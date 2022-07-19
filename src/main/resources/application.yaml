@@ -1,0 +1,27 @@
+server:
+  servlet:
+    context-path : /lending
+
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure: INFO;
+        cache: TRACE;
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,beans,shutdown,loggers,metrics,prometheus
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+    shutdown:
+      enabled: true
+    loggers:
+      enabled: true
