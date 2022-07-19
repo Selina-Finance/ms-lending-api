@@ -10,5 +10,5 @@ To compile and package using Docker multi-stage builds
 docker compose up --build
 ```
 
-And then visit http://localhost:8000 in your browser.
+And then visit http://localhost:8080 in your browser.
 
