@@ -16,22 +16,21 @@
 
 package com.selina.lending.internal.service.application.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
 @Setter
-public class DIPApplicationRequest extends ApplicationRequest {
-    private String selectedOffer;
-    private String selectedProduct;
-    private DipLoanInformation loanInformation;
-    private DIPPropertyDetails propertyDetails;
-    private Fees fees;
+public class System {
+    private List<Detail> detail;
+    private List<Summary> summary;
+    private List<UnderwriterNote> underwriterNotes;
 }

@@ -45,5 +45,22 @@ public class Applicant {
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
     private Date currentAddressMovedInDate;
+    private Boolean applicantUsedAnotherName;
+    private Integer estimatedRetirementAge;
+    private String maritalStatus;
+    private String nationality;
+    private String residentialStatus;
+    private Integer identifier;
+    private Incomes income;
+    private Employment employment;
+    private List<PreviousName> previousNames;
     private List<Address> addresses;
+    private Hooyu hooyu;
+    private CreditCheck creditCheck;
+    private Checklist checklist;
+    private List<Document>documents;
+    private Boolean applicantConsentedToSoftCreditCheck;
+    private Boolean hasBeenSubjectToDebtSolutionsInPart6Years;
+    private Boolean kqUkResidency;
+    private Boolean notHavePermanentRightToResideInTheUk;
 }

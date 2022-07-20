@@ -16,6 +16,8 @@
 
 package com.selina.lending.internal.service.application.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +27,7 @@ import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
 @Setter
 public class LoanInformation {
@@ -34,4 +36,5 @@ public class LoanInformation {
     private int numberOfApplicants;
     private String loanPurpose;
     private String desiredTimeLine;
+    private List<Facility> facilities;
 }

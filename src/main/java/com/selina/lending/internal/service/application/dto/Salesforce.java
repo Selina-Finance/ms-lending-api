@@ -27,10 +27,9 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ApplicationResponse {
-    private String message;
-    private String applicationType;
-    private String applicationId;
-    private Application application;
-    private Salesforce salesforce;
+public class Salesforce {
+    private String opportunityId;
+    private String contactId;
+    private String accountId;
+    private String reference;
 }

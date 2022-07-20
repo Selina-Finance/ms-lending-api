@@ -30,7 +30,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Incomes {
-    private List<Income> incomeList;
+    private List<Income> income;
     private Boolean doesNotHaveAnyIncome;
     private Boolean expectsFutureIncomeDecrease;
     private String expectsFutureIncomeDecreaseReason;

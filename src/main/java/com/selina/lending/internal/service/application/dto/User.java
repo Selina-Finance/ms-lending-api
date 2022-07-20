@@ -16,6 +16,8 @@
 
 package com.selina.lending.internal.service.application.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,10 +29,8 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ApplicationResponse {
-    private String message;
-    private String applicationType;
-    private String applicationId;
-    private Application application;
-    private Salesforce salesforce;
+public class User {
+    private List<Detail> detail;
+    private List<Summary> summary;
+    private List<UnderwriterNote> underwriterNotes;
 }

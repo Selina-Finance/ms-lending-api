@@ -27,10 +27,11 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ApplicationResponse {
-    private String message;
-    private String applicationType;
-    private String applicationId;
-    private Application application;
-    private Salesforce salesforce;
+public class Underwriting {
+    private String stageName;
+    private String subStage;
+    private String adviceFromBrokerSubmitter;
+    private String disbursementType;
+    private String underwritingOwner;
+    private String initialDisbursalsAmount;
 }

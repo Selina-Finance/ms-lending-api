@@ -26,7 +26,7 @@ import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
 @Setter
 public class ApplicationRequest {
@@ -37,6 +37,11 @@ public class ApplicationRequest {
     private String productCode;
     private String reference;
     private String applicationStage;
+    private String selectedOffer;
+    private String selectedProduct;
+    private LoanInformation loanInformation;
+    private PropertyDetails propertyDetails;
+    private Fees fees;
     private List<Applicant> applicants;
     private List<Expenditure> expenditure;
 }

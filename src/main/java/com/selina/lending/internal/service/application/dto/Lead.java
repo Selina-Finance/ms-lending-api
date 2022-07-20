@@ -16,20 +16,19 @@
 
 package com.selina.lending.internal.service.application.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
 @Setter
-public class DipLoanInformation extends LoanInformation{
-    private List<Facility> facilities;
+public class Lead {
+    private String utmSource;
+    private String utmCampaign;
+    private String utmMedium;
 }

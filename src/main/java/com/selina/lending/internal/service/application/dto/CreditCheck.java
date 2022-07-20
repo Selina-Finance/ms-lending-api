@@ -16,6 +16,8 @@
 
 package com.selina.lending.internal.service.application.dto;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,10 +29,18 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ApplicationResponse {
+public class CreditCheck {
+    private String serviceUsed;
+    private String requestId;
+    private Date requestTimeStamp;
+    private String responseId;
+    private Date responseTimeStamp;
+    private String responseStatus;
+    private int creditScore;
+    private String creditCheckReference;
+    private String errorCode;
     private String message;
-    private String applicationType;
-    private String applicationId;
-    private Application application;
-    private Salesforce salesforce;
+    private String status;
+    private boolean hardCheckCompleted;
+    private Date hardCheckCompletedDate;
 }

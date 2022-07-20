@@ -27,10 +27,12 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ApplicationResponse {
-    private String message;
-    private String applicationType;
-    private String applicationId;
-    private Application application;
-    private Salesforce salesforce;
+public class Document {
+    private String documentType;
+    private boolean required;
+    private boolean submitted;
+    private boolean verified;
+    private String description;
+    private String fileName;
+    private String fileContent;
 }
