@@ -28,6 +28,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Checklist {
-    private String required;
     private String notRequired;
+    private Required required;
 }

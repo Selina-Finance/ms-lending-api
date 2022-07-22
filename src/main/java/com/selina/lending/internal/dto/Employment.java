@@ -18,7 +18,8 @@ package com.selina.lending.internal.dto;
 
 import java.util.Date;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

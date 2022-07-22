@@ -16,7 +16,9 @@
 
 package com.selina.lending.internal.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +35,7 @@ public class DIPPropertyDetails extends PropertyDetails {
     @NotBlank(message = "propertyType is required")
     private String propertyType;
 
-    @NotBlank(message = "numberOfBedrooms is required")
+    @NotNull(message = "numberOfBedrooms is required")
     private int numberOfBedrooms;
     private Boolean hasBeenAffectedByJapaneseKnotWeed;
     private Boolean hasBeenBuiltInThePast2Years;

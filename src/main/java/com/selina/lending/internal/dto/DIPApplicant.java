@@ -18,8 +18,10 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,10 +35,10 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class DIPApplicant extends Applicant {
 
-    @NotBlank(message = "applicantUsedAnotherName is required")
+    @NotNull(message = "applicantUsedAnotherName is required")
     private Boolean applicantUsedAnotherName;
 
-    @NotBlank(message = "estimatedRetirementAge is required")
+    @NotNull(message = "estimatedRetirementAge is required")
     private Integer estimatedRetirementAge;
 
     @NotBlank(message = "maritalStatus is required")
@@ -46,9 +48,11 @@ public class DIPApplicant extends Applicant {
     private String nationality;
     private String residentialStatus;
 
-    @NotBlank(message = "identifier is required")
+    @NotNull(message = "identifier is required")
     private Integer identifier;
     private Income income;
+
+    @Valid
     @NotNull(message = "employment is required")
     private Employment employment;
     private List<PreviousName> previousNames;

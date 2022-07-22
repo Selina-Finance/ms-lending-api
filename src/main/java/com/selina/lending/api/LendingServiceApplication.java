@@ -19,7 +19,7 @@ package com.selina.lending.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.selina.lending")
 public class LendingServiceApplication {
 
 	public static void main(String[] args) {
