@@ -14,35 +14,31 @@
  *    limitations under the License.
  */
 
-package com.selina.lending.internal.dto;
-
-import java.util.List;
-
-import javax.validation.constraints.NotBlank;
+package com.selina.lending.internal.service.application.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
 @Setter
-public class ApplicationRequest {
-
-    private String requestType;
-
-    @NotBlank(message = "source is required")
-    private String source;
-    private String sourceClientId;
-    private String sourceAccount;
-
-    @NotBlank(message = "productCode is required")
-    private String productCode;
-    private String reference;
-
-    private List<ExpenditureDto> expenditure;
+public class Fees {
+    private boolean addAdviceFeeToLoan;
+    private boolean addArrangementFeeToLoan;
+    private boolean addCommissionFeeToLoan;
+    private boolean addThirdPartyFeeToLoan;
+    private boolean addValuationFeeToLoan;
+    private Double adviceFee;
+    private Double arrangementFee;
+    private Double commissionFee;
+    private Double thirdPartyFee;
+    private Double valuationFee;
+    private boolean addProductFeesToFacility;
+    private Double intermediaryFeeAmount;
+    private boolean addIntermediaryFeeToLoan;
 }

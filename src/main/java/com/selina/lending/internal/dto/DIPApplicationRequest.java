@@ -38,11 +38,11 @@ public class DIPApplicationRequest extends ApplicationRequest {
 
     @Size(message = "applicants is required", min = 1, max = 2)
     @Valid
-    private List<DIPApplicant> applicants;
+    private List<DIPApplicantDto> applicants;
     @Valid
-    private AdvancedLoanInformation loanInformation;
+    private AdvancedLoanInformationDto loanInformation;
     @Valid
-    private DIPPropertyDetails propertyDetails;
+    private DIPPropertyDetailsDto propertyDetails;
     @Valid
-    private Fees fees;
+    private FeesDto fees;
 }

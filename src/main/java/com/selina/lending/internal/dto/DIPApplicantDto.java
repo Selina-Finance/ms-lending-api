@@ -18,7 +18,9 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,18 +33,27 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Setter
-public class ApplicationRequest {
+public class DIPApplicantDto extends ApplicantDto {
 
-    private String requestType;
+    @NotNull(message = "applicantUsedAnotherName is required")
+    private Boolean applicantUsedAnotherName;
 
-    @NotBlank(message = "source is required")
-    private String source;
-    private String sourceClientId;
-    private String sourceAccount;
+    @NotNull(message = "estimatedRetirementAge is required")
+    private Integer estimatedRetirementAge;
 
-    @NotBlank(message = "productCode is required")
-    private String productCode;
-    private String reference;
+    @NotBlank(message = "maritalStatus is required")
+    private String maritalStatus;
 
-    private List<ExpenditureDto> expenditure;
+    @NotBlank(message = "nationality is required")
+    private String nationality;
+    private String residentialStatus;
+
+    @NotNull(message = "identifier is required")
+    private Integer identifier;
+    private IncomeDto income;
+
+    @Valid
+    @NotNull(message = "employment is required")
+    private EmploymentDto employment;
+    private List<PreviousNameDto> previousNames;
 }

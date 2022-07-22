@@ -14,35 +14,36 @@
  *    limitations under the License.
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.service.application.domain;
 
+import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
 @Setter
-public class ApplicationRequest {
-
-    private String requestType;
-
-    @NotBlank(message = "source is required")
-    private String source;
-    private String sourceClientId;
-    private String sourceAccount;
-
-    @NotBlank(message = "productCode is required")
-    private String productCode;
-    private String reference;
-
-    private List<ExpenditureDto> expenditure;
+public class Application {
+    public String id;
+    public String source;
+    public String sourceClientId;
+    public String sourceAccount;
+    public String externalApplicationId;
+    public String productCode;
+    public String applicationType;
+    public String status;
+    public String applicationStage;
+    public Date statusDate;
+    public Date createdDate;
+    public List<Applicant> applicants;
+    private LoanInformation loanInformation;
+    private PropertyDetails propertyDetails;
+    private List<Offer> offers;
 }

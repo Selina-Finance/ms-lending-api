@@ -3,7 +3,7 @@ package com.selina.lending.internal.service;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.service.application.dto.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @Service
 public class LendingServiceImpl implements LendingService {
