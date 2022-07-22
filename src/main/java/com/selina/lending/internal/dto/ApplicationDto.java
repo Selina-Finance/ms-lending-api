@@ -16,33 +16,34 @@
 
 package com.selina.lending.internal.dto;
 
+import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
 @Setter
-public class ApplicationRequest {
-
-    private String requestType;
-
-    @NotBlank(message = "source is required")
-    private String source;
-    private String sourceClientId;
-    private String sourceAccount;
-
-    @NotBlank(message = "productCode is required")
-    private String productCode;
-    private String reference;
-
-    private List<ExpenditureDto> expenditure;
+public class ApplicationDto {
+    public String id;
+    public String source;
+    public String sourceClientId;
+    public String sourceAccount;
+    public String externalApplicationId;
+    public String productCode;
+    public String requestType;
+    public String status;
+    public String applicationStage;
+    public Date statusDate;
+    public Date createdDate;
+    public List<ApplicantDto> applicants;
+    private LoanInformationDto loanInformation;
+    private PropertyDetailsDto propertyDetails;
+    private List<OfferDto> offers;
 }

@@ -18,7 +18,7 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,18 +31,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Setter
-public class ApplicationRequest {
-
-    private String requestType;
-
-    @NotBlank(message = "source is required")
-    private String source;
-    private String sourceClientId;
-    private String sourceAccount;
-
-    @NotBlank(message = "productCode is required")
-    private String productCode;
-    private String reference;
-
-    private List<ExpenditureDto> expenditure;
+public class AdvancedLoanInformationDto extends LoanInformationDto {
+    @NotNull(message = "facilities is required")
+    private List<FacilityDto> facilities;
 }

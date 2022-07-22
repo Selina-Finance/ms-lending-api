@@ -31,5 +31,5 @@ public class ApplicationResponse {
     private String message;
     private String requestType;
     private String applicationId;
-    private Application application;
+    private ApplicationDto application;
 }

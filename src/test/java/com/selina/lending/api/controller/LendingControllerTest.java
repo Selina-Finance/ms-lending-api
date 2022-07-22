@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.service.LendingService;
-import com.selina.lending.internal.service.application.dto.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest (controllers = LendingController.class)
