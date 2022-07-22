@@ -19,9 +19,10 @@ package com.selina.lending.internal.dto;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,15 +53,16 @@ public class Applicant {
     private String middleName;
     private String gender;
 
-    @NotBlank(message = "dateOfBirth is required")
+    @NotNull(message = "dateOfBirth is required")
     private Date dateOfBirth;
     private int numberOfAdultDependants;
     private int numberOfChildDependants;
 
-    @NotBlank(message = "livedInCurrrentAddressFor3Years is required")
+    @NotNull(message = "livedInCurrrentAddressFor3Years is required")
     private Boolean livedInCurrentAddressFor3Years;
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
+
     private Date currentAddressMovedInDate;
 
     @NotNull(message = "address is required")

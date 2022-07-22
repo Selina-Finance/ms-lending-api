@@ -94,7 +94,7 @@ readinessProbe:
 
 # custom ingress annotations on this service
 ingress:
-  enabled: false
+  enabled: true
   annotations: {}
   # defaults to nginx if no other ingress class annotation specified
   classAnnotation: ""
