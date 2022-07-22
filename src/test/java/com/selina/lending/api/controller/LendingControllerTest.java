@@ -41,28 +41,37 @@ public class LendingControllerTest {
 
     @Test
     public void getApplication() {
+        //Given
         when(lendingService.getApplication(eq(APPLICATION_ID))).thenReturn(mwApplicationResponse);
 
+        //When
         lendingController.getApplication(APPLICATION_ID);
 
+        //Then
         verify(lendingService, times(1)).getApplication(eq(APPLICATION_ID));
     }
 
     @Test
     public void createDipApplication() {
+        //Given
         when(lendingService.createDipApplication(eq(dipApplicationRequest))).thenReturn(mwApplicationResponse);
 
+        //When
         lendingController.createDipApplication(dipApplicationRequest);
 
+        //Then
         verify(lendingService, times(1)).createDipApplication(eq(dipApplicationRequest));
     }
 
     @Test
     public void updateDipApplication() {
+        //Given
         when(lendingService.updateDipApplication(eq(dipApplicationRequest))).thenReturn(mwApplicationResponse);
 
+        //When
         lendingController.updateDipApplication(APPLICATION_ID, dipApplicationRequest);
 
+        //Then
         verify(lendingService, times(1)).updateDipApplication(eq(dipApplicationRequest));
     }
 }
