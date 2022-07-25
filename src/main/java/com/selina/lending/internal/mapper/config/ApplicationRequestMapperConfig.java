@@ -17,20 +17,13 @@
 
 package com.selina.lending.internal.mapper.config;
 
-import org.mapstruct.InheritConfiguration;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.ReportingPolicy;
 
-import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
-import com.selina.lending.internal.service.application.domain.PropertyDetails;
+import com.selina.lending.internal.dto.ApplicationRequest;
 
-@MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface DipPropertyDetailsMapperConfig extends PropertyDetailsMapperConfig {
-    @InheritConfiguration(name = "mapPropertyDetailsDto")
-    void mapDipPropertyDetailsDto(PropertyDetails propertyDetails, @MappingTarget DIPPropertyDetailsDto dipPropertyDetailsDto);
-
-    @InheritConfiguration(name = "mapPropertyDetails")
-    void mapDipPropertyDetails(DIPPropertyDetailsDto dipPropertyDetailsDto, @MappingTarget PropertyDetails propertyDetails);
-
+@MapperConfig
+public interface ApplicationRequestMapperConfig {
+    void mapApplicationRequest(ApplicationRequest applicationRequestDto,
+            @MappingTarget com.selina.lending.internal.service.application.domain.ApplicationRequest applicationRequest);
 }

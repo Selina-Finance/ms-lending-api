@@ -25,10 +25,10 @@ import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
-import com.selina.lending.internal.mapper.config.DipPropertyDetailsMapperConfig;
+import com.selina.lending.internal.mapper.config.DIPPropertyDetailsMapperConfig;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 
-@Mapper (config = DipPropertyDetailsMapperConfig.class)
+@Mapper (config = DIPPropertyDetailsMapperConfig.class)
 public interface PropertyDetailsMapper {
     PropertyDetailsMapper INSTANCE = Mappers.getMapper(PropertyDetailsMapper.class);
 

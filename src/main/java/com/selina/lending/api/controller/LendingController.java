@@ -44,7 +44,7 @@ public class LendingController implements LendingOperations {
         log.info("LendingController getApplication()");
         //TODO
         Optional<ApplicationResponse> applicationResponse = lendingService.getApplication(id);
-        if (applicationResponse.isEmpty()){
+        if (applicationResponse == null || applicationResponse.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body("Get application for id "+id);

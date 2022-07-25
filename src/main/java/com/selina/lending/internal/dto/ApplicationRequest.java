@@ -34,6 +34,7 @@ import lombok.experimental.SuperBuilder;
 public class ApplicationRequest {
 
     private String requestType;
+    private String applicationStage;
 
     @NotBlank(message = "source is required")
     private String source;

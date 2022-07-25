@@ -22,16 +22,11 @@ import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import com.selina.lending.internal.dto.DIPApplicantDto;
-import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface DipApplicantMapperConfig extends ApplicantMapperConfig {
-
-    @InheritConfiguration(name = "mapApplicantDto")
-    void mapDipApplicantDto(Applicant applicant, @MappingTarget DIPApplicantDto dipApplicantDto);
-
-    @InheritConfiguration(name = "mapApplicant")
-    void mapDipApplicant(DIPApplicantDto dipApplicantDto, @MappingTarget Applicant applicant);
-
+public interface DIPApplicationRequestMapperConfig extends ApplicationRequestMapperConfig {
+    @InheritConfiguration(name = "mapApplicationRequest")
+    void mapDipApplicationRequest(DIPApplicationRequest dipApplicationRequest, @MappingTarget ApplicationRequest applicationRequest);
 }
