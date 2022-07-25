@@ -1,24 +1,27 @@
 package com.selina.lending.api.errors;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import com.selina.lending.api.errors.custom.Custom4xxException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/exception-translator-test")
 public class ExceptionTranslatorTestController {
 
     @PostMapping("/method-argument")
-    public void methodArgument(@Valid @RequestBody ExceptionTranslatorTestController.TestDto testDTO) {}
+    public void methodArgument(@Valid @RequestBody ExceptionTranslatorTestController.TestDto testDTO) {
+    }
 
     @GetMapping("/missing-servlet-request-part")
-    public void missingServletRequestPartException(@RequestPart String part) {}
+    public void missingServletRequestPartException(@RequestPart String part) {
+    }
 
     @GetMapping("/missing-servlet-request-parameter")
-    public void missingServletRequestParameterException(@RequestParam String param) {}
+    public void missingServletRequestParameterException(@RequestParam String param) {
+    }
 
     @GetMapping("/response-status")
     public void exceptionWithResponseStatus() {
@@ -28,6 +31,11 @@ public class ExceptionTranslatorTestController {
     @GetMapping("/internal-server-error")
     public void internalServerError() {
         throw new RuntimeException();
+    }
+
+    @GetMapping("/custom-4xx-exception")
+    public void customException() {
+        throw new Custom4xxException("Some problem details that make sense");
     }
 
     public static class TestDto {
@@ -46,5 +54,6 @@ public class ExceptionTranslatorTestController {
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "test response status")
     @SuppressWarnings("serial")
-    public static class TestResponseStatusException extends RuntimeException {}
+    public static class TestResponseStatusException extends RuntimeException {
+    }
 }

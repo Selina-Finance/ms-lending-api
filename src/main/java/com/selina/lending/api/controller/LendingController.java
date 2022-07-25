@@ -16,7 +16,6 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.api.errors.custom.MyCustomException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
