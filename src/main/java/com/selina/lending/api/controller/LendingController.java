@@ -16,6 +16,8 @@
 
 package com.selina.lending.api.controller;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +43,10 @@ public class LendingController implements LendingOperations {
     public ResponseEntity getApplication(String id) {
         log.info("LendingController getApplication()");
         //TODO
-        ApplicationResponse applicationResponse = lendingService.getApplication(id);
+        Optional<ApplicationResponse> applicationResponse = lendingService.getApplication(id);
+        if (applicationResponse.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok().body("Get application for id "+id);
     }
 

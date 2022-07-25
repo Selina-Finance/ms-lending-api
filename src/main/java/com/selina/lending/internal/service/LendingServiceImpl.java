@@ -1,5 +1,7 @@
 package com.selina.lending.internal.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
@@ -8,7 +10,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 @Service
 public class LendingServiceImpl implements LendingService {
     @Override
-    public ApplicationResponse getApplication(String id) {
+    public Optional<ApplicationResponse> getApplication(String id) {
         return null;
     }
 

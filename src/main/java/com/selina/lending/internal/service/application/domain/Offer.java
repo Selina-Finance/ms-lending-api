@@ -18,6 +18,8 @@ package com.selina.lending.internal.service.application.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,17 +55,18 @@ public class Offer {
     private String product;
     private String decision;
     private Double productFee;
-    private boolean productFeeAddedToLoan;
-    private boolean selected;
+    private Boolean productFeeAddedToLoan;
+    private Boolean selected;
     private int brokerFeesUpfront;
     private int externalSettlement;
-    private String eSignUrl;
-    private boolean hasFee;
+    @JsonProperty("eSignUrl")
+    private String esignUrl;
+    private Boolean hasFee;
     private Checklist checklist;
     private String plan;
     private String tier;
     private int maximumAdvance;
     private int maximumAdvancePrime;
-    private boolean isVariable;
+    private Boolean isVariable;
     private List<RuleOutcome> ruleOutcomes;
 }

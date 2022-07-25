@@ -28,6 +28,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class ChecklistDto {
-    private String required;
     private String notRequired;
+    private RequiredDto required;
 }

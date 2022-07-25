@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -42,7 +43,7 @@ public class LendingControllerTest {
     @Test
     public void getApplication() {
         //Given
-        when(lendingService.getApplication(eq(APPLICATION_ID))).thenReturn(mwApplicationResponse);
+        when(lendingService.getApplication(eq(APPLICATION_ID))).thenReturn(Optional.of(mwApplicationResponse));
 
         //When
         lendingController.getApplication(APPLICATION_ID);

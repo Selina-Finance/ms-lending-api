@@ -18,6 +18,8 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,7 +59,8 @@ public class OfferDto {
     private Boolean selected;
     private int brokerFeesUpfront;
     private int externalSettlement;
-    private String eSignUrl;
+    @JsonProperty("eSignUrl")
+    private String esignUrl;
     private Boolean hasFee;
     private ChecklistDto checklist;
     private String plan;
