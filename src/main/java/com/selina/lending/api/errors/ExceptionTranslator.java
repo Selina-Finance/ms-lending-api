@@ -1,6 +1,5 @@
 package com.selina.lending.api.errors;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -22,6 +21,7 @@ import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
