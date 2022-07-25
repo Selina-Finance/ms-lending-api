@@ -23,7 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.1'
 
 	// https://mvnrepository.com/artifact/org.zalando/problem-spring-web
-	implementation 'org.zalando:problem-spring-web:0.28.0-RC.0'
+	implementation 'org.zalando:problem-spring-web:0.27.0'
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 

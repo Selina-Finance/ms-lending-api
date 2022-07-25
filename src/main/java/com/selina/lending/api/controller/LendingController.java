@@ -16,6 +16,7 @@
 
 package com.selina.lending.api.controller;
 
+import com.selina.lending.api.errors.custom.MyCustomException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +43,8 @@ public class LendingController implements LendingOperations {
         log.info("LendingController getApplication()");
         //TODO
         ApplicationResponse applicationResponse = lendingService.getApplication(id);
-        return ResponseEntity.ok().body("Get application for id "+id);
+        throw new MyCustomException("Custom exception detail");
+//        return ResponseEntity.ok().body("Get application for id "+id);
     }
 
     @Override

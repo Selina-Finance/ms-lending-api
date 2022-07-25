@@ -25,7 +25,3 @@ management:
       enabled: true
     loggers:
       enabled: true
-
-jhipster:
-  clientApp:
-    name: abc
