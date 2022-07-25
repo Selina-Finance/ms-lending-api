@@ -43,8 +43,7 @@ public class LendingController implements LendingOperations {
         log.info("LendingController getApplication()");
         //TODO
         ApplicationResponse applicationResponse = lendingService.getApplication(id);
-        throw new MyCustomException("Custom exception detail");
-//        return ResponseEntity.ok().body("Get application for id "+id);
+        return ResponseEntity.ok().body("Get application for id "+id);
     }
 
     @Override

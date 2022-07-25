@@ -5,6 +5,8 @@ import javax.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
+
 @RestController
 @RequestMapping("/api/exception-translator-test")
 public class ExceptionTranslatorTestController {
@@ -17,16 +19,6 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/missing-servlet-request-parameter")
     public void missingServletRequestParameterException(@RequestParam String param) {}
-
-//    @GetMapping("/access-denied")
-//    public void accessdenied() {
-//        throw new AccessDeniedException("test access denied!");
-//    }
-//
-//    @GetMapping("/unauthorized")
-//    public void unauthorized() {
-//        throw new BadCredentialsException("test authentication failed!");
-//    }
 
     @GetMapping("/response-status")
     public void exceptionWithResponseStatus() {
