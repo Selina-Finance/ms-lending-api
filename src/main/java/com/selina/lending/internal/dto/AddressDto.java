@@ -16,33 +16,32 @@
 
 package com.selina.lending.internal.dto;
 
-import java.util.List;
-
-import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
 @Setter
-public class ApplicationRequest {
-
-    private String requestType;
-
-    @NotBlank(message = "source is required")
-    private String source;
-    private String sourceClientId;
-    private String sourceAccount;
-
-    @NotBlank(message = "productCode is required")
-    private String productCode;
-    private String reference;
-
-    private List<ExpenditureDto> expenditure;
+public class AddressDto {
+    private String addressType;
+    private String addressLine1;
+    private String addressLine2;
+    private String city;
+    private String postcode;
+    private String buildingName;
+    private String buildingNumber;
+    private String subBuildingName;
+    private int udprn;
+    private String poBox;
+    private String county;
+    private String country;
+    private Date fromDate;
+    private Date toDate;
 }

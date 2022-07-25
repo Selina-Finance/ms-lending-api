@@ -16,28 +16,48 @@
 
 package com.selina.lending.api.controller;
 
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.service.LendingService;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/application")
 @Slf4j
-public class LendingController {
+public class LendingController implements LendingOperations {
 
-    @GetMapping(value = "/dip")
-    public ResponseEntity get() {
-        log.info("LendingController get()");
-        return ResponseEntity.notFound().build();
+    private final LendingService lendingService;
+
+    public LendingController(LendingService lendingService) {
+        this.lendingService = lendingService;
     }
 
-    @PostMapping(value = "/dip", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(@Valid @RequestBody TheRequest request) {
-        log.info("LendingController post({})", request);
-        return ResponseEntity.badRequest().build();
+    @Override
+    public ResponseEntity getApplication(String id) {
+        log.info("LendingController getApplication()");
+        //TODO
+        ApplicationResponse applicationResponse = lendingService.getApplication(id);
+        return ResponseEntity.ok().body("Get application for id "+id);
     }
 
+    @Override
+    public ResponseEntity updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
+        log.info("LendingController updateDipApplication()");
+        //TODO
+        ApplicationResponse applicationResponse = lendingService.updateDipApplication(dipApplicationRequest);
+        return ResponseEntity.ok().body("Update dip application for id "+ id);
+    }
+
+    @Override
+    public ResponseEntity createDipApplication(DIPApplicationRequest dipApplicationRequest) {
+        log.info("LendingController createDipApplication()");
+        //TODO
+        ApplicationResponse applicationResponse = lendingService.createDipApplication(dipApplicationRequest);
+        return ResponseEntity.ok().body("Create new dip application");
+    }
 }

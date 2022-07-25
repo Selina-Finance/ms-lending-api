@@ -16,20 +16,33 @@
 
 package com.selina.lending.internal.dto;
 
+import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 public class DIPApplicationRequest extends ApplicationRequest {
     private String selectedOffer;
     private String selectedProduct;
-    private AdvancedLoanInformation loanInformation;
-    private DIPPropertyDetails propertyDetails;
-    private Fees fees;
+
+    @Size(message = "applicants is required", min = 1, max = 2)
+    @Valid
+    private List<DIPApplicantDto> applicants;
+    @Valid
+    private AdvancedLoanInformationDto loanInformation;
+    @Valid
+    private DIPPropertyDetailsDto propertyDetails;
+    @Valid
+    private FeesDto fees;
 }
