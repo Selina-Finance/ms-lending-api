@@ -30,11 +30,8 @@ import com.selina.lending.internal.service.application.domain.LoanInformation;
 public interface LoanInformationMapper {
     LoanInformationMapper INSTANCE = Mappers.getMapper(LoanInformationMapper.class);
 
-  //  @InheritConfiguration(name = "mapLoanInformationDto")
-   // LoanInformationDto mapToLoanInformationDto(LoanInformation loanInformation);
-
     @InheritConfiguration(name = "mapAdvancedLoanInformationDto")
-    AdvancedLoanInformationDto mapToAdvancedLoanInformationDto(LoanInformation loanInformation);
+    AdvancedLoanInformationDto mapToLoanInformationDto(LoanInformation loanInformation);
 
     @InheritConfiguration(name = "mapAdvancedLoanInformation")
     LoanInformation mapToLoanInformation(AdvancedLoanInformationDto advancedLoanInformationDto);

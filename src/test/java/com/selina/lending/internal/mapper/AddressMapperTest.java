@@ -27,7 +27,6 @@ import com.selina.lending.internal.service.application.domain.Address;
 
 public class AddressMapperTest extends MapperBase{
 
-
     @Test
     public void mapToAddress() {
         //Given
@@ -37,19 +36,18 @@ public class AddressMapperTest extends MapperBase{
         Address address = AddressMapper.INSTANCE.mapToAddress(addressDto);
 
         //Then
-        assertThat(ADDRESS_LINE_1, equalTo(address.getAddressLine1()));
-        assertThat(ADDRESS_LINE_2, equalTo(address.getAddressLine2()));
-        assertThat(ADDRESS_TYPE, equalTo(address.getAddressType()));
-        assertThat(COUNTRY, equalTo(address.getCountry()));
-        assertThat(BUILDING_NUMBER, equalTo(address.getBuildingNumber()));
-        assertThat(BUILDING_NAME, equalTo(address.getBuildingName()));
-        assertThat(CITY, equalTo(address.getCity()));
-        assertThat(POSTCODE, equalTo(address.getPostcode()));
-        assertThat(UDPRN, equalTo(address.getUdprn()));
-        assertThat(PO_BOX, equalTo(address.getPoBox()));
-        assertThat(COUNTY, equalTo(address.getCounty()));
-        assertThat(FROM_DATE, equalTo(address.getFrom()));
-        assertThat(TO_DATE, equalTo(address.getTo()));
+        assertThat(address.getAddressLine1(), equalTo(ADDRESS_LINE_1));
+        assertThat(address.getAddressLine2(), equalTo(ADDRESS_LINE_2));
+        assertThat(address.getAddressType(), equalTo(ADDRESS_TYPE));
+        assertThat(address.getCountry(), equalTo(COUNTRY));
+        assertThat(address.getBuildingNumber(), equalTo(BUILDING_NUMBER));
+        assertThat(address.getBuildingName(), equalTo(BUILDING_NAME));
+        assertThat(address.getCity(), equalTo(CITY));
+        assertThat(address.getPostcode(), equalTo(POSTCODE));
+        assertThat(address.getCounty(), equalTo(COUNTY));
+        assertThat(address.getUdprn(), equalTo(UDPRN));
+        assertThat(address.getPoBox(), equalTo(PO_BOX));
+        assertThat(address.getFrom(), equalTo(FROM_DATE));
     }
 
     @Test
@@ -61,16 +59,17 @@ public class AddressMapperTest extends MapperBase{
         AddressDto addressDto = AddressMapper.INSTANCE.mapToAddressDto(address);
 
         //Then
-        assertThat(ADDRESS_LINE_1, equalTo(addressDto.getAddressLine1()));
-        assertThat(ADDRESS_LINE_2, equalTo(addressDto.getAddressLine2()));
-        assertThat(ADDRESS_TYPE, equalTo(addressDto.getAddressType()));
-        assertThat(COUNTRY, equalTo(addressDto.getCountry()));
-        assertThat(BUILDING_NUMBER, equalTo(addressDto.getBuildingNumber()));
-        assertThat(BUILDING_NAME, equalTo(addressDto.getBuildingName()));
-        assertThat(CITY, equalTo(addressDto.getCity()));
-        assertThat(POSTCODE, equalTo(addressDto.getPostcode()));
-        assertThat(UDPRN, equalTo(addressDto.getUdprn()));
-        assertThat(PO_BOX, equalTo(addressDto.getPoBox()));
-        assertThat(COUNTY, equalTo(addressDto.getCounty()));
+        assertThat(addressDto.getAddressLine1(), equalTo(ADDRESS_LINE_1));
+        assertThat(addressDto.getAddressLine2(), equalTo(ADDRESS_LINE_2));
+        assertThat(addressDto.getAddressType(), equalTo(ADDRESS_TYPE));
+        assertThat(addressDto.getCountry(), equalTo(COUNTRY));
+        assertThat(addressDto.getBuildingNumber(), equalTo(BUILDING_NUMBER));
+        assertThat(addressDto.getBuildingName(), equalTo(BUILDING_NAME));
+        assertThat(addressDto.getCity(), equalTo(CITY));
+        assertThat(addressDto.getPostcode(), equalTo(POSTCODE));
+        assertThat(addressDto.getUdprn(), equalTo(UDPRN));
+        assertThat(addressDto.getPoBox(), equalTo(PO_BOX));
+        assertThat(addressDto.getCounty(), equalTo(COUNTY));
+        assertThat(addressDto.getFromDate(), equalTo(FROM_DATE));
     }
 }

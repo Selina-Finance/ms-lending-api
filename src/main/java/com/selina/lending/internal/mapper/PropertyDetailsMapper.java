@@ -32,9 +32,9 @@ import com.selina.lending.internal.service.application.domain.PropertyDetails;
 public interface PropertyDetailsMapper {
     PropertyDetailsMapper INSTANCE = Mappers.getMapper(PropertyDetailsMapper.class);
 
-    @InheritConfiguration(name = "mapPropertyDetailsDto")
+    @InheritConfiguration(name = "mapDipPropertyDetailsDto")
     @Mapping(target = "whenLastPurchased", source = "propertyDetails.whenHasLastPurchased")
-    PropertyDetailsDto mapToPropertyDetailsDto (PropertyDetails propertyDetails);
+    DIPPropertyDetailsDto mapToPropertyDetailsDto (PropertyDetails propertyDetails);
 
     @InheritConfiguration(name = "mapPropertyDetails")
     @Mappings({@Mapping(target = "whenHasLastPurchased", source = "dipPropertyDetailsDto.whenLastPurchased")

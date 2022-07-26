@@ -39,20 +39,23 @@ public class ApplicantMapperTest extends MapperBase {
         Applicant applicant = ApplicantMapper.INSTANCE.mapToApplicant(dipApplicantDto);
 
         //Then
-        assertThat(FIRST_NAME, equalTo(applicant.getFirstName()));
-        assertThat(LAST_NAME, equalTo(applicant.getLastName()));
-        assertThat(GENDER, equalTo(applicant.getGender()));
-        assertThat(false, equalTo(applicant.getApplicantUsedAnotherName()));
-        assertThat(EMAIL_ADDRESS, equalTo(applicant.getEmailAddress()));
-        assertThat(MOBILE_NUMBER, equalTo(applicant.getMobilePhoneNumber()));
-        assertThat(1, equalTo(applicant.getAddresses().size()));
-        assertThat(1, equalTo(applicant.getIdentifier()));
-        assertThat(ESTIMATED_RETIREMENT_AGE, equalTo(applicant.getEstimatedRetirementAge()));
-        assertThat(true, equalTo(applicant.getLivedInCurrentAddressFor3Years()));
-        assertThat(EMPLOYER_NAME, equalTo(applicant.getEmployment().getEmployerName()));
-        assertThat(1, equalTo(applicant.getIncome().getIncome().size()));
-        assertThat(INCOME_AMOUNT, equalTo(applicant.getIncome().getIncome().get(0).getAmount()));
-        assertThat(INCOME_TYPE, equalTo(applicant.getIncome().getIncome().get(0).getType()));
+        assertThat(applicant.getTitle(), equalTo(TITLE));
+        assertThat(applicant.getFirstName(), equalTo(FIRST_NAME));
+        assertThat(applicant.getLastName(), equalTo(LAST_NAME));
+        assertThat(applicant.getGender(), equalTo(GENDER));
+        assertThat(applicant.getApplicantUsedAnotherName(), equalTo(false));
+        assertThat(applicant.getEmailAddress(), equalTo(EMAIL_ADDRESS));
+        assertThat(applicant.getNationality(), equalTo(NATIONALITY));
+        assertThat(applicant.getMobilePhoneNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(applicant.getDateOfBirth(), equalTo(DOB));
+        assertThat(applicant.getAddresses().size(), equalTo(1));
+        assertThat(applicant.getIdentifier(), equalTo(1));
+        assertThat(applicant.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
+        assertThat(applicant.getLivedInCurrentAddressFor3Years(), equalTo(true));
+        assertThat(applicant.getEmployment().getEmployerName(), equalTo(EMPLOYER_NAME));
+        assertThat(applicant.getIncome().getIncome().size(), equalTo(1));
+        assertThat(applicant.getIncome().getIncome().get(0).getAmount(), equalTo(INCOME_AMOUNT));
+        assertThat(applicant.getIncome().getIncome().get(0).getType(), equalTo(INCOME_TYPE));
     }
 
     @Test
@@ -64,12 +67,14 @@ public class ApplicantMapperTest extends MapperBase {
         Applicant applicant = ApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
 
         //Then
-        assertThat(FIRST_NAME, equalTo(applicant.getFirstName()));
-        assertThat(LAST_NAME, equalTo(applicant.getLastName()));
-        assertThat(GENDER, equalTo(applicant.getGender()));
-        assertThat(EMAIL_ADDRESS, equalTo(applicant.getEmailAddress()));
-        assertThat(MOBILE_NUMBER, equalTo(applicant.getMobilePhoneNumber()));
-        assertThat(1, equalTo(applicant.getAddresses().size()));
+        assertThat(applicant.getTitle(), equalTo(TITLE));
+        assertThat(applicant.getFirstName(), equalTo(FIRST_NAME));
+        assertThat(applicant.getLastName(), equalTo(LAST_NAME));
+        assertThat(applicant.getGender(), equalTo(GENDER));
+        assertThat(applicant.getEmailAddress(), equalTo(EMAIL_ADDRESS));
+        assertThat(applicant.getMobilePhoneNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(applicant.getDateOfBirth(), equalTo(DOB));
+        assertThat(applicant.getAddresses().size(), equalTo(1));
         assertNull(applicant.getIdentifier());
         assertNull(applicant.getEstimatedRetirementAge());
         assertNull(applicant.getLivedInCurrentAddressFor3Years());
@@ -86,12 +91,14 @@ public class ApplicantMapperTest extends MapperBase {
         ApplicantDto applicantDto = ApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
 
         //Then
-        assertThat(FIRST_NAME, equalTo(applicantDto.getFirstName()));
-        assertThat(LAST_NAME, equalTo(applicantDto.getLastName()));
-        assertThat(GENDER, equalTo(applicantDto.getGender()));
-        assertThat(EMAIL_ADDRESS, equalTo(applicantDto.getEmailAddress()));
-        assertThat(MOBILE_NUMBER, equalTo(applicantDto.getMobileNumber()));
-        assertThat(1, equalTo(applicantDto.getAddresses().size()));
+        assertThat(applicantDto.getTitle(), equalTo(TITLE));
+        assertThat(applicantDto.getFirstName(), equalTo(FIRST_NAME));
+        assertThat(applicantDto.getLastName(), equalTo(LAST_NAME));
+        assertThat(applicantDto.getGender(), equalTo(GENDER));
+        assertThat(applicantDto.getEmailAddress(), equalTo(EMAIL_ADDRESS));
+        assertThat(applicantDto.getMobileNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(applicantDto.getDateOfBirth(), equalTo(DOB));
+        assertThat(applicantDto.getAddresses().size(), equalTo(1));
     }
 
     @Test
@@ -103,15 +110,18 @@ public class ApplicantMapperTest extends MapperBase {
         DIPApplicantDto dipApplicantDto = ApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
 
         //Then
-        assertThat(FIRST_NAME, equalTo(dipApplicantDto.getFirstName()));
-        assertThat(LAST_NAME, equalTo(dipApplicantDto.getLastName()));
-        assertThat(GENDER, equalTo(dipApplicantDto.getGender()));
-        assertThat(EMAIL_ADDRESS, equalTo(dipApplicantDto.getEmailAddress()));
-        assertThat(MOBILE_NUMBER, equalTo(dipApplicantDto.getMobileNumber()));
-        assertThat(1, equalTo(dipApplicantDto.getIdentifier()));
-        assertThat(ESTIMATED_RETIREMENT_AGE, equalTo(dipApplicantDto.getEstimatedRetirementAge()));
-        assertThat(true, equalTo(dipApplicantDto.getLivedInCurrentAddressFor3Years()));
-        assertThat(1, equalTo(dipApplicantDto.getAddresses().size()));
-        assertThat(EMPLOYER_NAME, equalTo(dipApplicantDto.getEmployment().getEmployerName()));
+        assertThat(dipApplicantDto.getTitle(), equalTo(TITLE));
+        assertThat(dipApplicantDto.getFirstName(), equalTo(FIRST_NAME));
+        assertThat(dipApplicantDto.getLastName(), equalTo(LAST_NAME));
+        assertThat(dipApplicantDto.getGender(), equalTo(GENDER));
+        assertThat(dipApplicantDto.getNationality(), equalTo(NATIONALITY));
+        assertThat(dipApplicantDto.getEmailAddress(), equalTo(EMAIL_ADDRESS));
+        assertThat(dipApplicantDto.getMobileNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(dipApplicantDto.getDateOfBirth(), equalTo(DOB));
+        assertThat(dipApplicantDto.getIdentifier(), equalTo(1));
+        assertThat(dipApplicantDto.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
+        assertThat(dipApplicantDto.getLivedInCurrentAddressFor3Years(), equalTo(true));
+        assertThat(dipApplicantDto.getAddresses().size(), equalTo(1));
+        assertThat(dipApplicantDto.getEmployment().getEmployerName(), equalTo(EMPLOYER_NAME));
     }
 }

@@ -24,17 +24,29 @@ import java.util.Date;
 import java.util.List;
 
 import com.selina.lending.internal.dto.AddressDto;
+import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.ApplicantDto;
+import com.selina.lending.internal.dto.ApplicationDto;
 import com.selina.lending.internal.dto.DIPApplicantDto;
+import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
 import com.selina.lending.internal.dto.EmploymentDto;
+import com.selina.lending.internal.dto.FacilityDto;
 import com.selina.lending.internal.dto.IncomeDto;
 import com.selina.lending.internal.dto.IncomeItemDto;
+import com.selina.lending.internal.dto.LoanInformationDto;
+import com.selina.lending.internal.dto.OfferDto;
+import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.Employment;
+import com.selina.lending.internal.service.application.domain.Facility;
+import com.selina.lending.internal.service.application.domain.LoanInformation;
+import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.internal.service.application.domain.PropertyDetails;
 
 public abstract class MapperBase {
-
+    public static final String TITLE = "Mrs";
     public static final String FIRST_NAME = "Sally";
     public static final String LAST_NAME = "Smith";
     public static final String EMAIL_ADDRESS = "sally.smith@someemail.com";
@@ -46,15 +58,20 @@ public abstract class MapperBase {
     public static final String EMPLOYER_NAME = "Employer name";
     public static final Double INCOME_AMOUNT = 15000.00;
     public static final String INCOME_TYPE = "Gross Salary";
-
-    static {
-        try {
-            DOB = new SimpleDateFormat("yyyy-mm-dd").parse("1975-03-12");
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    public static final String LOAN_PURPOSE = "Home improvements";
+    public static final Integer LOAN_AMOUNT = 50000;
+    public static final int LOAN_TERM = 5;
+    public static final double ALLOCATION_AMOUNT = 50000;
+    public static final String ALLOCATION_PURPOSE = "Home improvements";
+    public static final String DESIRED_TIME_LINE = "By 3 months";
+    public static final Double ESTIMATED_VALUE = 590000.00;
+    public static final String WHEN_LAST_PURCHASED = "1990";
+    public static final Double PURCHASE_VALUE = 390000.00;
+    public static final String PROPERTY_TYPE = "House";
+    public static final int NUMBER_OF_BEDROOMS = 4;
+    public static final String DIP_APPLICATION_TYPE = "DIP";
+    public static final String APPLICATION_ID = "123456789";
+    public static final Date CREATED_DATE = Date.from(Instant.now());
     public static final String ADDRESS_LINE_1 = "address line 1";
     public static final String ADDRESS_LINE_2 = "address line 2";
     public static final String ADDRESS_TYPE = "Home";
@@ -66,16 +83,26 @@ public abstract class MapperBase {
     public static final String PO_BOX = "poBox";
     public static final String BUILDING_NAME = "building name";
     public static final String COUNTY = "county";
-    public static final Date FROM_DATE = Date.from(Instant.now());
-    public static final Date TO_DATE = Date.from(Instant.now());
+    public static final Date FROM_DATE;
+    public static final String OFFER_ID = "offer123";
+    public static final String PRODUCT_CODE = "product123";
 
+    static {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            DOB = simpleDateFormat.parse("1975-03-12");
+            FROM_DATE = simpleDateFormat.parse("2000-01-21");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     protected List<AddressDto> getAddressDtoList() {
         return List.of(getAddressDto());
     }
 
     protected AddressDto getAddressDto() {
-        AddressDto addressDto = AddressDto.builder()
+        return AddressDto.builder()
                 .addressLine1(ADDRESS_LINE_1)
                 .addressLine2(ADDRESS_LINE_2)
                 .addressType(ADDRESS_TYPE)
@@ -88,13 +115,12 @@ public abstract class MapperBase {
                 .poBox(PO_BOX)
                 .county(COUNTY)
                 .fromDate(FROM_DATE)
-                .toDate(TO_DATE)
                 .build();
-        return addressDto;
     }
 
     protected ApplicantDto getApplicantDto() {
-        ApplicantDto applicantDto = ApplicantDto.builder()
+        return ApplicantDto.builder()
+                .title(TITLE)
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .gender(GENDER)
@@ -104,18 +130,15 @@ public abstract class MapperBase {
                 .applicant2LivesWithApplicant1(false)
                 .dateOfBirth(DOB)
                 .build();
-        return applicantDto;
     }
 
     protected EmploymentDto getEmploymentDto() {
-        EmploymentDto employmentDto = EmploymentDto.builder()
-                .employerName(EMPLOYER_NAME)
-                .build();
-        return employmentDto;
+        return EmploymentDto.builder().employerName(EMPLOYER_NAME).build();
     }
 
     protected DIPApplicantDto getDIPApplicantDto() {
-        DIPApplicantDto dipApplicantDto = DIPApplicantDto.builder()
+        return DIPApplicantDto.builder()
+                .title(TITLE)
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .gender(GENDER)
@@ -132,26 +155,78 @@ public abstract class MapperBase {
                 .employment(getEmploymentDto())
                 .income(getIncomeDto())
                 .build();
-        return dipApplicantDto;
     }
 
     protected IncomeDto getIncomeDto() {
-        IncomeDto incomeDto = IncomeDto.builder().income(List.of(getIncomeItemDto())).build();
-
-        return incomeDto;
+        return IncomeDto.builder().income(List.of(getIncomeItemDto())).build();
     }
 
     protected IncomeItemDto getIncomeItemDto() {
-        IncomeItemDto incomeItemDto = IncomeItemDto.builder()
-                .amount(INCOME_AMOUNT)
-                .type(INCOME_TYPE)
-                .build();
+        return IncomeItemDto.builder().amount(INCOME_AMOUNT).type(INCOME_TYPE).build();
+    }
 
-        return incomeItemDto;
+    protected LoanInformationDto getLoanInformationDto() {
+        return LoanInformationDto.builder()
+                .loanPurpose(LOAN_PURPOSE)
+                .requestedLoanAmount(LOAN_AMOUNT)
+                .numberOfApplicants(1)
+                .requestedLoanTerm(LOAN_TERM)
+                .desiredTimeLine(DESIRED_TIME_LINE)
+                .build();
+    }
+
+    protected AdvancedLoanInformationDto getAdvancedLoanInformationDto() {
+        return AdvancedLoanInformationDto.builder()
+                .loanPurpose(LOAN_PURPOSE)
+                .requestedLoanAmount(LOAN_AMOUNT)
+                .numberOfApplicants(1)
+                .requestedLoanTerm(LOAN_TERM)
+                .facilities(List.of(getFacilityDto()))
+                .desiredTimeLine(DESIRED_TIME_LINE)
+                .build();
+    }
+
+    protected FacilityDto getFacilityDto() {
+        return FacilityDto.builder().allocationAmount(ALLOCATION_AMOUNT).allocationPurpose(ALLOCATION_PURPOSE).build();
+    }
+
+    protected PropertyDetailsDto getPropertyDetailsDto() {
+        return PropertyDetailsDto.builder().addressLine1(ADDRESS_LINE_1).addressLine2(ADDRESS_LINE_2).buildingName(
+                BUILDING_NAME).buildingNumber(BUILDING_NUMBER).city(CITY).country(COUNTRY).county(COUNTY).postcode(
+                POSTCODE).estimatedValue(ESTIMATED_VALUE).purchaseValue(PURCHASE_VALUE).build();
+    }
+
+    protected DIPPropertyDetailsDto getDIPPropertyDetailsDto() {
+        return DIPPropertyDetailsDto.builder()
+                .addressLine1(ADDRESS_LINE_1)
+                .addressLine2(ADDRESS_LINE_2)
+                .buildingName(BUILDING_NAME)
+                .buildingNumber(BUILDING_NUMBER)
+                .city(CITY)
+                .country(COUNTRY)
+                .county(COUNTY)
+                .postcode(POSTCODE)
+                .estimatedValue(ESTIMATED_VALUE)
+                .purchaseValue(PURCHASE_VALUE)
+                .propertyType(PROPERTY_TYPE)
+                .numberOfBedrooms(NUMBER_OF_BEDROOMS)
+                .hasAGarage(true)
+                .build();
+    }
+
+    protected OfferDto getOfferDto() {
+        return OfferDto.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE).build();
+    }
+
+    protected ApplicationDto getApplicationDto() {
+        return ApplicationDto.builder().id(APPLICATION_ID).createdDate(CREATED_DATE).applicants(
+                List.of(getApplicantDto())).loanInformation(getLoanInformationDto()).propertyDetails(
+                getPropertyDetailsDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
     }
 
     protected Applicant getApplicant() {
-        Applicant applicant = Applicant.builder()
+        return Applicant.builder()
+                .title(TITLE)
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .gender(GENDER)
@@ -166,18 +241,14 @@ public abstract class MapperBase {
                 .dateOfBirth(DOB)
                 .employment(getEmployment())
                 .build();
-        return applicant;
     }
 
     protected Employment getEmployment() {
-        Employment employment = Employment.builder()
-                .employerName(EMPLOYER_NAME)
-                .build();
-        return employment;
+        return Employment.builder().employerName(EMPLOYER_NAME).build();
     }
 
     protected Address getAddress() {
-        Address address = Address.builder()
+        return Address.builder()
                 .addressLine1(ADDRESS_LINE_1)
                 .addressLine2(ADDRESS_LINE_2)
                 .addressType(ADDRESS_TYPE)
@@ -191,10 +262,60 @@ public abstract class MapperBase {
                 .county(COUNTY)
                 .from(FROM_DATE)
                 .build();
-        return address;
     }
 
     protected List<Address> getAddressList() {
         return List.of(getAddress());
     }
+
+    protected LoanInformation getLoanInformation() {
+        return LoanInformation.builder()
+                .loanPurpose(LOAN_PURPOSE)
+                .requestedLoanAmount(LOAN_AMOUNT)
+                .numberOfApplicants(1)
+                .requestedLoanTerm(LOAN_TERM)
+                .facilities(List.of(getFacility()))
+                .desiredTimeLine(DESIRED_TIME_LINE)
+                .build();
+    }
+
+    protected Facility getFacility() {
+        return Facility.builder().allocationAmount(ALLOCATION_AMOUNT).allocationPurpose(ALLOCATION_PURPOSE).build();
+    }
+
+    protected PropertyDetails getPropertyDetails() {
+        return PropertyDetails.builder()
+                .addressLine1(ADDRESS_LINE_1)
+                .addressLine2(ADDRESS_LINE_2)
+                .buildingName(BUILDING_NAME)
+                .buildingNumber(BUILDING_NUMBER)
+                .city(CITY)
+                .country(COUNTRY)
+                .county(COUNTY)
+                .postcode(POSTCODE)
+                .estimatedValue(ESTIMATED_VALUE)
+                .purchaseValue(PURCHASE_VALUE)
+                .whenHasLastPurchased(WHEN_LAST_PURCHASED)
+                .propertyType(PROPERTY_TYPE)
+                .numberOfBedrooms(NUMBER_OF_BEDROOMS)
+                .hasAGarage(true)
+                .build();
+    }
+
+    protected Application getApplication() {
+        return Application.builder()
+                .id(APPLICATION_ID)
+                .createdDate(CREATED_DATE)
+                .applicants(List.of(getApplicant()))
+                .loanInformation(getLoanInformation())
+                .propertyDetails(getPropertyDetails())
+                .applicationType(DIP_APPLICATION_TYPE)
+                .offers(List.of(getOffer()))
+                .build();
+    }
+
+    protected Offer getOffer() {
+        return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE).build();
+    }
+
 }
