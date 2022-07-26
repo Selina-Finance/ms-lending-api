@@ -30,7 +30,6 @@ import com.selina.lending.internal.service.application.domain.Applicant;
 
 public class ApplicantMapperTest extends MapperBase {
 
-
     @Test
     public void mapToApplicantFromDIPApplicantDto() {
         //Given

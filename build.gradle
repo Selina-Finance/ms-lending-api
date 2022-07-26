@@ -21,8 +21,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.1'
 
 	// other
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
 	implementation "org.projectlombok:lombok:1.18.24"
 	implementation 'org.slf4j:slf4j-api:1.7.36'
 	implementation 'org.zalando:problem-spring-web:0.27.0'
