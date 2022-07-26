@@ -42,5 +42,4 @@ public interface ApplicantMapper {
     @InheritConfiguration(name ="mapDipApplicantDto")
     @Mapping(target = "mobileNumber", source = "applicant.mobilePhoneNumber")
     DIPApplicantDto mapToApplicantDto(Applicant applicant);
-
 }
