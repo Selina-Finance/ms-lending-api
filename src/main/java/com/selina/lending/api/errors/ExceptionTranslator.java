@@ -6,10 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
+import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import javax.annotation.Nullable;
 import java.net.URI;
@@ -23,15 +25,29 @@ import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EX
 public class ExceptionTranslator implements ProblemHandling {
 
     /**
-     * Post-process the Problem payload to add the message key for the front-end if needed.
+     * Post-process the Problem payload to add/remove the message key for the front-end if needed.
      */
     @Override
     public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity, NativeWebRequest request) {
         if (entity == null) {
             return null;
         }
-        log.debug("You can program any logic here");
+
+        if (entity.getBody() instanceof ConstraintViolationProblem) {
+            return mapConstraintViolationProblem(entity);
+        }
+
         return entity;
+    }
+
+    private ResponseEntity<Problem> mapConstraintViolationProblem(ResponseEntity<Problem> entity) {
+        Problem problem = entity.getBody();
+        ProblemBuilder builder = Problem
+                .builder()
+                .withStatus(problem.getStatus())
+                .withTitle(problem.getTitle())
+                .with("violations", ((ConstraintViolationProblem) problem).getViolations());
+        return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
     }
 
     @Override
@@ -40,7 +56,7 @@ public class ExceptionTranslator implements ProblemHandling {
             return buildProblem(status, UNABLE_TO_CONVERT_HTTP_MESSAGE, throwable);
         }
 
-        if (isContainsPackageName(throwable.getMessage())) { // hide framework or inner implementation
+        if (isNeedToHideFrameworkDetails(throwable.getMessage())) {
             return buildProblem(status, UNEXPECTED_RUNTIME_EXCEPTION, throwable);
         }
 
@@ -62,7 +78,7 @@ public class ExceptionTranslator implements ProblemHandling {
         return throwable instanceof HttpMessageConversionException;
     }
 
-    private boolean isContainsPackageName(String message) {
+    private boolean isNeedToHideFrameworkDetails(String message) {
         // This list is for sure not complete
         return StringUtils.containsAny(
                 message,
