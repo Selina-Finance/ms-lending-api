@@ -33,6 +33,7 @@ class ExceptionTranslatorTest {
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.detail").value("Unable to convert http message"));
     }
 
@@ -51,6 +52,7 @@ class ExceptionTranslatorTest {
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
                 .andExpect(jsonPath("$.violations.[0].field").value("test"))
                 .andExpect(jsonPath("$.violations.[0].message").value("must not be null"));
@@ -67,6 +69,7 @@ class ExceptionTranslatorTest {
 
                 // Then
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title").value(expectedTitle))
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.detail").value(expectedDetail));
@@ -83,6 +86,7 @@ class ExceptionTranslatorTest {
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.detail").value(expectedDetail));
     }
 
@@ -97,6 +101,7 @@ class ExceptionTranslatorTest {
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.detail").value(expectedDetail));
     }
 
@@ -111,6 +116,7 @@ class ExceptionTranslatorTest {
                 // Then
                 .andExpect(status().isMethodNotAllowed())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title").value("Method Not Allowed"))
                 .andExpect(jsonPath("$.detail").value(expectedDetail));
     }
@@ -126,6 +132,7 @@ class ExceptionTranslatorTest {
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title").value(expectedTitle));
     }
 
@@ -140,6 +147,7 @@ class ExceptionTranslatorTest {
                 // Then
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title").value(expectedTitle));
     }
 }
