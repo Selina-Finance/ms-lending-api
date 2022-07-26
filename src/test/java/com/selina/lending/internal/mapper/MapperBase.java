@@ -24,7 +24,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.selina.lending.internal.dto.AddressDto;
+import com.selina.lending.internal.dto.ApplicantDto;
+import com.selina.lending.internal.dto.DIPApplicantDto;
+import com.selina.lending.internal.dto.EmploymentDto;
+import com.selina.lending.internal.dto.IncomeDto;
+import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.service.application.domain.Address;
+import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.service.application.domain.Employment;
 
 public abstract class MapperBase {
 
@@ -36,6 +43,9 @@ public abstract class MapperBase {
     public static final Integer ESTIMATED_RETIREMENT_AGE = 65;
     public static final String NATIONALITY = "British";
     public static final Date DOB;
+    public static final String EMPLOYER_NAME = "Employer name";
+    public static final Double INCOME_AMOUNT = 15000.00;
+    public static final String INCOME_TYPE = "Gross Salary";
 
     static {
         try {
@@ -60,25 +70,6 @@ public abstract class MapperBase {
     public static final Date TO_DATE = Date.from(Instant.now());
 
 
-
-    protected Address getAddress() {
-        Address address = Address.builder()
-                .addressLine1(ADDRESS_LINE_1)
-                .addressLine2(ADDRESS_LINE_2)
-                .addressType(ADDRESS_TYPE)
-                .country(COUNTRY)
-                .buildingNumber(BUILDING_NUMBER)
-                .buildingName(BUILDING_NAME)
-                .city(CITY)
-                .postcode(POSTCODE)
-                .udprn(UDPRN)
-                .poBox(PO_BOX)
-                .county(COUNTY)
-                .from(FROM_DATE)
-                .build();
-        return address;
-    }
-
     protected List<AddressDto> getAddressDtoList() {
         return List.of(getAddressDto());
     }
@@ -100,5 +91,110 @@ public abstract class MapperBase {
                 .toDate(TO_DATE)
                 .build();
         return addressDto;
+    }
+
+    protected ApplicantDto getApplicantDto() {
+        ApplicantDto applicantDto = ApplicantDto.builder()
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .gender(GENDER)
+                .emailAddress(EMAIL_ADDRESS)
+                .mobileNumber(MOBILE_NUMBER)
+                .addresses(getAddressDtoList())
+                .applicant2LivesWithApplicant1(false)
+                .dateOfBirth(DOB)
+                .build();
+        return applicantDto;
+    }
+
+    protected EmploymentDto getEmploymentDto() {
+        EmploymentDto employmentDto = EmploymentDto.builder()
+                .employerName(EMPLOYER_NAME)
+                .build();
+        return employmentDto;
+    }
+
+    protected DIPApplicantDto getDIPApplicantDto() {
+        DIPApplicantDto dipApplicantDto = DIPApplicantDto.builder()
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .gender(GENDER)
+                .emailAddress(EMAIL_ADDRESS)
+                .mobileNumber(MOBILE_NUMBER)
+                .applicantUsedAnotherName(false)
+                .identifier(1)
+                .estimatedRetirementAge(ESTIMATED_RETIREMENT_AGE)
+                .addresses(getAddressDtoList())
+                .nationality(NATIONALITY)
+                .applicant2LivesWithApplicant1(false)
+                .dateOfBirth(DOB)
+                .livedInCurrentAddressFor3Years(true)
+                .employment(getEmploymentDto())
+                .income(getIncomeDto())
+                .build();
+        return dipApplicantDto;
+    }
+
+    protected IncomeDto getIncomeDto() {
+        IncomeDto incomeDto = IncomeDto.builder().income(List.of(getIncomeItemDto())).build();
+
+        return incomeDto;
+    }
+
+    protected IncomeItemDto getIncomeItemDto() {
+        IncomeItemDto incomeItemDto = IncomeItemDto.builder()
+                .amount(INCOME_AMOUNT)
+                .type(INCOME_TYPE)
+                .build();
+
+        return incomeItemDto;
+    }
+
+    protected Applicant getApplicant() {
+        Applicant applicant = Applicant.builder()
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .gender(GENDER)
+                .emailAddress(EMAIL_ADDRESS)
+                .mobilePhoneNumber(MOBILE_NUMBER)
+                .identifier(1)
+                .estimatedRetirementAge(ESTIMATED_RETIREMENT_AGE)
+                .addresses(getAddressList())
+                .nationality(NATIONALITY)
+                .applicant2LivesWithApplicant1(false)
+                .livedInCurrentAddressFor3Years(true)
+                .dateOfBirth(DOB)
+                .employment(getEmployment())
+                .build();
+        return applicant;
+    }
+
+    protected Employment getEmployment() {
+        Employment employment = Employment.builder()
+                .employerName(EMPLOYER_NAME)
+                .build();
+        return employment;
+    }
+
+    protected Address getAddress() {
+        Address address = Address.builder()
+                .addressLine1(ADDRESS_LINE_1)
+                .addressLine2(ADDRESS_LINE_2)
+                .addressType(ADDRESS_TYPE)
+                .country(COUNTRY)
+                .buildingNumber(BUILDING_NUMBER)
+                .buildingName(BUILDING_NAME)
+                .city(CITY)
+                .postcode(POSTCODE)
+                .udprn(UDPRN)
+                .poBox(PO_BOX)
+                .county(COUNTY)
+                .from(FROM_DATE)
+                .build();
+        return address;
+    }
+
+    protected List<Address> getAddressList() {
+        return List.of(getAddress());
     }
 }

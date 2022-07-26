@@ -37,6 +37,7 @@ public interface ApplicantMapper {
     Applicant mapToApplicant(DIPApplicantDto dipApplicantDto);
 
     @InheritConfiguration(name = "mapApplicant")
+    @Mapping(target = "mobilePhoneNumber", source = "applicantDto.mobileNumber")
     Applicant mapToApplicant(ApplicantDto applicantDto);
 
     @InheritConfiguration(name ="mapDipApplicantDto")

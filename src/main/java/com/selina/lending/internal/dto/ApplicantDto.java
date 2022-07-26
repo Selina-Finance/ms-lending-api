@@ -58,7 +58,7 @@ public class ApplicantDto {
     private int numberOfAdultDependants;
     private int numberOfChildDependants;
 
-    @NotNull(message = "livedInCurrrentAddressFor3Years is required")
+    @NotNull(message = "livedInCurrentAddressFor3Years is required")
     private Boolean livedInCurrentAddressFor3Years;
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
