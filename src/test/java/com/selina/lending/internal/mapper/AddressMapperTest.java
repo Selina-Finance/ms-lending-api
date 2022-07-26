@@ -17,53 +17,21 @@
 
 package com.selina.lending.internal.mapper;
 
-
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-
-import java.time.Instant;
-import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.service.application.domain.Address;
 
-public class AddressMapperTest {
+public class AddressMapperTest extends MapperBase{
 
-    private static final String ADDRESS_LINE_1 = "address line 1";
-    private static final String ADDRESS_LINE_2 = "address line 2";
-    private static final String ADDRESS_TYPE = "Home";
-    private static final String COUNTRY = "England";
-    private static final String BUILDING_NUMBER = "10";
-    private static final String CITY = "a city";
-    private static final String POSTCODE = "postcode";
-    private static final int UDPRN = 1235;
-    private static final String PO_BOX = "poBox";
-    private static final String BUILDING_NAME = "building name";
-    private static final String COUNTY = "county";
-    public static final Date FROM_DATE = Date.from(Instant.now());
-    public static final Date TO_DATE = Date.from(Instant.now());
 
     @Test
     public void mapToAddress() {
         //Given
-        AddressDto addressDto = AddressDto.builder()
-                .addressLine1(ADDRESS_LINE_1)
-                .addressLine2(ADDRESS_LINE_2)
-                .addressType(ADDRESS_TYPE)
-                .country(COUNTRY)
-                .buildingNumber(BUILDING_NUMBER)
-                .buildingName(BUILDING_NAME)
-                .city(CITY)
-                .postcode(POSTCODE)
-                .udprn(UDPRN)
-                .poBox(PO_BOX)
-                .county(COUNTY)
-                .fromDate(FROM_DATE)
-                .toDate(TO_DATE)
-                .build();
+        AddressDto addressDto = getAddressDto();
 
         // When
         Address address = AddressMapper.INSTANCE.mapToAddress(addressDto);
@@ -87,20 +55,7 @@ public class AddressMapperTest {
     @Test
     public void mapToAddressDto() {
         //Given
-        Address address = Address.builder()
-                .addressLine1(ADDRESS_LINE_1)
-                .addressLine2(ADDRESS_LINE_2)
-                .addressType(ADDRESS_TYPE)
-                .country(COUNTRY)
-                .buildingNumber(BUILDING_NUMBER)
-                .buildingName(BUILDING_NAME)
-                .city(CITY)
-                .postcode(POSTCODE)
-                .udprn(UDPRN)
-                .poBox(PO_BOX)
-                .county(COUNTY)
-                .from(FROM_DATE)
-                .build();
+        Address address = getAddress();
 
         // When
         AddressDto addressDto = AddressMapper.INSTANCE.mapToAddressDto(address);

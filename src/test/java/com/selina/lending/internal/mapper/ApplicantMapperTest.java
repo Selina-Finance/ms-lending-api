@@ -27,14 +27,8 @@ import com.selina.lending.internal.dto.ApplicantDto;
 import com.selina.lending.internal.dto.DIPApplicantDto;
 import com.selina.lending.internal.service.application.domain.Applicant;
 
-public class ApplicantMapperTest {
+public class ApplicantMapperTest extends MapperBase {
 
-    private static final String FIRST_NAME = "Sally";
-    private static final String LAST_NAME = "Smith";
-    private static final String EMAIL_ADDRESS = "sally.smith@someemail.com";
-    private static final String GENDER = "Female";
-    private static final String MOBILE_NUMBER = "07965234654";
-    private static final Integer ESTIMATED_RETIREMENT_AGE = 65;
 
     @Test
     void mapToApplicant() {
@@ -47,6 +41,10 @@ public class ApplicantMapperTest {
                 .mobileNumber(MOBILE_NUMBER)
                 .identifier(1)
                 .estimatedRetirementAge(ESTIMATED_RETIREMENT_AGE)
+                .addresses(getAddressDtoList())
+                .nationality(NATIONALITY)
+                .applicant2LivesWithApplicant1(false)
+                .dateOfBirth(DOB)
                 .build();
 
         //When
@@ -78,4 +76,5 @@ public class ApplicantMapperTest {
     @Test
     void mapToApplicantDto() {
     }
+
 }
