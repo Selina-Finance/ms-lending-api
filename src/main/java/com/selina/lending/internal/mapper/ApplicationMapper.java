@@ -17,21 +17,26 @@
 
 package com.selina.lending.internal.mapper;
 
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.ApplicationDto;
+import com.selina.lending.internal.dto.DIPApplicationDto;
+import com.selina.lending.internal.mapper.config.DIPApplicationMapperConfig;
 import com.selina.lending.internal.service.application.domain.Application;
 
-@Mapper(uses = {LoanInformationMapper.class, ApplicantMapper.class, OfferMapper.class, PropertyDetailsMapper.class})
+@Mapper(config = DIPApplicationMapperConfig.class , uses = {LoanInformationMapper.class, ApplicantMapper.class, OfferMapper.class, PropertyDetailsMapper.class})
 public interface ApplicationMapper {
     ApplicationMapper INSTANCE = Mappers.getMapper(ApplicationMapper.class);
 
+    @InheritConfiguration(name = "mapDIPApplicationDto")
     @Mapping(target = "requestType", source = "application.applicationType")
-    ApplicationDto mapToApplicationDto(Application application);
+    DIPApplicationDto mapToDIPApplicationDto(Application application);
 
-    @Mapping(target = "applicationType", source = "applicationDto.requestType")
-    Application mapToApplication(ApplicationDto applicationDto);
+    @InheritConfiguration(name = "mapDIPApplication")
+    @Mapping(target = "applicationType", source = "dipApplicationDto.requestType")
+    Application mapToApplication(DIPApplicationDto dipApplicationDto);
 }
 

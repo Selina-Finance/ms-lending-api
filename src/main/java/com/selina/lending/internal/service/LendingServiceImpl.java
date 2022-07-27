@@ -26,7 +26,6 @@ public class LendingServiceImpl implements LendingService {
     @Override
     public ApplicationResponse createDipApplication(DIPApplicationRequest dipApplicationRequest) {
         ApplicationRequest applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
-        System.out.println("Converted " +applicationRequest);
         return null;
     }
 }

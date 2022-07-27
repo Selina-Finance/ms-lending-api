@@ -18,6 +18,8 @@ package com.selina.lending.api.controller;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,7 +61,7 @@ public class LendingController implements LendingOperations {
     }
 
     @Override
-    public ResponseEntity createDipApplication(DIPApplicationRequest dipApplicationRequest) {
+    public ResponseEntity createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
         log.info("LendingController createDipApplication()");
         //TODO
         ApplicationResponse applicationResponse = lendingService.createDipApplication(dipApplicationRequest);

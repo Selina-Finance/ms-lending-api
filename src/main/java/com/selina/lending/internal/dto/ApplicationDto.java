@@ -24,10 +24,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 public class ApplicationDto {
@@ -42,8 +43,4 @@ public class ApplicationDto {
     public String applicationStage;
     public Date statusDate;
     public Date createdDate;
-    public List<ApplicantDto> applicants;
-    private LoanInformationDto loanInformation;
-    private PropertyDetailsDto propertyDetails;
-    private List<OfferDto> offers;
 }

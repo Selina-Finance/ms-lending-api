@@ -27,10 +27,15 @@ import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.ApplicantDto;
 import com.selina.lending.internal.dto.ApplicationDto;
+import com.selina.lending.internal.dto.ApplicationRequest;
 import com.selina.lending.internal.dto.DIPApplicantDto;
+import com.selina.lending.internal.dto.DIPApplicationDto;
+import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
 import com.selina.lending.internal.dto.EmploymentDto;
+import com.selina.lending.internal.dto.ExpenditureDto;
 import com.selina.lending.internal.dto.FacilityDto;
+import com.selina.lending.internal.dto.FeesDto;
 import com.selina.lending.internal.dto.IncomeDto;
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
@@ -39,6 +44,7 @@ import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.Application;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.Employment;
 import com.selina.lending.internal.service.application.domain.Facility;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
@@ -70,6 +76,7 @@ public abstract class MapperBase {
     public static final String PROPERTY_TYPE = "House";
     public static final int NUMBER_OF_BEDROOMS = 4;
     public static final String DIP_APPLICATION_TYPE = "DIP";
+    public static final String APPLICATION_TYPE = "Quick Quote";
     public static final String APPLICATION_ID = "123456789";
     public static final Date CREATED_DATE = Date.from(Instant.now());
     public static final String ADDRESS_LINE_1 = "address line 1";
@@ -86,6 +93,9 @@ public abstract class MapperBase {
     public static final Date FROM_DATE;
     public static final String OFFER_ID = "offer123";
     public static final String PRODUCT_CODE = "product123";
+    public static final String EXPENDITURE_TYPE = "expenditure type";
+    public static final String SOURCE = "broker source";
+    protected static final Double ARRANGEMENT_FEE = 1000.00;
 
     static {
         try {
@@ -99,6 +109,36 @@ public abstract class MapperBase {
 
     protected List<AddressDto> getAddressDtoList() {
         return List.of(getAddressDto());
+    }
+
+    protected ApplicationRequest getApplicationRequestDto() {
+        return ApplicationRequest.builder()
+                .requestType(APPLICATION_TYPE)
+                .expenditure(List.of(getExpenditureDto()))
+                .productCode(PRODUCT_CODE)
+                .source(SOURCE)
+                .build();
+    }
+
+    protected DIPApplicationRequest getDIPApplicationRequestDto() {
+        return DIPApplicationRequest.builder()
+                .requestType(DIP_APPLICATION_TYPE)
+                .expenditure(List.of(getExpenditureDto()))
+                .applicants(List.of(getDIPApplicantDto()))
+                .loanInformation(getAdvancedLoanInformationDto())
+                .propertyDetails(getDIPPropertyDetailsDto())
+                .fees(getFeesDto())
+                .productCode(PRODUCT_CODE)
+                .source(SOURCE)
+                .build();
+    }
+
+    protected FeesDto getFeesDto() {
+        return FeesDto.builder().arrangementFee(ARRANGEMENT_FEE).addProductFeesToFacility(true).build();
+    }
+
+    protected ExpenditureDto getExpenditureDto() {
+        return ExpenditureDto.builder().expenditureType(EXPENDITURE_TYPE).build();
     }
 
     protected AddressDto getAddressDto() {
@@ -218,10 +258,10 @@ public abstract class MapperBase {
         return OfferDto.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE).build();
     }
 
-    protected ApplicationDto getApplicationDto() {
-        return ApplicationDto.builder().id(APPLICATION_ID).createdDate(CREATED_DATE).applicants(
-                List.of(getApplicantDto())).loanInformation(getLoanInformationDto()).propertyDetails(
-                getPropertyDetailsDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
+    protected DIPApplicationDto getDIPApplicationDto() {
+        return DIPApplicationDto.builder().id(APPLICATION_ID).createdDate(CREATED_DATE).applicants(
+                List.of(getDIPApplicantDto())).loanInformation(getAdvancedLoanInformationDto()).propertyDetails(
+                getDIPPropertyDetailsDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
     }
 
     protected Applicant getApplicant() {
@@ -318,4 +358,7 @@ public abstract class MapperBase {
         return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE).build();
     }
 
+    protected ApplicationResponse getApplicationResponse(){
+        return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).build();
+    }
 }
