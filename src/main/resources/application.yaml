@@ -25,3 +25,23 @@ management:
       enabled: true
     loggers:
       enabled: true
+
+resilience4j:
+  retry:
+    instances:
+      lending-api-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+#  circuitbreaker:
+#    instances:
+#      lending-api-cb:
+#        wait-duration-in-open-state: 1m
+#        permitted-number-of-calls-in-half-open-state: 3
+#        sliding-window-type: count-based
+#        sliding-window-size: 5
+#        minimum-number-of-calls: 5
+#        slow-call-duration-threshold: 1s
+#        slow-call-rate-threshold: 60
+#        failure-rate-threshold: 60
