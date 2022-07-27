@@ -18,6 +18,7 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
-    public ApplicationResponse getApplicationById(String id) {
+    public ApplicationDecisionResponse getApplicationById(String id) {
         log.debug("Request to get application by id: {}", id);
         return middlewareApi.getApplicationById(id);
     }

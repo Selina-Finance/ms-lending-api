@@ -96,6 +96,7 @@ public abstract class MapperBase {
     public static final String EXPENDITURE_TYPE = "expenditure type";
     public static final String SOURCE = "broker source";
     protected static final Double ARRANGEMENT_FEE = 1000.00;
+    public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
 
     static {
         try {
@@ -259,7 +260,7 @@ public abstract class MapperBase {
     }
 
     protected DIPApplicationDto getDIPApplicationDto() {
-        return DIPApplicationDto.builder().id(APPLICATION_ID).createdDate(CREATED_DATE).applicants(
+        return DIPApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).createdDate(CREATED_DATE).applicants(
                 List.of(getDIPApplicantDto())).loanInformation(getAdvancedLoanInformationDto()).propertyDetails(
                 getDIPPropertyDetailsDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
     }
@@ -346,6 +347,7 @@ public abstract class MapperBase {
         return Application.builder()
                 .id(APPLICATION_ID)
                 .createdDate(CREATED_DATE)
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .applicants(List.of(getApplicant()))
                 .loanInformation(getLoanInformation())
                 .propertyDetails(getPropertyDetails())

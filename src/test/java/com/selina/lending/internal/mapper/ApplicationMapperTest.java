@@ -37,6 +37,7 @@ public class ApplicationMapperTest extends MapperBase {
 
         //Then
         assertThat(applicationDto.getId(), equalTo(APPLICATION_ID));
+        assertThat(applicationDto.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(applicationDto.getApplicants().size(), equalTo(1));
         assertThat(applicationDto.getApplicants().get(0).getTitle(), equalTo(TITLE));
         assertThat(applicationDto.getApplicants().get(0).getFirstName(), equalTo(FIRST_NAME));
@@ -64,6 +65,7 @@ public class ApplicationMapperTest extends MapperBase {
 
         //Then
         assertThat(application.getId(), equalTo(APPLICATION_ID));
+        assertThat(application.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(application.getApplicants().size(), equalTo(1));
         assertThat(application.getApplicants().get(0).getTitle(), equalTo(TITLE));
         assertThat(application.getApplicants().get(0).getFirstName(), equalTo(FIRST_NAME));

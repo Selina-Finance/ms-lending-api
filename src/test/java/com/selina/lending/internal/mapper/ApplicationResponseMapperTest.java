@@ -44,7 +44,9 @@ public class ApplicationResponseMapperTest extends MapperBase {
 
         DIPApplicationDto applicationDto = (DIPApplicationDto) applicationResponseDto.getApplication();
 
-        assertThat(applicationDto.requestType, equalTo(DIP_APPLICATION_TYPE));
+        assertThat(applicationDto.getId(), equalTo(APPLICATION_ID));
+        assertThat(applicationDto.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+        assertThat(applicationDto.getRequestType(), equalTo(DIP_APPLICATION_TYPE));
         assertThat(applicationDto.getApplicants(), notNullValue());
         assertThat(applicationDto.getApplicants().size(), equalTo(1));
         assertThat(applicationDto.getApplicants().get(0).getAddresses().size(), equalTo(1));

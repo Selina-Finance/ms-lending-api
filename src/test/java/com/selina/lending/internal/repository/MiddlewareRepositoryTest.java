@@ -19,6 +19,7 @@ package com.selina.lending.internal.repository;
 
 
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class MiddlewareRepositoryTest {
     public void shouldCallHttpClientWhenGetApplicationByIdInvoked() {
         // Given
         var id = UUID.randomUUID().toString();
-        var apiResponse = new ApplicationResponse();
+        var apiResponse = new ApplicationDecisionResponse();
 
         when(middlewareApi.getApplicationById(id)).thenReturn(apiResponse);
 

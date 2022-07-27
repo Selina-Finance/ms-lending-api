@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.service.LendingService;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,7 @@ public class LendingController implements LendingOperations {
     public ResponseEntity getApplication(String id) {
         log.info("LendingController getApplication()");
         //TODO
-        Optional<ApplicationResponse> applicationResponse = lendingService.getApplication(id);
+        Optional<ApplicationDecisionResponse> applicationResponse = lendingService.getApplication(id);
         if (applicationResponse == null || applicationResponse.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -56,7 +57,7 @@ public class LendingController implements LendingOperations {
     public ResponseEntity updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
         log.info("LendingController updateDipApplication()");
         //TODO
-        ApplicationResponse applicationResponse = lendingService.updateDipApplication(dipApplicationRequest);
+        ApplicationResponse applicationResponse = lendingService.updateDipApplication(id, dipApplicationRequest);
         return ResponseEntity.ok().body("Update dip application for id "+ id);
     }
 
