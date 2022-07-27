@@ -15,15 +15,28 @@
  *
  */
 
-package com.selina.lending.internal.service;
+package com.selina.lending.internal.api;
 
-import java.util.Optional;
-
-import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-public interface LendingService {
-    Optional<ApplicationResponse> getApplication(String id);
-    ApplicationResponse updateDipApplication(DIPApplicationRequest dipApplicationRequest);
-    ApplicationResponse createDipApplication(DIPApplicationRequest dipApplicationRequest);
+// TODO: this class should be replaced with FeignClient
+@Slf4j
+@Component
+public class MiddlewareApi {
+
+    public ApplicationResponse getApplicationById(String id) {
+        if (true) {
+            log.debug("====================> Executing remote call to middleware-api");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            throw new RuntimeException("problem with middleware api");
+        }
+
+        return null;
+    }
 }
