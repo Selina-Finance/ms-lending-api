@@ -16,6 +16,8 @@
 
 package com.selina.lending.internal.dto;
 
+import com.selina.lending.internal.mapper.ApplicationResponseMapper;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

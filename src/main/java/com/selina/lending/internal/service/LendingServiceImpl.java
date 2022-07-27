@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.service;
 import java.util.Optional;
+
+import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import org.springframework.stereotype.Service;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
@@ -39,11 +41,11 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     public ApplicationResponse updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
-         return null;
+        return middlewareRepository.updateDipApplication(id, DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
     }
 
     @Override
     public ApplicationResponse createDipApplication(DIPApplicationRequest dipApplicationRequest) {
-        return null;
+        return middlewareRepository.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
     }
 }

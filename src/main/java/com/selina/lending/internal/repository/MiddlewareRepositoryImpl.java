@@ -18,7 +18,9 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,16 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public ApplicationDecisionResponse getApplicationById(String id) {
         log.debug("Request to get application by id: {}", id);
         return middlewareApi.getApplicationById(id);
+    }
+
+    @Override
+    public ApplicationResponse updateDipApplication(String id, ApplicationRequest applicationRequest) {
+        return null;
+    }
+
+    @Override
+    public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
+        return null;
     }
 
     public ApplicationResponse middlewareApiFallback(Exception e) {

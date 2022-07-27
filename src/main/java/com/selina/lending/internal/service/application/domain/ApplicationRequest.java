@@ -39,6 +39,7 @@ public class ApplicationRequest {
     private String applicationStage;
     private String selectedOffer;
     private String selectedProduct;
+    private String externalApplicationId;
     private LoanInformation loanInformation;
     private PropertyDetails propertyDetails;
     private Fees fees;

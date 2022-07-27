@@ -39,6 +39,7 @@ public class DIPApplicationRequestMapperTest extends MapperBase{
 
         //Then
         assertThat(applicationRequest.getApplicationType(), equalTo(APPLICATION_TYPE));
+        assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(applicationRequest.getProductCode(), equalTo(PRODUCT_CODE));
         assertThat(applicationRequest.getSource(), equalTo(SOURCE));
         assertThat(applicationRequest.getExpenditure(), notNullValue());
@@ -56,6 +57,7 @@ public class DIPApplicationRequestMapperTest extends MapperBase{
 
         //Then
         assertThat(applicationRequest.getApplicationType(), equalTo(DIP_APPLICATION_TYPE));
+        assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(applicationRequest.getProductCode(), equalTo(PRODUCT_CODE));
         assertThat(applicationRequest.getSource(), equalTo(SOURCE));
         assertThat(applicationRequest.getExpenditure(), notNullValue());
@@ -69,6 +71,8 @@ public class DIPApplicationRequestMapperTest extends MapperBase{
         assertThat(applicationRequest.getLoanInformation().getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(applicationRequest.getLoanInformation().getFacilities().size(), equalTo(1));
         assertThat(applicationRequest.getPropertyDetails(), notNullValue());
+        assertThat(applicationRequest.getPropertyDetails().getAddressLine1(), equalTo(ADDRESS_LINE_1));
+        assertThat(applicationRequest.getPropertyDetails().getAddressLine2(), equalTo(ADDRESS_LINE_2));
         assertThat(applicationRequest.getFees(), notNullValue());
         assertThat(applicationRequest.getFees().getArrangementFee(), equalTo(ARRANGEMENT_FEE));
     }

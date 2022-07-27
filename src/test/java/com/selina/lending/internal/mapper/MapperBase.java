@@ -44,12 +44,16 @@ import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.Application;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.Employment;
+import com.selina.lending.internal.service.application.domain.Expenditure;
 import com.selina.lending.internal.service.application.domain.Facility;
+import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.Offer;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
+import com.selina.lending.internal.service.application.domain.RuleOutcome;
 
 public abstract class MapperBase {
     public static final String TITLE = "Mrs";
@@ -97,6 +101,7 @@ public abstract class MapperBase {
     public static final String SOURCE = "broker source";
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
+    public static final String RULE_OUTCOME = "Granted";
 
     static {
         try {
@@ -115,6 +120,7 @@ public abstract class MapperBase {
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
                 .requestType(APPLICATION_TYPE)
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .productCode(PRODUCT_CODE)
                 .source(SOURCE)
@@ -124,6 +130,7 @@ public abstract class MapperBase {
     protected DIPApplicationRequest getDIPApplicationRequestDto() {
         return DIPApplicationRequest.builder()
                 .requestType(DIP_APPLICATION_TYPE)
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .applicants(List.of(getDIPApplicantDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
@@ -324,6 +331,14 @@ public abstract class MapperBase {
         return Facility.builder().allocationAmount(ALLOCATION_AMOUNT).allocationPurpose(ALLOCATION_PURPOSE).build();
     }
 
+    protected Fees getFees() {
+        return Fees.builder().arrangementFee(ARRANGEMENT_FEE).addProductFeesToFacility(true).build();
+    }
+
+    protected Expenditure getExpenditure() {
+        return Expenditure.builder().expenditureType(EXPENDITURE_TYPE).build();
+    }
+
     protected PropertyDetails getPropertyDetails() {
         return PropertyDetails.builder()
                 .addressLine1(ADDRESS_LINE_1)
@@ -356,11 +371,30 @@ public abstract class MapperBase {
                 .build();
     }
 
+    protected RuleOutcome getRuleOutcome() {
+        return RuleOutcome.builder().outcome(RULE_OUTCOME).build();
+    }
+
     protected Offer getOffer() {
-        return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE).build();
+        return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE).ruleOutcomes(List.of(getRuleOutcome())).build();
     }
 
     protected ApplicationResponse getApplicationResponse(){
         return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).build();
+    }
+
+    protected ApplicationDecisionResponse getApplicationDecisionResponse() {
+        return ApplicationDecisionResponse.builder()
+                .id(APPLICATION_ID)
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .applicants(List.of(getApplicant()))
+                .applicationType(DIP_APPLICATION_TYPE)
+                .loanInformation(getLoanInformation())
+                .propertyDetails(getPropertyDetails())
+                .offers(List.of(getOffer()))
+                .expenditure(List.of(getExpenditure()))
+                .fees(getFees())
+                .createdDate(CREATED_DATE)
+                .build();
     }
 }

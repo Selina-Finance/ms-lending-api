@@ -45,5 +45,6 @@ public class ApplicationRequest {
     private String productCode;
     private String reference;
 
+    private String externalApplicationId;
     private List<ExpenditureDto> expenditure;
 }

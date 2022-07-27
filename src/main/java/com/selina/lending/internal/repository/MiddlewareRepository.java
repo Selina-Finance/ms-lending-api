@@ -18,8 +18,14 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 public interface MiddlewareRepository {
     ApplicationDecisionResponse getApplicationById(String id);
+
+    ApplicationResponse updateDipApplication(String id, ApplicationRequest applicationRequest);
+
+    ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 }
 
