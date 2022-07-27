@@ -1,5 +1,6 @@
 package com.selina.lending.internal.service;
 
+import com.selina.lending.internal.repository.MiddlewareRepository;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
@@ -7,9 +8,17 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 
 @Service
 public class LendingServiceImpl implements LendingService {
+
+    private final MiddlewareRepository middlewareRepository;
+
+    public LendingServiceImpl(MiddlewareRepository middlewareRepository) {
+        this.middlewareRepository = middlewareRepository;
+    }
+
     @Override
     public ApplicationResponse getApplication(String id) {
-        return null;
+
+        return middlewareRepository.getApplicationById(id);
     }
 
     @Override
