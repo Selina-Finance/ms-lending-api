@@ -119,10 +119,6 @@ public abstract class MapperBase {
         }
     }
 
-    protected List<AddressDto> getAddressDtoList() {
-        return List.of(getAddressDto());
-    }
-
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
                 .requestType(APPLICATION_TYPE)
@@ -180,7 +176,7 @@ public abstract class MapperBase {
                 .gender(GENDER)
                 .emailAddress(EMAIL_ADDRESS)
                 .mobileNumber(MOBILE_NUMBER)
-                .addresses(getAddressDtoList())
+                .addresses(List.of(getAddressDto()))
                 .applicant2LivesWithApplicant1(false)
                 .dateOfBirth(DOB)
                 .build();
@@ -201,7 +197,7 @@ public abstract class MapperBase {
                 .applicantUsedAnotherName(false)
                 .identifier(1)
                 .estimatedRetirementAge(ESTIMATED_RETIREMENT_AGE)
-                .addresses(getAddressDtoList())
+                .addresses(List.of(getAddressDto()))
                 .nationality(NATIONALITY)
                 .applicant2LivesWithApplicant1(false)
                 .dateOfBirth(DOB)
@@ -212,12 +208,9 @@ public abstract class MapperBase {
     }
 
     protected IncomeDto getIncomeDto() {
-        return IncomeDto.builder().income(List.of(getIncomeItemDto())).build();
+        return IncomeDto.builder().income(List.of(IncomeItemDto.builder().amount(INCOME_AMOUNT).type(INCOME_TYPE).build())).build();
     }
 
-    protected IncomeItemDto getIncomeItemDto() {
-        return IncomeItemDto.builder().amount(INCOME_AMOUNT).type(INCOME_TYPE).build();
-    }
 
     protected LoanInformationDto getLoanInformationDto() {
         return LoanInformationDto.builder()
@@ -298,7 +291,7 @@ public abstract class MapperBase {
                 .mobilePhoneNumber(MOBILE_NUMBER)
                 .identifier(1)
                 .estimatedRetirementAge(ESTIMATED_RETIREMENT_AGE)
-                .addresses(getAddressList())
+                .addresses(List.of(getAddress()))
                 .nationality(NATIONALITY)
                 .applicant2LivesWithApplicant1(false)
                 .livedInCurrentAddressFor3Years(true)
@@ -331,10 +324,6 @@ public abstract class MapperBase {
                 .county(COUNTY)
                 .from(FROM_DATE)
                 .build();
-    }
-
-    protected List<Address> getAddressList() {
-        return List.of(getAddress());
     }
 
     protected LoanInformation getLoanInformation() {
