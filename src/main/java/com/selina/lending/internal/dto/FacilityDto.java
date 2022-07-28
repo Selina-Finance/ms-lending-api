@@ -16,18 +16,12 @@
 
 package com.selina.lending.internal.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class FacilityDto {
-    public Double allocationAmount;
-    public String allocationPurpose;
+    Double allocationAmount;
+    String allocationPurpose;
 }

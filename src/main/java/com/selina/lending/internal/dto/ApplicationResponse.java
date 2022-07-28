@@ -16,20 +16,14 @@
 
 package com.selina.lending.internal.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class ApplicationResponse {
-    private String message;
-    private String requestType;
-    private String applicationId;
-    private ApplicationDto application;
+    String message;
+    String requestType;
+    String applicationId;
+    ApplicationDto application;
 }

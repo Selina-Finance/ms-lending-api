@@ -16,59 +16,53 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class PropertyDetails {
-    private String addressLine1;
-    private String addressLine2;
-    private String city;
-    private String postcode;
-    private String buildingName;
-    private String buildingNumber;
-    private String subBuildingName;
-    private Integer udprn;
-    private String poBox;
-    private String county;
-    private String country;
-    private Double estimatedValue;
-    private String whenHasLastPurchased;
-    private Double purchaseValue;
-    private Integer internalFloorSpace;
-    private Integer numberOfPriorCharges;
-    private String propertyType;
-    private int numberOfBedrooms;
-    private Boolean hasBeenAffectedByJapaneseKnotWeed;
-    private Boolean hasBeenBuiltInThePast2Years;
-    private Boolean hasSection20NoticeServed;
-    private Boolean hasSharedOwnership;
-    private Boolean hasSufferedFromSubsidence;
-    private Boolean is4thFloorOrHigherWithoutLift;
-    private Boolean isHmoOrMub;
-    private Boolean isListedAsGradeIOrGradeIiOrA;
-    private Boolean notOfStandardConstruction;
-    private String constructionYear;
-    private String tenure;
-    private Boolean isThePropertyAnExLocalAuthority;
-    private Boolean hasAGarage;
-    private Integer yearsRemainingOnLease;
-    private Integer hometrackConfidenceLevel;
-    private Double hometrackValuation;
-    private Double ricsValuation;
-    private String buildingWarrantyCertificate;
-    private Boolean isAboveCommercialProperty;
-    private String typeOfCommercialPremises;
-    private Integer floorsInBuilding;
-    private String floorOfFlat;
-    private Boolean notResidentialUse;
-    private Boolean isApplicantResidence;
-    private Boolean isAboveCommercialPropertyDetails;
+    String addressLine1;
+    String addressLine2;
+    String city;
+    String postcode;
+    String buildingName;
+    String buildingNumber;
+    String subBuildingName;
+    Integer udprn;
+    String poBox;
+    String county;
+    String country;
+    Double estimatedValue;
+    String whenHasLastPurchased;
+    Double purchaseValue;
+    Integer internalFloorSpace;
+    Integer numberOfPriorCharges;
+    String propertyType;
+    int numberOfBedrooms;
+    Boolean hasBeenAffectedByJapaneseKnotWeed;
+    Boolean hasBeenBuiltInThePast2Years;
+    Boolean hasSection20NoticeServed;
+    Boolean hasSharedOwnership;
+    Boolean hasSufferedFromSubsidence;
+    Boolean is4thFloorOrHigherWithoutLift;
+    Boolean isHmoOrMub;
+    Boolean isListedAsGradeIOrGradeIiOrA;
+    Boolean notOfStandardConstruction;
+    String constructionYear;
+    String tenure;
+    Boolean isThePropertyAnExLocalAuthority;
+    Boolean hasAGarage;
+    Integer yearsRemainingOnLease;
+    Integer hometrackConfidenceLevel;
+    Double hometrackValuation;
+    Double ricsValuation;
+    String buildingWarrantyCertificate;
+    Boolean isAboveCommercialProperty;
+    String typeOfCommercialPremises;
+    Integer floorsInBuilding;
+    String floorOfFlat;
+    Boolean notResidentialUse;
+    Boolean isApplicantResidence;
+    Boolean isAboveCommercialPropertyDetails;
 }

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.service.LendingService;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -26,6 +28,8 @@ public class LendingControllerTest {
     @MockBean
     private LendingService lendingService;
 
+    @MockBean
+    private ApplicationDecisionResponse mwApplicationDecisionResponse;
     @MockBean
     private ApplicationResponse mwApplicationResponse;
 
@@ -42,7 +46,7 @@ public class LendingControllerTest {
     @Test
     public void getApplication() {
         //Given
-        when(lendingService.getApplication(eq(APPLICATION_ID))).thenReturn(mwApplicationResponse);
+        when(lendingService.getApplication(eq(APPLICATION_ID))).thenReturn(Optional.of(mwApplicationDecisionResponse));
 
         //When
         lendingController.getApplication(APPLICATION_ID);
@@ -66,12 +70,12 @@ public class LendingControllerTest {
     @Test
     public void updateDipApplication() {
         //Given
-        when(lendingService.updateDipApplication(eq(dipApplicationRequest))).thenReturn(mwApplicationResponse);
+        when(lendingService.updateDipApplication(eq(APPLICATION_ID), eq(dipApplicationRequest))).thenReturn(mwApplicationResponse);
 
         //When
         lendingController.updateDipApplication(APPLICATION_ID, dipApplicationRequest);
 
         //Then
-        verify(lendingService, times(1)).updateDipApplication(eq(dipApplicationRequest));
+        verify(lendingService, times(1)).updateDipApplication(eq(APPLICATION_ID), eq(dipApplicationRequest));
     }
 }

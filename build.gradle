@@ -28,10 +28,12 @@ dependencies {
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
 	implementation "org.projectlombok:lombok:1.18.24"
 	implementation 'org.slf4j:slf4j-api:1.7.36'
 	implementation 'org.zalando:problem-spring-web:0.27.0'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'org.mapstruct:mapstruct:1.5.1.Final'
 
 	// test
 	testImplementation 'org.hamcrest:hamcrest:2.2'

@@ -16,23 +16,17 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class Document {
-    private String documentType;
-    private boolean required;
-    private boolean submitted;
-    private boolean verified;
-    private String description;
-    private String fileName;
-    private String fileContent;
+    String documentType;
+    boolean required;
+    boolean submitted;
+    boolean verified;
+    String description;
+    String fileName;
+    String fileContent;
 }

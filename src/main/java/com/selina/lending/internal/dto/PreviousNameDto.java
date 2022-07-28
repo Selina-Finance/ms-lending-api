@@ -16,20 +16,14 @@
 
 package com.selina.lending.internal.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class PreviousNameDto {
-    private String title;
-    private String firstName;
-    private String middleName;
-    private String lastName;
+    String title;
+    String firstName;
+    String middleName;
+    String lastName;
 }

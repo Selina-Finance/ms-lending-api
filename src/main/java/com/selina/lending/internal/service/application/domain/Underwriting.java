@@ -16,22 +16,16 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class Underwriting {
-    private String stageName;
-    private String subStage;
-    private String adviceFromBrokerSubmitter;
-    private String disbursementType;
-    private String underwritingOwner;
-    private String initialDisbursalsAmount;
+    String stageName;
+    String subStage;
+    String adviceFromBrokerSubmitter;
+    String disbursementType;
+    String underwritingOwner;
+    String initialDisbursalsAmount;
 }

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,5 +46,5 @@ public interface LendingOperations {
 
     @Operation(description = "Create a new Decision In Principle (DIP) application")
     @PostMapping(value = "/dip")
-    ResponseEntity createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
+    ResponseEntity<ApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 }

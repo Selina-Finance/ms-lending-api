@@ -23,48 +23,44 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
 public class ApplicantDto {
-    @NotBlank(message = "title is required")
+    @NotBlank
     private String title;
 
     @Email(message = "emailAddress is not valid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
-    @NotBlank(message = "emailAddress is required")
+    @NotBlank
     private String emailAddress;
 
-    @NotBlank(message = "mobileNumber is required")
+    @NotBlank
     private String mobileNumber;
 
-    @NotBlank(message = "firstName is required")
+    @NotBlank
     private String firstName;
 
-    @NotBlank(message = "lastName is required")
+    @NotBlank
     private String lastName;
     private String middleName;
     private String gender;
 
-    @NotNull(message = "dateOfBirth is required")
+    @NotNull
     private Date dateOfBirth;
     private int numberOfAdultDependants;
     private int numberOfChildDependants;
 
-    @NotNull(message = "livedInCurrrentAddressFor3Years is required")
+    @NotNull
     private Boolean livedInCurrentAddressFor3Years;
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
 
     private Date currentAddressMovedInDate;
 
-    @NotNull(message = "address is required")
+    @NotNull
     private List<AddressDto> addresses;
 }

@@ -17,9 +17,17 @@
 
 package com.selina.lending.internal.repository;
 
+import java.util.Optional;
+
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 public interface MiddlewareRepository {
-    ApplicationResponse getApplicationById(String id);
+    Optional<ApplicationDecisionResponse> getApplicationById(String id);
+
+    ApplicationResponse updateDipApplication(String id, ApplicationRequest applicationRequest);
+
+    ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 }
+

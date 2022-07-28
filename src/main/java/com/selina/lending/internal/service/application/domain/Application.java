@@ -19,31 +19,25 @@ package com.selina.lending.internal.service.application.domain;
 import java.util.Date;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class Application {
-    public String id;
-    public String source;
-    public String sourceClientId;
-    public String sourceAccount;
-    public String externalApplicationId;
-    public String productCode;
-    public String applicationType;
-    public String status;
-    public String applicationStage;
-    public Date statusDate;
-    public Date createdDate;
-    public List<Applicant> applicants;
-    private LoanInformation loanInformation;
-    private PropertyDetails propertyDetails;
-    private List<Offer> offers;
+    String id;
+    String source;
+    String sourceClientId;
+    String sourceAccount;
+    String externalApplicationId;
+    String productCode;
+    String applicationType;
+    String status;
+    String applicationStage;
+    Date statusDate;
+    Date createdDate;
+    List<Applicant> applicants;
+    LoanInformation loanInformation;
+    PropertyDetails propertyDetails;
+    List<Offer> offers;
 }

@@ -16,13 +16,18 @@
 
 package com.selina.lending.api.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.selina.lending.internal.dto.ApplicationDecisionResponse;
+import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
+import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.service.LendingService;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,26 +43,23 @@ public class LendingController implements LendingOperations {
     }
 
     @Override
-    public ResponseEntity getApplication(String id) {
-        log.info("LendingController getApplication()");
-        //TODO
-        ApplicationResponse applicationResponse = lendingService.getApplication(id);
-        return ResponseEntity.ok().body("Get application for id "+id);
+    public ResponseEntity<ApplicationDecisionResponse> getApplication(String id) {
+        log.info("Get application {}", id);
+        var applicationResponse = lendingService.getApplication(id);
+        return ResponseEntity.of(applicationResponse.map(ApplicationDecisionResponseMapper.INSTANCE::mapToApplicationDecisionResponseDto));
     }
 
     @Override
     public ResponseEntity updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
-        log.info("LendingController updateDipApplication()");
-        //TODO
-        ApplicationResponse applicationResponse = lendingService.updateDipApplication(dipApplicationRequest);
-        return ResponseEntity.ok().body("Update dip application for id "+ id);
+        log.info("Update DIP application {}", id);
+        var applicationResponse = lendingService.updateDipApplication(id, dipApplicationRequest);
+        return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 
     @Override
-    public ResponseEntity createDipApplication(DIPApplicationRequest dipApplicationRequest) {
-        log.info("LendingController createDipApplication()");
-        //TODO
-        ApplicationResponse applicationResponse = lendingService.createDipApplication(dipApplicationRequest);
-        return ResponseEntity.ok().body("Create new dip application");
+    public ResponseEntity<ApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
+        log.info("Create DIP application with externalApplicationId {}", dipApplicationRequest.getExternalApplicationId());
+        var applicationResponse = lendingService.createDipApplication(dipApplicationRequest);
+        return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 }

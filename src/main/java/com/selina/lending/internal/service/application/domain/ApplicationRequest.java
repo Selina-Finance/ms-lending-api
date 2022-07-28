@@ -18,17 +18,11 @@ package com.selina.lending.internal.service.application.domain;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Data
 public class ApplicationRequest {
     private String applicationType;
     private String source;
@@ -39,6 +33,7 @@ public class ApplicationRequest {
     private String applicationStage;
     private String selectedOffer;
     private String selectedProduct;
+    private String externalApplicationId;
     private LoanInformation loanInformation;
     private PropertyDetails propertyDetails;
     private Fees fees;

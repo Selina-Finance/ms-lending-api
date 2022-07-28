@@ -18,29 +18,23 @@ package com.selina.lending.internal.service.application.domain;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class CreditCheck {
-    private String serviceUsed;
-    private String requestId;
-    private Date requestTimeStamp;
-    private String responseId;
-    private Date responseTimeStamp;
-    private String responseStatus;
-    private int creditScore;
-    private String creditCheckReference;
-    private String errorCode;
-    private String message;
-    private String status;
-    private boolean hardCheckCompleted;
-    private Date hardCheckCompletedDate;
+    String serviceUsed;
+    String requestId;
+    Date requestTimeStamp;
+    String responseId;
+    Date responseTimeStamp;
+    String responseStatus;
+    int creditScore;
+    String creditCheckReference;
+    String errorCode;
+    String message;
+    String status;
+    boolean hardCheckCompleted;
+    Date hardCheckCompletedDate;
 }

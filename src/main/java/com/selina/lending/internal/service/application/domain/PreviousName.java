@@ -16,20 +16,14 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class PreviousName {
-    private String title;
-    private String firstName;
-    private String middleName;
-    private String lastName;
+    String title;
+    String firstName;
+    String middleName;
+    String lastName;
 }

@@ -18,30 +18,24 @@ package com.selina.lending.internal.dto;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class AddressDto {
-    private String addressType;
-    private String addressLine1;
-    private String addressLine2;
-    private String city;
-    private String postcode;
-    private String buildingName;
-    private String buildingNumber;
-    private String subBuildingName;
-    private int udprn;
-    private String poBox;
-    private String county;
-    private String country;
-    private Date fromDate;
-    private Date toDate;
+    String addressType;
+    String addressLine1;
+    String addressLine2;
+    String city;
+    String postcode;
+    String buildingName;
+    String buildingNumber;
+    String subBuildingName;
+    int udprn;
+    String poBox;
+    String county;
+    String country;
+    Date fromDate;
+    Date toDate;
 }

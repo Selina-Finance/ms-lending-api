@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.api;
 
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MiddlewareApi {
 
-    public ApplicationResponse getApplicationById(String id) {
+    public ApplicationDecisionResponse getApplicationById(String id) {
         if (true) {
             log.debug("====================> Executing remote call to middleware-api");
             try {
@@ -37,6 +39,14 @@ public class MiddlewareApi {
             throw new RuntimeException("problem with middleware api");
         }
 
+        return null;
+    }
+
+    public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
+        return null;
+    }
+
+    public ApplicationResponse updateDipApplication(ApplicationRequest applicationRequest) {
         return null;
     }
 }

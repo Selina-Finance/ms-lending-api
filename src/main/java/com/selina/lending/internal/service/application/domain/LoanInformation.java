@@ -18,22 +18,16 @@ package com.selina.lending.internal.service.application.domain;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class LoanInformation {
-    private Integer requestedLoanAmount;
-    private int requestedLoanTerm;
-    private int numberOfApplicants;
-    private String loanPurpose;
-    private String desiredTimeLine;
-    private List<Facility> facilities;
+    Integer requestedLoanAmount;
+    int requestedLoanTerm;
+    int numberOfApplicants;
+    String loanPurpose;
+    String desiredTimeLine;
+    List<Facility> facilities;
 }

@@ -16,20 +16,14 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class Intermediary {
-    private String firmName;
-    private String fcaNumber;
-    private String contactFirstName;
-    private String contactLastName;
+    String firmName;
+    String fcaNumber;
+    String contactFirstName;
+    String contactLastName;
 }

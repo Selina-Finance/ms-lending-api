@@ -19,23 +19,21 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class DIPPropertyDetailsDto extends PropertyDetailsDto {
 
-    @NotBlank(message = "propertyType is required")
+    @NotBlank
     private String propertyType;
 
-    @NotNull(message = "numberOfBedrooms is required")
+    @NotNull
     private int numberOfBedrooms;
     private Boolean hasBeenAffectedByJapaneseKnotWeed;
     private Boolean hasBeenBuiltInThePast2Years;

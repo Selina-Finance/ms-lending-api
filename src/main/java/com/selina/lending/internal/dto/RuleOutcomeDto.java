@@ -16,20 +16,14 @@
 
 package com.selina.lending.internal.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class RuleOutcomeDto {
-    private String name;
-    private String description;
-    private String outcome;
+    String name;
+    String description;
+    String outcome;
 }
 

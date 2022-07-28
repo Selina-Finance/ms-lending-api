@@ -19,28 +19,24 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
 public class LoanInformationDto {
-    @NotNull(message = "requestedLoanAmount is required")
+    @NotNull
     private Integer requestedLoanAmount;
 
-    @NotNull(message = "requestedLoanTerm is required")
+    @NotNull
     private int requestedLoanTerm;
 
-    @NotNull(message = "numberOfApplicants is required")
+    @NotNull
     private int numberOfApplicants;
 
-    @NotBlank(message = "loanPurpose is required")
+    @NotBlank
     private String loanPurpose;
     private String desiredTimeLine;
 }

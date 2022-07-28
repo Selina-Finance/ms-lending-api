@@ -17,11 +17,17 @@
 
 package com.selina.lending.internal.repository;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -32,15 +38,32 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         this.middlewareApi = middlewareApi;
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
+    @Override
+    public Optional<ApplicationDecisionResponse> getApplicationById(String id) {
+        log.debug("Request to get application by id: {}", id);
+        return Optional.of(middlewareApi.getApplicationById(id));
+    }
+
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
-    public ApplicationResponse getApplicationById(String id) {
-        log.debug("Request to get application by id: {}", id);
-        return middlewareApi.getApplicationById(id);
+    public ApplicationResponse updateDipApplication(String id, ApplicationRequest applicationRequest) {
+        return null;
+    }
+
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
+    @Override
+    public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
+        return null;
     }
 
     public ApplicationResponse middlewareApiFallback(Exception e) {
         log.debug("Remote service is unavailable. Returning fallback.");
-        return new ApplicationResponse();
+        return ApplicationResponse.builder().build();
+    }
+
+    public Optional<ApplicationDecisionResponse> middlewareGetApiFallback(Exception e) {
+        log.debug("Remote service is unavailable. Returning fallback.");
+        return Optional.of(ApplicationDecisionResponse.builder().build());
     }
 }

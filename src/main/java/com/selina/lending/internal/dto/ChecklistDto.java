@@ -16,18 +16,12 @@
 
 package com.selina.lending.internal.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder
-@Getter
-@Setter
+@Builder
+@Value
 public class ChecklistDto {
-    private String required;
-    private String notRequired;
+    String notRequired;
+    RequiredDto required;
 }
