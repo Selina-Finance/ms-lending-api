@@ -19,48 +19,42 @@ package com.selina.lending.internal.service.application.domain;
 import java.util.Date;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder
-@Getter
-@Setter
+@Builder
+@Value
 public class Applicant {
-    private String title;
-    private String emailAddress;
-    private String mobilePhoneNumber;
-    private String firstName;
-    private String lastName;
-    private String middleName;
-    private String gender;
-    private Date dateOfBirth;
-    private int numberOfAdultDependants;
-    private int numberOfChildDependants;
-    private Boolean livedInCurrentAddressFor3Years;
-    private Boolean applicant2LivesWithApplicant1For3Years;
-    private Boolean applicant2LivesWithApplicant1;
-    private Date currentAddressMovedInDate;
-    private Boolean applicantUsedAnotherName;
-    private Integer estimatedRetirementAge;
-    private String maritalStatus;
-    private String nationality;
-    private String residentialStatus;
-    private Integer identifier;
-    private Incomes income;
-    private Employment employment;
-    private List<PreviousName> previousNames;
-    private List<Address> addresses;
-    private Hooyu hooyu;
-    private CreditCheck creditCheck;
-    private Checklist checklist;
-    private List<Document>documents;
-    private Boolean applicantConsentedToSoftCreditCheck;
-    private Boolean hasBeenSubjectToDebtSolutionsInPart6Years;
-    private Boolean kqUkResidency;
-    private Boolean notHavePermanentRightToResideInTheUk;
+    String title;
+    String emailAddress;
+    String mobilePhoneNumber;
+    String firstName;
+    String lastName;
+    String middleName;
+    String gender;
+    Date dateOfBirth;
+    int numberOfAdultDependants;
+    int numberOfChildDependants;
+    Boolean livedInCurrentAddressFor3Years;
+    Boolean applicant2LivesWithApplicant1For3Years;
+    Boolean applicant2LivesWithApplicant1;
+    Date currentAddressMovedInDate;
+    Boolean applicantUsedAnotherName;
+    Integer estimatedRetirementAge;
+    String maritalStatus;
+    String nationality;
+    String residentialStatus;
+    Integer identifier;
+    Incomes income;
+    Employment employment;
+    List<PreviousName> previousNames;
+    List<Address> addresses;
+    Hooyu hooyu;
+    CreditCheck creditCheck;
+    Checklist checklist;
+    List<Document> documents;
+    Boolean applicantConsentedToSoftCreditCheck;
+    Boolean hasBeenSubjectToDebtSolutionsInPart6Years;
+    Boolean kqUkResidency;
+    Boolean notHavePermanentRightToResideInTheUk;
 }

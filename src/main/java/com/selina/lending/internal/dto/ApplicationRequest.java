@@ -20,28 +20,24 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
 public class ApplicationRequest {
 
     private String requestType;
     private String applicationStage;
 
-    @NotBlank(message = "source is required")
+    @NotBlank
     private String source;
     private String sourceClientId;
     private String sourceAccount;
 
-    @NotBlank(message = "productCode is required")
+    @NotBlank
     private String productCode;
     private String reference;
 

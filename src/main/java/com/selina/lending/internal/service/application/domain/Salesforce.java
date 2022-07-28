@@ -16,20 +16,14 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class Salesforce {
-    private String opportunityId;
-    private String contactId;
-    private String accountId;
-    private String reference;
+    String opportunityId;
+    String contactId;
+    String accountId;
+    String reference;
 }

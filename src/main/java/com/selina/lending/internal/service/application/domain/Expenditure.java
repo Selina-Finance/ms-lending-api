@@ -16,22 +16,16 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class Expenditure {
-    private String frequency;
-    private int balanceDeclared;
-    private Double amountDeclared;
-    private Double paymentVerified;
-    private Double amountVerified;
-    private String expenditureType;
+    String frequency;
+    int balanceDeclared;
+    Double amountDeclared;
+    Double paymentVerified;
+    Double amountVerified;
+    String expenditureType;
 }

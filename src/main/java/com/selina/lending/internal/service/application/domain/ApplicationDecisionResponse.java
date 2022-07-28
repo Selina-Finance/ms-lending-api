@@ -19,21 +19,15 @@ package com.selina.lending.internal.service.application.domain;
 import java.util.Date;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * Once an application is saved, the retrieval of the application is returned in
  * this object.
  */
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Data
 public class ApplicationDecisionResponse {
     private String id;
     private String sourceAccount;
@@ -77,5 +71,4 @@ public class ApplicationDecisionResponse {
     private List<Expenditure> expenditure;
     private Lead lead;
     private Intermediary intermediary;
-
 }

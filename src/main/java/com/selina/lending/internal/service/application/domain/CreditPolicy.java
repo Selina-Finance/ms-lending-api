@@ -18,17 +18,11 @@ package com.selina.lending.internal.service.application.domain;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class CreditPolicy {
-    private List<Detail> detail;
+    List<Detail> detail;
 }

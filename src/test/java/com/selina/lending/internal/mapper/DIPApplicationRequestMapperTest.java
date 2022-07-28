@@ -17,25 +17,21 @@
 
 package com.selina.lending.internal.mapper;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.ApplicationRequest;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
-
 public class DIPApplicationRequestMapperTest extends MapperBase{
 
     @Test
     public void mapToApplicationRequestFromApplicationRequestDto() {
         //Given
-        ApplicationRequest applicationRequestDto = getApplicationRequestDto();
+        var applicationRequestDto = getApplicationRequestDto();
 
         //When
-        com.selina.lending.internal.service.application.domain.ApplicationRequest applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(applicationRequestDto);
+        var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(applicationRequestDto);
 
         //Then
         assertThat(applicationRequest.getApplicationType(), equalTo(APPLICATION_TYPE));
@@ -50,10 +46,10 @@ public class DIPApplicationRequestMapperTest extends MapperBase{
     @Test
     public void mapToApplicationRequestFromDIPApplicationRequestDto() {
         //Given
-        DIPApplicationRequest dipApplicationRequest = getDIPApplicationRequestDto();
+        var dipApplicationRequest = getDIPApplicationRequestDto();
 
         //When
-        com.selina.lending.internal.service.application.domain.ApplicationRequest applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
+        var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
 
         //Then
         assertThat(applicationRequest.getApplicationType(), equalTo(DIP_APPLICATION_TYPE));

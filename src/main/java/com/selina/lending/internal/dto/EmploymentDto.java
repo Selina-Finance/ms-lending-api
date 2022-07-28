@@ -20,49 +20,43 @@ import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class EmploymentDto {
 
-    @NotBlank(message = "employmentStatus is required")
-    private String employmentStatus;
-    private Boolean inProbationPeriod;
-    private String employmentType;
-    private String employerPhoneNumber;
-    private String postcode;
-    private String addressLine1;
-    private String addressLine2;
-    private String city;
-    private Date contractStartDate;
-    private Date contractEndDate;
-    private Boolean firstTimeContractor;
-    private String employerName;
-    private String jobTitle;
-    private String occupationType;
-    private Boolean isEmployedByFamilyMember;
-    private Boolean ownSharesInThisCompany;
-    private Double shareHolding;
-    private String registeredCompanyName;
-    private String selfEmployed;
-    private String fiscalYearReportedIncomeRelatesTo;
-    private String lengthSelfEmployed;
-    private Integer companyRegistrationNumber;
-    private Integer percentageOfCompanyOwned;
-    private String monthAccountingPeriodStarts;
-    private Date whenWasCompanyIncorporated;
-    private Date whenDidYouBeginTrading;
-    private Date startDate;
-    private Date partnershipFormedDate;
-    private Double percentageOfPartnershipOwned;
-    private String businessStructure;
-    private String industry;
+    @NotBlank
+    String employmentStatus;
+    Boolean inProbationPeriod;
+    String employmentType;
+    String employerPhoneNumber;
+    String postcode;
+    String addressLine1;
+    String addressLine2;
+    String city;
+    Date contractStartDate;
+    Date contractEndDate;
+    Boolean firstTimeContractor;
+    String employerName;
+    String jobTitle;
+    String occupationType;
+    Boolean isEmployedByFamilyMember;
+    Boolean ownSharesInThisCompany;
+    Double shareHolding;
+    String registeredCompanyName;
+    String selfEmployed;
+    String fiscalYearReportedIncomeRelatesTo;
+    String lengthSelfEmployed;
+    Integer companyRegistrationNumber;
+    Integer percentageOfCompanyOwned;
+    String monthAccountingPeriodStarts;
+    Date whenWasCompanyIncorporated;
+    Date whenDidYouBeginTrading;
+    Date startDate;
+    Date partnershipFormedDate;
+    Double percentageOfPartnershipOwned;
+    String businessStructure;
+    String industry;
 }

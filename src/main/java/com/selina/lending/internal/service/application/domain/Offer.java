@@ -20,53 +20,47 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class Offer {
-    private String id;
-    private Boolean active;
-    private Boolean productFeeCanAdd;
-    private Double aprc;
-    private Double cltv;
-    private Double offerBalance;
-    private Double initialTerm;
-    private Double initialRate;
-    private Double brokerFeesIncluded;
-    private Double reversionTerm;
-    private Double svr;
-    private Double procFee;
-    private Double lti;
-    private Double ltvCap;
-    private Double totalAmountRepaid;
-    private Double monthlyAffordabilityStatus;
-    private Double initialPayment;
-    private Double reversionPayment;
-    private Double affordabilityDeficit;
-    private String productCode;
-    private String product;
-    private String decision;
-    private Double productFee;
-    private Boolean productFeeAddedToLoan;
-    private Boolean selected;
-    private int brokerFeesUpfront;
-    private int externalSettlement;
+    String id;
+    Boolean active;
+    Boolean productFeeCanAdd;
+    Double aprc;
+    Double cltv;
+    Double offerBalance;
+    Double initialTerm;
+    Double initialRate;
+    Double brokerFeesIncluded;
+    Double reversionTerm;
+    Double svr;
+    Double procFee;
+    Double lti;
+    Double ltvCap;
+    Double totalAmountRepaid;
+    Double monthlyAffordabilityStatus;
+    Double initialPayment;
+    Double reversionPayment;
+    Double affordabilityDeficit;
+    String productCode;
+    String product;
+    String decision;
+    Double productFee;
+    Boolean productFeeAddedToLoan;
+    Boolean selected;
+    int brokerFeesUpfront;
+    int externalSettlement;
     @JsonProperty("eSignUrl")
-    private String esignUrl;
-    private Boolean hasFee;
-    private Checklist checklist;
-    private String plan;
-    private String tier;
-    private int maximumAdvance;
-    private int maximumAdvancePrime;
-    private Boolean isVariable;
-    private List<RuleOutcome> ruleOutcomes;
+    String esignUrl;
+    Boolean hasFee;
+    Checklist checklist;
+    String plan;
+    String tier;
+    int maximumAdvance;
+    int maximumAdvancePrime;
+    Boolean isVariable;
+    List<RuleOutcome> ruleOutcomes;
 }

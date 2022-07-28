@@ -56,13 +56,13 @@ public class LendingServiceImplTest {
     @Test
     public void getApplication() {
         //Given
-        Optional<ApplicationDecisionResponse> applicationDecisionResponse = Optional.of(
+        var applicationDecisionResponse = Optional.of(
                 ApplicationDecisionResponse.builder().id(APPLICATION_ID).build());
 
         when(middlewareRepository.getApplicationById(eq(APPLICATION_ID))).thenReturn(applicationDecisionResponse);
 
         //When
-        Optional<ApplicationDecisionResponse> response = lendingService.getApplication(APPLICATION_ID);
+        var response = lendingService.getApplication(APPLICATION_ID);
 
         //Then
         assertThat(response.isPresent(), equalTo(true));
@@ -74,7 +74,7 @@ public class LendingServiceImplTest {
     @Test
     public void updateDipApplication() {
         //Given
-        DIPApplicationRequest request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
+        var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         when(middlewareRepository.updateDipApplication(eq(APPLICATION_ID), any(ApplicationRequest.class))).thenReturn(applicationResponse);
 
         //When
@@ -88,7 +88,7 @@ public class LendingServiceImplTest {
     @Test
     public void createDipApplication() {
         //Given
-        DIPApplicationRequest request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
+        var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         when(middlewareRepository.createDipApplication(any())).thenReturn(applicationResponse);
 
         //When

@@ -22,18 +22,15 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.AddressDto;
-import com.selina.lending.internal.service.application.domain.Address;
-
 public class AddressMapperTest extends MapperBase{
 
     @Test
     public void mapToAddress() {
         //Given
-        AddressDto addressDto = getAddressDto();
+        var addressDto = getAddressDto();
 
         // When
-        Address address = AddressMapper.INSTANCE.mapToAddress(addressDto);
+        var address = AddressMapper.INSTANCE.mapToAddress(addressDto);
 
         //Then
         assertThat(address.getAddressLine1(), equalTo(ADDRESS_LINE_1));
@@ -53,10 +50,10 @@ public class AddressMapperTest extends MapperBase{
     @Test
     public void mapToAddressDto() {
         //Given
-        Address address = getAddress();
+        var address = getAddress();
 
         // When
-        AddressDto addressDto = AddressMapper.INSTANCE.mapToAddressDto(address);
+        var addressDto = AddressMapper.INSTANCE.mapToAddressDto(address);
 
         //Then
         assertThat(addressDto.getAddressLine1(), equalTo(ADDRESS_LINE_1));

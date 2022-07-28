@@ -19,18 +19,12 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class RequiredDto {
-    public List<String> all;
-    public List<List<String>> oneOf;
+    List<String> all;
+    List<List<String>> oneOf;
 }

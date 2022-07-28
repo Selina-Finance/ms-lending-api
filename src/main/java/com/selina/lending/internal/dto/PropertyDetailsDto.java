@@ -19,27 +19,23 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
 public class PropertyDetailsDto {
 
-    @NotBlank(message = "addressLine1 is required")
+    @NotBlank
     private String addressLine1;
     private String addressLine2;
 
-    @NotBlank(message = "city is required")
+    @NotBlank
     private String city;
 
-    @NotBlank(message = "postCode is required")
+    @NotBlank
     private String postcode;
     private String buildingName;
     private String buildingNumber;
@@ -49,13 +45,13 @@ public class PropertyDetailsDto {
     private String county;
     private String country;
 
-    @NotNull(message = "estimatedValue is required")
+    @NotNull
     private Double estimatedValue;
 
-    @NotBlank(message = "whenLastPurchased is required")
+    @NotBlank
     private String whenLastPurchased;
 
-    @NotNull(message = "purchaseValue is required")
+    @NotNull
     private Double purchaseValue;
     private Integer internalFloorSpace;
     private Integer numberOfPriorCharges;

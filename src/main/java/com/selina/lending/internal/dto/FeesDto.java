@@ -18,51 +18,45 @@ package com.selina.lending.internal.dto;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class FeesDto {
 
-    @NotNull(message = "addAdviceFeeToLoan is required")
-    private boolean addAdviceFeeToLoan;
+    @NotNull
+    boolean addAdviceFeeToLoan;
 
-    @NotNull(message = "addArrangementFeeToLoan is required")
-    private boolean addArrangementFeeToLoan;
+    @NotNull
+    boolean addArrangementFeeToLoan;
 
-    @NotNull(message = "addCommissionFeeToLoan is required")
-    private boolean addCommissionFeeToLoan;
+    @NotNull
+    boolean addCommissionFeeToLoan;
 
-    @NotNull(message = "addThirdPartyFeeToLoan is required")
-    private boolean addThirdPartyFeeToLoan;
+    @NotNull
+    boolean addThirdPartyFeeToLoan;
 
-    @NotNull(message = "addValuationFeeToLoan is required")
-    private boolean addValuationFeeToLoan;
+    @NotNull
+    boolean addValuationFeeToLoan;
 
-    @NotNull(message = "adviceFee is required")
-    private Double adviceFee;
+    @NotNull
+    Double adviceFee;
 
-    @NotNull(message = "arrangementFee is required")
-    private Double arrangementFee;
+    @NotNull
+    Double arrangementFee;
 
-    @NotNull(message = "commissionFee is required")
-    private Double commissionFee;
+    @NotNull
+    Double commissionFee;
 
-    @NotNull(message = "thirdPartyFee is required")
-    private Double thirdPartyFee;
+    @NotNull
+    Double thirdPartyFee;
 
-    @NotNull(message = "valuationFee is required")
-    private Double valuationFee;
+    @NotNull
+    Double valuationFee;
 
-    @NotNull(message = "addProductFeesToFacility is required")
-    private boolean addProductFeesToFacility;
-    private Double intermediaryFeeAmount;
-    private boolean addIntermediaryFeeToLoan;
+    @NotNull
+    boolean addProductFeesToFacility;
+    Double intermediaryFeeAmount;
+    boolean addIntermediaryFeeToLoan;
 }

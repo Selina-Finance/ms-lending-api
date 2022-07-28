@@ -18,46 +18,40 @@ package com.selina.lending.internal.service.application.domain;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class Detail {
-    public String id;
-    public String status;
-    public String applicant;
-    public String category;
-    public Date startDate;
-    public Date endDate;
-    public Date lastUpdatedDate;
-    public Integer remainingTerm;
-    public Double currentBalance;
-    public Double monthlyPayment;
-    public Double creditLimit;
-    public Boolean securityProperty;
-    public String paymentProfileShort;
-    public String paymentProfileLong;
-    public Boolean adverseCredit;
-    public Boolean consolidate;
-    public Boolean ignore;
-    public String repaymentType;
-    public String interestOnlyBalance;
-    public String repaymentVehicle;
-    public String costOfRepaymentVehicle;
-    public String interestRateType;
-    public Date fixedRatePeriodEndDate;
-    public Double amountToConsolidate;
-    public String reasonToIgnore;
-    public String lender;
-    public String accountNumber;
-    public String type;
-    public String date;
-    public Integer amount;
+    String id;
+    String status;
+    String applicant;
+    String category;
+    Date startDate;
+    Date endDate;
+    Date lastUpdatedDate;
+    Integer remainingTerm;
+    Double currentBalance;
+    Double monthlyPayment;
+    Double creditLimit;
+    Boolean securityProperty;
+    String paymentProfileShort;
+    String paymentProfileLong;
+    Boolean adverseCredit;
+    Boolean consolidate;
+    Boolean ignore;
+    String repaymentType;
+    String interestOnlyBalance;
+    String repaymentVehicle;
+    String costOfRepaymentVehicle;
+    String interestRateType;
+    Date fixedRatePeriodEndDate;
+    Double amountToConsolidate;
+    String reasonToIgnore;
+    String lender;
+    String accountNumber;
+    String type;
+    String date;
+    Integer amount;
 }

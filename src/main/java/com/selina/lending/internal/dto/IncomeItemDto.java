@@ -18,27 +18,21 @@ package com.selina.lending.internal.dto;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class IncomeItemDto {
-    private Double amount;
-    private String type;
-    private String status;
-    private String noIncomeSource;
-    private String docRequirements;
-    private Double amountVerified;
-    private Date incomeDate;
-    private String relatedYear;
-    private String frequency;
-    private Double contractDaysWorkedWeeklyReported;
-    private Double contractDayRateReported;
+    Double amount;
+    String type;
+    String status;
+    String noIncomeSource;
+    String docRequirements;
+    Double amountVerified;
+    Date incomeDate;
+    String relatedYear;
+    String frequency;
+    Double contractDaysWorkedWeeklyReported;
+    Double contractDayRateReported;
 }

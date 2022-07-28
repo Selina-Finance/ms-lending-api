@@ -16,21 +16,15 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class CreditCommitments {
-    private System system;
-    private User user;
-    private PublicInformation publicInformation;
-    private VotersRoll votersRoll;
-    private CreditPolicy creditPolicy;
+    System system;
+    User user;
+    PublicInformation publicInformation;
+    VotersRoll votersRoll;
+    CreditPolicy creditPolicy;
 }

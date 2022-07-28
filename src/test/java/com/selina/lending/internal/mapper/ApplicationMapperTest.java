@@ -24,18 +24,15 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.DIPApplicationDto;
-import com.selina.lending.internal.service.application.domain.Application;
-
 public class ApplicationMapperTest extends MapperBase {
 
     @Test
     public void mapToDIPApplicationDto() {
         //Given
-        Application application = getApplication();
+        var application = getApplication();
 
         //When
-        DIPApplicationDto applicationDto = ApplicationMapper.INSTANCE.mapToDIPApplicationDto(application);
+        var applicationDto = ApplicationMapper.INSTANCE.mapToDIPApplicationDto(application);
 
         //Then
         assertThat(applicationDto.getId(), equalTo(APPLICATION_ID));
@@ -60,10 +57,10 @@ public class ApplicationMapperTest extends MapperBase {
     @Test
     public void mapToApplication() {
         //Given
-        DIPApplicationDto applicationDto = getDIPApplicationDto();
+        var applicationDto = getDIPApplicationDto();
 
         //When
-        Application application = ApplicationMapper.INSTANCE.mapToApplication(applicationDto);
+        var application = ApplicationMapper.INSTANCE.mapToApplication(applicationDto);
 
         //Then
         assertThat(application.getId(), equalTo(APPLICATION_ID));

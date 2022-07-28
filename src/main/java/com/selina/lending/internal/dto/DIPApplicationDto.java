@@ -19,20 +19,17 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class DIPApplicationDto extends ApplicationDto {
-    public List<DIPApplicantDto> applicants;
+    private List<DIPApplicantDto> applicants;
     private AdvancedLoanInformationDto loanInformation;
     private DIPPropertyDetailsDto propertyDetails;
     private List<OfferDto> offers;

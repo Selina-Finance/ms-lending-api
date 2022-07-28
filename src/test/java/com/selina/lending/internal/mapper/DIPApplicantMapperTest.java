@@ -17,7 +17,6 @@
 
 package com.selina.lending.internal.mapper;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -25,19 +24,15 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.ApplicantDto;
-import com.selina.lending.internal.dto.DIPApplicantDto;
-import com.selina.lending.internal.service.application.domain.Applicant;
-
 public class DIPApplicantMapperTest extends MapperBase {
 
     @Test
     public void mapToApplicantFromDIPApplicantDto() {
         //Given
-        DIPApplicantDto dipApplicantDto = getDIPApplicantDto();
+        var dipApplicantDto = getDIPApplicantDto();
 
         //When
-        Applicant applicant = DIPApplicantMapper.INSTANCE.mapToApplicant(dipApplicantDto);
+        var applicant = DIPApplicantMapper.INSTANCE.mapToApplicant(dipApplicantDto);
 
         //Then
         assertThat(applicant.getTitle(), equalTo(TITLE));
@@ -62,10 +57,10 @@ public class DIPApplicantMapperTest extends MapperBase {
     @Test
     public void mapToApplicantFromApplicantDto() {
         //Given
-        ApplicantDto applicantDto = getApplicantDto();
+        var applicantDto = getApplicantDto();
 
         //When
-        Applicant applicant = DIPApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
+        var applicant = DIPApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
 
         //Then
         assertThat(applicant.getTitle(), equalTo(TITLE));
@@ -86,10 +81,10 @@ public class DIPApplicantMapperTest extends MapperBase {
     @Test
     public void mapToApplicantDto() {
         //Given
-        Applicant applicant = getApplicant();
+        var applicant = getApplicant();
 
         //When
-        ApplicantDto applicantDto = DIPApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
+        var applicantDto = DIPApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
 
         //Then
         assertThat(applicantDto.getTitle(), equalTo(TITLE));
@@ -105,10 +100,10 @@ public class DIPApplicantMapperTest extends MapperBase {
     @Test
     public void mapToDipApplicantDto() {
         //Given
-        Applicant applicant = getApplicant();
+        var applicant = getApplicant();
 
         //When
-        DIPApplicantDto dipApplicantDto = DIPApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
+        var dipApplicantDto = DIPApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
 
         //Then
         assertThat(dipApplicantDto.getTitle(), equalTo(TITLE));

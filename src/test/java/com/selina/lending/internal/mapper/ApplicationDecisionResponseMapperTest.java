@@ -17,7 +17,6 @@
 
 package com.selina.lending.internal.mapper;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -26,17 +25,16 @@ import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPApplicantDto;
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 
 public class ApplicationDecisionResponseMapperTest extends MapperBase {
 
     @Test
     void mapToApplicationDecisionResponseDto() {
         //Given
-        ApplicationDecisionResponse applicationDecisionResponse = getApplicationDecisionResponse();
+        var applicationDecisionResponse = getApplicationDecisionResponse();
 
         //When
-        com.selina.lending.internal.dto.ApplicationDecisionResponse responseDto = ApplicationDecisionResponseMapper.INSTANCE.mapToApplicationDecisionResponseDto(applicationDecisionResponse);
+        var responseDto = ApplicationDecisionResponseMapper.INSTANCE.mapToApplicationDecisionResponseDto(applicationDecisionResponse);
 
         //Then
         assertThat(responseDto.getId(), equalTo(APPLICATION_ID));
@@ -53,13 +51,13 @@ public class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(responseDto.getExpenditure(), notNullValue());
         assertThat(responseDto.getExpenditure().get(0).getExpenditureType(), equalTo(EXPENDITURE_TYPE));
 
-        DIPApplicantDto dipApplicantDto = (DIPApplicantDto) responseDto.getApplicants().get(0);
+        var dipApplicantDto = (DIPApplicantDto) responseDto.getApplicants().get(0);
         assertThat(dipApplicantDto.getFirstName(), equalTo(FIRST_NAME));
         assertThat(dipApplicantDto.getLivedInCurrentAddressFor3Years(), equalTo(true));
         assertThat(dipApplicantDto.getAddresses().size(), equalTo(1));
         assertThat(dipApplicantDto.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
 
-        AdvancedLoanInformationDto advancedLoanInformationDto = (AdvancedLoanInformationDto) responseDto.getLoanInformation();
+        var advancedLoanInformationDto = (AdvancedLoanInformationDto) responseDto.getLoanInformation();
         assertThat(advancedLoanInformationDto.getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(advancedLoanInformationDto.getFacilities(), notNullValue());
         assertThat(advancedLoanInformationDto.getFacilities().size(), equalTo(1));

@@ -17,7 +17,6 @@
 
 package com.selina.lending.internal.mapper;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -25,24 +24,23 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.dto.DIPApplicationDto;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 public class ApplicationResponseMapperTest extends MapperBase {
 
     @Test
     public void mapToApplicationResponseDto() {
         //Given
-        ApplicationResponse applicationResponse = getApplicationResponse();
+        var applicationResponse = getApplicationResponse();
 
         //When
-        com.selina.lending.internal.dto.ApplicationResponse applicationResponseDto = ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse);
+        var applicationResponseDto = ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse);
 
         //Then
         assertThat(applicationResponseDto.getApplicationId(), equalTo(APPLICATION_ID));
         assertThat(applicationResponseDto.getRequestType(), equalTo(DIP_APPLICATION_TYPE));
         assertThat(applicationResponseDto.getApplication(), notNullValue());
 
-        DIPApplicationDto applicationDto = (DIPApplicationDto) applicationResponseDto.getApplication();
+        var applicationDto = (DIPApplicationDto) applicationResponseDto.getApplication();
 
         assertThat(applicationDto.getId(), equalTo(APPLICATION_ID));
         assertThat(applicationDto.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));

@@ -17,26 +17,21 @@
 
 package com.selina.lending.internal.mapper;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.LoanInformationDto;
-import com.selina.lending.internal.service.application.domain.LoanInformation;
-
 public class LoanInformationMapperTest extends MapperBase{
 
     @Test
     public void mapToAdvancedLoanInformationDto() {
         //Given
-        LoanInformation loanInformation = getLoanInformation();
+        var loanInformation = getLoanInformation();
 
         //When
-        AdvancedLoanInformationDto advancedLoanInformationDto = LoanInformationMapper.INSTANCE.mapToLoanInformationDto(loanInformation);
+        var advancedLoanInformationDto = LoanInformationMapper.INSTANCE.mapToLoanInformationDto(loanInformation);
 
         //Then
         assertThat(advancedLoanInformationDto.getLoanPurpose(), equalTo(LOAN_PURPOSE));
@@ -52,10 +47,10 @@ public class LoanInformationMapperTest extends MapperBase{
     @Test
     public void mapToLoanInformationDto() {
         //Given
-        LoanInformation loanInformation = getLoanInformation();
+        var loanInformation = getLoanInformation();
 
         //When
-        LoanInformationDto loanInformationDto = LoanInformationMapper.INSTANCE.mapToLoanInformationDto(loanInformation);
+        var loanInformationDto = LoanInformationMapper.INSTANCE.mapToLoanInformationDto(loanInformation);
 
         //Then
         assertThat(loanInformationDto.getLoanPurpose(), equalTo(LOAN_PURPOSE));
@@ -68,10 +63,10 @@ public class LoanInformationMapperTest extends MapperBase{
     @Test
     public void mapToLoanInformationFromAdvancedLoanInformationDto() {
         //Given
-        AdvancedLoanInformationDto advancedLoanInformationDto = getAdvancedLoanInformationDto();
+        var advancedLoanInformationDto = getAdvancedLoanInformationDto();
 
         //When
-        LoanInformation loanInformation = LoanInformationMapper.INSTANCE.mapToLoanInformation(advancedLoanInformationDto);
+        var loanInformation = LoanInformationMapper.INSTANCE.mapToLoanInformation(advancedLoanInformationDto);
 
         //Then
         assertThat(loanInformation.getLoanPurpose(), equalTo(LOAN_PURPOSE));
@@ -87,10 +82,10 @@ public class LoanInformationMapperTest extends MapperBase{
     @Test
     public void mapToLoanInformationFromLoanInformationDto() {
         //Given
-        LoanInformationDto loanInformationDto = getLoanInformationDto();
+        var loanInformationDto = getLoanInformationDto();
 
         //When
-        LoanInformation loanInformation = LoanInformationMapper.INSTANCE.mapToLoanInformation(loanInformationDto);
+        var loanInformation = LoanInformationMapper.INSTANCE.mapToLoanInformation(loanInformationDto);
 
         //Then
         assertThat(loanInformation.getLoanPurpose(), equalTo(LOAN_PURPOSE));

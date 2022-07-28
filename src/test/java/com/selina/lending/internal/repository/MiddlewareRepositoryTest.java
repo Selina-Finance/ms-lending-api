@@ -17,23 +17,23 @@
 
 package com.selina.lending.internal.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.selina.lending.internal.api.MiddlewareApi;
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {
@@ -52,7 +52,7 @@ class MiddlewareRepositoryTest {
     public void shouldCallHttpClientWhenGetApplicationByIdInvoked() {
         // Given
         var id = UUID.randomUUID().toString();
-        var apiResponse = new ApplicationDecisionResponse();
+        var apiResponse = ApplicationDecisionResponse.builder().build();
 
         when(middlewareApi.getApplicationById(id)).thenReturn(apiResponse);
 

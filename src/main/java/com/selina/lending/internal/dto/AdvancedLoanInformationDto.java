@@ -20,18 +20,16 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class AdvancedLoanInformationDto extends LoanInformationDto {
-    @NotNull(message = "facilities is required")
+    @NotNull
     private List<FacilityDto> facilities;
 }

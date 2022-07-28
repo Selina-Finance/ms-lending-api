@@ -19,13 +19,15 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -57,11 +59,11 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
     public ApplicationResponse middlewareApiFallback(Exception e) {
         log.debug("Remote service is unavailable. Returning fallback.");
-        return new ApplicationResponse();
+        return ApplicationResponse.builder().build();
     }
 
     public Optional<ApplicationDecisionResponse> middlewareGetApiFallback(Exception e) {
         log.debug("Remote service is unavailable. Returning fallback.");
-        return Optional.of(new ApplicationDecisionResponse());
+        return Optional.of(ApplicationDecisionResponse.builder().build());
     }
 }

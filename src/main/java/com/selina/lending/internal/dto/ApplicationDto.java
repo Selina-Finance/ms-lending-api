@@ -17,30 +17,24 @@
 package com.selina.lending.internal.dto;
 
 import java.util.Date;
-import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
 public class ApplicationDto {
-    public String id;
-    public String source;
-    public String sourceClientId;
-    public String sourceAccount;
-    public String externalApplicationId;
-    public String productCode;
-    public String requestType;
-    public String status;
-    public String applicationStage;
-    public Date statusDate;
-    public Date createdDate;
+    private String id;
+    private String source;
+    private String sourceClientId;
+    private String sourceAccount;
+    private String externalApplicationId;
+    private String productCode;
+    private String requestType;
+    private String status;
+    private String applicationStage;
+    private Date statusDate;
+    private Date createdDate;
 }

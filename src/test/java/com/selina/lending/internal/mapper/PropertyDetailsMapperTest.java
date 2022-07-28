@@ -23,19 +23,15 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
-import com.selina.lending.internal.dto.PropertyDetailsDto;
-import com.selina.lending.internal.service.application.domain.PropertyDetails;
-
 public class PropertyDetailsMapperTest extends MapperBase {
 
     @Test
     public void mapToPropertyDetailsDto() {
         //Given
-        PropertyDetails propertyDetails = getPropertyDetails();
+        var propertyDetails = getPropertyDetails();
 
         //When
-        PropertyDetailsDto propertyDetailsDto = PropertyDetailsMapper.INSTANCE.mapToPropertyDetailsDto(propertyDetails);
+        var propertyDetailsDto = PropertyDetailsMapper.INSTANCE.mapToPropertyDetailsDto(propertyDetails);
 
         //Then
         assertThat(propertyDetailsDto.getAddressLine1(), equalTo(ADDRESS_LINE_1));
@@ -52,10 +48,10 @@ public class PropertyDetailsMapperTest extends MapperBase {
     @Test
     public void mapToDIPPropertyDetailsDto() {
         //Given
-        PropertyDetails propertyDetails = getPropertyDetails();
+        var propertyDetails = getPropertyDetails();
 
         //When
-        DIPPropertyDetailsDto dipPropertyDetailsDto = PropertyDetailsMapper.INSTANCE.mapToPropertyDetailsDto(propertyDetails);
+        var dipPropertyDetailsDto = PropertyDetailsMapper.INSTANCE.mapToPropertyDetailsDto(propertyDetails);
 
         //Then
         assertThat(dipPropertyDetailsDto.getAddressLine1(), equalTo(ADDRESS_LINE_1));
@@ -75,10 +71,10 @@ public class PropertyDetailsMapperTest extends MapperBase {
     @Test
     public void mapToPropertyDetailsFromPropertyDetailsDto() {
         //Given
-        PropertyDetailsDto propertyDetailsDto = getPropertyDetailsDto();
+        var propertyDetailsDto = getPropertyDetailsDto();
 
         //When
-        PropertyDetails propertyDetails = PropertyDetailsMapper.INSTANCE.mapToPropertyDetails(propertyDetailsDto);
+        var propertyDetails = PropertyDetailsMapper.INSTANCE.mapToPropertyDetails(propertyDetailsDto);
 
         //Then
         assertThat(propertyDetails.getAddressLine1(), equalTo(ADDRESS_LINE_1));
@@ -96,10 +92,10 @@ public class PropertyDetailsMapperTest extends MapperBase {
     @Test
     public void mapToPropertyDetailsFromDIPPropertyDetailsDto() {
         //Given
-        DIPPropertyDetailsDto dipPropertyDetailsDto = getDIPPropertyDetailsDto();
+        var dipPropertyDetailsDto = getDIPPropertyDetailsDto();
 
         //When
-        PropertyDetails propertyDetails = PropertyDetailsMapper.INSTANCE.mapToPropertyDetails(dipPropertyDetailsDto);
+        var propertyDetails = PropertyDetailsMapper.INSTANCE.mapToPropertyDetails(dipPropertyDetailsDto);
 
         //Then
         assertThat(propertyDetails.getAddressLine1(), equalTo(ADDRESS_LINE_1));

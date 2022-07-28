@@ -22,38 +22,36 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class DIPApplicantDto extends ApplicantDto {
 
-    @NotNull(message = "applicantUsedAnotherName is required")
+    @NotNull
     private Boolean applicantUsedAnotherName;
 
-    @NotNull(message = "estimatedRetirementAge is required")
+    @NotNull
     private Integer estimatedRetirementAge;
 
-    @NotBlank(message = "maritalStatus is required")
+    @NotBlank
     private String maritalStatus;
 
-    @NotBlank(message = "nationality is required")
+    @NotBlank
     private String nationality;
     private String residentialStatus;
 
-    @NotNull(message = "identifier is required")
+    @NotNull
     private Integer identifier;
     private IncomeDto income;
 
     @Valid
-    @NotNull(message = "employment is required")
+    @NotNull
     private EmploymentDto employment;
     private List<PreviousNameDto> previousNames;
 }

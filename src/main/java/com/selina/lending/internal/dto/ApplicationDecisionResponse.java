@@ -20,54 +20,46 @@ package com.selina.lending.internal.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Value
 public class ApplicationDecisionResponse {
-    private String id;
-    private String sourceAccount;
-    private String requestType;
-    private String sourceUserId;
-    private String sourceBrokerUserId;
-    private String externalApplicationId;
-    private String reference;
-    private String selectedOffer;
-    private String selectedProduct;
-    private Date createdDate;
-    private Date modifiedDate;
-    private String decision;
-    private String status;
-    private String currentStatusDescription;
-    private Date statusDate;
-    private boolean hasAcceptedTermsAndConditionsAndPrivacyPolicy;
-    private boolean hasConsentToSubmitFundingApplication;
-    private boolean hasGivenConsentForHardCreditCheck;
-    private boolean hasGivenConsentForIdVerification;
-    private boolean hasGivenConsentForMarketingCommunications;
-    private boolean hasCertifiedCurrentFinancialCircumstances;
-    private boolean canAddProductFee;
-    private boolean canCaseBeFunded;
-    private String decisionError;
-    private String decisionStatus;
-    private String applicationStage;
-    private String bankSortCode;
-    private String bankAccountNumber;
-    private String bankName;
-    private String nameOfAccountHolder;
-    private String initialDisbursalAmount;
-    private List<ApplicantDto> applicants;
-    private LoanInformationDto loanInformation;
-    private FeesDto fees;
-    private List<OfferDto> offers;
-    private List<ExpenditureDto> expenditure;
+    String id;
+    String sourceAccount;
+    String requestType;
+    String sourceUserId;
+    String sourceBrokerUserId;
+    String externalApplicationId;
+    String reference;
+    String selectedOffer;
+    String selectedProduct;
+    Date createdDate;
+    Date modifiedDate;
+    String decision;
+    String status;
+    String currentStatusDescription;
+    Date statusDate;
+    boolean hasAcceptedTermsAndConditionsAndPrivacyPolicy;
+    boolean hasConsentToSubmitFundingApplication;
+    boolean hasGivenConsentForHardCreditCheck;
+    boolean hasGivenConsentForIdVerification;
+    boolean hasGivenConsentForMarketingCommunications;
+    boolean hasCertifiedCurrentFinancialCircumstances;
+    boolean canAddProductFee;
+    boolean canCaseBeFunded;
+    String decisionError;
+    String decisionStatus;
+    String applicationStage;
+    String bankSortCode;
+    String bankAccountNumber;
+    String bankName;
+    String nameOfAccountHolder;
+    String initialDisbursalAmount;
+    List<ApplicantDto> applicants;
+    LoanInformationDto loanInformation;
+    FeesDto fees;
+    List<OfferDto> offers;
+    List<ExpenditureDto> expenditure;
 }
