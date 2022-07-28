@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 
-@Mapper(uses = {ApplicantMapper.class, LoanInformationMapper.class, FeesMapper.class, ExpenditureMapper.class, OfferMapper.class})
+@Mapper(uses = {DIPApplicantMapper.class, LoanInformationMapper.class, FeesMapper.class, ExpenditureMapper.class, OfferMapper.class})
 public interface ApplicationDecisionResponseMapper {
     ApplicationDecisionResponseMapper INSTANCE = Mappers.getMapper(ApplicationDecisionResponseMapper.class);
 

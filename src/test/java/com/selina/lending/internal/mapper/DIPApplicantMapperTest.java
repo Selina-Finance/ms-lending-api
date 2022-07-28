@@ -20,6 +20,7 @@ package com.selina.lending.internal.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ import com.selina.lending.internal.dto.ApplicantDto;
 import com.selina.lending.internal.dto.DIPApplicantDto;
 import com.selina.lending.internal.service.application.domain.Applicant;
 
-public class ApplicantMapperTest extends MapperBase {
+public class DIPApplicantMapperTest extends MapperBase {
 
     @Test
     public void mapToApplicantFromDIPApplicantDto() {
@@ -36,7 +37,7 @@ public class ApplicantMapperTest extends MapperBase {
         DIPApplicantDto dipApplicantDto = getDIPApplicantDto();
 
         //When
-        Applicant applicant = ApplicantMapper.INSTANCE.mapToApplicant(dipApplicantDto);
+        Applicant applicant = DIPApplicantMapper.INSTANCE.mapToApplicant(dipApplicantDto);
 
         //Then
         assertThat(applicant.getTitle(), equalTo(TITLE));
@@ -64,7 +65,7 @@ public class ApplicantMapperTest extends MapperBase {
         ApplicantDto applicantDto = getApplicantDto();
 
         //When
-        Applicant applicant = ApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
+        Applicant applicant = DIPApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
 
         //Then
         assertThat(applicant.getTitle(), equalTo(TITLE));
@@ -88,7 +89,7 @@ public class ApplicantMapperTest extends MapperBase {
         Applicant applicant = getApplicant();
 
         //When
-        ApplicantDto applicantDto = ApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
+        ApplicantDto applicantDto = DIPApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
 
         //Then
         assertThat(applicantDto.getTitle(), equalTo(TITLE));
@@ -107,7 +108,7 @@ public class ApplicantMapperTest extends MapperBase {
         Applicant applicant = getApplicant();
 
         //When
-        DIPApplicantDto dipApplicantDto = ApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
+        DIPApplicantDto dipApplicantDto = DIPApplicantMapper.INSTANCE.mapToApplicantDto(applicant);
 
         //Then
         assertThat(dipApplicantDto.getTitle(), equalTo(TITLE));
@@ -123,5 +124,7 @@ public class ApplicantMapperTest extends MapperBase {
         assertThat(dipApplicantDto.getLivedInCurrentAddressFor3Years(), equalTo(true));
         assertThat(dipApplicantDto.getAddresses().size(), equalTo(1));
         assertThat(dipApplicantDto.getEmployment().getEmployerName(), equalTo(EMPLOYER_NAME));
+        assertThat(dipApplicantDto.getIncome(), notNullValue());
+        assertThat(dipApplicantDto.getIncome().getIncome().get(0).getAmount(), equalTo(INCOME_AMOUNT));
     }
 }

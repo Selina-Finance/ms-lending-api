@@ -16,8 +16,6 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import com.selina.lending.internal.mapper.ApplicationResponseMapper;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

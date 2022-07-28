@@ -26,8 +26,8 @@ import java.util.List;
 import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.ApplicantDto;
-import com.selina.lending.internal.dto.ApplicationDto;
 import com.selina.lending.internal.dto.ApplicationRequest;
+import com.selina.lending.internal.dto.ChecklistDto;
 import com.selina.lending.internal.dto.DIPApplicantDto;
 import com.selina.lending.internal.dto.DIPApplicationDto;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
@@ -41,18 +41,23 @@ import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.dto.OfferDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
+import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.Checklist;
 import com.selina.lending.internal.service.application.domain.Employment;
 import com.selina.lending.internal.service.application.domain.Expenditure;
 import com.selina.lending.internal.service.application.domain.Facility;
 import com.selina.lending.internal.service.application.domain.Fees;
+import com.selina.lending.internal.service.application.domain.Income;
+import com.selina.lending.internal.service.application.domain.Incomes;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.Offer;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
+import com.selina.lending.internal.service.application.domain.Required;
 import com.selina.lending.internal.service.application.domain.RuleOutcome;
 
 public abstract class MapperBase {
@@ -102,6 +107,7 @@ public abstract class MapperBase {
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
     public static final String RULE_OUTCOME = "Granted";
+    public static final String REQUIRED_PASSPORT = "Passport";
 
     static {
         try {
@@ -262,8 +268,18 @@ public abstract class MapperBase {
                 .build();
     }
 
+    protected RequiredDto getRequiredDto() {
+        return RequiredDto.builder().all(List.of(REQUIRED_PASSPORT)).build();
+    }
+
+    protected ChecklistDto getChecklistDto() {
+        return ChecklistDto.builder().required(getRequiredDto()).build();
+    }
+
     protected OfferDto getOfferDto() {
-        return OfferDto.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE).build();
+        return OfferDto.builder().active(true).id(OFFER_ID).hasFee(true)
+                .checklist(getChecklistDto())
+                .productCode(PRODUCT_CODE).build();
     }
 
     protected DIPApplicationDto getDIPApplicationDto() {
@@ -288,7 +304,12 @@ public abstract class MapperBase {
                 .livedInCurrentAddressFor3Years(true)
                 .dateOfBirth(DOB)
                 .employment(getEmployment())
+                .income(getIncomes())
                 .build();
+    }
+
+    private Incomes getIncomes() {
+        return Incomes.builder().income(List.of(Income.builder().amount(INCOME_AMOUNT).build())).build();
     }
 
     protected Employment getEmployment() {
@@ -370,13 +391,22 @@ public abstract class MapperBase {
                 .offers(List.of(getOffer()))
                 .build();
     }
+    protected Required getRequired() {
+        return Required.builder().all(List.of(REQUIRED_PASSPORT)).build();
+    }
+
+    protected Checklist getChecklist() {
+        return Checklist.builder().required(getRequired()).build();
+    }
 
     protected RuleOutcome getRuleOutcome() {
         return RuleOutcome.builder().outcome(RULE_OUTCOME).build();
     }
 
     protected Offer getOffer() {
-        return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE).ruleOutcomes(List.of(getRuleOutcome())).build();
+        return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE)
+                .checklist(getChecklist())
+                .ruleOutcomes(List.of(getRuleOutcome())).build();
     }
 
     protected ApplicationResponse getApplicationResponse(){

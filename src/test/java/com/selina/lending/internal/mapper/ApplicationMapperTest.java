@@ -19,6 +19,8 @@ package com.selina.lending.internal.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.Test;
 
@@ -79,5 +81,8 @@ public class ApplicationMapperTest extends MapperBase {
         assertThat(application.getOffers().get(0).getActive(), equalTo(true));
         assertThat(application.getOffers().get(0).getId(), equalTo(OFFER_ID));
         assertThat(application.getOffers().get(0).getProductCode(), equalTo(PRODUCT_CODE));
+        assertThat(application.getOffers().get(0).getChecklist(), notNullValue());
+        assertThat(application.getOffers().get(0).getChecklist().getRequired(), notNullValue());
+        assertThat(application.getOffers().get(0).getChecklist().getRequired().getAll(), hasItem(REQUIRED_PASSPORT));
     }
 }

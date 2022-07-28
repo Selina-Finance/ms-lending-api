@@ -27,9 +27,10 @@ import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.config.DIPApplicationRequestMapperConfig;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 
-@Mapper(config = DIPApplicationRequestMapperConfig.class, uses = {ApplicantMapper.class, FeesMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class})
+@Mapper(config = DIPApplicationRequestMapperConfig.class, uses = {DIPApplicantMapper.class, FeesMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class})
 public interface DIPApplicationRequestMapper {
     DIPApplicationRequestMapper INSTANCE = Mappers.getMapper(DIPApplicationRequestMapper.class);
+
     @InheritConfiguration(name = "mapDipApplicationRequest")
     @Mappings({@Mapping(target= "applicationType", source = "dipApplicationRequest.requestType")})
     ApplicationRequest mapToApplicationRequest(DIPApplicationRequest dipApplicationRequest);

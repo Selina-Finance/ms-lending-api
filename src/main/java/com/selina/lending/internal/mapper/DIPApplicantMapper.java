@@ -29,8 +29,8 @@ import com.selina.lending.internal.service.application.domain.Applicant;
 
 @Mapper (config = DIPApplicantMapperConfig.class, uses = {AddressMapper.class,
         ChecklistMapper.class, IncomeMapper.class, PreviousNameMapper.class, EmploymentMapper.class})
-public interface ApplicantMapper {
-    ApplicantMapper INSTANCE = Mappers.getMapper(ApplicantMapper.class);
+public interface DIPApplicantMapper {
+    DIPApplicantMapper INSTANCE = Mappers.getMapper(DIPApplicantMapper.class);
 
     @InheritConfiguration(name = "mapDipApplicant")
     @Mapping(target = "mobilePhoneNumber", source = "dipApplicantDto.mobileNumber")
