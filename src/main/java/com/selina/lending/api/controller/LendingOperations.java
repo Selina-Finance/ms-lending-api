@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 
@@ -37,7 +36,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public interface LendingOperations {
     @Operation(description = "Retrieve the application for the given application id")
     @GetMapping(value = "/{id}")
-    ResponseEntity<ApplicationDecisionResponse> getApplication(@Parameter(name = "id", schema = @Schema(type = "String", example = "uniqueIdValue", description = "unique id for the application", required = true))
+    ResponseEntity getApplication(@Parameter(name = "id", schema = @Schema(type = "String", example = "uniqueIdValue", description = "unique id for the application", required = true))
     @PathVariable String id);
 
     @Operation(description = "Update the Decision In Principle (DIP) application for the given application id")

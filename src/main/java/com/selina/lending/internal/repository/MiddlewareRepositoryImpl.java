@@ -17,8 +17,9 @@
 
 package com.selina.lending.internal.repository;
 
+import java.util.Optional;
+
 import com.selina.lending.internal.api.MiddlewareApi;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
@@ -35,18 +36,20 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         this.middlewareApi = middlewareApi;
     }
 
-    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
     @Override
-    public ApplicationDecisionResponse getApplicationById(String id) {
+    public Optional<ApplicationDecisionResponse> getApplicationById(String id) {
         log.debug("Request to get application by id: {}", id);
-        return middlewareApi.getApplicationById(id);
+        return Optional.of(middlewareApi.getApplicationById(id));
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
     public ApplicationResponse updateDipApplication(String id, ApplicationRequest applicationRequest) {
         return null;
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         return null;
@@ -55,5 +58,10 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public ApplicationResponse middlewareApiFallback(Exception e) {
         log.debug("Remote service is unavailable. Returning fallback.");
         return new ApplicationResponse();
+    }
+
+    public Optional<ApplicationDecisionResponse> middlewareGetApiFallback(Exception e) {
+        log.debug("Remote service is unavailable. Returning fallback.");
+        return Optional.of(new ApplicationDecisionResponse());
     }
 }

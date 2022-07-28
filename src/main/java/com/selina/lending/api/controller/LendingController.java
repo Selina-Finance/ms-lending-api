@@ -47,33 +47,25 @@ public class LendingController implements LendingOperations {
 
     @Override
     public ResponseEntity<ApplicationDecisionResponse> getApplication(String id) {
-        log.info("LendingController get application {}", id);
+        log.info("Get application {}", id);
         Optional<com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse> applicationResponse = lendingService.getApplication(id);
         if (applicationResponse.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(toApplicationDecisionResponseDto(applicationResponse.get()));
+        return ResponseEntity.ok().body(ApplicationDecisionResponseMapper.INSTANCE.mapToApplicationDecisionResponseDto(applicationResponse.get()));
     }
 
     @Override
     public ResponseEntity updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
-        log.info("LendingController update dip application {}", id);
+        log.info("Update DIP application {}", id);
         com.selina.lending.internal.service.application.domain.ApplicationResponse applicationResponse = lendingService.updateDipApplication(id, dipApplicationRequest);
-        return ResponseEntity.ok().body(toApplicationResponseDto(applicationResponse));
+        return ResponseEntity.ok().body(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 
     @Override
     public ResponseEntity<ApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
+        log.info("Create DIP application with externalApplicationId {}", dipApplicationRequest.getExternalApplicationId());
         com.selina.lending.internal.service.application.domain.ApplicationResponse applicationResponse = lendingService.createDipApplication(dipApplicationRequest);
-        return ResponseEntity.ok().body(toApplicationResponseDto(applicationResponse));
-    }
-
-    private ApplicationResponse toApplicationResponseDto(
-            com.selina.lending.internal.service.application.domain.ApplicationResponse applicationResponse) {
-        return ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse);
-    }
-
-    private ApplicationDecisionResponse toApplicationDecisionResponseDto(com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse applicationDecisionResponse) {
-        return ApplicationDecisionResponseMapper.INSTANCE.mapToApplicationDecisionResponseDto(applicationDecisionResponse);
+        return ResponseEntity.ok().body(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 }

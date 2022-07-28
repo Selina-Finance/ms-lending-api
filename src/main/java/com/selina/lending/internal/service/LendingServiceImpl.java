@@ -36,7 +36,7 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplication(String id) {
-        return Optional.of(middlewareRepository.getApplicationById(id));
+        return middlewareRepository.getApplicationById(id);
     }
 
     @Override
