@@ -46,9 +46,6 @@ public class LendingController implements LendingOperations {
     public ResponseEntity<ApplicationDecisionResponse> getApplication(String id) {
         log.info("Get application {}", id);
         var applicationResponse = lendingService.getApplication(id);
-        if (applicationResponse.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.of(applicationResponse.map(ApplicationDecisionResponseMapper.INSTANCE::mapToApplicationDecisionResponseDto));
     }
 
