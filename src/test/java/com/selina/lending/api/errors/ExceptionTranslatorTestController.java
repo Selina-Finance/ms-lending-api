@@ -16,9 +16,7 @@
 
 package com.selina.lending.api.errors;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
+import com.selina.lending.api.errors.custom.Custom4xxException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,7 +29,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.selina.lending.api.errors.custom.Custom4xxException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/exception-translator-test")
