@@ -1,31 +1,25 @@
 package com.selina.lending.api.controller;
 
 
+import com.selina.lending.IntegrationTest;
+import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.service.LendingService;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import com.selina.lending.IntegrationTest;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.service.LendingService;
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import org.springframework.security.test.context.support.WithMockUser;
-
-@WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
 public class LendingControllerTest {
