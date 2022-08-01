@@ -41,6 +41,7 @@ public interface LendingOperations {
     ResponseEntity getApplication(@Parameter(name = "id", schema = @Schema(type = "String", example = "uniqueIdValue", description = "unique id for the application", required = true))
     @PathVariable String id);
 
+    @GetMapping(value = "/test")
     String securityTest(@AuthenticationPrincipal Jwt principal, String id);
 
     @Operation(description = "Update the Decision In Principle (DIP) application for the given application id")

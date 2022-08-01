@@ -148,6 +148,38 @@ class ExceptionTranslatorTest {
     }
 
     @Test
+    public void testAccessDenied() throws Exception {
+        // Given
+        String expectedValue = "test access denied!";
+
+        // When
+        mockMvc
+                .perform(get("/api/exception-translator-test/access-denied"))
+                // Then
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.detail").value(expectedValue));
+
+    }
+
+    @Test
+    public void testUnauthorized() throws Exception {
+        // Given
+
+        // When
+
+        // Then
+        mockMvc
+                .perform(get("/api/exception-translator-test/unauthorized"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.http.401"))
+                .andExpect(jsonPath("$.path").value("/api/exception-translator-test/unauthorized"))
+                .andExpect(jsonPath("$.detail").value("test authentication failed!"));
+
+    }
+
+    @Test
     void handleExceptionWithResponseStatus() throws Exception {
         // Given
         String expectedTitle = "test response status";

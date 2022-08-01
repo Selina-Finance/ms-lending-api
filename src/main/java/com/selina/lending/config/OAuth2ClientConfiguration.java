@@ -19,11 +19,20 @@ package com.selina.lending.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
+@Import(SecurityProblemSupport.class)
 @Configuration(proxyBeanMethods = false)
 public class OAuth2ClientConfiguration {
+
+    private final SecurityProblemSupport problemSupport;
+
+    public OAuth2ClientConfiguration(SecurityProblemSupport problemSupport) {
+        this.problemSupport = problemSupport;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,13 +41,20 @@ public class OAuth2ClientConfiguration {
 
         http.cors()
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(problemSupport)
+                .accessDeniedHandler(problemSupport)
+
+                .and()
                 .authorizeRequests()
                 .antMatchers("/actuator/**")
                 .permitAll()
+
                 .and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
+
                 .and()
                 .oauth2ResourceServer()
                 .jwt();

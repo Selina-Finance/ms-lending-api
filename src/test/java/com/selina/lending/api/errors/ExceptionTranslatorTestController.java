@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +47,16 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/missing-servlet-request-parameter")
     public void missingServletRequestParameterException(@RequestParam String param) {
+    }
+
+    @GetMapping("/access-denied")
+    public void accessdenied() {
+        throw new AccessDeniedException("test access denied!");
+    }
+
+    @GetMapping("/unauthorized")
+    public void unauthorized() {
+        throw new BadCredentialsException("test authentication failed!");
     }
 
     @GetMapping("/response-status")
