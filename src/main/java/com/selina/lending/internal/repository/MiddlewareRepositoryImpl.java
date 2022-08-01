@@ -48,12 +48,14 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @CircuitBreaker(name = "middleware-api-cb")
     @Override
     public void updateDipApplication(String id, ApplicationRequest applicationRequest) {
+        log.debug("Update dip application for id: {}, applicationRequest {} ", id, applicationRequest);
         middlewareApi.updateDipApplication(id, applicationRequest);
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
+        log.debug("Create dip application applicationRequest {}", applicationRequest);
         return middlewareApi.createDipApplication(applicationRequest);
     }
 

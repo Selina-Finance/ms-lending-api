@@ -22,6 +22,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationRequest
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,12 +30,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(value = "middleware-api", url = "${middleware.api.url}")
 public interface MiddlewareApi {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/application/{id}", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationDecisionResponse getApplicationById(@PathVariable("id") String id);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/application/dip", consumes = "application/json", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/application/{id}", consumes = "application/json")
+    @RequestMapping(method = RequestMethod.PUT, value = "/application/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     void updateDipApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
 }

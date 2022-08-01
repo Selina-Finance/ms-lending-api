@@ -42,7 +42,3 @@ resilience4j:
 middleware:
   api:
     url: http://TBC
-
-spring:
-  jackson:
-    default-property-inclusion: non_null

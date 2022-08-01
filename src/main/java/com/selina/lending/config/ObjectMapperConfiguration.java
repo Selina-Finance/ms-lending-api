@@ -16,6 +16,7 @@
 
 package com.selina.lending.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
@@ -37,5 +38,6 @@ public class ObjectMapperConfiguration implements InitializingBean {
                 new ProblemModule(),
                 new ConstraintViolationProblemModule()
         );
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 }
