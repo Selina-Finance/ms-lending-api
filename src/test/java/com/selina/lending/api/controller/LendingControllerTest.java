@@ -2,6 +2,7 @@ package com.selina.lending.api.controller;
 
 
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -70,7 +71,7 @@ public class LendingControllerTest {
     @Test
     public void updateDipApplication() {
         //Given
-        when(lendingService.updateDipApplication(eq(APPLICATION_ID), eq(dipApplicationRequest))).thenReturn(mwApplicationResponse);
+        doNothing().when(lendingService).updateDipApplication(eq(APPLICATION_ID), eq(dipApplicationRequest));
 
         //When
         lendingController.updateDipApplication(APPLICATION_ID, dipApplicationRequest);

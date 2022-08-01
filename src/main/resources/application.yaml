@@ -38,3 +38,11 @@ resilience4j:
         slow-call-duration-threshold: 1s
         slow-call-rate-threshold: 60
         failure-rate-threshold: 60
+
+middleware:
+  api:
+    url: http://TBC
+
+spring:
+  jackson:
+    default-property-inclusion: non_null

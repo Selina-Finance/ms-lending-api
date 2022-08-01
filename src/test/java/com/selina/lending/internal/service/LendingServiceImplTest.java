@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,6 +30,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -75,13 +77,15 @@ public class LendingServiceImplTest {
     public void updateDipApplication() {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
-        when(middlewareRepository.updateDipApplication(eq(APPLICATION_ID), any(ApplicationRequest.class))).thenReturn(applicationResponse);
+        var requestArgumentCaptor = ArgumentCaptor.forClass(ApplicationRequest.class);
+        doNothing().when(middlewareRepository).updateDipApplication(eq(APPLICATION_ID), requestArgumentCaptor.capture());
 
         //When
-        ApplicationResponse response = lendingService.updateDipApplication(APPLICATION_ID, request);
+        lendingService.updateDipApplication(APPLICATION_ID, request);
 
         //Then
-        assertThat(response, equalTo(applicationResponse));
+        var requestValue = requestArgumentCaptor.getValue();
+        assertThat(requestValue.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         verify(middlewareRepository, times(1)).updateDipApplication(eq(APPLICATION_ID), any());
     }
 
