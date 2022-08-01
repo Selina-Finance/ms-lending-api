@@ -17,16 +17,24 @@
 
 package com.selina.lending.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@Configuration(proxyBeanMethods = false)
+public class OAuth2ClientConfiguration {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//                .authenticationEntryPoint(problemSupport)
+//                .accessDeniedHandler(problemSupport)
+
         http.cors()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/actuator/**")
+                .permitAll()
                 .and()
                 .authorizeRequests()
                 .anyRequest()
@@ -34,5 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2ResourceServer()
                 .jwt();
+        return http.build();
     }
+
 }
