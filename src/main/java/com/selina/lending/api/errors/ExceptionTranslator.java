@@ -20,14 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
-import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
+import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import javax.annotation.Nullable;
@@ -40,7 +39,7 @@ import static com.selina.lending.api.errors.ErrorConstants.VIOLATIONS_KEY;
 
 @Slf4j
 @ControllerAdvice
-public class ExceptionTranslator implements ProblemHandling {
+public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
 
     /**
      * Post-process the Problem payload to add/remove the message key for the front-end if needed.
@@ -72,10 +71,6 @@ public class ExceptionTranslator implements ProblemHandling {
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
         if (isHttpMessageConversionException(throwable)) {
             return buildProblem(status, UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL, throwable);
-        }
-
-        if (throwable instanceof AccessDeniedException) {
-            return buildProblem(Status.FORBIDDEN, throwable.getMessage(), throwable);
         }
 
         if (isNeedToHideFrameworkDetails(throwable.getMessage())) {
