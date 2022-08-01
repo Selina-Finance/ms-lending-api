@@ -40,8 +40,8 @@ public class LendingServiceImpl implements LendingService {
     }
 
     @Override
-    public ApplicationResponse updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
-        return middlewareRepository.updateDipApplication(id, DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
+    public void updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
+        middlewareRepository.updateDipApplication(id, DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
     }
 
     @Override

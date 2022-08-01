@@ -45,16 +45,18 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return Optional.of(middlewareApi.getApplicationById(id));
     }
 
-    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
+    @CircuitBreaker(name = "middleware-api-cb")
     @Override
-    public ApplicationResponse updateDipApplication(String id, ApplicationRequest applicationRequest) {
-        return null;
+    public void updateDipApplication(String id, ApplicationRequest applicationRequest) {
+        log.debug("Update dip application for id: {}, applicationRequest {} ", id, applicationRequest);
+        middlewareApi.updateDipApplication(id, applicationRequest);
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
-        return null;
+        log.debug("Create dip application applicationRequest {}", applicationRequest);
+        return middlewareApi.createDipApplication(applicationRequest);
     }
 
     public ApplicationResponse middlewareApiFallback(Exception e) {

@@ -20,33 +20,22 @@ package com.selina.lending.internal.api;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-// TODO: this class should be replaced with FeignClient
-@Slf4j
-@Component
-public class MiddlewareApi {
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-    public ApplicationDecisionResponse getApplicationById(String id) {
-        if (true) {
-            log.debug("====================> Executing remote call to middleware-api");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            throw new RuntimeException("problem with middleware api");
-        }
+@FeignClient(value = "middleware-api", url = "${middleware.api.url}")
+public interface MiddlewareApi {
 
-        return null;
-    }
+    @RequestMapping(method = RequestMethod.GET, value = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ApplicationDecisionResponse getApplicationById(@PathVariable("id") String id);
 
-    public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
-        return null;
-    }
+    @RequestMapping(method = RequestMethod.POST, value = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
-    public ApplicationResponse updateDipApplication(ApplicationRequest applicationRequest) {
-        return null;
-    }
+    @RequestMapping(method = RequestMethod.PUT, value = "/application/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    void updateDipApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
 }
