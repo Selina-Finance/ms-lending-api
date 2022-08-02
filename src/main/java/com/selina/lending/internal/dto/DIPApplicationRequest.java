@@ -19,7 +19,10 @@ package com.selina.lending.internal.dto;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,13 +35,19 @@ public class DIPApplicationRequest extends ApplicationRequest {
     private String selectedOffer;
     private String selectedProduct;
 
+    @NotNull
     @Size(message = "applicants is required", min = 1, max = 2)
     @Valid
     private List<DIPApplicantDto> applicants;
+
+    @NotNull
     @Valid
     private AdvancedLoanInformationDto loanInformation;
+
+    @NotNull
     @Valid
     private DIPPropertyDetailsDto propertyDetails;
+
     @Valid
     private FeesDto fees;
 }

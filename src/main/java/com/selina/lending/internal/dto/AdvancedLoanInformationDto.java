@@ -18,6 +18,7 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -30,6 +31,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AdvancedLoanInformationDto extends LoanInformationDto {
+
     @NotNull
+    @NotEmpty
     private List<FacilityDto> facilities;
 }

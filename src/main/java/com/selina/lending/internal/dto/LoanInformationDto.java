@@ -31,10 +31,10 @@ public class LoanInformationDto {
     private Integer requestedLoanAmount;
 
     @NotNull
-    private int requestedLoanTerm;
+    private Integer requestedLoanTerm;
 
     @NotNull
-    private int numberOfApplicants;
+    private Integer numberOfApplicants;
 
     @NotBlank
     private String loanPurpose;
