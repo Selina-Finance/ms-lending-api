@@ -18,6 +18,8 @@ package com.selina.lending.internal.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -25,9 +27,14 @@ import lombok.Value;
 @Value
 public class AddressDto {
     String addressType;
+    @NotBlank
     String addressLine1;
     String addressLine2;
+
+    @NotBlank
     String city;
+
+    @NotBlank
     String postcode;
     String buildingName;
     String buildingNumber;

@@ -26,19 +26,19 @@ import lombok.Value;
 public class FeesDto {
 
     @NotNull
-    boolean addAdviceFeeToLoan;
+    Boolean addAdviceFeeToLoan;
 
     @NotNull
-    boolean addArrangementFeeToLoan;
+    Boolean addArrangementFeeToLoan;
 
     @NotNull
-    boolean addCommissionFeeToLoan;
+    Boolean addCommissionFeeToLoan;
 
     @NotNull
-    boolean addThirdPartyFeeToLoan;
+    Boolean addThirdPartyFeeToLoan;
 
     @NotNull
-    boolean addValuationFeeToLoan;
+    Boolean addValuationFeeToLoan;
 
     @NotNull
     Double adviceFee;
@@ -56,7 +56,7 @@ public class FeesDto {
     Double valuationFee;
 
     @NotNull
-    boolean addProductFeesToFacility;
+    Boolean addProductFeesToFacility;
     Double intermediaryFeeAmount;
-    boolean addIntermediaryFeeToLoan;
+    Boolean addIntermediaryFeeToLoan;
 }

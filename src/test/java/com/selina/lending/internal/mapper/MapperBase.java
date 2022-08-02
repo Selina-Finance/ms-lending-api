@@ -108,6 +108,9 @@ public abstract class MapperBase {
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
     public static final String RULE_OUTCOME = "Granted";
     public static final String REQUIRED_PASSPORT = "Passport";
+    public static final String EMPLOYED_STATUS = "Employed";
+    public static final String MARRIED_STATUS = "Married";
+    private static final Double FEE = 599.00;
 
     static {
         try {
@@ -144,7 +147,19 @@ public abstract class MapperBase {
     }
 
     protected FeesDto getFeesDto() {
-        return FeesDto.builder().arrangementFee(ARRANGEMENT_FEE).addProductFeesToFacility(true).build();
+        return FeesDto.builder()
+                .adviceFee(FEE)
+                .thirdPartyFee(FEE)
+                .commissionFee(FEE)
+                .valuationFee(FEE)
+                .addAdviceFeeToLoan(true)
+                .addArrangementFeeToLoan(true)
+                .addCommissionFeeToLoan(true)
+                .addValuationFeeToLoan(true)
+                .addThirdPartyFeeToLoan(true)
+                .arrangementFee(ARRANGEMENT_FEE)
+                .addProductFeesToFacility(true)
+                .build();
     }
 
     protected ExpenditureDto getExpenditureDto() {
@@ -183,7 +198,7 @@ public abstract class MapperBase {
     }
 
     protected EmploymentDto getEmploymentDto() {
-        return EmploymentDto.builder().employerName(EMPLOYER_NAME).build();
+        return EmploymentDto.builder().employmentStatus(EMPLOYED_STATUS).employerName(EMPLOYER_NAME).build();
     }
 
     protected DIPApplicantDto getDIPApplicantDto() {
@@ -194,6 +209,7 @@ public abstract class MapperBase {
                 .gender(GENDER)
                 .emailAddress(EMAIL_ADDRESS)
                 .mobileNumber(MOBILE_NUMBER)
+                .maritalStatus(MARRIED_STATUS)
                 .applicantUsedAnotherName(false)
                 .identifier(1)
                 .estimatedRetirementAge(ESTIMATED_RETIREMENT_AGE)
@@ -258,6 +274,7 @@ public abstract class MapperBase {
                 .propertyType(PROPERTY_TYPE)
                 .numberOfBedrooms(NUMBER_OF_BEDROOMS)
                 .hasAGarage(true)
+                .whenLastPurchased(WHEN_LAST_PURCHASED)
                 .build();
     }
 
