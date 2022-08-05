@@ -45,7 +45,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return Optional.of(middlewareApi.getApplicationById(id));
     }
 
-    @CircuitBreaker(name = "middleware-api-cb")
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallbackDefault")
     @Override
     public void updateDipApplication(String id, ApplicationRequest applicationRequest) {
         log.debug("Update dip application for id: {}, applicationRequest {} ", id, applicationRequest);
@@ -67,5 +67,9 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public Optional<ApplicationDecisionResponse> middlewareGetApiFallback(Exception e) {
         log.debug("Remote service is unavailable. Returning fallback.");
         return Optional.of(ApplicationDecisionResponse.builder().build());
+    }
+
+    public void middlewareApiFallbackDefault(Exception e) {
+        log.debug("Remote service is unavailable. ", e);
     }
 }
