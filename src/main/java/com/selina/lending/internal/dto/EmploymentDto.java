@@ -20,6 +20,8 @@ import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 
+import com.selina.lending.api.validator.EnumValueValidator;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -28,8 +30,10 @@ import lombok.Value;
 public class EmploymentDto {
 
     @NotBlank
+    @EnumValueValidator(enumClass = EmploymentStatus.class)
     String employmentStatus;
     Boolean inProbationPeriod;
+    @EnumValueValidator(enumClass = EmploymentType.class)
     String employmentType;
     String employerPhoneNumber;
     String postcode;
@@ -46,8 +50,10 @@ public class EmploymentDto {
     Boolean ownSharesInThisCompany;
     Double shareHolding;
     String registeredCompanyName;
+    @EnumValueValidator(enumClass = SelfEmployed.class)
     String selfEmployed;
     String fiscalYearReportedIncomeRelatesTo;
+    @EnumValueValidator(enumClass = SelfEmployedLength.class)
     String lengthSelfEmployed;
     Integer companyRegistrationNumber;
     Integer percentageOfCompanyOwned;
@@ -59,4 +65,118 @@ public class EmploymentDto {
     Double percentageOfPartnershipOwned;
     String businessStructure;
     String industry;
+
+    enum EmploymentStatus {
+        EMPLOYED("Employed"),
+        SELF_EMPLOYED_LIMITED_COMPANY("Self-employed (limited company)"),
+        SELF_EMPLOYED_SOLE_TRADER_PARTNERSHIP("Self-employed (sole trader / partnership)"),
+        SELF_EMPLOYED_CONTRACTOR("Self-employed (contractor)"),
+        RETIRED("Retired"),
+        NOT_IN_PAID_EMPLOYMENT("Not in paid employment");
+
+        final String value;
+        EmploymentStatus(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    enum EmploymentType {
+        PERMANENT_FULL_TIME("Permanent (full-time)"),
+        PERMANENT("Permanent (part-time)"),
+        FIXED_TERM_FULL_TIME("Fixed-term (full-time)"),
+        FIXED_TERM_PART_TIME("Fixed-term (part-time)");
+
+        final String value;
+        EmploymentType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    enum SelfEmployed {
+        LIMITED_COMPANY("Limited company"),
+        SOLE_TRADER("Sole trader"),
+        PARTNERSHIP("Partnership"),
+        LIMITED_LIABILITY_PARTNERSHIP("Limited liability partnership");
+
+        final String value;
+        SelfEmployed(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    enum SelfEmployedLength {
+        LESS_THAN_YEAR("Less than a year"),
+        BETWEEN_ONE_AND_TWO_YEARS("Between 1 and 2 years"),
+        MORE_THAN_TWO_YEARS("More than 2 years");
+        final String value;
+        SelfEmployedLength(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    enum Industry {
+        AGRICULTURE("Agriculture"),
+        APPAREL("Apparel"),
+        BANKING("Banking"),
+        BIOTECHNOLOGY("Biotechnology"),
+        CHEMICALS("Chemicals"),
+        COMMUNICATIONS("Communications"),
+        CONSTRUCTION("Construction"),
+        CONSULTING("Consulting"),
+        EDUCATION("Education"),
+        ELECTRONICS("Electronics"),
+        ENERGY("Energy"),
+        ENGINEERING("Engineering"),
+        ENTERTAINMENT("Entertainment"),
+        ENVIRONMENTAL("Environmental"),
+        FINANCE("Finance"),
+        FOOD_BEVERAGE("Food & Beverage"),
+        GOVERNMENT("Government"),
+        HEALTHCARE("Healthcare"),
+        HOSPITALITY("Hospitality"),
+        INSURANCE("Insurance"),
+        MACHINERY("Machinery"),
+        MANUFACTURING("Manufacturing"),
+        MEDIA("Media"),
+        NOT_FOR_PROFIT("Not For Profit"),
+        OTHER("Other"),
+        RECREATION("Recreation"),
+        RETAIL("Retail"),
+        SHIPPING("Shipping"),
+        TECHNOLOGY("Technology"),
+        TELECOMMUNICATIONS("Telecommunications"),
+        TRANSPORTATION("Transportation"),
+        UTILITIES("Utilities");
+
+        final String value;
+        Industry(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+    }
 }

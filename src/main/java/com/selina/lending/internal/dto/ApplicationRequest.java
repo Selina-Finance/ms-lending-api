@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
+import com.selina.lending.api.validator.EnumValueValidator;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -29,10 +31,12 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class ApplicationRequest {
 
+    @EnumValueValidator(enumClass = RequestType.class)
     private String requestType;
     private String applicationStage;
 
     @NotBlank
+    @EnumValueValidator(enumClass = Source.class)
     private String source;
     private String sourceClientId;
     private String sourceAccount;
@@ -43,4 +47,43 @@ public class ApplicationRequest {
 
     private String externalApplicationId;
     private List<ExpenditureDto> expenditure;
+
+    enum Source {
+        BROKER("Broker"),
+        INTERNAL("Internal"),
+        NIVO("Nivo"),
+        QUICK_QUOTE("Quick Quote Form");
+
+        final String value;
+
+        Source(String value) {
+            this.value = value;
+        }
+
+        String getValue() {
+            return this.value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    enum RequestType {
+        FULL_APPLICATION("FullApplication"),
+        DIP("DIP"),
+        LEGACY("Legacy"),
+        QUICK_QUOTE("QuickQuote");
+
+        final String value;
+
+        RequestType(String value) {
+            this.value = value;
+        }
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

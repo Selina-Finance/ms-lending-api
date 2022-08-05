@@ -22,6 +22,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.selina.lending.api.validator.EnumValueValidator;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -40,10 +42,14 @@ public class DIPApplicantDto extends ApplicantDto {
     private Integer estimatedRetirementAge;
 
     @NotBlank
+    @EnumValueValidator(enumClass = MaritalStatus.class)
     private String maritalStatus;
 
     @NotBlank
+    @EnumValueValidator(enumClass = Nationality.class)
     private String nationality;
+
+    @EnumValueValidator(enumClass = ResidentialStatus.class)
     private String residentialStatus;
 
     @NotNull
@@ -54,4 +60,38 @@ public class DIPApplicantDto extends ApplicantDto {
     @NotNull
     private EmploymentDto employment;
     private List<PreviousNameDto> previousNames;
+
+    enum MaritalStatus {
+        SINGLE("Single"),
+        MARRIED("Married"),
+        CIVIL_PARTNERSHIP("Civil partnership"),
+        WIDOWED("Widowed"),
+        DIVORCED("Divorced"),
+        SEPARATED("Separated");
+
+        final String value;
+        MaritalStatus(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    enum ResidentialStatus {
+        OWNER("Owner"),
+        OWNER_OCCUPIER("Owner Occupier");
+        final String value;
+        ResidentialStatus(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+    }
 }

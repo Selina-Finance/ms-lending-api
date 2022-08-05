@@ -19,6 +19,8 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.selina.lending.api.validator.EnumValueValidator;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -31,6 +33,7 @@ import lombok.experimental.SuperBuilder;
 public class DIPPropertyDetailsDto extends PropertyDetailsDto {
 
     @NotBlank
+    @EnumValueValidator(enumClass = PropertyType.class)
     private String propertyType;
 
     @NotNull
@@ -45,6 +48,7 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
     private Boolean isListedAsGradeIOrGradeIiOrA;
     private Boolean notOfStandardConstruction;
     private String constructionYear;
+    @EnumValueValidator(enumClass = Tenure.class)
     private String tenure;
     private Boolean isThePropertyAnExLocalAuthority;
     private Boolean hasAGarage;

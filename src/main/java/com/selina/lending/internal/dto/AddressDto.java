@@ -20,12 +20,15 @@ import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 
+import com.selina.lending.api.validator.EnumValueValidator;
+
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class AddressDto {
+    @EnumValueValidator(enumClass = AddressType.class)
     String addressType;
     @NotBlank
     String addressLine1;
@@ -45,4 +48,21 @@ public class AddressDto {
     String country;
     Date fromDate;
     Date toDate;
+
+    enum AddressType {
+        CURRENT("current"),
+        PREVIOUS("previous"),
+        EMPLOYER_CURRENT("employerCurrent"),
+        EMPLOYER_PREVIOUS("employerPrevious"),
+        WORK("work");
+        final String value;
+        AddressType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }
