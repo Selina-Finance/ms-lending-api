@@ -42,6 +42,7 @@ public class ApplicationRequest {
     private String sourceAccount;
 
     @NotBlank
+    @EnumValueValidator(enumClass = ProductCode.class)
     private String productCode;
     private String reference;
 
@@ -85,5 +86,34 @@ public class ApplicationRequest {
         public String toString() {
             return this.value;
         }
+    }
+
+    enum ProductCode {
+        ALL("All"),
+        QQ01("QQ01"),
+        VAR0004("Var0004"),
+        VAR0005("Var0005"),
+        VAR0006("Var0006"),
+        VAR0007("Var0007"),
+        VAR0008("Var0008"),
+        VAR0009("Var0009"),
+        VAR0019("Var0010"),
+        FIX0004("Fix0004"),
+        FIX0005("Fix0005"),
+        FIX0006("Fix0006"),
+        FIX0007("Fix0007"),
+        FIX0008("Fix0008"),
+        FIX0009("Fix0009"),
+        FIX0010("Fix0010");
+        final String value;
+
+        ProductCode(String value) {
+            this.value = value;
+        }
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
     }
 }

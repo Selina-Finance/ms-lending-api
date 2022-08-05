@@ -19,6 +19,7 @@ package com.selina.lending.internal.dto;
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.EnumValueValidator;
 
@@ -35,6 +36,7 @@ public class AddressDto {
     String addressLine2;
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z &-.']*$")
     String city;
 
     @NotBlank

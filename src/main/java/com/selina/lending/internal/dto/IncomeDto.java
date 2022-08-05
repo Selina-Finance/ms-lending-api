@@ -18,12 +18,15 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class IncomeDto {
+    @Valid
     List<IncomeItemDto> income;
     Boolean doesNotHaveAnyIncome;
     Boolean expectsFutureIncomeDecrease;

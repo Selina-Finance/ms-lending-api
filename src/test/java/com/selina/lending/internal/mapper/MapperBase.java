@@ -101,7 +101,7 @@ public abstract class MapperBase {
     public static final String COUNTY = "county";
     public static final Date FROM_DATE;
     public static final String OFFER_ID = "offer123";
-    public static final String PRODUCT_CODE = "product123";
+    public static final String PRODUCT_CODE = "All";
     public static final String EXPENDITURE_TYPE = "expenditure type";
     public static final String SOURCE = "Broker";
     protected static final Double ARRANGEMENT_FEE = 1000.00;

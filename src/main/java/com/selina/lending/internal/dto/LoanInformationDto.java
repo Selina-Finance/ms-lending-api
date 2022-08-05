@@ -42,31 +42,4 @@ public class LoanInformationDto {
     @EnumValueValidator(enumClass = LoanPurpose.class)
     private String loanPurpose;
     private String desiredTimeLine;
-
-    enum LoanPurpose {
-        DEBT_CONSOLIDATION("Debt consolidation"),
-        HOME_IMPROVEMENTS("Home improvements"),
-        HOLIDAY("Holiday"),
-        MEDICAL_BILLS("Medical bills"),
-        PROPERTY_SECOND_HOME_PURCHASE("Property - Second home purchase"),
-        PROPERTY_BUY_TO_LET_PURCHASE("Property - Buy-to-let purchase"),
-        SCHOOL_FEES_FURTHER_EDUCATION("School fees / further education"),
-        TAX_BILLS("Tax bills"),
-        VEHICLE_PURCHASE("Vehicle purchase"),
-        WEDDING("Wedding"),
-        BUSINESS_PURPOSES("Business purposes"),
-        CONTINGENCY("Contingency"),
-        OTHER("Other"),
-        NONE("None");
-
-        final String value;
-        LoanPurpose(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
 }
