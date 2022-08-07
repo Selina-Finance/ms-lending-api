@@ -43,6 +43,18 @@ middleware:
   api:
     url: http://TBC
 
+spring.security.oauth2.client:
+  registration:
+    #Repeat block for any number of AuthZ servers
+    bar-auth: #unique supplier service name
+      client-id: DUMMY_CLIENT_ID_XXX
+      client-secret: DUMMY_CLIENT_SECRET_YYYY
+      authorization-grant-type: client_credentials
+      client-authentication-method: post
+  provider:
+    #Repeat block for any number of AuthZ servers
+    bar-auth:
+      token-uri: ${BAR_AUTH_SERVER_URI}/oauth/token
 spring:
   security:
     oauth2:
