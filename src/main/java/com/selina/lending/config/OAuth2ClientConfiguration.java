@@ -37,6 +37,8 @@ public class OAuth2ClientConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+//        http.authorizeRequests().anyRequest().permitAll();
+//        return http.build();
         http.cors()
                 .and()
                 .exceptionHandling()
