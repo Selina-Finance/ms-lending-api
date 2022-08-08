@@ -30,7 +30,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = EnumValueValidatorImpl.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface EnumValueValidator {
+public @interface EnumValue {
     Class<? extends Enum<?>> enumClass();
     String message() default "value is not valid";
     Class<?>[] groups() default {};

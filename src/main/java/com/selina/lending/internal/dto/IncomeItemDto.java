@@ -18,7 +18,7 @@ package com.selina.lending.internal.dto;
 
 import java.util.Date;
 
-import com.selina.lending.api.validator.EnumValueValidator;
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Builder;
 import lombok.Value;
@@ -27,7 +27,7 @@ import lombok.Value;
 @Value
 public class IncomeItemDto {
     Double amount;
-    @EnumValueValidator(enumClass = IncomeType.class)
+    @EnumValue(enumClass = IncomeType.class)
     String type;
     String status;
     String noIncomeSource;

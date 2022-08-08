@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.selina.lending.api.validator.EnumValueValidator;
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,14 +42,14 @@ public class DIPApplicantDto extends ApplicantDto {
     private Integer estimatedRetirementAge;
 
     @NotBlank
-    @EnumValueValidator(enumClass = MaritalStatus.class)
+    @EnumValue(enumClass = MaritalStatus.class)
     private String maritalStatus;
 
     @NotBlank
-    @EnumValueValidator(enumClass = Nationality.class)
+    @EnumValue(enumClass = Nationality.class)
     private String nationality;
 
-    @EnumValueValidator(enumClass = ResidentialStatus.class)
+    @EnumValue(enumClass = ResidentialStatus.class)
     private String residentialStatus;
 
     @NotNull

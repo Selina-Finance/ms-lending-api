@@ -16,7 +16,7 @@
 
 package com.selina.lending.internal.dto;
 
-import com.selina.lending.api.validator.EnumValueValidator;
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Builder;
 import lombok.Value;
@@ -24,13 +24,13 @@ import lombok.Value;
 @Builder
 @Value
 public class ExpenditureDto {
-    @EnumValueValidator(enumClass = Frequency.class)
+    @EnumValue(enumClass = Frequency.class)
     String frequency;
     Integer balanceDeclared;
     Double amountDeclared;
     Double paymentVerified;
     Double amountVerified;
-    @EnumValueValidator(enumClass = ExpenditureType.class)
+    @EnumValue(enumClass = ExpenditureType.class)
     String expenditureType;
 
     enum Frequency {

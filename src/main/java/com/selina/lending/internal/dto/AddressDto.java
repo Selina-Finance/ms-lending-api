@@ -21,7 +21,7 @@ import java.util.Date;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-import com.selina.lending.api.validator.EnumValueValidator;
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Builder;
 import lombok.Value;
@@ -29,7 +29,7 @@ import lombok.Value;
 @Builder
 @Value
 public class AddressDto {
-    @EnumValueValidator(enumClass = AddressType.class)
+    @EnumValue(enumClass = AddressType.class)
     String addressType;
     @NotBlank
     String addressLine1;

@@ -20,7 +20,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 
-import com.selina.lending.api.validator.EnumValueValidator;
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Builder;
 import lombok.Value;
@@ -30,10 +30,10 @@ import lombok.Value;
 public class EmploymentDto {
 
     @NotBlank
-    @EnumValueValidator(enumClass = EmploymentStatus.class)
+    @EnumValue(enumClass = EmploymentStatus.class)
     String employmentStatus;
     Boolean inProbationPeriod;
-    @EnumValueValidator(enumClass = EmploymentType.class)
+    @EnumValue(enumClass = EmploymentType.class)
     String employmentType;
     String employerPhoneNumber;
     String postcode;
@@ -50,10 +50,10 @@ public class EmploymentDto {
     Boolean ownSharesInThisCompany;
     Double shareHolding;
     String registeredCompanyName;
-    @EnumValueValidator(enumClass = SelfEmployed.class)
+    @EnumValue(enumClass = SelfEmployed.class)
     String selfEmployed;
     String fiscalYearReportedIncomeRelatesTo;
-    @EnumValueValidator(enumClass = SelfEmployedLength.class)
+    @EnumValue(enumClass = SelfEmployedLength.class)
     String lengthSelfEmployed;
     Integer companyRegistrationNumber;
     Integer percentageOfCompanyOwned;

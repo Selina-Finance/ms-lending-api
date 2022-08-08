@@ -23,11 +23,11 @@ import java.util.stream.Stream;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class EnumValueValidatorImpl implements ConstraintValidator<EnumValueValidator, String> {
+public class EnumValueValidatorImpl implements ConstraintValidator<EnumValue, String> {
     private List<String> acceptedValues;
 
     @Override
-    public void initialize(EnumValueValidator constraintAnnotation) {
+    public void initialize(EnumValue constraintAnnotation) {
         acceptedValues = Stream.of(constraintAnnotation.enumClass().getEnumConstants())
                 .map(Enum::toString)
                 .collect(Collectors.toList());

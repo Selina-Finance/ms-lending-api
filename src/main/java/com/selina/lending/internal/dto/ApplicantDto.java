@@ -25,7 +25,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.selina.lending.api.validator.EnumValueValidator;
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,7 +36,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class ApplicantDto {
     @NotBlank
-    @EnumValueValidator(enumClass = Title.class)
+    @EnumValue(enumClass = Title.class)
     private String title;
 
     @Email(message = "emailAddress is not valid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
@@ -53,7 +53,7 @@ public class ApplicantDto {
     private String lastName;
     private String middleName;
 
-    @EnumValueValidator(enumClass = Gender.class)
+    @EnumValue(enumClass = Gender.class)
     private String gender;
 
     @NotNull

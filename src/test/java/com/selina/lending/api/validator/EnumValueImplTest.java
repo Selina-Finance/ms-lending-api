@@ -43,7 +43,7 @@ import com.selina.lending.internal.dto.IncomeDto;
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 
-public class EnumValueValidatorImplTest {
+public class EnumValueImplTest {
     private static final String INVALID_VALUE = "invalid";
     private static Validator validator;
 

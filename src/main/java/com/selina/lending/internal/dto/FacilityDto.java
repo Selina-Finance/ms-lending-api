@@ -16,7 +16,7 @@
 
 package com.selina.lending.internal.dto;
 
-import com.selina.lending.api.validator.EnumValueValidator;
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Builder;
 import lombok.Value;
@@ -25,6 +25,6 @@ import lombok.Value;
 @Value
 public class FacilityDto {
     Double allocationAmount;
-    @EnumValueValidator(enumClass = LoanPurpose.class)
+    @EnumValue(enumClass = LoanPurpose.class)
     String allocationPurpose;
 }

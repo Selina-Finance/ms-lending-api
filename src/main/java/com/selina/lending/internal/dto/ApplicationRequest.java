@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
-import com.selina.lending.api.validator.EnumValueValidator;
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,18 +31,18 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class ApplicationRequest {
 
-    @EnumValueValidator(enumClass = RequestType.class)
+    @EnumValue(enumClass = RequestType.class)
     private String requestType;
     private String applicationStage;
 
     @NotBlank
-    @EnumValueValidator(enumClass = Source.class)
+    @EnumValue(enumClass = Source.class)
     private String source;
     private String sourceClientId;
     private String sourceAccount;
 
     @NotBlank
-    @EnumValueValidator(enumClass = ProductCode.class)
+    @EnumValue(enumClass = ProductCode.class)
     private String productCode;
     private String reference;
 
