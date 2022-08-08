@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path : /lending
+    context-path: /lending
 
 logging:
   level:
@@ -43,9 +43,17 @@ middleware:
   api:
     url: http://TBC
 
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri : http://localhost:9999/realms/brokers
+spring.security:
+  oauth2:
+    resourceserver: # authenticating foreign requests to lending-API
+      jwt.issuer-uri: http://KEYKLOACK-SERVER/realms/REALM-NAME
+    client: # authenticating requests between inner services using Feign client
+      registration:
+        middleware-auth:
+          client-id: DUMMY_CLIENT_ID
+          client-secret: DUMMY_CLIENT_SECRET
+          authorization-grant-type: client_credentials
+          client-authentication-method: post
+      provider:
+        middleware-auth:
+          token-uri: https://MW-AUTH_SERVER/oauth2/token

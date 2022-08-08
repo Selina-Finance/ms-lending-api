@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.config;
+package com.selina.lending.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,17 +26,16 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @Import(SecurityProblemSupport.class)
 @Configuration(proxyBeanMethods = false)
-public class OAuth2ClientConfiguration {
+public class SecurityConfig {
 
     private final SecurityProblemSupport problemSupport;
 
-    public OAuth2ClientConfiguration(SecurityProblemSupport problemSupport) {
+    public SecurityConfig(SecurityProblemSupport problemSupport) {
         this.problemSupport = problemSupport;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
 //        http.authorizeRequests().anyRequest().permitAll();
 //        return http.build();
         http.cors()
@@ -62,5 +61,4 @@ public class OAuth2ClientConfiguration {
                 .jwt();
         return http.build();
     }
-
 }
