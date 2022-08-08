@@ -24,7 +24,6 @@ import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.service.LendingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,16 +38,6 @@ public class LendingController implements LendingOperations {
 
     public LendingController(LendingService lendingService) {
         this.lendingService = lendingService;
-    }
-
-    @Override
-    public String securityTest(Jwt principal, String id) {
-        log.info("principal: {}", principal.toString());
-        log.info("principal name: {}", principal.getClaimAsString("preferred_username"));
-
-//        throw new AccessDeniedException("test access denied!");
-//        throw new InvalidBearerTokenException("token is invalid!");
-        return "Success";
     }
 
     @Override
