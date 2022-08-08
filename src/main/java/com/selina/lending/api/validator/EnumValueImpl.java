@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class EnumValueValidatorImpl implements ConstraintValidator<EnumValue, String> {
+public class EnumValueImpl implements ConstraintValidator<EnumValue, String> {
     private List<String> acceptedValues;
 
     @Override
