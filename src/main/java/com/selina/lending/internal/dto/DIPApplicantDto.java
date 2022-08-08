@@ -70,6 +70,7 @@ public class DIPApplicantDto extends ApplicantDto {
         SEPARATED("Separated");
 
         final String value;
+
         MaritalStatus(String value) {
             this.value = value;
         }
@@ -84,6 +85,7 @@ public class DIPApplicantDto extends ApplicantDto {
         OWNER("Owner"),
         OWNER_OCCUPIER("Owner Occupier");
         final String value;
+
         ResidentialStatus(String value) {
             this.value = value;
         }
@@ -92,6 +94,5 @@ public class DIPApplicantDto extends ApplicantDto {
         public String toString() {
             return this.value;
         }
-
     }
 }

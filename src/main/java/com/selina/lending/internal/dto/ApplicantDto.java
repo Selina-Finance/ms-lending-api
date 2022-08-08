@@ -74,7 +74,6 @@ public class ApplicantDto {
     private List<AddressDto> addresses;
 
     enum Title {
-        //"Mr." "Mrs." "Miss" "Ms." "Dr." "Other"
         MR("Mr."),
         MRS("Mrs."),
         MISS("Miss"),
@@ -87,6 +86,7 @@ public class ApplicantDto {
         Title(String value) {
             this.value = value;
         }
+
         @Override
         public String toString() {
             return this.value;
@@ -94,12 +94,12 @@ public class ApplicantDto {
     }
 
     enum Gender {
-        //"Male" "Female" "Other"
         MALE("Male"),
         FEMALE("Female"),
         OTHER("Other");
 
         final String value;
+
         Gender(String value) {
             this.value = value;
         }

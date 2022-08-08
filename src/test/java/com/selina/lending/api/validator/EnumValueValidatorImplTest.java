@@ -20,6 +20,7 @@ package com.selina.lending.api.validator;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.dto.ApplicationRequest;
+import com.selina.lending.internal.dto.DIPApplicantDto;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.dto.ExpenditureDto;
 import com.selina.lending.internal.dto.IncomeDto;
@@ -67,6 +69,7 @@ public class EnumValueValidatorImplTest {
 
         //Then
         assertThat(violations.size(), equalTo(1));
+
         var violation = violations.iterator().next();
         assertThat(violation.getPropertyPath().toString(), equalTo("loanPurpose"));
         assertThat(violation.getMessage(), equalTo("value is not valid"));
@@ -86,7 +89,6 @@ public class EnumValueValidatorImplTest {
 
         var violationPropertyPath = getViolationPropertyPath(
                 violations.stream().map(ConstraintViolation::getPropertyPath));
-
         assertThat(violationPropertyPath, containsInAnyOrder("expenditureType", "frequency"));
     }
 
@@ -107,7 +109,6 @@ public class EnumValueValidatorImplTest {
 
         var violationPropertyPath = getViolationPropertyPath(
                 violations.stream().map(ConstraintViolation::getPropertyPath));
-
         assertThat(violationPropertyPath, containsInAnyOrder("requestType", "source", "productCode"));
     }
 
@@ -126,7 +127,6 @@ public class EnumValueValidatorImplTest {
         assertThat(violation.getPropertyPath().toString(), equalTo("income[0].type"));
         assertThat(violation.getMessage(), equalTo("value is not valid"));
         assertThat(violation.getInvalidValue(), equalTo(INVALID_VALUE));
-
     }
 
     @Test
@@ -147,9 +147,26 @@ public class EnumValueValidatorImplTest {
 
         var violationPropertyPath = getViolationPropertyPath(
                 violations.stream().map(ConstraintViolation::getPropertyPath));
-
         assertThat(violationPropertyPath,
                 containsInAnyOrder("employmentStatus", "employmentType", "selfEmployed", "lengthSelfEmployed"));
+    }
+
+    @Test
+    public void validateDIPApplicant() {
+        //Given
+        var applicant = DIPApplicantDto.builder().residentialStatus(INVALID_VALUE).title(INVALID_VALUE).maritalStatus(
+                INVALID_VALUE).nationality(INVALID_VALUE).build();
+
+        //When
+        var violations = validator.validate(applicant);
+
+        //Then
+        assertThat(violations.size(), equalTo(16));
+
+        var violationPropertyPath = getViolationPropertyPath(
+                violations.stream().map(ConstraintViolation::getPropertyPath));
+        assertThat(violationPropertyPath,
+                hasItems("title", "maritalStatus", "nationality", "residentialStatus"));
     }
 
     private List<String> getViolationPropertyPath(Stream<Path> violations) {

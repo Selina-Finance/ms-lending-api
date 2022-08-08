@@ -57,6 +57,7 @@ public class AddressDto {
         EMPLOYER_CURRENT("employerCurrent"),
         EMPLOYER_PREVIOUS("employerPrevious"),
         WORK("work");
+
         final String value;
         AddressType(String value) {
             this.value = value;

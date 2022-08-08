@@ -43,6 +43,7 @@ public class ExpenditureDto {
         ANNUALLY("annually");
 
         final String value;
+
         Frequency(String value) {
             this.value = value;
         }
@@ -71,8 +72,8 @@ public class ExpenditureDto {
         OTHER("Other"),
         OUTGOINGS_TOTAL("Outgoings Total");
 
-
         final String value;
+
         ExpenditureType(String value) {
             this.value = value;
         }

@@ -82,6 +82,7 @@ public class ApplicationRequest {
         RequestType(String value) {
             this.value = value;
         }
+
         @Override
         public String toString() {
             return this.value;
@@ -110,6 +111,7 @@ public class ApplicationRequest {
         ProductCode(String value) {
             this.value = value;
         }
+
         @Override
         public String toString() {
             return this.value;

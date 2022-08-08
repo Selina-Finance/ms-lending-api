@@ -75,6 +75,7 @@ public class IncomeItemDto {
         GROSS_ANNUAL_INCOME("Gross annual income");
 
         final String value;
+
         IncomeType(String value) {
             this.value = value;
         }

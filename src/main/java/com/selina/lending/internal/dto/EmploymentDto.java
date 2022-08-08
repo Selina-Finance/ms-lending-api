@@ -92,6 +92,7 @@ public class EmploymentDto {
         FIXED_TERM_PART_TIME("Fixed-term (part-time)");
 
         final String value;
+
         EmploymentType(String value) {
             this.value = value;
         }
@@ -109,6 +110,7 @@ public class EmploymentDto {
         LIMITED_LIABILITY_PARTNERSHIP("Limited liability partnership");
 
         final String value;
+
         SelfEmployed(String value) {
             this.value = value;
         }
@@ -169,6 +171,7 @@ public class EmploymentDto {
         UTILITIES("Utilities");
 
         final String value;
+
         Industry(String value) {
             this.value = value;
         }
@@ -177,6 +180,5 @@ public class EmploymentDto {
         public String toString() {
             return this.value;
         }
-
     }
 }

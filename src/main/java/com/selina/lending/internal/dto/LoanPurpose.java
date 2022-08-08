@@ -34,6 +34,7 @@ public enum LoanPurpose {
     NONE("None");
 
     final String value;
+
     LoanPurpose(String value) {
         this.value = value;
     }
