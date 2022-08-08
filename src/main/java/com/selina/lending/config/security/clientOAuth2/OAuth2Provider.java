@@ -50,4 +50,5 @@ public class OAuth2Provider {
                 .principal(ANONYMOUS_USER_AUTHENTICATION)
                 .build();
     }
+
 }

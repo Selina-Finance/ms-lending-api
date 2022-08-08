@@ -18,17 +18,21 @@
 package com.selina.lending.config.security.clientOAuth2;
 
 import feign.RequestInterceptor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Configuration
 public class MiddlewareOAuth2Configuration {
 
-    private final OAuth2Provider oauth2Provider;
     private final String OAUTH2_SERVER_NAME = "middleware-auth";
+
+    private final OAuth2Provider oauth2Provider;
+
+    public MiddlewareOAuth2Configuration(OAuth2Provider oauth2Provider) {
+        this.oauth2Provider = oauth2Provider;
+    }
 
     @Bean
     public RequestInterceptor authInterceptor() {
