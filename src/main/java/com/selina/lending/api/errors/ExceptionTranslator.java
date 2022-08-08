@@ -26,17 +26,20 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.StatusType;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
+import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import javax.annotation.Nullable;
 import java.net.URI;
 import java.util.Optional;
 
-import static com.selina.lending.api.errors.ErrorConstants.*;
+import static com.selina.lending.api.errors.ErrorConstants.UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EXCEPTION_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.VIOLATIONS_KEY;
 
 @Slf4j
 @ControllerAdvice
-public class ExceptionTranslator implements ProblemHandling {
+public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
 
     /**
      * Post-process the Problem payload to add/remove the message key for the front-end if needed.
