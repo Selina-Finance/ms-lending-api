@@ -45,8 +45,10 @@ public class OAuth2ClientConfiguration {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/actuator/**")
-                .permitAll()
+                .antMatchers("/actuator/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/v3/api-docs/**").permitAll()
 
                 .and()
                 .authorizeRequests()
