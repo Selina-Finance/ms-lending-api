@@ -31,7 +31,7 @@ public class MiddlewareOAuth2Configuration {
     private final String OAUTH2_SERVER_NAME = "middleware-auth";
 
     @Bean
-    public RequestInterceptor barAuthZInterceptor() {
+    public RequestInterceptor authInterceptor() {
         return (requestTemplate) -> requestTemplate.header(
                 AUTHORIZATION, oauth2Provider.getAuthenticationToken(OAUTH2_SERVER_NAME)
         );

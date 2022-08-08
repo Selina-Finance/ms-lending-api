@@ -17,7 +17,6 @@
 
 package com.selina.lending.config.security.clientOAuth2;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -25,12 +24,11 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
 public class OAuth2Provider {
 
     // Using anonymous user principal as its Service-to-Service authentication
-    public static final Authentication ANONYMOUS_USER_AUTHENTICATION = new AnonymousAuthenticationToken(
+    private static final Authentication ANONYMOUS_USER_AUTHENTICATION = new AnonymousAuthenticationToken(
             "key",
             "anonymous",
             AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS")
@@ -38,13 +36,17 @@ public class OAuth2Provider {
 
     private final OAuth2AuthorizedClientManager authorizedClientManager;
 
-    public String getAuthenticationToken(final String authZServerName) {
-        var request = buildOAuth2AuthorizeRequest(authZServerName);
+    public OAuth2Provider(OAuth2AuthorizedClientManager authorizedClientManager) {
+        this.authorizedClientManager = authorizedClientManager;
+    }
+
+    public String getAuthenticationToken(final String authServerName) {
+        var request = buildOAuth2AuthorizeRequest(authServerName);
         return "Bearer " + authorizedClientManager.authorize(request).getAccessToken().getTokenValue();
     }
 
-    private static OAuth2AuthorizeRequest buildOAuth2AuthorizeRequest(String authZServerName) {
-        return OAuth2AuthorizeRequest.withClientRegistrationId(authZServerName)
+    private static OAuth2AuthorizeRequest buildOAuth2AuthorizeRequest(String authServerName) {
+        return OAuth2AuthorizeRequest.withClientRegistrationId(authServerName)
                 .principal(ANONYMOUS_USER_AUTHENTICATION)
                 .build();
     }
