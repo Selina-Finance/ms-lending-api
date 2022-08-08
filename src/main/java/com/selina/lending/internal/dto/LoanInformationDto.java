@@ -19,6 +19,8 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.selina.lending.api.validator.EnumValue;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -37,6 +39,7 @@ public class LoanInformationDto {
     private Integer numberOfApplicants;
 
     @NotBlank
+    @EnumValue(enumClass = LoanPurpose.class)
     private String loanPurpose;
     private String desiredTimeLine;
 }

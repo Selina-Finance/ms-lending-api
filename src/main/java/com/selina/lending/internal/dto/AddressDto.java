@@ -19,6 +19,9 @@ package com.selina.lending.internal.dto;
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import com.selina.lending.api.validator.EnumValue;
 
 import lombok.Builder;
 import lombok.Value;
@@ -26,12 +29,14 @@ import lombok.Value;
 @Builder
 @Value
 public class AddressDto {
+    @EnumValue(enumClass = AddressType.class)
     String addressType;
     @NotBlank
     String addressLine1;
     String addressLine2;
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z &-.']*$")
     String city;
 
     @NotBlank
@@ -45,4 +50,22 @@ public class AddressDto {
     String country;
     Date fromDate;
     Date toDate;
+
+    enum AddressType {
+        CURRENT("current"),
+        PREVIOUS("previous"),
+        EMPLOYER_CURRENT("employerCurrent"),
+        EMPLOYER_PREVIOUS("employerPrevious"),
+        WORK("work");
+
+        final String value;
+        AddressType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
+import com.selina.lending.api.validator.EnumValue;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -29,18 +31,91 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class ApplicationRequest {
 
+    @EnumValue(enumClass = RequestType.class)
     private String requestType;
     private String applicationStage;
 
     @NotBlank
+    @EnumValue(enumClass = Source.class)
     private String source;
     private String sourceClientId;
     private String sourceAccount;
 
     @NotBlank
+    @EnumValue(enumClass = ProductCode.class)
     private String productCode;
     private String reference;
 
     private String externalApplicationId;
     private List<ExpenditureDto> expenditure;
+
+    enum Source {
+        BROKER("Broker"),
+        INTERNAL("Internal"),
+        NIVO("Nivo"),
+        QUICK_QUOTE("Quick Quote Form");
+
+        final String value;
+
+        Source(String value) {
+            this.value = value;
+        }
+
+        String getValue() {
+            return this.value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    enum RequestType {
+        FULL_APPLICATION("FullApplication"),
+        DIP("DIP"),
+        LEGACY("Legacy"),
+        QUICK_QUOTE("QuickQuote");
+
+        final String value;
+
+        RequestType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    enum ProductCode {
+        ALL("All"),
+        QQ01("QQ01"),
+        VAR0004("Var0004"),
+        VAR0005("Var0005"),
+        VAR0006("Var0006"),
+        VAR0007("Var0007"),
+        VAR0008("Var0008"),
+        VAR0009("Var0009"),
+        VAR0019("Var0010"),
+        FIX0004("Fix0004"),
+        FIX0005("Fix0005"),
+        FIX0006("Fix0006"),
+        FIX0007("Fix0007"),
+        FIX0008("Fix0008"),
+        FIX0009("Fix0009"),
+        FIX0010("Fix0010");
+        final String value;
+
+        ProductCode(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+    }
 }

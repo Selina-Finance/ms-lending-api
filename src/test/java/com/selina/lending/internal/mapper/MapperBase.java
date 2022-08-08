@@ -61,14 +61,14 @@ import com.selina.lending.internal.service.application.domain.Required;
 import com.selina.lending.internal.service.application.domain.RuleOutcome;
 
 public abstract class MapperBase {
-    public static final String TITLE = "Mrs";
+    public static final String TITLE = "Mrs.";
     public static final String FIRST_NAME = "Sally";
     public static final String LAST_NAME = "Smith";
     public static final String EMAIL_ADDRESS = "sally.smith@someemail.com";
     public static final String GENDER = "Female";
     public static final String MOBILE_NUMBER = "07965234654";
     public static final Integer ESTIMATED_RETIREMENT_AGE = 65;
-    public static final String NATIONALITY = "British";
+    public static final String NATIONALITY = "United Kingdom";
     public static final Date DOB;
     public static final String EMPLOYER_NAME = "Employer name";
     public static final Double INCOME_AMOUNT = 15000.00;
@@ -82,7 +82,7 @@ public abstract class MapperBase {
     public static final Double ESTIMATED_VALUE = 590000.00;
     public static final String WHEN_LAST_PURCHASED = "1990";
     public static final Double PURCHASE_VALUE = 390000.00;
-    public static final String PROPERTY_TYPE = "House";
+    public static final String PROPERTY_TYPE = "Detached house";
     public static final int NUMBER_OF_BEDROOMS = 4;
     public static final String DIP_APPLICATION_TYPE = "DIP";
     public static final String APPLICATION_TYPE = "Quick Quote";
@@ -90,7 +90,7 @@ public abstract class MapperBase {
     public static final Date CREATED_DATE = Date.from(Instant.now());
     public static final String ADDRESS_LINE_1 = "address line 1";
     public static final String ADDRESS_LINE_2 = "address line 2";
-    public static final String ADDRESS_TYPE = "Home";
+    public static final String ADDRESS_TYPE = "current";
     public static final String COUNTRY = "England";
     public static final String BUILDING_NUMBER = "10";
     public static final String CITY = "a city";
@@ -101,9 +101,9 @@ public abstract class MapperBase {
     public static final String COUNTY = "county";
     public static final Date FROM_DATE;
     public static final String OFFER_ID = "offer123";
-    public static final String PRODUCT_CODE = "product123";
+    public static final String PRODUCT_CODE = "All";
     public static final String EXPENDITURE_TYPE = "expenditure type";
-    public static final String SOURCE = "broker source";
+    public static final String SOURCE = "Broker";
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
     public static final String RULE_OUTCOME = "Granted";

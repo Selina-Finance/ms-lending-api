@@ -16,16 +16,71 @@
 
 package com.selina.lending.internal.dto;
 
+import com.selina.lending.api.validator.EnumValue;
+
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class ExpenditureDto {
+    @EnumValue(enumClass = Frequency.class)
     String frequency;
     Integer balanceDeclared;
     Double amountDeclared;
     Double paymentVerified;
     Double amountVerified;
+    @EnumValue(enumClass = ExpenditureType.class)
     String expenditureType;
+
+    enum Frequency {
+        DAILY("daily"),
+        WEEKLY("weekly"),
+        BI_WEEKLY("bi-weekly"),
+        MONTHLY("monthly"),
+        QUARTERLY("quarterly"),
+        SEMI_ANNUALLY("semi-annually"),
+        ANNUALLY("annually");
+
+        final String value;
+
+        Frequency(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+    }
+
+    enum ExpenditureType {
+        FOOD_DRINK_HOUSEKEEPING("Food, Drink, Housekeeping"),
+        CLOTHING_OR_FOOTWEAR("Clothing or footwear"),
+        TV_PHONE_INTERNET("TV phone and internet"),
+        UTILITIES("Utilities"),
+        FURNISHINGS_AND_MAINTENANCE("Furnishings and maintainence"),
+        INSURANCE("Insurance"),
+        COUNCIL_TAX("Council tax"),
+        TRANSPORT("Transport"),
+        RECREATION("Recreation"),
+        GROUND_RENT("Ground rent"),
+        EDUCATION_AND_CHILDCARE("Education and childcare"),
+        ALIMONY("Alimony"),
+        CONSUMABLES("Consumables"),
+        OTHER("Other"),
+        OUTGOINGS_TOTAL("Outgoings Total");
+
+        final String value;
+
+        ExpenditureType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }
