@@ -16,21 +16,23 @@
 
 package com.selina.lending.api.errors;
 
+import com.selina.lending.IntegrationTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import com.selina.lending.IntegrationTest;
-
+@WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
 class ExceptionTranslatorTest {
@@ -46,6 +48,7 @@ class ExceptionTranslatorTest {
         // When
         mockMvc.perform(
                         post("/api/exception-translator-test/method-argument")
+                                .with(csrf())
                                 .content(invalidInputJson)
                                 .contentType(APPLICATION_JSON)
                 )
@@ -64,6 +67,7 @@ class ExceptionTranslatorTest {
         // When
         mockMvc.perform(
                         post("/api/exception-translator-test/method-argument")
+                                .with(csrf())
                                 .content(emptyContent)
                                 .contentType(APPLICATION_JSON)
                 )
@@ -130,7 +134,10 @@ class ExceptionTranslatorTest {
         String expectedDetail = "Request method 'POST' not supported";
 
         // When
-        mockMvc.perform(post("/api/exception-translator-test/missing-servlet-request-parameter"))
+        mockMvc.perform(
+                        post("/api/exception-translator-test/missing-servlet-request-parameter")
+                                .with(csrf())
+                )
 
                 // Then
                 .andExpect(status().isMethodNotAllowed())
@@ -138,6 +145,36 @@ class ExceptionTranslatorTest {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title").value("Method Not Allowed"))
                 .andExpect(jsonPath("$.detail").value(expectedDetail));
+    }
+
+    @Test
+    public void testAccessDenied() throws Exception {
+        // Given
+        String expectedValue = "test access denied!";
+
+        // When
+        mockMvc
+                .perform(get("/api/exception-translator-test/access-denied"))
+                // Then
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.detail").value(expectedValue));
+
+    }
+
+    @Test
+    public void testUnauthorized() throws Exception {
+        // Given
+        String expectedMsg = "test authentication failed!";
+
+        // When
+        mockMvc
+                .perform(get("/api/exception-translator-test/unauthorized"))
+                // Then
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.detail").value(expectedMsg));
+
     }
 
     @Test

@@ -1,27 +1,29 @@
 package com.selina.lending.api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.selina.lending.IntegrationTest;
+import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
+import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.mapper.MapperBase;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.IntegrationTest;
-import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.mapper.MapperBase;
-
+@WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
 public class LendingControllerValidationTest extends MapperBase {
@@ -37,7 +39,7 @@ public class LendingControllerValidationTest extends MapperBase {
         var dipApplicationRequest = getDIPApplicationRequestDto();
 
         //When
-        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -49,7 +51,7 @@ public class LendingControllerValidationTest extends MapperBase {
         var dipApplicationRequest = DIPApplicationRequest.builder().build();
 
         //When
-        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -82,7 +84,7 @@ public class LendingControllerValidationTest extends MapperBase {
                 .build();
 
         //When
-        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -108,7 +110,7 @@ public class LendingControllerValidationTest extends MapperBase {
                 .build();
 
         //When
-        mockMvc.perform(put("/application/123/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(put("/application/123/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -131,7 +133,7 @@ public class LendingControllerValidationTest extends MapperBase {
         var dipApplicationRequest = getDIPApplicationRequestDto();
 
         //When
-        mockMvc.perform(put("/application/123/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(put("/application/123/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());

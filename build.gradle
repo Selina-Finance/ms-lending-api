@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.springframework:spring-aspects:5.3.22'
 	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
@@ -41,6 +42,7 @@ dependencies {
 	testImplementation 'org.mockito:mockito-core:4.6.1'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 dependencyManagement {
