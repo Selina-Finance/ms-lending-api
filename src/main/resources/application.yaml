@@ -45,19 +45,19 @@ middleware:
 
 spring.security.oauth2.client:
   registration:
-    #Repeat block for any number of AuthZ servers
-    bar-auth: #unique supplier service name
-      client-id: DUMMY_CLIENT_ID_XXX
-      client-secret: DUMMY_CLIENT_SECRET_YYYY
+    #Repeat block for any number of Auth servers
+    middleware-auth: #unique supplier service name
+      client-id: DUMMY_CLIENT_ID
+      client-secret: DUMMY_CLIENT_SECRET
       authorization-grant-type: client_credentials
       client-authentication-method: post
   provider:
-    #Repeat block for any number of AuthZ servers
-    bar-auth:
-      token-uri: ${BAR_AUTH_SERVER_URI}/oauth/token
+    #Repeat block for any number of Auth servers
+    middleware-auth:
+      token-uri: https://MW-AUTH_SERVER/oauth2/token
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri : http://localhost:9999/realms/brokers
+          issuer-uri : http://KEYKLOACK-SERVER/realms/REALM-NAME

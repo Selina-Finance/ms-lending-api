@@ -15,24 +15,25 @@
  *
  */
 
-package com.selina.lending.config;
+package com.selina.lending.config.security.clientOAuth2;
 
 import feign.RequestInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpHeaders;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class BarAuthZConfiguration {
+public class MiddlewareOAuth2Configuration {
 
     private final OAuth2Provider oauth2Provider;
-    private final String AUTHZ_SERVER_NAME = "bar-auth";
+    private final String OAUTH2_SERVER_NAME = "middleware-auth";
 
     @Bean
     public RequestInterceptor barAuthZInterceptor() {
-        return (requestTemplate) ->
-                requestTemplate.header(
-                        HttpHeaders.AUTHORIZATION, oauth2Provider.getAuthenticationToken(AUTHZ_SERVER_NAME));
+        return (requestTemplate) -> requestTemplate.header(
+                AUTHORIZATION, oauth2Provider.getAuthenticationToken(OAUTH2_SERVER_NAME)
+        );
     }
 }

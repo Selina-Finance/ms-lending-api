@@ -17,17 +17,21 @@
 
 package com.selina.lending.internal.api;
 
+import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(value = "middleware-api", url = "${middleware.api.url}")
+@FeignClient(
+        value = "middleware-api",
+        url = "${middleware.api.url}",
+        configuration = MiddlewareOAuth2Configuration.class
+)
 public interface MiddlewareApi {
 
     @RequestMapping(method = RequestMethod.GET, value = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

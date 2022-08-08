@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.config;
+package com.selina.lending.config.security.clientOAuth2;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
