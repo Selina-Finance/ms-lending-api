@@ -19,48 +19,26 @@ package com.selina.lending.config.security.clientOAuth2;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
-@Import(SecurityProblemSupport.class)
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class OAuth2ClientConfiguration {
 
-    private final SecurityProblemSupport problemSupport;
-
-    public OAuth2ClientConfiguration(SecurityProblemSupport problemSupport) {
-        this.problemSupport = problemSupport;
-    }
-
+    /**
+     * Creates AuthManager in spring context for OAuth token management in InMemory cache.
+     *
+     * @param repository    - repo to retrieve auto configured registrations in spring context.
+     * @param clientService - service to fetch & refresh auth token in memory.
+     * @return AuthorizedClientManager
+     */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-//        http.authorizeRequests().anyRequest().permitAll();
-//        return http.build();
-        http.cors()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(problemSupport)
-                .accessDeniedHandler(problemSupport)
-
-                .and()
-                .authorizeRequests()
-                .antMatchers("/actuator/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/v3/api-docs/**").permitAll()
-
-                .and()
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated()
-
-                .and()
-                .oauth2ResourceServer()
-                .jwt();
-        return http.build();
+    public OAuth2AuthorizedClientManager authorizedClientManager(
+            final ClientRegistrationRepository repository,
+            final OAuth2AuthorizedClientService clientService
+    ) {
+        return new AuthorizedClientServiceOAuth2AuthorizedClientManager(repository, clientService);
     }
-
 }

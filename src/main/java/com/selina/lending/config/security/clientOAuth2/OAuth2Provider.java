@@ -29,18 +29,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class OAuth2Provider {
 
-    // Using anonymous user principal as its S2S authentication
-    public static final Authentication ANONYMOUS_USER_AUTHENTICATION =
-            new AnonymousAuthenticationToken(
-                    "key", "anonymous", AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS"));
+    // Using anonymous user principal as its Service-to-Service authentication
+    public static final Authentication ANONYMOUS_USER_AUTHENTICATION = new AnonymousAuthenticationToken(
+            "key",
+            "anonymous",
+            AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS")
+    );
 
     private final OAuth2AuthorizedClientManager authorizedClientManager;
 
     public String getAuthenticationToken(final String authZServerName) {
-        final OAuth2AuthorizeRequest request =
-                OAuth2AuthorizeRequest.withClientRegistrationId(authZServerName)
-                        .principal(ANONYMOUS_USER_AUTHENTICATION)
-                        .build();
+        var request = buildOAuth2AuthorizeRequest(authZServerName);
         return "Bearer " + authorizedClientManager.authorize(request).getAccessToken().getTokenValue();
+    }
+
+    private static OAuth2AuthorizeRequest buildOAuth2AuthorizeRequest(String authZServerName) {
+        return OAuth2AuthorizeRequest.withClientRegistrationId(authZServerName)
+                .principal(ANONYMOUS_USER_AUTHENTICATION)
+                .build();
     }
 }

@@ -36,7 +36,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+//        http.authorizeRequests().anyRequest().permitAll();
+//        return http.build();
         http.cors()
                 .and()
                 .exceptionHandling()
@@ -45,8 +46,10 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/actuator/**")
-                .permitAll()
+                .antMatchers("/actuator/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/v3/api-docs/**").permitAll()
 
                 .and()
                 .authorizeRequests()
@@ -56,8 +59,6 @@ public class SecurityConfig {
                 .and()
                 .oauth2ResourceServer()
                 .jwt();
-
-
         return http.build();
     }
 }
