@@ -33,6 +33,7 @@ public class OAuth2Provider {
             "anonymous",
             AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS")
     );
+    private static final String TOKEN_PREFIX = "Bearer ";
 
     private final OAuth2AuthorizedClientManager authorizedClientManager;
 
@@ -42,7 +43,7 @@ public class OAuth2Provider {
 
     public String getAuthenticationToken(final String authServerName) {
         var request = buildOAuth2AuthorizeRequest(authServerName);
-        return "Bearer " + authorizedClientManager.authorize(request).getAccessToken().getTokenValue();
+        return TOKEN_PREFIX + authorizedClientManager.authorize(request).getAccessToken().getTokenValue();
     }
 
     private static OAuth2AuthorizeRequest buildOAuth2AuthorizeRequest(String authServerName) {
