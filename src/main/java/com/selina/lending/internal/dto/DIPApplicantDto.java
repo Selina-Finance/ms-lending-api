@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -42,13 +43,16 @@ public class DIPApplicantDto extends ApplicantDto {
     private Integer estimatedRetirementAge;
 
     @NotBlank
+    @Schema(implementation = MaritalStatus.class)
     @EnumValue(enumClass = MaritalStatus.class)
     private String maritalStatus;
 
     @NotBlank
+    @Schema(implementation = Nationality.class)
     @EnumValue(enumClass = Nationality.class)
     private String nationality;
 
+    @Schema(implementation = ResidentialStatus.class)
     @EnumValue(enumClass = ResidentialStatus.class)
     private String residentialStatus;
 

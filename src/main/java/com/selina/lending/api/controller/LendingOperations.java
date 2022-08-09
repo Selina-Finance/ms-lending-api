@@ -26,25 +26,42 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 public interface LendingOperations {
     @Operation(description = "Retrieve the application for the given application id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found application", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationDecisionResponse.class))}),
+            @ApiResponse(responseCode = "401", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content)})
     @GetMapping(value = "/{id}")
-    ResponseEntity getApplication(@Parameter(name = "id", schema = @Schema(type = "String", example = "uniqueIdValue", description = "unique id for the application", required = true))
-    @PathVariable String id);
+    ResponseEntity<ApplicationDecisionResponse> getApplication(@Parameter(description = "id of application to be searched", required = true) @PathVariable String id);
 
     @Operation(description = "Update the Decision In Principle (DIP) application for the given application id")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Application updated", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Application details invalid"),
+            @ApiResponse(responseCode = "401"),
+            @ApiResponse(responseCode = "403"),
+            @ApiResponse(responseCode = "404", description = "Application not found")})
     @PutMapping(value = "/{id}/dip")
-    ResponseEntity updateDipApplication(@Parameter(name = "id", schema = @Schema(type = "String", example = "uniqueIdValue", description = "unique id for the application", required = true))
-    @PathVariable String id, @Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
+    ResponseEntity<Void> updateDipApplication(@Parameter(description = "id of application to be updated", required = true) @PathVariable String id,
+            @Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 
     @Operation(description = "Create a new Decision In Principle (DIP) application")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Application created", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
+            @ApiResponse(responseCode = "401", content = @Content),
+            @ApiResponse(responseCode = "403", content = @Content)})
     @PostMapping(value = "/dip")
     ResponseEntity<ApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 }

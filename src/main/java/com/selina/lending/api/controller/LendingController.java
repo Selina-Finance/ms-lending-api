@@ -22,6 +22,10 @@ import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.service.LendingService;
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@OpenAPIDefinition(info = @Info(title = "Lending API", description = "Lending API service", version = "v1", license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")))
 @RestController
 @RequestMapping("/application")
 @Slf4j

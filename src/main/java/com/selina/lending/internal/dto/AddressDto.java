@@ -23,12 +23,14 @@ import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class AddressDto {
+    @Schema(implementation = AddressType.class)
     @EnumValue(enumClass = AddressType.class)
     String addressType;
     @NotBlank

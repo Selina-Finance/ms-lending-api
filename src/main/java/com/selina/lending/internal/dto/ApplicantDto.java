@@ -27,6 +27,7 @@ import javax.validation.constraints.NotNull;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -36,6 +37,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class ApplicantDto {
     @NotBlank
+    @Schema(implementation = Title.class)
     @EnumValue(enumClass = Title.class)
     private String title;
 
@@ -53,6 +55,7 @@ public class ApplicantDto {
     private String lastName;
     private String middleName;
 
+    @Schema(implementation = Gender.class)
     @EnumValue(enumClass = Gender.class)
     private String gender;
 

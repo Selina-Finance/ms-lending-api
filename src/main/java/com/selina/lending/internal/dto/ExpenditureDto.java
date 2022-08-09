@@ -18,18 +18,21 @@ package com.selina.lending.internal.dto;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class ExpenditureDto {
+    @Schema(implementation = Frequency.class)
     @EnumValue(enumClass = Frequency.class)
     String frequency;
     Integer balanceDeclared;
     Double amountDeclared;
     Double paymentVerified;
     Double amountVerified;
+    @Schema(implementation = ExpenditureType.class)
     @EnumValue(enumClass = ExpenditureType.class)
     String expenditureType;
 

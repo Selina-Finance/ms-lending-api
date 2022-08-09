@@ -20,6 +20,7 @@ import java.util.Date;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
@@ -27,6 +28,7 @@ import lombok.Value;
 @Value
 public class IncomeItemDto {
     Double amount;
+    @Schema(implementation = IncomeType.class)
     @EnumValue(enumClass = IncomeType.class)
     String type;
     String status;
