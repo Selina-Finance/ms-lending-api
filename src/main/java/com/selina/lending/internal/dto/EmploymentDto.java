@@ -22,6 +22,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
@@ -30,9 +31,11 @@ import lombok.Value;
 public class EmploymentDto {
 
     @NotBlank
+    @Schema(implementation = EmploymentStatus.class)
     @EnumValue(enumClass = EmploymentStatus.class)
     String employmentStatus;
     Boolean inProbationPeriod;
+    @Schema(implementation = EmploymentType.class)
     @EnumValue(enumClass = EmploymentType.class)
     String employmentType;
     String employerPhoneNumber;
@@ -50,9 +53,11 @@ public class EmploymentDto {
     Boolean ownSharesInThisCompany;
     Double shareHolding;
     String registeredCompanyName;
+    @Schema(implementation = SelfEmployed.class)
     @EnumValue(enumClass = SelfEmployed.class)
     String selfEmployed;
     String fiscalYearReportedIncomeRelatesTo;
+    @Schema(implementation = SelfEmployedLength.class)
     @EnumValue(enumClass = SelfEmployedLength.class)
     String lengthSelfEmployed;
     Integer companyRegistrationNumber;

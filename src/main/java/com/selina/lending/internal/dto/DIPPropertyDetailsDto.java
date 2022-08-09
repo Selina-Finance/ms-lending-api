@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ import lombok.experimental.SuperBuilder;
 public class DIPPropertyDetailsDto extends PropertyDetailsDto {
 
     @NotBlank
+    @Schema(implementation = PropertyType.class)
     @EnumValue(enumClass = PropertyType.class)
     private String propertyType;
 
@@ -48,6 +50,7 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
     private Boolean isListedAsGradeIOrGradeIiOrA;
     private Boolean notOfStandardConstruction;
     private String constructionYear;
+    @Schema(implementation = Tenure.class)
     @EnumValue(enumClass = Tenure.class)
     private String tenure;
     private Boolean isThePropertyAnExLocalAuthority;

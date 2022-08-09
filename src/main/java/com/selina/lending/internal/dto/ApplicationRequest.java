@@ -22,6 +22,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -31,17 +32,20 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class ApplicationRequest {
 
+    @Schema(implementation = RequestType.class)
     @EnumValue(enumClass = RequestType.class)
     private String requestType;
     private String applicationStage;
 
     @NotBlank
+    @Schema(implementation = Source.class)
     @EnumValue(enumClass = Source.class)
     private String source;
     private String sourceClientId;
     private String sourceAccount;
 
     @NotBlank
+    @Schema(implementation = ProductCode.class)
     @EnumValue(enumClass = ProductCode.class)
     private String productCode;
     private String reference;

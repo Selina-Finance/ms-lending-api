@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 
 import com.selina.lending.api.validator.EnumValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -39,6 +40,7 @@ public class LoanInformationDto {
     private Integer numberOfApplicants;
 
     @NotBlank
+    @Schema(implementation = LoanPurpose.class)
     @EnumValue(enumClass = LoanPurpose.class)
     private String loanPurpose;
     private String desiredTimeLine;
