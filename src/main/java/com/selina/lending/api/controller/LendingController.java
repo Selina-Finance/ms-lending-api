@@ -33,9 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@OpenAPIDefinition(info = @Info(title = "Lending API", description = "Lending API service", version = "v1", license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")))
 @RestController
-@RequestMapping("/application")
 @Slf4j
 public class LendingController implements LendingOperations {
 
