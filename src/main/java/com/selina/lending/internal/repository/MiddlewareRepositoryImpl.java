@@ -17,17 +17,16 @@
 
 package com.selina.lending.internal.repository;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
+import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -60,16 +59,21 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     public ApplicationResponse middlewareApiFallback(Exception e) {
-        log.debug("Remote service is unavailable. Returning fallback.");
+        defaultMiddlewareFallback(e);
         return ApplicationResponse.builder().build();
     }
 
     public Optional<ApplicationDecisionResponse> middlewareGetApiFallback(Exception e) {
-        log.debug("Remote service is unavailable. Returning fallback.");
-        return Optional.of(ApplicationDecisionResponse.builder().build());
+        defaultMiddlewareFallback(e);
+        return Optional.empty();
     }
 
     public void middlewareApiFallbackDefault(Exception e) {
-        log.debug("Remote service is unavailable. ", e);
+        defaultMiddlewareFallback(e);
+    }
+
+    private static void defaultMiddlewareFallback(Exception e) {
+        log.error("Middleware is unavailable. {}", e.getMessage());
+        throw new RemoteResourceProblemException();
     }
 }

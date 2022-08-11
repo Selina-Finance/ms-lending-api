@@ -99,6 +99,23 @@ class ExceptionTranslatorTest {
     }
 
     @Test
+    void handleRemoteResourceProblemException() throws Exception {
+        // Given
+        var expectedTitle = "Bad Gateway";
+        var expectedDetail = "Received an invalid response from the upstream server";
+
+        // When
+        mockMvc.perform(get("/api/exception-translator-test/custom-remote-resource-problem-exception"))
+
+                // Then
+                .andExpect(status().isBadGateway())
+                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.title").value(expectedTitle))
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.detail").value(expectedDetail));
+    }
+
+    @Test
     void handleMissingServletRequestPartException() throws Exception {
         // Given
         String expectedDetail = "Required request part 'part' is not present";

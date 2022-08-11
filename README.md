@@ -115,7 +115,12 @@ TODO
 
 ## Circuit Breaker
 
-TODO
+We use [Resilience4j](https://resilience4j.readme.io/docs) as a part of our fault tolerance solution.
+Our default configuration means that when something goes wrong in a chain of request execution - we push a circuit breaker into the OPEN state for 1 minute and answer HTTP 502 Bad Gateway to all requests.
+
+After 1 minute period, we change the circuit breaker state to HALF_OPEN and start gradually evaluating the current condition of the system. If the system is already healthy - we push the circuit breaker into the CLOSED state and continue to serve our clients in a usual way.
+
+In total, if you got HTTP 502 Bad Gateway as a response, it means that your request is valid but we cannot serve it right now. Please, retry in 1 minute.
 
 ## Rate limiting
 

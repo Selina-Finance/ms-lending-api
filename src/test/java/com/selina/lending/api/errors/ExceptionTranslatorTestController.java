@@ -17,6 +17,7 @@
 package com.selina.lending.api.errors;
 
 import com.selina.lending.api.errors.custom.Custom4xxException;
+import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -71,6 +72,11 @@ public class ExceptionTranslatorTestController {
     @GetMapping("/custom-4xx-exception")
     public void customException() {
         throw new Custom4xxException("Some problem details that make sense");
+    }
+
+    @GetMapping("/custom-remote-resource-problem-exception")
+    public void remoteResourceProblemException() {
+        throw new RemoteResourceProblemException();
     }
 
     public static class TestDto {
