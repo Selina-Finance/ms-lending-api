@@ -17,20 +17,17 @@
 package com.selina.lending.api.errors.custom;
 
 import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
-
-import javax.annotation.Nullable;
 
 import static org.zalando.problem.Status.BAD_GATEWAY;
 
-public class RemoteResourceException extends AbstractThrowableProblem {
+public class RemoteResourceProblemException extends AbstractThrowableProblem {
 
-    public RemoteResourceException(@Nullable String details) {
+    public RemoteResourceProblemException() {
         super(
                 null,
-                "Received an invalid response from the upstream server",
+                "Bad Gateway",
                 BAD_GATEWAY,
-                details
+                "Received an invalid response from the upstream server"
         );
     }
 }
