@@ -17,8 +17,6 @@
 
 package com.selina.lending.internal.mapper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +38,7 @@ import com.selina.lending.internal.dto.IncomeDto;
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.dto.OfferDto;
+import com.selina.lending.internal.dto.PreviousNameDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.service.application.domain.Address;
@@ -69,10 +68,10 @@ public abstract class MapperBase {
     public static final String MOBILE_NUMBER = "07965234654";
     public static final Integer ESTIMATED_RETIREMENT_AGE = 65;
     public static final String NATIONALITY = "United Kingdom";
-    public static final Date DOB;
+    public static final String DOB = "1975-03-12";
     public static final String EMPLOYER_NAME = "Employer name";
     public static final Double INCOME_AMOUNT = 15000.00;
-    public static final String INCOME_TYPE = "Gross Salary";
+    public static final String INCOME_TYPE = "Base salary";
     public static final String LOAN_PURPOSE = "Home improvements";
     public static final Integer LOAN_AMOUNT = 50000;
     public static final int LOAN_TERM = 5;
@@ -80,7 +79,7 @@ public abstract class MapperBase {
     public static final String ALLOCATION_PURPOSE = "Home improvements";
     public static final String DESIRED_TIME_LINE = "By 3 months";
     public static final Double ESTIMATED_VALUE = 590000.00;
-    public static final String WHEN_LAST_PURCHASED = "1990";
+    public static final String WHEN_LAST_PURCHASED = "1990-01-05";
     public static final Double PURCHASE_VALUE = 390000.00;
     public static final String PROPERTY_TYPE = "Detached house";
     public static final int NUMBER_OF_BEDROOMS = 4;
@@ -99,10 +98,10 @@ public abstract class MapperBase {
     public static final String PO_BOX = "poBox";
     public static final String BUILDING_NAME = "building name";
     public static final String COUNTY = "county";
-    public static final Date FROM_DATE;
+    public static final String FROM_DATE = "2000-01-21";
     public static final String OFFER_ID = "offer123";
     public static final String PRODUCT_CODE = "All";
-    public static final String EXPENDITURE_TYPE = "expenditure type";
+    public static final String EXPENDITURE_TYPE = "Utilities";
     public static final String SOURCE = "Broker";
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
@@ -110,17 +109,8 @@ public abstract class MapperBase {
     public static final String REQUIRED_PASSPORT = "Passport";
     public static final String EMPLOYED_STATUS = "Employed";
     public static final String MARRIED_STATUS = "Married";
-    private static final Double FEE = 599.00;
-
-    static {
-        try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            DOB = simpleDateFormat.parse("1975-03-12");
-            FROM_DATE = simpleDateFormat.parse("2000-01-21");
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final Double FEE = 599.00;
+    public static final String SOURCE_ACCOUNT = "Selina Finance Limited";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -143,6 +133,7 @@ public abstract class MapperBase {
                 .fees(getFeesDto())
                 .productCode(PRODUCT_CODE)
                 .source(SOURCE)
+                .sourceAccount(SOURCE_ACCOUNT)
                 .build();
     }
 
@@ -220,6 +211,7 @@ public abstract class MapperBase {
                 .livedInCurrentAddressFor3Years(true)
                 .employment(getEmploymentDto())
                 .income(getIncomeDto())
+                .previousNames(List.of(getPreviousNameDto()))
                 .build();
     }
 
@@ -227,6 +219,9 @@ public abstract class MapperBase {
         return IncomeDto.builder().income(List.of(IncomeItemDto.builder().amount(INCOME_AMOUNT).type(INCOME_TYPE).build())).build();
     }
 
+    protected PreviousNameDto getPreviousNameDto() {
+        return PreviousNameDto.builder().firstName(FIRST_NAME).lastName(LAST_NAME).title(TITLE).build();
+    }
 
     protected LoanInformationDto getLoanInformationDto() {
         return LoanInformationDto.builder()

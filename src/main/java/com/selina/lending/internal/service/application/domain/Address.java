@@ -36,6 +36,6 @@ public class Address {
     String poBox;
     String county;
     String country;
-    Date from;
-    Date to;
+    String from;
+    String to;
 }

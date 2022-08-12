@@ -19,6 +19,7 @@ package com.selina.lending.internal.dto;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.selina.lending.api.validator.EnumValue;
 
@@ -50,6 +51,8 @@ public class ApplicationRequest {
     private String productCode;
     private String reference;
 
+    @NotBlank
+    @Size(min = 4, max = 100)
     private String externalApplicationId;
     private List<ExpenditureDto> expenditure;
 

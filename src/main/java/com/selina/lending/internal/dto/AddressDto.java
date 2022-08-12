@@ -16,7 +16,6 @@
 
 package com.selina.lending.internal.dto;
 
-import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -50,8 +49,12 @@ public class AddressDto {
     String poBox;
     String county;
     String country;
-    Date fromDate;
-    Date toDate;
+
+    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    String fromDate;
+
+    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    String toDate;
 
     enum AddressType {
         CURRENT("current"),

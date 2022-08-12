@@ -32,13 +32,13 @@ public class Applicant {
     String lastName;
     String middleName;
     String gender;
-    Date dateOfBirth;
+    String dateOfBirth;
     int numberOfAdultDependants;
     int numberOfChildDependants;
     Boolean livedInCurrentAddressFor3Years;
     Boolean applicant2LivesWithApplicant1For3Years;
     Boolean applicant2LivesWithApplicant1;
-    Date currentAddressMovedInDate;
+    String currentAddressMovedInDate;
     Boolean applicantUsedAnotherName;
     Integer estimatedRetirementAge;
     String maritalStatus;

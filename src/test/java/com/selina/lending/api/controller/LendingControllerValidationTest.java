@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.IntegrationTest;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.LendingService;
 import org.junit.jupiter.api.Test;
@@ -62,17 +63,19 @@ public class LendingControllerValidationTest extends MapperBase {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                .andExpect(jsonPath("$.violations", hasSize(5)))
+                .andExpect(jsonPath("$.violations", hasSize(6)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                 .andExpect(jsonPath("$.violations[0].message").value("must not be null"))
-                .andExpect(jsonPath("$.violations[1].field").value("loanInformation"))
-                .andExpect(jsonPath("$.violations[1].message").value("must not be null"))
-                .andExpect(jsonPath("$.violations[2].field").value("productCode"))
-                .andExpect(jsonPath("$.violations[2].message").value("must not be blank"))
-                .andExpect(jsonPath("$.violations[3].field").value("propertyDetails"))
-                .andExpect(jsonPath("$.violations[3].message").value("must not be null"))
-                .andExpect(jsonPath("$.violations[4].field").value("source"))
-                .andExpect(jsonPath("$.violations[4].message").value("must not be blank"));
+                .andExpect(jsonPath("$.violations[1].field").value("externalApplicationId"))
+                .andExpect(jsonPath("$.violations[1].message").value("must not be blank"))
+                .andExpect(jsonPath("$.violations[2].field").value("loanInformation"))
+                .andExpect(jsonPath("$.violations[2].message").value("must not be null"))
+                .andExpect(jsonPath("$.violations[3].field").value("productCode"))
+                .andExpect(jsonPath("$.violations[3].message").value("must not be blank"))
+                .andExpect(jsonPath("$.violations[4].field").value("propertyDetails"))
+                .andExpect(jsonPath("$.violations[4].message").value("must not be null"))
+                .andExpect(jsonPath("$.violations[5].field").value("source"))
+                .andExpect(jsonPath("$.violations[5].message").value("must not be blank"));
     }
 
     @Test
@@ -142,5 +145,52 @@ public class LendingControllerValidationTest extends MapperBase {
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createDipApplicationWithInvalidDateFormat() throws Exception {
+        //Given
+        var employment = EmploymentDto.builder()
+                .employmentStatus(EMPLOYED_STATUS)
+                .contractStartDate("invalid")
+                .contractEndDate("21-01-2019")
+                .whenWasCompanyIncorporated("2019/01/21")
+                .partnershipFormedDate("Monday 21st January 2019")
+                .whenDidYouBeginTrading("2019-01-21 12:00")
+                .startDate("2019-01-21") //valid
+                .build();
+
+        var applicant = getDIPApplicantDto();
+        applicant.setEmployment(employment);
+
+        var dipApplicationRequest = DIPApplicationRequest.builder()
+                .requestType(DIP_APPLICATION_TYPE)
+                .applicants(List.of(applicant))
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .expenditure(List.of(getExpenditureDto()))
+                .loanInformation(getAdvancedLoanInformationDto())
+                .propertyDetails(getDIPPropertyDetailsDto())
+                .productCode(PRODUCT_CODE)
+                .source(SOURCE)
+                .build();
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(5)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].employment.contractEndDate"))
+                .andExpect(jsonPath("$.violations[0].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""))
+                .andExpect(jsonPath("$.violations[1].field").value("applicants[0].employment.contractStartDate"))
+                .andExpect(jsonPath("$.violations[1].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""))
+                .andExpect(jsonPath("$.violations[2].field").value("applicants[0].employment.partnershipFormedDate"))
+                .andExpect(jsonPath("$.violations[2].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""))
+                .andExpect(jsonPath("$.violations[3].field").value("applicants[0].employment.whenDidYouBeginTrading"))
+                .andExpect(jsonPath("$.violations[3].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""))
+                .andExpect(jsonPath("$.violations[4].field").value("applicants[0].employment.whenWasCompanyIncorporated"))
+                .andExpect(jsonPath("$.violations[4].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""));
     }
 }

@@ -16,9 +16,8 @@
 
 package com.selina.lending.internal.dto;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.EnumValue;
 
@@ -43,8 +42,12 @@ public class EmploymentDto {
     String addressLine1;
     String addressLine2;
     String city;
-    Date contractStartDate;
-    Date contractEndDate;
+
+    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    String contractStartDate;
+
+    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    String contractEndDate;
     Boolean firstTimeContractor;
     String employerName;
     String jobTitle;
@@ -60,15 +63,21 @@ public class EmploymentDto {
     @Schema(implementation = SelfEmployedLength.class)
     @EnumValue(enumClass = SelfEmployedLength.class)
     String lengthSelfEmployed;
-    Integer companyRegistrationNumber;
-    Integer percentageOfCompanyOwned;
+    String companyRegistrationNumber;
+    String percentageOfCompanyOwned;
     String monthAccountingPeriodStarts;
-    Date whenWasCompanyIncorporated;
-    Date whenDidYouBeginTrading;
-    Date startDate;
-    Date partnershipFormedDate;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    String whenWasCompanyIncorporated;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    String whenDidYouBeginTrading;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    String startDate;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    String partnershipFormedDate;
     Double percentageOfPartnershipOwned;
     String businessStructure;
+    @Schema(implementation = Industry.class)
+    @EnumValue(enumClass = Industry.class)
     String industry;
 
     enum EmploymentStatus {

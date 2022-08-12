@@ -52,6 +52,10 @@ public class DIPApplicantMapperTest extends MapperBase {
         assertThat(applicant.getIncome().getIncome().size(), equalTo(1));
         assertThat(applicant.getIncome().getIncome().get(0).getAmount(), equalTo(INCOME_AMOUNT));
         assertThat(applicant.getIncome().getIncome().get(0).getType(), equalTo(INCOME_TYPE));
+        assertThat(applicant.getPreviousNames().size(), equalTo(1));
+        assertThat(applicant.getPreviousNames().get(0).getTitle(), equalTo(TITLE));
+        assertThat(applicant.getPreviousNames().get(0).getFirstName(), equalTo(FIRST_NAME));
+        assertThat(applicant.getPreviousNames().get(0).getLastName(), equalTo(LAST_NAME));
     }
 
     @Test
