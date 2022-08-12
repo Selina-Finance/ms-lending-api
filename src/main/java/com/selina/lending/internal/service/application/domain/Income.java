@@ -30,7 +30,7 @@ public class Income {
     String noIncomeSource;
     String docRequirements;
     Double amountVerified;
-    Date incomeDate;
+    String incomeDate;
     String relatedYear;
     String frequency;
     Double contractDaysWorkedWeeklyReported;

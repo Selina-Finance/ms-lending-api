@@ -16,7 +16,6 @@
 
 package com.selina.lending.internal.dto;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -24,6 +23,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.EnumValue;
 
@@ -41,7 +41,7 @@ public class ApplicantDto {
     @EnumValue(enumClass = Title.class)
     private String title;
 
-    @Email(message = "emailAddress is not valid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
+    @Email(message = "emailAddress is not valid", regexp = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,3}")
     @NotBlank
     private String emailAddress;
 
@@ -60,7 +60,8 @@ public class ApplicantDto {
     private String gender;
 
     @NotNull
-    private Date dateOfBirth;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    private String dateOfBirth;
     private int numberOfAdultDependants;
     private int numberOfChildDependants;
 
@@ -69,7 +70,8 @@ public class ApplicantDto {
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
 
-    private Date currentAddressMovedInDate;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    private String currentAddressMovedInDate;
 
     @NotNull
     @Valid

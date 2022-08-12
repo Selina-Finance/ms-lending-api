@@ -16,7 +16,7 @@
 
 package com.selina.lending.internal.dto;
 
-import java.util.Date;
+import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.EnumValue;
 
@@ -35,7 +35,9 @@ public class IncomeItemDto {
     String noIncomeSource;
     String docRequirements;
     Double amountVerified;
-    Date incomeDate;
+
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    String incomeDate;
     String relatedYear;
     String frequency;
     Double contractDaysWorkedWeeklyReported;

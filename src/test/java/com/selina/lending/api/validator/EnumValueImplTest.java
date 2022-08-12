@@ -105,11 +105,11 @@ public class EnumValueImplTest {
         var violations = validator.validate(applicationRequest);
 
         //Then
-        assertThat(violations.size(), equalTo(3));
+        assertThat(violations.size(), equalTo(4));
 
         var violationPropertyPath = getViolationPropertyPath(
                 violations.stream().map(ConstraintViolation::getPropertyPath));
-        assertThat(violationPropertyPath, containsInAnyOrder("requestType", "source", "productCode"));
+        assertThat(violationPropertyPath, containsInAnyOrder("requestType", "source", "productCode", "externalApplicationId"));
     }
 
     @Test

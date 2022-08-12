@@ -19,6 +19,7 @@ package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,12 +35,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {
 
     @Mock
     private MiddlewareApi middlewareApi;
+
+    @Mock
+    private ApplicationRequest applicationRequest;
 
     private MiddlewareRepository middlewareRepository;
 
@@ -62,5 +68,34 @@ class MiddlewareRepositoryTest {
         // Then
         assertThat(result).isEqualTo(Optional.of(apiResponse));
         verify(middlewareApi, times(1)).getApplicationById(eq(id));
+    }
+
+    @Test
+    public void shouldCallHttpClientWhenCreateApplicationInvoked() {
+        // Given
+        var apiResponse = ApplicationResponse.builder().build();
+
+        when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(apiResponse);
+
+        // When
+        var result = middlewareRepository.createDipApplication(applicationRequest);
+
+        // Then
+        assertThat(result).isEqualTo(apiResponse);
+        verify(middlewareApi, times(1)).createDipApplication(eq(applicationRequest));
+    }
+
+    @Test
+    public void shouldCallHttpClientWhenUpdateApplicationInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+
+        doNothing().when(middlewareApi).updateDipApplication(id,applicationRequest);
+
+        // When
+        middlewareRepository.updateDipApplication(id, applicationRequest);
+
+        // Then
+        verify(middlewareApi, times(1)).updateDipApplication(eq(id), eq(applicationRequest));
     }
 }

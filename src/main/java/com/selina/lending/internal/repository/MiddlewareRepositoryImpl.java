@@ -49,13 +49,18 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public void updateDipApplication(String id, ApplicationRequest applicationRequest) {
         log.debug("Update dip application for id: {}, applicationRequest {} ", id, applicationRequest);
         middlewareApi.updateDipApplication(id, applicationRequest);
+        log.info("Finished calling mw to update dip application");
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         log.debug("Create dip application applicationRequest {}", applicationRequest);
-        return middlewareApi.createDipApplication(applicationRequest);
+
+        var appResponse =  middlewareApi.createDipApplication(applicationRequest);
+
+        log.info("Finished calling mw to create dip application");
+        return appResponse;
     }
 
     public ApplicationResponse middlewareApiFallback(Exception e) {
