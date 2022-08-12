@@ -50,10 +50,10 @@ public class AddressDto {
     String county;
     String country;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String fromDate;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String toDate;
 
     enum AddressType {

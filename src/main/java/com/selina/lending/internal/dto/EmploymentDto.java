@@ -43,10 +43,10 @@ public class EmploymentDto {
     String addressLine2;
     String city;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String contractStartDate;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String contractEndDate;
     Boolean firstTimeContractor;
     String employerName;
@@ -66,13 +66,13 @@ public class EmploymentDto {
     String companyRegistrationNumber;
     String percentageOfCompanyOwned;
     String monthAccountingPeriodStarts;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String whenWasCompanyIncorporated;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String whenDidYouBeginTrading;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String startDate;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String partnershipFormedDate;
     Double percentageOfPartnershipOwned;
     String businessStructure;

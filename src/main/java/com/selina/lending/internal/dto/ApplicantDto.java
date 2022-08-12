@@ -60,7 +60,7 @@ public class ApplicantDto {
     private String gender;
 
     @NotNull
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     private String dateOfBirth;
     private int numberOfAdultDependants;
     private int numberOfChildDependants;
@@ -70,7 +70,7 @@ public class ApplicantDto {
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     private String currentAddressMovedInDate;
 
     @NotNull

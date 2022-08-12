@@ -36,7 +36,7 @@ public class IncomeItemDto {
     String docRequirements;
     Double amountVerified;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     String incomeDate;
     String relatedYear;
     String frequency;

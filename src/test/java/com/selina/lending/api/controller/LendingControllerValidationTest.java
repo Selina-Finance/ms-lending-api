@@ -183,14 +183,14 @@ public class LendingControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
                 .andExpect(jsonPath("$.violations", hasSize(5)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants[0].employment.contractEndDate"))
-                .andExpect(jsonPath("$.violations[0].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""))
+                .andExpect(jsonPath("$.violations[0].message").value("must match yyyy-MM-dd format"))
                 .andExpect(jsonPath("$.violations[1].field").value("applicants[0].employment.contractStartDate"))
-                .andExpect(jsonPath("$.violations[1].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""))
+                .andExpect(jsonPath("$.violations[1].message").value("must match yyyy-MM-dd format"))
                 .andExpect(jsonPath("$.violations[2].field").value("applicants[0].employment.partnershipFormedDate"))
-                .andExpect(jsonPath("$.violations[2].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""))
+                .andExpect(jsonPath("$.violations[2].message").value("must match yyyy-MM-dd format"))
                 .andExpect(jsonPath("$.violations[3].field").value("applicants[0].employment.whenDidYouBeginTrading"))
-                .andExpect(jsonPath("$.violations[3].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""))
+                .andExpect(jsonPath("$.violations[3].message").value("must match yyyy-MM-dd format"))
                 .andExpect(jsonPath("$.violations[4].field").value("applicants[0].employment.whenWasCompanyIncorporated"))
-                .andExpect(jsonPath("$.violations[4].message").value("must match \"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\""));
+                .andExpect(jsonPath("$.violations[4].message").value("must match yyyy-MM-dd format"));
     }
 }

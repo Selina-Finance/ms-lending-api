@@ -50,7 +50,7 @@ public class PropertyDetailsDto {
     private Double estimatedValue;
 
     @NotBlank
-    @Pattern(regexp = LendingConstants.DATE_PATTERN)
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     private String whenLastPurchased;
 
     @NotNull
