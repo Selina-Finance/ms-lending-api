@@ -24,7 +24,7 @@ jx:
 
 # define environment variables here as a map of key: value
 env:
-  SPRING_CLOUD_BOOTSTRAP_LOCATION: classpath:/,/spring/cloud/bootstrap-cloud.properties
+  SPRING_CLOUD_BOOTSTRAP_LOCATION: classpath:/,/spring/cloud/bootstrap-cloud-v2.properties
 
 # enable this flag to use knative serve to deploy the app
 knativeDeploy: false
