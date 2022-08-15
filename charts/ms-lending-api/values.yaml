@@ -145,18 +145,18 @@ jxRequirements:
 #           - "application"
 # nodeSelector: {}
 
-# volumes:
-#   - name: bootstrap
-#     configMap:
-#       name: ms-cloud-bootstrap
+volumes:
+ - name: bootstrap
+   configMap:
+     name: ms-cloud-bootstrap
 #   # - name: cacerts
 #   #   emptyDir: {}
 #   # - name: vault-ca
 #   #   secret:
 #   #     secretName: vault-ca
 
-# volumeMounts:
-#   - name: bootstrap
-#     mountPath: /spring/cloud/
+volumeMounts:
+ - name: bootstrap
+   mountPath: /spring/cloud/
 #   # - name: cacerts
 #   #   mountPath: /usr/local/openjdk-11/lib/security/
