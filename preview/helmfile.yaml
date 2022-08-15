@@ -10,9 +10,9 @@ releases:
   name: jx-verify
   namespace: '{{ requiredEnv "PREVIEW_NAMESPACE" }}'
 - chart: ./charts/staging
-  name: staging
+  namespace: '{{ requiredEnv "PREVIEW_NAMESPACE" }}'
   values:
-  - jx-values.yaml  
+  name: staging
 - chart: '../charts/{{ requiredEnv "APP_NAME" }}'
   name: preview
   wait: true
