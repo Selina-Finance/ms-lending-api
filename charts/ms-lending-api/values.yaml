@@ -73,8 +73,8 @@ service:
     spring-boot: "true"
 resources:
   limits:
-    cpu: 400m
-    memory: 256Mi
+    cpu: 800m
+    memory: 512Mi
   requests:
     cpu: 200m
     memory: 128Mi
