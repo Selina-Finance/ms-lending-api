@@ -45,7 +45,7 @@ resilience4j:
           - feign.RetryableException
 
 
-middleware.api.url: http://TBC
+#middleware.api.url: http://TBC
 #middleware.api.url: ${MIDDLEWARE_URL}
 
 spring.security:
