@@ -22,8 +22,12 @@ import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+
+import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -49,7 +53,6 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public void updateDipApplication(String id, ApplicationRequest applicationRequest) {
         log.debug("Update dip application for id: {}, applicationRequest {} ", id, applicationRequest);
         middlewareApi.updateDipApplication(id, applicationRequest);
-        log.info("Finished calling mw to update dip application");
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
@@ -59,26 +62,45 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
         var appResponse =  middlewareApi.createDipApplication(applicationRequest);
 
-        log.info("Finished calling mw to create dip application");
+        log.info("Finished calling mw to create dip application id {}", appResponse.getApplicationId());
         return appResponse;
     }
 
-    public ApplicationResponse middlewareApiFallback(Exception e) {
-        defaultMiddlewareFallback(e);
-        return ApplicationResponse.builder().build();
-    }
-
-    public Optional<ApplicationDecisionResponse> middlewareGetApiFallback(Exception e) {
+    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) {
         defaultMiddlewareFallback(e);
         return Optional.empty();
     }
 
-    public void middlewareApiFallbackDefault(Exception e) {
+    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(feign.RetryableException e) {
+        defaultMiddlewareFallback(e);
+        return Optional.empty();
+    }
+
+    private void middlewareApiFallbackDefault(FeignException.FeignServerException e) {
+        defaultMiddlewareFallback(e, e.status());
+    }
+
+    private void middlewareApiFallbackDefault(feign.RetryableException e) {
         defaultMiddlewareFallback(e);
     }
 
-    private static void defaultMiddlewareFallback(Exception e) {
+    private ApplicationResponse middlewareApiFallback(FeignException.FeignServerException e) {
+        defaultMiddlewareFallback(e, e.status());
+        return ApplicationResponse.builder().build();
+    }
+
+    private ApplicationResponse middlewareApiFallback(feign.RetryableException e) {
+        defaultMiddlewareFallback(e);
+        return ApplicationResponse.builder().build();
+    }
+
+    private void defaultMiddlewareFallback(Exception e) {
         log.error("Middleware is unavailable. {}", e.getMessage());
-        throw new RemoteResourceProblemException();
+        throw new RemoteResourceProblemException(HttpStatus.BAD_GATEWAY.value());
+    }
+
+    private void defaultMiddlewareFallback(Exception e, int status) {
+        log.error("Middleware is unavailable. {}", e.getMessage());
+        throw new RemoteResourceProblemException(status);
     }
 }

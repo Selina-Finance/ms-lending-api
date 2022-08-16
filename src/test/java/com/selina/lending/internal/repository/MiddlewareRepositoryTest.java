@@ -18,25 +18,37 @@
 package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {
@@ -90,12 +102,145 @@ class MiddlewareRepositoryTest {
         // Given
         var id = UUID.randomUUID().toString();
 
-        doNothing().when(middlewareApi).updateDipApplication(id,applicationRequest);
+        doNothing().when(middlewareApi).updateDipApplication(id, applicationRequest);
 
         // When
         middlewareRepository.updateDipApplication(id, applicationRequest);
 
         // Then
         verify(middlewareApi, times(1)).updateDipApplication(eq(id), eq(applicationRequest));
+    }
+
+    @Test
+    public void shouldThrowFeignServerExceptionWhenMiddlewareThrowsInternalServerException() {
+        //Given
+        String errorMsg = "error";
+        var id = UUID.randomUUID().toString();
+
+        //When
+        when(middlewareApi.getApplicationById(id)).thenThrow(
+                new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
+                        errorMsg.getBytes(), null));
+
+        var exception = assertThrows(FeignException.FeignServerException.class,
+                () -> middlewareRepository.getApplicationById(id));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(errorMsg);
+    }
+
+    @Test
+    public void shouldThrowFeignClientExceptionWhenMiddlewareThrowsNotFoundException() {
+        //Given
+        String notFoundMsg = "not found";
+        var id = UUID.randomUUID().toString();
+
+        //When
+        when(middlewareApi.getApplicationById(id)).thenThrow(
+                new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
+                        notFoundMsg.getBytes(), null));
+
+        var exception = assertThrows(FeignException.FeignClientException.class,
+                () -> middlewareRepository.getApplicationById(id));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
+    }
+
+    @Test
+    public void shouldOpenCircuitBreakerWhenFeignServerExceptionTriggersFallback() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        var circuitBreaker = getCircuitBreaker();
+
+        //When
+        when(middlewareApi.getApplicationById(id)).thenThrow(
+                new FeignException.InternalServerError("Internal Server Error", createRequest(), "error".getBytes(), null));
+
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationById(id));
+
+        IntStream.range(0, 10).forEach(x -> {
+            try {
+                supplier.get();
+            } catch (Exception ignore) {
+            }
+        });
+
+        //Then
+        var metrics = circuitBreaker.getMetrics();
+        assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
+        assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
+
+        verify(middlewareApi, times(5)).getApplicationById(eq(id));
+    }
+
+
+    @Test
+    public void shouldOpenCircuitBreakerWhenRetryableExceptionTriggersFallback() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        var circuitBreaker = getCircuitBreaker();
+
+        //When
+        when(middlewareApi.getApplicationById(id)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
+
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationById(id));
+
+        IntStream.range(0, 10).forEach(x -> {
+            try {
+                supplier.get();
+            } catch (Exception ignore) {
+            }
+        });
+
+        //Then
+        var metrics = circuitBreaker.getMetrics();
+        assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
+        assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
+
+        verify(middlewareApi, times(5)).getApplicationById(eq(id));
+    }
+
+    @Test
+    public void shouldNotTriggerCircuitBreakerFallbackForIgnoredExceptions() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        var circuitBreaker = getCircuitBreaker();
+
+        //When
+        when(middlewareApi.getApplicationById(id)).thenThrow(
+                new FeignException.NotFound("Not found", createRequest(), "not found".getBytes(), null));
+
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationById(id));
+
+        IntStream.range(0, 10).forEach(x -> {
+            try {
+                supplier.get();
+            } catch (Exception ignore) {
+            }
+        });
+
+        //Then
+        var metrics = circuitBreaker.getMetrics();
+        assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(0);
+        assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(0);
+
+        verify(middlewareApi, times(10)).getApplicationById(eq(id));
+    }
+
+    private Request createRequest() {
+        return Request.create(Request.HttpMethod.GET, "url", new HashMap<>(), null, new RequestTemplate());
+    }
+
+    private CircuitBreaker getCircuitBreaker() {
+        var config = CircuitBreakerConfig.custom()
+                .failureRateThreshold(60)
+                .ignoreExceptions(FeignException.FeignClientException.class)
+                .recordExceptions(FeignException.FeignServerException.class, feign.RetryableException.class)
+                .slidingWindowSize(5)
+                .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
+                .build();
+        var registry = CircuitBreakerRegistry.of(config);
+        return registry.circuitBreaker("mw-cb");
     }
 }

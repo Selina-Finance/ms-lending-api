@@ -16,6 +16,8 @@
 
 package com.selina.lending.api.errors;
 
+import java.util.HashMap;
+
 import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
 
 @RestController
 @RequestMapping("/api/exception-translator-test")
@@ -76,7 +82,21 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/custom-remote-resource-problem-exception")
     public void remoteResourceProblemException() {
-        throw new RemoteResourceProblemException();
+        throw new RemoteResourceProblemException(HttpStatus.BAD_GATEWAY.value());
+    }
+
+    @GetMapping("/feign-bad-request-exception")
+    public void feignBadRequestException() {
+        var request = Request.create(Request.HttpMethod.GET, "/feign-bad-request-exception",
+                new HashMap<>(), null, new RequestTemplate());
+        throw new FeignException.BadRequest("Bad request", request, "bad request".getBytes(), null);
+    }
+
+    @GetMapping("/feign-not-found-exception")
+    public void feignNotFoundException() {
+        var request = Request.create(Request.HttpMethod.GET, "/feign-not-found-exception",
+                new HashMap<>(), null, new RequestTemplate());
+        throw new FeignException.NotFound("Not Found", request, "not found".getBytes(), null);
     }
 
     public static class TestDto {

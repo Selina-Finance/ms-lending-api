@@ -223,4 +223,36 @@ class ExceptionTranslatorTest {
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title").value(expectedTitle));
     }
+
+    @Test
+    void handleFeignBadRequestException() throws Exception {
+        //Given
+        String expectedMsg = "bad request";
+        String expectedTitle = "Bad Request";
+
+        //When
+        mockMvc.perform(get("/api/exception-translator-test/feign-bad-request-exception"))
+
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value(expectedTitle))
+                .andExpect(jsonPath("$.detail").value(expectedMsg));
+    }
+
+    @Test
+    void handleFeignNotFoundRequestException() throws Exception {
+        //Given
+        String expectedMsg = "not found";
+        String expectedTitle = "Not Found";
+
+        //When
+        mockMvc.perform(get("/api/exception-translator-test/feign-not-found-exception"))
+
+                //Then
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value(expectedTitle))
+                .andExpect(jsonPath("$.detail").value(expectedMsg));
+    }
 }
