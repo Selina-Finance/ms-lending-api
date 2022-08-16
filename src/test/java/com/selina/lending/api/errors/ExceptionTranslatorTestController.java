@@ -82,7 +82,7 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/custom-remote-resource-problem-exception")
     public void remoteResourceProblemException() {
-        throw new RemoteResourceProblemException(HttpStatus.BAD_GATEWAY.value());
+        throw new RemoteResourceProblemException();
     }
 
     @GetMapping("/feign-bad-request-exception")

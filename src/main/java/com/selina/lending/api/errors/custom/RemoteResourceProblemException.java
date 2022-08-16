@@ -16,18 +16,17 @@
 
 package com.selina.lending.api.errors.custom;
 
-import org.springframework.http.HttpStatus;
 import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.spring.common.HttpStatusAdapter;
 
+import static org.zalando.problem.Status.BAD_GATEWAY;
 
 public class RemoteResourceProblemException extends AbstractThrowableProblem {
 
-    public RemoteResourceProblemException(int status) {
+    public RemoteResourceProblemException() {
         super(
                 null,
-                HttpStatus.valueOf(status).getReasonPhrase(),
-                new HttpStatusAdapter(HttpStatus.valueOf(status)),
+                "Bad Gateway",
+                BAD_GATEWAY,
                 "Received an invalid response from the upstream server"
         );
     }

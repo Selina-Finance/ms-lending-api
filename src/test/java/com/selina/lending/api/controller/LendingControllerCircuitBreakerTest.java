@@ -45,7 +45,7 @@ public class LendingControllerCircuitBreakerTest extends MapperBase {
         //Given
         var dipId = UUID.randomUUID().toString();
 
-        when(lendingService.getApplication(dipId)).thenThrow(new RemoteResourceProblemException(HttpStatus.BAD_GATEWAY.value()));
+        when(lendingService.getApplication(dipId)).thenThrow(new RemoteResourceProblemException());
 
         //When
         mockMvc.perform(
@@ -60,7 +60,7 @@ public class LendingControllerCircuitBreakerTest extends MapperBase {
         //Given
         var requestDto = getDIPApplicationRequestDto();
 
-        when(lendingService.createDipApplication(requestDto)).thenThrow(new RemoteResourceProblemException(HttpStatus.BAD_GATEWAY.value()));
+        when(lendingService.createDipApplication(requestDto)).thenThrow(new RemoteResourceProblemException());
 
         //When
         mockMvc.perform(
@@ -80,7 +80,7 @@ public class LendingControllerCircuitBreakerTest extends MapperBase {
         var requestDto = getDIPApplicationRequestDto();
         String jsonRequestDto = objectMapper.writeValueAsString(requestDto);
 
-        doThrow(new RemoteResourceProblemException(HttpStatus.BAD_GATEWAY.value())).when(lendingService).updateDipApplication(dipId, requestDto);
+        doThrow(new RemoteResourceProblemException()).when(lendingService).updateDipApplication(dipId, requestDto);
 
         //When
         mockMvc.perform(

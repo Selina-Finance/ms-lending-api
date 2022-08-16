@@ -77,7 +77,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     private void middlewareApiFallbackDefault(FeignException.FeignServerException e) {
-        defaultMiddlewareFallback(e, e.status());
+        defaultMiddlewareFallback(e);
     }
 
     private void middlewareApiFallbackDefault(feign.RetryableException e) {
@@ -85,7 +85,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     private ApplicationResponse middlewareApiFallback(FeignException.FeignServerException e) {
-        defaultMiddlewareFallback(e, e.status());
+        defaultMiddlewareFallback(e);
         return ApplicationResponse.builder().build();
     }
 
@@ -96,11 +96,6 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
     private void defaultMiddlewareFallback(Exception e) {
         log.error("Middleware is unavailable. {}", e.getMessage());
-        throw new RemoteResourceProblemException(HttpStatus.BAD_GATEWAY.value());
-    }
-
-    private void defaultMiddlewareFallback(Exception e, int status) {
-        log.error("Middleware is unavailable. {}", e.getMessage());
-        throw new RemoteResourceProblemException(status);
+        throw new RemoteResourceProblemException();
     }
 }
