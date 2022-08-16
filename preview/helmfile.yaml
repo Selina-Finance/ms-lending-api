@@ -5,14 +5,16 @@ environments:
 repositories:
 - name: jx3
   url: https://jenkins-x-charts.github.io/repo
+- name: dev
+  url: http://chartmuseum-jx.selinadev.co.uk
 releases:
 - chart: jx3/jx-verify
   name: jx-verify
   namespace: '{{ requiredEnv "PREVIEW_NAMESPACE" }}'
-- chart: ./charts/staging
+- chart: dev/staging-resources
+  version: 0.0.1
   namespace: '{{ requiredEnv "PREVIEW_NAMESPACE" }}'
-  values:
-  name: staging
+  name: staging-resources
 - chart: '../charts/{{ requiredEnv "APP_NAME" }}'
   name: preview
   wait: true
