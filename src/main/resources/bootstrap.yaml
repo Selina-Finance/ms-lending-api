@@ -3,6 +3,8 @@
 #spring.cloud.vault.enabled=false
 
 spring:
+  application:
+    name: ms-lending-api
   cloud:
     kubernetes:
       config:
