@@ -12,7 +12,6 @@ releases:
   name: jx-verify
   namespace: '{{ requiredEnv "PREVIEW_NAMESPACE" }}'
 - chart: dev/staging-resources
-  version: 0.0.1
   namespace: '{{ requiredEnv "PREVIEW_NAMESPACE" }}'
   name: staging-resources
 - chart: '../charts/{{ requiredEnv "APP_NAME" }}'
