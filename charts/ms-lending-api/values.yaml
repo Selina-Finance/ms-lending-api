@@ -69,7 +69,8 @@ service:
   internalPort: 8080
   annotations: {}
   # Add labels to the service
-  labels: {}
+  labels:
+    spring-boot: "true"
 resources:
   limits:
     cpu: 400m
