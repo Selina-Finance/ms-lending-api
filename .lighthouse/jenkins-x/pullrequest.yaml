@@ -28,7 +28,13 @@ spec:
               cpu: 400m
               memory: 512Mi
         - name: build-gradle-build
-          resources: {}
+          resources: 
+            limits:
+              cpu: 800m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
         - name: check-registry
           resources: {}
         - name: build-container-build
