@@ -95,7 +95,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     private void defaultMiddlewareFallback(Exception e) {
-        log.error("Middleware is unavailable. {}", e.getMessage());
+        log.error("Middleware is unavailable. {} {}", e.getCause(), e.getMessage());
         throw new RemoteResourceProblemException();
     }
 }
