@@ -19,7 +19,7 @@ data:
       spring.cloud.kubernetes.config.enabled=true
       spring.cloud.kubernetes.config.sources[1].name=${spring.application.name}
       spring.cloud.kubernetes.config.sources[0].name=ms-common-properties
-      logging.config=/spring/cloud/logback.xml
+      #logging.config=/spring/cloud/logback.xml
       logging.level.org.springframework.vault.core=WARN
       logging.level.p6spy=WARN
   logback.xml: |
