@@ -16,8 +16,10 @@
 
 package com.selina.lending.api.errors;
 
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +27,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.StatusType;
+import org.zalando.problem.spring.common.HttpStatusAdapter;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
@@ -69,6 +72,11 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @Override
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
+        if (throwable instanceof FeignException) {
+            var feignException = (FeignException) throwable;
+            return buildProblem(new HttpStatusAdapter(HttpStatus.valueOf(feignException.status())), feignException.contentUTF8(), feignException);
+        }
+
         if (isHttpMessageConversionException(throwable)) {
             return buildProblem(status, UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL, throwable);
         }
