@@ -2,14 +2,6 @@ server:
   servlet:
     context-path: /lending
 
-logging:
-  level:
-    org:
-      springframework:
-        boot:
-          autoconfigure: INFO;
-        cache: TRACE;
-
 management:
   endpoints:
     web:
