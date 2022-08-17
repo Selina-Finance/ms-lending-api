@@ -168,17 +168,3 @@ volumeMounts:
    mountPath: /spring/cloud/
 #   # - name: cacerts
 #   #   mountPath: /usr/local/openjdk-11/lib/security/
-
-
-
-       volumeMounts:
-        - name: commonconfig-volume
-          mountPath: /usr/src/app/config
-      volumes:
-        - name: commonconfig-volume
-          projected:
-            sources:
-            - configMap:
-                name: test-configmap
-            - configMap:
-                name: common-config
