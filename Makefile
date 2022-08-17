@@ -25,3 +25,7 @@ develop:
 
 build_story:
 	docker build -t $(SERVICE) -f Dockerfile.nginx .
+
+
+preview:
+	helmfile --file helmfile.yaml template --validate --include-crds --output-dir-template /tmp/generate/ 
