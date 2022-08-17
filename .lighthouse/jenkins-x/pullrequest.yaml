@@ -34,9 +34,6 @@ spec:
         - name: build-container-build
           resources: {}
         - name: promote-jx-preview
-          env:
-          - name: JX_LOG_LEVEL
-            value: debug
           resources: {}
   podTemplate: {}
   serviceAccountName: tekton-bot
