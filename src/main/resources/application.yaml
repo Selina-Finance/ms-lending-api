@@ -2,14 +2,6 @@ server:
   servlet:
     context-path: /lending
 
-logging:
-  level:
-    org:
-      springframework:
-        boot:
-          autoconfigure: INFO;
-        cache: TRACE;
-
 management:
   endpoints:
     web:
@@ -44,9 +36,9 @@ resilience4j:
           - feign.FeignException.FeignServerException
           - feign.RetryableException
 
-middleware:
-  api:
-    url: http://TBC
+
+#middleware.api.url: http://TBC
+#middleware.api.url: ${MIDDLEWARE_URL}
 
 spring.security:
   oauth2:
