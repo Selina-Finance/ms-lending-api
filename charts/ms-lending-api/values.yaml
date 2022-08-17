@@ -151,6 +151,9 @@ volumes:
  - name: bootstrap
    configMap:
      name: ms-cloud-bootstrap
+ - name: ms-lending-api
+   configMap:
+     name: ms-lending-api     
 #   # - name: cacerts
 #   #   emptyDir: {}
 #   # - name: vault-ca
@@ -159,6 +162,8 @@ volumes:
 
 volumeMounts:
  - name: bootstrap
+   mountPath: /spring/cloud/
+ - name: ms-lending-api
    mountPath: /spring/cloud/
 #   # - name: cacerts
 #   #   mountPath: /usr/local/openjdk-11/lib/security/
