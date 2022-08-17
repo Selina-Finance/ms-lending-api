@@ -28,11 +28,14 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
 	implementation "org.projectlombok:lombok:1.18.24"
+	implementation 'ch.qos.logback:logback-core:1.2.11'
+	implementation 'ch.qos.logback:logback-classic:1.2.11'
 	implementation 'org.slf4j:slf4j-api:1.7.36'
 	implementation 'org.zalando:problem-spring-web:0.27.0'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
