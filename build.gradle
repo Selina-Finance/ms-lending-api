@@ -29,6 +29,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8'
+	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8-config'
+
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"

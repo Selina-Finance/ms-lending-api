@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: ms-lending-api
+  cloud:
+    kubernetes:
+      config:
+        enabled: false
+      enabled: false

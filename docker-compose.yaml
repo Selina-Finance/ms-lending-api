@@ -1,9 +1,0 @@
-version: "3.9"
-
-services:
-  web:
-    build:
-      dockerfile: Dockerfile.dev
-    command: java -XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom -jar /app/spring-boot-application.jar
-    ports:
-      - "8080:8080"
