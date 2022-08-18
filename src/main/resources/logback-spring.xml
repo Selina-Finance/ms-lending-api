@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration debug="true">
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <!-- TO DO - use ${k8s:podName:-}-->
     <springProperty scope="context" name="appName" source="spring.application.name"/>
