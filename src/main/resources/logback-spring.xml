@@ -14,12 +14,8 @@
        </encoder>
     </appender>
 
-    <logger name="com.selina.lending" level="info" additivity="false">
-        <appender-ref ref="Console"/>
-    </logger>
-
     <root level="info">
-        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="Console"/>
     </root>
 
 </configuration>
