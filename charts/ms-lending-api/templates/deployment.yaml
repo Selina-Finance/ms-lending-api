@@ -63,6 +63,7 @@ spec:
           value: {{ .Chart.Version }}
         - name: image
           value: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+{{- if .Values.fieldRef}}
         - name: MY_POD_IP
           valueFrom:
             fieldRef:
@@ -71,6 +72,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+{{- end }}              
 {{- range $pkey, $pval := .Values.env }}
         - name: {{ $pkey }}
           value: {{ quote $pval }}
