@@ -5,7 +5,7 @@
 
     <!-- TO DO - use ${k8s:podName:-}-->
     <springProperty scope="context" name="appName" source="spring.application.name"/>
-    <property name="LOG_REQUEST_PATTERN" value="%5p [App=${appName},X-Correlation-Id=%X{traceId:-},Span-Id=%X{spanId:-},Image=${k8s:imageName:-}]"/>
+    <property name="LOG_REQUEST_PATTERN" value="%5p [App=${appName},X-Correlation-Id=%X{traceId:-},Span-Id=%X{spanId:-},Image=${kubernetes.imageName:-},${kubernetes.imageId}]"/>
     <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_REQUEST_PATTERN:-%5p} ${PID:- } ---[%15.15t] %-40.40logger{39}: %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx})"/>
 
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
