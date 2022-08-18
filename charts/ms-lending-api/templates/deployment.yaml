@@ -61,7 +61,7 @@ spec:
         env:
         - name: VERSION
           value: {{ .Chart.Version }}
-        - name: image
+        - name: IMAGE
           value: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
 {{- if .Values.fieldRef}}
         - name: MY_POD_IP
