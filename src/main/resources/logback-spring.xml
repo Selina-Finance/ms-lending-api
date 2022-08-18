@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
     <!-- TO DO - use ${k8s:podName:-}-->
     <springProperty scope="context" name="appName" source="spring.application.name"/>
     <property name="LOG_REQUEST_PATTERN" value="%5p [App=${appName},X-Correlation-Id=%X{traceId:-},Span-Id=%X{spanId:-},Image=${k8s:imageName:-}]"/>
