@@ -167,3 +167,6 @@ volumeMounts:
    mountPath: /spring/cloud/ms-lending-api
 #   # - name: cacerts
 #   #   mountPath: /usr/local/openjdk-11/lib/security/
+
+
+fieldRef: true

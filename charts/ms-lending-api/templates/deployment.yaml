@@ -61,9 +61,23 @@ spec:
         env:
         - name: VERSION
           value: {{ .Chart.Version }}
+        - name: IMAGE
+          value: {{ .Values.image.tag }}
+{{- if .Values.fieldRef}}
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+{{- end }}              
 {{- range $pkey, $pval := .Values.env }}
         - name: {{ $pkey }}
           value: {{ quote $pval }}
+{{- end }}
+{{- if .Values.fieldRef }}              
 {{- end }}
         envFrom:
 {{ toYaml .Values.envFrom | indent 10 }}
