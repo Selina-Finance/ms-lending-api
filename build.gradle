@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.7.2'
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+	id 'jacoco'
 	id 'java'
 }
 
@@ -60,4 +61,21 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jacocoTestReport {
+	afterEvaluate {
+		classDirectories.from = (files(classDirectories.files.collect {
+			fileTree(dir: it, excludes: [
+					'com/selina/lending/internal/service/application/domain/**',
+					'com/selina/lending/internal/dto/**',
+					'com/selina/lending/api/ServletInitializer**'
+			])
+		}))
+	}
+	reports {
+		xml.required = true
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+	}
 }
