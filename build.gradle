@@ -59,11 +59,13 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
+	dependsOn test
 	afterEvaluate {
 		classDirectories.from = (files(classDirectories.files.collect {
 			fileTree(dir: it, excludes: [
@@ -79,5 +81,3 @@ jacocoTestReport {
 		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
 	}
 }
-
-test.finalizedBy jacocoTestReport
