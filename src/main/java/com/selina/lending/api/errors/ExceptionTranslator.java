@@ -74,8 +74,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @Override
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
-        if (throwable instanceof FeignException) {
-            var feignException = (FeignException) throwable;
+        if (throwable instanceof FeignException feignException) {
             return buildProblem(new HttpStatusAdapter(HttpStatus.valueOf(feignException.status())), feignException.contentUTF8(), feignException);
         }
 
