@@ -29,3 +29,18 @@ build_story:
 
 preview:
 	helmfile --file helmfile.yaml template --validate --include-crds --output-dir-template /tmp/generate/ 
+
+build: sonarcube
+	gradle test
+	gradle build --no-daemon	
+
+# Section for Java Lib
+build_lib:
+	#gradle test
+	gradle build -Dversion=${VERSION} --no-daemon
+
+publish:
+	gradle publish -Dversion=${VERSION}
+
+sonarcube:
+	gradle sonarqube
