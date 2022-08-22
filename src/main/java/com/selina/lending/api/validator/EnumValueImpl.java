@@ -35,6 +35,6 @@ public class EnumValueImpl implements ConstraintValidator<EnumValue, String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value == null ? true : acceptedValues.contains(value);
+        return value == null || acceptedValues.contains(value);
     }
 }
