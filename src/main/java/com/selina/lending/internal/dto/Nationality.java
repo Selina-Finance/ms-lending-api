@@ -17,8 +17,6 @@
 
 package com.selina.lending.internal.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 public enum Nationality {
     AFGHANISTAN("Afghanistan"),
     ALAND_ISLANDS("Aland Islands"),

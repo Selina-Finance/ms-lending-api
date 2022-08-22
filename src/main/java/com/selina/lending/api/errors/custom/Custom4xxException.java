@@ -16,10 +16,10 @@
 
 package com.selina.lending.api.errors.custom;
 
+import javax.annotation.Nullable;
+
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
-
-import javax.annotation.Nullable;
 
 public class Custom4xxException extends AbstractThrowableProblem {
 

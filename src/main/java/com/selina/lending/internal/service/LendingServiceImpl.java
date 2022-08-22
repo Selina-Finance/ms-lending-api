@@ -16,12 +16,14 @@
  */
 
 package com.selina.lending.internal.service;
+
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
-import org.springframework.stereotype.Service;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 

@@ -17,11 +17,12 @@
 
 package com.selina.lending.config.security.clientOAuth2;
 
-import feign.RequestInterceptor;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import feign.RequestInterceptor;
 
 @Configuration
 public class MiddlewareOAuth2Configuration {

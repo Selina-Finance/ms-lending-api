@@ -16,9 +16,9 @@
 
 package com.selina.lending.api.errors.custom;
 
-import org.zalando.problem.AbstractThrowableProblem;
-
 import static org.zalando.problem.Status.BAD_GATEWAY;
+
+import org.zalando.problem.AbstractThrowableProblem;
 
 public class RemoteResourceProblemException extends AbstractThrowableProblem {
 

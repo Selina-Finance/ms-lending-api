@@ -17,15 +17,17 @@
 
 package com.selina.lending.internal.api;
 
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(
         value = "middleware-api",
@@ -34,12 +36,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 )
 public interface MiddlewareApi {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationDecisionResponse getApplicationById(@PathVariable("id") String id);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping (path = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/application/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/application/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     void updateDipApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
 }

@@ -16,8 +16,15 @@
 
 package com.selina.lending.api.errors;
 
-import feign.FeignException;
-import lombok.extern.slf4j.Slf4j;
+import static com.selina.lending.api.errors.ErrorConstants.UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EXCEPTION_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.VIOLATIONS_KEY;
+
+import java.net.URI;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +39,8 @@ import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
-import javax.annotation.Nullable;
-import java.net.URI;
-import java.util.Optional;
-
-import static com.selina.lending.api.errors.ErrorConstants.UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL;
-import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EXCEPTION_DETAIL;
-import static com.selina.lending.api.errors.ErrorConstants.VIOLATIONS_KEY;
+import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ControllerAdvice

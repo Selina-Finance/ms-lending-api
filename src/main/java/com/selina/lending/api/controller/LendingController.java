@@ -16,6 +16,11 @@
 
 package com.selina.lending.api.controller;
 
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
@@ -23,15 +28,7 @@ import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.service.LendingService;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.info.License;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RestController
 @Slf4j
