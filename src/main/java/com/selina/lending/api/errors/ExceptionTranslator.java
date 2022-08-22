@@ -40,6 +40,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import feign.FeignException;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -62,7 +63,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         return entity;
     }
 
-    private ResponseEntity<Problem> mapConstraintViolationProblem(ResponseEntity<Problem> entity) {
+    private ResponseEntity<Problem> mapConstraintViolationProblem(@NonNull ResponseEntity<Problem> entity) {
         Problem problem = entity.getBody();
         ProblemBuilder builder = Problem
                 .builder()
