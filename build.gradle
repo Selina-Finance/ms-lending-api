@@ -24,6 +24,7 @@ sonarqube {
 		property "sonar.projectKey", "Selina-Finance_ms-lending-api"
 		property "sonar.organization", "selina-finance"
 		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.login", $SONAR_TOKEN
 	}
 }
 
