@@ -31,7 +31,7 @@ preview:
 	helmfile --file helmfile.yaml template --validate --include-crds --output-dir-template /tmp/generate/ 
 
 build: sonarcube
-	gradle test
+	gradle test jacocoTestReport
 	gradle build --no-daemon
 	rm -f build/libs/*-plain.jar  
 
