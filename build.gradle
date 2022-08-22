@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 	id 'jacoco'
 	id 'java'
+	id "org.sonarqube" version "3.4.0.2513"
 }
 
 group = 'com.selina.lending'
