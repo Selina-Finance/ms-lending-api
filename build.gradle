@@ -80,3 +80,5 @@ jacocoTestReport {
 		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
 	}
 }
+
+test.finalizedBy jacocoTestReport
