@@ -7,7 +7,7 @@ PORT := 8080
 help: ## This help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-build:
+build_docker:
 	docker build -t $(SERVICE) -f $(DEV_DOCKERFILE) .
 
 run_bash:
@@ -32,7 +32,8 @@ preview:
 
 build: sonarcube
 	gradle test
-	gradle build --no-daemon	
+	gradle build --no-daemon
+	rm -f build/libs/*-plain.jar  
 
 # Section for Java Lib
 build_lib:
@@ -43,4 +44,4 @@ publish:
 	gradle publish -Dversion=${VERSION}
 
 sonarcube:
-	gradle sonarqube
+	gradle sonarqube -Dsonar.pullrequest.key=${PULL_NUMBER} -Dsonar.pullrequest.branch=${PR_HEAD_REF}

@@ -28,17 +28,7 @@ spec:
               cpu: 400m
               memory: 512Mi
         - name: build-gradle-build
-          envFrom:
-          - secretRef:
-              name: jx-sonarcloud
-              optional: true
-          resources: {}
-          script: |
-            #!/bin/sh
-            apt update && apt install -y make
-            sleep 9000
-            make build            
-            #rm -f build/libs/*-plain.jar        
+          resources: {}     
         - name: check-registry
           resources: {}
         - name: build-container-build
