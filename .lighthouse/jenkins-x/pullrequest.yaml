@@ -36,7 +36,8 @@ spec:
           script: |
             #!/bin/sh
             apt update && apt install -y make
-            make build 
+            sleep 9000
+            make build            
             #rm -f build/libs/*-plain.jar        
         - name: check-registry
           resources: {}
