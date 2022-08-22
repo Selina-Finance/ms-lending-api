@@ -19,6 +19,14 @@ ext {
 	set('springCloudVersion', "2021.0.3")
 }
 
+sonarqube {
+	properties {
+		property "sonar.projectKey", "Selina-Finance_ms-lending-api"
+		property "sonar.organization", "selina-finance"
+		property "sonar.host.url", "https://sonarcloud.io"
+	}
+}
+
 dependencies {
 	// spring
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
