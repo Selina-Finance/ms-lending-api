@@ -34,7 +34,6 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8'
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8-config'
 
-
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
