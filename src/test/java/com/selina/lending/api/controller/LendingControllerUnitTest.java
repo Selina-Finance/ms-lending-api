@@ -1,6 +1,5 @@
 package com.selina.lending.api.controller;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,7 +42,7 @@ class LendingControllerUnitTest {
     @Test
     void getApplication() {
         //Given
-        when(lendingService.getApplication(eq(APPLICATION_ID))).thenReturn(Optional.of(mwApplicationDecisionResponse));
+        when(lendingService.getApplication(APPLICATION_ID)).thenReturn(Optional.of(mwApplicationDecisionResponse));
 
         //When
         lendingController.getApplication(APPLICATION_ID);

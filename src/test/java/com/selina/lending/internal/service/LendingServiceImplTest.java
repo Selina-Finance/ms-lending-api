@@ -20,7 +20,6 @@ package com.selina.lending.internal.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -61,7 +60,7 @@ class LendingServiceImplTest {
         var applicationDecisionResponse = Optional.of(
                 ApplicationDecisionResponse.builder().id(APPLICATION_ID).build());
 
-        when(middlewareRepository.getApplicationById(eq(APPLICATION_ID))).thenReturn(applicationDecisionResponse);
+        when(middlewareRepository.getApplicationById(APPLICATION_ID)).thenReturn(applicationDecisionResponse);
 
         //When
         var response = lendingService.getApplication(APPLICATION_ID);
@@ -70,7 +69,7 @@ class LendingServiceImplTest {
         assertThat(response.isPresent(), equalTo(true));
         assertThat(response.get(), equalTo(applicationDecisionResponse.get()));
         assertThat(response.get().getId(), equalTo(APPLICATION_ID));
-        verify(middlewareRepository, times(1)).getApplicationById(eq(APPLICATION_ID));
+        verify(middlewareRepository, times(1)).getApplicationById(APPLICATION_ID);
     }
 
     @Test
@@ -78,7 +77,7 @@ class LendingServiceImplTest {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         var requestArgumentCaptor = ArgumentCaptor.forClass(ApplicationRequest.class);
-        doNothing().when(middlewareRepository).updateDipApplication(eq(APPLICATION_ID), requestArgumentCaptor.capture());
+        doNothing().when(middlewareRepository).updateDipApplication(APPLICATION_ID, requestArgumentCaptor.capture());
 
         //When
         lendingService.updateDipApplication(APPLICATION_ID, request);
@@ -86,7 +85,7 @@ class LendingServiceImplTest {
         //Then
         var requestValue = requestArgumentCaptor.getValue();
         assertThat(requestValue.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
-        verify(middlewareRepository, times(1)).updateDipApplication(eq(APPLICATION_ID), any());
+        verify(middlewareRepository, times(1)).updateDipApplication(APPLICATION_ID, any());
     }
 
     @Test
