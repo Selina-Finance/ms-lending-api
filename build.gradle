@@ -17,6 +17,7 @@ repositories {
 
 ext {
 	set('springCloudVersion', "2021.0.3")
+	set('springBootAdminVersion', "2.7.4")
 }
 
 sonarqube {
@@ -44,6 +45,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8'
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8-config'
+	implementation 'de.codecentric:spring-boot-admin-starter-client'
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
@@ -67,6 +69,7 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
 	}
 }
 
