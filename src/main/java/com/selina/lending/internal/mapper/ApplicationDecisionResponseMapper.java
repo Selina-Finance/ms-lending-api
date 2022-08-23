@@ -28,7 +28,7 @@ import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 public interface ApplicationDecisionResponseMapper {
     ApplicationDecisionResponseMapper INSTANCE = Mappers.getMapper(ApplicationDecisionResponseMapper.class);
 
-    @Mappings({@Mapping(target= "requestType", source = "applicationDecisionResponse.applicationType")})
+    @Mapping(target= "requestType", source = "applicationDecisionResponse.applicationType")
     ApplicationDecisionResponse mapToApplicationDecisionResponseDto(
             com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse applicationDecisionResponse);
 }

@@ -42,7 +42,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationRequest
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class LendingServiceImplTest {
+class LendingServiceImplTest {
     private static final String APPLICATION_ID = "applicationId";
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
 
@@ -56,7 +56,7 @@ public class LendingServiceImplTest {
     private LendingServiceImpl lendingService;
 
     @Test
-    public void getApplication() {
+    void getApplication() {
         //Given
         var applicationDecisionResponse = Optional.of(
                 ApplicationDecisionResponse.builder().id(APPLICATION_ID).build());
@@ -74,7 +74,7 @@ public class LendingServiceImplTest {
     }
 
     @Test
-    public void updateDipApplication() {
+    void updateDipApplication() {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         var requestArgumentCaptor = ArgumentCaptor.forClass(ApplicationRequest.class);
@@ -90,7 +90,7 @@ public class LendingServiceImplTest {
     }
 
     @Test
-    public void createDipApplication() {
+    void createDipApplication() {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         when(middlewareRepository.createDipApplication(any())).thenReturn(applicationResponse);

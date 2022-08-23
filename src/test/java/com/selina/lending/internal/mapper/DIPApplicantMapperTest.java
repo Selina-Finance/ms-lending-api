@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-public class DIPApplicantMapperTest extends MapperBase {
+class DIPApplicantMapperTest extends MapperBase {
 
     @Test
-    public void mapToApplicantFromDIPApplicantDto() {
+    void mapToApplicantFromDIPApplicantDto() {
         //Given
         var dipApplicantDto = getDIPApplicantDto();
 
@@ -59,7 +59,7 @@ public class DIPApplicantMapperTest extends MapperBase {
     }
 
     @Test
-    public void mapToApplicantFromApplicantDto() {
+    void mapToApplicantFromApplicantDto() {
         //Given
         var applicantDto = getApplicantDto();
 
@@ -83,7 +83,7 @@ public class DIPApplicantMapperTest extends MapperBase {
     }
 
     @Test
-    public void mapToApplicantDto() {
+    void mapToApplicantDto() {
         //Given
         var applicant = getApplicant();
 
@@ -102,7 +102,7 @@ public class DIPApplicantMapperTest extends MapperBase {
     }
 
     @Test
-    public void mapToDipApplicantDto() {
+    void mapToDipApplicantDto() {
         //Given
         var applicant = getApplicant();
 

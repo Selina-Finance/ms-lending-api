@@ -30,7 +30,7 @@ import feign.RequestTemplate;
 
 @WithMockUser
 @WebMvcTest
-public class LendingControllerCircuitBreakerTest extends MapperBase {
+class LendingControllerCircuitBreakerTest extends MapperBase {
 
     @Autowired
     private MockMvc mockMvc;
@@ -41,7 +41,7 @@ public class LendingControllerCircuitBreakerTest extends MapperBase {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void shouldReturnBadGatewayWhenGetDipApplicationHasMiddlewareProblem() throws Exception {
+    void shouldReturnBadGatewayWhenGetDipApplicationHasMiddlewareProblem() throws Exception {
         //Given
         var dipId = UUID.randomUUID().toString();
 
@@ -56,7 +56,7 @@ public class LendingControllerCircuitBreakerTest extends MapperBase {
     }
 
     @Test
-    public void shouldReturnBadGatewayWhenCreateDipApplicationHasMiddlewareProblem() throws Exception {
+    void shouldReturnBadGatewayWhenCreateDipApplicationHasMiddlewareProblem() throws Exception {
         //Given
         var requestDto = getDIPApplicationRequestDto();
 
@@ -74,7 +74,7 @@ public class LendingControllerCircuitBreakerTest extends MapperBase {
     }
 
     @Test
-    public void shouldReturnBadGatewayWhenUpdateDipApplicationHasMiddlewareProblem() throws Exception {
+    void shouldReturnBadGatewayWhenUpdateDipApplicationHasMiddlewareProblem() throws Exception {
         //Given
         var dipId = UUID.randomUUID().toString();
         var requestDto = getDIPApplicationRequestDto();
@@ -93,7 +93,7 @@ public class LendingControllerCircuitBreakerTest extends MapperBase {
     }
 
     @Test
-    public void shouldReturnNotFoundWhenDipApplicationDoesNotExistInMiddleware() throws Exception {
+    void shouldReturnNotFoundWhenDipApplicationDoesNotExistInMiddleware() throws Exception {
         //Given
         var dipId = UUID.randomUUID().toString();
         var request = Request.create(Request.HttpMethod.GET, "url",

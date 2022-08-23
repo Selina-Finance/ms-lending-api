@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
-public class LendingControllerValidationTest extends MapperBase {
+class LendingControllerValidationTest extends MapperBase {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,7 +40,7 @@ public class LendingControllerValidationTest extends MapperBase {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void createDipApplicationSuccess() throws Exception {
+    void createDipApplicationSuccess() throws Exception {
         //Given
         var dipApplicationRequest = getDIPApplicationRequestDto();
 
@@ -52,7 +52,7 @@ public class LendingControllerValidationTest extends MapperBase {
     }
 
     @Test
-    public void createDipApplicationWithEmptyDIPApplicationRequest() throws Exception {
+    void createDipApplicationWithEmptyDIPApplicationRequest() throws Exception {
         //Given
         var dipApplicationRequest = DIPApplicationRequest.builder().build();
 
@@ -79,7 +79,7 @@ public class LendingControllerValidationTest extends MapperBase {
     }
 
     @Test
-    public void createDipApplicationWithMissingApplicantsRequest() throws Exception {
+    void createDipApplicationWithMissingApplicantsRequest() throws Exception {
         //Given
         var dipApplicationRequest = DIPApplicationRequest.builder()
                 .requestType(DIP_APPLICATION_TYPE)
@@ -104,7 +104,7 @@ public class LendingControllerValidationTest extends MapperBase {
     }
 
     @Test
-    public void updateDipApplicationWithMissingMandatoryLoanInformation() throws Exception {
+    void updateDipApplicationWithMissingMandatoryLoanInformation() throws Exception {
         //Given
         var dipApplicationRequest = DIPApplicationRequest.builder()
                 .requestType(DIP_APPLICATION_TYPE)
@@ -136,7 +136,7 @@ public class LendingControllerValidationTest extends MapperBase {
     }
 
     @Test
-    public void updateDipApplicationSuccess() throws Exception {
+    void updateDipApplicationSuccess() throws Exception {
         //Given
         var dipApplicationRequest = getDIPApplicationRequestDto();
 
@@ -148,7 +148,7 @@ public class LendingControllerValidationTest extends MapperBase {
     }
 
     @Test
-    public void createDipApplicationWithInvalidDateFormat() throws Exception {
+    void createDipApplicationWithInvalidDateFormat() throws Exception {
         //Given
         var employment = EmploymentDto.builder()
                 .employmentStatus(EMPLOYED_STATUS)

@@ -7,7 +7,7 @@ PORT := 8080
 help: ## This help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-build:
+build_docker:
 	docker build -t $(SERVICE) -f $(DEV_DOCKERFILE) .
 
 run_bash:
@@ -29,3 +29,20 @@ build_story:
 
 preview:
 	helmfile --file helmfile.yaml template --validate --include-crds --output-dir-template /tmp/generate/ 
+
+build: build_test sonarcube
+	gradle build --no-daemon
+	rm -f build/libs/*-plain.jar  
+
+build_test:
+	gradle test jacocoTestReport
+# Section for Java Lib
+build_lib:
+	#gradle test
+	gradle build -Dversion=${VERSION} --no-daemon
+
+publish:
+	gradle publish -Dversion=${VERSION}
+
+sonarcube:
+	gradle sonarqube -Dsonar.pullrequest.key=${PULL_NUMBER} -Dsonar.pullrequest.branch=${PR_HEAD_REF}

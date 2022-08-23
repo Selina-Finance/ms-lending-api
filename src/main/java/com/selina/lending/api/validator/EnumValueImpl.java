@@ -20,6 +20,7 @@ package com.selina.lending.api.validator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -29,12 +30,11 @@ public class EnumValueImpl implements ConstraintValidator<EnumValue, String> {
     @Override
     public void initialize(EnumValue constraintAnnotation) {
         acceptedValues = Stream.of(constraintAnnotation.enumClass().getEnumConstants())
-                .map(Enum::toString)
-                .collect(Collectors.toList());
+                .map(Enum::toString).toList();
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value == null ? true : acceptedValues.contains(value);
+        return value == null || acceptedValues.contains(value);
     }
 }

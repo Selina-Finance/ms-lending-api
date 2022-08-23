@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPApplicantDto;
 
-public class ApplicationDecisionResponseMapperTest extends MapperBase {
+class ApplicationDecisionResponseMapperTest extends MapperBase {
 
     @Test
     void mapToApplicationDecisionResponseDto() {

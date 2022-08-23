@@ -16,8 +16,6 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import java.util.Date;
-
 import lombok.Builder;
 import lombok.Value;
 

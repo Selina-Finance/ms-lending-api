@@ -1,7 +1,9 @@
 plugins {
 	id 'org.springframework.boot' version '2.7.2'
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+	id 'jacoco'
 	id 'java'
+	id "org.sonarqube" version "3.4.0.2513"
 }
 
 group = 'com.selina.lending'
@@ -15,6 +17,17 @@ repositories {
 
 ext {
 	set('springCloudVersion', "2021.0.3")
+}
+
+sonarqube {
+	properties {
+		property "sonar.projectKey", "Selina-Finance_ms-lending-api"
+		property "sonar.organization", "selina-finance"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.exclusions", "**/*ServiceApplication.java"
+		property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+		property "sonar.coverage.exclusions", "**/com/selina/lending/internal/dto/**, **/com/selina/lending/internal/service/application/domain/**, **/com/selina/lending/api/ServletInitializer**"
+	}
 }
 
 dependencies {
@@ -31,7 +44,6 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8'
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8-config'
-
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
@@ -58,6 +70,25 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	afterEvaluate {
+		classDirectories.from = (files(classDirectories.files.collect {
+			fileTree(dir: it, excludes: [
+					'com/selina/lending/internal/service/application/domain/**',
+					'com/selina/lending/internal/dto/**',
+					'com/selina/lending/api/ServletInitializer**'
+			])
+		}))
+	}
+	reports {
+		xml.required = true
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+	}
 }

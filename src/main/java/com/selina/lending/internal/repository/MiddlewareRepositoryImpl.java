@@ -17,6 +17,10 @@
 
 package com.selina.lending.internal.repository;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
@@ -26,11 +30,6 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
