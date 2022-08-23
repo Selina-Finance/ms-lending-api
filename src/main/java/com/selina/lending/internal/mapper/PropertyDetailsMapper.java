@@ -20,7 +20,6 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.DIPPropertyDetailsDto;

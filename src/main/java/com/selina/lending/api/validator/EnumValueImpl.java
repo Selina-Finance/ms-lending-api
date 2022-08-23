@@ -18,7 +18,6 @@
 package com.selina.lending.api.validator;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.validation.ConstraintValidator;

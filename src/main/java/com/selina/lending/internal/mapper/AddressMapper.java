@@ -19,7 +19,6 @@ package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.AddressDto;
@@ -29,11 +28,11 @@ import com.selina.lending.internal.service.application.domain.Address;
 public interface AddressMapper {
     AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
 
-    @Mappings({@Mapping(target = "fromDate", source = "address.from"),
-            @Mapping(target = "toDate", source = "address.to")})
+    @Mapping(target = "fromDate", source = "address.from")
+    @Mapping(target = "toDate", source = "address.to")
     AddressDto mapToAddressDto(Address address);
 
-    @Mappings({@Mapping(target = "from", source = "addressDto.fromDate"),
-            @Mapping(target = "to", source = "addressDto.toDate")})
+    @Mapping(target = "from", source = "addressDto.fromDate")
+    @Mapping(target = "to", source = "addressDto.toDate")
     Address mapToAddress(AddressDto addressDto);
 }

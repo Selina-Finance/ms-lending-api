@@ -37,7 +37,7 @@ public class MiddlewareOAuth2Configuration {
 
     @Bean
     public RequestInterceptor authInterceptor() {
-        return (requestTemplate) -> requestTemplate.header(
+        return requestTemplate -> requestTemplate.header(
                 AUTHORIZATION, oauth2Provider.getAuthenticationToken(OAUTH2_SERVER_NAME)
         );
     }

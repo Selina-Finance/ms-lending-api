@@ -17,6 +17,8 @@
 
 package com.selina.lending.config.security.clientOAuth2;
 
+import java.util.Objects;
+
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -43,7 +45,7 @@ public class OAuth2Provider {
 
     public String getAuthenticationToken(final String authServerName) {
         var request = buildOAuth2AuthorizeRequest(authServerName);
-        return TOKEN_PREFIX + authorizedClientManager.authorize(request).getAccessToken().getTokenValue();
+        return TOKEN_PREFIX + Objects.requireNonNull(authorizedClientManager.authorize(request)).getAccessToken().getTokenValue();
     }
 
     private static OAuth2AuthorizeRequest buildOAuth2AuthorizeRequest(String authServerName) {
