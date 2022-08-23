@@ -27,7 +27,7 @@ import feign.RequestInterceptor;
 @Configuration
 public class MiddlewareOAuth2Configuration {
 
-    private final static String OAUTH2_SERVER_NAME = "middleware-auth";
+    private static final String OAUTH2_SERVER_NAME = "middleware-auth";
 
     private final OAuth2Provider oauth2Provider;
 

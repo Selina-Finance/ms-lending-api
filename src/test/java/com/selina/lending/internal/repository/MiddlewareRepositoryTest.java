@@ -19,7 +19,6 @@ package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -198,7 +197,7 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
         assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
 
-        verify(middlewareApi, times(5)).getApplicationById(eq(id));
+        verify(middlewareApi, times(5)).getApplicationById(id);
     }
 
     @Test
