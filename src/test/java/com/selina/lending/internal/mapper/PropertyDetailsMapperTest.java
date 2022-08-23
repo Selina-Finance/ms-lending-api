@@ -46,7 +46,7 @@ class PropertyDetailsMapperTest extends MapperBase {
         assertThat(propertyDetailsDto.getWhenLastPurchased(), equalTo(WHEN_LAST_PURCHASED));
     }
     @Test
-    public void mapToDIPPropertyDetailsDto() {
+    void mapToDIPPropertyDetailsDto() {
         //Given
         var propertyDetails = getPropertyDetails();
 

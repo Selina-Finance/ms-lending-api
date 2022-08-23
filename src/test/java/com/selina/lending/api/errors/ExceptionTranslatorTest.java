@@ -166,7 +166,7 @@ class ExceptionTranslatorTest {
     }
 
     @Test
-    public void testAccessDenied() throws Exception {
+    void testAccessDenied() throws Exception {
         // Given
         String expectedValue = "test access denied!";
 
@@ -181,7 +181,7 @@ class ExceptionTranslatorTest {
     }
 
     @Test
-    public void testUnauthorized() throws Exception {
+    void testUnauthorized() throws Exception {
         // Given
         String expectedMsg = "test authentication failed!";
 
