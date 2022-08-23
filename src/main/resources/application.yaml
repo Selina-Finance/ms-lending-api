@@ -37,6 +37,7 @@ resilience4j:
           - feign.RetryableException
 
 
+#spring.boot.admin.client.url: http://localhost:8081
 #middleware.api.url: http://TBC
 #middleware.api.url: ${MIDDLEWARE_URL}
 
