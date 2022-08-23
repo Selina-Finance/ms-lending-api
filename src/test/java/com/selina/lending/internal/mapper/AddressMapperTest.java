@@ -21,11 +21,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.Test;
-
-public class AddressMapperTest extends MapperBase{
+class AddressMapperTest extends MapperBase{
 
     @Test
-    public void mapToAddress() {
+    void mapToAddress() {
         //Given
         var addressDto = getAddressDto();
 
@@ -48,7 +47,7 @@ public class AddressMapperTest extends MapperBase{
     }
 
     @Test
-    public void mapToAddressDto() {
+    void mapToAddressDto() {
         //Given
         var address = getAddress();
 

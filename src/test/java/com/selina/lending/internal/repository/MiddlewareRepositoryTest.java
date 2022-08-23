@@ -62,12 +62,12 @@ class MiddlewareRepositoryTest {
     private MiddlewareRepository middlewareRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi);
     }
 
     @Test
-    public void shouldCallHttpClientWhenGetApplicationByIdInvoked() {
+    void shouldCallHttpClientWhenGetApplicationByIdInvoked() {
         // Given
         var id = UUID.randomUUID().toString();
         var apiResponse = ApplicationDecisionResponse.builder().build();
@@ -79,11 +79,11 @@ class MiddlewareRepositoryTest {
 
         // Then
         assertThat(result).isEqualTo(Optional.of(apiResponse));
-        verify(middlewareApi, times(1)).getApplicationById(eq(id));
+        verify(middlewareApi, times(1)).getApplicationById(id);
     }
 
     @Test
-    public void shouldCallHttpClientWhenCreateApplicationInvoked() {
+    void shouldCallHttpClientWhenCreateApplicationInvoked() {
         // Given
         var apiResponse = ApplicationResponse.builder().build();
 
@@ -94,11 +94,11 @@ class MiddlewareRepositoryTest {
 
         // Then
         assertThat(result).isEqualTo(apiResponse);
-        verify(middlewareApi, times(1)).createDipApplication(eq(applicationRequest));
+        verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 
     @Test
-    public void shouldCallHttpClientWhenUpdateApplicationInvoked() {
+    void shouldCallHttpClientWhenUpdateApplicationInvoked() {
         // Given
         var id = UUID.randomUUID().toString();
 
@@ -108,11 +108,11 @@ class MiddlewareRepositoryTest {
         middlewareRepository.updateDipApplication(id, applicationRequest);
 
         // Then
-        verify(middlewareApi, times(1)).updateDipApplication(eq(id), eq(applicationRequest));
+        verify(middlewareApi, times(1)).updateDipApplication(id, applicationRequest);
     }
 
     @Test
-    public void shouldThrowFeignServerExceptionWhenMiddlewareThrowsInternalServerException() {
+    void shouldThrowFeignServerExceptionWhenMiddlewareThrowsInternalServerException() {
         //Given
         String errorMsg = "error";
         var id = UUID.randomUUID().toString();
@@ -130,7 +130,7 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
-    public void shouldThrowFeignClientExceptionWhenMiddlewareThrowsNotFoundException() {
+    void shouldThrowFeignClientExceptionWhenMiddlewareThrowsNotFoundException() {
         //Given
         String notFoundMsg = "not found";
         var id = UUID.randomUUID().toString();
@@ -148,7 +148,7 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
-    public void shouldOpenCircuitBreakerWhenFeignServerExceptionTriggersFallback() {
+    void shouldOpenCircuitBreakerWhenFeignServerExceptionTriggersFallback() {
         //Given
         var id = UUID.randomUUID().toString();
         var circuitBreaker = getCircuitBreaker();
@@ -171,12 +171,12 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
         assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
 
-        verify(middlewareApi, times(5)).getApplicationById(eq(id));
+        verify(middlewareApi, times(5)).getApplicationById(id);
     }
 
 
     @Test
-    public void shouldOpenCircuitBreakerWhenRetryableExceptionTriggersFallback() {
+    void shouldOpenCircuitBreakerWhenRetryableExceptionTriggersFallback() {
         //Given
         var id = UUID.randomUUID().toString();
         var circuitBreaker = getCircuitBreaker();
@@ -202,7 +202,7 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
-    public void shouldNotTriggerCircuitBreakerFallbackForIgnoredExceptions() {
+    void shouldNotTriggerCircuitBreakerFallbackForIgnoredExceptions() {
         //Given
         var id = UUID.randomUUID().toString();
         var circuitBreaker = getCircuitBreaker();
@@ -222,10 +222,10 @@ class MiddlewareRepositoryTest {
 
         //Then
         var metrics = circuitBreaker.getMetrics();
-        assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(0);
-        assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(0);
+        assertThat(metrics.getNumberOfFailedCalls()).isZero();
+        assertThat(metrics.getNumberOfNotPermittedCalls()).isZero();
 
-        verify(middlewareApi, times(10)).getApplicationById(eq(id));
+        verify(middlewareApi, times(10)).getApplicationById(id);
     }
 
     private Request createRequest() {

@@ -24,7 +24,7 @@ sonarqube {
 		property "sonar.projectKey", "Selina-Finance_ms-lending-api"
 		property "sonar.organization", "selina-finance"
 		property "sonar.host.url", "https://sonarcloud.io"
-		property "sonar.coverage.exclusions", "com/selina/lending/internal/dto/**, com/selina/lending/internal/service/application/domain/**, com/selina/lending/api/ServletInitializer**"
+		property "sonar.coverage.exclusions", "**/com/selina/lending/internal/dto/**, **/com/selina/lending/internal/service/application/domain/**, **/com/selina/lending/api/ServletInitializer**"
 	}
 }
 

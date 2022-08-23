@@ -32,10 +32,10 @@ public interface DIPApplicationRequestMapper {
     DIPApplicationRequestMapper INSTANCE = Mappers.getMapper(DIPApplicationRequestMapper.class);
 
     @InheritConfiguration(name = "mapDipApplicationRequest")
-    @Mappings({@Mapping(target= "applicationType", source = "dipApplicationRequest.requestType")})
+    @Mapping(target= "applicationType", source = "dipApplicationRequest.requestType")
     ApplicationRequest mapToApplicationRequest(DIPApplicationRequest dipApplicationRequest);
 
     @InheritConfiguration(name = "mapApplicationRequest")
-    @Mappings({@Mapping(target= "applicationType", source = "applicationRequest.requestType")})
+    @Mapping(target= "applicationType", source = "applicationRequest.requestType")
     ApplicationRequest mapToApplicationRequest(com.selina.lending.internal.dto.ApplicationRequest applicationRequest);
 }

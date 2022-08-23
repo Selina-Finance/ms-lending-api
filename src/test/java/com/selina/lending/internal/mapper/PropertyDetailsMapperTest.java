@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-public class PropertyDetailsMapperTest extends MapperBase {
+class PropertyDetailsMapperTest extends MapperBase {
 
     @Test
-    public void mapToPropertyDetailsDto() {
+    void mapToPropertyDetailsDto() {
         //Given
         var propertyDetails = getPropertyDetails();
 
@@ -69,7 +69,7 @@ public class PropertyDetailsMapperTest extends MapperBase {
     }
 
     @Test
-    public void mapToPropertyDetailsFromPropertyDetailsDto() {
+    void mapToPropertyDetailsFromPropertyDetailsDto() {
         //Given
         var propertyDetailsDto = getPropertyDetailsDto();
 
@@ -90,7 +90,7 @@ public class PropertyDetailsMapperTest extends MapperBase {
     }
 
     @Test
-    public void mapToPropertyDetailsFromDIPPropertyDetailsDto() {
+    void mapToPropertyDetailsFromDIPPropertyDetailsDto() {
         //Given
         var dipPropertyDetailsDto = getDIPPropertyDetailsDto();
 

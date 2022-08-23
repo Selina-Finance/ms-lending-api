@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-public class LoanInformationMapperTest extends MapperBase{
+class LoanInformationMapperTest extends MapperBase{
 
     @Test
-    public void mapToAdvancedLoanInformationDto() {
+    void mapToAdvancedLoanInformationDto() {
         //Given
         var loanInformation = getLoanInformation();
 
@@ -45,7 +45,7 @@ public class LoanInformationMapperTest extends MapperBase{
     }
 
     @Test
-    public void mapToLoanInformationDto() {
+    void mapToLoanInformationDto() {
         //Given
         var loanInformation = getLoanInformation();
 
@@ -61,7 +61,7 @@ public class LoanInformationMapperTest extends MapperBase{
     }
 
     @Test
-    public void mapToLoanInformationFromAdvancedLoanInformationDto() {
+    void mapToLoanInformationFromAdvancedLoanInformationDto() {
         //Given
         var advancedLoanInformationDto = getAdvancedLoanInformationDto();
 
@@ -80,7 +80,7 @@ public class LoanInformationMapperTest extends MapperBase{
     }
 
     @Test
-    public void mapToLoanInformationFromLoanInformationDto() {
+    void mapToLoanInformationFromLoanInformationDto() {
         //Given
         var loanInformationDto = getLoanInformationDto();
 

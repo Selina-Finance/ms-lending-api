@@ -42,20 +42,19 @@ import com.selina.lending.internal.dto.ExpenditureDto;
 import com.selina.lending.internal.dto.IncomeDto;
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
-
-public class EnumValueImplTest {
+ class EnumValueImplTest {
     private static final String INVALID_VALUE = "invalid";
     private static Validator validator;
 
     @BeforeAll
-    public static void setupValidatorInstance() {
+    static void setupValidatorInstance() {
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             validator = factory.getValidator();
         }
     }
 
     @Test
-    public void validateLoanInformation() {
+    void validateLoanInformation() {
         //Given
         var loanInformationDto = LoanInformationDto.builder()
                 .requestedLoanAmount(10000)
@@ -77,7 +76,7 @@ public class EnumValueImplTest {
     }
 
     @Test
-    public void validateExpenditure() {
+    void validateExpenditure() {
         //Given
         var expenditure = ExpenditureDto.builder().expenditureType(INVALID_VALUE).frequency(INVALID_VALUE).build();
 
@@ -93,7 +92,7 @@ public class EnumValueImplTest {
     }
 
     @Test
-    public void validateApplicationRequest() {
+    void validateApplicationRequest() {
         //Given
         var applicationRequest = ApplicationRequest.builder()
                 .requestType(INVALID_VALUE)
@@ -113,7 +112,7 @@ public class EnumValueImplTest {
     }
 
     @Test
-    public void validateIncome() {
+    void validateIncome() {
         //Given
         var income = IncomeDto.builder().income(List.of(IncomeItemDto.builder().type(INVALID_VALUE).build())).build();
 
@@ -130,7 +129,7 @@ public class EnumValueImplTest {
     }
 
     @Test
-    public void validateEmployment() {
+    void validateEmployment() {
         //Given
         var employment = EmploymentDto.builder()
                 .employmentStatus(INVALID_VALUE)
@@ -152,7 +151,7 @@ public class EnumValueImplTest {
     }
 
     @Test
-    public void validateDIPApplicant() {
+    void validateDIPApplicant() {
         //Given
         var applicant = DIPApplicantDto.builder().residentialStatus(INVALID_VALUE).title(INVALID_VALUE).maritalStatus(
                 INVALID_VALUE).nationality(INVALID_VALUE).build();

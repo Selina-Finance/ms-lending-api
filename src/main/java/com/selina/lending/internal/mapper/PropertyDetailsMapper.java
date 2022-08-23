@@ -37,12 +37,10 @@ public interface PropertyDetailsMapper {
     DIPPropertyDetailsDto mapToPropertyDetailsDto (PropertyDetails propertyDetails);
 
     @InheritConfiguration(name = "mapPropertyDetails")
-    @Mappings({@Mapping(target = "whenHasLastPurchased", source = "dipPropertyDetailsDto.whenLastPurchased")
-    })
+    @Mapping(target = "whenHasLastPurchased", source = "dipPropertyDetailsDto.whenLastPurchased")
     PropertyDetails mapToPropertyDetails(DIPPropertyDetailsDto dipPropertyDetailsDto);
 
     @InheritConfiguration(name = "mapPropertyDetails")
-    @Mappings({@Mapping(target = "whenHasLastPurchased", source = "propertyDetailsDto.whenLastPurchased"),
-    })
+    @Mapping(target = "whenHasLastPurchased", source = "propertyDetailsDto.whenLastPurchased")
     PropertyDetails mapToPropertyDetails(PropertyDetailsDto propertyDetailsDto);
 }

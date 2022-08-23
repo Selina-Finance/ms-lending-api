@@ -24,11 +24,10 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.dto.DIPApplicationDto;
-
-public class ApplicationResponseMapperTest extends MapperBase {
+class ApplicationResponseMapperTest extends MapperBase {
 
     @Test
-    public void mapToApplicationResponseDto() {
+    void mapToApplicationResponseDto() {
         //Given
         var applicationResponse = getApplicationResponse();
 

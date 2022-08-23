@@ -27,7 +27,8 @@ import com.selina.lending.internal.dto.ApplicationResponse;
 @Mapper(uses = {ApplicationMapper.class})
 public interface ApplicationResponseMapper {
     ApplicationResponseMapper INSTANCE = Mappers.getMapper(ApplicationResponseMapper.class);
-    @Mappings({@Mapping(target= "requestType", source = "applicationResponse.applicationType")})
+
+    @Mapping(target= "requestType", source = "applicationResponse.applicationType")
     ApplicationResponse mapToApplicationResponseDto(
             com.selina.lending.internal.service.application.domain.ApplicationResponse applicationResponse);
 }

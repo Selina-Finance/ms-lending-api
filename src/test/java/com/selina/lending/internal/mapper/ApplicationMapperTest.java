@@ -23,11 +23,10 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.Test;
-
-public class ApplicationMapperTest extends MapperBase {
+class ApplicationMapperTest extends MapperBase {
 
     @Test
-    public void mapToDIPApplicationDto() {
+    void mapToDIPApplicationDto() {
         //Given
         var application = getApplication();
 
@@ -55,7 +54,7 @@ public class ApplicationMapperTest extends MapperBase {
     }
 
     @Test
-    public void mapToApplication() {
+    void mapToApplication() {
         //Given
         var applicationDto = getDIPApplicationDto();
 

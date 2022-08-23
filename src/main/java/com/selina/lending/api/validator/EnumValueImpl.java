@@ -30,8 +30,7 @@ public class EnumValueImpl implements ConstraintValidator<EnumValue, String> {
     @Override
     public void initialize(EnumValue constraintAnnotation) {
         acceptedValues = Stream.of(constraintAnnotation.enumClass().getEnumConstants())
-                .map(Enum::toString)
-                .collect(Collectors.toList());
+                .map(Enum::toString).toList();
     }
 
     @Override

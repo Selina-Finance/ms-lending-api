@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LendingControllerUnitTest {
+class LendingControllerUnitTest {
 
     private static final String APPLICATION_ID = UUID.randomUUID().toString();
 
@@ -41,7 +41,7 @@ public class LendingControllerUnitTest {
     private LendingController lendingController;
 
     @Test
-    public void getApplication() {
+    void getApplication() {
         //Given
         when(lendingService.getApplication(eq(APPLICATION_ID))).thenReturn(Optional.of(mwApplicationDecisionResponse));
 
@@ -53,7 +53,7 @@ public class LendingControllerUnitTest {
     }
 
     @Test
-    public void createDipApplication() {
+    void createDipApplication() {
         //Given
         when(lendingService.createDipApplication(eq(dipApplicationRequest))).thenReturn(mwApplicationResponse);
 
@@ -65,7 +65,7 @@ public class LendingControllerUnitTest {
     }
 
     @Test
-    public void updateDipApplication() {
+    void updateDipApplication() {
         //Given
         doNothing().when(lendingService).updateDipApplication(eq(APPLICATION_ID), eq(dipApplicationRequest));
 
