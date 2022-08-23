@@ -30,11 +30,12 @@ build_story:
 preview:
 	helmfile --file helmfile.yaml template --validate --include-crds --output-dir-template /tmp/generate/ 
 
-build: sonarcube
-	gradle test jacocoTestReport
+build: build_test sonarcube
 	gradle build --no-daemon
 	rm -f build/libs/*-plain.jar  
 
+build_test:
+	gradle test jacocoTestReport
 # Section for Java Lib
 build_lib:
 	#gradle test
