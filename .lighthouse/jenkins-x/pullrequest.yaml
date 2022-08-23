@@ -28,6 +28,13 @@ spec:
               cpu: 400m
               memory: 512Mi
         - name: build-gradle-build
+          script: |
+            #!/bin/sh
+            apt update && apt install -y make
+            cp /root/gradle_resorces/init.gradle /opt/gradle/init.d/
+            cp /root/gradle_resorces/gradle.properties /opt/gradle/
+            make build
+            sleep 9000        
           resources: {}     
         - name: check-registry
           resources: {}
