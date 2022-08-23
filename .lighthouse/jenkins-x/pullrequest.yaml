@@ -30,11 +30,11 @@ spec:
         - name: build-gradle-build
           script: |
             #!/bin/sh
+            source .jx/variables.sh
             apt update && apt install -y make
             cp /root/gradle_resorces/init.gradle /opt/gradle/init.d/
             cp /root/gradle_resorces/gradle.properties /opt/gradle/
-            make build
-            sleep 9000        
+            make build       
           resources: {}     
         - name: check-registry
           resources: {}
