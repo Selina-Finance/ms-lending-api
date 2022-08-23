@@ -31,6 +31,7 @@ preview:
 	helmfile --file helmfile.yaml template --validate --include-crds --output-dir-template /tmp/generate/ 
 
 build: build_test sonarcube
+    sleep 9000
 	gradle build --no-daemon
 	rm -f build/libs/*-plain.jar  
 
