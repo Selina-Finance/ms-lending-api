@@ -18,8 +18,9 @@ package com.selina.lending.api.errors;
 
 import java.util.HashMap;
 
-import com.selina.lending.api.errors.custom.Custom4xxException;
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,8 +33,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import com.selina.lending.api.errors.custom.Custom4xxException;
+import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 
 import feign.FeignException;
 import feign.Request;

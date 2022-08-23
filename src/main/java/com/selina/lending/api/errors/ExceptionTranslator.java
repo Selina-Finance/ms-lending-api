@@ -26,6 +26,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -40,7 +41,6 @@ import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import feign.FeignException;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -63,18 +63,16 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         return entity;
     }
 
-    private ResponseEntity<Problem> mapConstraintViolationProblem(@NonNull ResponseEntity<Problem> entity) {
+    private ResponseEntity<Problem> mapConstraintViolationProblem(@NotNull ResponseEntity<Problem> entity) {
         Problem problem = entity.getBody();
-        ProblemBuilder builder = Problem
-                .builder()
-                .withStatus(problem.getStatus())
-                .withTitle(problem.getTitle())
-                .with(VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations());
+        assert problem != null;
+        ProblemBuilder builder = Problem.builder().withStatus(problem.getStatus()).withTitle(problem.getTitle()).with(
+                VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations());
         return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
     }
 
     @Override
-    public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
+    public ProblemBuilder prepare(@NotNull final Throwable throwable, @NotNull final StatusType status, @NotNull final URI type) {
         if (throwable instanceof FeignException feignException) {
             return buildProblem(new HttpStatusAdapter(HttpStatus.valueOf(feignException.status())), feignException.contentUTF8(), feignException);
         }
