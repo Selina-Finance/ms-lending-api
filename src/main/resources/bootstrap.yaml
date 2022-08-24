@@ -6,3 +6,5 @@ spring:
       config:
         enabled: false
       enabled: false
+    vault:
+      enabled: false
