@@ -46,6 +46,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8'
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8-config'
 	implementation 'de.codecentric:spring-boot-admin-starter-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
