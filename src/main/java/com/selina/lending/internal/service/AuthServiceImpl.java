@@ -15,27 +15,16 @@
  *
  */
 
-package com.selina.lending.api.controller.auth;
+package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.auth.AuthTokenResponse;
 import com.selina.lending.internal.dto.auth.CredentialsDto;
-import com.selina.lending.internal.service.AuthService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
-@Slf4j
-public class AuthController implements AuthOperations {
-
-    private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
+@Service
+public class AuthServiceImpl implements AuthService {
     @Override
-    public ResponseEntity<AuthTokenResponse> createToken(CredentialsDto credentialsDto) {
+    public AuthTokenResponse getTokenByCredentials(CredentialsDto credentialsDto) {
         return null;
     }
 }
