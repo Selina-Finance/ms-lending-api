@@ -154,7 +154,7 @@ volumes:
  - name: ms-lending-api
    configMap:
      name: ms-lending-api     
- - name: vault-ca
+ - name: vault-cacert
    emptyDir: {}
  - name: vault-jks-cacert
    emptyDir: {}  
@@ -222,7 +222,7 @@ deploymentInitContainers:
       terminationMessagePolicy: File
       volumeMounts:
       - mountPath: /tmp/vault
-        name: vault-ca
+        name: vault-cacert
     - name: init-vault-secret-jks
       image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
       command:
