@@ -156,8 +156,8 @@ volumes:
      name: ms-lending-api     
  - name: vault-cacert
    emptyDir: {}
-#  - name: vault-jks-cacert
-#    emptyDir: {}  
+ - name: vault-jks-cacert
+   emptyDir: {}  
 
 
 volumeMounts:
@@ -165,8 +165,8 @@ volumeMounts:
    mountPath: /spring/cloud/
  - name: ms-lending-api
    mountPath: /spring/cloud/ms-lending-api
-#  - name: vault-jks-cacert 
-#    mountPath: /vault/jkscacert
+ - name: vault-jks-cacert 
+   mountPath: /vault/jkscacert
   
 #  - name: vault-ca
 #    mountPath: /usr/local/share/ca-certificates

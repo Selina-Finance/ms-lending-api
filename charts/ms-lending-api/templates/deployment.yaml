@@ -72,36 +72,23 @@ spec:
             name: vault-cacert
         - name: init-vault-secret-jks
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          # command:
-          #   - keytool
-          #   - -importcert 
-          #   - -storepass 
-          #   - changeit 
-          #   - -noprompt 
-          #   - -file 
-          #   - /vault/cacert/ca.crt 
-          #   - -keystore 
-          #   - /vault/jkscacert/ca.jks
           command:
             - keytool
-            - -import
-            - -trustcacerts 
-            - -alias 
-            - vaultca
+            - -importcert 
+            - -storepass 
+            - changeit 
             - -noprompt 
             - -file 
             - /vault/cacert/ca.crt 
             - -keystore 
-            - /usr/lib/jvm/java-17-amazon-corretto/lib/security/cacerts 
-            - -storepass 
-            - changeit
+            - /vault/jkscacert/vaultca.jks
 
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts: 
           - name: vault-cacert
             mountPath: /vault/cacert
-          # - name: vault-jks-cacert
-          #   mountPath: /vault/jkscacert 
+          - name: vault-jks-cacert
+            mountPath: /vault/jkscacert 
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
