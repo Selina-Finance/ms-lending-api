@@ -154,8 +154,8 @@ volumes:
  - name: ms-lending-api
    configMap:
      name: ms-lending-api     
-  - name: vault-ca
-    emptyDir: {}
+ - name: vault-ca
+   emptyDir: {}
 #   # - name: vault-ca
 #   #   secret:
 #   #     secretName: vault-ca
