@@ -63,7 +63,7 @@ spec:
           args:
           - kubectl get secret -n jx-vault vault-tls -o jsonpath='{.data.ca\.crt}' |
             base64 --decode > /tmp/vault/ca.crt
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
@@ -82,7 +82,7 @@ spec:
             - /vault/cacert/ca.crt 
             - -keystore 
             - /vault/jkscacert/ca.jks
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts: 
           - name: vault-cacert
             mountPath: /vault/cacert
