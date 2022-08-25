@@ -168,39 +168,4 @@ volumeMounts:
  - name: vault-jks-cacert 
    mountPath: /vault/jkscacert
   
-#  - name: vault-ca
-#    mountPath: /usr/local/share/ca-certificates
-#   # - name: cacerts
-#   #   mountPath: /usr/local/openjdk-11/lib/security/
-
-
 fieldRef: true
-
-
-# deploymentInitContainers:
-#   initContainers:
-#   - command:
-#     - bash
-#     - -c
-#     - |
-#       ls -la /usr/local/openjdk-11/lib/security/
-#       cp -R /usr/local/openjdk-11/lib/security/* /cacerts/
-#       ls -la /cacerts/
-#       cat /security/vault-ca.crt
-#       keytool -import -noprompt -trustcacerts -alias vaultca -file /security/vault-ca.crt -keystore /cacerts/cacerts -storepass changeit
-#       #keytool -import -alias vaultca -file /security/vault-ca.crt  -keystore /cacerts/cacerts -storepass changeit -noprompt
-#       keytool -list -keystore /cacerts/cacerts -alias vaultca -storepass changeit -noprompt
-#       keytool -keystore /cacerts/cacerts -storepass changeit -list
-#       ls -la /cacerts/
-#     image: 986794016656.dkr.ecr.eu-west-2.amazonaws.com/baseimage:openjdk-11-jdk-slim
-#     imagePullPolicy: IfNotPresent
-#     name: init-vault-secret
-#     resources: {}
-#     terminationMessagePath: /dev/termination-log
-#     terminationMessagePolicy: File
-#     volumeMounts:
-#     - mountPath: /cacerts
-#       name: cacerts
-#     - mountPath: /security
-#       name: vault-ca
-
