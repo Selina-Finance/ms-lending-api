@@ -54,6 +54,41 @@ spec:
       volumes:
 {{ toYaml .Values.volumes | indent 10 }}
 {{- end }}
+      initContainers:
+        - name: init-vault-secret
+          image: bitnami/kubectl:1.20.2
+          command:
+          - /bin/sh
+          - -c
+          args:
+          - kubectl get secret -n jx-vault vault-tls -o jsonpath='{.data.ca\.crt}' |
+            base64 --decode > /tmp/vault/ca.crt
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp/vault
+            name: vault-cacert
+        - name: init-vault-secret-jks
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command:
+            - keytool
+            - -importcert 
+            - -storepass 
+            - changeit 
+            - -noprompt 
+            - -file 
+            - /vault/cacert/ca.crt 
+            - -keystore 
+            - /vault/jkscacert/vaultca.jks
+
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts: 
+          - name: vault-cacert
+            mountPath: /vault/cacert
+          - name: vault-jks-cacert
+            mountPath: /vault/jkscacert 
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
