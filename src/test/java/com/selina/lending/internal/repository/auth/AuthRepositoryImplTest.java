@@ -21,9 +21,9 @@ import com.selina.lending.internal.api.AuthApi;
 import com.selina.lending.internal.dto.auth.AuthTokenResponse;
 import com.selina.lending.internal.dto.auth.CredentialsDto;
 import com.selina.lending.internal.service.application.domain.auth.LoginResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -36,17 +36,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AuthRepositoryTest {
+class AuthRepositoryImplTest {
 
     @Mock
     private AuthApi authApi;
 
-    private AuthRepository authRepository;
-
-    @BeforeEach
-    void setUp() {
-        authRepository = new AuthRepositoryImpl(authApi);
-    }
+    @InjectMocks
+    private AuthRepositoryImpl authRepository;
 
     @Test
     void shouldMapApiResponseWhenGetTokenByCredentialsInvoked() {
