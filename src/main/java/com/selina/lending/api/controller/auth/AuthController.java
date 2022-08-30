@@ -36,6 +36,7 @@ public class AuthController implements AuthOperations {
 
     @Override
     public ResponseEntity<AuthTokenResponse> createToken(CredentialsDto credentialsDto) {
-        return null;
+        log.info("Request to create an auth token");
+        return ResponseEntity.ok(authService.getTokenByCredentials(credentialsDto));
     }
 }

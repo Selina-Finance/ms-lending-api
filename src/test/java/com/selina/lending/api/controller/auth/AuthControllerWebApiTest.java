@@ -31,8 +31,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ContextConfiguration(classes = SecurityConfig.class)
@@ -52,8 +55,8 @@ class AuthControllerWebApiTest {
     void shouldReturn200OKWhenTokenWasSuccessfullyBuilt() throws Exception {
         //Given
         var credentials = new CredentialsDto("broker", "super-secret");
-        var token = new AuthTokenResponse("theTokenValue", 60);
-        when(authService.getTokenByCredentials(credentials)).thenReturn(token);
+        var expectedToken = new AuthTokenResponse("theTokenValue", 60);
+        when(authService.getTokenByCredentials(credentials)).thenReturn(expectedToken);
 
         //When
         mockMvc.perform(
