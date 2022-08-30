@@ -32,7 +32,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthTokenResponse getTokenByCredentials(CredentialsDto credentialsDto) {
-        var tokenDto = repository.getTokenByCredentials(credentialsDto);
-        return new AuthTokenResponse(tokenDto.access_token(), tokenDto.expires_in());
+        return repository.getTokenByCredentials(credentialsDto);
     }
 }

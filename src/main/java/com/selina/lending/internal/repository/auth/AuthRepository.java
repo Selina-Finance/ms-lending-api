@@ -17,9 +17,9 @@
 
 package com.selina.lending.internal.repository.auth;
 
+import com.selina.lending.internal.dto.auth.AuthTokenResponse;
 import com.selina.lending.internal.dto.auth.CredentialsDto;
-import com.selina.lending.internal.service.application.domain.auth.LoginResponse;
 
 public interface AuthRepository {
-    LoginResponse getTokenByCredentials(CredentialsDto credentialsDto);
+    AuthTokenResponse getTokenByCredentials(CredentialsDto credentialsDto);
 }

@@ -18,6 +18,7 @@
 package com.selina.lending.internal.repository.auth;
 
 import com.selina.lending.internal.api.AuthApi;
+import com.selina.lending.internal.dto.auth.AuthTokenResponse;
 import com.selina.lending.internal.dto.auth.CredentialsDto;
 import com.selina.lending.internal.service.application.domain.auth.LoginResponse;
 import org.springframework.stereotype.Component;
@@ -34,13 +35,14 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public LoginResponse getTokenByCredentials(CredentialsDto credentialsDto) {
+    public AuthTokenResponse getTokenByCredentials(CredentialsDto credentialsDto) {
 
-        return authApi.login(Map.of(
+        var apiResponse = authApi.login(Map.of(
                         "client_id", credentialsDto.clientId(),
                         "client_secret", credentialsDto.clientSecret(),
                         "grant_type", "client_credentials"
                 )
         );
+        return new AuthTokenResponse(apiResponse.access_token(), apiResponse.expires_in());
     }
 }
