@@ -18,7 +18,6 @@
 package com.selina.lending.api.controller.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.config.security.SecurityConfig;
 import com.selina.lending.internal.dto.auth.AuthTokenResponse;
 import com.selina.lending.internal.dto.auth.CredentialsDto;
 import com.selina.lending.internal.service.AuthService;
@@ -26,16 +25,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ContextConfiguration(classes = SecurityConfig.class)
+@WithMockUser
 @WebMvcTest(value = AuthController.class)
 class AuthControllerWebApiTest {
 
@@ -49,20 +51,23 @@ class AuthControllerWebApiTest {
     private AuthService authService;
 
     @Test
-    void shouldReturn200OKWhenTokenWasSuccessfullyBuilt() throws Exception {
+    void shouldReturn200OKWhenTokenWasBuiltSuccessfully() throws Exception {
         //Given
         var credentials = new CredentialsDto("broker", "super-secret");
-        var expectedToken = new AuthTokenResponse("theTokenValue", 60);
-        when(authService.getTokenByCredentials(credentials)).thenReturn(expectedToken);
+        var response = new AuthTokenResponse("theTokenValue", 60);
+        when(authService.getTokenByCredentials(credentials)).thenReturn(response);
 
         //When
         mockMvc.perform(
-                        post("/lending/auth/token")
+                        post("/auth/token")
                                 .with(csrf())
                                 .content(objectMapper.writeValueAsString(credentials))
                                 .contentType(APPLICATION_JSON)
                 )
                 //Then
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.accessToken").value(response.accessToken()))
+                .andExpect(jsonPath("$.expiresIn").value(response.expiresIn()));
     }
 }
