@@ -45,7 +45,7 @@ public interface AuthOperations {
                                     mediaType = APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = TokenResponse.class))
                     }),
-            @ApiResponse(responseCode = "400", description = "Invalid client credentials request", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid client credentials", content = @Content),
     })
     @PostMapping(value = "/auth/token")
     ResponseEntity<TokenResponse> createToken(@Valid @RequestBody Credentials credentials);

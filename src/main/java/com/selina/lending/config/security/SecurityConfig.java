@@ -40,7 +40,7 @@ public class SecurityConfig {
         http
                 .csrf()
                 .ignoringAntMatchers("/actuator/**")
-                .ignoringAntMatchers("/auth/**")
+                .ignoringAntMatchers("/auth/token")
                 .and()
                 .cors()
                 .and()
@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/token").permitAll()
 
                 .and()
                 .authorizeRequests()
