@@ -21,6 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.internal.dto.auth.AuthTokenResponse;
 import com.selina.lending.internal.dto.auth.CredentialsDto;
 import com.selina.lending.internal.service.AuthService;
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,9 +31,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+
+import static feign.Request.HttpMethod.GET;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -69,5 +76,26 @@ class AuthControllerWebApiTest {
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.accessToken").value(response.accessToken()))
                 .andExpect(jsonPath("$.expiresIn").value(response.expiresIn()));
+    }
+
+    @Test
+    void shouldReturn400BadRequestWhenCreateTokenFailed() throws Exception {
+        //Given
+        var credentials = new CredentialsDto("broker", "super-secret");
+
+        var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
+        var exception = new FeignException.BadRequest("Bad request", request, "bad request".getBytes(), null);
+        when(authService.getTokenByCredentials(credentials)).thenThrow(exception);
+
+        //When
+        mockMvc.perform(
+                        post("/auth/token")
+                                .with(csrf())
+                                .content(objectMapper.writeValueAsString(credentials))
+                                .contentType(APPLICATION_JSON)
+                )
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(APPLICATION_PROBLEM_JSON));
     }
 }
