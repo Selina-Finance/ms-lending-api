@@ -17,11 +17,19 @@
 
 package com.selina.lending.internal.api;
 
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.auth.LoginResponse;
+import feign.form.spring.SpringFormEncoder;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import feign.codec.Encoder;
+import java.util.Map;
 
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @FeignClient(
@@ -32,8 +40,15 @@ public interface AuthApi {
 
     @PostMapping(
             path = "/protocol/openid-connect/token",
-            consumes = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_FORM_URLENCODED_VALUE,
             produces = APPLICATION_JSON_VALUE)
-    ApplicationResponse getToken(ApplicationRequest applicationRequest);
+    LoginResponse login(@RequestBody Map<String, ?> loginRequest);
 
+
+    class Configuration {
+        @Bean
+        Encoder feignFormEncoder(ObjectFactory<HttpMessageConverters> converters) {
+            return new SpringFormEncoder(new SpringEncoder(converters));
+        }
+    }
 }

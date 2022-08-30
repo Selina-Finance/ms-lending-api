@@ -19,12 +19,20 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.auth.AuthTokenResponse;
 import com.selina.lending.internal.dto.auth.CredentialsDto;
+import com.selina.lending.internal.repository.auth.AuthRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+    private final AuthRepository repository;
+
+    public AuthServiceImpl(AuthRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public AuthTokenResponse getTokenByCredentials(CredentialsDto credentialsDto) {
-        return null;
+        var tokenDto = repository.getTokenByCredentials(credentialsDto);
+        return new AuthTokenResponse(tokenDto.access_token(), tokenDto.expires_in());
     }
 }

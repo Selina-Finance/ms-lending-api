@@ -18,8 +18,8 @@
 package com.selina.lending.internal.repository.auth;
 
 import com.selina.lending.internal.dto.auth.CredentialsDto;
-import com.selina.lending.internal.service.application.domain.auth.AuthTokenDto;
+import com.selina.lending.internal.service.application.domain.auth.LoginResponse;
 
 public interface AuthRepository {
-    AuthTokenDto getTokenByCredentials(CredentialsDto credentialsDto);
+    LoginResponse getTokenByCredentials(CredentialsDto credentialsDto);
 }
