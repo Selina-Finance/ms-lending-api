@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.api;
 
-import com.selina.lending.internal.service.application.domain.auth.LoginResponse;
+import com.selina.lending.internal.service.application.domain.auth.AuthApiTokenResponse;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.beans.factory.ObjectFactory;
@@ -43,8 +43,7 @@ public interface AuthApi {
             path = "/protocol/openid-connect/token",
             consumes = APPLICATION_FORM_URLENCODED_VALUE,
             produces = APPLICATION_JSON_VALUE)
-    LoginResponse login(@RequestBody Map<String, ?> params);
-
+    AuthApiTokenResponse login(@RequestBody Map<String, ?> params);
 
     class Configuration { // to execute Content-Type: application/x-www-form-urlencoded request
         @Bean

@@ -15,10 +15,10 @@
  *
  */
 
-package com.selina.lending.internal.dto.auth;
+package com.selina.lending.internal.service.application.domain.auth;
 
-public record AuthTokenRequest(
-        String accessToken,
-        Integer expiresIn
+public record AuthApiTokenResponse(
+        String access_token,
+        Integer expires_in
 ) {
 }

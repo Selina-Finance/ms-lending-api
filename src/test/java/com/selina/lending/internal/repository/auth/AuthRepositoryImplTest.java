@@ -18,9 +18,9 @@
 package com.selina.lending.internal.repository.auth;
 
 import com.selina.lending.internal.api.AuthApi;
-import com.selina.lending.internal.dto.auth.AuthTokenResponse;
-import com.selina.lending.internal.dto.auth.CredentialsDto;
-import com.selina.lending.internal.service.application.domain.auth.LoginResponse;
+import com.selina.lending.internal.dto.auth.TokenResponse;
+import com.selina.lending.internal.dto.auth.Credentials;
+import com.selina.lending.internal.service.application.domain.auth.AuthApiTokenResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,22 +47,22 @@ class AuthRepositoryImplTest {
     @Test
     void shouldMapApiResponseWhenGetTokenByCredentialsInvoked() {
         // Given
-        var credentials = new CredentialsDto("the-client-id", "client-super-secret");
-        var apiResponse = new LoginResponse("auth-token", 300);
+        var credentials = new Credentials("the-client-id", "client-super-secret");
+        var apiResponse = new AuthApiTokenResponse("auth-token", 300);
         when(authApi.login(any())).thenReturn(apiResponse);
 
         // When
         var result = authRepository.getTokenByCredentials(credentials);
 
         // Then
-        assertThat(result).isEqualTo(new AuthTokenResponse(apiResponse.access_token(), apiResponse.expires_in()));
+        assertThat(result).isEqualTo(new TokenResponse(apiResponse.access_token(), apiResponse.expires_in()));
     }
 
     @Test
     void shouldCallAuthApiWhenGetTokenByCredentialsInvoked() {
         // Given
-        var credentials = new CredentialsDto("the-client-id", "client-super-secret");
-        when(authApi.login(any())).thenReturn(new LoginResponse("auth-token", 300));
+        var credentials = new Credentials("the-client-id", "client-super-secret");
+        when(authApi.login(any())).thenReturn(new AuthApiTokenResponse("auth-token", 300));
 
         var expectedAuthApiRequestParams = Map.of(
                 "client_id", credentials.clientId(),

@@ -17,8 +17,8 @@
 
 package com.selina.lending.api.controller.auth;
 
-import com.selina.lending.internal.dto.auth.AuthTokenResponse;
-import com.selina.lending.internal.dto.auth.CredentialsDto;
+import com.selina.lending.internal.dto.auth.TokenResponse;
+import com.selina.lending.internal.dto.auth.Credentials;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,10 +43,10 @@ public interface AuthOperations {
                     content = {
                             @Content(
                                     mediaType = APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AuthTokenResponse.class))
+                                    schema = @Schema(implementation = TokenResponse.class))
                     }),
             @ApiResponse(responseCode = "400", description = "Invalid client credentials request", content = @Content),
     })
     @PostMapping(value = "/auth/token")
-    ResponseEntity<AuthTokenResponse> createToken(@Valid @RequestBody CredentialsDto credentialsDto);
+    ResponseEntity<TokenResponse> createToken(@Valid @RequestBody Credentials credentials);
 }

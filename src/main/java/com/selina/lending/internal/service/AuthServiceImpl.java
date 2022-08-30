@@ -17,8 +17,8 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.internal.dto.auth.AuthTokenResponse;
-import com.selina.lending.internal.dto.auth.CredentialsDto;
+import com.selina.lending.internal.dto.auth.TokenResponse;
+import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.repository.auth.AuthRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthTokenResponse getTokenByCredentials(CredentialsDto credentialsDto) {
-        return repository.getTokenByCredentials(credentialsDto);
+    public TokenResponse getTokenByCredentials(Credentials credentials) {
+        return repository.getTokenByCredentials(credentials);
     }
 }

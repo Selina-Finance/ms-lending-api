@@ -17,8 +17,8 @@
 
 package com.selina.lending.api.controller.auth;
 
-import com.selina.lending.internal.dto.auth.AuthTokenResponse;
-import com.selina.lending.internal.dto.auth.CredentialsDto;
+import com.selina.lending.internal.dto.auth.TokenResponse;
+import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +35,8 @@ public class AuthController implements AuthOperations {
     }
 
     @Override
-    public ResponseEntity<AuthTokenResponse> createToken(CredentialsDto credentialsDto) {
+    public ResponseEntity<TokenResponse> createToken(Credentials credentials) {
         log.info("Request to create an auth token");
-        return ResponseEntity.ok(authService.getTokenByCredentials(credentialsDto));
+        return ResponseEntity.ok(authService.getTokenByCredentials(credentials));
     }
 }

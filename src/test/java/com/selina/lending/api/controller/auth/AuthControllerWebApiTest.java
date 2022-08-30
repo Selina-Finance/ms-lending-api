@@ -18,8 +18,8 @@
 package com.selina.lending.api.controller.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.internal.dto.auth.AuthTokenResponse;
-import com.selina.lending.internal.dto.auth.CredentialsDto;
+import com.selina.lending.internal.dto.auth.TokenResponse;
+import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.service.AuthService;
 import feign.FeignException;
 import feign.Request;
@@ -60,8 +60,8 @@ class AuthControllerWebApiTest {
     @Test
     void shouldReturn200OKWhenTokenWasBuiltSuccessfully() throws Exception {
         //Given
-        var credentials = new CredentialsDto("broker", "super-secret");
-        var response = new AuthTokenResponse("theTokenValue", 60);
+        var credentials = new Credentials("broker", "super-secret");
+        var response = new TokenResponse("theTokenValue", 60);
         when(authService.getTokenByCredentials(credentials)).thenReturn(response);
 
         //When
@@ -81,7 +81,7 @@ class AuthControllerWebApiTest {
     @Test
     void shouldReturn400BadRequestWhenCreateTokenFailed() throws Exception {
         //Given
-        var credentials = new CredentialsDto("broker", "super-secret");
+        var credentials = new Credentials("broker", "super-secret");
 
         var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
         var exception = new FeignException.BadRequest("Bad request", request, "bad request".getBytes(), null);

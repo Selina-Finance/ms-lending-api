@@ -17,8 +17,7 @@
 
 package com.selina.lending.internal.dto.auth;
 
-public record AuthTokenResponse(
-        String accessToken,
-        Integer expiresIn
-) {
-}
+public record Credentials(
+        String clientId,
+        String clientSecret
+) {}
