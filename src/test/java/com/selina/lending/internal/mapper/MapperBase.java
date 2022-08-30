@@ -39,6 +39,7 @@ import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.dto.OfferDto;
 import com.selina.lending.internal.dto.PreviousNameDto;
+import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.service.application.domain.Address;
@@ -47,20 +48,35 @@ import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.Checklist;
+import com.selina.lending.internal.service.application.domain.CreditCheck;
+import com.selina.lending.internal.service.application.domain.CreditCommitments;
+import com.selina.lending.internal.service.application.domain.CreditPolicy;
+import com.selina.lending.internal.service.application.domain.Detail;
+import com.selina.lending.internal.service.application.domain.Document;
 import com.selina.lending.internal.service.application.domain.Employment;
 import com.selina.lending.internal.service.application.domain.Expenditure;
 import com.selina.lending.internal.service.application.domain.Facility;
 import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.Income;
 import com.selina.lending.internal.service.application.domain.Incomes;
+import com.selina.lending.internal.service.application.domain.Intermediary;
+import com.selina.lending.internal.service.application.domain.Lead;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.internal.service.application.domain.PreviousName;
+import com.selina.lending.internal.service.application.domain.PriorCharges;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
+import com.selina.lending.internal.service.application.domain.PublicInformation;
 import com.selina.lending.internal.service.application.domain.Required;
 import com.selina.lending.internal.service.application.domain.RuleOutcome;
+import com.selina.lending.internal.service.application.domain.Salesforce;
+import com.selina.lending.internal.service.application.domain.System;
+import com.selina.lending.internal.service.application.domain.Underwriting;
+import com.selina.lending.internal.service.application.domain.User;
+import com.selina.lending.internal.service.application.domain.VotersRoll;
 
 public abstract class MapperBase {
-    public static final String TITLE = "Mrs.";
+    public static final String TITLE = "Mrs";
     public static final String FIRST_NAME = "Sally";
     public static final String LAST_NAME = "Smith";
     public static final String EMAIL_ADDRESS = "sally.smith@someemail.com";
@@ -111,6 +127,25 @@ public abstract class MapperBase {
     public static final String MARRIED_STATUS = "Married";
     public static final Double FEE = 599.00;
     public static final String SOURCE_ACCOUNT = "Selina Finance Limited";
+    public static final String CREDIT_CHECK_SERVICE_USED = "Experian";
+    public static final int CREDIT_SCORE = 900;
+    public static final String CREDIT_CHECK_REF = "6HVRQLKGFH";
+    public static final String DOCUMENT_TYPE = "passport";
+    public static final String DETAIL_ID = "detailId123";
+    public static final String DETAIL_ACCOUNT_NUMBER = "8227422";
+    public static final String UNDERWRITER = "Madeline Scott";
+    public static final String UNDERWRITING_STAGE = "Underwriting Satge";
+    public static final String SALESFORCE_OPPORTUNITY_ID = "0062z000003YtBkAAK";
+    public static final String SALESFORCE_ACCOUNT_ID = "837312";
+    public static final String INTERMEDIARY_FIRSTNAME = "Jim";
+    public static final String FCA_NUMBER = "27127";
+    public static final String UTM_CAMPAIGN = "utm campaign";
+    public static final String UTM_SOURCE = "utm source";
+    public static final String UTM_MEDIUM = "utm medium";
+    public static final String HSBC = "HSBC";
+    public static final int MONTHLY_PAYMENT = 1000;
+    public static final String REPAYMENT_TYPE = "Capital and interest";
+    public static final String RATE_TYPE = "Fixed";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -270,7 +305,14 @@ public abstract class MapperBase {
                 .numberOfBedrooms(NUMBER_OF_BEDROOMS)
                 .hasAGarage(true)
                 .whenLastPurchased(WHEN_LAST_PURCHASED)
+                .numberOfPriorCharges(1)
+                .priorCharges(List.of(getPriorChargesDto()))
                 .build();
+    }
+
+    private PriorChargesDto getPriorChargesDto() {
+        return PriorChargesDto.builder().name(HSBC).monthlyPayment(MONTHLY_PAYMENT).repaymentType(REPAYMENT_TYPE).rateType(
+                RATE_TYPE).build();
     }
 
     protected RequiredDto getRequiredDto() {
@@ -308,9 +350,24 @@ public abstract class MapperBase {
                 .applicant2LivesWithApplicant1(false)
                 .livedInCurrentAddressFor3Years(true)
                 .dateOfBirth(DOB)
+                .previousNames(List.of(getPreviousName()))
                 .employment(getEmployment())
                 .income(getIncomes())
+                .checklist(getChecklist())
+                .creditCheck(getCreditCheck())
+                .documents(List.of(getDocument()))
                 .build();
+    }
+
+    private PreviousName getPreviousName() {
+        return PreviousName.builder().firstName(FIRST_NAME).build();
+    }
+
+    private Document getDocument() {
+        return Document.builder().documentType(DOCUMENT_TYPE).build();
+    }
+    private CreditCheck getCreditCheck() {
+        return CreditCheck.builder().serviceUsed(CREDIT_CHECK_SERVICE_USED).hardCheckCompleted(false).creditCheckReference(CREDIT_CHECK_REF).creditScore(CREDIT_SCORE).build();
     }
 
     private Incomes getIncomes() {
@@ -377,7 +434,14 @@ public abstract class MapperBase {
                 .propertyType(PROPERTY_TYPE)
                 .numberOfBedrooms(NUMBER_OF_BEDROOMS)
                 .hasAGarage(true)
+                .numberOfPriorCharges(1)
+                .priorCharges(List.of(getPriorCharges()))
                 .build();
+    }
+
+    private PriorCharges getPriorCharges() {
+        return PriorCharges.builder().name(HSBC).monthlyPayment(MONTHLY_PAYMENT).repaymentType(REPAYMENT_TYPE).rateType(
+                RATE_TYPE).build();
     }
 
     protected Application getApplication() {
@@ -426,6 +490,62 @@ public abstract class MapperBase {
                 .expenditure(List.of(getExpenditure()))
                 .fees(getFees())
                 .createdDate(CREATED_DATE)
+                .creditCommitments(getCreditCommitments())
+                .underwriting(getUnderwriting())
+                .lead(getLead())
+                .intermediary(getIntermediary())
+                .salesforce(getSalesforce())
                 .build();
     }
+
+    private Salesforce getSalesforce() {
+        return Salesforce.builder().opportunityId(SALESFORCE_OPPORTUNITY_ID).accountId(SALESFORCE_ACCOUNT_ID).build();
+    }
+
+    private Intermediary getIntermediary() {
+        return Intermediary.builder().contactFirstName(INTERMEDIARY_FIRSTNAME).fcaNumber(FCA_NUMBER).build();
+    }
+
+    private Lead getLead() {
+        return Lead.builder().utmCampaign(UTM_CAMPAIGN).utmMedium(UTM_MEDIUM).utmSource(UTM_SOURCE).build();
+    }
+
+    private CreditCommitments getCreditCommitments() {
+        return CreditCommitments.builder().creditPolicy(getCreditPolicy())
+                .system(getSystem()).creditPolicy(getCreditPolicy()).votersRoll(getVotersRoll())
+                .publicInformation(getPublicInformation())
+                .user(getUser())
+                .build();
+    }
+
+    private User getUser() {
+        return User.builder().detail(List.of(getDetail())).build();
+    }
+
+    private PublicInformation getPublicInformation() {
+        return PublicInformation.builder().system(getSystem()).build();
+    }
+
+    private VotersRoll getVotersRoll() {
+        return VotersRoll.builder().detail(List.of(getDetail())).build();
+    }
+
+    private CreditPolicy getCreditPolicy() {
+        return CreditPolicy.builder().detail(List.of(getDetail())).build();
+    }
+
+    private Detail getDetail() {
+        return Detail.builder().id(DETAIL_ID).accountNumber(DETAIL_ACCOUNT_NUMBER).build();
+    }
+
+    private System getSystem() {
+        return System.builder().detail(List.of(getDetail())).build();
+    }
+
+
+
+    private Underwriting getUnderwriting() {
+        return Underwriting.builder().underwritingOwner(UNDERWRITER).stageName(UNDERWRITING_STAGE).build();
+    }
+
 }

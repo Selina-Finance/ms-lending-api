@@ -16,6 +16,8 @@
 
 package com.selina.lending.internal.service.application.domain;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -29,6 +31,7 @@ public class PropertyDetails {
     String buildingName;
     String buildingNumber;
     String subBuildingName;
+    String propertyName;
     Integer udprn;
     String poBox;
     String county;
@@ -36,10 +39,11 @@ public class PropertyDetails {
     Double estimatedValue;
     String whenHasLastPurchased;
     Double purchaseValue;
-    Integer internalFloorSpace;
+    Integer propertyInternalFloorSpace;
     Integer numberOfPriorCharges;
     String propertyType;
-    int numberOfBedrooms;
+    Integer numberOfBedrooms;
+    Integer numberOfBathrooms;
     Boolean hasBeenAffectedByJapaneseKnotWeed;
     Boolean hasBeenBuiltInThePast2Years;
     Boolean hasSection20NoticeServed;
@@ -53,6 +57,7 @@ public class PropertyDetails {
     String tenure;
     Boolean isThePropertyAnExLocalAuthority;
     Boolean hasAGarage;
+    Integer numberOfParkingSpaces;
     Integer yearsRemainingOnLease;
     Integer hometrackConfidenceLevel;
     Double hometrackValuation;
@@ -65,4 +70,12 @@ public class PropertyDetails {
     Boolean notResidentialUse;
     Boolean isApplicantResidence;
     Boolean isAboveCommercialPropertyDetails;
-}
+    String areaOfOutdoorSpace;
+    String finishQuality;
+    Double valuationVerified;
+    Double propertyRiskValuation;
+    String propertyRiskValuationComment;
+    String finalValuationChannel;
+    String googleMaps;
+    List<PriorCharges> priorCharges;
+  }

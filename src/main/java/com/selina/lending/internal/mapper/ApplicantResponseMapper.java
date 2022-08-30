@@ -18,14 +18,17 @@
 package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.RuleOutcomeDto;
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
+import com.selina.lending.internal.dto.ApplicantResponseDto;
+import com.selina.lending.internal.service.application.domain.Applicant;
 
-@Mapper
-public interface RuleOutcomeMapper {
-    RuleOutcomeMapper INSTANCE = Mappers.getMapper(RuleOutcomeMapper.class);
+@Mapper(uses = {AddressMapper.class, ChecklistMapper.class, IncomeMapper.class, PreviousNameMapper.class,
+        EmploymentMapper.class, CreditCheckMapper.class, DocumentMapper.class})
+public interface ApplicantResponseMapper {
+    ApplicantResponseMapper INSTANCE = Mappers.getMapper(ApplicantResponseMapper.class);
 
-    RuleOutcomeDto mapToRuleOutcomeDto(RuleOutcome ruleOutcome);
+    @Mapping(target = "mobileNumber", source = "applicant.mobilePhoneNumber")
+    ApplicantResponseDto mapToApplicantResponseDto(Applicant applicant);
 }

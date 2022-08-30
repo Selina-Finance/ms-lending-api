@@ -20,12 +20,12 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.RuleOutcomeDto;
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
+import com.selina.lending.internal.dto.CreditCheckDto;
+import com.selina.lending.internal.service.application.domain.CreditCheck;
 
 @Mapper
-public interface RuleOutcomeMapper {
-    RuleOutcomeMapper INSTANCE = Mappers.getMapper(RuleOutcomeMapper.class);
+public interface CreditCheckMapper {
+    CreditCheckMapper INSTANCE = Mappers.getMapper(CreditCheckMapper.class);
 
-    RuleOutcomeDto mapToRuleOutcomeDto(RuleOutcome ruleOutcome);
+    CreditCheckDto mapToCreditCheckDto(CreditCheck creditCheck);
 }

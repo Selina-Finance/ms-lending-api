@@ -32,8 +32,8 @@ public class Applicant {
     String middleName;
     String gender;
     String dateOfBirth;
-    int numberOfAdultDependants;
-    int numberOfChildDependants;
+    Integer numberOfAdultDependants;
+    Integer numberOfChildDependants;
     Boolean livedInCurrentAddressFor3Years;
     Boolean applicant2LivesWithApplicant1For3Years;
     Boolean applicant2LivesWithApplicant1;
@@ -48,7 +48,6 @@ public class Applicant {
     Employment employment;
     List<PreviousName> previousNames;
     List<Address> addresses;
-    Hooyu hooyu;
     CreditCheck creditCheck;
     Checklist checklist;
     List<Document> documents;
@@ -56,4 +55,5 @@ public class Applicant {
     Boolean hasBeenSubjectToDebtSolutionsInPart6Years;
     Boolean kqUkResidency;
     Boolean notHavePermanentRightToResideInTheUk;
+    Boolean hasAnyCriminalConvictions;
 }

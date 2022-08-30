@@ -15,17 +15,24 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+public enum AreaOutdoorSpace {
+      NONE("None"),
+      BALCONY("Balcony"),
+      GARDEN("Garden"),
+      TERRACE("Terrace"),
+      VERY_LARGE_GARDEN("Very large garden"),
+      COURTYARD_GARDEN("Courtyard garden");
 
-import com.selina.lending.internal.dto.RuleOutcomeDto;
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
+      final String value;
 
-@Mapper
-public interface RuleOutcomeMapper {
-    RuleOutcomeMapper INSTANCE = Mappers.getMapper(RuleOutcomeMapper.class);
+      AreaOutdoorSpace (String value) {
+            this.value = value;
+      }
 
-    RuleOutcomeDto mapToRuleOutcomeDto(RuleOutcome ruleOutcome);
+      @Override
+      public String toString() {
+            return this.value;
+      }
 }

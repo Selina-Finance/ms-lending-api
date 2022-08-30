@@ -28,5 +28,4 @@ public interface FeesMapper {
     FeesMapper INSTANCE = Mappers.getMapper(FeesMapper.class);
 
     FeesDto mapToFeesDto(Fees fees);
-    Fees mapToFees(FeesDto feesDto);
 }

@@ -15,17 +15,24 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.service.application.domain;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import lombok.Builder;
+import lombok.Value;
 
-import com.selina.lending.internal.dto.RuleOutcomeDto;
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
-
-@Mapper
-public interface RuleOutcomeMapper {
-    RuleOutcomeMapper INSTANCE = Mappers.getMapper(RuleOutcomeMapper.class);
-
-    RuleOutcomeDto mapToRuleOutcomeDto(RuleOutcome ruleOutcome);
+@Builder
+@Value
+public class PriorCharges {
+    String name;
+    Integer monthlyPayment;
+    Integer outstandingBalance;
+    Integer monthlyPaymentVerified;
+    Integer outstandingBalanceVerified;
+    Integer remainingTerm;
+    String rateType;
+    String repaymentType;
+    String fixedRatePeriodEndDate;
+    Integer interestOnlyBalanceOfPartAndPartMortgage;
+    Boolean toBeConsolidated;
+    String status;
 }

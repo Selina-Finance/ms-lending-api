@@ -22,8 +22,11 @@ import lombok.Value;
 @Builder
 @Value
 public class Salesforce {
+    String contactName;
     String opportunityId;
-    String contactId;
+    String brokerAccountId;
     String accountId;
+    String opportunityName;
+    String ownerId;
     String reference;
 }
