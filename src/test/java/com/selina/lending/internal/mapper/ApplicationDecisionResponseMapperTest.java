@@ -92,7 +92,7 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(creditCheckDto.getServiceUsed(), equalTo(CREDIT_CHECK_SERVICE_USED));
         assertThat(creditCheckDto.getCreditScore(), equalTo(CREDIT_SCORE));
         assertThat(creditCheckDto.getCreditCheckReference(), equalTo(CREDIT_CHECK_REF));
-        assertThat(creditCheckDto.isHardCheckCompleted(), equalTo(false));
+        assertThat(creditCheckDto.getHardCheckCompleted(), equalTo(false));
     }
 
     private void assertCommitments(ApplicationDecisionResponse responseDto) {
