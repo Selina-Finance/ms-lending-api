@@ -542,10 +542,7 @@ public abstract class MapperBase {
         return System.builder().detail(List.of(getDetail())).build();
     }
 
-
-
     private Underwriting getUnderwriting() {
         return Underwriting.builder().underwritingOwner(UNDERWRITER).stageName(UNDERWRITING_STAGE).build();
     }
-
 }

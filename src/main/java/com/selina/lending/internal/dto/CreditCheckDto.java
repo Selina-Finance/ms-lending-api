@@ -29,11 +29,11 @@ public class CreditCheckDto {
     String responseId;
     String responseTimeStamp;
     String responseStatus;
-    int creditScore;
+    Integer creditScore;
     String creditCheckReference;
     String errorCode;
     String message;
     String status;
-    boolean hardCheckCompleted;
+    Boolean hardCheckCompleted;
     String hardCheckCompletedDate;
 }

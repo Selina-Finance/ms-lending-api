@@ -33,8 +33,8 @@ public class ApplicantResponseDto {
     String middleName;
     String gender;
     String dateOfBirth;
-    int numberOfAdultDependants;
-    int numberOfChildDependants;
+    Integer numberOfAdultDependants;
+    Integer numberOfChildDependants;
     Boolean livedInCurrentAddressFor3Years;
     Boolean applicant2LivesWithApplicant1For3Years;
     Boolean applicant2LivesWithApplicant1;
