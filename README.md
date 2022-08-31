@@ -40,7 +40,7 @@ docker compose up --build
 
 After the application has started you can check the health status:
 ```
-http://localhost:8080/lending/actuator/health
+http://localhost:8080/actuator/health
 ```
 
 TODO  - provide necessary information to DevOps about dynamic configurations for the service in different Cloud environments.
@@ -89,22 +89,22 @@ Below are some apis we have for creating, updating and retrieving an application
 
 Get an Application by application id
 ```
-http://localhost:8080/lending/application/{id}
+http://localhost:8080/application/{id}
 ```
 
 Create DIP Application
 ```
-http://localhost:8080/lending/application/dip
+http://localhost:8080/application/dip
 ```
 
 Update DIP Application for a given application
 ```
-http://localhost:8080/lending/application/{id}/dip
+http://localhost:8080/application/{id}/dip
 ```
 
 To see the full list of apis, the documentation is available under:
 ```
-http://localhost:8080/lending/swagger-ui/index.html
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ## Security
