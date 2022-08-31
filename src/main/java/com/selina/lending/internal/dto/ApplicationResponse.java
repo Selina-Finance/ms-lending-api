@@ -26,4 +26,5 @@ public class ApplicationResponse {
     String requestType;
     String applicationId;
     ApplicationDto application;
+    SalesforceDto salesforce;
 }

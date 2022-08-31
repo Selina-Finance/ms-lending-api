@@ -16,6 +16,8 @@
 
 package com.selina.lending.internal.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -41,6 +43,7 @@ public class PropertyDetailsDto {
     private String buildingName;
     private String buildingNumber;
     private String subBuildingName;
+    private String propertyName;
     private Integer udprn;
     private String poBox;
     private String county;
@@ -55,6 +58,7 @@ public class PropertyDetailsDto {
 
     @NotNull
     private Double purchaseValue;
-    private Integer internalFloorSpace;
+    private Integer propertyInternalFloorSpace;
     private Integer numberOfPriorCharges;
+    private List<PriorChargesDto> priorCharges;
 }

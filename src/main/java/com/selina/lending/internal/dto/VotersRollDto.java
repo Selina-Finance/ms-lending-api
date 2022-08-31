@@ -15,17 +15,16 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import java.util.List;
 
-import com.selina.lending.internal.dto.RuleOutcomeDto;
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
+import lombok.Builder;
+import lombok.Value;
 
-@Mapper
-public interface RuleOutcomeMapper {
-    RuleOutcomeMapper INSTANCE = Mappers.getMapper(RuleOutcomeMapper.class);
-
-    RuleOutcomeDto mapToRuleOutcomeDto(RuleOutcome ruleOutcome);
+@Builder
+@Value
+public class VotersRollDto {
+    List<DetailDto> detail;
 }
+

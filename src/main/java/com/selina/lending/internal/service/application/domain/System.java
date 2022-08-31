@@ -25,6 +25,4 @@ import lombok.Value;
 @Value
 public class System {
     List<Detail> detail;
-    List<Summary> summary;
-    List<UnderwriterNote> underwriterNotes;
 }

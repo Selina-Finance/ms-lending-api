@@ -16,8 +16,6 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import java.util.Date;
-
 import lombok.Builder;
 import lombok.Value;
 
@@ -26,15 +24,15 @@ import lombok.Value;
 public class CreditCheck {
     String serviceUsed;
     String requestId;
-    Date requestTimeStamp;
+    String requestTimeStamp;
     String responseId;
-    Date responseTimeStamp;
+    String responseTimeStamp;
     String responseStatus;
-    int creditScore;
+    Integer creditScore;
     String creditCheckReference;
     String errorCode;
     String message;
     String status;
-    boolean hardCheckCompleted;
-    Date hardCheckCompletedDate;
+    Boolean hardCheckCompleted;
+    String hardCheckCompletedDate;
 }

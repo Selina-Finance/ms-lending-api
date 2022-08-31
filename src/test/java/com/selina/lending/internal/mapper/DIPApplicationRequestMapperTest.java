@@ -69,6 +69,13 @@ class DIPApplicationRequestMapperTest extends MapperBase{
         assertThat(applicationRequest.getPropertyDetails(), notNullValue());
         assertThat(applicationRequest.getPropertyDetails().getAddressLine1(), equalTo(ADDRESS_LINE_1));
         assertThat(applicationRequest.getPropertyDetails().getAddressLine2(), equalTo(ADDRESS_LINE_2));
+
+        var priorCharges = applicationRequest.getPropertyDetails().getPriorCharges().get(0);
+        assertThat(priorCharges.getName(), equalTo(HSBC));
+        assertThat(priorCharges.getRateType(), equalTo(RATE_TYPE));
+        assertThat(priorCharges.getRepaymentType(), equalTo(REPAYMENT_TYPE));
+        assertThat(priorCharges.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
+
         assertThat(applicationRequest.getFees(), notNullValue());
         assertThat(applicationRequest.getFees().getArrangementFee(), equalTo(ARRANGEMENT_FEE));
     }

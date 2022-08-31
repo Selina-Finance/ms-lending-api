@@ -19,12 +19,14 @@ package com.selina.lending.internal.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.DIPApplicantDto;
+import com.selina.lending.internal.dto.ApplicantResponseDto;
+import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 
 class ApplicationDecisionResponseMapperTest extends MapperBase {
 
@@ -51,17 +53,59 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(responseDto.getExpenditure(), notNullValue());
         assertThat(responseDto.getExpenditure().get(0).getExpenditureType(), equalTo(EXPENDITURE_TYPE));
 
-        var dipApplicantDto = (DIPApplicantDto) responseDto.getApplicants().get(0);
-        assertThat(dipApplicantDto.getFirstName(), equalTo(FIRST_NAME));
-        assertThat(dipApplicantDto.getLivedInCurrentAddressFor3Years(), equalTo(true));
-        assertThat(dipApplicantDto.getAddresses().size(), equalTo(1));
-        assertThat(dipApplicantDto.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
+        assertThat(responseDto.getUnderwriting().getUnderwritingOwner(), equalTo(UNDERWRITER));
+        assertThat(responseDto.getUnderwriting().getStageName(), equalTo(UNDERWRITING_STAGE));
+        assertThat(responseDto.getIntermediary().getContactFirstName(), equalTo(INTERMEDIARY_FIRSTNAME));
+        assertThat(responseDto.getIntermediary().getFcaNumber(), equalTo(FCA_NUMBER));
+        assertThat(responseDto.getLead().getUtmCampaign(), equalTo(UTM_CAMPAIGN));
+        assertThat(responseDto.getLead().getUtmMedium(), equalTo(UTM_MEDIUM));
+        assertThat(responseDto.getLead().getUtmSource(), equalTo(UTM_SOURCE));
 
+        assertApplicant(responseDto);
+        assertCommitments(responseDto);
+        assertLoanInformation(responseDto);
+    }
+
+    private void assertLoanInformation(ApplicationDecisionResponse responseDto) {
         var advancedLoanInformationDto = (AdvancedLoanInformationDto) responseDto.getLoanInformation();
         assertThat(advancedLoanInformationDto.getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(advancedLoanInformationDto.getFacilities(), notNullValue());
         assertThat(advancedLoanInformationDto.getFacilities().size(), equalTo(1));
         assertThat(advancedLoanInformationDto.getFacilities().get(0).getAllocationAmount(), equalTo(ALLOCATION_AMOUNT));
         assertThat(advancedLoanInformationDto.getFacilities().get(0).getAllocationPurpose(), equalTo(ALLOCATION_PURPOSE));
+    }
+
+    private void assertApplicant(ApplicationDecisionResponse responseDto) {
+        var applicantDto = (ApplicantResponseDto) responseDto.getApplicants().get(0);
+        assertThat(applicantDto.getFirstName(), equalTo(FIRST_NAME));
+        assertThat(applicantDto.getLivedInCurrentAddressFor3Years(), equalTo(true));
+        assertThat(applicantDto.getAddresses().size(), equalTo(1));
+        assertThat(applicantDto.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
+        assertThat(applicantDto.getPreviousNames().get(0).getFirstName(), equalTo(FIRST_NAME));
+        assertThat(applicantDto.getChecklist().getRequired().getAll(), hasItems(REQUIRED_PASSPORT));
+
+        var documentsDto = applicantDto.getDocuments();
+        assertThat(documentsDto.size(), equalTo(1));
+        assertThat(documentsDto.get(0).getDocumentType(), equalTo(DOCUMENT_TYPE));
+
+        var creditCheckDto = applicantDto.getCreditCheck();
+        assertThat(creditCheckDto.getServiceUsed(), equalTo(CREDIT_CHECK_SERVICE_USED));
+        assertThat(creditCheckDto.getCreditScore(), equalTo(CREDIT_SCORE));
+        assertThat(creditCheckDto.getCreditCheckReference(), equalTo(CREDIT_CHECK_REF));
+        assertThat(creditCheckDto.getHardCheckCompleted(), equalTo(false));
+    }
+
+    private void assertCommitments(ApplicationDecisionResponse responseDto) {
+        var creditCommitmentsDto = responseDto.getCreditCommitments();
+        assertThat(creditCommitmentsDto.getCreditPolicy().getDetail().get(0).getId(), equalTo(DETAIL_ID));
+        assertThat(creditCommitmentsDto.getCreditPolicy().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
+        assertThat(creditCommitmentsDto.getSystem().getDetail().get(0).getId(), equalTo(DETAIL_ID));
+        assertThat(creditCommitmentsDto.getSystem().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
+        assertThat(creditCommitmentsDto.getVotersRoll().getDetail().get(0).getId(), equalTo(DETAIL_ID));
+        assertThat(creditCommitmentsDto.getVotersRoll().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
+        assertThat(creditCommitmentsDto.getPublicInformation().getSystem().getDetail().get(0).getId(), equalTo(DETAIL_ID));
+        assertThat(creditCommitmentsDto.getPublicInformation().getSystem().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
+        assertThat(creditCommitmentsDto.getUser().getDetail().get(0).getId(), equalTo(DETAIL_ID));
+        assertThat(creditCommitmentsDto.getUser().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
     }
 }

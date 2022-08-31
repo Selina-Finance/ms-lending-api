@@ -62,8 +62,8 @@ public class ApplicantDto {
     @NotNull
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     private String dateOfBirth;
-    private int numberOfAdultDependants;
-    private int numberOfChildDependants;
+    private Integer numberOfAdultDependants;
+    private Integer numberOfChildDependants;
 
     @NotNull
     private Boolean livedInCurrentAddressFor3Years;
@@ -78,12 +78,13 @@ public class ApplicantDto {
     @NotEmpty
     private List<AddressDto> addresses;
 
+
     enum Title {
-        MR("Mr."),
-        MRS("Mrs."),
+        MR("Mr"),
+        MRS("Mrs"),
         MISS("Miss"),
-        MS("Ms."),
-        DR("Dr."),
+        MS("Ms"),
+        DR("Dr"),
         OTHER("Other");
 
         final String value;

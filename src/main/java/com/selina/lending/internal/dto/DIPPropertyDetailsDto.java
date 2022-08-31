@@ -39,7 +39,9 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
     private String propertyType;
 
     @NotNull
-    private int numberOfBedrooms;
+    private Integer numberOfBedrooms;
+    private Integer numberOfBathrooms;
+    private Integer numberOfParkingSpaces;
     private Boolean hasBeenAffectedByJapaneseKnotWeed;
     private Boolean hasBeenBuiltInThePast2Years;
     private Boolean hasSection20NoticeServed;
@@ -67,5 +69,15 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
     private Boolean notResidentialUse;
     private Boolean isApplicantResidence;
     private Boolean isAboveCommercialPropertyDetails;
+
+    @Schema(implementation = AreaOutdoorSpace.class)
+    @EnumValue(enumClass = AreaOutdoorSpace.class)
+    private String areaOfOutdoorSpace;
+    private String finishQuality;
+    private Double valuationVerified;
+    private Double propertyRiskValuation;
+    private String propertyRiskValuationComment;
+    private String finalValuationChannel;
+    private String googleMaps;
 }
 

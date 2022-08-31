@@ -63,7 +63,7 @@ public class ExpenditureDto {
         CLOTHING_OR_FOOTWEAR("Clothing or footwear"),
         TV_PHONE_INTERNET("TV phone and internet"),
         UTILITIES("Utilities"),
-        FURNISHINGS_AND_MAINTENANCE("Furnishings and maintainence"),
+        FURNISHINGS_AND_MAINTENANCE("Furnishings and maintenance"),
         INSURANCE("Insurance"),
         COUNCIL_TAX("Council tax"),
         TRANSPORT("Transport"),
@@ -73,7 +73,9 @@ public class ExpenditureDto {
         ALIMONY("Alimony"),
         CONSUMABLES("Consumables"),
         OTHER("Other"),
-        OUTGOINGS_TOTAL("Outgoings Total");
+        MORTGAGE ("Mortgage"),
+        OUTGOINGS_TOTAL("Outgoings Total"),
+        UNSECURED_LOAN("Unsecured loan (personal loans etc)");
 
         final String value;
 
