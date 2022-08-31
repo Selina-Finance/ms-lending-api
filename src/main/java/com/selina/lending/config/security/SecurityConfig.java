@@ -36,8 +36,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated().and().csrf().disable();
-     /*   http
+//        http.authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated().and().csrf().disable();
+        http
                 .csrf()
                 .ignoringAntMatchers("/actuator/**")
                 .and()
@@ -61,7 +61,7 @@ public class SecurityConfig {
 
                 .and()
                 .oauth2ResourceServer()
-                .jwt();*/
+                .jwt();
         return http.build();
     }
 }
