@@ -61,6 +61,7 @@ public class ApplicationDecisionResponse {
     CreditCommitmentsDto creditCommitments;
     SalesforceDto salesforce;
     LoanInformationDto loanInformation;
+    PropertyDetailsDto propertyDetails;
     FeesDto fees;
     List<OfferDto> offers;
     List<ExpenditureDto> expenditure;

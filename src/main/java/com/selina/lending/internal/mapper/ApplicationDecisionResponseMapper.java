@@ -23,7 +23,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 
-@Mapper(uses = {ApplicantResponseMapper.class, LoanInformationMapper.class, FeesMapper.class,
+@Mapper(uses = {ApplicantResponseMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class, FeesMapper.class,
         ExpenditureMapper.class, OfferMapper.class, CreditCommitmentsMapper.class, SalesforceMapper.class,
         IntermediaryMapper.class, LeadMapper.class, UnderwritingMapper.class
 })

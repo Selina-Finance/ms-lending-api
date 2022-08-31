@@ -23,7 +23,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
 
-@Mapper(uses = {ApplicationMapper.class})
+@Mapper(uses = {ApplicationMapper.class, SalesforceMapper.class})
 public interface ApplicationResponseMapper {
     ApplicationResponseMapper INSTANCE = Mappers.getMapper(ApplicationResponseMapper.class);
 
