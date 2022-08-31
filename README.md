@@ -108,11 +108,21 @@ http://localhost:8080/swagger-ui/index.html
 ```
 
 ## Security
-
-TODO
-- Keycloak
-- Middleware authentication
-
+To access our API endpoints you will need a security token. \
+Using your credentials you can execute the following request to get your token:
+```
+curl --location --request POST 'http://localhost:8080/auth/token' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "clientId": "your-client-id",
+    "clientSecret": "your-client-secret"
+}'
+```
+In the response you will get an access token and expiration period of its validity. \
+Then, to make your request authenticated please add the next header to your request using the token you've just got.
+```
+'Authorization: Bearer your-token-value'
+```
 ## Circuit Breaker
 
 We use [Resilience4j](https://resilience4j.readme.io/docs) as a part of our fault tolerance solution.
