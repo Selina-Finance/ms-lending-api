@@ -76,7 +76,7 @@ import com.selina.lending.internal.service.application.domain.User;
 import com.selina.lending.internal.service.application.domain.VotersRoll;
 
 public abstract class MapperBase {
-    public static final String TITLE = "Mrs";
+    public static final String TITLE = "Mrs.";
     public static final String FIRST_NAME = "Sally";
     public static final String LAST_NAME = "Smith";
     public static final String EMAIL_ADDRESS = "sally.smith@someemail.com";

@@ -80,11 +80,11 @@ public class ApplicantDto {
 
 
     enum Title {
-        MR("Mr"),
-        MRS("Mrs"),
+        MR("Mr."),
+        MRS("Mrs."),
         MISS("Miss"),
-        MS("Ms"),
-        DR("Dr"),
+        MS("Ms."),
+        DR("Dr."),
         OTHER("Other");
 
         final String value;
