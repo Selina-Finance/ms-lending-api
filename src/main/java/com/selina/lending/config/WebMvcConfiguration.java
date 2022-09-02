@@ -18,11 +18,13 @@
 package com.selina.lending.config;
 
 import com.selina.lending.api.interceptor.BrokerRequestInterceptor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     private final BrokerRequestInterceptor brokerRequestInterceptor;

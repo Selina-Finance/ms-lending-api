@@ -20,6 +20,7 @@ package com.selina.lending.api.interceptor;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
 import com.selina.lending.messaging.publisher.event.BrokerRequestCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +31,7 @@ import java.util.UUID;
 
 @Slf4j
 @Component
+@ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestInterceptor implements HandlerInterceptor {
 
     private final BrokerRequestEventPublisher publisher;
