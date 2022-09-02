@@ -31,7 +31,8 @@ public class BrokerRequestEventPublisher implements EventPublisher<BrokerRequest
     private final ObjectMapper mapper;
     private final KafkaManager kafkaManager;
 
-    private static final String APP_REQUEST_TOPIC_OUT = "private.ms-lending-api.broker-request.local";
+    // TODO: move to remote config
+    public static final String BROKER_REQUEST_TOPIC_OUT = "private.ms-lending-api.broker-request.local";
 
     public BrokerRequestEventPublisher(ObjectMapper mapper, KafkaManager kafkaManager) {
         this.mapper = mapper;
@@ -41,7 +42,7 @@ public class BrokerRequestEventPublisher implements EventPublisher<BrokerRequest
     @Override
     public void publish(BrokerRequestEvent event) {
         log.debug("Request to publish event: {}", event);
-        kafkaManager.publish(APP_REQUEST_TOPIC_OUT, event.key(), toPayload(event));
+        kafkaManager.publish(BROKER_REQUEST_TOPIC_OUT, event.key(), toPayload(event));
     }
 
     private String toPayload(BrokerRequestEvent event) {

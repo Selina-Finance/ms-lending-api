@@ -14,3 +14,7 @@ spring.security:
       provider:
         middleware-auth:
           token-uri: https://MW-AUTH_SERVER/oauth2/token
+
+kafka:
+  enable: false
+  bootstrapAddress: localhost:9092
