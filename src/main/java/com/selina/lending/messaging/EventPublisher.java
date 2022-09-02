@@ -17,6 +17,6 @@
 
 package com.selina.lending.messaging;
 
-public interface EventPublisher {
-    void publish(String topic, String key, String payload);
+public interface EventPublisher<E> {
+    void publish(E event);
 }

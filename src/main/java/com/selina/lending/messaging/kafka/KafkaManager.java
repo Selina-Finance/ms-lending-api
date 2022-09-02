@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.messaging;
+package com.selina.lending.messaging.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -24,15 +24,14 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class KafkaEventPublisher implements EventPublisher {
+public class KafkaManager {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public KafkaEventPublisher(KafkaTemplate<String, String> kafkaTemplate) {
+    public KafkaManager(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @Override
     public void publish(String topic, String key, String payload) {
         log.debug("Publishing event. Topic: {}, Key: {}, Payload: {}", topic, key, payload);
         kafkaTemplate.send(topic, key, payload)

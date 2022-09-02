@@ -17,6 +17,7 @@
 
 package com.selina.lending.messaging;
 
+import com.selina.lending.messaging.kafka.KafkaManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,13 +33,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class KafkaEventPublisherTest {
+class KafkaManagerTest {
 
     @Mock
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @InjectMocks
-    private KafkaEventPublisher publisher;
+    private KafkaManager publisher;
 
     @Test
     public void shouldUseKafkaTemplateToPublishEvent() {
