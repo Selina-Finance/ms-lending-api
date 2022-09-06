@@ -19,13 +19,13 @@ package com.selina.lending.messaging.publisher.event;
 
 import java.util.UUID;
 
-public record BrokerRequestCreatedEvent(
-        UUID uuid,
+public record BrokerRequestStartedEvent(
+        String requestId,
         String broker,
         String IP
 ) implements BrokerRequestEvent{
     @Override
     public String key() {
-        return broker;
+        return requestId.toString();
     }
 }

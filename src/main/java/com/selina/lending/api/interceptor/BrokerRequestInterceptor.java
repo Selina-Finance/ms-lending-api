@@ -17,10 +17,11 @@
 
 package com.selina.lending.api.interceptor;
 
-import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
-import com.selina.lending.messaging.publisher.event.BrokerRequestCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,30 +35,53 @@ import java.util.UUID;
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestInterceptor implements HandlerInterceptor {
 
-    private final BrokerRequestEventPublisher publisher;
+    private final BrokerRequestKpiResolver kpiResolver;
+    private final static String BROKER_ATTR_NAME = "broker-request-id";
+    private final static String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
 
-    public BrokerRequestInterceptor(BrokerRequestEventPublisher publisher) {
-        this.publisher = publisher;
+    public BrokerRequestInterceptor(BrokerRequestKpiResolver kpiResolver) {
+        this.kpiResolver = kpiResolver;
     }
 
     // TODO: POC
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("========> BEFORE");
+    public boolean preHandle(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        var brokerRequestId = UUID.randomUUID().toString();
+        request.setAttribute(BROKER_ATTR_NAME, brokerRequestId);
 
-        var event = new BrokerRequestCreatedEvent(UUID.randomUUID(), "local-test", "BEFORE");
-        publisher.publish(event);
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var jwt = (Jwt) authentication.getPrincipal();
+        String brokerClientId = (String) jwt.getClaims().get(CLIENT_ID_JWT_CLAIM_NAME);
+
+        kpiResolver.onRequestStarted(brokerClientId, brokerRequestId, request);
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("========> AFTER");
-
-        var event = new BrokerRequestCreatedEvent(UUID.randomUUID(), "local-test", "AFTER");
-        publisher.publish(event);
-
+    public void postHandle(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        // do nothing. All post-request work will be done inside afterCompletion method
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
+    }
+
+    @Override
+    public void afterCompletion(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        String brokerRequestId = (String) request.getAttribute(BROKER_ATTR_NAME);
+        int httpResponseCode = response.getStatus();
+
+        if (brokerRequestId != null) {
+            kpiResolver.onRequestFinished(brokerRequestId, httpResponseCode);
+        }
+
+        HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
+    }
+
+    private String getRemoteAddr(@NotNull HttpServletRequest request) {
+        String ipFromHeader = request.getHeader("X-FORWARDED-FOR");
+        if (ipFromHeader != null && ipFromHeader.length() > 0) {
+            log.debug("ip from proxy - X-FORWARDED-FOR : " + ipFromHeader);
+            return ipFromHeader;
+        }
+        return request.getRemoteAddr();
     }
 }

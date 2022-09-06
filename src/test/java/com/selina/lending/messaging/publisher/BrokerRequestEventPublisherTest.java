@@ -20,7 +20,7 @@ package com.selina.lending.messaging.publisher;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.messaging.kafka.KafkaManager;
-import com.selina.lending.messaging.publisher.event.BrokerRequestCreatedEvent;
+import com.selina.lending.messaging.publisher.event.BrokerRequestStartedEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,7 +51,7 @@ class BrokerRequestEventPublisherTest {
     @Test
     public void shouldInvokeKafkaManagerWithCorrectArguments() throws JsonProcessingException {
         // Given
-        var event = new BrokerRequestCreatedEvent(UUID.randomUUID(), "super-broker", "12.0.0.1");
+        var event = new BrokerRequestStartedEvent(UUID.randomUUID().toString(), "super-broker", "12.0.0.1");
 
         var eventAsJsonString = "this-would-be-event-as-json-string";
         when(mapper.writeValueAsString(any())).thenReturn(eventAsJsonString);
@@ -61,13 +61,13 @@ class BrokerRequestEventPublisherTest {
         publisher.publish(event);
 
         // Then
-        verify(kafkaManager, times(1)).publish("private.ms-lending-api.broker-request.local", event.broker(), eventAsJsonString);
+        verify(kafkaManager, times(1)).publish("private.ms-lending-api.broker-request.local", event.requestId(), eventAsJsonString);
     }
 
     @Test
     public void shouldNotInvokeKafkaManagerWhenEventIsNotSerializableToJsonString() throws JsonProcessingException {
         // Given
-        var event = new BrokerRequestCreatedEvent(UUID.randomUUID(), "super-broker", "12.0.0.1");
+        var event = new BrokerRequestStartedEvent(UUID.randomUUID().toString(), "super-broker", "12.0.0.1");
         when(mapper.writeValueAsString(any())).thenThrow(JsonProcessingException.class);
 
         // When
