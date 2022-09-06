@@ -47,6 +47,7 @@ class BrokerRequestEventMapperTest {
         // Then
         assertThat(result.requestId()).isEqualTo(requestId);
         assertThat(result.httpResponseCode()).isEqualTo(httpResponseCode);
+        assertThat(result.created()).isBeforeOrEqualTo(Instant.now());
     }
 
     @Test

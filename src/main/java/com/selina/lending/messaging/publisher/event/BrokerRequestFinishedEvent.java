@@ -17,9 +17,12 @@
 
 package com.selina.lending.messaging.publisher.event;
 
+import java.time.Instant;
+
 public record BrokerRequestFinishedEvent(
         String requestId,
-        Integer httpResponseCode
+        Integer httpResponseCode,
+        Instant created
 ) implements BrokerRequestEvent {
     @Override
     public String key() {

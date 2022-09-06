@@ -51,6 +51,6 @@ public class BrokerRequestEventMapper {
     }
 
     public BrokerRequestFinishedEvent toFinishedEvent(String requestId, int httpResponseCode) {
-        return new BrokerRequestFinishedEvent(requestId, httpResponseCode);
+        return new BrokerRequestFinishedEvent(requestId, httpResponseCode, Instant.now());
     }
 }

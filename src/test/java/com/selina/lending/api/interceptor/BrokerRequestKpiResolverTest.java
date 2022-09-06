@@ -27,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.UUID;
 
 import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestStartedEvent;
@@ -70,7 +71,7 @@ class BrokerRequestKpiResolverTest {
         var httpResponseCode = 200;
 
 
-        var event = new BrokerRequestFinishedEvent("", httpResponseCode);
+        var event = new BrokerRequestFinishedEvent("", httpResponseCode, Instant.now());
         when(eventMapper.toFinishedEvent(requestId, httpResponseCode)).thenReturn(event);
 
         // When
