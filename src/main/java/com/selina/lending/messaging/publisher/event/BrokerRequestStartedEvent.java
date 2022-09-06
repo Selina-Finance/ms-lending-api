@@ -27,6 +27,7 @@ public record BrokerRequestStartedEvent(
         Instant created,
         String broker,
         String path,
+        String method,
         String ip
 ) implements BrokerRequestEvent {
     @Override

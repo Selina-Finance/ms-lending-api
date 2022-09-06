@@ -54,7 +54,7 @@ class BrokerRequestKpiResolverTest {
         var requestId = UUID.randomUUID().toString();
         var httpRequest = mock(HttpServletRequest.class);
 
-        var event = new BrokerRequestStartedEvent("", Instant.now(), "", "", "");
+        var event = new BrokerRequestStartedEvent("", Instant.now(), "", "","", "");
         when(eventMapper.toStartedEvent(broker, requestId, httpRequest)).thenReturn(event);
 
         // When

@@ -43,7 +43,6 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
         this.kpiResolver = kpiResolver;
     }
 
-    // TODO: POC
     @Override
     public boolean preHandle(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         var brokerRequestId = UUID.randomUUID().toString();

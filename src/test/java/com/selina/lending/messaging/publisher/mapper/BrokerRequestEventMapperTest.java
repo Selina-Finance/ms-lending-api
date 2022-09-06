@@ -23,7 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,10 +55,12 @@ class BrokerRequestEventMapperTest {
         var broker = "the-broker";
         var requestId = "123";
         var path = "/abra/cadabra";
+        var method = "POST";
         var ip = "192.0.0.1";
 
         var httpRequest = mock(HttpServletRequest.class);
         when(httpRequest.getRequestURI()).thenReturn(path);
+        when(httpRequest.getMethod()).thenReturn(method);
         when(httpRequest.getRemoteAddr()).thenReturn(ip);
 
         // When
@@ -69,11 +70,8 @@ class BrokerRequestEventMapperTest {
         assertThat(result.requestId()).isEqualTo(requestId);
         assertThat(result.broker()).isEqualTo(broker);
         assertThat(result.created()).isBeforeOrEqualTo(Instant.now());
-
         assertThat(result.path()).isEqualTo(path);
+        assertThat(result.method()).isEqualTo(method);
         assertThat(result.ip()).isEqualTo(ip);
     }
-
-//    String path,
-//    String ip
 }

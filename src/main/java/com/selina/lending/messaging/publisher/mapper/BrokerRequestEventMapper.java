@@ -36,6 +36,7 @@ public class BrokerRequestEventMapper {
                 Instant.now(),
                 broker,
                 httpRequest.getRequestURI(),
+                httpRequest.getMethod(),
                 getRemoteAddr(httpRequest)
         );
     }
