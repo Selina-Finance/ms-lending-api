@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -53,7 +54,7 @@ class BrokerRequestKpiResolverTest {
         var requestId = UUID.randomUUID().toString();
         var httpRequest = mock(HttpServletRequest.class);
 
-        var event = new BrokerRequestStartedEvent("", "", "");
+        var event = new BrokerRequestStartedEvent("", Instant.now(), "", "", "");
         when(eventMapper.toStartedEvent(broker, requestId, httpRequest)).thenReturn(event);
 
         // When

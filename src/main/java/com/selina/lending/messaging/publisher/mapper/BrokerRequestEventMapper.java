@@ -24,13 +24,20 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 
 @Slf4j
 @Component
 public class BrokerRequestEventMapper {
 
     public BrokerRequestStartedEvent toStartedEvent(String broker, String requestId, HttpServletRequest httpRequest) {
-        return new BrokerRequestStartedEvent("","","");
+        return new BrokerRequestStartedEvent(
+                requestId,
+                Instant.now(),
+                broker,
+                httpRequest.getRequestURI(),
+                getRemoteAddr(httpRequest)
+        );
     }
 
     private String getRemoteAddr(@NotNull HttpServletRequest request) {
@@ -43,6 +50,6 @@ public class BrokerRequestEventMapper {
     }
 
     public BrokerRequestFinishedEvent toFinishedEvent(String requestId, int httpResponseCode) {
-        return null;
+        return new BrokerRequestFinishedEvent(requestId, httpResponseCode);
     }
 }

@@ -17,9 +17,16 @@
 
 package com.selina.lending.messaging.publisher.event;
 
+import lombok.Builder;
+
+import java.time.Instant;
+
+@Builder()
 public record BrokerRequestStartedEvent(
         String requestId,
+        Instant created,
         String broker,
+        String path,
         String ip
 ) implements BrokerRequestEvent {
     @Override

@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -51,7 +52,7 @@ class BrokerRequestEventPublisherTest {
     @Test
     public void shouldInvokeKafkaManagerWithCorrectArguments() throws JsonProcessingException {
         // Given
-        var event = new BrokerRequestStartedEvent(UUID.randomUUID().toString(), "super-broker", "12.0.0.1");
+        var event = new BrokerRequestStartedEvent(UUID.randomUUID().toString(), Instant.now(), "super-broker", "/test", "12.0.0.1");
 
         var eventAsJsonString = "this-would-be-event-as-json-string";
         when(mapper.writeValueAsString(any())).thenReturn(eventAsJsonString);
@@ -67,7 +68,7 @@ class BrokerRequestEventPublisherTest {
     @Test
     public void shouldNotInvokeKafkaManagerWhenEventIsNotSerializableToJsonString() throws JsonProcessingException {
         // Given
-        var event = new BrokerRequestStartedEvent(UUID.randomUUID().toString(), "super-broker", "12.0.0.1");
+        var event = new BrokerRequestStartedEvent(UUID.randomUUID().toString(), Instant.now(), "super-broker", "/test", "12.0.0.1");
         when(mapper.writeValueAsString(any())).thenThrow(JsonProcessingException.class);
 
         // When
