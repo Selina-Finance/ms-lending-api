@@ -19,7 +19,6 @@ package com.selina.lending.api.interceptor;
 
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
 import com.selina.lending.messaging.publisher.event.BrokerRequestFinishedEvent;
-import com.selina.lending.messaging.publisher.event.BrokerRequestStartedEvent;
 import com.selina.lending.messaging.publisher.mapper.BrokerRequestEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,9 +27,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Instant;
 import java.util.UUID;
 
+import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestStartedEvent;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -54,7 +53,7 @@ class BrokerRequestKpiResolverTest {
         var requestId = UUID.randomUUID().toString();
         var httpRequest = mock(HttpServletRequest.class);
 
-        var event = new BrokerRequestStartedEvent("", Instant.now(), "", "","", "");
+        var event = buildBrokerRequestStartedEvent();
         when(eventMapper.toStartedEvent(broker, requestId, httpRequest)).thenReturn(event);
 
         // When

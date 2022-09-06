@@ -31,14 +31,14 @@ import java.time.Instant;
 public class BrokerRequestEventMapper {
 
     public BrokerRequestStartedEvent toStartedEvent(String broker, String requestId, HttpServletRequest httpRequest) {
-        return new BrokerRequestStartedEvent(
-                requestId,
-                Instant.now(),
-                broker,
-                httpRequest.getRequestURI(),
-                httpRequest.getMethod(),
-                getRemoteAddr(httpRequest)
-        );
+        return BrokerRequestStartedEvent.builder()
+                .requestId(requestId)
+                .created(Instant.now())
+                .broker(broker)
+                .uriPath(httpRequest.getRequestURI())
+                .httpMethod(httpRequest.getMethod())
+                .ip(getRemoteAddr(httpRequest))
+                .build();
     }
 
     private String getRemoteAddr(@NotNull HttpServletRequest request) {

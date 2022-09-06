@@ -15,23 +15,24 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.event;
+package com.selina.lending.testHelper;
 
-import lombok.Builder;
+import com.selina.lending.messaging.publisher.event.BrokerRequestStartedEvent;
 
 import java.time.Instant;
+import java.util.UUID;
 
-@Builder
-public record BrokerRequestStartedEvent(
-        String requestId,
-        Instant created,
-        String broker,
-        String uriPath,
-        String httpMethod,
-        String ip
-) implements BrokerRequestEvent {
-    @Override
-    public String key() {
-        return requestId;
+public class BrokerRequestEventTestHelper {
+    public static final String BROKER = "the broker";
+
+    public static BrokerRequestStartedEvent buildBrokerRequestStartedEvent() {
+        return BrokerRequestStartedEvent.builder()
+                .requestId(UUID.randomUUID().toString())
+                .created(Instant.now())
+                .broker(BROKER)
+                .uriPath("/test")
+                .httpMethod("GET")
+                .ip("127.0.0.1")
+                .build();
     }
 }
