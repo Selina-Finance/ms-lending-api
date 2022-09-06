@@ -20,6 +20,7 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.selina.lending.api.validator.Conditional;
 import com.selina.lending.api.validator.EnumValue;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,6 +29,7 @@ import lombok.Value;
 
 @Builder
 @Value
+@Conditional(selected = "addressType", values = {"previous"}, required = {"fromDate", "toDate"})
 public class AddressDto {
     @Schema(implementation = AddressType.class)
     @EnumValue(enumClass = AddressType.class)
@@ -37,7 +39,7 @@ public class AddressDto {
     String addressLine2;
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z &-.']*$")
+    @Pattern(regexp = "^[a-zA-Z &\\-.']*$")
     String city;
 
     @NotBlank
@@ -45,7 +47,7 @@ public class AddressDto {
     String buildingName;
     String buildingNumber;
     String subBuildingName;
-    int udprn;
+    Integer udprn;
     String poBox;
     String county;
     String country;
