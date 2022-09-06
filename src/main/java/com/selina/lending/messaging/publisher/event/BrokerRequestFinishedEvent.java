@@ -17,15 +17,12 @@
 
 package com.selina.lending.messaging.publisher.event;
 
-import java.util.UUID;
-
 public record BrokerRequestFinishedEvent(
         String requestId,
-        String broker,
-        int httpStatus
+        Integer httpResponseCode
 ) implements BrokerRequestEvent {
     @Override
     public String key() {
-        return requestId.toString();
+        return requestId;
     }
 }

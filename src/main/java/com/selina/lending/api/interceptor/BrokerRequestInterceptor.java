@@ -75,13 +75,4 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
 
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
-
-    private String getRemoteAddr(@NotNull HttpServletRequest request) {
-        String ipFromHeader = request.getHeader("X-FORWARDED-FOR");
-        if (ipFromHeader != null && ipFromHeader.length() > 0) {
-            log.debug("ip from proxy - X-FORWARDED-FOR : " + ipFromHeader);
-            return ipFromHeader;
-        }
-        return request.getRemoteAddr();
-    }
 }

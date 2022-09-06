@@ -17,15 +17,13 @@
 
 package com.selina.lending.messaging.publisher.event;
 
-import java.util.UUID;
-
 public record BrokerRequestStartedEvent(
         String requestId,
         String broker,
-        String IP
-) implements BrokerRequestEvent{
+        String ip
+) implements BrokerRequestEvent {
     @Override
     public String key() {
-        return requestId.toString();
+        return requestId;
     }
 }
