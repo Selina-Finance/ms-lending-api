@@ -26,8 +26,8 @@ public record BrokerRequestStartedEvent(
         String requestId,
         Instant created,
         String broker,
-        String path,
-        String method,
+        String uriPath,
+        String httpMethod,
         String ip
 ) implements BrokerRequestEvent {
     @Override

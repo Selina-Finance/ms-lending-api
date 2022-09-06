@@ -70,8 +70,8 @@ class BrokerRequestEventMapperTest {
         assertThat(result.requestId()).isEqualTo(requestId);
         assertThat(result.broker()).isEqualTo(broker);
         assertThat(result.created()).isBeforeOrEqualTo(Instant.now());
-        assertThat(result.path()).isEqualTo(path);
-        assertThat(result.method()).isEqualTo(method);
+        assertThat(result.uriPath()).isEqualTo(path);
+        assertThat(result.httpMethod()).isEqualTo(method);
         assertThat(result.ip()).isEqualTo(ip);
     }
 }

@@ -59,7 +59,7 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        // do nothing. All post-request work will be done inside afterCompletion method
+        // do nothing. All post-request work will be done inside afterCompletion httpMethod
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 
