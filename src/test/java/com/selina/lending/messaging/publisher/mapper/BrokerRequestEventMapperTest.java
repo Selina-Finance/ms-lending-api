@@ -53,7 +53,7 @@ class BrokerRequestEventMapperTest {
     @Test
     public void shouldMapToBrokerRequestStartedEvent() {
         // Given
-        var broker = "the-broker";
+        var source = "the-broker";
         var requestId = "123";
         var path = "/abra/cadabra";
         var method = "POST";
@@ -65,11 +65,11 @@ class BrokerRequestEventMapperTest {
         when(httpRequest.getRemoteAddr()).thenReturn(ip);
 
         // When
-        var result = mapper.toStartedEvent(broker, requestId, httpRequest);
+        var result = mapper.toStartedEvent(source, requestId, httpRequest);
 
         // Then
         assertThat(result.requestId()).isEqualTo(requestId);
-        assertThat(result.broker()).isEqualTo(broker);
+        assertThat(result.source()).isEqualTo(source);
         assertThat(result.created()).isBeforeOrEqualTo(Instant.now());
         assertThat(result.uriPath()).isEqualTo(path);
         assertThat(result.httpMethod()).isEqualTo(method);

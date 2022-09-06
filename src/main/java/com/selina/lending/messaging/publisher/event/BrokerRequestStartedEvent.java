@@ -25,7 +25,7 @@ import java.time.Instant;
 public record BrokerRequestStartedEvent(
         String requestId,
         Instant created,
-        String broker,
+        String source,
         String uriPath,
         String httpMethod,
         String ip

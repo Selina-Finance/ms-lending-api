@@ -23,13 +23,13 @@ import java.time.Instant;
 import java.util.UUID;
 
 public class BrokerRequestEventTestHelper {
-    public static final String BROKER = "the broker";
+    public static final String SOURCE = "the broker";
 
     public static BrokerRequestStartedEvent buildBrokerRequestStartedEvent() {
         return BrokerRequestStartedEvent.builder()
                 .requestId(UUID.randomUUID().toString())
                 .created(Instant.now())
-                .broker(BROKER)
+                .source(SOURCE)
                 .uriPath("/test")
                 .httpMethod("GET")
                 .ip("127.0.0.1")

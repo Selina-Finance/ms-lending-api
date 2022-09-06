@@ -34,7 +34,7 @@ public class BrokerRequestEventMapper {
         return BrokerRequestStartedEvent.builder()
                 .requestId(requestId)
                 .created(Instant.now())
-                .broker(broker)
+                .source(broker)
                 .uriPath(httpRequest.getRequestURI())
                 .httpMethod(httpRequest.getMethod())
                 .ip(getRemoteAddr(httpRequest))
