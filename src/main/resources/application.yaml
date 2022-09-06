@@ -33,4 +33,4 @@ resilience4j:
           - feign.RetryableException
 
 kafka:
-  enable: true
+  enable: false
