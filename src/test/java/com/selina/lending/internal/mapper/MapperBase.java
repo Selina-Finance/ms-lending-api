@@ -146,6 +146,7 @@ public abstract class MapperBase {
     public static final int MONTHLY_PAYMENT = 1000;
     public static final String REPAYMENT_TYPE = "Capital and interest";
     public static final String RATE_TYPE = "Fixed";
+    public static final String CURRENT_ADDRESS_MOVED_IN_DATE = "2018-02-21";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -247,6 +248,7 @@ public abstract class MapperBase {
                 .employment(getEmploymentDto())
                 .income(getIncomeDto())
                 .previousNames(List.of(getPreviousNameDto()))
+                .currentAddressMovedInDate(CURRENT_ADDRESS_MOVED_IN_DATE)
                 .build();
     }
 

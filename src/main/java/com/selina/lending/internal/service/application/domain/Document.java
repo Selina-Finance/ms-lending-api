@@ -23,9 +23,9 @@ import lombok.Value;
 @Value
 public class Document {
     String documentType;
-    boolean required;
-    boolean submitted;
-    boolean verified;
+    Boolean required;
+    Boolean submitted;
+    Boolean verified;
     String description;
     String fileName;
     String fileContent;

@@ -70,6 +70,7 @@ public class ApplicantDto {
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
 
+    @NotNull
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     private String currentAddressMovedInDate;
 

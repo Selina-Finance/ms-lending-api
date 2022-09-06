@@ -15,19 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.validator;
 
-import lombok.Builder;
-import lombok.Value;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Builder
-@Value
-public class DocumentDto {
-    String documentType;
-    Boolean required;
-    Boolean submitted;
-    Boolean verified;
-    String description;
-    String fileName;
-    String fileContent;
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+public @interface Conditionals {
+    Conditional[] value();
 }
