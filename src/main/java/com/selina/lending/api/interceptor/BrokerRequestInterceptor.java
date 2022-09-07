@@ -37,9 +37,9 @@ import java.util.UUID;
 public class BrokerRequestInterceptor implements HandlerInterceptor {
 
     private final BrokerRequestKpiResolver kpiResolver;
-    private final static String BROKER_ATTR_NAME = "broker-request-id";
     private final static String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
     private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
+    private final static String REQUEST_ID_ATTR_NAME = "broker-request-id";
 
     public BrokerRequestInterceptor(BrokerRequestKpiResolver kpiResolver) {
         this.kpiResolver = kpiResolver;
@@ -50,7 +50,7 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
         String requestId = Optional
                 .ofNullable(request.getHeader(REQUEST_ID_HEADER_NAME))
                 .orElse(UUID.randomUUID().toString());
-        request.setAttribute(BROKER_ATTR_NAME, requestId);
+        request.setAttribute(REQUEST_ID_ATTR_NAME, requestId);
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var jwt = (Jwt) authentication.getPrincipal();
@@ -69,7 +69,7 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        String brokerRequestId = (String) request.getAttribute(BROKER_ATTR_NAME);
+        String brokerRequestId = (String) request.getAttribute(REQUEST_ID_ATTR_NAME);
         int httpResponseCode = response.getStatus();
 
         if (brokerRequestId != null) {
