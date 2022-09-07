@@ -37,9 +37,9 @@ import java.util.UUID;
 public class BrokerRequestInterceptor implements HandlerInterceptor {
 
     private final BrokerRequestKpiResolver kpiResolver;
-    private final static String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
+    private static final String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
     private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
-    private final static String REQUEST_ID_ATTR_NAME = "broker-request-id";
+    private static final String REQUEST_ID_ATTR_NAME = "broker-request-id";
 
     public BrokerRequestInterceptor(BrokerRequestKpiResolver kpiResolver) {
         this.kpiResolver = kpiResolver;
