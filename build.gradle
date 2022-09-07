@@ -27,7 +27,7 @@ sonarqube {
 		property "sonar.host.url", "https://sonarcloud.io"
 		property "sonar.exclusions", "**/*ServiceApplication.java, **/com/selina/lending/internal/dto/**, **/com/selina/lending/internal/service/application/domain/**"
 		property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-		property "sonar.coverage.exclusions", "**/com/selina/lending/internal/dto/**, **/com/selina/lending/internal/service/application/domain/**, **/com/selina/lending/LendingServiceApplication**, **/com/selina/lending/api/ServletInitializer**, **/com/selina/lending/internal/api/AuthApi**"
+		property "sonar.coverage.exclusions", "**/com/selina/lending/internal/dto/**, **/com/selina/lending/internal/service/application/domain/**, **/com/selina/lending/LendingServiceApplication**, **/com/selina/lending/api/ServletInitializer**, **/com/selina/lending/internal/api/AuthApi**, **/com/selina/lending/config/kafka/KafkaProducerConfig**, **/com/selina/lending/config/kafka/KafkaTopicConfig**"
 	}
 }
 
@@ -47,6 +47,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8-config'
 	implementation 'de.codecentric:spring-boot-admin-starter-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
+	implementation 'org.springframework.kafka:spring-kafka'
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
@@ -88,7 +89,9 @@ jacocoTestReport {
 					'com/selina/lending/internal/service/application/domain/**',
 					'com/selina/lending/internal/dto/**',
 					'com/selina/lending/api/ServletInitializer**',
-					'com/selina/lending/internal/api/AuthApi**'
+					'com/selina/lending/internal/api/AuthApi**',
+					'com/selina/lending/config/kafka/KafkaProducerConfig**',
+					'com/selina/lending/config/kafka/KafkaTopicConfig**'
 			])
 		}))
 	}
