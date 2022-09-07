@@ -24,6 +24,7 @@ import java.time.Instant;
 @Builder
 public record BrokerRequestStartedEvent(
         String requestId,
+        String externalApplicationId,
         Instant created,
         String source,
         String uriPath,

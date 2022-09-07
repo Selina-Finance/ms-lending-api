@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -55,8 +56,9 @@ class BrokerRequestEventMapperTest {
         // Given
         var source = "the-broker";
         var requestId = "123";
-        var path = "/abra/cadabra";
-        var method = "POST";
+        var externalAppId = UUID.randomUUID().toString();
+        var path = "/application/" + externalAppId;
+        var method = "GET";
         var ip = "192.0.0.1";
 
         var httpRequest = mock(HttpServletRequest.class);
@@ -69,10 +71,13 @@ class BrokerRequestEventMapperTest {
 
         // Then
         assertThat(result.requestId()).isEqualTo(requestId);
+        assertThat(result.externalApplicationId()).isEqualTo(externalAppId);
         assertThat(result.source()).isEqualTo(source);
         assertThat(result.created()).isBeforeOrEqualTo(Instant.now());
         assertThat(result.uriPath()).isEqualTo(path);
         assertThat(result.httpMethod()).isEqualTo(method);
         assertThat(result.ip()).isEqualTo(ip);
     }
+
+
 }

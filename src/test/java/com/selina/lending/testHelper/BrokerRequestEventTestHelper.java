@@ -28,6 +28,7 @@ public class BrokerRequestEventTestHelper {
     public static BrokerRequestStartedEvent buildBrokerRequestStartedEvent() {
         return BrokerRequestStartedEvent.builder()
                 .requestId(UUID.randomUUID().toString())
+                .externalApplicationId(UUID.randomUUID().toString())
                 .created(Instant.now())
                 .source(SOURCE)
                 .uriPath("/test")
