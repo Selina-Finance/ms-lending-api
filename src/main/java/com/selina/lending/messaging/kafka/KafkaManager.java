@@ -18,6 +18,7 @@
 package com.selina.lending.messaging.kafka;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
@@ -41,11 +42,11 @@ public class KafkaManager {
                 );
     }
 
-    private void successfulCallback(String payload, SendResult<String, String> result) {
+    private void successfulCallback(String payload, @NotNull SendResult<String, String> result) {
         log.debug("Sent event:{} with offset:{}", payload, result.getRecordMetadata().offset());
     }
 
-    private void errorCallback(String payload, Throwable ex) {
+    private void errorCallback(String payload, @NotNull Throwable ex) {
         log.error("Unable to send event: {} due to: {}", payload, ex.getMessage());
     }
 }

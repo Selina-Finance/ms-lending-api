@@ -18,6 +18,7 @@
 package com.selina.lending.messaging.publisher.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -31,25 +32,34 @@ public class ExternalAppIdHelper {
 
         if (request.getRequestURI().contains("/application")) {
             if ("GET".equals(request.getMethod())) {
-                String[] numbers = request.getRequestURI().split("/");
-                return Optional.ofNullable(numbers[numbers.length - 1]);
+                return extractFromPath(request, 1);
             }
             if ("PUT".equals(request.getMethod())) {
-                String[] numbers = request.getRequestURI().split("/");
-                return Optional.ofNullable(numbers[numbers.length - 2]);
+                return extractFromPath(request, 2);
             }
             if ("POST".equals(request.getMethod())) {
-                try {
-                    String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-                    Map map = objectMapper.readValue(body, Map.class);
-                    return Optional.ofNullable((String) map.get("externalApplicationId"));
-                } catch (Exception e) {
-                    return Optional.empty();
-                }
+                return extractFromPostBody(request);
             }
         }
 
         return Optional.empty();
+    }
+
+    @NotNull
+    private static Optional<String> extractFromPath(HttpServletRequest request, int countFromEnd) {
+        String[] numbers = request.getRequestURI().split("/");
+        return Optional.ofNullable(numbers[numbers.length - countFromEnd]);
+    }
+
+    @NotNull
+    private static Optional<String> extractFromPostBody(HttpServletRequest request) {
+        try {
+            String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+            Map map = objectMapper.readValue(body, Map.class);
+            return Optional.ofNullable((String) map.get("externalApplicationId"));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
 }
