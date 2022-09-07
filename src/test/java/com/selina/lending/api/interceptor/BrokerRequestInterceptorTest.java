@@ -51,33 +51,57 @@ class BrokerRequestInterceptorTest {
 
     private static final String BROKER_JWT_CLIENT_ID = "fake-client-id";
     private static final String BROKER_HTTP_ATTR_NAME = "broker-request-id";
+    private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
 
     @Test
-    public void shouldSetBrokerRequestIdToHttpRequestAttributesWhenPreHandle() throws Exception {
+    public void shouldSetForeignRequestIdFromHeadersToHttpRequestAttributesWhenPreHandle() throws Exception {
         // Given
+        var foreignRequestId = "123";
         var httpRequest = mock(HttpServletRequest.class);
         doNothing().when(httpRequest).setAttribute(eq(BROKER_HTTP_ATTR_NAME), any());
+        when(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).thenReturn(foreignRequestId);
         mockSecurity();
 
         // When
         interceptor.preHandle(httpRequest, null, null);
 
         // Then
+        verify(httpRequest, times(1)).getHeader(eq(REQUEST_ID_HEADER_NAME));
+        verify(httpRequest, times(1)).setAttribute(eq(BROKER_HTTP_ATTR_NAME), eq(foreignRequestId));
+    }
+
+    @Test
+    public void shouldGenerateRequestIdAndSetToHttpRequestAttributesWhenNotPresentedInHeadersOnPreHandle() throws Exception {
+        // Given
+        var httpRequest = mock(HttpServletRequest.class);
+        doNothing().when(httpRequest).setAttribute(eq(BROKER_HTTP_ATTR_NAME), any());
+        when(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).thenReturn(null);
+
+        mockSecurity();
+
+        // When
+        interceptor.preHandle(httpRequest, null, null);
+
+        // Then
+        verify(httpRequest, times(1)).getHeader(eq(REQUEST_ID_HEADER_NAME));
         verify(httpRequest, times(1)).setAttribute(eq(BROKER_HTTP_ATTR_NAME), any());
     }
 
     @Test
     public void shouldPassRequestDataToResolverOnRequestStartedWhenExecutePreHandle() throws Exception {
         // Given
+        var requestId = "abc";
         var httpRequest = mock(HttpServletRequest.class);
         doNothing().when(kpiResolver).onRequestStarted(any(), any(), any());
+        when(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).thenReturn(requestId);
+
         mockSecurity();
 
         // When
         interceptor.preHandle(httpRequest, null, null);
 
         // Then
-        verify(kpiResolver, times(1)).onRequestStarted(eq(BROKER_JWT_CLIENT_ID), any(), eq(httpRequest));
+        verify(kpiResolver, times(1)).onRequestStarted(eq(BROKER_JWT_CLIENT_ID), eq(requestId), eq(httpRequest));
     }
 
     private void mockSecurity() {
@@ -130,6 +154,4 @@ class BrokerRequestInterceptorTest {
         // Then
         verify(kpiResolver, times(0)).onRequestFinished(eq(requestId), eq(httpResponseCode));
     }
-
-
 }

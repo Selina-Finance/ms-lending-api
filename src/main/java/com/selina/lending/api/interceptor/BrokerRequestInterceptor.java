@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -38,6 +39,7 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
     private final BrokerRequestKpiResolver kpiResolver;
     private final static String BROKER_ATTR_NAME = "broker-request-id";
     private final static String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
+    private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
 
     public BrokerRequestInterceptor(BrokerRequestKpiResolver kpiResolver) {
         this.kpiResolver = kpiResolver;
@@ -45,14 +47,16 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        var brokerRequestId = UUID.randomUUID().toString();
-        request.setAttribute(BROKER_ATTR_NAME, brokerRequestId);
+        String requestId = Optional
+                .ofNullable(request.getHeader(REQUEST_ID_HEADER_NAME))
+                .orElse(UUID.randomUUID().toString());
+        request.setAttribute(BROKER_ATTR_NAME, requestId);
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var jwt = (Jwt) authentication.getPrincipal();
         String brokerClientId = (String) jwt.getClaims().get(CLIENT_ID_JWT_CLAIM_NAME);
 
-        kpiResolver.onRequestStarted(brokerClientId, brokerRequestId, request);
+        kpiResolver.onRequestStarted(brokerClientId, requestId, request);
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
