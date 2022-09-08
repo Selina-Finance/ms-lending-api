@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.api.MiddlewareGetApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
@@ -35,16 +36,18 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     private final MiddlewareApi middlewareApi;
+    private final MiddlewareGetApi middlewareGetApi;
 
-    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi) {
+    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi, MiddlewareGetApi middlewareGetApi) {
         this.middlewareApi = middlewareApi;
+        this.middlewareGetApi = middlewareGetApi;
     }
 
-    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
+    @CircuitBreaker(name = "middleware-get-api-cb", fallbackMethod = "middlewareGetApiFallback")
     @Override
-    public Optional<ApplicationDecisionResponse> getApplicationById(String id) {
-        log.debug("Request to get application by id: {}", id);
-        return Optional.of(middlewareApi.getApplicationById(id));
+    public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String id) {
+        log.debug("Request to get application by externalApplicationId: {}", id);
+        return Optional.of(middlewareGetApi.getApplicationByExternalApplicationId(id));
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallbackDefault")

@@ -41,9 +41,9 @@ public class LendingController implements LendingOperations {
     }
 
     @Override
-    public ResponseEntity<ApplicationDecisionResponse> getApplication(String id) {
-        log.info("Get application {}", id);
-        var applicationResponse = lendingService.getApplication(id);
+    public ResponseEntity<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
+        log.info("Get application {}", externalApplicationId);
+        var applicationResponse = lendingService.getApplication(externalApplicationId);
         return ResponseEntity.of(applicationResponse.map(ApplicationDecisionResponseMapper.INSTANCE::mapToApplicationDecisionResponseDto));
     }
 

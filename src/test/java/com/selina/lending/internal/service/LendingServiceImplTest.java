@@ -61,7 +61,7 @@ class LendingServiceImplTest {
         var applicationDecisionResponse = Optional.of(
                 ApplicationDecisionResponse.builder().id(APPLICATION_ID).build());
 
-        when(middlewareRepository.getApplicationById(APPLICATION_ID)).thenReturn(applicationDecisionResponse);
+        when(middlewareRepository.getApplicationByExternalApplicationId(APPLICATION_ID)).thenReturn(applicationDecisionResponse);
 
         //When
         var response = lendingService.getApplication(APPLICATION_ID);
@@ -70,7 +70,7 @@ class LendingServiceImplTest {
         assertThat(response.isPresent(), equalTo(true));
         assertThat(response.get(), equalTo(applicationDecisionResponse.get()));
         assertThat(response.get().getId(), equalTo(APPLICATION_ID));
-        verify(middlewareRepository, times(1)).getApplicationById(APPLICATION_ID);
+        verify(middlewareRepository, times(1)).getApplicationByExternalApplicationId(APPLICATION_ID);
     }
 
     @Test
