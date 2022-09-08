@@ -26,7 +26,7 @@ import lombok.Value;
 public class FeesDto {
 
     @NotNull
-    Boolean addAdviceFeeToLoan;
+    Boolean isAddAdviceFeeToLoan;
 
     @NotNull
     Boolean addArrangementFeeToLoan;
