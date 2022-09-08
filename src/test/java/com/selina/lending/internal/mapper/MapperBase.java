@@ -179,13 +179,14 @@ public abstract class MapperBase {
                 .thirdPartyFee(FEE)
                 .commissionFee(FEE)
                 .valuationFee(FEE)
-                .addAdviceFeeToLoan(true)
-                .addArrangementFeeToLoan(true)
-                .addCommissionFeeToLoan(true)
-                .addValuationFeeToLoan(true)
-                .addThirdPartyFeeToLoan(true)
+                .isAddAdviceFeeToLoan(true)
+                .isAddArrangementFeeToLoan(true)
+                .isAddCommissionFeeToLoan(true)
+                .isAddValuationFeeToLoan(true)
+                .isAddThirdPartyFeeToLoan(true)
                 .arrangementFee(ARRANGEMENT_FEE)
-                .addProductFeesToFacility(true)
+                .isAddProductFeesToFacility(true)
+                .isAddIntermediaryFeeToLoan(false)
                 .build();
     }
 
@@ -225,7 +226,9 @@ public abstract class MapperBase {
     }
 
     protected EmploymentDto getEmploymentDto() {
-        return EmploymentDto.builder().employmentStatus(EMPLOYED_STATUS).employerName(EMPLOYER_NAME).build();
+        return EmploymentDto.builder().employmentStatus(EMPLOYED_STATUS).employerName(EMPLOYER_NAME)
+                .inProbationPeriod(false)
+                .build();
     }
 
     protected DIPApplicantDto getDIPApplicantDto() {
@@ -413,7 +416,7 @@ public abstract class MapperBase {
     }
 
     protected Fees getFees() {
-        return Fees.builder().arrangementFee(ARRANGEMENT_FEE).addProductFeesToFacility(true).build();
+        return Fees.builder().arrangementFee(ARRANGEMENT_FEE).isAddProductFeesToFacility(true).build();
     }
 
     protected Expenditure getExpenditure() {
