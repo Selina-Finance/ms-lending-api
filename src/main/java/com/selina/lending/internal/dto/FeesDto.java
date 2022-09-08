@@ -18,6 +18,8 @@ package com.selina.lending.internal.dto;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -26,19 +28,24 @@ import lombok.Value;
 public class FeesDto {
 
     @NotNull
-    Boolean addAdviceFeeToLoan;
+    @JsonProperty("addAdviceFeeToLoan")
+    Boolean isAddAdviceFeeToLoan;
 
     @NotNull
-    Boolean addArrangementFeeToLoan;
+    @JsonProperty("addArrangementFeeToLoan")
+    Boolean isAddArrangementFeeToLoan;
 
     @NotNull
-    Boolean addCommissionFeeToLoan;
+    @JsonProperty("addCommissionFeeToLoan")
+    Boolean isAddCommissionFeeToLoan;
 
     @NotNull
-    Boolean addThirdPartyFeeToLoan;
+    @JsonProperty("addThirdPartyFeeToLoan")
+    Boolean isAddThirdPartyFeeToLoan;
 
     @NotNull
-    Boolean addValuationFeeToLoan;
+    @JsonProperty("addValuationFeeToLoan")
+    Boolean isAddValuationFeeToLoan;
 
     @NotNull
     Double adviceFee;
@@ -56,7 +63,11 @@ public class FeesDto {
     Double valuationFee;
 
     @NotNull
-    Boolean addProductFeesToFacility;
+    @JsonProperty("addProductFeesToFacility")
+    Boolean isAddProductFeesToFacility;
+
     Double intermediaryFeeAmount;
-    Boolean addIntermediaryFeeToLoan;
+
+    @JsonProperty("addIntermediaryFeeToLoan")
+    Boolean isAddIntermediaryFeeToLoan;
 }

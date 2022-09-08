@@ -16,23 +16,32 @@
 
 package com.selina.lending.internal.service.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class Fees {
-    Boolean addAdviceFeeToLoan;
-    Boolean addArrangementFeeToLoan;
-    Boolean addCommissionFeeToLoan;
-    Boolean addThirdPartyFeeToLoan;
-    Boolean addValuationFeeToLoan;
+    @JsonProperty("addAdviceFeeToLoan")
+    Boolean isAddAdviceFeeToLoan;
+    @JsonProperty("addArrangementFeeToLoan")
+    Boolean isAddArrangementFeeToLoan;
+    @JsonProperty("addCommissionFeeToLoan")
+    Boolean isAddCommissionFeeToLoan;
+    @JsonProperty("addThirdPartyFeeToLoan")
+    Boolean isAddThirdPartyFeeToLoan;
+    @JsonProperty("addValuationFeeToLoan")
+    Boolean isAddValuationFeeToLoan;
     Double adviceFee;
     Double arrangementFee;
     Double commissionFee;
     Double thirdPartyFee;
     Double valuationFee;
-    Boolean addProductFeesToFacility;
+    @JsonProperty("addProductFeesToFacility")
+    Boolean isAddProductFeesToFacility;
     Double intermediaryFeeAmount;
-    Boolean addIntermediaryFeeToLoan;
+    @JsonProperty("addIntermediaryFeeToLoan")
+    Boolean isAddIntermediaryFeeToLoan;
 }
