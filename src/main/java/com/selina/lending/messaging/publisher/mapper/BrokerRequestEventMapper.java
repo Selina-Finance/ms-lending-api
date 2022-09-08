@@ -17,7 +17,6 @@
 
 package com.selina.lending.messaging.publisher.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
 import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +32,6 @@ import static com.selina.lending.messaging.publisher.mapper.ExternalAppIdHelper.
 @Slf4j
 @Component
 public class BrokerRequestEventMapper {
-
-    private final ObjectMapper objectMapper;
-
-    public BrokerRequestEventMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
 
     public BrokerRequestStartedEvent toStartedEvent(String broker, String requestId, HttpServletRequest httpRequest) {
         return BrokerRequestStartedEvent.builder()
