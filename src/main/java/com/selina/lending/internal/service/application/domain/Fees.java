@@ -22,7 +22,7 @@ import lombok.Value;
 @Builder
 @Value
 public class Fees {
-    Boolean isAddAdviceFeeToLoan;
+    Boolean addAdviceFeeToLoan;
     Boolean addArrangementFeeToLoan;
     Boolean addCommissionFeeToLoan;
     Boolean addThirdPartyFeeToLoan;

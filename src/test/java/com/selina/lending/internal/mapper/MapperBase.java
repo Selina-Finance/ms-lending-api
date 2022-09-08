@@ -179,7 +179,7 @@ public abstract class MapperBase {
                 .thirdPartyFee(FEE)
                 .commissionFee(FEE)
                 .valuationFee(FEE)
-                .isAddAdviceFeeToLoan(true)
+                .addAdviceFeeToLoan(true)
                 .addArrangementFeeToLoan(true)
                 .addCommissionFeeToLoan(true)
                 .addValuationFeeToLoan(true)
