@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 public class ExternalAppIdHelper {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private ExternalAppIdHelper() {
+    }
+
     public static Optional<String> getExternalAppId(HttpServletRequest request) {
 
         if (request.getRequestURI().contains("/application")) {

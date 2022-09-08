@@ -28,6 +28,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 import static com.selina.lending.messaging.publisher.mapper.ExternalAppIdHelper.getExternalAppId;
+import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
 
 @Slf4j
 @Component
@@ -54,14 +55,7 @@ public class BrokerRequestEventMapper {
         return optExternalAppId.orElse(null);
     }
 
-    private String getRemoteAddr(@NotNull HttpServletRequest request) {
-        String ipFromHeader = request.getHeader("X-FORWARDED-FOR");
-        if (ipFromHeader != null && ipFromHeader.length() > 0) {
-            log.debug("ip from proxy - X-FORWARDED-FOR : " + ipFromHeader);
-            return ipFromHeader;
-        }
-        return request.getRemoteAddr();
-    }
+
 
     public BrokerRequestFinishedEvent toFinishedEvent(String requestId, int httpResponseCode) {
         return new BrokerRequestFinishedEvent(requestId, httpResponseCode, Instant.now());
