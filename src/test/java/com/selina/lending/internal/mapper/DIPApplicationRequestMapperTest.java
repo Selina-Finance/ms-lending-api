@@ -23,6 +23,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.Test;
 
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+
 class DIPApplicationRequestMapperTest extends MapperBase{
 
     @Test
@@ -64,19 +66,35 @@ class DIPApplicationRequestMapperTest extends MapperBase{
         assertThat(applicationRequest.getApplicants().get(0).getIncome().getIncome().size(), equalTo(1));
         assertThat(applicationRequest.getApplicants().get(0).getAddresses().size(), equalTo(1));
         assertThat(applicationRequest.getApplicants().get(0).getEmployment(), notNullValue());
+        assertThat(applicationRequest.getApplicants().get(0).getEmployment().getInProbationPeriod(), equalTo(false));
         assertThat(applicationRequest.getLoanInformation().getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(applicationRequest.getLoanInformation().getFacilities().size(), equalTo(1));
         assertThat(applicationRequest.getPropertyDetails(), notNullValue());
         assertThat(applicationRequest.getPropertyDetails().getAddressLine1(), equalTo(ADDRESS_LINE_1));
         assertThat(applicationRequest.getPropertyDetails().getAddressLine2(), equalTo(ADDRESS_LINE_2));
 
+        assertPriorCharges(applicationRequest);
+
+        assertFees(applicationRequest);
+    }
+
+    private void assertFees(ApplicationRequest applicationRequest) {
+        var fees = applicationRequest.getFees();
+        assertThat(fees, notNullValue());
+        assertThat(fees.getIsAddAdviceFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddArrangementFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddCommissionFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddValuationFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddThirdPartyFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddIntermediaryFeeToLoan(), equalTo(false));
+        assertThat(fees.getArrangementFee(), equalTo(ARRANGEMENT_FEE));
+    }
+
+    private void assertPriorCharges(ApplicationRequest applicationRequest) {
         var priorCharges = applicationRequest.getPropertyDetails().getPriorCharges().get(0);
         assertThat(priorCharges.getName(), equalTo(HSBC));
         assertThat(priorCharges.getRateType(), equalTo(RATE_TYPE));
         assertThat(priorCharges.getRepaymentType(), equalTo(REPAYMENT_TYPE));
         assertThat(priorCharges.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
-
-        assertThat(applicationRequest.getFees(), notNullValue());
-        assertThat(applicationRequest.getFees().getArrangementFee(), equalTo(ARRANGEMENT_FEE));
     }
 }
