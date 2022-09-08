@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class IPHelperTest {
 
     @Test
-    public void shouldGetIpFromXForwardedHeaderWhenItPresentAndValid() {
+    void shouldGetIpFromXForwardedHeaderWhenItPresentAndValid() {
         // Given
         var ip = "127.0.0.1";
         var httpRequest = new MockHttpServletRequest();
@@ -40,7 +40,7 @@ class IPHelperTest {
     }
 
     @Test
-    public void shouldNotGetIpFromXForwardedHeaderWhenItPresentAsEmptyString() {
+    void shouldNotGetIpFromXForwardedHeaderWhenItPresentAsEmptyString() {
         // Given
         var ip = "";
         var httpRequest = new MockHttpServletRequest();
@@ -54,7 +54,7 @@ class IPHelperTest {
     }
 
     @Test
-    public void shouldGetIpFromRequestRemoteAddrWhenXForwardedHeaderIsNull() {
+    void shouldGetIpFromRequestRemoteAddrWhenXForwardedHeaderIsNull() {
         // Given
         var ip = "31.13.12.1";
         var httpRequest = new MockHttpServletRequest();
