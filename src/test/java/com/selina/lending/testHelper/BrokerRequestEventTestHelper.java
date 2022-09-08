@@ -17,7 +17,7 @@
 
 package com.selina.lending.testHelper;
 
-import com.selina.lending.messaging.publisher.event.BrokerRequestStartedEvent;
+import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
 
 import java.time.Instant;
 import java.util.UUID;

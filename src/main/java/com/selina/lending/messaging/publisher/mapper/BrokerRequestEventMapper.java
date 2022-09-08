@@ -17,11 +17,9 @@
 
 package com.selina.lending.messaging.publisher.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.messaging.publisher.event.BrokerRequestFinishedEvent;
-import com.selina.lending.messaging.publisher.event.BrokerRequestStartedEvent;
+import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
+import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,16 +27,11 @@ import java.time.Instant;
 import java.util.Optional;
 
 import static com.selina.lending.messaging.publisher.mapper.ExternalAppIdHelper.getExternalAppId;
+import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
 
 @Slf4j
 @Component
 public class BrokerRequestEventMapper {
-
-    private final ObjectMapper objectMapper;
-
-    public BrokerRequestEventMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
 
     public BrokerRequestStartedEvent toStartedEvent(String broker, String requestId, HttpServletRequest httpRequest) {
         return BrokerRequestStartedEvent.builder()
@@ -61,14 +54,6 @@ public class BrokerRequestEventMapper {
         return optExternalAppId.orElse(null);
     }
 
-    private String getRemoteAddr(@NotNull HttpServletRequest request) {
-        String ipFromHeader = request.getHeader("X-FORWARDED-FOR");
-        if (ipFromHeader != null && ipFromHeader.length() > 0) {
-            log.debug("ip from proxy - X-FORWARDED-FOR : " + ipFromHeader);
-            return ipFromHeader;
-        }
-        return request.getRemoteAddr();
-    }
 
     public BrokerRequestFinishedEvent toFinishedEvent(String requestId, int httpResponseCode) {
         return new BrokerRequestFinishedEvent(requestId, httpResponseCode, Instant.now());

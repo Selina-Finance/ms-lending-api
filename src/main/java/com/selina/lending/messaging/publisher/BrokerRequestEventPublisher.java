@@ -20,7 +20,7 @@ package com.selina.lending.messaging.publisher;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.messaging.kafka.KafkaManager;
-import com.selina.lending.messaging.publisher.event.BrokerRequestEvent;
+import com.selina.lending.messaging.event.BrokerRequestEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

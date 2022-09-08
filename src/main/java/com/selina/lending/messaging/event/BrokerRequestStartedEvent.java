@@ -15,8 +15,24 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.event;
+package com.selina.lending.messaging.event;
 
-public interface BrokerRequestEvent {
-    String key();
+import lombok.Builder;
+
+import java.time.Instant;
+
+@Builder
+public record BrokerRequestStartedEvent(
+        String requestId,
+        String externalApplicationId,
+        Instant created,
+        String source,
+        String uriPath,
+        String httpMethod,
+        String ip
+) implements BrokerRequestEvent {
+    @Override
+    public String key() {
+        return requestId;
+    }
 }

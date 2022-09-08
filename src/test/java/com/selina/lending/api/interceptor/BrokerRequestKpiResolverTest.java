@@ -18,7 +18,7 @@
 package com.selina.lending.api.interceptor;
 
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
-import com.selina.lending.messaging.publisher.event.BrokerRequestFinishedEvent;
+import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
 import com.selina.lending.messaging.publisher.mapper.BrokerRequestEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

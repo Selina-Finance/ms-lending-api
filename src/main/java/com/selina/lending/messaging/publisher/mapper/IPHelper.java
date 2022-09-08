@@ -15,17 +15,22 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.event;
+package com.selina.lending.messaging.publisher.mapper;
 
-import java.time.Instant;
+import org.jetbrains.annotations.NotNull;
 
-public record BrokerRequestFinishedEvent(
-        String requestId,
-        Integer httpResponseCode,
-        Instant created
-) implements BrokerRequestEvent {
-    @Override
-    public String key() {
-        return requestId;
+import javax.servlet.http.HttpServletRequest;
+
+public class IPHelper {
+
+    private IPHelper() {
+    }
+
+    public static String getRemoteAddr(@NotNull HttpServletRequest request) {
+        String ipFromHeader = request.getHeader("X-FORWARDED-FOR");
+        if (ipFromHeader != null && ipFromHeader.length() > 0) {
+            return ipFromHeader;
+        }
+        return request.getRemoteAddr();
     }
 }
