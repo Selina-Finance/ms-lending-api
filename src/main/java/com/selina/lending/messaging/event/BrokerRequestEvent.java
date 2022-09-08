@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.event;
+package com.selina.lending.messaging.event;
 
 public interface BrokerRequestEvent {
     String key();

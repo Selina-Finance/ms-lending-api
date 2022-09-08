@@ -18,8 +18,8 @@
 package com.selina.lending.messaging.publisher.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.messaging.publisher.event.BrokerRequestFinishedEvent;
-import com.selina.lending.messaging.publisher.event.BrokerRequestStartedEvent;
+import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
+import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;

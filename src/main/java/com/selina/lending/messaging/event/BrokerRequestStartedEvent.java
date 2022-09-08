@@ -15,14 +15,21 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.event;
+package com.selina.lending.messaging.event;
+
+import lombok.Builder;
 
 import java.time.Instant;
 
-public record BrokerRequestFinishedEvent(
+@Builder
+public record BrokerRequestStartedEvent(
         String requestId,
-        Integer httpResponseCode,
-        Instant created
+        String externalApplicationId,
+        Instant created,
+        String source,
+        String uriPath,
+        String httpMethod,
+        String ip
 ) implements BrokerRequestEvent {
     @Override
     public String key() {
