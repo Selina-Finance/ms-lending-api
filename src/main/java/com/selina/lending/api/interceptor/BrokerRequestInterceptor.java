@@ -20,8 +20,6 @@ package com.selina.lending.api.interceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,18 +29,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.selina.lending.internal.service.TokenService;
+
 @Slf4j
 @Component
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestInterceptor implements HandlerInterceptor {
 
     private final BrokerRequestKpiResolver kpiResolver;
-    private static final String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
+    private final TokenService tokenService;
     private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
     private static final String REQUEST_ID_ATTR_NAME = "broker-request-id";
 
-    public BrokerRequestInterceptor(BrokerRequestKpiResolver kpiResolver) {
+    public BrokerRequestInterceptor(BrokerRequestKpiResolver kpiResolver, TokenService tokenService) {
         this.kpiResolver = kpiResolver;
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -52,9 +53,7 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
                 .orElse(UUID.randomUUID().toString());
         request.setAttribute(REQUEST_ID_ATTR_NAME, requestId);
 
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var jwt = (Jwt) authentication.getPrincipal();
-        String brokerClientId = (String) jwt.getClaims().get(CLIENT_ID_JWT_CLAIM_NAME);
+        String brokerClientId = tokenService.retrieveClientId();
 
         kpiResolver.onRequestStarted(brokerClientId, requestId, request);
 

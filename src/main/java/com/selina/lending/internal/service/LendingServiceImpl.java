@@ -31,9 +31,11 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 public class LendingServiceImpl implements LendingService {
 
     private final MiddlewareRepository middlewareRepository;
+    private final TokenService tokenService;
 
-    public LendingServiceImpl(MiddlewareRepository middlewareRepository) {
+    public LendingServiceImpl(MiddlewareRepository middlewareRepository, TokenService tokenService) {
         this.middlewareRepository = middlewareRepository;
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -48,6 +50,8 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     public ApplicationResponse createDipApplication(DIPApplicationRequest dipApplicationRequest) {
-        return middlewareRepository.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
+        var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
+        applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
+        return middlewareRepository.createDipApplication(applicationRequest);
     }
 }

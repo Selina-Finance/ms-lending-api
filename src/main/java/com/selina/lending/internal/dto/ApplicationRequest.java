@@ -43,7 +43,6 @@ public class ApplicationRequest {
     @EnumValue(enumClass = Source.class)
     private String source;
     private String sourceClientId;
-    private String sourceAccount;
 
     @NotBlank
     @Schema(implementation = ProductCode.class)

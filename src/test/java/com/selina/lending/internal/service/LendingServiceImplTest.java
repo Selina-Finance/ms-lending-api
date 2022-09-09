@@ -46,8 +46,13 @@ class LendingServiceImplTest {
     private static final String APPLICATION_ID = "applicationId";
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
 
+    private static final String SOURCE_ACCOUNT = "source account";
+
     @Mock
     private MiddlewareRepository middlewareRepository;
+
+    @Mock
+    private TokenService tokenService;
 
     @Mock
     private ApplicationResponse applicationResponse;
@@ -94,6 +99,7 @@ class LendingServiceImplTest {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         when(middlewareRepository.createDipApplication(any())).thenReturn(applicationResponse);
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
 
         //When
         ApplicationResponse response = lendingService.createDipApplication(request);
