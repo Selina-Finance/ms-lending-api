@@ -86,21 +86,37 @@ class MiddlewareRepositoryTest {
         verify(middlewareApi, times(1)).getApplicationById(id);
     }
 
-
     @Test
     void shouldCallHttpClientWhenGetApplicationIdByExternalApplicationIdInvoked() {
         // Given
         var id = UUID.randomUUID().toString();
-        var apiResponse = ApplicationIdentifier.builder().build();
+        var extApplicationId = UUID.randomUUID().toString();
+        var apiResponse = ApplicationIdentifier.builder().id(id).build();
 
-        when(middlewareGetApi.getApplicationIdByExternalApplicationId(id)).thenReturn(apiResponse);
+        when(middlewareGetApi.getApplicationIdByExternalApplicationId(extApplicationId)).thenReturn(apiResponse);
 
         // When
-        var result = middlewareRepository.getApplicationIdByExternalApplicationId(id);
+        var result = middlewareRepository.getApplicationIdByExternalApplicationId(extApplicationId);
 
         // Then
         assertThat(result).isEqualTo(Optional.of(apiResponse));
-        verify(middlewareGetApi, times(1)).getApplicationIdByExternalApplicationId(id);
+        verify(middlewareGetApi, times(1)).getApplicationIdByExternalApplicationId(extApplicationId);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenGetSourceAccountByExternalApplicationIdInvoked() {
+        // Given
+        var extApplicationId = UUID.randomUUID().toString();
+        var apiResponse = ApplicationIdentifier.builder().sourceAccount("Source Account").build();
+
+        when(middlewareGetApi.getApplicationSourceAccountByExternalApplicationId(extApplicationId)).thenReturn(apiResponse);
+
+        // When
+        var result = middlewareRepository.getApplicationSourceAccountByExternalApplicationId(extApplicationId);
+
+        // Then
+        assertThat(result).isEqualTo(Optional.of(apiResponse));
+        verify(middlewareGetApi, times(1)).getApplicationSourceAccountByExternalApplicationId(extApplicationId);
     }
 
     @Test

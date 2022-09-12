@@ -58,6 +58,12 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return Optional.of(middlewareGetApi.getApplicationIdByExternalApplicationId(externalApplicationId));
     }
 
+    @Override
+    public Optional<ApplicationIdentifier> getApplicationSourceAccountByExternalApplicationId(
+            String externalApplicationId) {
+        return Optional.of(middlewareGetApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId));
+    }
+
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallbackDefault")
     @Override
     public void updateDipApplication(String id, ApplicationRequest applicationRequest) {

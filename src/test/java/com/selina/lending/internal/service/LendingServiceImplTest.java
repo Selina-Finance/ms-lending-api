@@ -19,7 +19,6 @@ package com.selina.lending.internal.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -35,8 +34,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
@@ -111,17 +108,5 @@ class LendingServiceImplTest {
         //Then
         assertThat(response, equalTo(applicationResponse));
         verify(middlewareRepository, times(1)).createDipApplication(any());
-    }
-
-    @Test
-    void getApplicationThrowsCustom4xxExceptionWhenApplicationNotFound() {
-        //Given
-        when(middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.empty());
-
-        //When
-        var exception = assertThrows(Custom4xxException.class, () -> lendingService.getApplication(EXTERNAL_APPLICATION_ID));
-
-        //Then
-        assertThat(exception.getMessage(), equalTo("Error: Application not found for externalCaseId"));
     }
 }

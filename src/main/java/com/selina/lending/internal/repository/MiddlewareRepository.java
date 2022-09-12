@@ -29,6 +29,8 @@ public interface MiddlewareRepository {
 
     Optional<ApplicationIdentifier> getApplicationIdByExternalApplicationId(String externalApplicationId);
 
+    Optional<ApplicationIdentifier> getApplicationSourceAccountByExternalApplicationId(String externalApplicationId);
+
     void updateDipApplication(String id, ApplicationRequest applicationRequest);
 
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);

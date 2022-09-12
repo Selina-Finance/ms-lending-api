@@ -29,4 +29,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationIdentif
 public interface MiddlewareGetApi {
     @GetMapping(path = "/application/application-id/{externalApplicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationIdentifier getApplicationIdByExternalApplicationId(@PathVariable("externalApplicationId") String externalApplicationId);
+
+    @GetMapping(path = "/application/source-account/{externalApplicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(@PathVariable("externalApplicationId") String externalApplicationId);
 }

@@ -79,7 +79,7 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/custom-4xx-exception")
     public void customException() {
-        throw new Custom4xxException("Some problem details that make sense", Status.BAD_REQUEST);
+        throw new Custom4xxException("Some problem details that make sense");
     }
 
     @GetMapping("/custom-remote-resource-problem-exception")
