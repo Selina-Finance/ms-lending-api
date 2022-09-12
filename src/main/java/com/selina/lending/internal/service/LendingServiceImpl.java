@@ -20,11 +20,14 @@ package com.selina.lending.internal.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.zalando.problem.Status;
 
+import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @Service
@@ -37,8 +40,13 @@ public class LendingServiceImpl implements LendingService {
     }
 
     @Override
-    public Optional<ApplicationDecisionResponse> getApplication(String id) {
-        return middlewareRepository.getApplicationByExternalApplicationId(id);
+    public Optional<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
+        // Get applicationId by externalId, then use the ID returned from get
+        Optional<ApplicationIdentifier> applicationIdentifier  = middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
+        if (applicationIdentifier.isPresent()) {
+            return middlewareRepository.getApplicationById(applicationIdentifier.get().getId());
+        }
+        throw new Custom4xxException("Application not found for "+externalApplicationId, Status.NOT_FOUND);
     }
 
     @Override

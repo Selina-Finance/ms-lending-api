@@ -23,7 +23,7 @@ import org.zalando.problem.Status;
 
 public class Custom4xxException extends AbstractThrowableProblem {
 
-    public Custom4xxException(@Nullable String details) {
-        super(null, "The custom exception title", Status.BAD_REQUEST, details);
+    public Custom4xxException(@Nullable String details, Status status) {
+        super(null, "Error", status, details);
     }
 }

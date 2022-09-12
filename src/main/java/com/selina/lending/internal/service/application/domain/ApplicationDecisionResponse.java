@@ -62,7 +62,6 @@ public class ApplicationDecisionResponse {
     private String initialDisbursalAmount;
     private Underwriting underwriting;
     private List<Applicant> applicants;
-    private CreditCommitments creditCommitments;
     private LoanInformation loanInformation;
     private PropertyDetails propertyDetails;
     private Salesforce salesforce;

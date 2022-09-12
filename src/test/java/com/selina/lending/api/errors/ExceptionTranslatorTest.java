@@ -85,7 +85,7 @@ class ExceptionTranslatorTest {
     @Test
     void handleCustomException() throws Exception {
         // Given
-        var expectedTitle = "The custom exception title";
+        var expectedTitle = "Error";
         var expectedDetail = "Some problem details that make sense";
 
         // When

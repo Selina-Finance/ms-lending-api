@@ -25,6 +25,7 @@ import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.api.MiddlewareGetApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
@@ -43,11 +44,17 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         this.middlewareGetApi = middlewareGetApi;
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
+    @Override
+    public Optional<ApplicationDecisionResponse> getApplicationById(String id) {
+        log.debug("Request to get application by id: {}", id);
+        return Optional.of(middlewareApi.getApplicationById(id));
+    }
+
     @CircuitBreaker(name = "middleware-get-api-cb", fallbackMethod = "middlewareGetApiFallback")
     @Override
-    public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String id) {
-        log.debug("Request to get application by externalApplicationId: {}", id);
-        return Optional.of(middlewareGetApi.getApplicationByExternalApplicationId(id));
+    public Optional<ApplicationIdentifier> getApplicationIdByExternalApplicationId(String externalApplicationId) {
+        return Optional.of(middlewareGetApi.getApplicationIdByExternalApplicationId(externalApplicationId));
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallbackDefault")

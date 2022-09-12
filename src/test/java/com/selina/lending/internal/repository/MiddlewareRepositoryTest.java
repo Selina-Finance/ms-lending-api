@@ -40,6 +40,7 @@ import org.springframework.http.HttpStatus;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.api.MiddlewareGetApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
@@ -70,19 +71,36 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
-    void shouldCallHttpClientWhenGetApplicationByExternalApplicationIdInvoked() {
+    void shouldCallHttpClientWhenGetApplicationByIdInvoked() {
         // Given
         var id = UUID.randomUUID().toString();
         var apiResponse = ApplicationDecisionResponse.builder().build();
 
-        when(middlewareGetApi.getApplicationByExternalApplicationId(id)).thenReturn(apiResponse);
+        when(middlewareApi.getApplicationById(id)).thenReturn(apiResponse);
 
         // When
-        var result = middlewareRepository.getApplicationByExternalApplicationId(id);
+        var result = middlewareRepository.getApplicationById(id);
 
         // Then
         assertThat(result).isEqualTo(Optional.of(apiResponse));
-        verify(middlewareGetApi, times(1)).getApplicationByExternalApplicationId(id);
+        verify(middlewareApi, times(1)).getApplicationById(id);
+    }
+
+
+    @Test
+    void shouldCallHttpClientWhenGetApplicationIdByExternalApplicationIdInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+        var apiResponse = ApplicationIdentifier.builder().build();
+
+        when(middlewareGetApi.getApplicationIdByExternalApplicationId(id)).thenReturn(apiResponse);
+
+        // When
+        var result = middlewareRepository.getApplicationIdByExternalApplicationId(id);
+
+        // Then
+        assertThat(result).isEqualTo(Optional.of(apiResponse));
+        verify(middlewareGetApi, times(1)).getApplicationIdByExternalApplicationId(id);
     }
 
     @Test
@@ -121,12 +139,12 @@ class MiddlewareRepositoryTest {
         var id = UUID.randomUUID().toString();
 
         //When
-        when(middlewareGetApi.getApplicationByExternalApplicationId(id)).thenThrow(
+        when(middlewareApi.getApplicationById(id)).thenThrow(
                 new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
                         errorMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignServerException.class,
-                () -> middlewareRepository.getApplicationByExternalApplicationId(id));
+                () -> middlewareRepository.getApplicationById(id));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
@@ -139,12 +157,12 @@ class MiddlewareRepositoryTest {
         var id = UUID.randomUUID().toString();
 
         //When
-        when(middlewareGetApi.getApplicationByExternalApplicationId(id)).thenThrow(
+        when(middlewareApi.getApplicationById(id)).thenThrow(
                 new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
                         notFoundMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignClientException.class,
-                () -> middlewareRepository.getApplicationByExternalApplicationId(id));
+                () -> middlewareRepository.getApplicationById(id));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
@@ -157,10 +175,10 @@ class MiddlewareRepositoryTest {
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareGetApi.getApplicationByExternalApplicationId(id)).thenThrow(
+        when(middlewareApi.getApplicationById(id)).thenThrow(
                 new FeignException.InternalServerError("Internal Server Error", createRequest(), "error".getBytes(), null));
 
-        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationByExternalApplicationId(id));
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationById(id));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
@@ -174,7 +192,7 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
         assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
 
-        verify(middlewareGetApi, times(5)).getApplicationByExternalApplicationId(id);
+        verify(middlewareApi, times(5)).getApplicationById(id);
     }
 
 
@@ -185,9 +203,9 @@ class MiddlewareRepositoryTest {
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareGetApi.getApplicationByExternalApplicationId(id)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
+        when(middlewareApi.getApplicationById(id)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
 
-        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationByExternalApplicationId(id));
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationById(id));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
@@ -201,7 +219,7 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
         assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
 
-        verify(middlewareGetApi, times(5)).getApplicationByExternalApplicationId(id);
+        verify(middlewareApi, times(5)).getApplicationById(id);
     }
 
     @Test
@@ -211,10 +229,10 @@ class MiddlewareRepositoryTest {
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareGetApi.getApplicationByExternalApplicationId(id)).thenThrow(
+        when(middlewareApi.getApplicationById(id)).thenThrow(
                 new FeignException.NotFound("Not found", createRequest(), "not found".getBytes(), null));
 
-        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationByExternalApplicationId(id));
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationById(id));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
@@ -228,7 +246,7 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isZero();
         assertThat(metrics.getNumberOfNotPermittedCalls()).isZero();
 
-        verify(middlewareGetApi, times(10)).getApplicationByExternalApplicationId(id);
+        verify(middlewareApi, times(10)).getApplicationById(id);
     }
 
     private Request createRequest() {

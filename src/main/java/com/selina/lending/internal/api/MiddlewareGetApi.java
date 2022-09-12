@@ -21,13 +21,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 
 @FeignClient(
         value = "middleware-get-api",
         url = "${middleware.get.api.url}")
 public interface MiddlewareGetApi {
-    @GetMapping(path = "/application/external-id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ApplicationDecisionResponse getApplicationByExternalApplicationId(@PathVariable("id") String id);
+    @GetMapping(path = "/application/application-id/{externalApplicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ApplicationIdentifier getApplicationIdByExternalApplicationId(@PathVariable("externalApplicationId") String externalApplicationId);
 }

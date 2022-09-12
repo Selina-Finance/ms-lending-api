@@ -58,7 +58,6 @@ public class ApplicationDecisionResponse {
     String nameOfAccountHolder;
     String initialDisbursalAmount;
     List<ApplicantResponseDto> applicants;
-    CreditCommitmentsDto creditCommitments;
     SalesforceDto salesforce;
     LoanInformationDto loanInformation;
     PropertyDetailsDto propertyDetails;
