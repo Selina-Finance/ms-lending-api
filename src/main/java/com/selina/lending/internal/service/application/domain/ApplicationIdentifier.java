@@ -17,11 +17,16 @@
 
 package com.selina.lending.internal.service.application.domain;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class ApplicationIdentifier {
-    String id;
+    private String id;
 }

@@ -27,7 +27,6 @@ import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @Service
@@ -41,8 +40,7 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
-        // Get applicationId by externalId, then use the ID returned from get
-        Optional<ApplicationIdentifier> applicationIdentifier  = middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
+        var applicationIdentifier= middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
         if (applicationIdentifier.isPresent()) {
             return middlewareRepository.getApplicationById(applicationIdentifier.get().getId());
         }

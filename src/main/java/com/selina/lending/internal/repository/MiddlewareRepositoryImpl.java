@@ -51,9 +51,10 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return Optional.of(middlewareApi.getApplicationById(id));
     }
 
-    @CircuitBreaker(name = "middleware-get-api-cb", fallbackMethod = "middlewareGetApiFallback")
+    @CircuitBreaker(name = "middleware-get-api-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
     public Optional<ApplicationIdentifier> getApplicationIdByExternalApplicationId(String externalApplicationId) {
+        log.debug("Request to get application id by external application id {}", externalApplicationId);
         return Optional.of(middlewareGetApi.getApplicationIdByExternalApplicationId(externalApplicationId));
     }
 
@@ -73,6 +74,16 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
         log.info("Finished calling mw to create dip application id {}", appResponse.getApplicationId());
         return appResponse;
+    }
+
+    private Optional<ApplicationIdentifier> middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) {
+        defaultMiddlewareFallback(e);
+        return Optional.empty();
+    }
+
+    private Optional<ApplicationIdentifier> middlewareGetByExternalIdApiFallback(feign.RetryableException e) {
+        defaultMiddlewareFallback(e);
+        return Optional.empty();
     }
 
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) {
