@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.zalando.problem.Status;
 
 import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;

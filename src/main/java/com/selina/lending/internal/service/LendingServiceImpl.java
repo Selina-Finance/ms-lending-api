@@ -37,11 +37,8 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
-       var applicationIdentifier= middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
-       if (applicationIdentifier.isPresent()) {
-            return middlewareRepository.getApplicationById(applicationIdentifier.get().getId());
-       }
-       return Optional.empty();
+       var applicationIdentifier = middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
+       return applicationIdentifier.isPresent() ? middlewareRepository.getApplicationById(applicationIdentifier.get().getId()) : Optional.empty();
     }
 
     @Override
