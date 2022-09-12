@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
-import com.selina.lending.internal.api.MiddlewareGetApi;
+import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
@@ -37,11 +37,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     private final MiddlewareApi middlewareApi;
-    private final MiddlewareGetApi middlewareGetApi;
+    private final MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
-    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi, MiddlewareGetApi middlewareGetApi) {
+    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi, MiddlewareApplicationServiceApi middlewareApplicationServiceApi) {
         this.middlewareApi = middlewareApi;
-        this.middlewareGetApi = middlewareGetApi;
+        this.middlewareApplicationServiceApi = middlewareApplicationServiceApi;
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
@@ -51,17 +51,18 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return Optional.of(middlewareApi.getApplicationById(id));
     }
 
-    @CircuitBreaker(name = "middleware-get-api-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
+    @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
     public Optional<ApplicationIdentifier> getApplicationIdByExternalApplicationId(String externalApplicationId) {
         log.debug("Request to get application id by external application id {}", externalApplicationId);
-        return Optional.of(middlewareGetApi.getApplicationIdByExternalApplicationId(externalApplicationId));
+        return Optional.of(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalApplicationId));
     }
 
+    @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
     public Optional<ApplicationIdentifier> getApplicationSourceAccountByExternalApplicationId(
             String externalApplicationId) {
-        return Optional.of(middlewareGetApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId));
+        return Optional.of(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId));
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallbackDefault")

@@ -31,7 +31,7 @@ resilience4j:
         recordExceptions:
           - feign.FeignException.FeignServerException
           - feign.RetryableException
-      middleware-get-api-cb:
+      middleware-application-service-cb:
         wait-duration-in-open-state: 1m
         permitted-number-of-calls-in-half-open-state: 3
         sliding-window-type: count-based

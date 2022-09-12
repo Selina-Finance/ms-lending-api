@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 
 @FeignClient(
-        value = "middleware-get-api",
-        url = "${middleware.get.api.url}")
-public interface MiddlewareGetApi {
+        value = "middleware-application-service-api",
+        url = "${middleware.application.service.url}")
+public interface MiddlewareApplicationServiceApi {
     @GetMapping(path = "/application/application-id/{externalApplicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationIdentifier getApplicationIdByExternalApplicationId(@PathVariable("externalApplicationId") String externalApplicationId);
 

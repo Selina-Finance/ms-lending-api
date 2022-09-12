@@ -38,7 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApi;
-import com.selina.lending.internal.api.MiddlewareGetApi;
+import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
@@ -58,7 +58,7 @@ class MiddlewareRepositoryTest {
     private MiddlewareApi middlewareApi;
 
     @Mock
-    private MiddlewareGetApi middlewareGetApi;
+    private MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
     @Mock
     private ApplicationRequest applicationRequest;
@@ -67,7 +67,7 @@ class MiddlewareRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, middlewareGetApi);
+        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, middlewareApplicationServiceApi);
     }
 
     @Test
@@ -93,14 +93,14 @@ class MiddlewareRepositoryTest {
         var extApplicationId = UUID.randomUUID().toString();
         var apiResponse = ApplicationIdentifier.builder().id(id).build();
 
-        when(middlewareGetApi.getApplicationIdByExternalApplicationId(extApplicationId)).thenReturn(apiResponse);
+        when(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(extApplicationId)).thenReturn(apiResponse);
 
         // When
         var result = middlewareRepository.getApplicationIdByExternalApplicationId(extApplicationId);
 
         // Then
         assertThat(result).isEqualTo(Optional.of(apiResponse));
-        verify(middlewareGetApi, times(1)).getApplicationIdByExternalApplicationId(extApplicationId);
+        verify(middlewareApplicationServiceApi, times(1)).getApplicationIdByExternalApplicationId(extApplicationId);
     }
 
     @Test
@@ -109,14 +109,14 @@ class MiddlewareRepositoryTest {
         var extApplicationId = UUID.randomUUID().toString();
         var apiResponse = ApplicationIdentifier.builder().sourceAccount("Source Account").build();
 
-        when(middlewareGetApi.getApplicationSourceAccountByExternalApplicationId(extApplicationId)).thenReturn(apiResponse);
+        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(extApplicationId)).thenReturn(apiResponse);
 
         // When
         var result = middlewareRepository.getApplicationSourceAccountByExternalApplicationId(extApplicationId);
 
         // Then
         assertThat(result).isEqualTo(Optional.of(apiResponse));
-        verify(middlewareGetApi, times(1)).getApplicationSourceAccountByExternalApplicationId(extApplicationId);
+        verify(middlewareApplicationServiceApi, times(1)).getApplicationSourceAccountByExternalApplicationId(extApplicationId);
     }
 
     @Test
