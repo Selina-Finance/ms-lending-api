@@ -88,6 +88,18 @@ class LendingServiceImplTest {
     }
 
     @Test
+    void getApplicationWhenApplicationNotFoundReturnsEmptyResponse() {
+        //Given
+        when(middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.empty());
+
+        //When
+        var response = lendingService.getApplication(EXTERNAL_APPLICATION_ID);
+
+        //Then
+        assertThat(response.isEmpty(), equalTo(true));
+    }
+
+    @Test
     void updateDipApplication() {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
