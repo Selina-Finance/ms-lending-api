@@ -34,10 +34,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
@@ -52,6 +52,9 @@ class LendingServiceImplTest {
     @Mock
     private ApplicationResponse applicationResponse;
 
+    @Mock
+    private ApplicationIdentifier applicationIdentifier;
+
     @InjectMocks
     private LendingServiceImpl lendingService;
 
@@ -59,17 +62,21 @@ class LendingServiceImplTest {
     void getApplication() {
         //Given
         var applicationDecisionResponse = Optional.of(
-                ApplicationDecisionResponse.builder().id(APPLICATION_ID).build());
+                ApplicationDecisionResponse.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).build());
 
+        when(middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.of(applicationIdentifier));
+        when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         when(middlewareRepository.getApplicationById(APPLICATION_ID)).thenReturn(applicationDecisionResponse);
 
         //When
-        var response = lendingService.getApplication(APPLICATION_ID);
+        var response = lendingService.getApplication(EXTERNAL_APPLICATION_ID);
 
         //Then
         assertThat(response.isPresent(), equalTo(true));
         assertThat(response.get(), equalTo(applicationDecisionResponse.get()));
         assertThat(response.get().getId(), equalTo(APPLICATION_ID));
+        assertThat(response.get().getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+        verify(middlewareRepository, times(1)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
         verify(middlewareRepository, times(1)).getApplicationById(APPLICATION_ID);
     }
 

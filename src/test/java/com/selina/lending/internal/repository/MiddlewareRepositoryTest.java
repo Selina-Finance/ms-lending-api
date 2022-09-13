@@ -38,7 +38,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
@@ -56,13 +58,16 @@ class MiddlewareRepositoryTest {
     private MiddlewareApi middlewareApi;
 
     @Mock
+    private MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
+
+    @Mock
     private ApplicationRequest applicationRequest;
 
     private MiddlewareRepository middlewareRepository;
 
     @BeforeEach
     void setUp() {
-        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi);
+        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, middlewareApplicationServiceApi);
     }
 
     @Test
@@ -79,6 +84,39 @@ class MiddlewareRepositoryTest {
         // Then
         assertThat(result).isEqualTo(Optional.of(apiResponse));
         verify(middlewareApi, times(1)).getApplicationById(id);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenGetApplicationIdByExternalApplicationIdInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+        var extApplicationId = UUID.randomUUID().toString();
+        var apiResponse = ApplicationIdentifier.builder().id(id).build();
+
+        when(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(extApplicationId)).thenReturn(apiResponse);
+
+        // When
+        var result = middlewareRepository.getApplicationIdByExternalApplicationId(extApplicationId);
+
+        // Then
+        assertThat(result).isEqualTo(Optional.of(apiResponse));
+        verify(middlewareApplicationServiceApi, times(1)).getApplicationIdByExternalApplicationId(extApplicationId);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenGetSourceAccountByExternalApplicationIdInvoked() {
+        // Given
+        var extApplicationId = UUID.randomUUID().toString();
+        var apiResponse = ApplicationIdentifier.builder().sourceAccount("Source Account").build();
+
+        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(extApplicationId)).thenReturn(apiResponse);
+
+        // When
+        var result = middlewareRepository.getApplicationSourceAccountByExternalApplicationId(extApplicationId);
+
+        // Then
+        assertThat(result).isEqualTo(Optional.of(apiResponse));
+        verify(middlewareApplicationServiceApi, times(1)).getApplicationSourceAccountByExternalApplicationId(extApplicationId);
     }
 
     @Test

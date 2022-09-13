@@ -62,7 +62,6 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(responseDto.getLead().getUtmSource(), equalTo(UTM_SOURCE));
 
         assertApplicant(responseDto);
-        assertCommitments(responseDto);
         assertLoanInformation(responseDto);
     }
 
@@ -93,19 +92,5 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(creditCheckDto.getCreditScore(), equalTo(CREDIT_SCORE));
         assertThat(creditCheckDto.getCreditCheckReference(), equalTo(CREDIT_CHECK_REF));
         assertThat(creditCheckDto.getHardCheckCompleted(), equalTo(false));
-    }
-
-    private void assertCommitments(ApplicationDecisionResponse responseDto) {
-        var creditCommitmentsDto = responseDto.getCreditCommitments();
-        assertThat(creditCommitmentsDto.getCreditPolicy().getDetail().get(0).getId(), equalTo(DETAIL_ID));
-        assertThat(creditCommitmentsDto.getCreditPolicy().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
-        assertThat(creditCommitmentsDto.getSystem().getDetail().get(0).getId(), equalTo(DETAIL_ID));
-        assertThat(creditCommitmentsDto.getSystem().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
-        assertThat(creditCommitmentsDto.getVotersRoll().getDetail().get(0).getId(), equalTo(DETAIL_ID));
-        assertThat(creditCommitmentsDto.getVotersRoll().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
-        assertThat(creditCommitmentsDto.getPublicInformation().getSystem().getDetail().get(0).getId(), equalTo(DETAIL_ID));
-        assertThat(creditCommitmentsDto.getPublicInformation().getSystem().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
-        assertThat(creditCommitmentsDto.getUser().getDetail().get(0).getId(), equalTo(DETAIL_ID));
-        assertThat(creditCommitmentsDto.getUser().getDetail().get(0).getAccountNumber(), equalTo(DETAIL_ACCOUNT_NUMBER));
     }
 }

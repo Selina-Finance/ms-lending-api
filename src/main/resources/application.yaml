@@ -31,6 +31,19 @@ resilience4j:
         recordExceptions:
           - feign.FeignException.FeignServerException
           - feign.RetryableException
-
+      middleware-application-service-cb:
+        wait-duration-in-open-state: 1m
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-type: count-based
+        sliding-window-size: 5
+        minimum-number-of-calls: 5
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 60
+        failure-rate-threshold: 60
+        ignoreExceptions:
+          - feign.FeignException.FeignClientException
+        recordExceptions:
+          - feign.FeignException.FeignServerException
+          - feign.RetryableException
 kafka:
   enable: false
