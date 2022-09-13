@@ -20,6 +20,9 @@ package com.selina.lending.internal.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.zalando.problem.Status;
+
+import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
@@ -39,12 +42,21 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
-       var applicationIdentifier = middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
-       return applicationIdentifier.isPresent() ? middlewareRepository.getApplicationById(applicationIdentifier.get().getId()) : Optional.empty();
+       var sourceAccount = middlewareRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
+       if (sourceAccount.isPresent()) {
+           if (tokenService.retrieveSourceAccount().equals(sourceAccount.get().getSourceAccount())) {
+               var applicationIdentifier = middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
+               return applicationIdentifier.isPresent() ? middlewareRepository.getApplicationById(applicationIdentifier.get().getId()) : Optional.empty();
+           } else {
+               throw new Custom4xxException("Access denied for {} "+ externalApplicationId, Status.FORBIDDEN);
+           }
+       }
+       throw new Custom4xxException("Application not found {} "+ externalApplicationId, Status.NOT_FOUND);
     }
 
     @Override
     public void updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
+        // Get source account
         middlewareRepository.updateDipApplication(id, DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
     }
 

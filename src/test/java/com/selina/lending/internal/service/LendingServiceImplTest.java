@@ -68,7 +68,9 @@ class LendingServiceImplTest {
         //Given
         var applicationDecisionResponse = Optional.of(
                 ApplicationDecisionResponse.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).build());
-
+        when(middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.of(applicationIdentifier));
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.of(applicationIdentifier));
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         when(middlewareRepository.getApplicationById(APPLICATION_ID)).thenReturn(applicationDecisionResponse);

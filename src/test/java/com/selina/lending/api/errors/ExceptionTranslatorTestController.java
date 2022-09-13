@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.zalando.problem.Status;
 
 import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
@@ -78,7 +79,7 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/custom-4xx-exception")
     public void customException() {
-        throw new Custom4xxException("Some problem details that make sense");
+        throw new Custom4xxException("Some problem details that make sense", Status.BAD_REQUEST);
     }
 
     @GetMapping("/custom-remote-resource-problem-exception")
