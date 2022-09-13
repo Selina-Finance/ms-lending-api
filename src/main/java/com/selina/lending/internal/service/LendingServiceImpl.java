@@ -20,7 +20,6 @@ package com.selina.lending.internal.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
@@ -39,8 +38,9 @@ public class LendingServiceImpl implements LendingService {
     }
 
     @Override
-    public Optional<ApplicationDecisionResponse> getApplication(String id) {
-        return middlewareRepository.getApplicationById(id);
+    public Optional<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
+       var applicationIdentifier = middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
+       return applicationIdentifier.isPresent() ? middlewareRepository.getApplicationById(applicationIdentifier.get().getId()) : Optional.empty();
     }
 
     @Override

@@ -494,7 +494,6 @@ public abstract class MapperBase {
                 .expenditure(List.of(getExpenditure()))
                 .fees(getFees())
                 .createdDate(CREATED_DATE)
-                .creditCommitments(getCreditCommitments())
                 .underwriting(getUnderwriting())
                 .lead(getLead())
                 .intermediary(getIntermediary())
@@ -514,7 +513,7 @@ public abstract class MapperBase {
         return Lead.builder().utmCampaign(UTM_CAMPAIGN).utmMedium(UTM_MEDIUM).utmSource(UTM_SOURCE).build();
     }
 
-    private CreditCommitments getCreditCommitments() {
+    public CreditCommitments getCreditCommitments() {
         return CreditCommitments.builder().creditPolicy(getCreditPolicy())
                 .system(getSystem()).creditPolicy(getCreditPolicy()).votersRoll(getVotersRoll())
                 .publicInformation(getPublicInformation())

@@ -45,7 +45,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @OpenAPIDefinition(info = @Info(title = "Lending API", description = "Lending API service", license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")))
 @RequestMapping("/application")
 public interface LendingOperations {
-    @Operation(description = "Retrieve the application for the given application id")
+    @Operation(description = "Retrieve the application for the given externalApplicationId")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -58,8 +58,8 @@ public interface LendingOperations {
             @ApiResponse(responseCode = "401", content = @Content),
             @ApiResponse(responseCode = "404", description = "Application not found", content = @Content)
     })
-    @GetMapping(value = "/{id}")
-    ResponseEntity<ApplicationDecisionResponse> getApplication(@Parameter(description = "id of application to be searched", required = true) @PathVariable String id);
+    @GetMapping(value = "/{externalApplicationId}")
+    ResponseEntity<ApplicationDecisionResponse> getApplication(@Parameter(description = "externalApplicationId of application to be searched", required = true) @PathVariable String externalApplicationId);
 
     @Operation(description = "Update the Decision In Principle (DIP) application for the given application id")
     @ApiResponses(value = {
