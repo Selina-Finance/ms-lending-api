@@ -24,18 +24,19 @@ Our apis enables users to get an idea of how much money can be borrowed against 
 - OAuth 2
 - Resilience4J Circuit Breaker
 - Zalando error handling
-- TODO Monitoring, alerting, logging, and tracing 
+- Logback and Slf4j
+- Spring Cloud Sleuth
 
 
 ## Setup
 
 The project is built using Gradle and the main application is LendingServiceApplication. 
-You can run the application either using docker or run the LendingServiceApplication class via your IDE.
+You can run the LendingServiceApplication class via your IDE.
 
-Build and run the project using docker from the root ms-lending-api:
+Docker:
 
 ```
-docker compose up --build
+TODO
 ```
 
 After the application has started you can check the health status:
@@ -87,7 +88,7 @@ ttl=8000h
 ## Usage
 Below are some apis we have for creating, updating and retrieving an application:
 
-Get an Application by application id
+Get an Application by external application id
 ```
 http://localhost:8080/application/{id}
 ```
@@ -97,7 +98,7 @@ Create DIP Application
 http://localhost:8080/application/dip
 ```
 
-Update DIP Application for a given application
+Update DIP Application for a given application by external application id
 ```
 http://localhost:8080/application/{id}/dip
 ```

@@ -17,9 +17,6 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +28,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class ApplicationIdentifier {
     private String id;
-    @JsonProperty("source_account")
     private String sourceAccount;
 }

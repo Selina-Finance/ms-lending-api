@@ -32,6 +32,9 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 @Service
 public class LendingServiceImpl implements LendingService {
 
+    private static final String ACCESS_DENIED_MESSAGE = "Access denied for application %s";
+    private static final String APPLICATION_NOT_FOUND_MESSAGE = "Application not found %s";
+
     private final MiddlewareRepository middlewareRepository;
     private final TokenService tokenService;
 
@@ -46,18 +49,29 @@ public class LendingServiceImpl implements LendingService {
        if (sourceAccount.isPresent()) {
            if (tokenService.retrieveSourceAccount().equals(sourceAccount.get().getSourceAccount())) {
                var applicationIdentifier = middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
-               return applicationIdentifier.isPresent() ? middlewareRepository.getApplicationById(applicationIdentifier.get().getId()) : Optional.empty();
+               if (applicationIdentifier.isPresent()) {
+                   return middlewareRepository.getApplicationById(applicationIdentifier.get().getId());
+               }
            } else {
-               throw new Custom4xxException("Access denied for {} "+ externalApplicationId, Status.FORBIDDEN);
+               throw new Custom4xxException(String.format(ACCESS_DENIED_MESSAGE, externalApplicationId), Status.FORBIDDEN);
            }
        }
-       throw new Custom4xxException("Application not found {} "+ externalApplicationId, Status.NOT_FOUND);
+       throw new Custom4xxException(String.format(APPLICATION_NOT_FOUND_MESSAGE, externalApplicationId), Status.NOT_FOUND);
     }
 
     @Override
     public void updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
-        // Get source account
-        middlewareRepository.updateDipApplication(id, DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
+        var externalApplicationId = dipApplicationRequest.getExternalApplicationId();
+        var sourceAccount = middlewareRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
+        if (sourceAccount.isPresent()) {
+            if (tokenService.retrieveSourceAccount().equals(sourceAccount.get().getSourceAccount())) {
+                middlewareRepository.updateDipApplication(id, DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
+            } else {
+                throw new Custom4xxException(String.format(ACCESS_DENIED_MESSAGE, externalApplicationId), Status.FORBIDDEN);
+            }
+        } else {
+            throw new Custom4xxException(String.format(APPLICATION_NOT_FOUND_MESSAGE, externalApplicationId), Status.NOT_FOUND);
+        }
     }
 
     @Override

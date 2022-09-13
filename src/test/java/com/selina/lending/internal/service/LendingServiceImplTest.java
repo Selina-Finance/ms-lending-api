@@ -19,11 +19,13 @@ package com.selina.lending.internal.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -34,6 +36,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.zalando.problem.Status;
+
+import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
@@ -88,15 +93,33 @@ class LendingServiceImplTest {
     }
 
     @Test
-    void getApplicationWhenApplicationNotFoundReturnsEmptyResponse() {
+    void getApplicationWhenApplicationNotFoundThrowsNotFoundException() {
         //Given
-        when(middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.empty());
+        when(middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.empty());
 
         //When
-        var response = lendingService.getApplication(EXTERNAL_APPLICATION_ID);
+        var exception = assertThrows(Custom4xxException.class, () -> lendingService.getApplication(EXTERNAL_APPLICATION_ID));
 
         //Then
-        assertThat(response.isEmpty(), equalTo(true));
+        assertThat(exception.getMessage(), equalTo("Error processing request: Application not found "+ EXTERNAL_APPLICATION_ID));
+        assertThat(exception.getStatus(), equalTo(Status.NOT_FOUND));
+        verifyNoInteractions(tokenService);
+    }
+
+    @Test
+    void getApplicationWhenNotAuthorisedThrowsAccessDeniedException() {
+        //Given
+        when(middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.of(applicationIdentifier));
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(applicationIdentifier.getSourceAccount()).thenReturn("Another source account");
+
+        //When
+        var exception = assertThrows(Custom4xxException.class, () -> lendingService.getApplication(EXTERNAL_APPLICATION_ID));
+
+        //Then
+        assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application "+ EXTERNAL_APPLICATION_ID));
+        assertThat(exception.getStatus(), equalTo(Status.FORBIDDEN));
+        verify(middlewareRepository, times(0)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
     }
 
     @Test
@@ -104,6 +127,9 @@ class LendingServiceImplTest {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         var requestArgumentCaptor = ArgumentCaptor.forClass(ApplicationRequest.class);
+        when(middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.of(applicationIdentifier));
+        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         doNothing().when(middlewareRepository).updateDipApplication(eq(APPLICATION_ID), requestArgumentCaptor.capture());
 
         //When
@@ -113,6 +139,38 @@ class LendingServiceImplTest {
         var requestValue = requestArgumentCaptor.getValue();
         assertThat(requestValue.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         verify(middlewareRepository, times(1)).updateDipApplication(eq(APPLICATION_ID), any());
+    }
+
+    @Test
+    void updateDipApplicationWhenApplicationNotFoundThrowsNotFoundException() {
+        //Given
+        var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
+        when(middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.empty());
+
+        //When
+        var exception = assertThrows(Custom4xxException.class, () -> lendingService.updateDipApplication(APPLICATION_ID, request));
+
+        //Then
+        assertThat(exception.getMessage(), equalTo("Error processing request: Application not found "+ EXTERNAL_APPLICATION_ID));
+        assertThat(exception.getStatus(), equalTo(Status.NOT_FOUND));
+        verifyNoInteractions(tokenService);
+    }
+
+    @Test
+    void updateDipApplicationWhenNotAuthorisedThrowsAccessDeniedException() {
+        //Given
+        var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
+        when(middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.of(applicationIdentifier));
+        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(tokenService.retrieveSourceAccount()).thenReturn("Another source account");
+
+        //When
+        var exception = assertThrows(Custom4xxException.class, () -> lendingService.updateDipApplication(APPLICATION_ID, request));
+
+        //Then
+        assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application "+ EXTERNAL_APPLICATION_ID));
+        assertThat(exception.getStatus(), equalTo(Status.FORBIDDEN));
+        verify(middlewareRepository, times(0)).updateDipApplication(eq(APPLICATION_ID), any());
     }
 
     @Test
