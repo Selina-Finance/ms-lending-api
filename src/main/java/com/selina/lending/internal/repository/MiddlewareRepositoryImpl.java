@@ -83,40 +83,40 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return appResponse;
     }
 
-    private Optional<ApplicationIdentifier> middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) {
+    private Optional<ApplicationIdentifier> middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) { //NOSONAR
         defaultMiddlewareFallback(e);
         return Optional.empty();
     }
 
-    private Optional<ApplicationIdentifier> middlewareGetByExternalIdApiFallback(feign.RetryableException e) {
+    private Optional<ApplicationIdentifier> middlewareGetByExternalIdApiFallback(feign.RetryableException e) { //NOSONAR
         defaultMiddlewareFallback(e);
         return Optional.empty();
     }
 
-    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) {
+    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) { //NOSONAR
         defaultMiddlewareFallback(e);
         return Optional.empty();
     }
 
-    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(feign.RetryableException e) {
+    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(feign.RetryableException e) { //NOSONAR
         defaultMiddlewareFallback(e);
         return Optional.empty();
     }
 
-    private void middlewareApiFallbackDefault(FeignException.FeignServerException e) {
+    private void middlewareApiFallbackDefault(FeignException.FeignServerException e) { //NOSONAR
         defaultMiddlewareFallback(e);
     }
 
-    private void middlewareApiFallbackDefault(feign.RetryableException e) {
+    private void middlewareApiFallbackDefault(feign.RetryableException e) { //NOSONAR
         defaultMiddlewareFallback(e);
     }
 
-    private ApplicationResponse middlewareApiFallback(FeignException.FeignServerException e) {
+    private ApplicationResponse middlewareApiFallback(FeignException.FeignServerException e) { //NOSONAR
         defaultMiddlewareFallback(e);
         return ApplicationResponse.builder().build();
     }
 
-    private ApplicationResponse middlewareApiFallback(feign.RetryableException e) {
+    private ApplicationResponse middlewareApiFallback(feign.RetryableException e) { //NOSONAR
         defaultMiddlewareFallback(e);
         return ApplicationResponse.builder().build();
     }
