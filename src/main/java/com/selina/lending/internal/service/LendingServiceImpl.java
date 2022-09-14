@@ -20,9 +20,7 @@ package com.selina.lending.internal.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.zalando.problem.Status;
 
-import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
@@ -32,52 +30,25 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 @Service
 public class LendingServiceImpl implements LendingService {
 
-    private static final String ACCESS_DENIED_MESSAGE = "Access denied for application %s";
-    private static final String APPLICATION_NOT_FOUND_MESSAGE = "Application not found %s";
-
     private final MiddlewareRepository middlewareRepository;
-    private final TokenService tokenService;
 
-    public LendingServiceImpl(MiddlewareRepository middlewareRepository, TokenService tokenService) {
+    public LendingServiceImpl(MiddlewareRepository middlewareRepository) {
         this.middlewareRepository = middlewareRepository;
-        this.tokenService = tokenService;
     }
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
-       var sourceAccount = middlewareRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
-       if (sourceAccount.isPresent()) {
-           if (tokenService.retrieveSourceAccount().equals(sourceAccount.get().getSourceAccount())) {
-               var applicationIdentifier = middlewareRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
-               if (applicationIdentifier.isPresent()) {
-                   return middlewareRepository.getApplicationById(applicationIdentifier.get().getId());
-               }
-           } else {
-               throw new Custom4xxException(String.format(ACCESS_DENIED_MESSAGE, externalApplicationId), Status.FORBIDDEN);
-           }
-       }
-       throw new Custom4xxException(String.format(APPLICATION_NOT_FOUND_MESSAGE, externalApplicationId), Status.NOT_FOUND);
+        return middlewareRepository.getApplicationByExternalApplicationId(externalApplicationId);
     }
 
     @Override
     public void updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
-        var externalApplicationId = dipApplicationRequest.getExternalApplicationId();
-        var sourceAccount = middlewareRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
-        if (sourceAccount.isPresent()) {
-            if (tokenService.retrieveSourceAccount().equals(sourceAccount.get().getSourceAccount())) {
-                middlewareRepository.updateDipApplication(id, DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
-            } else {
-                throw new Custom4xxException(String.format(ACCESS_DENIED_MESSAGE, externalApplicationId), Status.FORBIDDEN);
-            }
-        } else {
-            throw new Custom4xxException(String.format(APPLICATION_NOT_FOUND_MESSAGE, externalApplicationId), Status.NOT_FOUND);
-        }
+        middlewareRepository.updateDipApplicationById(id, DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
     }
 
     @Override
     public ApplicationResponse createDipApplication(DIPApplicationRequest dipApplicationRequest) {
         var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
-        applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
         return middlewareRepository.createDipApplication(applicationRequest);
     }
 }

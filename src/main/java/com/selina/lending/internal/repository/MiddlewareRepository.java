@@ -20,18 +20,14 @@ package com.selina.lending.internal.repository;
 import java.util.Optional;
 
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 public interface MiddlewareRepository {
-    Optional<ApplicationDecisionResponse> getApplicationById(String id);
 
-    Optional<ApplicationIdentifier> getApplicationIdByExternalApplicationId(String externalApplicationId);
+    Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String id);
 
-    Optional<ApplicationIdentifier> getApplicationSourceAccountByExternalApplicationId(String externalApplicationId);
-
-    void updateDipApplication(String id, ApplicationRequest applicationRequest);
+    void updateDipApplicationById(String id, ApplicationRequest applicationRequest);
 
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 }

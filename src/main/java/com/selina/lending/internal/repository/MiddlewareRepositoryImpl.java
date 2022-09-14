@@ -21,9 +21,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
+import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
@@ -36,46 +38,58 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class MiddlewareRepositoryImpl implements MiddlewareRepository {
+
+
     private final MiddlewareApi middlewareApi;
     private final MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
-    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi, MiddlewareApplicationServiceApi middlewareApplicationServiceApi) {
+    private final TokenService tokenService;
+
+    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi, MiddlewareApplicationServiceApi middlewareApplicationServiceApi, TokenService tokenService) {
         this.middlewareApi = middlewareApi;
         this.middlewareApplicationServiceApi = middlewareApplicationServiceApi;
+        this.tokenService = tokenService;
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
-    @Override
     public Optional<ApplicationDecisionResponse> getApplicationById(String id) {
         log.debug("Request to get application by id: {}", id);
         return Optional.of(middlewareApi.getApplicationById(id));
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
-    @Override
-    public Optional<ApplicationIdentifier> getApplicationIdByExternalApplicationId(String externalApplicationId) {
+    private ApplicationIdentifier getApplicationIdByExternalApplicationId(String externalApplicationId) {
         log.debug("Request to get application id by external application id {}", externalApplicationId);
-        return Optional.of(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalApplicationId));
+        return middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalApplicationId);
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
-    @Override
-    public Optional<ApplicationIdentifier> getApplicationSourceAccountByExternalApplicationId(
-            String externalApplicationId) {
-        return Optional.of(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId));
+    private ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(String externalApplicationId) {
+        log.debug("Request to get application source by external application id {}", externalApplicationId);
+        return middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallbackDefault")
-    @Override
-    public void updateDipApplication(String id, ApplicationRequest applicationRequest) {
+    private void updateDipApplication(String id, ApplicationRequest applicationRequest) {
         log.debug("Update dip application for id: {}, applicationRequest {} ", id, applicationRequest);
         middlewareApi.updateDipApplication(id, applicationRequest);
     }
 
+    @Override
+    public void updateDipApplicationById(String id, ApplicationRequest applicationRequest) {
+        var externalApplicationId = applicationRequest.getExternalApplicationId();
+        var sourceAccount = getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
+        if (tokenService.retrieveSourceAccount().equals(sourceAccount.getSourceAccount())) {
+            updateDipApplication(id, applicationRequest);
+        } else {
+            throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
+        }
+    }
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         log.debug("Create dip application applicationRequest {}", applicationRequest);
+        applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
 
         var appResponse =  middlewareApi.createDipApplication(applicationRequest);
 
@@ -83,14 +97,25 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return appResponse;
     }
 
-    private Optional<ApplicationIdentifier> middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return Optional.empty();
+    @Override
+    public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId) {
+        var sourceAccount = getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
+        if (tokenService.retrieveSourceAccount().equals(sourceAccount.getSourceAccount())) {
+            var applicationIdentifier = getApplicationIdByExternalApplicationId(externalApplicationId);
+            return getApplicationById(applicationIdentifier.getId());
+        } else {
+            throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
+        }
     }
 
-    private Optional<ApplicationIdentifier> middlewareGetByExternalIdApiFallback(feign.RetryableException e) { //NOSONAR
+    private ApplicationIdentifier middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) { //NOSONAR
         defaultMiddlewareFallback(e);
-        return Optional.empty();
+        return ApplicationIdentifier.builder().build();
+    }
+
+    private ApplicationIdentifier middlewareGetByExternalIdApiFallback(feign.RetryableException e) { //NOSONAR
+        defaultMiddlewareFallback(e);
+        return ApplicationIdentifier.builder().build();
     }
 
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) { //NOSONAR
