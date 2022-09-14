@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.selina.lending.api.errors.custom.Custom4xxException;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 
 import feign.FeignException;
@@ -76,9 +75,9 @@ public class ExceptionTranslatorTestController {
         throw new RuntimeException();
     }
 
-    @GetMapping("/custom-4xx-exception")
-    public void customException() {
-        throw new Custom4xxException("Some problem details that make sense");
+    @GetMapping("/access-denied-exception")
+    public void accessDeniedException() {
+        throw new com.selina.lending.api.errors.custom.AccessDeniedException("Some problem details that make sense");
     }
 
     @GetMapping("/custom-remote-resource-problem-exception")

@@ -15,18 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.api.errors.custom;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class ApplicationIdentifier {
-    private String id;
-    private String sourceAccount;
+public class AccessDeniedException extends AbstractThrowableProblem { //NOSONAR
+    public static final String ACCESS_DENIED_MESSAGE = "Access denied for application";
+    public AccessDeniedException(String details) {
+        super(null, "Error processing request", Status.FORBIDDEN, details);
+    }
 }

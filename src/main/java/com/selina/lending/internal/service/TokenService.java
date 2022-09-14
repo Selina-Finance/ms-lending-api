@@ -15,18 +15,9 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class ApplicationIdentifier {
-    private String id;
-    private String sourceAccount;
+public interface TokenService {
+    String retrieveClientId();
+    String retrieveSourceAccount();
 }

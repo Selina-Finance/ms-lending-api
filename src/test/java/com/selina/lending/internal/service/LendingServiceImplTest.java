@@ -19,9 +19,12 @@ package com.selina.lending.internal.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,10 +37,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.zalando.problem.Status;
+
+import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
@@ -52,9 +57,6 @@ class LendingServiceImplTest {
     @Mock
     private ApplicationResponse applicationResponse;
 
-    @Mock
-    private ApplicationIdentifier applicationIdentifier;
-
     @InjectMocks
     private LendingServiceImpl lendingService;
 
@@ -63,10 +65,7 @@ class LendingServiceImplTest {
         //Given
         var applicationDecisionResponse = Optional.of(
                 ApplicationDecisionResponse.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).build());
-
-        when(middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.of(applicationIdentifier));
-        when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
-        when(middlewareRepository.getApplicationById(APPLICATION_ID)).thenReturn(applicationDecisionResponse);
+        when(middlewareRepository.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationDecisionResponse);
 
         //When
         var response = lendingService.getApplication(EXTERNAL_APPLICATION_ID);
@@ -76,20 +75,19 @@ class LendingServiceImplTest {
         assertThat(response.get(), equalTo(applicationDecisionResponse.get()));
         assertThat(response.get().getId(), equalTo(APPLICATION_ID));
         assertThat(response.get().getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
-        verify(middlewareRepository, times(1)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(1)).getApplicationById(APPLICATION_ID);
     }
 
     @Test
-    void getApplicationWhenApplicationNotFoundReturnsEmptyResponse() {
+    void getApplicationWhenNotAuthorisedThrowsAccessDeniedException() {
         //Given
-        when(middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(Optional.empty());
+        when(middlewareRepository.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenThrow(new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE));
 
         //When
-        var response = lendingService.getApplication(EXTERNAL_APPLICATION_ID);
+        var exception = assertThrows(AccessDeniedException.class, () -> lendingService.getApplication(EXTERNAL_APPLICATION_ID));
 
         //Then
-        assertThat(response.isEmpty(), equalTo(true));
+        assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application"));
+        assertThat(exception.getStatus(), equalTo(Status.FORBIDDEN));
     }
 
     @Test
@@ -97,7 +95,7 @@ class LendingServiceImplTest {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         var requestArgumentCaptor = ArgumentCaptor.forClass(ApplicationRequest.class);
-        doNothing().when(middlewareRepository).updateDipApplication(eq(APPLICATION_ID), requestArgumentCaptor.capture());
+        doNothing().when(middlewareRepository).updateDipApplicationById(eq(APPLICATION_ID), requestArgumentCaptor.capture());
 
         //When
         lendingService.updateDipApplication(APPLICATION_ID, request);
@@ -105,7 +103,21 @@ class LendingServiceImplTest {
         //Then
         var requestValue = requestArgumentCaptor.getValue();
         assertThat(requestValue.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
-        verify(middlewareRepository, times(1)).updateDipApplication(eq(APPLICATION_ID), any());
+        verify(middlewareRepository, times(1)).updateDipApplicationById(eq(APPLICATION_ID), any());
+    }
+
+    @Test
+    void updateDipApplicationWhenNotAuthorisedThrowsAccessDeniedException() {
+        //Given
+        var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
+        doThrow(new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE)).when(middlewareRepository).updateDipApplicationById(anyString(), any(ApplicationRequest.class));
+
+        //When
+        var exception = assertThrows(AccessDeniedException.class, () -> lendingService.updateDipApplication(APPLICATION_ID, request));
+
+        //Then
+        assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application"));
+        assertThat(exception.getStatus(), equalTo(Status.FORBIDDEN));
     }
 
     @Test

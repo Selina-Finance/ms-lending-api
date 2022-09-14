@@ -21,12 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,11 +35,16 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.selina.lending.internal.service.TokenService;
+
 @ExtendWith(MockitoExtension.class)
 class BrokerRequestInterceptorTest {
 
     @Mock
     private BrokerRequestKpiResolver kpiResolver;
+
+    @Mock
+    private TokenService tokenService;
 
     @InjectMocks
     private BrokerRequestInterceptor interceptor;
@@ -54,69 +54,56 @@ class BrokerRequestInterceptorTest {
     private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
 
     @Test
-    public void shouldSetForeignRequestIdFromHeadersToHttpRequestAttributesWhenPreHandle() throws Exception {
+    void shouldSetForeignRequestIdFromHeadersToHttpRequestAttributesWhenPreHandle() throws Exception {
         // Given
         var foreignRequestId = "123";
         var httpRequest = mock(HttpServletRequest.class);
         doNothing().when(httpRequest).setAttribute(eq(BROKER_HTTP_ATTR_NAME), any());
         when(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).thenReturn(foreignRequestId);
-        mockSecurity();
+        when(tokenService.retrieveClientId()).thenReturn(BROKER_JWT_CLIENT_ID);
 
         // When
         interceptor.preHandle(httpRequest, null, null);
 
         // Then
-        verify(httpRequest, times(1)).getHeader(eq(REQUEST_ID_HEADER_NAME));
-        verify(httpRequest, times(1)).setAttribute(eq(BROKER_HTTP_ATTR_NAME), eq(foreignRequestId));
+        verify(httpRequest, times(1)).getHeader(REQUEST_ID_HEADER_NAME);
+        verify(httpRequest, times(1)).setAttribute(BROKER_HTTP_ATTR_NAME, foreignRequestId);
     }
 
     @Test
-    public void shouldGenerateRequestIdAndSetToHttpRequestAttributesWhenNotPresentedInHeadersOnPreHandle() throws Exception {
+    void shouldGenerateRequestIdAndSetToHttpRequestAttributesWhenNotPresentedInHeadersOnPreHandle() throws Exception {
         // Given
         var httpRequest = mock(HttpServletRequest.class);
         doNothing().when(httpRequest).setAttribute(eq(BROKER_HTTP_ATTR_NAME), any());
         when(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).thenReturn(null);
-
-        mockSecurity();
+        when(tokenService.retrieveClientId()).thenReturn(BROKER_JWT_CLIENT_ID);
 
         // When
         interceptor.preHandle(httpRequest, null, null);
 
         // Then
-        verify(httpRequest, times(1)).getHeader(eq(REQUEST_ID_HEADER_NAME));
+        verify(httpRequest, times(1)).getHeader(REQUEST_ID_HEADER_NAME);
         verify(httpRequest, times(1)).setAttribute(eq(BROKER_HTTP_ATTR_NAME), any());
     }
 
     @Test
-    public void shouldPassRequestDataToResolverOnRequestStartedWhenExecutePreHandle() throws Exception {
+    void shouldPassRequestDataToResolverOnRequestStartedWhenExecutePreHandle() throws Exception {
         // Given
         var requestId = "abc";
         var httpRequest = mock(HttpServletRequest.class);
         doNothing().when(kpiResolver).onRequestStarted(any(), any(), any());
         when(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).thenReturn(requestId);
-
-        mockSecurity();
+        when(tokenService.retrieveClientId()).thenReturn(BROKER_JWT_CLIENT_ID);
 
         // When
         interceptor.preHandle(httpRequest, null, null);
 
         // Then
-        verify(kpiResolver, times(1)).onRequestStarted(eq(BROKER_JWT_CLIENT_ID), eq(requestId), eq(httpRequest));
-    }
-
-    private void mockSecurity() {
-        Authentication authentication = Mockito.mock(Authentication.class);
-
-        Jwt jwt = Jwt.withTokenValue("abc").header("", "").claim("clientId", BROKER_JWT_CLIENT_ID).build();
-        when(authentication.getPrincipal()).thenReturn(jwt);
-
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
+        verify(kpiResolver, times(1)).onRequestStarted(BROKER_JWT_CLIENT_ID, requestId, httpRequest);
     }
 
     @Test
-    public void shouldPassRequestIdAndResponseStatusWhenFinishingRequest() throws Exception {
+    void shouldPassRequestIdAndResponseStatusWhenFinishingRequest() throws Exception {
         // Given
         var requestId = UUID.randomUUID().toString();
         var httpResponseCode = 200;
@@ -133,11 +120,11 @@ class BrokerRequestInterceptorTest {
         interceptor.afterCompletion(request, response, null, null);
 
         // Then
-        verify(kpiResolver, times(1)).onRequestFinished(eq(requestId), eq(httpResponseCode));
+        verify(kpiResolver, times(1)).onRequestFinished(requestId, httpResponseCode);
     }
 
     @Test
-    public void shouldNotCallKpiResolverOnPostHandleWhenBrokerRequestIdIsNull() throws Exception {
+    void shouldNotCallKpiResolverOnPostHandleWhenBrokerRequestIdIsNull() throws Exception {
         // Given
         String requestId = null;
         var httpResponseCode = 200;
@@ -152,6 +139,6 @@ class BrokerRequestInterceptorTest {
         interceptor.afterCompletion(request, response, null, null);
 
         // Then
-        verify(kpiResolver, times(0)).onRequestFinished(eq(requestId), eq(httpResponseCode));
+        verify(kpiResolver, times(0)).onRequestFinished(requestId, httpResponseCode);
     }
 }

@@ -38,7 +38,7 @@ class ExternalAppIdHelperTest extends MapperBase {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void shouldFetchExternalAppIdWhenGetAppRequest() {
+    void shouldFetchExternalAppIdWhenGetAppRequest() {
         // Given
         var externalAppId = UUID.randomUUID().toString();
         var path = "/application/" + externalAppId;
@@ -52,12 +52,11 @@ class ExternalAppIdHelperTest extends MapperBase {
         var result = getExternalAppId(httpRequest);
 
         // Then
-        assertThat(result.isPresent()).isTrue();
-        assertThat(result.get()).isEqualTo(externalAppId);
+        assertThat(result).isPresent().contains(externalAppId);
     }
 
     @Test
-    public void shouldFetchExternalAppIdWhenUpdateAppRequest() {
+    void shouldFetchExternalAppIdWhenUpdateAppRequest() {
         // Given
         var externalAppId = UUID.randomUUID().toString();
         var path = "/application/" + externalAppId + "/dip";
@@ -71,12 +70,11 @@ class ExternalAppIdHelperTest extends MapperBase {
         var result = getExternalAppId(httpRequest);
 
         // Then
-        assertThat(result.isPresent()).isTrue();
-        assertThat(result.get()).isEqualTo(externalAppId);
+        assertThat(result).isPresent().contains(externalAppId);
     }
 
     @Test
-    public void shouldFetchExternalAppIdWhenCreateAppRequest() throws IOException {
+    void shouldFetchExternalAppIdWhenCreateAppRequest() throws IOException {
         // Given
         var application = getDIPApplicationRequestDto();
         var request = new MockHttpServletRequest(HttpMethod.POST.name(), "/application/dip");
@@ -88,7 +86,6 @@ class ExternalAppIdHelperTest extends MapperBase {
         var result = getExternalAppId(request);
 
         // Then
-        assertThat(result.isPresent()).isTrue();
-        assertThat(result.get()).isEqualTo(application.getExternalApplicationId());
+        assertThat(result).isPresent().contains(application.getExternalApplicationId());
     }
 }

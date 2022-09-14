@@ -169,7 +169,6 @@ public abstract class MapperBase {
                 .fees(getFeesDto())
                 .productCode(PRODUCT_CODE)
                 .source(SOURCE)
-                .sourceAccount(SOURCE_ACCOUNT)
                 .build();
     }
 

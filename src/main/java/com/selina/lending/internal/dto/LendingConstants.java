@@ -21,6 +21,10 @@ public final class LendingConstants {
     public static final String DATE_PATTERN = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
     public static final String DATE_INVALID_MESSAGE = "must match yyyy-MM-dd format";
 
+    public static final String SOURCE_ACCOUNT_JWT_CLAIM_NAME = "sourceAccount";
+
+    public static final String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
+
     private LendingConstants() {
 
     }

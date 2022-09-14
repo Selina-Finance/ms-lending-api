@@ -31,7 +31,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestStartedEvent;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -48,7 +47,7 @@ class BrokerRequestKpiResolverTest {
     private BrokerRequestKpiResolver kpiResolver;
 
     @Test
-    public void shouldPublishMessageWhenOnRequestStartedInvoked() {
+    void shouldPublishMessageWhenOnRequestStartedInvoked() {
         // Given
         var broker = "the-broker";
         var requestId = UUID.randomUUID().toString();
@@ -61,11 +60,11 @@ class BrokerRequestKpiResolverTest {
         kpiResolver.onRequestStarted(broker, requestId, httpRequest);
 
         // Then
-        verify(eventPublisher).publish(eq(event));
+        verify(eventPublisher).publish(event);
     }
 
     @Test
-    public void shouldPublishMessageWhenOnRequestFinishedInvoked() {
+    void shouldPublishMessageWhenOnRequestFinishedInvoked() {
         // Given
         var requestId = UUID.randomUUID().toString();
         var httpResponseCode = 200;
@@ -78,7 +77,7 @@ class BrokerRequestKpiResolverTest {
         kpiResolver.onRequestFinished(requestId, httpResponseCode);
 
         // Then
-        verify(eventPublisher).publish(eq(event));
+        verify(eventPublisher).publish(event);
     }
 
 }

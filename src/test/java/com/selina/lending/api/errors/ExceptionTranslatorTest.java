@@ -83,16 +83,16 @@ class ExceptionTranslatorTest {
     }
 
     @Test
-    void handleCustomException() throws Exception {
+    void handleAccessDeniedException() throws Exception {
         // Given
-        var expectedTitle = "The custom exception title";
+        var expectedTitle = "Error processing request";
         var expectedDetail = "Some problem details that make sense";
 
         // When
-        mockMvc.perform(get("/api/exception-translator-test/custom-4xx-exception"))
+        mockMvc.perform(get("/api/exception-translator-test/access-denied-exception"))
 
                 // Then
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.type").doesNotExist())
                 .andExpect(jsonPath("$.title").value(expectedTitle))
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
