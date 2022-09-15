@@ -1,10 +1,12 @@
 package com.selina.lending.api.controller;
 
-import static org.mockito.Mockito.doNothing;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -66,12 +68,17 @@ class LendingControllerUnitTest {
     @Test
     void updateDipApplication() {
         //Given
-        doNothing().when(lendingService).updateDipApplication(APPLICATION_ID, dipApplicationRequest);
+        var id = UUID.randomUUID().toString();
+        var applicationType = "DIP";
+        var mwApplicationResponse = ApplicationResponse.builder().applicationId(id).applicationType(applicationType).build();
+        when(lendingService.updateDipApplication(APPLICATION_ID, dipApplicationRequest)).thenReturn(mwApplicationResponse);
 
         //When
-        lendingController.updateDipApplication(APPLICATION_ID, dipApplicationRequest);
+        var appResponse = lendingController.updateDipApplication(APPLICATION_ID, dipApplicationRequest);
 
         //Then
+        assertThat(Objects.requireNonNull(appResponse.getBody()).getRequestType(), equalTo(applicationType));
+        assertThat(appResponse.getBody().getApplicationId(), equalTo(id));
         verify(lendingService, times(1)).updateDipApplication(APPLICATION_ID, dipApplicationRequest);
     }
 }

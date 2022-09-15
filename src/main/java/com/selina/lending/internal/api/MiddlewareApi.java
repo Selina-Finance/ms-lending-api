@@ -22,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
@@ -41,7 +40,4 @@ public interface MiddlewareApi {
 
     @PostMapping (path = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
-
-    @PutMapping(path = "/application/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    void updateDipApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
 }

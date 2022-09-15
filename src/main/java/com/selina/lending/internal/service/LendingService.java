@@ -25,7 +25,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 
 public interface LendingService {
     Optional<ApplicationDecisionResponse> getApplication(String externalApplicationId);
-    void updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest);
+    ApplicationResponse updateDipApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest);
     ApplicationResponse createDipApplication(DIPApplicationRequest dipApplicationRequest);
 }
 

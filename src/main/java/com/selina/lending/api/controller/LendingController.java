@@ -48,10 +48,10 @@ public class LendingController implements LendingOperations {
     }
 
     @Override
-    public ResponseEntity<Void> updateDipApplication(String id, DIPApplicationRequest dipApplicationRequest) {
-        log.info("Update DIP application {}", id);
-        lendingService.updateDipApplication(id, dipApplicationRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ApplicationResponse> updateDipApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest) {
+        log.info("Update DIP application {}", externalApplicationId);
+        var applicationResponse = lendingService.updateDipApplication(externalApplicationId, dipApplicationRequest);
+        return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 
     @Override

@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -95,7 +94,7 @@ class LendingServiceImplTest {
         //Given
         var request = DIPApplicationRequest.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build();
         var requestArgumentCaptor = ArgumentCaptor.forClass(ApplicationRequest.class);
-        doNothing().when(middlewareRepository).updateDipApplicationById(eq(APPLICATION_ID), requestArgumentCaptor.capture());
+        when(middlewareRepository.updateDipApplicationById(eq(APPLICATION_ID), requestArgumentCaptor.capture())).thenReturn(applicationResponse);
 
         //When
         lendingService.updateDipApplication(APPLICATION_ID, request);

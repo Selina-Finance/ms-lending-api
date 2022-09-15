@@ -19,7 +19,6 @@ package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,6 +40,7 @@ import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
@@ -69,6 +69,12 @@ class MiddlewareRepositoryTest {
 
     @Mock
     private ApplicationRequest applicationRequest;
+
+    @Mock
+    private ApplicationResponse applicationResponse;
+
+    @Mock
+    private Application application;
 
     @Mock
     private ApplicationIdentifier applicationIdentifier;
@@ -105,50 +111,66 @@ class MiddlewareRepositoryTest {
     @Test
     void shouldCallHttpClientWhenCreateApplicationInvoked() {
         // Given
-        var apiResponse = ApplicationResponse.builder().build();
-
-        when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(apiResponse);
+        when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
+        when(applicationResponse.getApplication()).thenReturn(application);
+        when(application.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
 
         // When
         var result = middlewareRepository.createDipApplication(applicationRequest);
 
         // Then
-        assertThat(result).isEqualTo(apiResponse);
+        assertThat(result).isEqualTo(applicationResponse);
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 
     @Test
     void shouldCallHttpClientWhenUpdateApplicationInvoked() {
         // Given
-        var id = UUID.randomUUID().toString();
         when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
         when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        doNothing().when(middlewareApi).updateDipApplication(id, applicationRequest);
+        when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
+        when(applicationResponse.getApplication()).thenReturn(application);
+        when(application.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
 
         // When
-        middlewareRepository.updateDipApplicationById(id, applicationRequest);
+        middlewareRepository.updateDipApplicationById(EXTERNAL_APPLICATION_ID, applicationRequest);
 
         // Then
-        verify(middlewareApi, times(1)).updateDipApplication(id, applicationRequest);
+        verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 
     @Test
     void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateApplication() {
         // Given
-        var id = UUID.randomUUID().toString();
-        when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
         when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(tokenService.retrieveSourceAccount()).thenReturn(ANOTHER_SOURCE_ACCOUNT);
 
         // When
-        var exception = assertThrows(AccessDeniedException.class, () -> middlewareRepository.updateDipApplicationById(id, applicationRequest));
+        var exception = assertThrows(AccessDeniedException.class, () -> middlewareRepository.updateDipApplicationById(EXTERNAL_APPLICATION_ID, applicationRequest));
 
         // Then
         assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-        verify(middlewareApi, times(0)).updateDipApplication(id, applicationRequest);
+        verify(middlewareApi, times(0)).createDipApplication(applicationRequest);
+    }
+
+
+    @Test
+    void shouldThrowAccessDeniedExceptionWhenApplicationRequestExternalApplicationIdNotMatched() {
+        // Given
+        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(applicationRequest.getExternalApplicationId()).thenReturn("any id");
+
+        // When
+        var exception = assertThrows(AccessDeniedException.class, () -> middlewareRepository.updateDipApplicationById(EXTERNAL_APPLICATION_ID, applicationRequest));
+
+        // Then
+        assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
+        verify(middlewareApi, times(0)).createDipApplication(applicationRequest);
     }
 
     @Test
