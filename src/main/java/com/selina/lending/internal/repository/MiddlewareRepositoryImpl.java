@@ -72,8 +72,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @Override
     public ApplicationResponse updateDipApplicationById(String externalApplicationId, ApplicationRequest applicationRequest) {
         var sourceAccount = getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
-        if (tokenService.retrieveSourceAccount().equals(sourceAccount.getSourceAccount())
-                && externalApplicationId.equals(applicationRequest.getExternalApplicationId())) {
+        if (isAuthorisedToUpdateApplication(sourceAccount.getSourceAccount(), externalApplicationId, applicationRequest)) {
             return createDipApplication(applicationRequest);
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
@@ -100,6 +99,11 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
         }
+    }
+
+    private boolean isAuthorisedToUpdateApplication(String sourceAccount, String externalApplicationId, ApplicationRequest applicationRequest) {
+        return (tokenService.retrieveSourceAccount().equals(sourceAccount)
+                && externalApplicationId.equals(applicationRequest.getExternalApplicationId()));
     }
 
     private ApplicationIdentifier middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) { //NOSONAR
