@@ -61,7 +61,7 @@ public interface LendingOperations {
     @GetMapping(value = "/{externalApplicationId}")
     ResponseEntity<ApplicationDecisionResponse> getApplication(@Parameter(description = "externalApplicationId of application to be searched", required = true) @PathVariable String externalApplicationId);
 
-    @Operation(description = "Update the Decision In Principle (DIP) application for the given application id")
+    @Operation(description = "Update the Decision In Principle (DIP) application for the given external application id")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -73,8 +73,8 @@ public interface LendingOperations {
             @ApiResponse(responseCode = "403"),
             @ApiResponse(responseCode = "404", description = "Application not found")
     })
-    @PutMapping(value = "/{id}/dip")
-    ResponseEntity<Void> updateDipApplication(@Parameter(description = "id of application to be updated", required = true) @PathVariable String id,
+    @PutMapping(value = "/{externalApplicationId}/dip")
+    ResponseEntity<ApplicationResponse> updateDipApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
             @Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 
     @Operation(description = "Create a new Decision In Principle (DIP) application")

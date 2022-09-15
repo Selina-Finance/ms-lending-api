@@ -20,10 +20,10 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class Application {
     String id;
     String source;

@@ -52,7 +52,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
-    public Optional<ApplicationDecisionResponse> getApplicationById(String id) {
+    private Optional<ApplicationDecisionResponse> getApplicationById(String id) {
         log.debug("Request to get application by id: {}", id);
         return Optional.of(middlewareApi.getApplicationById(id));
     }
@@ -69,18 +69,11 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
     }
 
-    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallbackDefault")
-    private void updateDipApplication(String id, ApplicationRequest applicationRequest) {
-        log.debug("Update dip application for id: {}, applicationRequest {} ", id, applicationRequest);
-        middlewareApi.updateDipApplication(id, applicationRequest);
-    }
-
     @Override
-    public void updateDipApplicationById(String id, ApplicationRequest applicationRequest) {
-        var externalApplicationId = applicationRequest.getExternalApplicationId();
+    public ApplicationResponse updateDipApplicationById(String externalApplicationId, ApplicationRequest applicationRequest) {
         var sourceAccount = getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
-        if (tokenService.retrieveSourceAccount().equals(sourceAccount.getSourceAccount())) {
-            updateDipApplication(id, applicationRequest);
+        if (isAuthorisedToUpdateApplication(sourceAccount.getSourceAccount(), externalApplicationId, applicationRequest)) {
+            return createDipApplication(applicationRequest);
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
         }
@@ -93,7 +86,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
         var appResponse =  middlewareApi.createDipApplication(applicationRequest);
 
-        log.info("Finished calling mw to create dip application id {}", appResponse.getApplicationId());
+        log.info("Finished calling mw to create dip application id {}", appResponse.getApplication().getExternalApplicationId());
         return appResponse;
     }
 
@@ -106,6 +99,11 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
         }
+    }
+
+    private boolean isAuthorisedToUpdateApplication(String sourceAccount, String externalApplicationId, ApplicationRequest applicationRequest) {
+        return (tokenService.retrieveSourceAccount().equals(sourceAccount)
+                && externalApplicationId.equals(applicationRequest.getExternalApplicationId()));
     }
 
     private ApplicationIdentifier middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) { //NOSONAR
@@ -126,14 +124,6 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(feign.RetryableException e) { //NOSONAR
         defaultMiddlewareFallback(e);
         return Optional.empty();
-    }
-
-    private void middlewareApiFallbackDefault(FeignException.FeignServerException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-    }
-
-    private void middlewareApiFallbackDefault(feign.RetryableException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
     }
 
     private ApplicationResponse middlewareApiFallback(FeignException.FeignServerException e) { //NOSONAR
