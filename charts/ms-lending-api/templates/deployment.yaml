@@ -24,7 +24,7 @@ spec:
         draft: {{ default "draft-app" .Values.draft }}
         app: {{ template "fullname" . }}
 {{- if .Values.podsLabels }}
-{{ toYaml .Values.podsLabels | indent 6 }}
+{{ toYaml .Values.podsLabels | indent 8 }}
 {{- end }}
 {{- if .Values.podAnnotations }}
       annotations:
