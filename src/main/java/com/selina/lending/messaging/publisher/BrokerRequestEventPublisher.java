@@ -17,40 +17,51 @@
 
 package com.selina.lending.messaging.publisher;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.messaging.kafka.KafkaManager;
 import com.selina.lending.messaging.event.BrokerRequestEvent;
+import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
+import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class BrokerRequestEventPublisher implements EventPublisher<BrokerRequestEvent> {
-
-    private final ObjectMapper mapper;
-    private final KafkaManager kafkaManager;
+public class BrokerRequestEventPublisher {
 
     // TODO: move to remote config
     public static final String BROKER_REQUEST_TOPIC_OUT = "private.ms-lending-api.broker-request.local";
 
-    public BrokerRequestEventPublisher(ObjectMapper mapper, KafkaManager kafkaManager) {
-        this.mapper = mapper;
-        this.kafkaManager = kafkaManager;
+
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    public BrokerRequestEventPublisher(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
     }
 
-    @Override
-    public void publish(BrokerRequestEvent event) {
-        log.debug("Request to publish event: {}", event);
-        kafkaManager.publish(BROKER_REQUEST_TOPIC_OUT, event.key(), toPayload(event));
+    public void publish(BrokerRequestStartedEvent event) {
+        log.debug("Request to publish BrokerRequestStartedEvent: {}", event);
+        kafkaTemplate.send(BROKER_REQUEST_TOPIC_OUT, event.key(), event).addCallback(
+                result -> successfulCallback(event, result),
+                ex -> errorCallback(event, ex)
+        );
     }
 
-    private String toPayload(BrokerRequestEvent event) {
-        try {
-            return mapper.writeValueAsString(event);
-        } catch (JsonProcessingException e) {
-            log.error("Error on serializing event to json string. Event: {}", event);
-            throw new RuntimeException(e);
-        }
+    public void publish(BrokerRequestFinishedEvent event) {
+        log.debug("Request to publish BrokerRequestFinishedEvent: {}", event);
+        kafkaTemplate.send(BROKER_REQUEST_TOPIC_OUT, event.key(), event).addCallback(
+                result -> successfulCallback(event, result),
+                ex -> errorCallback(event, ex)
+        );
     }
+
+    private void successfulCallback(BrokerRequestEvent payload, @NotNull SendResult<String, Object> result) {
+        log.debug("Sent event:{} with offset:{}", payload, result.getRecordMetadata().offset());
+    }
+
+    private void errorCallback(BrokerRequestEvent payload, @NotNull Throwable ex) {
+        log.error("Unable to send event: {} due to: {}", payload, ex.getMessage());
+    }
+
 }
