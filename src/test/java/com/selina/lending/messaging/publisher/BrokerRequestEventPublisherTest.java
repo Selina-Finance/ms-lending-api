@@ -43,7 +43,7 @@ class BrokerRequestEventPublisherTest {
     private BrokerRequestEventPublisher publisher;
 
     @Test
-    public void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishStartedEvent() {
+    void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishStartedEvent() {
         // Given
         var event = buildBrokerRequestStartedEvent();
 
@@ -58,7 +58,7 @@ class BrokerRequestEventPublisherTest {
     }
 
     @Test
-    public void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishFinishedEvent() {
+    void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishFinishedEvent() {
         // Given
         var event = buildBrokerRequestFinishedEvent();
 
