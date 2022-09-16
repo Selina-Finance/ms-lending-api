@@ -45,7 +45,7 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public NewTopic topic1() {
-        return new NewTopic(BROKER_REQUEST_TOPIC_OUT, 1, (short) 1);
+    public NewTopic brokerRequestKpiTopic() {
+        return new NewTopic(BROKER_REQUEST_TOPIC_OUT, 3, (short) 3);
     }
 }

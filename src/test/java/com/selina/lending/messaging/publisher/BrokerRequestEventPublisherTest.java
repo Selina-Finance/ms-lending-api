@@ -17,62 +17,59 @@
 
 package com.selina.lending.messaging.publisher;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.messaging.kafka.KafkaManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.util.concurrent.SettableListenableFuture;
 
+import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestFinishedEvent;
 import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestStartedEvent;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BrokerRequestEventPublisherTest {
 
     @Mock
-    private ObjectMapper mapper;
-    @Mock
-    private KafkaManager kafkaManager;
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @InjectMocks
     private BrokerRequestEventPublisher publisher;
 
     @Test
-    public void shouldInvokeKafkaManagerWithCorrectArguments() throws JsonProcessingException {
+    void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishStartedEvent() {
         // Given
         var event = buildBrokerRequestStartedEvent();
 
-        var eventAsJsonString = "this-would-be-event-as-json-string";
-        when(mapper.writeValueAsString(any())).thenReturn(eventAsJsonString);
-        Mockito.doNothing().when(kafkaManager).publish(any(), any(), any());
+        SettableListenableFuture<SendResult<String, Object>> future = new SettableListenableFuture<>();
+        when(kafkaTemplate.send(any(), any(), any())).thenReturn(future);
 
         // When
         publisher.publish(event);
 
         // Then
-        verify(kafkaManager, times(1)).publish("private.ms-lending-api.broker-request.local", event.requestId(), eventAsJsonString);
+        verify(kafkaTemplate, times(1)).send("private.ms-lending-api.broker-request.local", event.requestId(), event);
     }
 
     @Test
-    public void shouldNotInvokeKafkaManagerWhenEventIsNotSerializableToJsonString() throws JsonProcessingException {
+    void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishFinishedEvent() {
         // Given
-        var event = buildBrokerRequestStartedEvent();
-        when(mapper.writeValueAsString(any())).thenThrow(JsonProcessingException.class);
+        var event = buildBrokerRequestFinishedEvent();
+
+        SettableListenableFuture<SendResult<String, Object>> future = new SettableListenableFuture<>();
+        when(kafkaTemplate.send(any(), any(), any())).thenReturn(future);
 
         // When
-        assertThatThrownBy(() -> publisher.publish(event)).isInstanceOf(RuntimeException.class);
+        publisher.publish(event);
 
         // Then
-        verifyNoInteractions(kafkaManager);
+        verify(kafkaTemplate, times(1)).send("private.ms-lending-api.broker-request.local", event.requestId(), event);
     }
 
 }

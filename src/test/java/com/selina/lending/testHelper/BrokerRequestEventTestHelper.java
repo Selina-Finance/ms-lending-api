@@ -17,6 +17,7 @@
 
 package com.selina.lending.testHelper;
 
+import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
 import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
 
 import java.time.Instant;
@@ -35,5 +36,13 @@ public class BrokerRequestEventTestHelper {
                 .httpMethod("GET")
                 .ip("127.0.0.1")
                 .build();
+    }
+
+    public static BrokerRequestFinishedEvent buildBrokerRequestFinishedEvent() {
+        return new BrokerRequestFinishedEvent(
+                UUID.randomUUID().toString(),
+                200,
+                Instant.now()
+        );
     }
 }

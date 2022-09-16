@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,7 @@ import java.util.Map;
 import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
+import static org.springframework.kafka.support.serializer.JsonSerializer.TYPE_MAPPINGS;
 
 @Configuration
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
@@ -40,16 +42,22 @@ public class KafkaProducerConfig {
     private String bootstrapAddress;
 
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, Object> multiTypeProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put(
+                TYPE_MAPPINGS,
+                "BrokerRequestStartedEvent:com.selina.lending.messaging.event.BrokerRequestStartedEvent, " +
+                        "BrokerRequestFinishedEvent:com.selina.lending.messaging.event.BrokerRequestFinishedEvent"
+        );
+
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, Object> multiTypeKafkaTemplate() {
+        return new KafkaTemplate<>(multiTypeProducerFactory());
     }
 }
