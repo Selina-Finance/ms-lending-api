@@ -5,9 +5,11 @@ replicaCount: 1
 # Add annotations to the pods
 podAnnotations: {}
 # Add labels to the pods
-podsLabels: {}
+podsLabels: 
+  framework: spring
 # Add labels to the deployment
-deploymentLabels: {}
+deploymentLabels: 
+  framework: spring
 
 image:
   repository: draft
