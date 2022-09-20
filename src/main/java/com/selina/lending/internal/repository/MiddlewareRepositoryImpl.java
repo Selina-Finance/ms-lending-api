@@ -69,15 +69,28 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
     }
 
+    private void deleteApplicationByExternalApplicationId(String sourceAccount, String externalApplicationId) {
+        log.info("Request to delete application by external application id {}, source account {}", externalApplicationId, sourceAccount);
+        middlewareApplicationServiceApi.deleteApplicationByExternalApplicationId(sourceAccount, externalApplicationId);
+    }
+
     @Override
     public ApplicationResponse updateDipApplicationById(String externalApplicationId, ApplicationRequest applicationRequest) {
+        ApplicationResponse applicationResponse;
         var sourceAccount = getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
         if (isAuthorisedToUpdateApplication(sourceAccount.getSourceAccount(), externalApplicationId, applicationRequest)) {
-            return createDipApplication(applicationRequest);
+             applicationResponse = createDipApplication(applicationRequest);
+             try {
+                 deleteApplicationByExternalApplicationId(sourceAccount.getSourceAccount(), externalApplicationId);
+             } catch (Exception e) {
+                 log.error("********ALERT******** Unable to delete application external application id {}, source account {}, {} ********", externalApplicationId, sourceAccount, e.getMessage());
+             }
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
         }
+        return applicationResponse;
     }
+
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
@@ -89,6 +102,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         log.info("Finished calling mw to create dip application id {}", appResponse.getApplication().getExternalApplicationId());
         return appResponse;
     }
+
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId) {

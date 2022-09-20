@@ -19,8 +19,11 @@ package com.selina.lending.internal.api;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 
 @FeignClient(
@@ -32,4 +35,7 @@ public interface MiddlewareApplicationServiceApi {
 
     @GetMapping(path = "/application/source-account/{externalApplicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(@PathVariable("externalApplicationId") String externalApplicationId);
+
+    @DeleteMapping(path = "/application/external-id/{externalApplicationId}")
+    void deleteApplicationByExternalApplicationId(@RequestHeader("x-source-account") String sourceAccount, @PathVariable("externalApplicationId") String externalApplicationId);
 }

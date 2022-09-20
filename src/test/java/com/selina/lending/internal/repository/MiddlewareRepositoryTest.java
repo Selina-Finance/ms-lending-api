@@ -19,6 +19,7 @@ package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -133,12 +134,14 @@ class MiddlewareRepositoryTest {
         when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
         when(applicationResponse.getApplication()).thenReturn(application);
         when(application.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
+        doNothing().when(middlewareApplicationServiceApi).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
 
         // When
         middlewareRepository.updateDipApplicationById(EXTERNAL_APPLICATION_ID, applicationRequest);
 
         // Then
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
+        verify(middlewareApplicationServiceApi, times(1)).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
     }
 
     @Test
@@ -154,6 +157,7 @@ class MiddlewareRepositoryTest {
         // Then
         assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
         verify(middlewareApi, times(0)).createDipApplication(applicationRequest);
+        verify(middlewareApplicationServiceApi, times(0)).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
     }
 
 
@@ -171,6 +175,7 @@ class MiddlewareRepositoryTest {
         // Then
         assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
         verify(middlewareApi, times(0)).createDipApplication(applicationRequest);
+        verify(middlewareApplicationServiceApi, times(0)).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
     }
 
     @Test

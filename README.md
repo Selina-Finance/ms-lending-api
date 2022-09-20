@@ -44,44 +44,26 @@ After the application has started you can check the health status:
 http://localhost:8080/actuator/health
 ```
 
-TODO  - provide necessary information to DevOps about dynamic configurations for the service in different Cloud environments.
-
 1. When setting up this microservice we will need to create the following vault policies:
 
-* ms-example-jx-staging
+* ms-lending-api-jx-staging
 
 ```
-path "kv/jx-staging" {
-capabilities = [ "read", "list"]
-}
-
-path "kv/ms-example/jx-staging" {
-capabilities = [ "read", "list"]
+path "secret/data/ms-lending-api-kpi/staging" {
+    capabilities = [ "read", "list"]
 }
 ```
 
-TODO
 
 * Then we will need to bind the kubernetes service account to these policies:
 
 ```
-vault write auth/kubernetes/role/ms-example-jx-staging \
-bound_service_account_names=jx-ms-example \
+vault write auth/kubernetes/role/ms-lending-api-jx-staging \
+bound_service_account_names=jx-ms-lending-api \
 bound_service_account_namespaces=jx-staging \
-policies=ms-example-jx-staging \
+policies=ms-lending-api-jx-staging \
 ttl=8000h
-
-vault write auth/kubernetes/role/ms-example-jx-preview \
-bound_service_account_names=preview-preview \
-bound_service_account_namespaces="*" \
-policies=ms-example-jx-staging \
-ttl=8000h
-
-vault write auth/kubernetes/role/ms-example-jx-production \
-bound_service_account_names=jx-ms-example \
-bound_service_account_namespaces=jx-production \
-policies=ms-example-jx-production \
-ttl=8000h
+    
 ```
 
 
