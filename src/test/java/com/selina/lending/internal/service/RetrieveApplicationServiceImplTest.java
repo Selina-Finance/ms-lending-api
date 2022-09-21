@@ -33,6 +33,7 @@ import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+
 @ExtendWith(MockitoExtension.class)
 class RetrieveApplicationServiceImplTest {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
