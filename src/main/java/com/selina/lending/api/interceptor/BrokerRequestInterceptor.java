@@ -69,10 +69,9 @@ public class BrokerRequestInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         String brokerRequestId = (String) request.getAttribute(REQUEST_ID_ATTR_NAME);
-        int httpResponseCode = response.getStatus();
 
         if (brokerRequestId != null) {
-            kpiResolver.onRequestFinished(brokerRequestId, httpResponseCode);
+            kpiResolver.onRequestFinished(brokerRequestId, response);
         }
 
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);

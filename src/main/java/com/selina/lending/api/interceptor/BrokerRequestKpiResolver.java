@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Component
@@ -43,10 +44,10 @@ public class BrokerRequestKpiResolver {
         publisher.publish(event);
     }
 
-    public void onRequestFinished(String requestId, Integer httpResponseCode) {
-        log.debug("Handling finished broker request. RequestId: {}, HttpStatus: {}", requestId, httpResponseCode);
+    public void onRequestFinished(String requestId, HttpServletResponse response) {
+        log.debug("Handling finished broker request. RequestId: {}", requestId);
 
-        var event = mapper.toFinishedEvent(requestId, httpResponseCode);
+        var event = mapper.toFinishedEvent(requestId, response);
         publisher.publish(event);
     }
 

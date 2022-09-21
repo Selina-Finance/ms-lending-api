@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -54,8 +55,13 @@ public class BrokerRequestEventMapper {
         return optExternalAppId.orElse(null);
     }
 
-
-    public BrokerRequestFinishedEvent toFinishedEvent(String requestId, int httpResponseCode) {
-        return new BrokerRequestFinishedEvent(requestId, httpResponseCode, Instant.now());
+    public BrokerRequestFinishedEvent toFinishedEvent(String requestId, HttpServletResponse response) {
+        return BrokerRequestFinishedEvent.builder()
+                .requestId(requestId)
+//                .decision(Optional.ofNullable())
+                .decision(null)
+                .httpResponseCode(response.getStatus())
+                .created(Instant.now())
+                .build();
     }
 }

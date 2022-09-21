@@ -17,11 +17,15 @@
 
 package com.selina.lending.messaging.event;
 
+import lombok.Builder;
+
 import java.time.Instant;
 
+@Builder(toBuilder = true)
 public record BrokerRequestFinishedEvent(
         String requestId,
         Integer httpResponseCode,
+        String decision,
         Instant created
 ) implements BrokerRequestEvent {
     @Override

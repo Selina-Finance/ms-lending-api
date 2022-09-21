@@ -39,10 +39,11 @@ public class BrokerRequestEventTestHelper {
     }
 
     public static BrokerRequestFinishedEvent buildBrokerRequestFinishedEvent() {
-        return new BrokerRequestFinishedEvent(
-                UUID.randomUUID().toString(),
-                200,
-                Instant.now()
-        );
+        return BrokerRequestFinishedEvent.builder()
+                .requestId(UUID.randomUUID().toString())
+                .decision(null)
+                .httpResponseCode(200)
+                .created(Instant.now())
+                .build();
     }
 }

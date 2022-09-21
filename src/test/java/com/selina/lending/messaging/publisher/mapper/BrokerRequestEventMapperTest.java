@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
@@ -40,14 +42,16 @@ class BrokerRequestEventMapperTest {
     public void shouldMapToBrokerRequestFinishedEvent() {
         // Given
         var requestId = "123";
-        var httpResponseCode = 502;
+        var response = new MockHttpServletResponse();
+        response.setStatus(502);
 
         // When
-        var result = mapper.toFinishedEvent(requestId, httpResponseCode);
+        var result = mapper.toFinishedEvent(requestId, response);
 
         // Then
         assertThat(result.requestId()).isEqualTo(requestId);
-        assertThat(result.httpResponseCode()).isEqualTo(httpResponseCode);
+        assertThat(result.decision()).isEqualTo(null);
+        assertThat(result.httpResponseCode()).isEqualTo(response.getStatus());
         assertThat(result.created()).isBeforeOrEqualTo(Instant.now());
     }
 

@@ -17,14 +17,15 @@
 
 package com.selina.lending.api.interceptor;
 
+import com.selina.lending.internal.service.TokenService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -34,8 +35,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import com.selina.lending.internal.service.TokenService;
 
 @ExtendWith(MockitoExtension.class)
 class BrokerRequestInterceptorTest {
@@ -106,13 +105,10 @@ class BrokerRequestInterceptorTest {
     void shouldPassRequestIdAndResponseStatusWhenFinishingRequest() throws Exception {
         // Given
         var requestId = UUID.randomUUID().toString();
-        var httpResponseCode = 200;
+        var response = new MockHttpServletResponse();
 
         var request = mock(HttpServletRequest.class);
         when(request.getAttribute(BROKER_HTTP_ATTR_NAME)).thenReturn(requestId);
-
-        var response = mock(HttpServletResponse.class);
-        when(response.getStatus()).thenReturn(httpResponseCode);
 
         doNothing().when(kpiResolver).onRequestFinished(any(), any());
 
@@ -120,25 +116,23 @@ class BrokerRequestInterceptorTest {
         interceptor.afterCompletion(request, response, null, null);
 
         // Then
-        verify(kpiResolver, times(1)).onRequestFinished(requestId, httpResponseCode);
+        verify(kpiResolver, times(1)).onRequestFinished(requestId, response);
     }
 
     @Test
     void shouldNotCallKpiResolverOnPostHandleWhenBrokerRequestIdIsNull() throws Exception {
         // Given
         String requestId = null;
-        var httpResponseCode = 200;
 
         var request = mock(HttpServletRequest.class);
         when(request.getAttribute(BROKER_HTTP_ATTR_NAME)).thenReturn(requestId);
 
-        var response = mock(HttpServletResponse.class);
-        when(response.getStatus()).thenReturn(httpResponseCode);
+        var response = new MockHttpServletResponse();
 
         // When
         interceptor.afterCompletion(request, response, null, null);
 
         // Then
-        verify(kpiResolver, times(0)).onRequestFinished(requestId, httpResponseCode);
+        verify(kpiResolver, times(0)).onRequestFinished(requestId, response);
     }
 }

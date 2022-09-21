@@ -25,11 +25,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.UUID;
 
+import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestFinishedEvent;
 import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestStartedEvent;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -67,14 +69,14 @@ class BrokerRequestKpiResolverTest {
     void shouldPublishMessageWhenOnRequestFinishedInvoked() {
         // Given
         var requestId = UUID.randomUUID().toString();
-        var httpResponseCode = 200;
+        var response = new MockHttpServletResponse();
+        response.setStatus(200);
 
-
-        var event = new BrokerRequestFinishedEvent("", httpResponseCode, Instant.now());
-        when(eventMapper.toFinishedEvent(requestId, httpResponseCode)).thenReturn(event);
+        var event = buildBrokerRequestFinishedEvent();
+        when(eventMapper.toFinishedEvent(requestId, response)).thenReturn(event);
 
         // When
-        kpiResolver.onRequestFinished(requestId, httpResponseCode);
+        kpiResolver.onRequestFinished(requestId, response);
 
         // Then
         verify(eventPublisher).publish(event);
