@@ -26,7 +26,10 @@ import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
-import com.selina.lending.internal.service.LendingService;
+import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
+import com.selina.lending.internal.service.CreateApplicationService;
+import com.selina.lending.internal.service.RetrieveApplicationService;
+import com.selina.lending.internal.service.UpdateApplicationService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,30 +37,35 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LendingController implements LendingOperations {
 
-    private final LendingService lendingService;
+    private final RetrieveApplicationService retrieveApplicationService;
+    private final CreateApplicationService createApplicationService;
+    private final UpdateApplicationService updateApplicationService;
 
-    public LendingController(LendingService lendingService) {
-        this.lendingService = lendingService;
+    public LendingController(RetrieveApplicationService retrieveApplicationService, CreateApplicationService createApplicationService, UpdateApplicationService updateApplicationService) {
+        this.retrieveApplicationService = retrieveApplicationService;
+        this.createApplicationService = createApplicationService;
+        this.updateApplicationService = updateApplicationService;
     }
 
     @Override
     public ResponseEntity<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
         log.info("Get application {}", externalApplicationId);
-        var applicationResponse = lendingService.getApplication(externalApplicationId);
+        var applicationResponse = retrieveApplicationService.getApplicationByExternalApplicationId(externalApplicationId);
         return ResponseEntity.of(applicationResponse.map(ApplicationDecisionResponseMapper.INSTANCE::mapToApplicationDecisionResponseDto));
     }
 
     @Override
     public ResponseEntity<ApplicationResponse> updateDipApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest) {
         log.info("Update DIP application {}", externalApplicationId);
-        var applicationResponse = lendingService.updateDipApplication(externalApplicationId, dipApplicationRequest);
+        var applicationResponse = updateApplicationService.updateDipApplication(externalApplicationId,
+                DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 
     @Override
     public ResponseEntity<ApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
         log.info("Create DIP application with externalApplicationId {}", dipApplicationRequest.getExternalApplicationId());
-        var applicationResponse = lendingService.createDipApplication(dipApplicationRequest);
+        var applicationResponse = createApplicationService.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 }

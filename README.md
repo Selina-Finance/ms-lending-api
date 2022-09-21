@@ -22,7 +22,7 @@ Our apis enables users to get an idea of how much money can be borrowed against 
 - Java 17
 - Spring Boot
 - OAuth 2
-- Resilience4J Circuit Breaker
+- Resilience4J Circuit Breaker and Retry
 - Zalando error handling
 - Logback and Slf4j
 - Spring Cloud Sleuth
@@ -49,7 +49,7 @@ http://localhost:8080/actuator/health
 * ms-lending-api-jx-staging
 
 ```
-path "secret/data/ms-lending-api-kpi/staging" {
+path "secret/data/ms-lending-api/staging" {
     capabilities = [ "read", "list"]
 }
 ```

@@ -25,7 +25,9 @@ import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.LendingService;
+import com.selina.lending.internal.service.CreateApplicationService;
+import com.selina.lending.internal.service.RetrieveApplicationService;
+import com.selina.lending.internal.service.UpdateApplicationService;
 
 @WithMockUser
 @AutoConfigureMockMvc
@@ -36,8 +38,13 @@ class LendingControllerValidationTest extends MapperBase {
     private MockMvc mockMvc;
 
     @MockBean
-    private LendingService lendingService;
+    private RetrieveApplicationService retrieveApplicationService;
 
+    @MockBean
+    private UpdateApplicationService updateApplicationService;
+
+    @MockBean
+    private CreateApplicationService createApplicationService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
