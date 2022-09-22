@@ -58,7 +58,7 @@ public class BrokerRequestEventMapper {
     public BrokerRequestFinishedEvent toFinishedEvent(String requestId, HttpServletResponse response) {
         return BrokerRequestFinishedEvent.builder()
                 .requestId(requestId)
-//                .decision(Optional.ofNullable())
+//                .decision(Optional.ofNullable()) TODO - parse response to get logical decision
                 .decision(null)
                 .httpResponseCode(response.getStatus())
                 .created(Instant.now())
