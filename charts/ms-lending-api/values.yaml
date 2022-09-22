@@ -16,6 +16,11 @@ image:
   tag: dev
   pullPolicy: IfNotPresent
 
+# Optional Toleration and affinity
+eks:
+  tolerations: {}
+  affinity: {}
+
 # optional list of image pull secrets to use to pull images
 jx:
   # optional image pull secrets
