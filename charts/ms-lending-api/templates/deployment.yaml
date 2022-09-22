@@ -31,17 +31,17 @@ spec:
 {{ toYaml .Values.podAnnotations | indent 8 }}
 {{- end }}
     spec:
-{{- if .Values.affinity }}    
+{{- if .Values.eks.affinity }}    
       affinity:
-{{ toYaml .Values.affinity | indent 8 }}
+{{ toYaml .Values.eks.affinity | indent 8 }}
 {{- end }}
 {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
 {{- end }}
-{{- if .Values.tolerations }}
+{{- if .Values.eks.tolerations }}
       tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+{{ toYaml .Values.eks.tolerations | indent 8 }}
 {{- end }}    
 {{- if .Values.serviceAccount.enabled }}
 {{- if .Values.serviceAccount.name }}
