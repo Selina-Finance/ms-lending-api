@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import static com.selina.lending.messaging.publisher.mapper.ExternalAppIdHelper.getExternalAppId;
 import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
+import static com.selina.lending.messaging.publisher.mapper.LogicalDecisionExtractHelper.extractLogicalDecision;
 
 @Slf4j
 @Component
@@ -56,10 +57,15 @@ public class BrokerRequestEventMapper {
     }
 
     public BrokerRequestFinishedEvent toFinishedEvent(String requestId, HttpServletResponse response) {
+        String decision = extractLogicalDecision(response).orElse(null);
+        if (decision == null) {
+            log.debug("Can't parse logical decision for requestId: {}", requestId);
+        }
+
         return BrokerRequestFinishedEvent.builder()
                 .requestId(requestId)
-//                .decision(Optional.ofNullable()) TODO - parse response to get logical decision
-                .decision(null)
+                .decision(decision)
+                .decision(decision)
                 .httpResponseCode(response.getStatus())
                 .created(Instant.now())
                 .build();
