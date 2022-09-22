@@ -15,7 +15,19 @@ management:
       enabled: true
 
 resilience4j:
+  retry:
+    retry-aspect-order: 100
+    instances:
+      middleware-application-service-retry:
+        max-attempts: 3
+        wait-duration: 3s
+        ignoreExceptions:
+          - feign.FeignException.FeignClientException
+        retryExceptions:
+          - feign.FeignException.FeignServerException
+          - feign.RetryableException
   circuitbreaker:
+    circuit-breaker-aspect-order: 1
     instances:
       middleware-api-cb:
         wait-duration-in-open-state: 1m

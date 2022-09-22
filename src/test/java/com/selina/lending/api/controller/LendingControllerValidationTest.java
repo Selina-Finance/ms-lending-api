@@ -1,3 +1,20 @@
+/*
+ * Copyright 2022 Selina Finance
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.selina.lending.api.controller;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -25,7 +42,9 @@ import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.LendingService;
+import com.selina.lending.internal.service.CreateApplicationService;
+import com.selina.lending.internal.service.RetrieveApplicationService;
+import com.selina.lending.internal.service.UpdateApplicationService;
 
 @WithMockUser
 @AutoConfigureMockMvc
@@ -36,8 +55,13 @@ class LendingControllerValidationTest extends MapperBase {
     private MockMvc mockMvc;
 
     @MockBean
-    private LendingService lendingService;
+    private RetrieveApplicationService retrieveApplicationService;
 
+    @MockBean
+    private UpdateApplicationService updateApplicationService;
+
+    @MockBean
+    private CreateApplicationService createApplicationService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test

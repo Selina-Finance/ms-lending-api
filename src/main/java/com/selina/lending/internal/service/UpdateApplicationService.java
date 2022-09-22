@@ -17,15 +17,9 @@
 
 package com.selina.lending.internal.service;
 
-import java.util.Optional;
-
-import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
-public interface LendingService {
-    Optional<ApplicationDecisionResponse> getApplication(String externalApplicationId);
-    ApplicationResponse updateDipApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest);
-    ApplicationResponse createDipApplication(DIPApplicationRequest dipApplicationRequest);
+public interface UpdateApplicationService {
+    ApplicationResponse updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest);
 }
-

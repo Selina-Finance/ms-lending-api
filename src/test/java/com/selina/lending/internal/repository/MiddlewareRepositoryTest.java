@@ -36,13 +36,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.api.MiddlewareApi;
-import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
@@ -56,16 +53,9 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
-    private static final String ACCESS_DENIED_MSG =
-            "Error processing request: Access denied for application "+ EXTERNAL_APPLICATION_ID;
-    private static final String SOURCE_ACCOUNT = "source account";
-    private static final String ANOTHER_SOURCE_ACCOUNT = "Another source account";
 
     @Mock
     private MiddlewareApi middlewareApi;
-
-    @Mock
-    private MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
     @Mock
     private ApplicationRequest applicationRequest;
@@ -76,8 +66,6 @@ class MiddlewareRepositoryTest {
     @Mock
     private Application application;
 
-    @Mock
-    private ApplicationIdentifier applicationIdentifier;
 
     private MiddlewareRepository middlewareRepository;
 
@@ -86,26 +74,22 @@ class MiddlewareRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, middlewareApplicationServiceApi, tokenService);
+        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, tokenService);
     }
 
     @Test
-    void shouldCallHttpClientWhenGetApplicationByExternalApplicationIdInvoked() {
+    void shouldCallHttpClientWhenGetApplicationByIdInvoked() {
         // Given
         var id = UUID.randomUUID().toString();
         var apiResponse = ApplicationDecisionResponse.builder().build();
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getId()).thenReturn(id);
         when(middlewareApi.getApplicationById(id)).thenReturn(apiResponse);
 
         // When
-        var result = middlewareRepository.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        var result = middlewareRepository.getApplicationById(id);
 
         // Then
         assertThat(result).isEqualTo(Optional.of(apiResponse));
+        verify(middlewareApi, times(1)).getApplicationById(id);
     }
 
     @Test
@@ -123,66 +107,12 @@ class MiddlewareRepositoryTest {
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 
-    @Test
-    void shouldCallHttpClientWhenUpdateApplicationInvoked() {
-        // Given
-        when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
-        when(applicationResponse.getApplication()).thenReturn(application);
-        when(application.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
-
-        // When
-        middlewareRepository.updateDipApplicationById(EXTERNAL_APPLICATION_ID, applicationRequest);
-
-        // Then
-        verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
-    }
-
-    @Test
-    void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateApplication() {
-        // Given
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(ANOTHER_SOURCE_ACCOUNT);
-
-        // When
-        var exception = assertThrows(AccessDeniedException.class, () -> middlewareRepository.updateDipApplicationById(EXTERNAL_APPLICATION_ID, applicationRequest));
-
-        // Then
-        assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-        verify(middlewareApi, times(0)).createDipApplication(applicationRequest);
-    }
-
-
-    @Test
-    void shouldThrowAccessDeniedExceptionWhenApplicationRequestExternalApplicationIdNotMatched() {
-        // Given
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(applicationRequest.getExternalApplicationId()).thenReturn("any id");
-
-        // When
-        var exception = assertThrows(AccessDeniedException.class, () -> middlewareRepository.updateDipApplicationById(EXTERNAL_APPLICATION_ID, applicationRequest));
-
-        // Then
-        assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-        verify(middlewareApi, times(0)).createDipApplication(applicationRequest);
-    }
 
     @Test
     void shouldThrowFeignServerExceptionWhenMiddlewareThrowsInternalServerException() {
         //Given
         String errorMsg = "error";
         var id = UUID.randomUUID().toString();
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getId()).thenReturn(id);
 
         //When
         when(middlewareApi.getApplicationById(id)).thenThrow(
@@ -190,7 +120,7 @@ class MiddlewareRepositoryTest {
                         errorMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignServerException.class,
-                () -> middlewareRepository.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID));
+                () -> middlewareRepository.getApplicationById(id));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
@@ -202,32 +132,15 @@ class MiddlewareRepositoryTest {
         String notFoundMsg = "not found";
 
         //When
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenThrow(
+        when(middlewareApi.createDipApplication(applicationRequest)).thenThrow(
                 new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
                         notFoundMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignClientException.class,
-                () -> middlewareRepository.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID));
+                () -> middlewareRepository.createDipApplication(applicationRequest));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
-    }
-
-    @Test
-    void shouldThrowAccessDeniedExceptionWhenSourceAccountNotMatchedTokenSourceAccount() {
-        //Given
-        String accessDeniedMsg = "Error processing request: Access denied for application "+ EXTERNAL_APPLICATION_ID;
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(ANOTHER_SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-
-        //When
-        var exception = assertThrows(AccessDeniedException.class,
-                () -> middlewareRepository.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID));
-
-        //Then
-        assertThat(exception.getMessage()).isEqualTo(accessDeniedMsg);
-        verify(middlewareApplicationServiceApi, times(0)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
     }
 
     @Test
@@ -237,10 +150,10 @@ class MiddlewareRepositoryTest {
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(id)).thenThrow(
+        when(middlewareApi.getApplicationById(id)).thenThrow(
                 new FeignException.InternalServerError("Internal Server Error", createRequest(), "error".getBytes(), null));
 
-        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationByExternalApplicationId(id));
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationById(id));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
@@ -254,20 +167,19 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
         assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
 
-        verify(middlewareApplicationServiceApi, times(5)).getApplicationSourceAccountByExternalApplicationId(id);
+        verify(middlewareApi, times(5)).getApplicationById(id);
     }
 
 
     @Test
     void shouldOpenCircuitBreakerWhenRetryableExceptionTriggersFallback() {
         //Given
-        var id = UUID.randomUUID().toString();
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(id)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
+        when(middlewareApi.createDipApplication(applicationRequest)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
 
-        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationByExternalApplicationId(id));
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.createDipApplication(applicationRequest));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
@@ -281,7 +193,7 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
         assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
 
-        verify(middlewareApplicationServiceApi, times(5)).getApplicationSourceAccountByExternalApplicationId(id);
+        verify(middlewareApi, times(5)).createDipApplication(applicationRequest);
     }
 
     @Test
@@ -291,10 +203,10 @@ class MiddlewareRepositoryTest {
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(id)).thenThrow(
+        when(middlewareApi.getApplicationById(id)).thenThrow(
                 new FeignException.NotFound("Not found", createRequest(), "not found".getBytes(), null));
 
-        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationByExternalApplicationId(id));
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.getApplicationById(id));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
@@ -308,7 +220,7 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isZero();
         assertThat(metrics.getNumberOfNotPermittedCalls()).isZero();
 
-        verify(middlewareApplicationServiceApi, times(10)).getApplicationSourceAccountByExternalApplicationId(id);
+        verify(middlewareApi, times(10)).getApplicationById(id);
     }
 
     private Request createRequest() {

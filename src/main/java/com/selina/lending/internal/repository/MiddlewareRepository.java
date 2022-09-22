@@ -25,9 +25,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 
 public interface MiddlewareRepository {
 
-    Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String id);
-
-    ApplicationResponse updateDipApplicationById(String id, ApplicationRequest applicationRequest);
+    Optional<ApplicationDecisionResponse> getApplicationById(String id);
 
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 }
