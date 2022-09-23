@@ -37,39 +37,34 @@ import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAd
 public class BrokerRequestEventMapper {
 
     private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
-
     private final ObjectMapper objectMapper;
 
     public BrokerRequestEventMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-
     public Optional<BrokerRequestKpiEvent> toBrokerRequestKpiEvent(
-            ContentCachingRequestWrapper request,
-            ContentCachingResponseWrapper response,
+            ContentCachingRequestWrapper httpRequest,
+            ContentCachingResponseWrapper httpResponse,
             Instant started,
             String clientId
     ) {
-        String requestId = Optional.ofNullable(request.getHeader(REQUEST_ID_HEADER_NAME)).orElse(UUID.randomUUID().toString());
-
-//        String requestBody = getStringValue(request.getContentAsByteArray(), request.getCharacterEncoding());
-//        String responseBody = getStringValue(response.getContentAsByteArray(), response.getCharacterEncoding());
+        String requestId = Optional.ofNullable(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).orElse(UUID.randomUUID().toString());
 
         try {
-            ApplicationResponse resp = objectMapper.readValue(response.getContentAsByteArray(), ApplicationResponse.class);
+            var resp = objectMapper.readValue(httpResponse.getContentAsByteArray(), ApplicationResponse.class);
 
             return Optional.of(BrokerRequestKpiEvent.builder()
                     .requestId(requestId)
                     .externalApplicationId(resp.getApplication().getExternalApplicationId())
                     .source(clientId)
-                    .uriPath(request.getRequestURI())
-                    .httpMethod(request.getMethod())
-                    .ip(getRemoteAddr(request))
+                    .uriPath(httpRequest.getRequestURI())
+                    .httpMethod(httpRequest.getMethod())
+                    .ip(getRemoteAddr(httpRequest))
                     .started(started)
                     .finished(Instant.now())
                     .decision(resp.getApplication().getStatus())
-                    .httpResponseCode(response.getStatus())
+                    .httpResponseCode(httpResponse.getStatus())
                     .build());
         } catch (IOException e) {
             log.error("Can't map event. Reason: {}", e.getMessage());

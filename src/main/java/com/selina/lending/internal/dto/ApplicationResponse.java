@@ -20,7 +20,7 @@ package com.selina.lending.internal.dto;
 import lombok.Builder;
 import lombok.Value;
 
-@Builder
+@Builder(toBuilder = true)
 @Value
 public class ApplicationResponse {
     String message;
