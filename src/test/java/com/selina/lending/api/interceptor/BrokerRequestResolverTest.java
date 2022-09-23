@@ -1,83 +1,87 @@
-///*
-// * Copyright 2022 Selina Finance
-// *
-// * Licensed under the Apache License, Version 2.0 (the "License");
-// * you may not use this file except in compliance with the License.
-// * You may obtain a copy of the License at
-// *
-// * http://www.apache.org/licenses/LICENSE-2.0
-// *
-// * Unless required by applicable law or agreed to in writing, software
-// * distributed under the License is distributed on an "AS IS" BASIS,
-// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// * See the License for the specific language governing permissions and
-// * limitations under the License.
-// *
-// */
-//
-//package com.selina.lending.api.interceptor;
-//
-//import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
-//import com.selina.lending.messaging.publisher.mapper.BrokerRequestEventMapper;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//import org.springframework.mock.web.MockHttpServletResponse;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import java.util.UUID;
-//
-//import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestFinishedEvent;
-//import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestStartedEvent;
-//import static org.mockito.Mockito.mock;
-//import static org.mockito.Mockito.verify;
-//import static org.mockito.Mockito.when;
-//
-//@ExtendWith(MockitoExtension.class)
-//class BrokerRequestResolverTest {
-//
-//    @Mock
-//    private BrokerRequestEventPublisher eventPublisher;
-//    @Mock
-//    private BrokerRequestEventMapper eventMapper;
-//
-//    @InjectMocks
-//    private BrokerRequestResolver kpiResolver;
-//
-//    @Test
-//    void shouldPublishMessageWhenOnRequestStartedInvoked() {
-//        // Given
-//        var broker = "the-broker";
-//        var requestId = UUID.randomUUID().toString();
-//        var httpRequest = mock(HttpServletRequest.class);
-//
-//        var event = buildBrokerRequestStartedEvent();
-//        when(eventMapper.toStartedEvent(broker, requestId, httpRequest)).thenReturn(event);
-//
-//        // When
-//        kpiResolver.onRequestStarted(broker, requestId, httpRequest);
-//
-//        // Then
-//        verify(eventPublisher).publish(event);
-//    }
-//
-//    @Test
-//    void shouldPublishMessageWhenOnRequestFinishedInvoked() {
-//        // Given
-//        var requestId = UUID.randomUUID().toString();
-//        var response = new MockHttpServletResponse();
-//        response.setStatus(200);
-//
-//        var event = buildBrokerRequestFinishedEvent();
-//        when(eventMapper.toFinishedEvent(requestId, response)).thenReturn(event);
-//
-//        // When
-//        kpiResolver.onRequestFinished(requestId, response);
-//
-//        // Then
-//        verify(eventPublisher).publish(event);
-//    }
-//
-//}
+/*
+ * Copyright 2022 Selina Finance
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package com.selina.lending.api.interceptor;
+
+import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
+import com.selina.lending.messaging.publisher.mapper.BrokerRequestEventMapper;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
+
+import java.time.Instant;
+import java.util.Optional;
+
+import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class BrokerRequestResolverTest {
+
+    @Mock
+    private BrokerRequestEventPublisher publisher;
+    @Mock
+    private BrokerRequestEventMapper mapper;
+    @Mock
+    private TokenService tokenService;
+
+    @InjectMocks
+    private BrokerRequestResolver resolver;
+
+    @Test
+    void shouldDoNotPublishEventWheMapperReturnedEmpty() {
+        // Given
+        when(mapper.toBrokerRequestKpiEvent(any(), any(), any(), any())).thenReturn(Optional.empty());
+
+        // When
+        resolver.handle(null, null, null);
+
+        // Then
+        verifyNoInteractions(publisher);
+    }
+
+    @Test
+    void shouldPublishEventWheMapperReturnedResult() {
+        // Given
+        var request = new MockHttpServletRequest();
+        var response = new MockHttpServletResponse();
+        var started = Instant.now();
+        var event = buildBrokerRequestKpiEvent();
+        when(mapper.toBrokerRequestKpiEvent(any(), any(), any(), any())).thenReturn(Optional.of(event));
+
+        // When
+        resolver.handle(
+                new ContentCachingRequestWrapper(request),
+                new ContentCachingResponseWrapper(response),
+                started
+        );
+
+        // Then
+        verify(publisher, times(1)).publish(event);
+    }
+}
