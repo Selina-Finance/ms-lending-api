@@ -27,7 +27,7 @@ public record BrokerRequestFinishedEvent(
         Integer httpResponseCode,
         String decision,
         Instant created
-) implements BrokerRequestEvent {
+) implements KafkaEvent {
     @Override
     public String key() {
         return requestId;

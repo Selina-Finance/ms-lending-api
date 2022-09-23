@@ -29,11 +29,16 @@ public class LogicalDecisionExtractHelper {
 
     public static Optional<String> extractLogicalDecision(HttpServletResponse response) {
         try {
-//            ContentCachingResponseWrapper resp = new ContentCachingResponseWrapper(response);
-//            resp.copyBodyToResponse();
-//            var body = objectMapper.readValue(resp.getContentAsByteArray(), ApplicationResponse.class);
-//            return Optional.ofNullable(body.getApplication().getStatus());
-            return Optional.empty();
+            ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+
+            byte[] responseArray = responseWrapper.getContentAsByteArray();
+            String responseStr = new String(responseArray, responseWrapper.getCharacterEncoding());
+            responseWrapper.copyBodyToResponse();
+
+
+            byte[] contentAsByteArray = responseWrapper.getContentAsByteArray();
+            ApplicationResponse body = objectMapper.readValue(contentAsByteArray, ApplicationResponse.class);
+            return Optional.ofNullable(body.getApplication().getStatus());
         } catch (Exception e) {
             return Optional.empty();
         }

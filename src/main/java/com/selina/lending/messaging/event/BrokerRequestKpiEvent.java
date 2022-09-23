@@ -21,15 +21,18 @@ import lombok.Builder;
 
 import java.time.Instant;
 
-@Builder
-public record BrokerRequestStartedEvent(
+@Builder(toBuilder = true)
+public record BrokerRequestKpiEvent(
         String requestId,
         String externalApplicationId,
-        Instant created,
+        String ip,
         String source,
         String uriPath,
         String httpMethod,
-        String ip
+        Integer httpResponseCode,
+        String decision,
+        Instant started,
+        Instant finished
 ) implements KafkaEvent {
     @Override
     public String key() {

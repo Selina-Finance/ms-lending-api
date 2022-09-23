@@ -28,7 +28,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.selina.lending.messaging.publisher.BrokerRequestEventPublisher.BROKER_REQUEST_TOPIC_OUT;
+import static com.selina.lending.messaging.publisher.BrokerRequestEventPublisher.BROKER_REQUEST_KPI_TOPIC_OUT;
 
 @Configuration
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
@@ -46,6 +46,6 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic brokerRequestKpiTopic() {
-        return new NewTopic(BROKER_REQUEST_TOPIC_OUT, 3, (short) 3);
+        return new NewTopic(BROKER_REQUEST_KPI_TOPIC_OUT, 3, (short) 3);
     }
 }

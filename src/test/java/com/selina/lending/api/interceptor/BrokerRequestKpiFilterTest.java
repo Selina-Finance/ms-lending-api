@@ -15,8 +15,14 @@
  *
  */
 
-package com.selina.lending.messaging.event;
+package com.selina.lending.api.interceptor;
 
-public interface BrokerRequestEvent {
-    String key();
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+class BrokerRequestKpiFilterTest {
+
 }
