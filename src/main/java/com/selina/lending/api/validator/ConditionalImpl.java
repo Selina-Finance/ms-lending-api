@@ -21,6 +21,8 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -47,7 +49,8 @@ public class ConditionalImpl implements ConstraintValidator<Conditional, Object>
 
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext context) {
-        boolean valid = true;
+        var propertyInvalidMap = new HashMap<>();
+        boolean valid;
         try {
             var selectedValue = BeanUtils.getProperty(object, selected);
             if (Arrays.asList(values).contains(selectedValue)) {
@@ -57,6 +60,7 @@ public class ConditionalImpl implements ConstraintValidator<Conditional, Object>
                     if (!valid) {
                         context.disableDefaultConstraintViolation();
                         context.buildConstraintViolationWithTemplate(message).addPropertyNode(propertyName).addConstraintViolation();
+                        propertyInvalidMap.put(propertyName, false);
                     }
                 }
             }
@@ -64,6 +68,6 @@ public class ConditionalImpl implements ConstraintValidator<Conditional, Object>
             log.error("An exception occurred while accessing class : {}, exception : {}", object.getClass().getName(), e);
             return false;
         }
-        return valid;
+        return propertyInvalidMap.isEmpty();
     }
 }
