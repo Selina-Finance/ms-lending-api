@@ -17,9 +17,8 @@
 
 package com.selina.lending.messaging.publisher;
 
-import com.selina.lending.messaging.event.BrokerRequestEvent;
-import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
-import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
+import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
+import com.selina.lending.messaging.event.KafkaEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -31,7 +30,7 @@ import org.springframework.stereotype.Component;
 public class BrokerRequestEventPublisher {
 
     // TODO: move to remote config
-    public static final String BROKER_REQUEST_TOPIC_OUT = "private.ms-lending-api.broker-request.local";
+    public static final String BROKER_REQUEST_KPI_TOPIC_OUT = "private.ms-lending-api.broker-request.local";
 
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -40,27 +39,19 @@ public class BrokerRequestEventPublisher {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(BrokerRequestStartedEvent event) {
-        log.debug("Request to publish BrokerRequestStartedEvent: {}", event);
-        kafkaTemplate.send(BROKER_REQUEST_TOPIC_OUT, event.key(), event).addCallback(
+    public void publish(BrokerRequestKpiEvent event) {
+        log.debug("Request to publish BrokerRequestKpiEvent: {}", event);
+        kafkaTemplate.send(BROKER_REQUEST_KPI_TOPIC_OUT, event.key(), event).addCallback(
                 result -> successfulCallback(event, result),
                 ex -> errorCallback(event, ex)
         );
     }
 
-    public void publish(BrokerRequestFinishedEvent event) {
-        log.debug("Request to publish BrokerRequestFinishedEvent: {}", event);
-        kafkaTemplate.send(BROKER_REQUEST_TOPIC_OUT, event.key(), event).addCallback(
-                result -> successfulCallback(event, result),
-                ex -> errorCallback(event, ex)
-        );
-    }
-
-    private void successfulCallback(BrokerRequestEvent payload, @NotNull SendResult<String, Object> result) {
+    private void successfulCallback(KafkaEvent payload, @NotNull SendResult<String, Object> result) {
         log.debug("Sent event:{} with offset:{}", payload, result.getRecordMetadata().offset());
     }
 
-    private void errorCallback(BrokerRequestEvent payload, @NotNull Throwable ex) {
+    private void errorCallback(KafkaEvent payload, @NotNull Throwable ex) {
         log.error("Unable to send event: {} due to: {}", payload, ex.getMessage());
     }
 

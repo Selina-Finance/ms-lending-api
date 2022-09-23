@@ -17,67 +17,124 @@
 
 package com.selina.lending.messaging.publisher.mapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.mapper.MapperBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.Instant;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BrokerRequestEventMapperTest {
+class BrokerRequestEventMapperTest extends MapperBase {
+    private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
+    @Mock
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private BrokerRequestEventMapper mapper;
 
     @Test
-    public void shouldMapToBrokerRequestFinishedEvent() {
+    public void shouldMapToBrokerRequestKpiEvent() throws IOException {
         // Given
-        var requestId = "123";
-        var httpResponseCode = 502;
+        var clientId = "the-broker-id";
+        var started = Instant.now();
+        var foreignRequestId = "123";
+        var uriPath = "/application/123";
+        var httpMethod = "POST";
+        var ip = "192.0.0.1";
+
+        var httpRequest = new MockHttpServletRequest();
+        httpRequest.setRequestURI(uriPath);
+        httpRequest.setMethod(httpMethod);
+        httpRequest.setRemoteAddr(ip);
+        httpRequest.addHeader(REQUEST_ID_HEADER_NAME, foreignRequestId);
+
+        var httpResponseCode = 200;
+        var response = new MockHttpServletResponse();
+        response.setStatus(httpResponseCode);
+
+        ApplicationResponse appResponse = ApplicationResponse.builder().application(getDIPApplicationDto()).build();
+        when(objectMapper.readValue(eq(new byte[]{}), eq(ApplicationResponse.class))).thenReturn(appResponse);
 
         // When
-        var result = mapper.toFinishedEvent(requestId, httpResponseCode);
+        var optResult = mapper.toBrokerRequestKpiEvent(
+                new ContentCachingRequestWrapper(httpRequest),
+                new ContentCachingResponseWrapper(response),
+                started,
+                clientId
+        );
 
         // Then
-        assertThat(result.requestId()).isEqualTo(requestId);
+        assertTrue(optResult.isPresent());
+        var result = optResult.get();
+
+        assertThat(result.requestId()).isEqualTo(foreignRequestId);
+        assertThat(result.externalApplicationId()).isEqualTo(appResponse.getApplication().getExternalApplicationId());
+        assertThat(result.ip()).isEqualTo(ip);
+        assertThat(result.source()).isEqualTo(clientId);
+        assertThat(result.uriPath()).isEqualTo(uriPath);
+        assertThat(result.httpMethod()).isEqualTo(httpMethod);
         assertThat(result.httpResponseCode()).isEqualTo(httpResponseCode);
-        assertThat(result.created()).isBeforeOrEqualTo(Instant.now());
+        assertThat(result.decision()).isEqualTo(appResponse.getApplication().getStatus());
+        assertThat(result.started()).isEqualTo(started);
+        assertThat(result.finished()).isAfter(started);
     }
 
     @Test
-    public void shouldMapToBrokerRequestStartedEvent() {
+    public void shouldGenerateRequestIdWhenHeaderIsEmpty() throws IOException {
         // Given
-        var source = "the-broker";
-        var requestId = "123";
-        var externalAppId = UUID.randomUUID().toString();
-        var path = "/application/" + externalAppId;
-        var method = "GET";
-        var ip = "192.0.0.1";
+        var httpRequest = new MockHttpServletRequest(); // without request-id header
+        var response = new MockHttpServletResponse();
 
-        var httpRequest = mock(HttpServletRequest.class);
-        when(httpRequest.getRequestURI()).thenReturn(path);
-        when(httpRequest.getMethod()).thenReturn(method);
-        when(httpRequest.getRemoteAddr()).thenReturn(ip);
+        ApplicationResponse appResponse = ApplicationResponse.builder().application(getDIPApplicationDto()).build();
+        when(objectMapper.readValue(eq(new byte[]{}), eq(ApplicationResponse.class))).thenReturn(appResponse);
 
         // When
-        var result = mapper.toStartedEvent(source, requestId, httpRequest);
+        var optResult = mapper.toBrokerRequestKpiEvent(
+                new ContentCachingRequestWrapper(httpRequest),
+                new ContentCachingResponseWrapper(response),
+                Instant.now(),
+                "the-broker-id"
+        );
 
         // Then
-        assertThat(result.requestId()).isEqualTo(requestId);
-        assertThat(result.externalApplicationId()).isEqualTo(externalAppId);
-        assertThat(result.source()).isEqualTo(source);
-        assertThat(result.created()).isBeforeOrEqualTo(Instant.now());
-        assertThat(result.uriPath()).isEqualTo(path);
-        assertThat(result.httpMethod()).isEqualTo(method);
-        assertThat(result.ip()).isEqualTo(ip);
+        assertTrue(optResult.isPresent());
+        var result = optResult.get();
+        assertThat(result.requestId()).isNotNull();
     }
 
+    @Test
+    public void shouldReturnEmptyWhenCanNotProperlyReadResponse() throws IOException {
+        // Given
+        var httpRequest = new MockHttpServletRequest(); // without request-id header
+        var response = new MockHttpServletResponse();
+
+        when(objectMapper.readValue(eq(new byte[]{}), eq(ApplicationResponse.class))).thenThrow(new IOException("error"));
+
+        // When
+        var optResult = mapper.toBrokerRequestKpiEvent(
+                new ContentCachingRequestWrapper(httpRequest),
+                new ContentCachingResponseWrapper(response),
+                Instant.now(),
+                "the-broker-id"
+        );
+
+        // Then
+        assertTrue(optResult.isEmpty());
+    }
 
 }

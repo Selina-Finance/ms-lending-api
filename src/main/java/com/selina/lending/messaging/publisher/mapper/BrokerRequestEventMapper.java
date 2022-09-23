@@ -17,45 +17,60 @@
 
 package com.selina.lending.messaging.publisher.mapper;
 
-import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
-import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
-import static com.selina.lending.messaging.publisher.mapper.ExternalAppIdHelper.getExternalAppId;
 import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
 
 @Slf4j
 @Component
 public class BrokerRequestEventMapper {
 
-    public BrokerRequestStartedEvent toStartedEvent(String broker, String requestId, HttpServletRequest httpRequest) {
-        return BrokerRequestStartedEvent.builder()
-                .requestId(requestId)
-                .externalApplicationId(fetchExternalApplicationId(httpRequest))
-                .created(Instant.now())
-                .source(broker)
-                .uriPath(httpRequest.getRequestURI())
-                .httpMethod(httpRequest.getMethod())
-                .ip(getRemoteAddr(httpRequest))
-                .build();
+    private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
+    private final ObjectMapper objectMapper;
+
+    public BrokerRequestEventMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
-    private String fetchExternalApplicationId(HttpServletRequest httpRequest) {
-        Optional<String> optExternalAppId = getExternalAppId(httpRequest);
-        if (optExternalAppId.isEmpty()) {
-            log.warn("Can't fetch externalAppId from: {} {}", httpRequest.getMethod(), httpRequest.getRequestURI());
+    public Optional<BrokerRequestKpiEvent> toBrokerRequestKpiEvent(
+            ContentCachingRequestWrapper httpRequest,
+            ContentCachingResponseWrapper httpResponse,
+            Instant started,
+            String clientId
+    ) {
+        String requestId = Optional.ofNullable(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).orElse(UUID.randomUUID().toString());
+
+        try {
+            var resp = objectMapper.readValue(httpResponse.getContentAsByteArray(), ApplicationResponse.class);
+
+            return Optional.of(BrokerRequestKpiEvent.builder()
+                    .requestId(requestId)
+                    .externalApplicationId(resp.getApplication().getExternalApplicationId())
+                    .source(clientId)
+                    .uriPath(httpRequest.getRequestURI())
+                    .httpMethod(httpRequest.getMethod())
+                    .ip(getRemoteAddr(httpRequest))
+                    .started(started)
+                    .finished(Instant.now())
+                    .decision(resp.getApplication().getStatus())
+                    .httpResponseCode(httpResponse.getStatus())
+                    .build());
+        } catch (IOException e) {
+            log.error("Can't map event. Reason: {}", e.getMessage());
+            return Optional.empty();
         }
-
-        return optExternalAppId.orElse(null);
     }
 
 
-    public BrokerRequestFinishedEvent toFinishedEvent(String requestId, int httpResponseCode) {
-        return new BrokerRequestFinishedEvent(requestId, httpResponseCode, Instant.now());
-    }
 }

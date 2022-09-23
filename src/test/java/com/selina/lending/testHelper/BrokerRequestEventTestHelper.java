@@ -17,32 +17,28 @@
 
 package com.selina.lending.testHelper;
 
-import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
-import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
+import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 public class BrokerRequestEventTestHelper {
     public static final String SOURCE = "the broker";
 
-    public static BrokerRequestStartedEvent buildBrokerRequestStartedEvent() {
-        return BrokerRequestStartedEvent.builder()
+    public static BrokerRequestKpiEvent buildBrokerRequestKpiEvent() {
+        return BrokerRequestKpiEvent.builder()
                 .requestId(UUID.randomUUID().toString())
                 .externalApplicationId(UUID.randomUUID().toString())
-                .created(Instant.now())
                 .source(SOURCE)
                 .uriPath("/test")
                 .httpMethod("GET")
                 .ip("127.0.0.1")
+                .started(Instant.now())
+                .decision("Approved")
+                .httpResponseCode(200)
+                .finished(Instant.now().plus(1, ChronoUnit.MINUTES))
                 .build();
     }
 
-    public static BrokerRequestFinishedEvent buildBrokerRequestFinishedEvent() {
-        return new BrokerRequestFinishedEvent(
-                UUID.randomUUID().toString(),
-                200,
-                Instant.now()
-        );
-    }
 }

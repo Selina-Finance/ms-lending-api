@@ -17,37 +17,36 @@
 
 package com.selina.lending.api.interceptor;
 
+import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
 import com.selina.lending.messaging.publisher.mapper.BrokerRequestEventMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 
 @Slf4j
 @Component
-public class BrokerRequestKpiResolver {
+public class BrokerRequestResolver {
 
     private final BrokerRequestEventPublisher publisher;
     private final BrokerRequestEventMapper mapper;
+    private final TokenService tokenService;
 
-    public BrokerRequestKpiResolver(BrokerRequestEventPublisher publisher, BrokerRequestEventMapper mapper) {
+    public BrokerRequestResolver(BrokerRequestEventPublisher publisher, BrokerRequestEventMapper mapper, TokenService tokenService) {
         this.publisher = publisher;
         this.mapper = mapper;
+        this.tokenService = tokenService;
     }
 
-    public void onRequestStarted(String broker, String requestId, HttpServletRequest httpRequest) {
-        log.debug("Handling started broker request. Broker: {}, RequestId: {}", broker, requestId);
-
-        var event = mapper.toStartedEvent(broker, requestId, httpRequest);
-        publisher.publish(event);
-    }
-
-    public void onRequestFinished(String requestId, Integer httpResponseCode) {
-        log.debug("Handling finished broker request. RequestId: {}, HttpStatus: {}", requestId, httpResponseCode);
-
-        var event = mapper.toFinishedEvent(requestId, httpResponseCode);
-        publisher.publish(event);
+    public void handle(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, Instant started) {
+        var optEvent = mapper.toBrokerRequestKpiEvent(request, response, started, tokenService.retrieveClientId());
+        optEvent.ifPresentOrElse(
+                publisher::publish,
+                () -> log.warn("BrokerRequestKpiEvent won't be published due to mapping problem")
+        );
     }
 
 }

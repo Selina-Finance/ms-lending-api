@@ -26,8 +26,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.SettableListenableFuture;
 
-import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestFinishedEvent;
-import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestStartedEvent;
+import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -45,22 +44,7 @@ class BrokerRequestEventPublisherTest {
     @Test
     void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishStartedEvent() {
         // Given
-        var event = buildBrokerRequestStartedEvent();
-
-        SettableListenableFuture<SendResult<String, Object>> future = new SettableListenableFuture<>();
-        when(kafkaTemplate.send(any(), any(), any())).thenReturn(future);
-
-        // When
-        publisher.publish(event);
-
-        // Then
-        verify(kafkaTemplate, times(1)).send("private.ms-lending-api.broker-request.local", event.requestId(), event);
-    }
-
-    @Test
-    void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishFinishedEvent() {
-        // Given
-        var event = buildBrokerRequestFinishedEvent();
+        var event = buildBrokerRequestKpiEvent();
 
         SettableListenableFuture<SendResult<String, Object>> future = new SettableListenableFuture<>();
         when(kafkaTemplate.send(any(), any(), any())).thenReturn(future);

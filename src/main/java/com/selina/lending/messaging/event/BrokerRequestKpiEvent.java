@@ -17,6 +17,25 @@
 
 package com.selina.lending.messaging.event;
 
-public interface BrokerRequestEvent {
-    String key();
+import lombok.Builder;
+
+import java.time.Instant;
+
+@Builder(toBuilder = true)
+public record BrokerRequestKpiEvent(
+        String requestId,
+        String externalApplicationId,
+        String ip,
+        String source,
+        String uriPath,
+        String httpMethod,
+        Integer httpResponseCode,
+        String decision,
+        Instant started,
+        Instant finished
+) implements KafkaEvent {
+    @Override
+    public String key() {
+        return requestId;
+    }
 }
