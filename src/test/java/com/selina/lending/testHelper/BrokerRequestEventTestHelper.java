@@ -17,13 +17,10 @@
 
 package com.selina.lending.testHelper;
 
-import com.selina.lending.messaging.event.BrokerRequestFinishedEvent;
 import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
-import com.selina.lending.messaging.event.BrokerRequestStartedEvent;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.UUID;
 
 public class BrokerRequestEventTestHelper {

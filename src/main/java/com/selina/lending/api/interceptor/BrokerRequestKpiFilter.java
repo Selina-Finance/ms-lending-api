@@ -32,10 +32,15 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Objects;
 
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+
 @Slf4j
 @Component
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestKpiFilter extends OncePerRequestFilter {
+
+    private static final String APPLICATION_PATH = "application";
 
     private final BrokerRequestResolver kpiResolver;
 
@@ -61,8 +66,8 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
     }
 
     private static boolean isObservedBrokerRequest(HttpServletRequest request) {
-        return (Objects.equals(request.getMethod(), "POST") || Objects.equals(request.getMethod(), "PUT"))
-                && request.getRequestURI().contains("application");
+        return (Objects.equals(request.getMethod(), POST.name()) || Objects.equals(request.getMethod(), PUT.name()))
+                && request.getRequestURI().contains(APPLICATION_PATH);
     }
 
 }
