@@ -17,12 +17,90 @@
 
 package com.selina.lending.api.interceptor;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockFilterChain;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class BrokerRequestKpiFilterTest {
 
+    @Mock
+    private BrokerRequestResolver resolver;
+
+    @InjectMocks
+    private BrokerRequestKpiFilter filter;
+
+    @Test
+    void shouldNotCallBrokerHandlerWhenNotApplicatonPath() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/not-app-path");
+        request.setMethod("POST");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verifyNoInteractions(resolver);
+    }
+
+    @Test
+    void shouldCallBrokerHandlerWhenPOSTApplicaton() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/application");
+        request.setMethod("POST");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verify(resolver, times(1)).handle(any(), any(), any());
+    }
+
+    @Test
+    void shouldCallBrokerHandlerWhenPUTApplicaton() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/application");
+        request.setMethod("PUT");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verify(resolver, times(1)).handle(any(), any(), any());
+    }
+
+    @Test
+    void shouldCallBrokerHandlerWhenGETApplicaton() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/application");
+        request.setMethod("GET");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verifyNoInteractions(resolver);
+    }
 }

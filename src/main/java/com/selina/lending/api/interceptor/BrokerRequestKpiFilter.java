@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -60,7 +61,8 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
     }
 
     private static boolean isObservedBrokerRequest(HttpServletRequest request) {
-        return request.getRequestURI().contains("application");
+        return (Objects.equals(request.getMethod(), "POST") || Objects.equals(request.getMethod(), "PUT"))
+                && request.getRequestURI().contains("application");
     }
 
 }
