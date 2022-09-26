@@ -30,13 +30,13 @@ public class UpdateApplicationServiceImpl implements UpdateApplicationService {
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
 
-    private final TokenService tokenService;
+    private final AccessManagementService accessManagementService;
 
     public UpdateApplicationServiceImpl(MiddlewareRepository middlewareRepository, MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository,
-            TokenService tokenService) {
+            AccessManagementService accessManagementService) {
         this.middlewareRepository = middlewareRepository;
         this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
-        this.tokenService = tokenService;
+        this.accessManagementService = accessManagementService;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class UpdateApplicationServiceImpl implements UpdateApplicationService {
     }
 
     private boolean isAuthorisedToUpdateApplication(String sourceAccount, String externalApplicationId, ApplicationRequest applicationRequest) {
-        return (tokenService.retrieveSourceAccount().equals(sourceAccount)
+        return (accessManagementService.isSourceAccountAccessAllowed(sourceAccount)
                 && externalApplicationId.equals(applicationRequest.getExternalApplicationId()));
     }
 }
