@@ -19,6 +19,8 @@ package com.selina.lending.internal.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,9 +40,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationIdentif
 class RetrieveApplicationServiceImplTest {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
     private static final String SOURCE_ACCOUNT = "sourceAccount";
-    private static final String ANOTHER_SOURCE_ACCOUNT = "anotherSourceAccount";
-    private static final String ACCESS_DENIED_MSG =
-            "Error processing request: Access denied for application " + EXTERNAL_APPLICATION_ID;
+    private static final String ACCESS_DENIED_MSG = "Error processing request: Access denied for application";
 
     @Mock
     private ApplicationIdentifier applicationIdentifier;
@@ -51,7 +51,7 @@ class RetrieveApplicationServiceImplTest {
     private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
 
     @Mock
-    private TokenService tokenService;
+    private AccessManagementService accessManagementService;
 
     @InjectMocks
     private RetrieveApplicationServiceImpl retrieveApplicationService;
@@ -62,7 +62,7 @@ class RetrieveApplicationServiceImplTest {
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
         when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getId()).thenReturn(EXTERNAL_APPLICATION_ID);
 
@@ -79,7 +79,7 @@ class RetrieveApplicationServiceImplTest {
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(ANOTHER_SOURCE_ACCOUNT);
+        doThrow(new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE)).when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
 
         //When
         var exception = assertThrows(AccessDeniedException.class,
