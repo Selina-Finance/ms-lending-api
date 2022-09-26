@@ -49,8 +49,7 @@ public class KafkaProducerConfig {
         configProps.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         configProps.put(
                 TYPE_MAPPINGS,
-                "BrokerRequestStartedEvent:com.selina.lending.messaging.event.BrokerRequestStartedEvent, " +
-                        "BrokerRequestFinishedEvent:com.selina.lending.messaging.event.BrokerRequestFinishedEvent"
+                        "BrokerRequestKpiEvent:com.selina.lending.messaging.event.BrokerRequestKpiEvent"
         );
 
         return new DefaultKafkaProducerFactory<>(configProps);
