@@ -21,7 +21,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
@@ -30,23 +29,20 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 public class RetrieveApplicationServiceImpl implements RetrieveApplicationService {
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
-    private final TokenService tokenService;
+    private final AccessManagementService accessManagementService;
 
     public RetrieveApplicationServiceImpl(MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository, MiddlewareRepository middlewareRepository,
-            TokenService tokenService) {
+            AccessManagementService accessManagementService) {
         this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
         this.middlewareRepository = middlewareRepository;
-        this.tokenService = tokenService;
+        this.accessManagementService = accessManagementService;
     }
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId) {
         var sourceAccount = middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
-        if (tokenService.retrieveSourceAccount().equals(sourceAccount.getSourceAccount())) {
-            var applicationIdentifier = middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
-            return middlewareRepository.getApplicationById(applicationIdentifier.getId());
-        } else {
-            throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
-        }
+        accessManagementService.checkSourceAccountAccessPermitted(sourceAccount.getSourceAccount());
+        var applicationIdentifier = middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
+        return middlewareRepository.getApplicationById(applicationIdentifier.getId());
     }
 }

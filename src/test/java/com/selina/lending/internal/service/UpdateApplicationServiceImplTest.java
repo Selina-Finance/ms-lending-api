@@ -42,7 +42,6 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 class UpdateApplicationServiceImplTest {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
     private static final String SOURCE_ACCOUNT = "sourceAccount";
-    private static final String ANOTHER_SOURCE_ACCOUNT = "anotherSourceAccount";
     private static final String ACCESS_DENIED_MSG =
             "Error processing request: Access denied for application " + EXTERNAL_APPLICATION_ID;
 
@@ -62,7 +61,7 @@ class UpdateApplicationServiceImplTest {
     private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
 
     @Mock
-    private TokenService tokenService;
+    private AccessManagementService accessManagementService;
 
     @InjectMocks
     private UpdateApplicationServiceImpl updateApplicationService;
@@ -73,7 +72,7 @@ class UpdateApplicationServiceImplTest {
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
         when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
         when(middlewareRepository.createDipApplication(any())).thenReturn(applicationResponse);
         doNothing().when(middlewareApplicationServiceRepository).deleteApplicationByExternalApplicationId(
@@ -95,7 +94,7 @@ class UpdateApplicationServiceImplTest {
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(ANOTHER_SOURCE_ACCOUNT);
+        when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(false);
 
         // When
         var exception = assertThrows(AccessDeniedException.class,
@@ -115,7 +114,7 @@ class UpdateApplicationServiceImplTest {
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
         when(applicationRequest.getExternalApplicationId()).thenReturn("any id");
 
         // When
