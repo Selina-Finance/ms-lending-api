@@ -48,7 +48,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
     @Override
     public Optional<ApplicationDecisionResponse> getApplicationById(String id) {
-        log.debug("Request to get application by id: {}", id);
+        log.info("Request to get application by [applicationId={}]", id);
         return Optional.of(middlewareApi.getApplicationById(id));
     }
 
@@ -60,7 +60,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
         var appResponse =  middlewareApi.createDipApplication(applicationRequest);
 
-        log.info("Finished calling mw to create dip application id {}", appResponse.getApplication().getExternalApplicationId());
+        log.info("Finished calling mw to create dip application [externalApplicationId={}]", appResponse.getApplication().getExternalApplicationId());
         return appResponse;
     }
 

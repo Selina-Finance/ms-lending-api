@@ -43,21 +43,21 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
     public ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(String externalApplicationId) {
-        log.debug("Request to get application source by externalApplicationId {}", externalApplicationId);
+        log.info("Request to get application sourceAccount by [externalApplicationId={}]", externalApplicationId);
         return middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
     public ApplicationIdentifier getApplicationIdByExternalApplicationId(String externalApplicationId) {
-        log.debug("Request to get application Id by externalApplicationId {}", externalApplicationId);
+        log.info("Request to get application Id by [externalApplicationId={}]", externalApplicationId);
         return middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalApplicationId);
     }
 
     @Retry(name = "middleware-application-service-retry", fallbackMethod = "deleteApiFallback")
     @Override
     public void deleteApplicationByExternalApplicationId(String sourceAccount, String externalApplicationId) {
-        log.debug("Request to delete application by externalApplicationId {}, sourceAccount {}", externalApplicationId, sourceAccount);
+        log.info("Request to delete application by [externalApplicationId={}] [sourceAccount={}]", externalApplicationId, sourceAccount);
         middlewareApplicationServiceApi.deleteApplicationByExternalApplicationId(sourceAccount, externalApplicationId);
     }
 

@@ -50,14 +50,14 @@ public class LendingController implements LendingOperations {
 
     @Override
     public ResponseEntity<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
-        log.info("Get application {}", externalApplicationId);
+        log.info("Get application [externalApplicationId={}]", externalApplicationId);
         var applicationResponse = retrieveApplicationService.getApplicationByExternalApplicationId(externalApplicationId);
         return ResponseEntity.of(applicationResponse.map(ApplicationDecisionResponseMapper.INSTANCE::mapToApplicationDecisionResponseDto));
     }
 
     @Override
     public ResponseEntity<ApplicationResponse> updateDipApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest) {
-        log.info("Update DIP application {}", externalApplicationId);
+        log.info("Update DIP application [externalApplicationId={}]", externalApplicationId);
         var applicationResponse = updateApplicationService.updateDipApplication(externalApplicationId,
                 DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
@@ -65,7 +65,7 @@ public class LendingController implements LendingOperations {
 
     @Override
     public ResponseEntity<ApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
-        log.info("Create DIP application with externalApplicationId {}", dipApplicationRequest.getExternalApplicationId());
+        log.info("Create DIP application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
         var applicationResponse = createApplicationService.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
