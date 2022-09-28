@@ -57,5 +57,4 @@ resilience4j:
         recordExceptions:
           - feign.FeignException.FeignServerException
           - feign.RetryableException
-kafka:
-  enable: false
+
