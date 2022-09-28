@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.concurrent.SettableListenableFuture;
 
 import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
@@ -46,6 +47,9 @@ class BrokerRequestEventPublisherTest {
         // Given
         var event = buildBrokerRequestKpiEvent();
 
+        var injectedFromConfigTopicName = "the-broker-topic-name";
+        ReflectionTestUtils.setField(publisher, "brokerRequestKpiTopicName", injectedFromConfigTopicName);
+
         SettableListenableFuture<SendResult<String, Object>> future = new SettableListenableFuture<>();
         when(kafkaTemplate.send(any(), any(), any())).thenReturn(future);
 
@@ -53,7 +57,7 @@ class BrokerRequestEventPublisherTest {
         publisher.publish(event);
 
         // Then
-        verify(kafkaTemplate, times(1)).send("private.ms-lending-api.broker-request.local", event.requestId(), event);
+        verify(kafkaTemplate, times(1)).send(injectedFromConfigTopicName, event.requestId(), event);
     }
 
 }

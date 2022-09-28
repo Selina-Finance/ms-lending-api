@@ -21,6 +21,7 @@ import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
 import com.selina.lending.messaging.publisher.mapper.BrokerRequestEventMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -29,6 +30,7 @@ import java.time.Instant;
 
 @Slf4j
 @Component
+@ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestResolver {
 
     private final BrokerRequestEventPublisher publisher;

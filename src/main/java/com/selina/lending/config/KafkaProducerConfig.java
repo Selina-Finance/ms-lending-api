@@ -38,6 +38,7 @@ import static org.springframework.kafka.support.serializer.JsonSerializer.TYPE_M
 @Configuration
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class KafkaProducerConfig {
+
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
 
@@ -49,7 +50,7 @@ public class KafkaProducerConfig {
         configProps.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         configProps.put(
                 TYPE_MAPPINGS,
-                        "BrokerRequestKpiEvent:com.selina.lending.messaging.event.BrokerRequestKpiEvent"
+                "BrokerRequestKpiEvent:com.selina.lending.messaging.event.BrokerRequestKpiEvent"
         );
 
         return new DefaultKafkaProducerFactory<>(configProps);
