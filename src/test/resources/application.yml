@@ -19,3 +19,8 @@ spring.security:
 kafka:
   enable: false
   bootstrapAddress: localhost:9092
+  topics:
+    brokerRequestKpi:
+      name: private.ms-lending-api.broker-request.local
+      partitions: 3
+      replicationFactor: 3

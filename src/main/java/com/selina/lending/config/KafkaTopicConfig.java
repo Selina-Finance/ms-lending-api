@@ -28,14 +28,21 @@ import org.springframework.kafka.core.KafkaAdmin;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.selina.lending.messaging.publisher.BrokerRequestEventPublisher.BROKER_REQUEST_KPI_TOPIC_OUT;
-
 @Configuration
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class KafkaTopicConfig {
 
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
+
+    @Value(value = "${kafka.topics.brokerRequestKpi.name}")
+    private String brokerRequestKpiTopicName;
+
+    @Value(value = "${kafka.topics.brokerRequestKpi.partitions}")
+    private Integer brokerRequestKpiTopicPartitions;
+
+    @Value(value = "${kafka.topics.brokerRequestKpi.replicationFactor}")
+    private Short brokerRequestKpiTopicReplicationFactor;
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -46,6 +53,10 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic brokerRequestKpiTopic() {
-        return new NewTopic(BROKER_REQUEST_KPI_TOPIC_OUT, 3, (short) 3);
+        return new NewTopic(
+                brokerRequestKpiTopicName,
+                brokerRequestKpiTopicPartitions,
+                brokerRequestKpiTopicReplicationFactor
+        );
     }
 }
