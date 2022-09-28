@@ -58,3 +58,5 @@ resilience4j:
           - feign.FeignException.FeignServerException
           - feign.RetryableException
 
+kafka:
+  enable: true
