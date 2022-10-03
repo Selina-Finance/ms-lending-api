@@ -155,7 +155,7 @@ jxRequirements:
 # nodeSelector: {}
 
 volumes:
- - name: bootstrap
+  - name: bootstrap
    configMap:
      name: ms-cloud-bootstrap
  - name: ms-lending-api

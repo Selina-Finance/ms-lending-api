@@ -39,13 +39,13 @@ import static org.springframework.kafka.support.serializer.JsonSerializer.TYPE_M
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class KafkaProducerConfig {
 
-    @Value(value = "${kafka.bootstrapAddress}")
-    private String bootstrapAddress;
+    @Value(value = "${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
 
     @Bean
     public ProducerFactory<String, Object> multiTypeProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        configProps.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         configProps.put(
