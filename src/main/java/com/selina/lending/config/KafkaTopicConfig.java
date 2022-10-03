@@ -32,8 +32,8 @@ import java.util.Map;
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class KafkaTopicConfig {
 
-    @Value(value = "${kafka.bootstrapAddress}")
-    private String bootstrapAddress;
+    @Value(value = "${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
 
     @Value(value = "${kafka.topics.brokerRequestKpi.name}")
     private String brokerRequestKpiTopicName;
@@ -47,7 +47,7 @@ public class KafkaTopicConfig {
     @Bean
     public KafkaAdmin kafkaAdmin() {
         Map<String, Object> configs = new HashMap<>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         return new KafkaAdmin(configs);
     }
 
