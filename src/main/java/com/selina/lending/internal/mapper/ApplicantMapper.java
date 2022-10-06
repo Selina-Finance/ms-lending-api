@@ -22,20 +22,20 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.DIPApplicantDto;
-import com.selina.lending.internal.mapper.config.DIPApplicantMapperConfig;
+import com.selina.lending.internal.dto.ApplicantDto;
+import com.selina.lending.internal.mapper.config.ApplicantMapperConfig;
 import com.selina.lending.internal.service.application.domain.Applicant;
 
-@Mapper(config = DIPApplicantMapperConfig.class, uses = {AddressMapper.class,
+@Mapper(config = ApplicantMapperConfig.class, uses = {AddressMapper.class,
         ChecklistMapper.class, IncomeMapper.class, PreviousNameMapper.class, EmploymentMapper.class})
-public interface DIPApplicantMapper {
-    DIPApplicantMapper INSTANCE = Mappers.getMapper(DIPApplicantMapper.class);
+public interface ApplicantMapper {
+    ApplicantMapper INSTANCE = Mappers.getMapper(ApplicantMapper.class);
 
-    @InheritConfiguration(name = "mapDipApplicant")
-    @Mapping(target = "mobilePhoneNumber", source = "dipApplicantDto.mobileNumber")
-    Applicant mapToApplicant(DIPApplicantDto dipApplicantDto);
+    @InheritConfiguration(name = "mapApplicant")
+    @Mapping(target = "mobilePhoneNumber", source = "applicantDto.mobileNumber")
+    Applicant mapToApplicant(ApplicantDto applicantDto);
 
-    @InheritConfiguration(name ="mapDipApplicantDto")
+    @InheritConfiguration(name ="mapApplicantDto")
     @Mapping(target = "mobileNumber", source = "applicant.mobilePhoneNumber")
-    DIPApplicantDto mapToApplicantDto(Applicant applicant);
+    ApplicantDto mapToApplicantDto(Applicant applicant);
 }
