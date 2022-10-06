@@ -25,6 +25,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.selina.lending.api.validator.EnumValue;
 
@@ -47,6 +48,7 @@ public class ApplicantDto {
     private String emailAddress;
 
     @NotBlank
+    @Size(min = 10, max = 13)
     private String mobileNumber;
 
     @NotBlank
@@ -71,7 +73,6 @@ public class ApplicantDto {
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
 
-    @NotNull
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     private String currentAddressMovedInDate;
 
@@ -80,6 +81,12 @@ public class ApplicantDto {
     @NotEmpty
     private List<AddressDto> addresses;
 
+    @NotNull
+    private IncomeDto income;
+
+    @Schema(implementation = ResidentialStatus.class)
+    @EnumValue(enumClass = ResidentialStatus.class)
+    private String residentialStatus;
 
     enum Title {
         MR("Mr."),
@@ -109,6 +116,25 @@ public class ApplicantDto {
         final String value;
 
         Gender(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+
+    enum ResidentialStatus {
+        OWNER("Owner"),
+        OWNER_OCCUPIER("Owner Occupier"),
+        PRIVATE_TENANT("Private Tenant"),
+        COUNCIL_TENANT ("Council Tenant"),
+        LIVING_WITH_FAMILY("Living with family");
+        final String value;
+
+        ResidentialStatus(String value) {
             this.value = value;
         }
 

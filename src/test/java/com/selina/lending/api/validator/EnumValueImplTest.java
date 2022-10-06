@@ -96,19 +96,17 @@ import com.selina.lending.internal.dto.LoanInformationDto;
         //Given
         var applicationRequest = ApplicationRequest.builder()
                 .requestType(INVALID_VALUE)
-                .source(INVALID_VALUE)
-                .productCode(INVALID_VALUE)
                 .build();
 
         //When
         var violations = validator.validate(applicationRequest);
 
         //Then
-        assertThat(violations.size(), equalTo(4));
+        assertThat(violations.size(), equalTo(2));
 
         var violationPropertyPath = getViolationPropertyPath(
                 violations.stream().map(ConstraintViolation::getPropertyPath));
-        assertThat(violationPropertyPath, containsInAnyOrder("requestType", "source", "productCode", "externalApplicationId"));
+        assertThat(violationPropertyPath, containsInAnyOrder("requestType", "externalApplicationId"));
     }
 
     @Test
@@ -165,7 +163,7 @@ import com.selina.lending.internal.dto.LoanInformationDto;
         var violationPropertyPath = getViolationPropertyPath(
                 violations.stream().map(ConstraintViolation::getPropertyPath));
         assertThat(violationPropertyPath,
-                hasItems("title", "maritalStatus", "nationality", "residentialStatus", "currentAddressMovedInDate"));
+                hasItems("title", "maritalStatus", "nationality", "residentialStatus", "income"));
     }
 
     private List<String> getViolationPropertyPath(Stream<Path> violations) {

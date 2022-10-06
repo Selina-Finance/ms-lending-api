@@ -37,46 +37,15 @@ public class ApplicationRequest {
     @Schema(implementation = RequestType.class)
     @EnumValue(enumClass = RequestType.class)
     private String requestType;
-    private String applicationStage;
 
-    @NotBlank
-    @Schema(implementation = Source.class)
-    @EnumValue(enumClass = Source.class)
-    private String source;
     private String sourceClientId;
 
-    @NotBlank
-    @Schema(implementation = ProductCode.class)
-    @EnumValue(enumClass = ProductCode.class)
-    private String productCode;
     private String reference;
 
     @NotBlank
     @Size(min = 4, max = 100)
     private String externalApplicationId;
     private List<ExpenditureDto> expenditure;
-
-    enum Source {
-        BROKER("Broker"),
-        INTERNAL("Internal"),
-        NIVO("Nivo"),
-        QUICK_QUOTE("Quick Quote Form");
-
-        final String value;
-
-        Source(String value) {
-            this.value = value;
-        }
-
-        String getValue() {
-            return this.value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
 
     enum RequestType {
         FULL_APPLICATION("FullApplication"),
@@ -94,35 +63,5 @@ public class ApplicationRequest {
         public String toString() {
             return this.value;
         }
-    }
-
-    enum ProductCode {
-        ALL("All"),
-        QQ01("QQ01"),
-        VAR0004("Var0004"),
-        VAR0005("Var0005"),
-        VAR0006("Var0006"),
-        VAR0007("Var0007"),
-        VAR0008("Var0008"),
-        VAR0009("Var0009"),
-        VAR0019("Var0010"),
-        FIX0004("Fix0004"),
-        FIX0005("Fix0005"),
-        FIX0006("Fix0006"),
-        FIX0007("Fix0007"),
-        FIX0008("Fix0008"),
-        FIX0009("Fix0009"),
-        FIX0010("Fix0010");
-        final String value;
-
-        ProductCode(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
     }
 }

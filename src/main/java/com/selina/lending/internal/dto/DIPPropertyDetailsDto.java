@@ -19,6 +19,7 @@ package com.selina.lending.internal.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.EnumValue;
 
@@ -38,6 +39,13 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
     @Schema(implementation = PropertyType.class)
     @EnumValue(enumClass = PropertyType.class)
     private String propertyType;
+
+    @NotBlank
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    private String whenLastPurchased;
+
+    @NotNull
+    private Double purchaseValue;
 
     @NotNull
     private Integer numberOfBedrooms;

@@ -17,14 +17,21 @@
 
 package com.selina.lending.internal.dto;
 
-import lombok.Builder;
-import lombok.Value;
+public enum Source {
+    BROKER("Broker"),
+    INTERNAL("Internal"),
+    LENDING_API("LendingAPI"),
+    NIVO("Nivo"),
+    QUICK_QUOTE("Quick Quote Form");
 
-@Builder
-@Value
-public class RuleOutcomeDto {
-    String name;
-    String description;
-    String outcome;
+    final String value;
+
+    Source(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
+    }
 }
-

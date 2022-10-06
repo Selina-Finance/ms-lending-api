@@ -52,10 +52,6 @@ public class ApplicationDecisionResponse {
     String decisionError;
     String decisionStatus;
     String applicationStage;
-    String bankSortCode;
-    String bankAccountNumber;
-    String bankName;
-    String nameOfAccountHolder;
     String initialDisbursalAmount;
     List<ApplicantResponseDto> applicants;
     SalesforceDto salesforce;

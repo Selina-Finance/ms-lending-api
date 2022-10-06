@@ -15,17 +15,23 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import javax.validation.constraints.Pattern;
 
-import com.selina.lending.internal.dto.RuleOutcomeDto;
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Mapper
-public interface RuleOutcomeMapper {
-    RuleOutcomeMapper INSTANCE = Mappers.getMapper(RuleOutcomeMapper.class);
+@NoArgsConstructor
+@SuperBuilder
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class QuickQuotePropertyDetailsDto extends PropertyDetailsDto {
 
-    RuleOutcomeDto mapToRuleOutcomeDto(RuleOutcome ruleOutcome);
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    private String whenLastPurchased;
+
+    private Double purchaseValue;
 }

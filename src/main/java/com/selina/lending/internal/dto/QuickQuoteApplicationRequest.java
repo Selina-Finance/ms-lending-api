@@ -19,40 +19,31 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @SuperBuilder
-@Data
-public class PropertyDetailsDto {
-
-    @NotBlank
-    private String addressLine1;
-    private String addressLine2;
-
-    @NotBlank
-    private String city;
-
-    @NotBlank
-    private String postcode;
-    private String buildingName;
-    private String buildingNumber;
-    private String subBuildingName;
-    private String propertyName;
-    private Integer udprn;
-    private String poBox;
-    private String county;
-    private String country;
+@Getter
+@EqualsAndHashCode(callSuper = true)
+public class QuickQuoteApplicationRequest extends ApplicationRequest {
 
     @NotNull
-    private Double estimatedValue;
+    @Size(message = "applicants is required", min = 1, max = 2)
+    @Valid
+    private List<ApplicantDto> applicants;
 
-    private Integer propertyInternalFloorSpace;
-    private Integer numberOfPriorCharges;
-    private List<PriorChargesDto> priorCharges;
+    @NotNull
+    @Valid
+    private LoanInformationDto loanInformation;
+
+    @NotNull
+    @Valid
+    private QuickQuotePropertyDetailsDto propertyDetails;
 }
