@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.dto.LendingConstants;
+import com.selina.lending.internal.dto.Source;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
@@ -56,12 +58,18 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         log.debug("Create dip application applicationRequest {}", applicationRequest);
-        applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
+        enrichApplicationRequest(applicationRequest);
 
         var appResponse =  middlewareApi.createDipApplication(applicationRequest);
 
         log.info("Finished calling mw to create dip application [externalApplicationId={}]", appResponse.getApplication().getExternalApplicationId());
         return appResponse;
+    }
+
+    private void enrichApplicationRequest(ApplicationRequest applicationRequest) {
+        applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
+        applicationRequest.setSource(Source.LENDING_API.toString());
+        applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
     }
 
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) { //NOSONAR

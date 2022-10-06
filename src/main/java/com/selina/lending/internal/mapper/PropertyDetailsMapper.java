@@ -40,6 +40,5 @@ public interface PropertyDetailsMapper {
     PropertyDetails mapToPropertyDetails(DIPPropertyDetailsDto dipPropertyDetailsDto);
 
     @InheritConfiguration(name = "mapPropertyDetails")
-    @Mapping(target = "whenHasLastPurchased", source = "propertyDetailsDto.whenLastPurchased")
     PropertyDetails mapToPropertyDetails(PropertyDetailsDto propertyDetailsDto);
 }

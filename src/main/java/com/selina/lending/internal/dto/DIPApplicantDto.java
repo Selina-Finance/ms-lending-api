@@ -53,13 +53,8 @@ public class DIPApplicantDto extends ApplicantDto {
     @EnumValue(enumClass = Nationality.class)
     private String nationality;
 
-    @Schema(implementation = ResidentialStatus.class)
-    @EnumValue(enumClass = ResidentialStatus.class)
-    private String residentialStatus;
-
     @NotNull
     private Integer identifier;
-    private IncomeDto income;
 
     @Valid
     @NotNull
@@ -77,21 +72,6 @@ public class DIPApplicantDto extends ApplicantDto {
         final String value;
 
         MaritalStatus(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
-
-    enum ResidentialStatus {
-        OWNER("Owner"),
-        OWNER_OCCUPIER("Owner Occupier");
-        final String value;
-
-        ResidentialStatus(String value) {
             this.value = value;
         }
 

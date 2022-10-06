@@ -88,19 +88,15 @@ class LendingControllerValidationTest extends MapperBase {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                .andExpect(jsonPath("$.violations", hasSize(6)))
+                .andExpect(jsonPath("$.violations", hasSize(4)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                 .andExpect(jsonPath("$.violations[0].message").value("must not be null"))
                 .andExpect(jsonPath("$.violations[1].field").value("externalApplicationId"))
                 .andExpect(jsonPath("$.violations[1].message").value("must not be blank"))
                 .andExpect(jsonPath("$.violations[2].field").value("loanInformation"))
                 .andExpect(jsonPath("$.violations[2].message").value("must not be null"))
-                .andExpect(jsonPath("$.violations[3].field").value("productCode"))
-                .andExpect(jsonPath("$.violations[3].message").value("must not be blank"))
-                .andExpect(jsonPath("$.violations[4].field").value("propertyDetails"))
-                .andExpect(jsonPath("$.violations[4].message").value("must not be null"))
-                .andExpect(jsonPath("$.violations[5].field").value("source"))
-                .andExpect(jsonPath("$.violations[5].message").value("must not be blank"));
+                .andExpect(jsonPath("$.violations[3].field").value("propertyDetails"))
+                .andExpect(jsonPath("$.violations[3].message").value("must not be null"));
     }
 
     @Test
@@ -112,8 +108,6 @@ class LendingControllerValidationTest extends MapperBase {
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPPropertyDetailsDto())
-                .productCode(PRODUCT_CODE)
-                .source(SOURCE)
                 .build();
 
         //When
@@ -138,8 +132,6 @@ class LendingControllerValidationTest extends MapperBase {
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(AdvancedLoanInformationDto.builder().loanPurpose("invalid loanPurpose").facilities(List.of(getFacilityDto())).build())
                 .propertyDetails(getDIPPropertyDetailsDto())
-                .productCode(PRODUCT_CODE)
-                .source(SOURCE)
                 .build();
 
         //When
@@ -195,8 +187,6 @@ class LendingControllerValidationTest extends MapperBase {
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPPropertyDetailsDto())
-                .productCode(PRODUCT_CODE)
-                .source(SOURCE)
                 .build();
 
         //When

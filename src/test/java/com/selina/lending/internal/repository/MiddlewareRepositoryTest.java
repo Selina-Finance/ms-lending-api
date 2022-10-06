@@ -37,6 +37,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.dto.Source;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
@@ -104,6 +105,7 @@ class MiddlewareRepositoryTest {
 
         // Then
         assertThat(result).isEqualTo(applicationResponse);
+        verify(applicationRequest, times(1)).setSource(Source.LENDING_API.toString());
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 

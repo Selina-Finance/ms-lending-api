@@ -118,7 +118,6 @@ public abstract class MapperBase {
     public static final String OFFER_ID = "offer123";
     public static final String PRODUCT_CODE = "All";
     public static final String EXPENDITURE_TYPE = "Utilities";
-    public static final String SOURCE = "Broker";
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
     public static final String RULE_OUTCOME = "Granted";
@@ -126,7 +125,6 @@ public abstract class MapperBase {
     public static final String EMPLOYED_STATUS = "Employed";
     public static final String MARRIED_STATUS = "Married";
     public static final Double FEE = 599.00;
-    public static final String SOURCE_ACCOUNT = "Selina Finance Limited";
     public static final String CREDIT_CHECK_SERVICE_USED = "Experian";
     public static final int CREDIT_SCORE = 900;
     public static final String CREDIT_CHECK_REF = "6HVRQLKGFH";
@@ -153,8 +151,6 @@ public abstract class MapperBase {
                 .requestType(APPLICATION_TYPE)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
-                .productCode(PRODUCT_CODE)
-                .source(SOURCE)
                 .build();
     }
 
@@ -167,8 +163,6 @@ public abstract class MapperBase {
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPPropertyDetailsDto())
                 .fees(getFeesDto())
-                .productCode(PRODUCT_CODE)
-                .source(SOURCE)
                 .build();
     }
 
@@ -290,7 +284,7 @@ public abstract class MapperBase {
     protected PropertyDetailsDto getPropertyDetailsDto() {
         return PropertyDetailsDto.builder().addressLine1(ADDRESS_LINE_1).addressLine2(ADDRESS_LINE_2).buildingName(
                 BUILDING_NAME).buildingNumber(BUILDING_NUMBER).city(CITY).country(COUNTRY).county(COUNTY).postcode(
-                POSTCODE).estimatedValue(ESTIMATED_VALUE).purchaseValue(PURCHASE_VALUE).build();
+                POSTCODE).estimatedValue(ESTIMATED_VALUE).build();
     }
 
     protected DIPPropertyDetailsDto getDIPPropertyDetailsDto() {

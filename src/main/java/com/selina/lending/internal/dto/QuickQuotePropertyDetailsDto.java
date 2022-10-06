@@ -17,17 +17,21 @@
 
 package com.selina.lending.internal.dto;
 
-public final class LendingConstants {
-    public static final String DATE_PATTERN = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
-    public static final String DATE_INVALID_MESSAGE = "must match yyyy-MM-dd format";
+import javax.validation.constraints.Pattern;
 
-    public static final String SOURCE_ACCOUNT_JWT_CLAIM_NAME = "sourceAccount";
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-    public static final String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
+@NoArgsConstructor
+@SuperBuilder
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class QuickQuotePropertyDetailsDto extends PropertyDetailsDto {
 
-    public static final String PRODUCT_CODE_ALL = "All";
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    private String whenLastPurchased;
 
-    private LendingConstants() {
-
-    }
+    private Double purchaseValue;
 }

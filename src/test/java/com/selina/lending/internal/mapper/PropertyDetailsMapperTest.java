@@ -79,7 +79,6 @@ class PropertyDetailsMapperTest extends MapperBase {
         //Then
         assertThat(propertyDetails.getAddressLine1(), equalTo(ADDRESS_LINE_1));
         assertThat(propertyDetails.getAddressLine2(), equalTo(ADDRESS_LINE_2));
-        assertThat(propertyDetails.getPurchaseValue(), equalTo(PURCHASE_VALUE));
         assertThat(propertyDetails.getCountry(), equalTo(COUNTRY));
         assertThat(propertyDetails.getBuildingNumber(), equalTo(BUILDING_NUMBER));
         assertThat(propertyDetails.getBuildingName(), equalTo(BUILDING_NAME));

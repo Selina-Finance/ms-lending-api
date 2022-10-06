@@ -31,7 +31,6 @@ public class ApplicationRequest {
     private String sourceAccount;
     private String productCode;
     private String reference;
-    private String applicationStage;
     private String selectedOffer;
     private String selectedProduct;
     private String externalApplicationId;
