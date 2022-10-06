@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 import com.selina.lending.internal.dto.OfferDto;
 import com.selina.lending.internal.service.application.domain.Offer;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ChecklistMapper.class, RuleOutcomeMapper.class})
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ChecklistMapper.class})
 public interface OfferMapper {
     OfferMapper INSTANCE = Mappers.getMapper(OfferMapper.class);
 
