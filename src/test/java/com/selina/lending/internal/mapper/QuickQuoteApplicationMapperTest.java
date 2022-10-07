@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 class QuickQuoteApplicationMapperTest extends MapperBase {
 
     @Test
-    void mapToDIPApplicationDto() {
+    void mapToQuickQuoteApplicationDto() {
         //Given
         var application = getApplication();
 

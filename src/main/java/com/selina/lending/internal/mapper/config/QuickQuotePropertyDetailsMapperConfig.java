@@ -26,11 +26,11 @@ import com.selina.lending.internal.service.application.domain.PropertyDetails;
 
 @MapperConfig
 public interface QuickQuotePropertyDetailsMapperConfig extends PropertyDetailsMapperConfig {
+
     @InheritConfiguration(name = "mapPropertyDetailsDto")
     void mapQuickQuotePropertyDetailsDto(
             PropertyDetails propertyDetails, @MappingTarget QuickQuotePropertyDetailsDto quickQuotePropertyDetailsDto);
 
     @InheritConfiguration(name = "mapPropertyDetails")
     void mapQuickQuotePropertyDtoToPropertyDetails(QuickQuotePropertyDetailsDto quickQuotePropertyDetailsDto, @MappingTarget PropertyDetails propertyDetails);
-
 }
