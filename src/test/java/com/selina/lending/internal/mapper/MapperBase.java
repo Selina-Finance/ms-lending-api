@@ -42,6 +42,7 @@ import com.selina.lending.internal.dto.PreviousNameDto;
 import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.dto.QuickQuoteApplicationDto;
+import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.service.application.domain.Address;
@@ -146,7 +147,6 @@ public abstract class MapperBase {
     public static final int MONTHLY_PAYMENT = 1000;
     public static final String REPAYMENT_TYPE = "Capital and interest";
     public static final String RATE_TYPE = "Fixed";
-    public static final String CURRENT_ADDRESS_MOVED_IN_DATE = "2018-02-21";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -165,6 +165,17 @@ public abstract class MapperBase {
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPPropertyDetailsDto())
                 .fees(getFeesDto())
+                .build();
+    }
+
+    protected QuickQuoteApplicationRequest getQuickQuoteApplicationRequestDto() {
+        return QuickQuoteApplicationRequest.builder()
+                .requestType(APPLICATION_TYPE)
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .expenditure(List.of(getExpenditureDto()))
+                .loanInformation(getLoanInformationDto())
+                .propertyDetails(getQuickQuotePropertyDetailsDto())
+                .applicants(List.of(getApplicantDto()))
                 .build();
     }
 
@@ -217,6 +228,7 @@ public abstract class MapperBase {
                 .addresses(List.of(getAddressDto()))
                 .applicant2LivesWithApplicant1(false)
                 .dateOfBirth(DOB)
+                .income(getIncomeDto())
                 .livedInCurrentAddressFor3Years(Boolean.TRUE)
                 .build();
     }
@@ -247,7 +259,6 @@ public abstract class MapperBase {
                 .employment(getEmploymentDto())
                 .income(getIncomeDto())
                 .previousNames(List.of(getPreviousNameDto()))
-                .currentAddressMovedInDate(CURRENT_ADDRESS_MOVED_IN_DATE)
                 .build();
     }
 

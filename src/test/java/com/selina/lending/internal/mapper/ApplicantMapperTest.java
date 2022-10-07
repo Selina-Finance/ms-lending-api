@@ -19,7 +19,6 @@ package com.selina.lending.internal.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
@@ -44,10 +43,12 @@ class ApplicantMapperTest extends MapperBase {
         assertThat(applicant.getDateOfBirth(), equalTo(DOB));
         assertThat(applicant.getAddresses().size(), equalTo(1));
         assertThat(applicant.getLivedInCurrentAddressFor3Years(), equalTo(true));
+        assertThat(applicant.getIncome().getIncome().size(), equalTo(1));
+        assertThat(applicant.getIncome().getIncome().get(0).getAmount(), equalTo(INCOME_AMOUNT));
+        assertThat(applicant.getIncome().getIncome().get(0).getType(), equalTo(INCOME_TYPE));
         assertNull(applicant.getIdentifier());
         assertNull(applicant.getEstimatedRetirementAge());
         assertNull(applicant.getEmployment());
-        assertNull(applicant.getIncome());
     }
 
     @Test

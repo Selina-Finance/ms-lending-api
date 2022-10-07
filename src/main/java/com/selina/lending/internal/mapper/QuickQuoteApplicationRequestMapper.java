@@ -17,10 +17,20 @@
 
 package com.selina.lending.internal.mapper;
 
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.mapper.config.QuickQuotePropertyDetailsMapperConfig;
+import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.mapper.config.QuickQuoteApplicationRequestMapperConfig;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 
-@Mapper(config = QuickQuotePropertyDetailsMapperConfig.class)
+@Mapper(config = QuickQuoteApplicationRequestMapperConfig.class)
 public interface QuickQuoteApplicationRequestMapper {
+    QuickQuoteApplicationRequestMapper INSTANCE = Mappers.getMapper(QuickQuoteApplicationRequestMapper.class);
+    @InheritConfiguration(name = "mapApplicationRequest")
+    @Mapping(target = "applicationType", source = "quickQuoteApplicationRequest.requestType")
+    ApplicationRequest mapToApplicationRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
+
 }

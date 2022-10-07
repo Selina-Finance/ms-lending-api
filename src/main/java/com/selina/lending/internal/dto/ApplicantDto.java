@@ -73,9 +73,6 @@ public class ApplicantDto {
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    private String currentAddressMovedInDate;
-
     @NotNull
     @Valid
     @NotEmpty
@@ -128,10 +125,7 @@ public class ApplicantDto {
 
     enum ResidentialStatus {
         OWNER("Owner"),
-        OWNER_OCCUPIER("Owner Occupier"),
-        PRIVATE_TENANT("Private Tenant"),
-        COUNCIL_TENANT ("Council Tenant"),
-        LIVING_WITH_FAMILY("Living with family");
+        OWNER_OCCUPIER("Owner Occupier");
         final String value;
 
         ResidentialStatus(String value) {

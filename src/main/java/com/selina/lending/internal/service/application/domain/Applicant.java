@@ -38,7 +38,6 @@ public class Applicant {
     Boolean livedInCurrentAddressFor3Years;
     Boolean applicant2LivesWithApplicant1For3Years;
     Boolean applicant2LivesWithApplicant1;
-    String currentAddressMovedInDate;
     Boolean applicantUsedAnotherName;
     Integer estimatedRetirementAge;
     String maritalStatus;
