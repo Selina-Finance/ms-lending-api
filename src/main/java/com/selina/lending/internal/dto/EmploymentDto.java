@@ -86,8 +86,6 @@ public class EmploymentDto {
         SELF_EMPLOYED_LIMITED_COMPANY("Self-employed (limited company)"),
         SELF_EMPLOYED_SOLE_TRADER_PARTNERSHIP("Self-employed (sole trader / partnership)"),
         SELF_EMPLOYED_CONTRACTOR("Self-employed (contractor)"),
-        STUDENT ("Student"),
-        HOMEMAKER("Homemaker"),
         RETIRED("Retired"),
         NOT_IN_PAID_EMPLOYMENT("Not in paid employment");
 

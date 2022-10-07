@@ -17,15 +17,17 @@
 
 package com.selina.lending.internal.mapper.config;
 
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import com.selina.lending.internal.dto.ApplicantDto;
-import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ApplicantMapperConfig {
-    void mapApplicantDto(Applicant applicant, @MappingTarget ApplicantDto applicantDto);
-    void mapApplicant(ApplicantDto applicantDto, @MappingTarget Applicant applicant);
+public interface QuickQuoteApplicationRequestMapperConfig extends ApplicationRequestMapperConfig {
+
+    @InheritConfiguration(name = "mapApplicationRequest")
+    void mapQuickQuoteApplicationRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest, @MappingTarget ApplicationRequest applicationRequest);
 }

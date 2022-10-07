@@ -38,7 +38,6 @@ public class ApplicantResponseDto {
     Boolean livedInCurrentAddressFor3Years;
     Boolean applicant2LivesWithApplicant1For3Years;
     Boolean applicant2LivesWithApplicant1;
-    String currentAddressMovedInDate;
     Boolean applicantConsentedToSoftCreditCheck;
     Boolean hasAnyCriminalConvictions;
     Boolean hasBeenSubjectToDebtSolutionsInPart6Years;

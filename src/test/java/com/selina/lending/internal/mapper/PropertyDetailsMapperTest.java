@@ -110,4 +110,29 @@ class PropertyDetailsMapperTest extends MapperBase {
         assertThat(propertyDetails.getNumberOfBedrooms(), equalTo(NUMBER_OF_BEDROOMS));
         assertThat(propertyDetails.getHasAGarage(), equalTo(true));
     }
+
+    @Test
+    void mapToPropertyDetailsFromQuickQuotePropertyDetailsDto() {
+        //Given
+        var quickQuotePropertyDetailsDto = getQuickQuotePropertyDetailsDto();
+
+        //When
+        var propertyDetails = QuickQuotePropertyDetailsMapper.INSTANCE.mapQuickQuotePropertyDetailsDtoToPropertyDetails(quickQuotePropertyDetailsDto);
+
+        //Then
+        assertThat(propertyDetails.getAddressLine1(), equalTo(ADDRESS_LINE_1));
+        assertThat(propertyDetails.getAddressLine2(), equalTo(ADDRESS_LINE_2));
+        assertThat(propertyDetails.getPurchaseValue(), equalTo(PURCHASE_VALUE));
+        assertThat(propertyDetails.getCountry(), equalTo(COUNTRY));
+        assertThat(propertyDetails.getBuildingNumber(), equalTo(BUILDING_NUMBER));
+        assertThat(propertyDetails.getBuildingName(), equalTo(BUILDING_NAME));
+        assertThat(propertyDetails.getCity(), equalTo(CITY));
+        assertThat(propertyDetails.getPostcode(), equalTo(POSTCODE));
+        assertThat(propertyDetails.getCounty(), equalTo(COUNTY));
+        assertThat(propertyDetails.getWhenHasLastPurchased(), equalTo(WHEN_LAST_PURCHASED));
+        assertThat(propertyDetails.getPriorCharges().size(), equalTo(1));
+        assertNull(propertyDetails.getNumberOfBedrooms());
+        assertNull(propertyDetails.getPropertyType());
+        assertNull(propertyDetails.getHasAGarage());
+    }
 }

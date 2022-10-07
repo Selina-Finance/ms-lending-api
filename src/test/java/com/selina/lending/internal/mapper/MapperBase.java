@@ -41,6 +41,9 @@ import com.selina.lending.internal.dto.OfferDto;
 import com.selina.lending.internal.dto.PreviousNameDto;
 import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
+import com.selina.lending.internal.dto.QuickQuoteApplicationDto;
+import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.dto.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
@@ -132,7 +135,7 @@ public abstract class MapperBase {
     public static final String DETAIL_ID = "detailId123";
     public static final String DETAIL_ACCOUNT_NUMBER = "8227422";
     public static final String UNDERWRITER = "Madeline Scott";
-    public static final String UNDERWRITING_STAGE = "Underwriting Satge";
+    public static final String UNDERWRITING_STAGE = "Underwriting Stage";
     public static final String SALESFORCE_OPPORTUNITY_ID = "0062z000003YtBkAAK";
     public static final String SALESFORCE_ACCOUNT_ID = "837312";
     public static final String INTERMEDIARY_FIRSTNAME = "Jim";
@@ -144,7 +147,6 @@ public abstract class MapperBase {
     public static final int MONTHLY_PAYMENT = 1000;
     public static final String REPAYMENT_TYPE = "Capital and interest";
     public static final String RATE_TYPE = "Fixed";
-    public static final String CURRENT_ADDRESS_MOVED_IN_DATE = "2018-02-21";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -163,6 +165,17 @@ public abstract class MapperBase {
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPPropertyDetailsDto())
                 .fees(getFeesDto())
+                .build();
+    }
+
+    protected QuickQuoteApplicationRequest getQuickQuoteApplicationRequestDto() {
+        return QuickQuoteApplicationRequest.builder()
+                .requestType(APPLICATION_TYPE)
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .expenditure(List.of(getExpenditureDto()))
+                .loanInformation(getLoanInformationDto())
+                .propertyDetails(getQuickQuotePropertyDetailsDto())
+                .applicants(List.of(getApplicantDto()))
                 .build();
     }
 
@@ -215,6 +228,8 @@ public abstract class MapperBase {
                 .addresses(List.of(getAddressDto()))
                 .applicant2LivesWithApplicant1(false)
                 .dateOfBirth(DOB)
+                .income(getIncomeDto())
+                .livedInCurrentAddressFor3Years(Boolean.TRUE)
                 .build();
     }
 
@@ -244,7 +259,6 @@ public abstract class MapperBase {
                 .employment(getEmploymentDto())
                 .income(getIncomeDto())
                 .previousNames(List.of(getPreviousNameDto()))
-                .currentAddressMovedInDate(CURRENT_ADDRESS_MOVED_IN_DATE)
                 .build();
     }
 
@@ -279,6 +293,13 @@ public abstract class MapperBase {
 
     protected FacilityDto getFacilityDto() {
         return FacilityDto.builder().allocationAmount(ALLOCATION_AMOUNT).allocationPurpose(ALLOCATION_PURPOSE).build();
+    }
+
+    protected QuickQuotePropertyDetailsDto getQuickQuotePropertyDetailsDto() {
+        return QuickQuotePropertyDetailsDto.builder().addressLine1(ADDRESS_LINE_1).addressLine2(ADDRESS_LINE_2).buildingName(
+                BUILDING_NAME).buildingNumber(BUILDING_NUMBER).city(CITY).country(COUNTRY).county(COUNTY).postcode(
+                POSTCODE).estimatedValue(ESTIMATED_VALUE).whenLastPurchased(WHEN_LAST_PURCHASED)
+                .purchaseValue(PURCHASE_VALUE).priorCharges(List.of(getPriorChargesDto())).build();
     }
 
     protected PropertyDetailsDto getPropertyDetailsDto() {
@@ -331,6 +352,12 @@ public abstract class MapperBase {
         return DIPApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).createdDate(CREATED_DATE).applicants(
                 List.of(getDIPApplicantDto())).loanInformation(getAdvancedLoanInformationDto()).propertyDetails(
                 getDIPPropertyDetailsDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
+    }
+
+    protected QuickQuoteApplicationDto getQuickQuoteApplicationDto() {
+        return QuickQuoteApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).createdDate(CREATED_DATE).applicants(
+                List.of(getApplicantDto())).loanInformation(getLoanInformationDto()).propertyDetails(
+                getDIPPropertyDetailsDto()).requestType(APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
     }
 
     protected Applicant getApplicant() {

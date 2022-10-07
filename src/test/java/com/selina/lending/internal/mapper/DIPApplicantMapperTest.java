@@ -59,30 +59,6 @@ class DIPApplicantMapperTest extends MapperBase {
     }
 
     @Test
-    void mapToApplicantFromApplicantDto() {
-        //Given
-        var applicantDto = getApplicantDto();
-
-        //When
-        var applicant = DIPApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
-
-        //Then
-        assertThat(applicant.getTitle(), equalTo(TITLE));
-        assertThat(applicant.getFirstName(), equalTo(FIRST_NAME));
-        assertThat(applicant.getLastName(), equalTo(LAST_NAME));
-        assertThat(applicant.getGender(), equalTo(GENDER));
-        assertThat(applicant.getEmailAddress(), equalTo(EMAIL_ADDRESS));
-        assertThat(applicant.getMobilePhoneNumber() ,equalTo(MOBILE_NUMBER));
-        assertThat(applicant.getDateOfBirth(), equalTo(DOB));
-        assertThat(applicant.getAddresses().size(), equalTo(1));
-        assertNull(applicant.getIdentifier());
-        assertNull(applicant.getEstimatedRetirementAge());
-        assertNull(applicant.getLivedInCurrentAddressFor3Years());
-        assertNull(applicant.getEmployment());
-        assertNull(applicant.getIncome());
-    }
-
-    @Test
     void mapToApplicantDto() {
         //Given
         var applicant = getApplicant();
