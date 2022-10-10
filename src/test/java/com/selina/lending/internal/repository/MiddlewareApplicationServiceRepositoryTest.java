@@ -39,6 +39,7 @@ import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.monitoring.MetricService;
 
 import feign.FeignException;
 import feign.Request;
@@ -62,11 +63,14 @@ class MiddlewareApplicationServiceRepositoryTest {
     @Mock
     private MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
+    @Mock
+    private MetricService metricService;
+
     private MiddlewareApplicationServiceRepository middlewareRepository;
 
     @BeforeEach
     void setUp() {
-        middlewareRepository = new MiddlewareApplicationServiceRepositoryImpl(middlewareApplicationServiceApi);
+        middlewareRepository = new MiddlewareApplicationServiceRepositoryImpl(middlewareApplicationServiceApi, metricService);
     }
 
     @Test
