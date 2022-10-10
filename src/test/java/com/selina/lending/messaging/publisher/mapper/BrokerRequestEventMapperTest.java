@@ -35,7 +35,6 @@ import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +47,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
     private BrokerRequestEventMapper mapper;
 
     @Test
-    public void shouldMapToBrokerRequestKpiEvent() throws IOException {
+    void shouldMapToBrokerRequestKpiEvent() throws IOException {
         // Given
         var clientId = "the-broker-id";
         var started = Instant.now();
@@ -68,7 +67,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
         response.setStatus(httpResponseCode);
 
         ApplicationResponse appResponse = ApplicationResponse.builder().application(getDIPApplicationDto()).build();
-        when(objectMapper.readValue(eq(new byte[]{}), eq(ApplicationResponse.class))).thenReturn(appResponse);
+        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
 
         // When
         var optResult = mapper.toBrokerRequestKpiEvent(
@@ -95,13 +94,13 @@ class BrokerRequestEventMapperTest extends MapperBase {
     }
 
     @Test
-    public void shouldGenerateRequestIdWhenHeaderIsEmpty() throws IOException {
+    void shouldGenerateRequestIdWhenHeaderIsEmpty() throws IOException {
         // Given
         var httpRequest = new MockHttpServletRequest(); // without request-id header
         var response = new MockHttpServletResponse();
 
         ApplicationResponse appResponse = ApplicationResponse.builder().application(getDIPApplicationDto()).build();
-        when(objectMapper.readValue(eq(new byte[]{}), eq(ApplicationResponse.class))).thenReturn(appResponse);
+        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
 
         // When
         var optResult = mapper.toBrokerRequestKpiEvent(
@@ -118,12 +117,12 @@ class BrokerRequestEventMapperTest extends MapperBase {
     }
 
     @Test
-    public void shouldReturnEmptyWhenCanNotProperlyReadResponse() throws IOException {
+    void shouldReturnEmptyWhenCanNotProperlyReadResponse() throws IOException {
         // Given
         var httpRequest = new MockHttpServletRequest(); // without request-id header
         var response = new MockHttpServletResponse();
 
-        when(objectMapper.readValue(eq(new byte[]{}), eq(ApplicationResponse.class))).thenThrow(new IOException("error"));
+        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenThrow(new IOException("error"));
 
         // When
         var optResult = mapper.toBrokerRequestKpiEvent(
@@ -137,4 +136,24 @@ class BrokerRequestEventMapperTest extends MapperBase {
         assertTrue(optResult.isEmpty());
     }
 
+    @Test
+    void shouldReturnEmptyWhenApplicationNotInResponse() throws IOException {
+        // Given
+        var httpRequest = new MockHttpServletRequest(); // without request-id header
+        var response = new MockHttpServletResponse();
+
+        ApplicationResponse appResponse = ApplicationResponse.builder().build();
+        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
+
+        // When
+        var optResult = mapper.toBrokerRequestKpiEvent(
+                new ContentCachingRequestWrapper(httpRequest),
+                new ContentCachingResponseWrapper(response),
+                Instant.now(),
+                "the-broker-id"
+        );
+
+        // Then
+        assertTrue(optResult.isEmpty());
+    }
 }
