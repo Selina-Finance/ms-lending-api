@@ -54,7 +54,7 @@ public class BrokerRequestEventMapper {
         try {
             var resp = objectMapper.readValue(httpResponse.getContentAsByteArray(), ApplicationResponse.class);
 
-            return Optional.of(BrokerRequestKpiEvent.builder()
+            return resp.getApplication() != null ? Optional.of(BrokerRequestKpiEvent.builder()
                     .requestId(requestId)
                     .externalApplicationId(resp.getApplication().getExternalApplicationId())
                     .source(clientId)
@@ -65,7 +65,7 @@ public class BrokerRequestEventMapper {
                     .finished(Instant.now())
                     .decision(resp.getApplication().getStatus())
                     .httpResponseCode(httpResponse.getStatus())
-                    .build());
+                    .build()) : Optional.empty();
         } catch (IOException e) {
             log.error("Can't map event. Reason: {}", e.getMessage());
             return Optional.empty();
