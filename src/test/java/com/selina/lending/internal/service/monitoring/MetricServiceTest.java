@@ -39,7 +39,7 @@ class MetricServiceTest {
     private MetricService metricService;
 
     @Test
-    void incrementApplicationDeleteFailed() {
+    void shouldIncrementApplicationDeleteFailedCounter() {
         //Given
         var counter = mock(Counter.class);
         ReflectionTestUtils.setField(metricService, "applicationDeleteFailedCounter", counter);
