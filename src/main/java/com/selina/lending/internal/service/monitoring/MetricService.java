@@ -21,8 +21,10 @@ import org.springframework.stereotype.Service;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class MetricService {
 
     private final MeterRegistry meterRegistry;
@@ -34,6 +36,7 @@ public class MetricService {
     }
 
     public void incrementApplicationDeleteFailed() {
+        log.debug("Increment applicationDeleteFailedCounter");
         applicationDeleteFailedCounter.increment();
     }
 }
