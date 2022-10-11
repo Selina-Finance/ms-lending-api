@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.monitoring.MetricService;
 
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -36,8 +37,12 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
             "**ALERT** Unable to delete application externalApplicationId %s, sourceAccount %s";
     private final MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
-    public MiddlewareApplicationServiceRepositoryImpl(MiddlewareApplicationServiceApi middlewareApplicationServiceApi) {
+    private final MetricService metricService;
+
+    public MiddlewareApplicationServiceRepositoryImpl(MiddlewareApplicationServiceApi middlewareApplicationServiceApi,
+            MetricService metricService) {
         this.middlewareApplicationServiceApi = middlewareApplicationServiceApi;
+        this.metricService = metricService;
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
@@ -63,10 +68,12 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
 
     private void deleteApiFallback(String sourceAccount, String externalApplicationId, FeignException.FeignServerException e) { //NOSONAR
         log.error(String.format(DELETE_FAILED_ERROR, externalApplicationId, sourceAccount), e);
+        metricService.incrementApplicationDeleteFailed();
     }
 
     private void deleteApiFallback(String sourceAccount, String externalApplicationId, feign.RetryableException e) { //NOSONAR
         log.error(String.format(DELETE_FAILED_ERROR, externalApplicationId, sourceAccount), e);
+        metricService.incrementApplicationDeleteFailed();
     }
 
     private ApplicationIdentifier middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) { //NOSONAR
