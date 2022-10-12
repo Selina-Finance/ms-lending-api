@@ -23,7 +23,6 @@ import lombok.Value;
 @Builder(toBuilder = true)
 @Value
 public class ApplicationResponse {
-    String message;
     String requestType;
     String applicationId;
     ApplicationDto application;
