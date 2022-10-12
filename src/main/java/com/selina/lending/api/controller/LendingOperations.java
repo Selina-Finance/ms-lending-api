@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -66,12 +65,16 @@ public interface LendingOperations {
             @ApiResponse(
                     responseCode = "200",
                     description = "Application updated",
-                    content = @Content),
+                    content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ApplicationResponse.class))
+                    }),
             @ApiResponse(
-                    responseCode = "400", description = "Application details invalid"),
-            @ApiResponse(responseCode = "401"),
-            @ApiResponse(responseCode = "403"),
-            @ApiResponse(responseCode = "404", description = "Application not found")
+                    responseCode = "400", description = "Application details invalid", content = @Content),
+            @ApiResponse(responseCode = "401", content = @Content),
+            @ApiResponse(responseCode = "403", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content),
     })
     @PutMapping(value = "/{externalApplicationId}/dip")
     ResponseEntity<ApplicationResponse> updateDipApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
