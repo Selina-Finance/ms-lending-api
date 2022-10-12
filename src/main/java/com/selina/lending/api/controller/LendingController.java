@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
@@ -69,19 +68,5 @@ public class LendingController implements LendingOperations {
         log.info("Create DIP application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
         var applicationResponse = createApplicationService.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
-    }
-
-    @Override
-    public ResponseEntity<ApplicationResponse> createQuickQuoteApplication(
-            QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        log.info("Create Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        return ResponseEntity.ok().build();
-    }
-
-    @Override
-    public ResponseEntity<ApplicationResponse> updateQuickQuoteApplication(String externalApplicationId,
-            QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        log.info("Update Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        return ResponseEntity.ok().build();
     }
 }

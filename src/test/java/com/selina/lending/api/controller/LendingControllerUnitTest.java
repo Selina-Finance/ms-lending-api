@@ -19,7 +19,6 @@ package com.selina.lending.api.controller;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -37,7 +36,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.RetrieveApplicationService;
 import com.selina.lending.internal.service.UpdateApplicationService;
@@ -57,9 +55,6 @@ class LendingControllerUnitTest {
 
     @Mock
     private DIPApplicationRequest dipApplicationRequest;
-
-    @Mock
-    private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
 
     @Mock
     private RetrieveApplicationService retrieveApplicationService;
@@ -112,31 +107,5 @@ class LendingControllerUnitTest {
         assertThat(Objects.requireNonNull(appResponse.getBody()).getRequestType(), equalTo(applicationType));
         assertThat(appResponse.getBody().getApplicationId(), equalTo(id));
         verify(updateApplicationService, times(1)).updateDipApplication(eq(APPLICATION_ID), any());
-    }
-
-    @Test
-    void createQuickQuoteApplication() {
-        //Given
-        var id = UUID.randomUUID().toString();
-        when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-
-        //When
-        var response = lendingController.createQuickQuoteApplication(quickQuoteApplicationRequest);
-
-        //Then
-        assertNotNull(response);
-    }
-
-    @Test
-    void updateQuickQuoteApplication() {
-        //Given
-        var id = UUID.randomUUID().toString();
-        when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-
-        //When
-        var response = lendingController.updateQuickQuoteApplication(id, quickQuoteApplicationRequest);
-
-        //Then
-        assertNotNull(response);
     }
 }

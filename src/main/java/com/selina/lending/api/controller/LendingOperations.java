@@ -31,9 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
-
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -99,45 +96,4 @@ public interface LendingOperations {
     })
     @PostMapping(value = "/dip")
     ResponseEntity<ApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
-
-
-    @Hidden
-    @Operation(description = "Create a new Quick Quote application")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Quick Quote created",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ApplicationResponse.class))
-                    }),
-            @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
-            @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content)
-    })
-    @PostMapping(value = "/quickquote")
-    ResponseEntity<ApplicationResponse> createQuickQuoteApplication(@Valid @RequestBody QuickQuoteApplicationRequest quickQuoteApplicationRequest);
-
-    @Hidden
-    @Operation(description = "Update the Quick Quote application for the given external application id")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Quick Quote updated",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ApplicationResponse.class))
-                    }),
-            @ApiResponse(
-                    responseCode = "400", description = "Application details invalid", content = @Content),
-            @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content),
-    })
-    @PutMapping(value = "/{externalApplicationId}/quickquote")
-    ResponseEntity<ApplicationResponse> updateQuickQuoteApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
-            @Valid @RequestBody QuickQuoteApplicationRequest quickQuoteApplicationRequest);
-
 }
