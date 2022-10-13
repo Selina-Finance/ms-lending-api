@@ -68,7 +68,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
     private void enrichApplicationRequest(ApplicationRequest applicationRequest) {
         applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
-        applicationRequest.setSource(Source.LENDING_API.toString());
+        applicationRequest.setSource(Source.BROKER.toString());
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
     }
 

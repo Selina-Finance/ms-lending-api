@@ -105,7 +105,7 @@ class MiddlewareRepositoryTest {
 
         // Then
         assertThat(result).isEqualTo(applicationResponse);
-        verify(applicationRequest, times(1)).setSource(Source.LENDING_API.toString());
+        verify(applicationRequest, times(1)).setSource(Source.BROKER.toString());
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 
