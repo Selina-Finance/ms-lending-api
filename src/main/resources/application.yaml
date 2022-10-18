@@ -2,9 +2,13 @@ management:
   endpoints:
     web:
       exposure:
-        include: info,health,beans,shutdown,loggers,metrics,prometheus
+        include: info,health,beans,shutdown,loggers,prometheus
       path-mapping:
         prometheus: metrics
+      metrics:
+        enabled: true
+      prometheus:
+        enabled: true
   endpoint:
     health:
       show-components: always

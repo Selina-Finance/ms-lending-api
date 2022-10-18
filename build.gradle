@@ -60,6 +60,7 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 	implementation 'org.mapstruct:mapstruct:1.5.1.Final'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+	implementation 'io.micrometer:micrometer-registry-prometheus:1.9.4'
 
 	// test
 	testImplementation 'org.hamcrest:hamcrest:2.2'
