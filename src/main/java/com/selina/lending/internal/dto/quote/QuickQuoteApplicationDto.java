@@ -15,9 +15,16 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.dto.quote;
 
 import java.util.List;
+
+import com.selina.lending.internal.dto.ApplicantDto;
+import com.selina.lending.internal.dto.ApplicationDto;
+import com.selina.lending.internal.dto.FeesDto;
+import com.selina.lending.internal.dto.LoanInformationDto;
+import com.selina.lending.internal.dto.OfferDto;
+import com.selina.lending.internal.dto.PropertyDetailsDto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

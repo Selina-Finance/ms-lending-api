@@ -15,23 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.dto.quote;
 
-import javax.validation.constraints.Pattern;
+import lombok.Builder;
+import lombok.Value;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
-@NoArgsConstructor
-@SuperBuilder
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class QuickQuotePropertyDetailsDto extends PropertyDetailsDto {
-
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    private String whenLastPurchased;
-
-    private Double purchaseValue;
+@Builder(toBuilder = true)
+@Value
+public class QuickQuoteResponse {
+    String externalApplicationId;
+    String status;
 }

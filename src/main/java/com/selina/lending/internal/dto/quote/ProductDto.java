@@ -15,27 +15,9 @@
  *
  */
 
-package com.selina.lending.messaging.event;
+package com.selina.lending.internal.dto.quote;
 
-import lombok.Builder;
+public class ProductDto {
 
-import java.time.Instant;
-
-@Builder(toBuilder = true)
-public record  BrokerRequestKpiEvent(
-        String requestId,
-        String externalApplicationId,
-        String ip,
-        String source,
-        String uriPath,
-        String httpMethod,
-        Integer httpResponseCode,
-        String decision,
-        Instant started,
-        Instant finished
-) implements KafkaEvent {
-    @Override
-    public String key() {
-        return requestId;
-    }
+    String product;
 }

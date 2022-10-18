@@ -28,7 +28,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 
 @ExtendWith(MockitoExtension.class)
 class QuickQuoteControllerTest {

@@ -21,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -15,35 +15,26 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.dto.quote;
 
-import java.util.List;
+import javax.validation.constraints.Pattern;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import com.selina.lending.internal.dto.LendingConstants;
+import com.selina.lending.internal.dto.PropertyDetailsDto;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
+@Data
 @EqualsAndHashCode(callSuper = true)
-public class QuickQuoteApplicationRequest extends ApplicationRequest {
+public class QuickQuotePropertyDetailsDto extends PropertyDetailsDto {
 
-    @NotNull
-    @Size(message = "applicants is required", min = 1, max = 2)
-    @Valid
-    private List<ApplicantDto> applicants;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    private String whenLastPurchased;
 
-    @NotNull
-    @Valid
-    private LoanInformationDto loanInformation;
-
-    @NotNull
-    @Valid
-    private QuickQuotePropertyDetailsDto propertyDetails;
+    private Double purchaseValue;
 }
