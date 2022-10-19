@@ -66,7 +66,6 @@ ttl=8000h
     
 ```
 
-
 ## Usage
 Below are some apis we have for creating, updating and retrieving an application:
 
