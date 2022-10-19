@@ -49,6 +49,7 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
     @Override
     public ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(String externalApplicationId) {
         log.info("Request to get application sourceAccount by [externalApplicationId={}]", externalApplicationId);
+        metricService.incrementApplicationDeleteFailed();
         return middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
     }
 
