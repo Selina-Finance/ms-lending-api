@@ -17,7 +17,22 @@
 
 package com.selina.lending.internal.dto.quote;
 
-public class ProductDto {
+public class ProductOfferDto {
+    String name;
 
-    String product;
+    String code;
+
+    String category;
+
+    String variant;
+
+    Boolean isVariable;
+
+    Boolean hasFree;
+
+    Double requestedLoanAmount;
+    Double totalAmountRepaid;
+    Double initialPayment;
+    Double productFee;
+
 }
