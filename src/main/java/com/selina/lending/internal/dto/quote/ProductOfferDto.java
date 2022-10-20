@@ -15,23 +15,24 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.dto.quote;
 
-import java.util.List;
+import lombok.Builder;
+import lombok.Value;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
-@NoArgsConstructor
-@SuperBuilder
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class QuickQuoteApplicationDto extends ApplicationDto {
-    private List<ApplicantDto> applicants;
-    private LoanInformationDto loanInformation;
-    private PropertyDetailsDto propertyDetails;
-    private FeesDto fees;
-    private List<OfferDto> offers;
+@Builder
+@Value
+public class ProductOfferDto {
+    String id;
+    String name;
+    Double requestedLoanAmount;
+    Double totalAmountRepaid;
+    Boolean hasFee;
+    Double productFee;
+    Boolean productFeeAddedToLoan;
+    Boolean isVariable;
+    Integer initialTerm;
+    Double initialRate;
+    Double initialPayment;
+    Double aprc;
 }

@@ -21,7 +21,7 @@ import org.mapstruct.InheritConfiguration;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 
-import com.selina.lending.internal.dto.QuickQuotePropertyDetailsDto;
+import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 
 @MapperConfig

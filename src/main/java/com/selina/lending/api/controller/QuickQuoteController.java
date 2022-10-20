@@ -20,8 +20,8 @@ package com.selina.lending.api.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,14 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 public class QuickQuoteController implements QuickQuoteOperations {
 
     @Override
-    public ResponseEntity<ApplicationResponse> createQuickQuoteApplication(
+    public ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Create Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<ApplicationResponse> updateQuickQuoteApplication(String externalApplicationId,
+    public ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(String externalApplicationId,
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Update Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
         return ResponseEntity.ok().build();

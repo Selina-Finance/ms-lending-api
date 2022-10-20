@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,14 +51,14 @@ public interface QuickQuoteOperations {
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ApplicationResponse.class))
+                                    schema = @Schema(implementation = QuickQuoteResponse.class))
                     }),
             @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
             @ApiResponse(responseCode = "401", content = @Content),
             @ApiResponse(responseCode = "403", content = @Content)
     })
     @PostMapping(value = "/quickquote")
-    ResponseEntity<ApplicationResponse> createQuickQuoteApplication(@Valid @RequestBody
+    ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(@Valid @RequestBody
     QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 
     @Hidden
@@ -70,7 +70,7 @@ public interface QuickQuoteOperations {
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ApplicationResponse.class))
+                                    schema = @Schema(implementation = QuickQuoteResponse.class))
                     }),
             @ApiResponse(
                     responseCode = "400", description = "Application details invalid", content = @Content),
@@ -79,7 +79,7 @@ public interface QuickQuoteOperations {
             @ApiResponse(responseCode = "404", description = "Application not found", content = @Content),
     })
     @PutMapping(value = "/{externalApplicationId}/quickquote")
-    ResponseEntity<ApplicationResponse> updateQuickQuoteApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable
+    ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable
     String externalApplicationId,
             @Valid @RequestBody QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 }

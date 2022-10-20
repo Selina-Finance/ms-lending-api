@@ -23,7 +23,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.QuickQuoteApplicationDto;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationDto;
 import com.selina.lending.internal.mapper.config.ApplicationMapperConfig;
 import com.selina.lending.internal.service.application.domain.Application;
 
