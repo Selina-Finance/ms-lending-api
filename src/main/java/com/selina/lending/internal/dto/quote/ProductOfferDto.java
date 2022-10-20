@@ -17,22 +17,22 @@
 
 package com.selina.lending.internal.dto.quote;
 
+import lombok.Builder;
+import lombok.Value;
+
+@Builder
+@Value
 public class ProductOfferDto {
+    String id;
     String name;
-
-    String code;
-
-    String category;
-
-    String variant;
-
-    Boolean isVariable;
-
-    Boolean hasFree;
-
     Double requestedLoanAmount;
     Double totalAmountRepaid;
-    Double initialPayment;
+    Boolean hasFee;
     Double productFee;
-
+    Boolean productFeeAddedToLoan;
+    Boolean isVariable;
+    Integer initialTerm;
+    Double initialRate;
+    Double initialPayment;
+    Double aprc;
 }
