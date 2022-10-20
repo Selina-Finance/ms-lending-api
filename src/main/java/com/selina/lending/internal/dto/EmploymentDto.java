@@ -31,7 +31,7 @@ import lombok.Value;
 public class EmploymentDto {
 
     @NotBlank
-    @Schema(implementation = EmploymentStatus.class)
+    @Schema(implementation = EmploymentStatus.class, description = "Employment Status, if value is not in the enum list e.g. Student map to 'Not in paid employment'")
     @EnumValue(enumClass = EmploymentStatus.class)
     String employmentStatus;
     Boolean inProbationPeriod;

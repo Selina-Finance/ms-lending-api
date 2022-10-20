@@ -73,6 +73,10 @@ public class ApplicantDto {
     private Boolean applicant2LivesWithApplicant1For3Years;
     private Boolean applicant2LivesWithApplicant1;
 
+    @Schema(implementation = ResidentialStatus.class, description = "Residential Status, if value is not in the enum list e.g. Private Tenant map to 'Owner Occupier'")
+    @EnumValue(enumClass = ResidentialStatus.class)
+    private String residentialStatus;
+
     @NotNull
     @Valid
     @NotEmpty
@@ -80,10 +84,6 @@ public class ApplicantDto {
 
     @NotNull
     private IncomeDto income;
-
-    @Schema(implementation = ResidentialStatus.class)
-    @EnumValue(enumClass = ResidentialStatus.class)
-    private String residentialStatus;
 
     enum Title {
         MR("Mr."),
@@ -121,7 +121,6 @@ public class ApplicantDto {
             return this.value;
         }
     }
-
 
     enum ResidentialStatus {
         OWNER("Owner"),

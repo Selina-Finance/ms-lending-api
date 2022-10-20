@@ -17,35 +17,21 @@
 
 package com.selina.lending.internal.dto.quote;
 
-import java.util.List;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import com.selina.lending.internal.dto.ApplicationRequest;
-import com.selina.lending.internal.dto.LoanInformationDto;
 
+import com.selina.lending.internal.dto.ApplicantDto;
+import com.selina.lending.internal.dto.EmploymentDto;
+
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
+@Data
 @EqualsAndHashCode(callSuper = true)
-public class QuickQuoteApplicationRequest extends ApplicationRequest {
-
-    @NotNull
-    @Size(message = "applicants is required", min = 1, max = 2)
+public class QuickQuoteApplicantDto extends ApplicantDto {
     @Valid
-    private List<QuickQuoteApplicantDto> applicants;
-
-    @NotNull
-    @Valid
-    private LoanInformationDto loanInformation;
-
-    @NotNull
-    @Valid
-    private QuickQuotePropertyDetailsDto propertyDetails;
+    private EmploymentDto employment;
 }

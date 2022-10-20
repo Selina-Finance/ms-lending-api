@@ -41,6 +41,7 @@ import com.selina.lending.internal.dto.OfferDto;
 import com.selina.lending.internal.dto.PreviousNameDto;
 import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
@@ -147,6 +148,7 @@ public abstract class MapperBase {
     public static final int MONTHLY_PAYMENT = 1000;
     public static final String REPAYMENT_TYPE = "Capital and interest";
     public static final String RATE_TYPE = "Fixed";
+    public static final String RESIDENTIAL_STATUS_OWNER = "Owner";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -175,7 +177,7 @@ public abstract class MapperBase {
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getLoanInformationDto())
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
-                .applicants(List.of(getApplicantDto()))
+                .applicants(List.of(getQuickQuoteApplicantDto()))
                 .build();
     }
 
@@ -230,6 +232,23 @@ public abstract class MapperBase {
                 .dateOfBirth(DOB)
                 .income(getIncomeDto())
                 .livedInCurrentAddressFor3Years(Boolean.TRUE)
+                .build();
+    }
+    protected QuickQuoteApplicantDto getQuickQuoteApplicantDto() {
+        return QuickQuoteApplicantDto.builder()
+                .title(TITLE)
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .gender(GENDER)
+                .emailAddress(EMAIL_ADDRESS)
+                .mobileNumber(MOBILE_NUMBER)
+                .addresses(List.of(getAddressDto()))
+                .applicant2LivesWithApplicant1(false)
+                .dateOfBirth(DOB)
+                .income(getIncomeDto())
+                .residentialStatus(RESIDENTIAL_STATUS_OWNER)
+                .livedInCurrentAddressFor3Years(Boolean.TRUE)
+                .employment(getEmploymentDto())
                 .build();
     }
 
