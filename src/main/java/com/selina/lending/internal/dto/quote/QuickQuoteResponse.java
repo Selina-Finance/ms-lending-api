@@ -27,5 +27,5 @@ import lombok.Value;
 public class QuickQuoteResponse {
     String externalApplicationId;
     String status;
-    List<ProductOfferDto> offer;
+    List<ProductOfferDto> offers;
 }
