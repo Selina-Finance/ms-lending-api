@@ -46,6 +46,8 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase{
         assertThat(applicationRequest.getApplicants().get(0).getIncome(), notNullValue());
         assertThat(applicationRequest.getApplicants().get(0).getIncome().getIncome().size(), equalTo(1));
         assertThat(applicationRequest.getApplicants().get(0).getAddresses().size(), equalTo(1));
+        assertThat(applicationRequest.getApplicants().get(0).getEmployment().getEmployerName(), equalTo(EMPLOYER_NAME));
+        assertThat(applicationRequest.getApplicants().get(0).getResidentialStatus(), equalTo(RESIDENTIAL_STATUS_OWNER));
         assertThat(applicationRequest.getLoanInformation().getLoanPurpose(), equalTo(LOAN_PURPOSE));
 
         assertPropertyDetails(applicationRequest);
