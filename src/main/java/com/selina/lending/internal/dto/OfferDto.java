@@ -37,8 +37,11 @@ public class OfferDto {
     Double reversionTerm;
     Double svr;
     Double procFee;
+    Double lti;
+    Double ltvCap;
     Double totalAmountRepaid;
     Double initialPayment;
+    Double reversionPayment;
     String productCode;
     String product;
     String decision;
