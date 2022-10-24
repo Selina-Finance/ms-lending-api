@@ -15,19 +15,16 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+import lombok.Builder;
+import lombok.Value;
 
-import com.selina.lending.internal.dto.OfferDto;
-import com.selina.lending.internal.service.application.domain.Offer;
-
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ChecklistMapper.class, ErcMapper.class})
-public interface OfferMapper {
-    OfferMapper INSTANCE = Mappers.getMapper(OfferMapper.class);
-
-    OfferDto mapToOfferDto(Offer offer);
-    Offer mapToOffer(OfferDto offerDto);
+@Builder
+@Value
+public class ErcDto {
+    Integer period;
+    Double ercFee;
+    Double ercBalance;
+    Double ercAmount;
 }

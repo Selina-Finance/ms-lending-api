@@ -74,9 +74,7 @@ public class ExpenditureDto {
         ALIMONY("Alimony"),
         CONSUMABLES("Consumables"),
         OTHER("Other"),
-        MORTGAGE ("Mortgage"),
-        OUTGOINGS_TOTAL("Outgoings Total"),
-        UNSECURED_LOAN("Unsecured loan (personal loans etc)");
+        OUTGOINGS_TOTAL("Outgoings Total");
 
         final String value;
 

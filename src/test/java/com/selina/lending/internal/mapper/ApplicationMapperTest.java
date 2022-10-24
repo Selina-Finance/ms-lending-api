@@ -80,5 +80,8 @@ class ApplicationMapperTest extends MapperBase {
         assertThat(application.getOffers().get(0).getChecklist(), notNullValue());
         assertThat(application.getOffers().get(0).getChecklist().getRequired(), notNullValue());
         assertThat(application.getOffers().get(0).getChecklist().getRequired().getAll(), hasItem(REQUIRED_PASSPORT));
+        assertThat(application.getOffers().get(0).getMaxErc(), equalTo(MAX_ERC));
+        assertThat(application.getOffers().get(0).getErcData().size(), equalTo(1));
+        assertThat(application.getOffers().get(0).getErcData().get(0).getPeriod(), equalTo(1));
     }
 }

@@ -31,6 +31,7 @@ import com.selina.lending.internal.dto.DIPApplicationDto;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
 import com.selina.lending.internal.dto.EmploymentDto;
+import com.selina.lending.internal.dto.ErcDto;
 import com.selina.lending.internal.dto.ExpenditureDto;
 import com.selina.lending.internal.dto.FacilityDto;
 import com.selina.lending.internal.dto.FeesDto;
@@ -41,11 +42,11 @@ import com.selina.lending.internal.dto.OfferDto;
 import com.selina.lending.internal.dto.PreviousNameDto;
 import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
+import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
-import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.Application;
@@ -58,6 +59,7 @@ import com.selina.lending.internal.service.application.domain.CreditPolicy;
 import com.selina.lending.internal.service.application.domain.Detail;
 import com.selina.lending.internal.service.application.domain.Document;
 import com.selina.lending.internal.service.application.domain.Employment;
+import com.selina.lending.internal.service.application.domain.Erc;
 import com.selina.lending.internal.service.application.domain.Expenditure;
 import com.selina.lending.internal.service.application.domain.Facility;
 import com.selina.lending.internal.service.application.domain.Fees;
@@ -149,6 +151,11 @@ public abstract class MapperBase {
     public static final String REPAYMENT_TYPE = "Capital and interest";
     public static final String RATE_TYPE = "Fixed";
     public static final String RESIDENTIAL_STATUS_OWNER = "Owner";
+    public static final Double MAX_ERC = 500.0;
+    public static final Double ERC_BALANCE = 50000.0;
+    public static final Double ERC_AMOUNT = 250.0;
+    public static final Double ERC_FEE = 0.02;
+    public static final String HOMEOWNER_LOAN = "Homeowner";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -361,9 +368,14 @@ public abstract class MapperBase {
         return ChecklistDto.builder().required(getRequiredDto()).build();
     }
 
+    protected List<ErcDto> getErcDto() {
+        return List.of(ErcDto.builder().ercFee(ERC_FEE).period(1).ercAmount(ERC_AMOUNT).ercBalance(ERC_BALANCE).build());
+    }
     protected OfferDto getOfferDto() {
         return OfferDto.builder().active(true).id(OFFER_ID).hasFee(true)
                 .checklist(getChecklistDto())
+                .maxErc(MAX_ERC)
+                .ercData(getErcDto())
                 .productCode(PRODUCT_CODE).build();
     }
 
@@ -512,10 +524,19 @@ public abstract class MapperBase {
         return RuleOutcome.builder().outcome(RULE_OUTCOME).build();
     }
 
+    protected List<Erc> getErc() {
+        return List.of(Erc.builder().period(1).ercFee(ERC_FEE).ercBalance(ERC_BALANCE).ercAmount(ERC_AMOUNT).build(),
+                Erc.builder().period(2).ercFee(ERC_FEE).ercBalance(ERC_BALANCE).ercAmount(ERC_AMOUNT).build());
+    }
+
     protected Offer getOffer() {
         return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE)
                 .checklist(getChecklist())
-                .ruleOutcomes(List.of(getRuleOutcome())).build();
+                .ruleOutcomes(List.of(getRuleOutcome()))
+                .family(HOMEOWNER_LOAN)
+                .maxErc(MAX_ERC)
+                .ercData(getErc())
+                .build();
     }
 
     protected ApplicationResponse getApplicationResponse(){

@@ -63,5 +63,8 @@ public class Offer {
     int maximumAdvance;
     int maximumAdvancePrime;
     Boolean isVariable;
+    String family;
+    Double maxErc;
+    List<Erc> ercData;
     List<RuleOutcome> ruleOutcomes;
 }
