@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Value;
@@ -37,23 +37,14 @@ public class OfferDto {
     Double reversionTerm;
     Double svr;
     Double procFee;
-    Double lti;
-    Double ltvCap;
     Double totalAmountRepaid;
-    Double monthlyAffordabilityStatus;
     Double initialPayment;
-    Double reversionPayment;
-    Double affordabilityDeficit;
     String productCode;
     String product;
     String decision;
     Double productFee;
     Boolean productFeeAddedToLoan;
-    Boolean selected;
     int brokerFeesUpfront;
-    int externalSettlement;
-    @JsonProperty("eSignUrl")
-    String esignUrl;
     Boolean hasFee;
     ChecklistDto checklist;
     String plan;
@@ -61,4 +52,7 @@ public class OfferDto {
     int maximumAdvance;
     int maximumAdvancePrime;
     Boolean isVariable;
+    String family;
+    Double maxErc;
+    List<ErcDto> ercData;
 }

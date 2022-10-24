@@ -18,16 +18,14 @@
 package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.OfferDto;
-import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.internal.dto.ErcDto;
+import com.selina.lending.internal.service.application.domain.Erc;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ChecklistMapper.class, ErcMapper.class})
-public interface OfferMapper {
-    OfferMapper INSTANCE = Mappers.getMapper(OfferMapper.class);
+@Mapper
+public interface ErcMapper {
+    ErcMapper INSTANCE = Mappers.getMapper(ErcMapper.class);
 
-    OfferDto mapToOfferDto(Offer offer);
-    Offer mapToOffer(OfferDto offerDto);
+    ErcDto mapToErcDto(Erc erc);
 }
