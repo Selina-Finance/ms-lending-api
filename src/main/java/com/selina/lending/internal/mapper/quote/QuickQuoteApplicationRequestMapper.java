@@ -40,7 +40,7 @@ public class QuickQuoteApplicationRequestMapper {
 
     private QuickQuoteApplicationRequestMapper() {}
 
-    static FilteredQuickQuoteApplicationRequest mapRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+    public static FilteredQuickQuoteApplicationRequest mapRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         return FilteredQuickQuoteApplicationRequest.builder()
                 .application(mapApplication(quickQuoteApplicationRequest))
                 .options(mapOptions(quickQuoteApplicationRequest))
