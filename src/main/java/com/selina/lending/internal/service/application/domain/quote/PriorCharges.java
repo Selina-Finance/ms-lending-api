@@ -15,7 +15,9 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.service.application.domain.quote;
+
+import java.time.LocalDate;
 
 import lombok.Builder;
 import lombok.Value;
@@ -23,16 +25,10 @@ import lombok.Value;
 @Builder
 @Value
 public class PriorCharges {
-    String name;
+    Double balanceConsolidated;
+    Double balanceOutstanding;
     Double monthlyPayment;
-    Double outstandingBalance;
-    Double monthlyPaymentVerified;
-    Double outstandingBalanceVerified;
-    Integer remainingTerm;
-    String rateType;
-    String repaymentType;
-    String fixedRatePeriodEndDate;
-    Double interestOnlyBalanceOfPartAndPartMortgage;
-    Boolean toBeConsolidated;
-    String status;
+    Integer numberPriorCharges;
+    LocalDate priorChargesYoungestDate;
+    Double otherDebtPayments;
 }

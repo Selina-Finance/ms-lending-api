@@ -15,24 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.service.application.domain.quote;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
-public class PriorCharges {
-    String name;
-    Double monthlyPayment;
-    Double outstandingBalance;
-    Double monthlyPaymentVerified;
-    Double outstandingBalanceVerified;
-    Integer remainingTerm;
-    String rateType;
-    String repaymentType;
-    String fixedRatePeriodEndDate;
-    Double interestOnlyBalanceOfPartAndPartMortgage;
-    Boolean toBeConsolidated;
-    String status;
+@Data
+public class FilteredQuickQuoteApplicationRequest {
+
+    private Application application;
+    private Options options;
 }

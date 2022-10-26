@@ -20,6 +20,7 @@ package com.selina.lending.internal.dto.quote;
 import javax.validation.constraints.Pattern;
 
 import com.selina.lending.internal.dto.LendingConstants;
+import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 
 import lombok.Data;
@@ -37,4 +38,6 @@ public class QuickQuotePropertyDetailsDto extends PropertyDetailsDto {
     private String whenLastPurchased;
 
     private Double purchaseValue;
+
+    private PriorChargesDto priorCharges;
 }

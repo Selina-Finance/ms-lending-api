@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -88,5 +90,7 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
     private String propertyRiskValuationComment;
     private String finalValuationChannel;
     private String googleMaps;
+
+    private List<PriorChargesDto> priorCharges;
 }
 

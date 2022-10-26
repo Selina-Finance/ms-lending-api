@@ -15,24 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.service.application.domain.quote;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class PriorCharges {
+public class SourceAccount {
+    String id;
     String name;
-    Double monthlyPayment;
-    Double outstandingBalance;
-    Double monthlyPaymentVerified;
-    Double outstandingBalanceVerified;
-    Integer remainingTerm;
-    String rateType;
-    String repaymentType;
-    String fixedRatePeriodEndDate;
-    Double interestOnlyBalanceOfPartAndPartMortgage;
-    Boolean toBeConsolidated;
-    String status;
 }

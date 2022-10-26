@@ -33,7 +33,7 @@ public class Offer {
     Double aprc;
     Double cltv;
     Double offerBalance;
-    Double initialTerm;
+    Integer initialTerm;
     Double initialRate;
     Double brokerFeesIncluded;
     Double reversionTerm;
@@ -52,16 +52,16 @@ public class Offer {
     Double productFee;
     Boolean productFeeAddedToLoan;
     Boolean selected;
-    int brokerFeesUpfront;
-    int externalSettlement;
+    Integer brokerFeesUpfront;
+    Integer externalSettlement;
     @JsonProperty("eSignUrl")
     String esignUrl;
     Boolean hasFee;
     Checklist checklist;
     String plan;
     String tier;
-    int maximumAdvance;
-    int maximumAdvancePrime;
+    Integer maximumAdvance;
+    Integer maximumAdvancePrime;
     Boolean isVariable;
     String family;
     Double maxErc;

@@ -44,7 +44,6 @@ import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.Address;
@@ -80,6 +79,9 @@ import com.selina.lending.internal.service.application.domain.System;
 import com.selina.lending.internal.service.application.domain.Underwriting;
 import com.selina.lending.internal.service.application.domain.User;
 import com.selina.lending.internal.service.application.domain.VotersRoll;
+import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.Product;
+import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
 
 public abstract class MapperBase {
     public static final String TITLE = "Mrs.";
@@ -147,7 +149,7 @@ public abstract class MapperBase {
     public static final String UTM_SOURCE = "utm source";
     public static final String UTM_MEDIUM = "utm medium";
     public static final String HSBC = "HSBC";
-    public static final int MONTHLY_PAYMENT = 1000;
+    public static final Double MONTHLY_PAYMENT = 1000.0;
     public static final String REPAYMENT_TYPE = "Capital and interest";
     public static final String RATE_TYPE = "Fixed";
     public static final String RESIDENTIAL_STATUS_OWNER = "Owner";
@@ -156,6 +158,14 @@ public abstract class MapperBase {
     public static final Double ERC_AMOUNT = 250.0;
     public static final Double ERC_FEE = 0.02;
     public static final String HOMEOWNER_LOAN = "Homeowner";
+    public static final String DECISION = "Accept";
+    public static final String OFFER_VARIABLE_RATE_50_LTV = "Variable Rate - 50% LTV";
+    public static final Double TOTAL_AMOUNT_REPAID = 60352.20;
+    public static final Double INITIAL_RATE = 8.75;
+    public static final Double INITIAL_PAYMENT = 411.08;
+    public static final Double APRC = 9.77;
+    public static final Double REQUESTED_LOAN_AMOUNT = 50000.0;
+    public static final Double OUTSTANDING_BALANCE = 20000.0;
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -325,7 +335,7 @@ public abstract class MapperBase {
         return QuickQuotePropertyDetailsDto.builder().addressLine1(ADDRESS_LINE_1).addressLine2(ADDRESS_LINE_2).buildingName(
                 BUILDING_NAME).buildingNumber(BUILDING_NUMBER).city(CITY).country(COUNTRY).county(COUNTY).postcode(
                 POSTCODE).estimatedValue(ESTIMATED_VALUE).whenLastPurchased(WHEN_LAST_PURCHASED)
-                .purchaseValue(PURCHASE_VALUE).priorCharges(List.of(getPriorChargesDto())).build();
+                .purchaseValue(PURCHASE_VALUE).numberOfPriorCharges(1).priorCharges(getPriorChargesDto()).build();
     }
 
     protected PropertyDetailsDto getPropertyDetailsDto() {
@@ -356,8 +366,12 @@ public abstract class MapperBase {
     }
 
     private PriorChargesDto getPriorChargesDto() {
-        return PriorChargesDto.builder().name(HSBC).monthlyPayment(MONTHLY_PAYMENT).repaymentType(REPAYMENT_TYPE).rateType(
-                RATE_TYPE).build();
+        return PriorChargesDto.builder().name(HSBC)
+                .monthlyPayment(MONTHLY_PAYMENT)
+                .repaymentType(REPAYMENT_TYPE)
+                .rateType(RATE_TYPE)
+                .outstandingBalance(OUTSTANDING_BALANCE)
+                .build();
     }
 
     protected RequiredDto getRequiredDto() {
@@ -383,12 +397,6 @@ public abstract class MapperBase {
         return DIPApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).createdDate(CREATED_DATE).applicants(
                 List.of(getDIPApplicantDto())).loanInformation(getAdvancedLoanInformationDto()).propertyDetails(
                 getDIPPropertyDetailsDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
-    }
-
-    protected QuickQuoteApplicationDto getQuickQuoteApplicationDto() {
-        return QuickQuoteApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).createdDate(CREATED_DATE).applicants(
-                List.of(getApplicantDto())).loanInformation(getLoanInformationDto()).propertyDetails(
-                getDIPPropertyDetailsDto()).requestType(APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
     }
 
     protected Applicant getApplicant() {
@@ -559,6 +567,32 @@ public abstract class MapperBase {
                 .lead(getLead())
                 .intermediary(getIntermediary())
                 .salesforce(getSalesforce())
+                .build();
+    }
+
+    protected FilteredQuickQuoteDecisionResponse getFilteredQuickQuoteDecisionResponse() {
+        return FilteredQuickQuoteDecisionResponse.builder().decision(DECISION)
+                .products(List.of(Product.builder()
+                        .isVariable(true)
+                        .family(HOMEOWNER_LOAN)
+                        .name(OFFER_VARIABLE_RATE_50_LTV)
+                        .offer(getProductOffer())
+                        .build()))
+                .build();
+    }
+
+    private ProductOffer getProductOffer() {
+        return ProductOffer.builder()
+                .id(OFFER_ID)
+                .totalAmountRepaid(TOTAL_AMOUNT_REPAID)
+                .aprc(APRC)
+                .initialPayment(INITIAL_PAYMENT)
+                .initialRate(INITIAL_RATE)
+                .initialTerm(LOAN_TERM)
+                .hasFee(true)
+                .productFee(FEE)
+                .requestedLoanAmount(REQUESTED_LOAN_AMOUNT)
+                .hasProductFeeAddedToLoan(true)
                 .build();
     }
 
