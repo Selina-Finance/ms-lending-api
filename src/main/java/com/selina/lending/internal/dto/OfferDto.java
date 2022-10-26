@@ -31,7 +31,7 @@ public class OfferDto {
     Double aprc;
     Double cltv;
     Double offerBalance;
-    Double initialTerm;
+    Integer initialTerm;
     Double initialRate;
     Double brokerFeesIncluded;
     Double reversionTerm;

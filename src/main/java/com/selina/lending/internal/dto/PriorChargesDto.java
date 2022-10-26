@@ -24,15 +24,15 @@ import lombok.Value;
 @Value
 public class PriorChargesDto {
       String name;
-      Integer monthlyPayment;
-      Integer outstandingBalance;
-      Integer monthlyPaymentVerified;
-      Integer outstandingBalanceVerified;
+      Double monthlyPayment;
+      Double outstandingBalance;
+      Double monthlyPaymentVerified;
+      Double outstandingBalanceVerified;
       Integer remainingTerm;
       String rateType;
       String repaymentType;
       String fixedRatePeriodEndDate;
-      Integer interestOnlyBalanceOfPartAndPartMortgage;
+      Double interestOnlyBalanceOfPartAndPartMortgage;
       Boolean toBeConsolidated;
       String status;
 }

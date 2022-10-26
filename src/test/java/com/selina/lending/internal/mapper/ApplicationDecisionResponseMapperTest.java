@@ -42,16 +42,8 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(responseDto.getId(), equalTo(APPLICATION_ID));
         assertThat(responseDto.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(responseDto.getApplicants(), notNullValue());
-
-        assertThat(responseDto.getOffers(), notNullValue());
-        assertThat(responseDto.getOffers().size(), equalTo(1));
-        assertThat(responseDto.getOffers().get(0).getProductCode(), equalTo(PRODUCT_CODE));
-        assertThat(responseDto.getOffers().get(0).getMaxErc(), equalTo(MAX_ERC));
-        assertThat(responseDto.getFees().getArrangementFee(), equalTo(ARRANGEMENT_FEE));
-
         assertThat(responseDto.getExpenditure(), notNullValue());
         assertThat(responseDto.getExpenditure().get(0).getExpenditureType(), equalTo(EXPENDITURE_TYPE));
-
         assertThat(responseDto.getUnderwriting().getUnderwritingOwner(), equalTo(UNDERWRITER));
         assertThat(responseDto.getUnderwriting().getStageName(), equalTo(UNDERWRITING_STAGE));
         assertThat(responseDto.getIntermediary().getContactFirstName(), equalTo(INTERMEDIARY_FIRSTNAME));
@@ -60,8 +52,28 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(responseDto.getLead().getUtmMedium(), equalTo(UTM_MEDIUM));
         assertThat(responseDto.getLead().getUtmSource(), equalTo(UTM_SOURCE));
 
+        assertOffers(responseDto);
         assertApplicant(responseDto);
         assertLoanInformation(responseDto);
+    }
+
+    private void assertOffers(ApplicationDecisionResponse responseDto) {
+        assertThat(responseDto.getOffers(), notNullValue());
+        assertThat(responseDto.getOffers().size(), equalTo(1));
+        assertThat(responseDto.getOffers().get(0).getProductCode(), equalTo(PRODUCT_CODE));
+        assertThat(responseDto.getOffers().get(0).getMaxErc(), equalTo(MAX_ERC));
+        assertThat(responseDto.getFees().getArrangementFee(), equalTo(ARRANGEMENT_FEE));
+        assertThat(responseDto.getOffers().get(0).getErcData().size(), equalTo(2));
+
+        var ercData = responseDto.getOffers().get(0).getErcData();
+        assertThat(ercData.get(0).getPeriod(), equalTo(1));
+        assertThat(ercData.get(0).getErcAmount(), equalTo(ERC_AMOUNT));
+        assertThat(ercData.get(0).getErcBalance(), equalTo(ERC_BALANCE));
+        assertThat(ercData.get(0).getErcFee(), equalTo(ERC_FEE));
+        assertThat(ercData.get(1).getPeriod(), equalTo(2));
+        assertThat(ercData.get(1).getErcAmount(), equalTo(ERC_AMOUNT));
+        assertThat(ercData.get(1).getErcBalance(), equalTo(ERC_BALANCE));
+        assertThat(ercData.get(1).getErcFee(), equalTo(ERC_FEE));
     }
 
     private void assertLoanInformation(ApplicationDecisionResponse responseDto) {

@@ -17,8 +17,6 @@
 
 package com.selina.lending.internal.dto;
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -54,5 +52,4 @@ public class PropertyDetailsDto {
 
     private Integer propertyInternalFloorSpace;
     private Integer numberOfPriorCharges;
-    private List<PriorChargesDto> priorCharges;
 }

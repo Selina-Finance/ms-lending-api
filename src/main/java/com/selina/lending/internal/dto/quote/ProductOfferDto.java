@@ -29,7 +29,7 @@ public class ProductOfferDto {
     Double totalAmountRepaid;
     Boolean hasFee;
     Double productFee;
-    Boolean productFeeAddedToLoan;
+    Boolean hasProductFeeAddedToLoan;
     Boolean isVariable;
     Integer initialTerm;
     Double initialRate;
