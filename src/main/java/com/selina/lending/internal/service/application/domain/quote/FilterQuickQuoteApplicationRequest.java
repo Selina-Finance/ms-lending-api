@@ -15,29 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.service.application.domain.quote;
 
-import java.util.List;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
-@NoArgsConstructor
-@SuperBuilder
+@Builder
 @Data
-public class ApplicationRequest {
+public class FilterQuickQuoteApplicationRequest {
 
-    private String sourceClientId;
-
-    private String reference;
-
-    @NotBlank
-    @Size(min = 4, max = 100)
-    private String externalApplicationId;
-    private List<ExpenditureDto> expenditure;
-
+    private Application application;
+    private Options options;
 }

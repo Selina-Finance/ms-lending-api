@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.dto;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.EnumValue;
@@ -29,6 +30,7 @@ import lombok.Value;
 @Value
 public class IncomeItemDto {
     Double amount;
+    @NotNull
     @Schema(implementation = IncomeType.class)
     @EnumValue(enumClass = IncomeType.class)
     String type;

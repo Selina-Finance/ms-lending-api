@@ -17,8 +17,6 @@
 
 package com.selina.lending.internal.service.application.domain.quote;
 
-import java.time.LocalDate;
-
 import lombok.Builder;
 import lombok.Value;
 
@@ -29,6 +27,5 @@ public class PriorCharges {
     Double balanceOutstanding;
     Double monthlyPayment;
     Integer numberPriorCharges;
-    LocalDate priorChargesYoungestDate;
     Double otherDebtPayments;
 }

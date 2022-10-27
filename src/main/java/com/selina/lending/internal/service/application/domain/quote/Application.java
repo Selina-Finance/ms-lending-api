@@ -20,10 +20,10 @@ package com.selina.lending.internal.service.application.domain.quote;
 import java.util.List;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class Application {
     String externalApplicationId;
     Source source;

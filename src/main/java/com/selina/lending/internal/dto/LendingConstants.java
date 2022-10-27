@@ -27,6 +27,8 @@ public final class LendingConstants {
 
     public static final String PRODUCT_CODE_ALL = "All";
 
+    public static final String REQUEST_SOURCE =  Source.BROKER.toString();
+
     private LendingConstants() {
 
     }

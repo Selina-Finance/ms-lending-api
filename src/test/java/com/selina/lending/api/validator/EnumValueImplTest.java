@@ -18,6 +18,7 @@
 package com.selina.lending.api.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
@@ -95,18 +96,18 @@ import com.selina.lending.internal.dto.LoanInformationDto;
     void validateApplicationRequest() {
         //Given
         var applicationRequest = ApplicationRequest.builder()
-                .requestType(INVALID_VALUE)
+                .externalApplicationId("1")
                 .build();
 
         //When
         var violations = validator.validate(applicationRequest);
 
         //Then
-        assertThat(violations.size(), equalTo(2));
+        assertThat(violations.size(), equalTo(1));
 
         var violationPropertyPath = getViolationPropertyPath(
                 violations.stream().map(ConstraintViolation::getPropertyPath));
-        assertThat(violationPropertyPath, containsInAnyOrder("requestType", "externalApplicationId"));
+        assertThat(violationPropertyPath, contains("externalApplicationId"));
     }
 
     @Test

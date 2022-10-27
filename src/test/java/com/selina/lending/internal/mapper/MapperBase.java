@@ -108,7 +108,6 @@ public abstract class MapperBase {
     public static final String PROPERTY_TYPE = "Detached house";
     public static final int NUMBER_OF_BEDROOMS = 4;
     public static final String DIP_APPLICATION_TYPE = "DIP";
-    public static final String APPLICATION_TYPE = "Quick Quote";
     public static final String APPLICATION_ID = "123456789";
     public static final Date CREATED_DATE = Date.from(Instant.now());
     public static final String ADDRESS_LINE_1 = "address line 1";
@@ -158,7 +157,7 @@ public abstract class MapperBase {
     public static final Double ERC_AMOUNT = 250.0;
     public static final Double ERC_FEE = 0.02;
     public static final String HOMEOWNER_LOAN = "Homeowner";
-    public static final String DECISION = "Accept";
+    public static final String DECISION = "Accepted";
     public static final String OFFER_VARIABLE_RATE_50_LTV = "Variable Rate - 50% LTV";
     public static final Double TOTAL_AMOUNT_REPAID = 60352.20;
     public static final Double INITIAL_RATE = 8.75;
@@ -169,7 +168,6 @@ public abstract class MapperBase {
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
-                .requestType(APPLICATION_TYPE)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .build();
@@ -177,7 +175,6 @@ public abstract class MapperBase {
 
     protected DIPApplicationRequest getDIPApplicationRequestDto() {
         return DIPApplicationRequest.builder()
-                .requestType(DIP_APPLICATION_TYPE)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .applicants(List.of(getDIPApplicantDto()))
@@ -189,7 +186,6 @@ public abstract class MapperBase {
 
     protected QuickQuoteApplicationRequest getQuickQuoteApplicationRequestDto() {
         return QuickQuoteApplicationRequest.builder()
-                .requestType(APPLICATION_TYPE)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getLoanInformationDto())

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 
 class QuickQuoteApplicationRequestMapperTest extends MapperBase {
 
@@ -63,7 +63,7 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(propertyDetails.getPostcode(), equalTo(POSTCODE));
     }
 
-    private void assertPriorCharges(FilteredQuickQuoteApplicationRequest applicationRequest) {
+    private void assertPriorCharges(FilterQuickQuoteApplicationRequest applicationRequest) {
         var priorCharges = applicationRequest.getOptions().getPriorCharges();
         assertThat(priorCharges.getNumberPriorCharges(), equalTo(1));
         assertThat(priorCharges.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));

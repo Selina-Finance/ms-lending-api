@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -42,7 +41,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public interface QuickQuoteOperations {
 
 
-    @Hidden
     @Operation(description = "Create a new Quick Quote application")
     @ApiResponses(value = {
             @ApiResponse(
@@ -61,7 +59,6 @@ public interface QuickQuoteOperations {
     ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(@Valid @RequestBody
     QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 
-    @Hidden
     @Operation(description = "Update the Quick Quote application for the given external application id")
     @ApiResponses(value = {
             @ApiResponse(

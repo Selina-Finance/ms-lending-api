@@ -29,7 +29,7 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.quote.Applicant;
 import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.Income;
 import com.selina.lending.internal.service.application.domain.quote.LoanInformation;
 import com.selina.lending.internal.service.application.domain.quote.Options;
@@ -40,8 +40,8 @@ public class QuickQuoteApplicationRequestMapper {
 
     private QuickQuoteApplicationRequestMapper() {}
 
-    public static FilteredQuickQuoteApplicationRequest mapRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        return FilteredQuickQuoteApplicationRequest.builder()
+    public static FilterQuickQuoteApplicationRequest mapRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        return FilterQuickQuoteApplicationRequest.builder()
                 .application(mapApplication(quickQuoteApplicationRequest))
                 .options(mapOptions(quickQuoteApplicationRequest))
                 .build();
@@ -54,6 +54,9 @@ public class QuickQuoteApplicationRequestMapper {
     }
 
     private static PriorCharges mapPriorCharges(QuickQuotePropertyDetailsDto propertyDetailsDto) {
+        if (propertyDetailsDto == null) {
+            return null;
+        }
         PriorChargesDto priorChargesDto = propertyDetailsDto.getPriorCharges();
         return PriorCharges.builder()
                 .numberPriorCharges(propertyDetailsDto.getNumberOfPriorCharges())
@@ -72,18 +75,15 @@ public class QuickQuoteApplicationRequestMapper {
     }
 
     private static PropertyDetails mapPropertyDetails(QuickQuotePropertyDetailsDto propertyDetailsDto) {
-        return PropertyDetails.builder()
-                .estimatedValue(propertyDetailsDto.getEstimatedValue())
-                .postcode(propertyDetailsDto.getPostcode())
-                .build();
+        return propertyDetailsDto == null ? null : PropertyDetails.builder().estimatedValue(
+                propertyDetailsDto.getEstimatedValue()).postcode(propertyDetailsDto.getPostcode()).build();
     }
 
     private static LoanInformation mapLoanInformation(LoanInformationDto loanInformationDto) {
-        return LoanInformation.builder()
-                .numberOfApplicants(loanInformationDto.getNumberOfApplicants())
-                .requestedLoanAmount(Double.valueOf(loanInformationDto.getRequestedLoanAmount()))
-                .requestedLoanTerm(loanInformationDto.getRequestedLoanTerm())
-                .build();
+        return loanInformationDto == null ? null : LoanInformation.builder().numberOfApplicants(
+                loanInformationDto.getNumberOfApplicants()).requestedLoanAmount(
+                Double.valueOf(loanInformationDto.getRequestedLoanAmount())).requestedLoanTerm(
+                loanInformationDto.getRequestedLoanTerm()).build();
     }
 
     private static List<Applicant> mapApplicants(List<QuickQuoteApplicantDto> applicantDto) {
