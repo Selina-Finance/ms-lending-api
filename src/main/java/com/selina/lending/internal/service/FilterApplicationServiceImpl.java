@@ -20,7 +20,7 @@ package com.selina.lending.internal.service;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.repository.SelectionServiceRepository;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 
 @Service
@@ -32,7 +32,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     @Override
-    public FilteredQuickQuoteDecisionResponse filter(FilteredQuickQuoteApplicationRequest request) {
+    public FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request) {
         return selectionServiceRepository.filter(request);
     }
 }

@@ -22,7 +22,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class FilteredQuickQuoteApplicationRequest {
+public class FilterQuickQuoteApplicationRequest {
 
     private Application application;
     private Options options;

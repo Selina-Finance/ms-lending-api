@@ -33,7 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.selina.lending.internal.api.SelectionServiceApi;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Source;
 
@@ -50,7 +50,7 @@ class SelectionServiceRepositoryTest {
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
 
     @Mock
-    private FilteredQuickQuoteApplicationRequest filteredQuickQuoteApplicationRequest;
+    private FilterQuickQuoteApplicationRequest filterQuickQuoteApplicationRequest;
 
     @Mock
     private Application application;
@@ -67,16 +67,16 @@ class SelectionServiceRepositoryTest {
         //Given
         var externalApplicationId = UUID.randomUUID().toString();
         var sourceAccount = "Broker";
-        when(filteredQuickQuoteApplicationRequest.getApplication()).thenReturn(application);
+        when(filterQuickQuoteApplicationRequest.getApplication()).thenReturn(application);
         when(selectionServiceApi.filterQuickQuote(any())).thenReturn(filteredQuickQuoteDecisionResponse);
         when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
         when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
 
         //When
-        selectionServiceRepository.filter(filteredQuickQuoteApplicationRequest);
+        selectionServiceRepository.filter(filterQuickQuoteApplicationRequest);
 
         //Then
-        verify(selectionServiceApi, times(1)).filterQuickQuote(filteredQuickQuoteApplicationRequest);
+        verify(selectionServiceApi, times(1)).filterQuickQuote(filterQuickQuoteApplicationRequest);
         verify(application, times(1)).setSource(any(Source.class));
     }
 }

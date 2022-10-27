@@ -21,7 +21,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 
 @FeignClient(
@@ -30,5 +30,5 @@ import com.selina.lending.internal.service.application.domain.quote.FilteredQuic
 public interface SelectionServiceApi {
 
     @PostMapping(path = "/v1/applications/quickquote/filter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    FilteredQuickQuoteDecisionResponse filterQuickQuote(FilteredQuickQuoteApplicationRequest applicationRequest);
+    FilteredQuickQuoteDecisionResponse filterQuickQuote(FilterQuickQuoteApplicationRequest applicationRequest);
 }

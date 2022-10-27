@@ -17,10 +17,10 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 
 public interface FilterApplicationService {
 
-    FilteredQuickQuoteDecisionResponse filter(FilteredQuickQuoteApplicationRequest request);
+    FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request);
 }

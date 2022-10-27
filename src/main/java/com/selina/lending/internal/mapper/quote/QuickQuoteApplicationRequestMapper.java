@@ -29,7 +29,7 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.quote.Applicant;
 import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.Income;
 import com.selina.lending.internal.service.application.domain.quote.LoanInformation;
 import com.selina.lending.internal.service.application.domain.quote.Options;
@@ -40,8 +40,8 @@ public class QuickQuoteApplicationRequestMapper {
 
     private QuickQuoteApplicationRequestMapper() {}
 
-    public static FilteredQuickQuoteApplicationRequest mapRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        return FilteredQuickQuoteApplicationRequest.builder()
+    public static FilterQuickQuoteApplicationRequest mapRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        return FilterQuickQuoteApplicationRequest.builder()
                 .application(mapApplication(quickQuoteApplicationRequest))
                 .options(mapOptions(quickQuoteApplicationRequest))
                 .build();

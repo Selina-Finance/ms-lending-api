@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import com.selina.lending.internal.api.SelectionServiceApi;
 import com.selina.lending.internal.dto.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Source;
 import com.selina.lending.internal.service.application.domain.quote.SourceAccount;
@@ -42,14 +42,14 @@ public class SelectionServiceRepositoryImpl implements SelectionServiceRepositor
     }
 
     @Override
-    public FilteredQuickQuoteDecisionResponse filter(FilteredQuickQuoteApplicationRequest request) {
+    public FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request) {
         log.info("Filter Quick Quote application [externalApplicationId={}]",
                 request.getApplication().getExternalApplicationId());
         enrichRequest(request);
         return selectionServiceApi.filterQuickQuote(request);
     }
 
-    private void enrichRequest(FilteredQuickQuoteApplicationRequest request) {
+    private void enrichRequest(FilterQuickQuoteApplicationRequest request) {
         var application = request.getApplication();
         var source = Source.builder().name(LendingConstants.REQUEST_SOURCE).account(
                 SourceAccount.builder().name(tokenService.retrieveSourceAccount()).build()).build();
