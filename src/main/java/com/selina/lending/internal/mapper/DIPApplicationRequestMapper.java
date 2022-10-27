@@ -19,7 +19,6 @@ package com.selina.lending.internal.mapper;
 
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
@@ -31,10 +30,8 @@ public interface DIPApplicationRequestMapper {
     DIPApplicationRequestMapper INSTANCE = Mappers.getMapper(DIPApplicationRequestMapper.class);
 
     @InheritConfiguration(name = "mapDipApplicationRequest")
-    @Mapping(target = "applicationType", source = "dipApplicationRequest.requestType")
     ApplicationRequest mapToApplicationRequest(DIPApplicationRequest dipApplicationRequest);
 
     @InheritConfiguration(name = "mapApplicationRequest")
-    @Mapping(target = "applicationType", source = "applicationRequest.requestType")
     ApplicationRequest mapToApplicationRequest(com.selina.lending.internal.dto.ApplicationRequest applicationRequest);
 }

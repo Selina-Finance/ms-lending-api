@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapper;
+import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationResponseMapper;
+import com.selina.lending.internal.service.FilterApplicationService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,17 +32,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QuickQuoteController implements QuickQuoteOperations {
 
+    private final FilterApplicationService filterApplicationService;
+
+    public QuickQuoteController(FilterApplicationService filterApplicationService) {
+        this.filterApplicationService = filterApplicationService;
+    }
+
     @Override
     public ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Create Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        return ResponseEntity.ok().build();
+        var response = filterApplicationService.filter(QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest));
+        return ResponseEntity.ok(QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(response));
     }
 
     @Override
     public ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(String externalApplicationId,
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Update Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        return ResponseEntity.ok().build();
+        var response = filterApplicationService.filter(QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest));
+        return ResponseEntity.ok(QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(response));
     }
 }

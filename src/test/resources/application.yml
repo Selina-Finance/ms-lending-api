@@ -1,5 +1,6 @@
 middleware.api.url: http://TBC
 middleware.application.service.url: http://TBC
+selection.service.url: http://selection-service
 
 spring.security:
   oauth2:

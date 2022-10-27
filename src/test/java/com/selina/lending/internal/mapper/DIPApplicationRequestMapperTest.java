@@ -36,7 +36,6 @@ class DIPApplicationRequestMapperTest extends MapperBase{
         var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(applicationRequestDto);
 
         //Then
-        assertThat(applicationRequest.getApplicationType(), equalTo(APPLICATION_TYPE));
         assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(applicationRequest.getExpenditure(), notNullValue());
         assertThat(applicationRequest.getExpenditure().size(), equalTo(1));
@@ -52,7 +51,6 @@ class DIPApplicationRequestMapperTest extends MapperBase{
         var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
 
         //Then
-        assertThat(applicationRequest.getApplicationType(), equalTo(DIP_APPLICATION_TYPE));
         assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(applicationRequest.getExpenditure(), notNullValue());
         assertThat(applicationRequest.getExpenditure().size(), equalTo(1));

@@ -17,7 +17,10 @@
 
 package com.selina.lending.api.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.UUID;
@@ -29,12 +32,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.FilterApplicationService;
 
 @ExtendWith(MockitoExtension.class)
 class QuickQuoteControllerTest {
 
     @InjectMocks
     private QuickQuoteController quickQuoteController;
+
+    @Mock
+    private FilterApplicationService filterApplicationService;
 
     @Mock
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
@@ -50,6 +57,7 @@ class QuickQuoteControllerTest {
 
         //Then
         assertNotNull(response);
+        verify(filterApplicationService,times(1)).filter(any());
     }
 
     @Test
@@ -63,5 +71,6 @@ class QuickQuoteControllerTest {
 
         //Then
         assertNotNull(response);
+        verify(filterApplicationService,times(1)).filter(any());
     }
 }

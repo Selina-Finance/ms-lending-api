@@ -103,7 +103,6 @@ class LendingControllerValidationTest extends MapperBase {
     void createDipApplicationWithMissingApplicantsRequest() throws Exception {
         //Given
         var dipApplicationRequest = DIPApplicationRequest.builder()
-                .requestType(DIP_APPLICATION_TYPE)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
@@ -126,7 +125,6 @@ class LendingControllerValidationTest extends MapperBase {
     void updateDipApplicationWithMissingMandatoryLoanInformation() throws Exception {
         //Given
         var dipApplicationRequest = DIPApplicationRequest.builder()
-                .requestType(DIP_APPLICATION_TYPE)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .applicants(List.of(getDIPApplicantDto()))
                 .expenditure(List.of(getExpenditureDto()))
@@ -181,7 +179,6 @@ class LendingControllerValidationTest extends MapperBase {
         applicant.setEmployment(employment);
 
         var dipApplicationRequest = DIPApplicationRequest.builder()
-                .requestType(DIP_APPLICATION_TYPE)
                 .applicants(List.of(applicant))
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))

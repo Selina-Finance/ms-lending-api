@@ -29,7 +29,7 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
 
 
     @Test
-    void mapToQuickQuoteResponseDecisionAccept() {
+    void mapToQuickQuoteResponseDecisionAccepted() {
         //Given
         var filteredResponse = getFilteredQuickQuoteDecisionResponse();
 
@@ -56,9 +56,9 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
     }
 
     @Test
-    void mapToQuickQuoteResponseDecisionDecline() {
+    void mapToQuickQuoteResponseDecisionDeclined() {
         //Given
-        String decision = "Decline";
+        String decision = "Declined";
         var filteredResponse =
                 FilteredQuickQuoteDecisionResponse.builder().decision(decision).build();
 

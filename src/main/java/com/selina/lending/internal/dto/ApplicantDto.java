@@ -83,6 +83,7 @@ public class ApplicantDto {
     private List<AddressDto> addresses;
 
     @NotNull
+    @Valid
     private IncomeDto income;
 
     enum Title {
