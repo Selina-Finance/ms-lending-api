@@ -56,6 +56,9 @@ public class OfferDto {
     int maximumAdvancePrime;
     Boolean isVariable;
     String family;
+    String ercShortCode;
+    Integer ercPeriodYears;
+    Double maximumBalanceEsis;
     Double maxErc;
     List<ErcDto> ercData;
 }

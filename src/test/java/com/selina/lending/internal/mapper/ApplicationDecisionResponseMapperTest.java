@@ -58,12 +58,16 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
     }
 
     private void assertOffers(ApplicationDecisionResponse responseDto) {
+        var offer = responseDto.getOffers().get(0);
         assertThat(responseDto.getOffers(), notNullValue());
         assertThat(responseDto.getOffers().size(), equalTo(1));
-        assertThat(responseDto.getOffers().get(0).getProductCode(), equalTo(PRODUCT_CODE));
-        assertThat(responseDto.getOffers().get(0).getMaxErc(), equalTo(MAX_ERC));
+        assertThat(offer.getProductCode(), equalTo(PRODUCT_CODE));
+        assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
         assertThat(responseDto.getFees().getArrangementFee(), equalTo(ARRANGEMENT_FEE));
-        assertThat(responseDto.getOffers().get(0).getErcData().size(), equalTo(2));
+        assertThat(offer.getErcData().size(), equalTo(2));
+        assertThat(offer.getErcPeriodYears(), equalTo(2));
+        assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
+        assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
 
         var ercData = responseDto.getOffers().get(0).getErcData();
         assertThat(ercData.get(0).getPeriod(), equalTo(1));
