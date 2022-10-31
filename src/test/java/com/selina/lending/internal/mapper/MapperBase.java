@@ -166,6 +166,7 @@ public abstract class MapperBase {
     public static final Double REQUESTED_LOAN_AMOUNT = 50000.0;
     public static final Double OUTSTANDING_BALANCE = 20000.0;
     public static final Double MAX_BALANCE_ESIS = 100000.0;
+    public static final String ERC_SHORT_CODE = "ERC_01";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -541,6 +542,7 @@ public abstract class MapperBase {
                 .family(HOMEOWNER_LOAN)
                 .ercPeriodYears(2)
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
+                .ercShortCode(ERC_SHORT_CODE)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())
                 .build();
