@@ -37,6 +37,8 @@ public interface QuickQuoteApplicationResponseMapper {
 
     @Mapping(source = "product.name", target = "name")
     @Mapping(source = "product.isVariable", target = "isVariable")
+    @Mapping(source = "product.hasErc", target = "hasErc")
+    @Mapping(source = "product.ercShortCode", target = "ercShortCode")
     @Mapping(source = "offer.id", target = "id")
     @Mapping(source = "offer.hasFee", target = "hasFee")
     @Mapping(source = "offer.productFee", target = "productFee")
@@ -47,5 +49,7 @@ public interface QuickQuoteApplicationResponseMapper {
     @Mapping(source = "offer.totalAmountRepaid", target = "totalAmountRepaid")
     @Mapping(source = "offer.requestedLoanAmount", target = "requestedLoanAmount")
     @Mapping(source = "offer.hasProductFeeAddedToLoan", target = "hasProductFeeAddedToLoan")
+    @Mapping(source = "offer.ercPeriodYears", target = "ercPeriodYears")
+    @Mapping(source = "offer.ercData", target = "ercData")
     ProductOfferDto mapToProductOfferDto(Product product);
 }

@@ -17,6 +17,10 @@
 
 package com.selina.lending.internal.dto.quote;
 
+import java.util.List;
+
+import com.selina.lending.internal.dto.ErcDto;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -35,4 +39,10 @@ public class ProductOfferDto {
     Double initialRate;
     Double initialPayment;
     Double aprc;
+    String family;
+    Boolean hasErc;
+    Double maxErc;
+    String ercShortCode;
+    Integer ercPeriodYears;
+    List<ErcDto> ercData;
 }

@@ -576,6 +576,8 @@ public abstract class MapperBase {
                 .products(List.of(Product.builder()
                         .isVariable(true)
                         .family(HOMEOWNER_LOAN)
+                        .hasErc(true)
+                        .ercShortCode(ERC_SHORT_CODE)
                         .name(OFFER_VARIABLE_RATE_50_LTV)
                         .offer(getProductOffer())
                         .build()))
@@ -594,6 +596,9 @@ public abstract class MapperBase {
                 .productFee(FEE)
                 .requestedLoanAmount(REQUESTED_LOAN_AMOUNT)
                 .hasProductFeeAddedToLoan(true)
+                .ercPeriodYears(2)
+                .maxErc(MAX_ERC)
+                .ercData(getErc())
                 .build();
     }
 

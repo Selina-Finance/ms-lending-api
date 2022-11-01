@@ -53,6 +53,19 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
         assertThat(offer.getHasProductFeeAddedToLoan(), equalTo(true));
         assertThat(offer.getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
         assertThat(offer.getIsVariable(), equalTo(true));
+        assertThat(offer.getHasErc(), equalTo(true));
+        assertThat(offer.getErcPeriodYears(), equalTo(2));
+        assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
+
+        var ercData = offer.getErcData();
+        assertThat(ercData.get(0).getPeriod(), equalTo(1));
+        assertThat(ercData.get(0).getErcAmount(), equalTo(ERC_AMOUNT));
+        assertThat(ercData.get(0).getErcBalance(), equalTo(ERC_BALANCE));
+        assertThat(ercData.get(0).getErcFee(), equalTo(ERC_FEE));
+        assertThat(ercData.get(1).getPeriod(), equalTo(2));
+        assertThat(ercData.get(1).getErcAmount(), equalTo(ERC_AMOUNT));
+        assertThat(ercData.get(1).getErcBalance(), equalTo(ERC_BALANCE));
+        assertThat(ercData.get(1).getErcFee(), equalTo(ERC_FEE));
     }
 
     @Test
