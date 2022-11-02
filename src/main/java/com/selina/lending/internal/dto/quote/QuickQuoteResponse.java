@@ -20,12 +20,12 @@ package com.selina.lending.internal.dto.quote;
 import java.util.List;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder(toBuilder = true)
-@Value
+@Data
 public class QuickQuoteResponse {
-    String externalApplicationId;
-    String status;
-    List<ProductOfferDto> offers;
+    private String externalApplicationId;
+    private String status;
+    private List<ProductOfferDto> offers;
 }

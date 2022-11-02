@@ -17,12 +17,16 @@
 
 package com.selina.lending.api.controller;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -31,8 +35,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.FilterApplicationService;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 
 @ExtendWith(MockitoExtension.class)
 class QuickQuoteControllerTest {
@@ -44,6 +51,9 @@ class QuickQuoteControllerTest {
     private FilterApplicationService filterApplicationService;
 
     @Mock
+    private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
+
+    @Mock
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
 
     @Test
@@ -51,12 +61,14 @@ class QuickQuoteControllerTest {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
+        when(filterApplicationService.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(filteredQuickQuoteDecisionResponse);
 
         //When
         var response = quickQuoteController.createQuickQuoteApplication(quickQuoteApplicationRequest);
 
         //Then
         assertNotNull(response);
+        assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
         verify(filterApplicationService,times(1)).filter(any());
     }
 
@@ -65,12 +77,28 @@ class QuickQuoteControllerTest {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
+        when(filterApplicationService.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(filteredQuickQuoteDecisionResponse);
 
         //When
         var response = quickQuoteController.updateQuickQuoteApplication(id, quickQuoteApplicationRequest);
 
         //Then
         assertNotNull(response);
+        assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
         verify(filterApplicationService,times(1)).filter(any());
+    }
+
+    @Test
+    void updateQuickQuoteApplicationThrowsAccessDeniedException() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
+
+        //When
+        var exception = assertThrows(AccessDeniedException.class, () ->
+                quickQuoteController.updateQuickQuoteApplication("anyId", quickQuoteApplicationRequest));
+
+        //Then
+        assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application anyId"));
     }
 }

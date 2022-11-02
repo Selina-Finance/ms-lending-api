@@ -30,5 +30,8 @@ public class Product {
     String variant;
     Boolean isVariable;
     Boolean hasFee;
+    Boolean hasErc;
+    String ercProfile;
+    String ercShortCode;
     ProductOffer offer;
 }

@@ -20,6 +20,7 @@ package com.selina.lending.api.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
 import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapper;
@@ -42,15 +43,28 @@ public class QuickQuoteController implements QuickQuoteOperations {
     public ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Create Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        var response = filterApplicationService.filter(QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest));
-        return ResponseEntity.ok(QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(response));
+        return ResponseEntity.ok(filterQuickQuote(quickQuoteApplicationRequest));
     }
 
     @Override
     public ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(String externalApplicationId,
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Update Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        var response = filterApplicationService.filter(QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest));
-        return ResponseEntity.ok(QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(response));
+        if (!externalApplicationId.equals(quickQuoteApplicationRequest.getExternalApplicationId())) {
+            throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
+        }
+        return ResponseEntity.ok(filterQuickQuote(quickQuoteApplicationRequest));
+    }
+
+    private QuickQuoteResponse filterQuickQuote(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        var filteredQuickQuoteDecisionResponse = filterApplicationService.filter(QuickQuoteApplicationRequestMapper.mapRequest(
+                quickQuoteApplicationRequest));
+        var quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
+        enrichResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
+        return quickQuoteResponse;
+    }
+
+    private void enrichResponseWithExternalApplicationId(QuickQuoteResponse response, String externalApplicationId) {
+        response.setExternalApplicationId(externalApplicationId);
     }
 }

@@ -17,6 +17,10 @@
 
 package com.selina.lending.internal.service.application.domain.quote;
 
+import java.util.List;
+
+import com.selina.lending.internal.service.application.domain.Erc;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -36,4 +40,7 @@ public class ProductOffer {
     Double totalAmountRepaid;
     Integer initialTerm;
     Boolean hasProductFeeAddedToLoan;
+    Double maxErc;
+    Integer ercPeriodYears;
+    List<Erc> ercData;
 }
