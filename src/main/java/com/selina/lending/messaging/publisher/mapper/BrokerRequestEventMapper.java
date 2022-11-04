@@ -17,23 +17,24 @@
 
 package com.selina.lending.messaging.publisher.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
-import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.stereotype.Component;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.ContentCachingResponseWrapper;
+import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.stereotype.Component;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -57,18 +58,20 @@ public class BrokerRequestEventMapper {
         try {
             Pair<String, String> externalAppIdDecision = getExternalApplicationIdAndDecisionPair(httpRequest, httpResponse);
 
-            return (externalAppIdDecision.getLeft() == null || externalAppIdDecision.getRight() == null) ? Optional.empty() : Optional.of(BrokerRequestKpiEvent.builder()
-                    .requestId(requestId)
-                    .externalApplicationId(externalAppIdDecision.getLeft())
-                    .source(clientId)
-                    .uriPath(httpRequest.getRequestURI())
-                    .httpMethod(httpRequest.getMethod())
-                    .ip(getRemoteAddr(httpRequest))
-                    .started(started)
-                    .finished(Instant.now())
-                    .decision(externalAppIdDecision.getRight())
-                    .httpResponseCode(httpResponse.getStatus())
-                    .build());
+            return (externalAppIdDecision.getLeft() == null || externalAppIdDecision.getRight() == null) ?
+                    Optional.empty() :
+                    Optional.of(BrokerRequestKpiEvent.builder()
+                            .requestId(requestId)
+                            .externalApplicationId(externalAppIdDecision.getLeft())
+                            .source(clientId)
+                            .uriPath(httpRequest.getRequestURI())
+                            .httpMethod(httpRequest.getMethod())
+                            .ip(getRemoteAddr(httpRequest))
+                            .started(started)
+                            .finished(Instant.now())
+                            .decision(externalAppIdDecision.getRight())
+                            .httpResponseCode(httpResponse.getStatus())
+                            .build());
         } catch (IOException e) {
             log.error("Can't map event. Reason: {}", e.getMessage());
             return Optional.empty();
@@ -80,7 +83,7 @@ public class BrokerRequestEventMapper {
         String externalApplicationId = null;
         String decision = null;
 
-        if (httpRequest.getRequestURI().contains(QUICK_QUOTE_PATH)) {
+        if (isQuickQuoteRequest(httpRequest)) {
             var resp = objectMapper.readValue(httpResponse.getContentAsByteArray(), QuickQuoteResponse.class);
             externalApplicationId = resp.getExternalApplicationId();
             decision = resp.getStatus();
@@ -92,5 +95,9 @@ public class BrokerRequestEventMapper {
             }
         }
         return Pair.of(externalApplicationId, decision);
+    }
+
+    private boolean isQuickQuoteRequest(ContentCachingRequestWrapper httpRequest) {
+        return httpRequest.getRequestURI().contains(QUICK_QUOTE_PATH);
     }
 }
