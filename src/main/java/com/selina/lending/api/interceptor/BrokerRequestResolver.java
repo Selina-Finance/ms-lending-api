@@ -44,7 +44,7 @@ public class BrokerRequestResolver {
     }
 
     public void handle(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, Instant started) {
-        var optEvent = mapper.toBrokerRequestKpiEvent(request, response, started, tokenService.retrieveClientId());
+        var optEvent = mapper.toBrokerRequestKpiEvent(request, response, started, tokenService.retrieveSourceAccount());
         optEvent.ifPresentOrElse(
                 publisher::publish,
                 () -> log.warn("BrokerRequestKpiEvent won't be published due to mapping problem")
