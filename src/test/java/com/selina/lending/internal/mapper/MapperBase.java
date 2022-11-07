@@ -167,6 +167,7 @@ public abstract class MapperBase {
     public static final Double OUTSTANDING_BALANCE = 20000.0;
     public static final Double MAX_BALANCE_ESIS = 100000.0;
     public static final String ERC_SHORT_CODE = "ERC_01";
+    public static final String DECISIONING_ACCEPT = "Decisioning Accept";
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -392,7 +393,7 @@ public abstract class MapperBase {
     }
 
     protected DIPApplicationDto getDIPApplicationDto() {
-        return DIPApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).createdDate(CREATED_DATE).applicants(
+        return DIPApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).status(DECISIONING_ACCEPT).createdDate(CREATED_DATE).applicants(
                 List.of(getDIPApplicantDto())).loanInformation(getAdvancedLoanInformationDto()).propertyDetails(
                 getDIPPropertyDetailsDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
     }

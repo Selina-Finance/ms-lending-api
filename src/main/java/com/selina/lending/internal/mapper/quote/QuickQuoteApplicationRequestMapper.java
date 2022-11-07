@@ -54,15 +54,16 @@ public class QuickQuoteApplicationRequestMapper {
     }
 
     private static PriorCharges mapPriorCharges(QuickQuotePropertyDetailsDto propertyDetailsDto) {
-        if (propertyDetailsDto == null) {
-            return null;
-        }
-        PriorChargesDto priorChargesDto = propertyDetailsDto.getPriorCharges();
-        return PriorCharges.builder()
+        PriorCharges priorCharges = null;
+        if (propertyDetailsDto != null) {
+            PriorChargesDto priorChargesDto = propertyDetailsDto.getPriorCharges();
+            priorCharges = PriorCharges.builder()
                 .numberPriorCharges(propertyDetailsDto.getNumberOfPriorCharges())
                 .monthlyPayment(priorChargesDto.getMonthlyPayment())
                 .balanceOutstanding(priorChargesDto.getOutstandingBalance())
                 .build();
+        }
+        return priorCharges;
     }
 
     private static Application mapApplication(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
