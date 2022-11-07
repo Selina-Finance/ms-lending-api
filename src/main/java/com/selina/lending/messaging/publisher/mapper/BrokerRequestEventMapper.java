@@ -17,24 +17,22 @@
 
 package com.selina.lending.messaging.publisher.mapper;
 
-import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.stereotype.Component;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.stereotype.Component;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.ContentCachingResponseWrapper;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
-import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
-
-import lombok.extern.slf4j.Slf4j;
+import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
 
 @Slf4j
 @Component
@@ -48,11 +46,18 @@ public class BrokerRequestEventMapper {
         this.objectMapper = objectMapper;
     }
 
-    public Optional<BrokerRequestKpiEvent> toBrokerRequestKpiEvent(
-            ContentCachingRequestWrapper httpRequest,
-            ContentCachingResponseWrapper httpResponse,
-            Instant started,
-            String clientId) {
+
+    public Optional<BrokerRequestKpiEvent> quickQuoteToKpiEvent(ContentCachingRequestWrapper httpRequest,
+                                                                ContentCachingResponseWrapper httpResponse,
+                                                                Instant started,
+                                                                String clientId) {
+        return Optional.empty();
+    }
+
+    public Optional<BrokerRequestKpiEvent> dipToKpiEvent(ContentCachingRequestWrapper httpRequest,
+                                                         ContentCachingResponseWrapper httpResponse,
+                                                         Instant started,
+                                                         String clientId) {
         String requestId = Optional.ofNullable(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).orElse(UUID.randomUUID().toString());
 
         try {
@@ -100,4 +105,5 @@ public class BrokerRequestEventMapper {
     private boolean isQuickQuoteRequest(ContentCachingRequestWrapper httpRequest) {
         return httpRequest.getRequestURI().contains(QUICK_QUOTE_PATH);
     }
+
 }

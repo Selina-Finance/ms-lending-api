@@ -73,7 +73,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
 
         // When
-        var optResult = mapper.toBrokerRequestKpiEvent(
+        var optResult = mapper.dipToKpiEvent(
                 new ContentCachingRequestWrapper(httpRequest),
                 new ContentCachingResponseWrapper(response),
                 started,
@@ -120,7 +120,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
         when(objectMapper.readValue(new byte[]{}, QuickQuoteResponse.class)).thenReturn(appResponse);
 
         // When
-        var optResult = mapper.toBrokerRequestKpiEvent(
+        var optResult = mapper.dipToKpiEvent(
                 new ContentCachingRequestWrapper(httpRequest),
                 new ContentCachingResponseWrapper(response),
                 started,
@@ -153,7 +153,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
 
         // When
-        var optResult = mapper.toBrokerRequestKpiEvent(
+        var optResult = mapper.dipToKpiEvent(
                 new ContentCachingRequestWrapper(httpRequest),
                 new ContentCachingResponseWrapper(response),
                 Instant.now(),
@@ -175,7 +175,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenThrow(new IOException("error"));
 
         // When
-        var optResult = mapper.toBrokerRequestKpiEvent(
+        var optResult = mapper.dipToKpiEvent(
                 new ContentCachingRequestWrapper(httpRequest),
                 new ContentCachingResponseWrapper(response),
                 Instant.now(),
@@ -196,7 +196,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
 
         // When
-        var optResult = mapper.toBrokerRequestKpiEvent(
+        var optResult = mapper.dipToKpiEvent(
                 new ContentCachingRequestWrapper(httpRequest),
                 new ContentCachingResponseWrapper(response),
                 Instant.now(),
@@ -217,7 +217,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
 
         // When
-        var optResult = mapper.toBrokerRequestKpiEvent(
+        var optResult = mapper.dipToKpiEvent(
                 new ContentCachingRequestWrapper(httpRequest),
                 new ContentCachingResponseWrapper(response),
                 Instant.now(),
