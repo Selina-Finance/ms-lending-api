@@ -29,6 +29,8 @@ public record BrokerRequestKpiEvent(
         String source,
         String uriPath,
         String httpMethod,
+        String httpRequestBody,
+        String httpResponseBody,
         Integer httpResponseCode,
         String decision,
         Instant started,
