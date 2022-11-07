@@ -56,10 +56,10 @@ public class BrokerRequestEventMapper {
                 return Optional.empty();
             }
 
-            String externalApplicationId = resp.getApplication().getExternalApplicationId();
+            String externalId = resp.getApplication().getExternalApplicationId();
             String decision = resp.getApplication().getStatus();
 
-            return doMapping(httpRequest, httpResponse, started, clientId, externalApplicationId, decision);
+            return doMapping(httpRequest, httpResponse, started, clientId, externalId, decision);
         } catch (IOException e) {
             log.error("Can't map event. Reason: {}", e.getMessage());
             return Optional.empty();
@@ -72,11 +72,10 @@ public class BrokerRequestEventMapper {
                                                                 String clientId) {
         try {
             var resp = objectMapper.readValue(httpResponse.getContentAsByteArray(), QuickQuoteResponse.class);
-            String externalApplicationId = resp.getExternalApplicationId();
+            String externalId = resp.getExternalApplicationId();
             String decision = resp.getStatus();
 
-            return doMapping(httpRequest, httpResponse, started, clientId, externalApplicationId, decision);
-
+            return doMapping(httpRequest, httpResponse, started, clientId, externalId, decision);
         } catch (IOException e) {
             log.error("Can't map event. Reason: {}", e.getMessage());
             return Optional.empty();
@@ -88,14 +87,14 @@ public class BrokerRequestEventMapper {
     private static Optional<BrokerRequestKpiEvent> doMapping(ContentCachingRequestWrapper httpRequest,
                                                              ContentCachingResponseWrapper httpResponse,
                                                              Instant started, String clientId,
-                                                             String externalApplicationId,
+                                                             String externalId,
                                                              String decision
     ) {
         var requestId = Optional.ofNullable(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).orElse(UUID.randomUUID().toString());
 
         return Optional.of(BrokerRequestKpiEvent.builder()
                 .requestId(requestId)
-                .externalApplicationId(externalApplicationId)
+                .externalApplicationId(externalId)
                 .source(clientId)
                 .uriPath(httpRequest.getRequestURI())
                 .httpMethod(httpRequest.getMethod())
