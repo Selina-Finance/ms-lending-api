@@ -120,7 +120,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
         when(objectMapper.readValue(new byte[]{}, QuickQuoteResponse.class)).thenReturn(appResponse);
 
         // When
-        var optResult = mapper.dipToKpiEvent(
+        var optResult = mapper.quickQuoteToKpiEvent(
                 new ContentCachingRequestWrapper(httpRequest),
                 new ContentCachingResponseWrapper(response),
                 started,
