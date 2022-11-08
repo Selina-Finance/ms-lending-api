@@ -108,7 +108,7 @@ jacocoTestReport {
 swagger {
 	apiSource {
 		springmvc = true
-		locations = ['com.selina.lending']
+		locations = ['com.selina.lending.api']
 		info {
 			version = '1.0'
 			title = 'Lending API'
@@ -118,6 +118,7 @@ swagger {
 				name = 'Apache 2.0'
 			}
 		}
+		attachSwaggerArtifact = true
 		swaggerDirectory = "${project.rootDir}/generated/swagger-json"
 	}
 }
