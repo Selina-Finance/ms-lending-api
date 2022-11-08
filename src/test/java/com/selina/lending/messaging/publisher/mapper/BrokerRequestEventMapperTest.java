@@ -20,9 +20,10 @@ package com.selina.lending.messaging.publisher.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.internal.dto.ApplicationDto;
 import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
 import com.selina.lending.internal.mapper.MapperBase;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,12 +66,19 @@ class BrokerRequestEventMapperTest extends MapperBase {
         httpRequest.setRemoteAddr(ip);
         httpRequest.addHeader(REQUEST_ID_HEADER_NAME, foreignRequestId);
 
+        var appRequest = getDIPApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
+        String requestAsAString = "app_request_as_a_string";
+        when(objectMapper.writeValueAsString(appRequest)).thenReturn(requestAsAString);
+
         var httpResponseCode = 200;
         var response = new MockHttpServletResponse();
         response.setStatus(httpResponseCode);
 
         ApplicationResponse appResponse = ApplicationResponse.builder().application(getDIPApplicationDto()).build();
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
+        String responseAsAString = "app_response_as_a_string";
+        when(objectMapper.writeValueAsString(appResponse)).thenReturn(responseAsAString);
 
         // When
         var optResult = mapper.dipToKpiEvent(
@@ -90,6 +98,8 @@ class BrokerRequestEventMapperTest extends MapperBase {
         assertThat(result.source()).isEqualTo(clientId);
         assertThat(result.uriPath()).isEqualTo(uriPath);
         assertThat(result.httpMethod()).isEqualTo(httpMethod);
+        assertThat(result.httpRequestBody()).isEqualTo(requestAsAString);
+        assertThat(result.httpResponseBody()).isEqualTo(responseAsAString);
         assertThat(result.httpResponseCode()).isEqualTo(httpResponseCode);
         assertThat(result.decision()).isEqualTo(appResponse.getApplication().getStatus());
         assertThat(result.started()).isEqualTo(started);
@@ -112,12 +122,19 @@ class BrokerRequestEventMapperTest extends MapperBase {
         httpRequest.setRemoteAddr(ip);
         httpRequest.addHeader(REQUEST_ID_HEADER_NAME, foreignRequestId);
 
+        var appRequest = getQuickQuoteApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, QuickQuoteApplicationRequest.class)).thenReturn(appRequest);
+        String requestAsAString = "app_request_as_a_string";
+        when(objectMapper.writeValueAsString(appRequest)).thenReturn(requestAsAString);
+
         var httpResponseCode = 200;
         var response = new MockHttpServletResponse();
         response.setStatus(httpResponseCode);
 
         var appResponse = QuickQuoteResponse.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).status(DECISION).build();
         when(objectMapper.readValue(new byte[]{}, QuickQuoteResponse.class)).thenReturn(appResponse);
+        String responseAsAString = "app_response_as_a_string";
+        when(objectMapper.writeValueAsString(appResponse)).thenReturn(responseAsAString);
 
         // When
         var optResult = mapper.quickQuoteToKpiEvent(
@@ -137,6 +154,8 @@ class BrokerRequestEventMapperTest extends MapperBase {
         assertThat(result.source()).isEqualTo(clientId);
         assertThat(result.uriPath()).isEqualTo(uriPath);
         assertThat(result.httpMethod()).isEqualTo(httpMethod);
+        assertThat(result.httpRequestBody()).isEqualTo(requestAsAString);
+        assertThat(result.httpResponseBody()).isEqualTo(responseAsAString);
         assertThat(result.httpResponseCode()).isEqualTo(httpResponseCode);
         assertThat(result.decision()).isEqualTo(appResponse.getStatus());
         assertThat(result.started()).isEqualTo(started);
@@ -148,6 +167,9 @@ class BrokerRequestEventMapperTest extends MapperBase {
         // Given
         var httpRequest = new MockHttpServletRequest(); // without request-id header
         var response = new MockHttpServletResponse();
+
+        var appRequest = getDIPApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
 
         ApplicationResponse appResponse = ApplicationResponse.builder().application(getDIPApplicationDto()).build();
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
@@ -172,6 +194,8 @@ class BrokerRequestEventMapperTest extends MapperBase {
         var httpRequest = new MockHttpServletRequest(); // without request-id header
         var response = new MockHttpServletResponse();
 
+        var appRequest = getDIPApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenThrow(new IOException("error"));
 
         // When
@@ -189,8 +213,11 @@ class BrokerRequestEventMapperTest extends MapperBase {
     @Test
     void shouldReturnEmptyWhenApplicationNotInResponse() throws IOException {
         // Given
-        var httpRequest = new MockHttpServletRequest(); // without request-id header
+        var httpRequest = new MockHttpServletRequest();
         var response = new MockHttpServletResponse();
+
+        var appRequest = getDIPApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
 
         ApplicationResponse appResponse = ApplicationResponse.builder().build();
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
@@ -212,6 +239,9 @@ class BrokerRequestEventMapperTest extends MapperBase {
         // Given
         var httpRequest = new MockHttpServletRequest();
         var response = new MockHttpServletResponse();
+
+        var appRequest = getDIPApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
 
         var appResponse = ApplicationResponse.builder().application(ApplicationDto.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build()).build();
         when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);

@@ -18,7 +18,10 @@
 package com.selina.lending.messaging.publisher.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.selina.lending.internal.dto.ApplicationRequest;
 import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
 import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -50,16 +53,26 @@ public class BrokerRequestEventMapper {
                                                          Instant started,
                                                          String clientId) {
         try {
-            var resp = objectMapper.readValue(httpResponse.getContentAsByteArray(), ApplicationResponse.class);
+            var requestBody = objectMapper.readValue(httpRequest.getContentAsByteArray(), DIPApplicationRequest.class);
+            var responseBody = objectMapper.readValue(httpResponse.getContentAsByteArray(), ApplicationResponse.class);
 
-            if (resp.getApplication() == null || resp.getApplication().getStatus() == null) {
+            if (responseBody.getApplication() == null || responseBody.getApplication().getStatus() == null) {
                 return Optional.empty();
             }
 
-            String externalId = resp.getApplication().getExternalApplicationId();
-            String decision = resp.getApplication().getStatus();
+            String externalId = responseBody.getApplication().getExternalApplicationId();
+            String decision = responseBody.getApplication().getStatus();
 
-            return doMapping(httpRequest, httpResponse, started, clientId, externalId, decision);
+            return buildEvent(
+                    httpRequest,
+                    objectMapper.writeValueAsString(requestBody),
+                    httpResponse,
+                    objectMapper.writeValueAsString(responseBody),
+                    started,
+                    clientId,
+                    externalId,
+                    decision
+            );
         } catch (IOException e) {
             log.error("Can't map event. Reason: {}", e.getMessage());
             return Optional.empty();
@@ -71,11 +84,25 @@ public class BrokerRequestEventMapper {
                                                                 Instant started,
                                                                 String clientId) {
         try {
-            var resp = objectMapper.readValue(httpResponse.getContentAsByteArray(), QuickQuoteResponse.class);
-            String externalId = resp.getExternalApplicationId();
-            String decision = resp.getStatus();
+            var requestBody = objectMapper.readValue(httpRequest.getContentAsByteArray(), QuickQuoteApplicationRequest.class);
+            var responseBody = objectMapper.readValue(httpResponse.getContentAsByteArray(), QuickQuoteResponse.class);
+            String externalId = responseBody.getExternalApplicationId();
+            String decision = responseBody.getStatus();
 
-            return doMapping(httpRequest, httpResponse, started, clientId, externalId, decision);
+            if (externalId == null || decision == null) {
+                return Optional.empty();
+            }
+
+            return buildEvent(
+                    httpRequest,
+                    objectMapper.writeValueAsString(requestBody),
+                    httpResponse,
+                    objectMapper.writeValueAsString(responseBody),
+                    started,
+                    clientId,
+                    externalId,
+                    decision
+            );
         } catch (IOException e) {
             log.error("Can't map event. Reason: {}", e.getMessage());
             return Optional.empty();
@@ -84,11 +111,14 @@ public class BrokerRequestEventMapper {
     }
 
     @NotNull
-    private static Optional<BrokerRequestKpiEvent> doMapping(ContentCachingRequestWrapper httpRequest,
-                                                             ContentCachingResponseWrapper httpResponse,
-                                                             Instant started, String clientId,
-                                                             String externalId,
-                                                             String decision
+    private Optional<BrokerRequestKpiEvent> buildEvent(ContentCachingRequestWrapper httpRequest,
+                                                       String requestBody,
+                                                       ContentCachingResponseWrapper httpResponse,
+                                                       String responseBody,
+                                                       Instant started,
+                                                       String clientId,
+                                                       String externalId,
+                                                       String decision
     ) {
         var requestId = Optional.ofNullable(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).orElse(UUID.randomUUID().toString());
 
@@ -98,6 +128,8 @@ public class BrokerRequestEventMapper {
                 .source(clientId)
                 .uriPath(httpRequest.getRequestURI())
                 .httpMethod(httpRequest.getMethod())
+                .httpRequestBody(requestBody)
+                .httpResponseBody(responseBody)
                 .ip(getRemoteAddr(httpRequest))
                 .started(started)
                 .finished(Instant.now())
