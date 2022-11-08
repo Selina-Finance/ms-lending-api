@@ -22,53 +22,53 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class FeesDto {
 
     @NotNull
     @JsonProperty("addAdviceFeeToLoan")
-    Boolean isAddAdviceFeeToLoan;
+    private Boolean isAddAdviceFeeToLoan;
 
     @NotNull
     @JsonProperty("addArrangementFeeToLoan")
-    Boolean isAddArrangementFeeToLoan;
+    private Boolean isAddArrangementFeeToLoan;
 
     @NotNull
     @JsonProperty("addCommissionFeeToLoan")
-    Boolean isAddCommissionFeeToLoan;
+    private Boolean isAddCommissionFeeToLoan;
 
     @NotNull
     @JsonProperty("addThirdPartyFeeToLoan")
-    Boolean isAddThirdPartyFeeToLoan;
+    private Boolean isAddThirdPartyFeeToLoan;
 
     @NotNull
     @JsonProperty("addValuationFeeToLoan")
-    Boolean isAddValuationFeeToLoan;
+    private Boolean isAddValuationFeeToLoan;
 
     @NotNull
-    Double adviceFee;
+    private Double adviceFee;
 
     @NotNull
-    Double arrangementFee;
+    private Double arrangementFee;
 
     @NotNull
-    Double commissionFee;
+    private Double commissionFee;
 
     @NotNull
-    Double thirdPartyFee;
+    private Double thirdPartyFee;
 
     @NotNull
-    Double valuationFee;
+    private Double valuationFee;
 
     @NotNull
     @JsonProperty("addProductFeesToFacility")
-    Boolean isAddProductFeesToFacility;
+    private Boolean isAddProductFeesToFacility;
 
-    Double intermediaryFeeAmount;
+    private Double intermediaryFeeAmount;
 
     @JsonProperty("addIntermediaryFeeToLoan")
-    Boolean isAddIntermediaryFeeToLoan;
+    private Boolean isAddIntermediaryFeeToLoan;
 }
