@@ -191,7 +191,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
     @Test
     void shouldReturnEmptyWhenCanNotProperlyReadResponse() throws IOException {
         // Given
-        var httpRequest = new MockHttpServletRequest(); // without request-id header
+        var httpRequest = new MockHttpServletRequest();
         var response = new MockHttpServletResponse();
 
         var appRequest = getDIPApplicationRequestDto();
@@ -211,7 +211,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
     }
 
     @Test
-    void shouldReturnEmptyWhenApplicationNotInResponse() throws IOException {
+    void shouldReturnEmptyWhenApplicationNotInDipResponse() throws IOException {
         // Given
         var httpRequest = new MockHttpServletRequest();
         var response = new MockHttpServletResponse();
@@ -235,7 +235,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
     }
 
     @Test
-    void shouldReturnEmptyWhenDecisionNotInResponse() throws IOException {
+    void shouldReturnEmptyWhenDecisionNotInDipResponse() throws IOException {
         // Given
         var httpRequest = new MockHttpServletRequest();
         var response = new MockHttpServletResponse();
@@ -248,6 +248,78 @@ class BrokerRequestEventMapperTest extends MapperBase {
 
         // When
         var optResult = mapper.dipToKpiEvent(
+                new ContentCachingRequestWrapper(httpRequest),
+                new ContentCachingResponseWrapper(response),
+                Instant.now(),
+                "the-broker-id"
+        );
+
+        // Then
+        assertTrue(optResult.isEmpty());
+    }
+
+    @Test
+    void shouldReturnEmptyWhenExternalApplicationIdIsNullInQuickQuoteResponse() throws IOException {
+        // Given
+        var httpRequest = new MockHttpServletRequest();
+        var response = new MockHttpServletResponse();
+
+        var appRequest = getQuickQuoteApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, QuickQuoteApplicationRequest.class)).thenReturn(appRequest);
+
+        QuickQuoteResponse appResponse = QuickQuoteResponse.builder().externalApplicationId(null).build();
+        when(objectMapper.readValue(new byte[]{}, QuickQuoteResponse.class)).thenReturn(appResponse);
+
+        // When
+        var optResult = mapper.quickQuoteToKpiEvent(
+                new ContentCachingRequestWrapper(httpRequest),
+                new ContentCachingResponseWrapper(response),
+                Instant.now(),
+                "the-broker-id"
+        );
+
+        // Then
+        assertTrue(optResult.isEmpty());
+    }
+
+    @Test
+    void shouldReturnEmptyWhenStatusIsNullInQuickQuoteResponse() throws IOException {
+        // Given
+        var httpRequest = new MockHttpServletRequest();
+        var response = new MockHttpServletResponse();
+
+        var appRequest = getQuickQuoteApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, QuickQuoteApplicationRequest.class)).thenReturn(appRequest);
+
+        QuickQuoteResponse appResponse = QuickQuoteResponse.builder().status(null).build();
+        when(objectMapper.readValue(new byte[]{}, QuickQuoteResponse.class)).thenReturn(appResponse);
+
+        // When
+        var optResult = mapper.quickQuoteToKpiEvent(
+                new ContentCachingRequestWrapper(httpRequest),
+                new ContentCachingResponseWrapper(response),
+                Instant.now(),
+                "the-broker-id"
+        );
+
+        // Then
+        assertTrue(optResult.isEmpty());
+    }
+
+    @Test
+    void shouldReturnEmptyWhenDecisionIsNullInQuickQuoteResponse() throws IOException {
+        // Given
+        var httpRequest = new MockHttpServletRequest();
+        var response = new MockHttpServletResponse();
+
+        var appRequest = getQuickQuoteApplicationRequestDto();
+        when(objectMapper.readValue(new byte[]{}, QuickQuoteApplicationRequest.class)).thenReturn(appRequest);
+
+        QuickQuoteResponse appResponse = QuickQuoteResponse.builder().status(null).build();
+        when(objectMapper.readValue(new byte[]{}, QuickQuoteResponse.class)).thenReturn(appResponse);
+
+        // When
+        var optResult = mapper.quickQuoteToKpiEvent(
                 new ContentCachingRequestWrapper(httpRequest),
                 new ContentCachingResponseWrapper(response),
                 Instant.now(),
