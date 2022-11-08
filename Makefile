@@ -30,8 +30,8 @@ build_story:
 preview:
 	helmfile --file helmfile.yaml template --validate --include-crds --output-dir-template /tmp/generate/ 
 
-build: build_test sonarcube build_documentation
-	gradle build --no-daemon
+build: build_test sonarcube
+	gradle build generateSwaggerDocumentation --no-daemon
 	rm -f build/libs/*-plain.jar  
 
 build_test:
@@ -43,9 +43,6 @@ build_lib:
 
 publish:
 	gradle publish -Dversion=${VERSION}
-
-build_documentation:
-    gradle generateSwaggerDocumentation
 
 sonarcube:
 	gradle sonarqube -Dsonar.pullrequest.key=${PULL_NUMBER} -Dsonar.pullrequest.branch=${PR_HEAD_REF}
