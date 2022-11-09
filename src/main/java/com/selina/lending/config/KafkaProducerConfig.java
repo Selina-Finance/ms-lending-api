@@ -32,12 +32,14 @@ import java.util.Map;
 
 import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.MAX_REQUEST_SIZE_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
 import static org.springframework.kafka.support.serializer.JsonSerializer.TYPE_MAPPINGS;
 
 @Configuration
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class KafkaProducerConfig {
+    static final String MAX_MESSAGE_SIZE = "20971520"; // 20 MB
 
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -48,6 +50,7 @@ public class KafkaProducerConfig {
         configProps.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put(MAX_REQUEST_SIZE_CONFIG, MAX_MESSAGE_SIZE);
         configProps.put(
                 TYPE_MAPPINGS,
                 "BrokerRequestKpiEvent:com.selina.lending.messaging.event.BrokerRequestKpiEvent"

@@ -28,6 +28,8 @@ import org.springframework.kafka.core.KafkaAdmin;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.selina.lending.config.KafkaProducerConfig.MAX_MESSAGE_SIZE;
+
 @Configuration
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class KafkaTopicConfig {
@@ -53,10 +55,15 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic brokerRequestKpiTopic() {
-        return new NewTopic(
+
+        NewTopic newTopic = new NewTopic(
                 brokerRequestKpiTopicName,
                 brokerRequestKpiTopicPartitions,
                 brokerRequestKpiTopicReplicationFactor
         );
+        Map<String, String> configs = new HashMap<>();
+        configs.put("max.message.bytes", MAX_MESSAGE_SIZE);
+        newTopic.configs(configs);
+        return newTopic;
     }
 }
