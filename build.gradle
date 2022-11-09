@@ -118,6 +118,7 @@ swagger {
 				name = 'Apache 2.0'
 			}
 		}
+		expandSuperTypes = false
 		swaggerDirectory = "${project.rootDir}/generated/swagger-json"
 	}
 }
