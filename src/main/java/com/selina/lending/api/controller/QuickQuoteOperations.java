@@ -75,7 +75,7 @@ public interface QuickQuoteOperations {
             @ApiResponse(responseCode = "403", content = @Content),
     })
     @PutMapping(value = "/{externalApplicationId}/quickquote")
-    ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true, name = "externalApplicationId") @PathVariable
+    ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable
     String externalApplicationId,
             @Valid @RequestBody QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 }
