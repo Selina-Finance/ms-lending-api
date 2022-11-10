@@ -35,11 +35,11 @@ resilience4j:
     instances:
       middleware-api-cb:
         wait-duration-in-open-state: 1m
-        permitted-number-of-calls-in-half-open-state: 3
+        permitted-number-of-calls-in-half-open-state: 5
         sliding-window-type: count-based
-        sliding-window-size: 5
+        sliding-window-size: 10
         minimum-number-of-calls: 5
-        slow-call-duration-threshold: 30s
+        slow-call-duration-threshold: 50s
         slow-call-rate-threshold: 60
         failure-rate-threshold: 60
         ignoreExceptions:
@@ -49,11 +49,11 @@ resilience4j:
           - feign.RetryableException
       middleware-application-service-cb:
         wait-duration-in-open-state: 1m
-        permitted-number-of-calls-in-half-open-state: 3
+        permitted-number-of-calls-in-half-open-state: 5
         sliding-window-type: count-based
-        sliding-window-size: 5
+        sliding-window-size: 10
         minimum-number-of-calls: 5
-        slow-call-duration-threshold: 3s
+        slow-call-duration-threshold: 30s
         slow-call-rate-threshold: 60
         failure-rate-threshold: 60
         ignoreExceptions:
@@ -64,3 +64,11 @@ resilience4j:
 
 kafka:
   enable: true
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 90000
+        readTimeout: 90000
+        loggerLevel: full
