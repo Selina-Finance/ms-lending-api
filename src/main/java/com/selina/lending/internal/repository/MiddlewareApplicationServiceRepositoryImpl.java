@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApplicationServiceRepository {
 
     public static final String DELETE_FAILED_ERROR =
-            "**ALERT** Unable to delete application externalApplicationId %s, sourceAccount %s";
+            "**ALERT** Unable to delete application [externalApplicationId=%s] [sourceAccount=%s]";
     private final MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
     private final MetricService metricService;
