@@ -29,6 +29,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 @EnableAsync
 public class ThreadConfig  {
+    private static final int CORE_POOL_SIZE = 10;
+    private static final int MAX_POOL_SIZE = 10;
 
     private final BeanFactory beanFactory;
 
@@ -39,8 +41,8 @@ public class ThreadConfig  {
     @Bean
     public Executor taskExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-        threadPoolTaskExecutor.setCorePoolSize(10);
-        threadPoolTaskExecutor.setMaxPoolSize(10);
+        threadPoolTaskExecutor.setCorePoolSize(CORE_POOL_SIZE);
+        threadPoolTaskExecutor.setMaxPoolSize(MAX_POOL_SIZE);
         threadPoolTaskExecutor.initialize();
 
         return new LazyTraceExecutor(beanFactory, threadPoolTaskExecutor);

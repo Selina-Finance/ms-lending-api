@@ -62,7 +62,7 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
 
     @Retry(name = "middleware-application-service-retry", fallbackMethod = "deleteApiFallback")
     @Override
-    @Async
+    @Async("taskExecutor")
     public void deleteApplicationByExternalApplicationId(String sourceAccount, String externalApplicationId) {
         log.info("Request to delete application by [externalApplicationId={}] [sourceAccount={}]", externalApplicationId, sourceAccount);
         middlewareApplicationServiceApi.deleteApplicationByExternalApplicationId(sourceAccount, externalApplicationId);
