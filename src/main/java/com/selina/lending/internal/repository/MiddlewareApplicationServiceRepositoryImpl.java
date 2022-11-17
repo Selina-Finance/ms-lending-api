@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.repository;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
@@ -61,9 +62,11 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
 
     @Retry(name = "middleware-application-service-retry", fallbackMethod = "deleteApiFallback")
     @Override
+    @Async("taskExecutor")
     public void deleteApplicationByExternalApplicationId(String sourceAccount, String externalApplicationId) {
         log.info("Request to delete application by [externalApplicationId={}] [sourceAccount={}]", externalApplicationId, sourceAccount);
         middlewareApplicationServiceApi.deleteApplicationByExternalApplicationId(sourceAccount, externalApplicationId);
+        log.info("Application deleted [externalApplicationId={}] [sourceAccount={}]", externalApplicationId, sourceAccount);
     }
 
     private void deleteApiFallback(String sourceAccount, String externalApplicationId, FeignException.FeignServerException e) { //NOSONAR
