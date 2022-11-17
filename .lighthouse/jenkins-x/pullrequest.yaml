@@ -28,18 +28,16 @@ spec:
               cpu: 400m
               memory: 512Mi
         - name: build-gradle-build
-          script: |
-            #!/bin/sh
-            source .jx/variables.sh
-            apt update && apt install -y make
-            cp /root/gradle_resorces/init.gradle /opt/gradle/init.d/
-            cp /root/gradle_resorces/gradle.properties /opt/gradle/
-            make build       
           resources: {}     
         - name: check-registry
           resources: {}
         - name: build-container-build
           resources: {}
+          script: |
+            #!/busybox/sh
+            source .jx/variables.sh
+            cp /tekton/creds/.docker/config.json /kaniko/.docker/config.json
+            /kaniko/executor $KANIKO_FLAGS --context=/workspace/source --dockerfile=${DOCKERFILE_PATH:-Dockerfile} --destination=$PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION          
         - name: promote-jx-preview
           resources: {}
   podTemplate: {}
