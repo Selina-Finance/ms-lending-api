@@ -31,8 +31,8 @@ resilience4j:
           - feign.FeignException.FeignServerException
           - feign.RetryableException
       middleware-api-retry:
-        max-attempts: 3
-        wait-duration: 5s
+        max-attempts: 5
+        wait-duration: 3s
         ignoreExceptions:
           - feign.FeignException.FeignClientException
         retryExceptions:

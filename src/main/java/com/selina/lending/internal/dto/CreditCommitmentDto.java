@@ -22,7 +22,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class CreditCommitmentsDto {
+public class CreditCommitmentDto {
     SystemDto system;
     UserDto user;
     PublicInformationDto publicInformation;

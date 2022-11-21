@@ -30,7 +30,7 @@ class CreditCommitmentMapperTest extends MapperBase {
         var creditCommitments = getCreditCommitments();
 
         //When
-        var creditCommitmentsDto = CreditCommitmentsMapper.INSTANCE.mapToCreditCommitmentsDto(creditCommitments);
+        var creditCommitmentsDto = com.selina.lending.internal.mapper.CreditCommitmentMapper.INSTANCE.mapToCreditCommitmentsDto(creditCommitments);
 
         //Then
         assertThat(creditCommitmentsDto.getCreditPolicy().getDetail().get(0).getId(), equalTo(DETAIL_ID));

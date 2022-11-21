@@ -41,4 +41,5 @@ public class Application {
     LoanInformation loanInformation;
     PropertyDetails propertyDetails;
     List<Offer> offers;
+    CreditCommitmentResponse creditCommitment;
 }
