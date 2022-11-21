@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.Test;
 
-class CreditCommitmentsMapperTest extends MapperBase {
+class CreditCommitmentMapperTest extends MapperBase {
 
     @Test
     void mapToCreditCommitmentsDto() {

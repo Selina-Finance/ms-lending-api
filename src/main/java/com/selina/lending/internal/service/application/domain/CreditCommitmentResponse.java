@@ -17,15 +17,14 @@
 
 package com.selina.lending.internal.service.application.domain;
 
+import java.util.List;
+
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
-public class CreditCommitments {
-    System system;
-    User user;
-    PublicInformation publicInformation;
-    VotersRoll votersRoll;
-    CreditPolicy creditPolicy;
+@Data
+public class CreditCommitmentResponse {
+    String id;
+    List<ApplicantCreditCommitment> applicants;
 }

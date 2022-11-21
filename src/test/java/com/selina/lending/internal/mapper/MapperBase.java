@@ -53,7 +53,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.Checklist;
 import com.selina.lending.internal.service.application.domain.CreditCheck;
-import com.selina.lending.internal.service.application.domain.CreditCommitments;
+import com.selina.lending.internal.service.application.domain.CreditCommitment;
 import com.selina.lending.internal.service.application.domain.CreditPolicy;
 import com.selina.lending.internal.service.application.domain.Detail;
 import com.selina.lending.internal.service.application.domain.Document;
@@ -615,8 +615,8 @@ public abstract class MapperBase {
         return Lead.builder().utmCampaign(UTM_CAMPAIGN).utmMedium(UTM_MEDIUM).utmSource(UTM_SOURCE).build();
     }
 
-    public CreditCommitments getCreditCommitments() {
-        return CreditCommitments.builder().creditPolicy(getCreditPolicy())
+    public CreditCommitment getCreditCommitments() {
+        return CreditCommitment.builder().creditPolicy(getCreditPolicy())
                 .system(getSystem()).creditPolicy(getCreditPolicy()).votersRoll(getVotersRoll())
                 .publicInformation(getPublicInformation())
                 .user(getUser())
