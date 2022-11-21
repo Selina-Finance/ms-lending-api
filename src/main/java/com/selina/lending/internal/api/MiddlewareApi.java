@@ -27,6 +27,7 @@ import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configura
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.CreditCommitmentResponse;
 
 @FeignClient(
         value = "middleware-api",
@@ -40,4 +41,7 @@ public interface MiddlewareApi {
 
     @PostMapping (path = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
+
+    @GetMapping(path = "/creditcommitments/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    CreditCommitmentResponse getCreditCommitmentByApplicationId(@PathVariable("id") String id);
 }

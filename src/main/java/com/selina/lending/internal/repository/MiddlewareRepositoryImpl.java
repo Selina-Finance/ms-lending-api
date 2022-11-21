@@ -28,6 +28,7 @@ import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.CreditCommitmentResponse;
 
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -63,6 +64,12 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
         log.info("Finished calling mw to create dip application [externalApplicationId={}]", appResponse.getApplication().getExternalApplicationId());
         return appResponse;
+    }
+
+    @Override
+    public CreditCommitmentResponse getCreditCommitments(String id) {
+        log.info("Get credit commitments for [applicationId={}]", id);
+        return middlewareApi.getCreditCommitmentByApplicationId(id);
     }
 
     private void enrichApplicationRequest(ApplicationRequest applicationRequest) {

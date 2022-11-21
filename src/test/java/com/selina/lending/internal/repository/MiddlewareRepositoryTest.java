@@ -19,6 +19,7 @@ package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,6 +44,7 @@ import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.CreditCommitmentResponse;
 
 import feign.FeignException;
 import feign.Request;
@@ -67,6 +69,8 @@ class MiddlewareRepositoryTest {
     @Mock
     private Application application;
 
+    @Mock
+    private CreditCommitmentResponse creditCommitmentResponse;
 
     private MiddlewareRepository middlewareRepository;
 
@@ -109,6 +113,19 @@ class MiddlewareRepositoryTest {
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 
+    @Test
+    void shouldCallHttpClientWhenGetCreditCommitmentsInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+        when(middlewareApi.getCreditCommitmentByApplicationId(id)).thenReturn(creditCommitmentResponse);
+
+        // When
+        var result = middlewareRepository.getCreditCommitments(id);
+
+        // Then
+        assertThat(result).isEqualTo(creditCommitmentResponse);
+        verify(middlewareApi, times(1)).getCreditCommitmentByApplicationId(id);
+    }
 
     @Test
     void shouldThrowFeignServerExceptionWhenMiddlewareThrowsInternalServerException() {
@@ -146,6 +163,42 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
+    void shouldThrowFeignClientExceptionWhenMiddlewareGetCreditCommitmentsThrowsNotFoundException() {
+        //Given
+        String notFoundMsg = "not found";
+        var id = UUID.randomUUID().toString();
+
+        //When
+        when(middlewareApi.getCreditCommitmentByApplicationId(id)).thenThrow(
+                new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
+                        notFoundMsg.getBytes(), null));
+
+        var exception = assertThrows(FeignException.FeignClientException.class,
+                () -> middlewareRepository.getCreditCommitments(id));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
+    }
+
+    @Test
+    void shouldThrowFeignServerExceptionWhenMiddlewareGetCreditCommitmentsThrowsInternalServerException() {
+        //Given
+        String errorMsg = "error";
+        var id = UUID.randomUUID().toString();
+
+        //When
+        when(middlewareApi.getCreditCommitmentByApplicationId(id)).thenThrow(
+                new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
+                        errorMsg.getBytes(), null));
+
+        var exception = assertThrows(FeignException.FeignServerException.class,
+                () -> middlewareRepository.getCreditCommitments(id));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(errorMsg);
+    }
+
+    @Test
     void shouldOpenCircuitBreakerWhenFeignServerExceptionTriggersFallback() {
         //Given
         var id = UUID.randomUUID().toString();
@@ -171,7 +224,6 @@ class MiddlewareRepositoryTest {
 
         verify(middlewareApi, times(5)).getApplicationById(id);
     }
-
 
     @Test
     void shouldOpenCircuitBreakerWhenRetryableExceptionTriggersFallback() {

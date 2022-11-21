@@ -30,6 +30,14 @@ resilience4j:
         retryExceptions:
           - feign.FeignException.FeignServerException
           - feign.RetryableException
+      middleware-api-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        ignoreExceptions:
+          - feign.FeignException.FeignClientException
+        retryExceptions:
+          - feign.FeignException.FeignServerException
+          - feign.RetryableException
   circuitbreaker:
     circuit-breaker-aspect-order: 1
     instances:

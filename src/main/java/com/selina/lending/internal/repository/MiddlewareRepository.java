@@ -22,11 +22,14 @@ import java.util.Optional;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.CreditCommitmentResponse;
 
 public interface MiddlewareRepository {
 
     Optional<ApplicationDecisionResponse> getApplicationById(String id);
 
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
+
+    CreditCommitmentResponse getCreditCommitments(String id);
 }
 
