@@ -118,6 +118,22 @@ class ExceptionTranslatorTest {
     }
 
     @Test
+    void handleBadRequestException() throws Exception {
+        // Given
+        var expectedTitle = "Error processing request";
+        var expectedDetail = "bad request";
+
+        // When
+        mockMvc.perform(get("/api/exception-translator-test/bad-request-exception"))
+
+                // Then
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.type").doesNotExist())
+                .andExpect(jsonPath("$.title").value(expectedTitle))
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.detail").value(expectedDetail));
+    }
+    @Test
     void handleMissingServletRequestPartException() throws Exception {
         // Given
         String expectedDetail = "Required request part 'part' is not present";
