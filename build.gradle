@@ -4,7 +4,6 @@ plugins {
 	id 'jacoco'
 	id 'java'
 	id 'org.sonarqube' version '3.4.0.2513'
-	id 'com.benjaminsproule.swagger' version '1.0.14'
 }
 
 group = 'com.selina.lending'
@@ -102,23 +101,5 @@ jacocoTestReport {
 		xml.required = true
 		csv.required = false
 		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-	}
-}
-
-swagger {
-	apiSource {
-		springmvc = true
-		locations = ['com.selina.lending.api.controller']
-		info {
-			version = '1.0'
-			title = 'Lending API'
-			description = 'The Lending API provides a gateway for making a Quick Quote, Decision In Principle (DIP) and Decision In Principle with Credit Commitment (DIPCC) applications'
-			license {
-				url = 'http://www.apache.org/licenses/LICENSE-2.0.html'
-				name = 'Apache 2.0'
-			}
-		}
-		expandSuperTypes = false
-		swaggerDirectory = "${project.rootDir}/generated/swagger-json"
 	}
 }
