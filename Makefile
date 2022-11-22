@@ -31,7 +31,7 @@ preview:
 	helmfile --file helmfile.yaml template --validate --include-crds --output-dir-template /tmp/generate/ 
 
 build: build_test sonarcube
-	gradle build generateSwaggerDocumentation --no-daemon
+	gradle build --no-daemon
 	rm -f build/libs/*-plain.jar  
 
 build_test:
