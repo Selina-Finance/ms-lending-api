@@ -18,9 +18,13 @@
 package com.selina.lending.internal.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,9 +32,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
 
 @ExtendWith(MockitoExtension.class)
 class CreateApplicationServiceImplTest {
@@ -38,10 +49,16 @@ class CreateApplicationServiceImplTest {
     private MiddlewareRepository middlewareRepository;
 
     @Mock
+    private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+
+    @Mock
     private ApplicationRequest applicationRequest;
 
     @Mock
     private ApplicationResponse applicationResponse;
+
+    @Mock
+    private ApplicationIdentifier applicationIdentifier;
 
     @InjectMocks
     private CreateApplicationServiceImpl createApplicationService;
@@ -49,6 +66,11 @@ class CreateApplicationServiceImplTest {
     @Test
     void shouldCreateDipApplication() {
         //Given
+        String notFoundMsg = "Not found";
+        var id = UUID.randomUUID().toString();
+        when(applicationRequest.getExternalApplicationId()).thenReturn(id);
+        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(id)).thenThrow(new FeignException.NotFound(notFoundMsg,
+                request(), notFoundMsg.getBytes(), null));
         when(middlewareRepository.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
 
         //When
@@ -57,5 +79,27 @@ class CreateApplicationServiceImplTest {
         //Then
         assertThat(result).isEqualTo(applicationResponse);
         verify(middlewareRepository, times(1)).createDipApplication(applicationRequest);
+    }
+
+    @Test
+    void shouldThrowAccessDeniedExceptionWhenApplicationWithIdAlreadyExists() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        when(applicationRequest.getExternalApplicationId()).thenReturn(id);
+        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(id)).thenReturn(applicationIdentifier);
+        when(applicationIdentifier.getId()).thenReturn("any");
+
+        //When
+        var exception = assertThrows(AccessDeniedException.class,
+                () ->  createApplicationService.createDipApplication(applicationRequest));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists "+id);
+        verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
+
+    }
+
+    private Request request() {
+        return Request.create(Request.HttpMethod.GET, "url", new HashMap<>(), null, new RequestTemplate());
     }
 }
