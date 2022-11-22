@@ -81,6 +81,11 @@ public class ExceptionTranslatorTestController {
         throw new com.selina.lending.api.errors.custom.AccessDeniedException("Some problem details that make sense");
     }
 
+    @GetMapping("/bad-request-exception")
+    public void badRequestException() {
+        throw new com.selina.lending.api.errors.custom.BadRequestException("bad request");
+    }
+
     @GetMapping("/custom-remote-resource-problem-exception")
     public void remoteResourceProblemException() {
         throw new RemoteResourceProblemException();

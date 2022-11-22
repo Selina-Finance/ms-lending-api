@@ -33,6 +33,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
@@ -82,7 +83,7 @@ class CreateApplicationServiceImplTest {
     }
 
     @Test
-    void shouldThrowAccessDeniedExceptionWhenApplicationWithIdAlreadyExists() {
+    void shouldThrowBadRequestExceptionWhenApplicationWithIdAlreadyExists() {
         //Given
         var id = UUID.randomUUID().toString();
         when(applicationRequest.getExternalApplicationId()).thenReturn(id);
@@ -90,7 +91,7 @@ class CreateApplicationServiceImplTest {
         when(applicationIdentifier.getId()).thenReturn("any");
 
         //When
-        var exception = assertThrows(AccessDeniedException.class,
+        var exception = assertThrows(BadRequestException.class,
                 () ->  createApplicationService.createDipApplication(applicationRequest));
 
         //Then

@@ -19,8 +19,7 @@ package com.selina.lending.internal.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
@@ -50,7 +49,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
         try {
             var applicationIdentifier = middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(applicationRequest.getExternalApplicationId());
             if (StringUtils.isNotEmpty(applicationIdentifier.getId())) {
-                throw new AccessDeniedException(APPLICATION_ALREADY_EXISTS_ERROR + " " + applicationRequest.getExternalApplicationId());
+                throw new BadRequestException(APPLICATION_ALREADY_EXISTS_ERROR + " " + applicationRequest.getExternalApplicationId());
             }
         } catch (FeignException.NotFound ignore) {
             //application does not exist, so we can safely ignore this exception and create the application
