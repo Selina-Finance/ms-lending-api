@@ -28,18 +28,26 @@ import lombok.Value;
 @Value
 public class ProductOfferDto {
     String id;
+    String code;
     String name;
     Double requestedLoanAmount;
+    Double maximumLoanAmount;
+    Double offerBalance;
     Double totalAmountRepaid;
     Boolean hasFee;
     Double productFee;
     Boolean hasProductFeeAddedToLoan;
     Boolean isVariable;
+    Integer term;
+    Integer reversionTerm;
     Integer initialTerm;
     Double initialRate;
     Double initialPayment;
     Double aprc;
+    Double ear;
+    Double svr;
     String family;
+    String decision;
     Boolean hasErc;
     Double maxErc;
     String ercShortCode;

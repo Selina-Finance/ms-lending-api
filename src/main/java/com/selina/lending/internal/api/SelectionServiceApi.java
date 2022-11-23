@@ -29,6 +29,6 @@ import com.selina.lending.internal.service.application.domain.quote.FilteredQuic
         url = "${selection.service.url}")
 public interface SelectionServiceApi {
 
-    @PostMapping(path = "/v1/applications/quickquote/filter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/v1/applications/quickquote/filter?decision=Accept", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     FilteredQuickQuoteDecisionResponse filterQuickQuote(FilterQuickQuoteApplicationRequest applicationRequest);
 }

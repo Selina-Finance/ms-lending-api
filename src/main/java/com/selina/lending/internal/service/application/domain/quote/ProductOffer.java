@@ -33,13 +33,18 @@ public class ProductOffer {
     Double maximumLoanAmount;
     Double offerBalance;
     Double aprc;
+    Double ear;
+    Double svr;
     Double productFee;
     Boolean hasFee;
     Double initialRate;
     Double initialPayment;
     Double totalAmountRepaid;
+    Integer term;
     Integer initialTerm;
+    Integer reversionTerm;
     Boolean hasProductFeeAddedToLoan;
+    String decision;
     Double maxErc;
     Integer ercPeriodYears;
     List<Erc> ercData;

@@ -167,7 +167,13 @@ public abstract class MapperBase {
     public static final Double OUTSTANDING_BALANCE = 20000.0;
     public static final Double MAX_BALANCE_ESIS = 100000.0;
     public static final String ERC_SHORT_CODE = "ERC_01";
+    public static final String CODE = "HOL00750";
+    public static final Double EAR = 9.39;
+    public static final Double SVR = 9.0;
+    public static final Double OFFER_BALANCE = 30000.0;
     public static final String DECISIONING_ACCEPT = "Decisioning Accept";
+    public static final Integer REVERSION_TERM = 3;
+    public static final Double MAX_LOAN_AMOUNT = 50000.0;
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -577,6 +583,7 @@ public abstract class MapperBase {
                 .products(List.of(Product.builder()
                         .isVariable(true)
                         .family(HOMEOWNER_LOAN)
+                        .code(CODE)
                         .hasErc(true)
                         .ercShortCode(ERC_SHORT_CODE)
                         .name(OFFER_VARIABLE_RATE_50_LTV)
@@ -590,9 +597,15 @@ public abstract class MapperBase {
                 .id(OFFER_ID)
                 .totalAmountRepaid(TOTAL_AMOUNT_REPAID)
                 .aprc(APRC)
+                .ear(EAR)
+                .svr(SVR)
+                .offerBalance(OFFER_BALANCE)
                 .initialPayment(INITIAL_PAYMENT)
                 .initialRate(INITIAL_RATE)
                 .initialTerm(LOAN_TERM)
+                .term(LOAN_TERM)
+                .reversionTerm(REVERSION_TERM)
+                .maximumLoanAmount(MAX_LOAN_AMOUNT)
                 .hasFee(true)
                 .productFee(FEE)
                 .requestedLoanAmount(REQUESTED_LOAN_AMOUNT)
