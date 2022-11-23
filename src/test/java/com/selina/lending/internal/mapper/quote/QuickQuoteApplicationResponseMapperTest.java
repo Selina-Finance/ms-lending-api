@@ -22,11 +22,11 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.Test;
 
+import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 
 class QuickQuoteApplicationResponseMapperTest extends MapperBase {
-
 
     @Test
     void mapToQuickQuoteResponseDecisionAccepted() {
@@ -44,20 +44,31 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
         assertThat(offer.getId(), equalTo(OFFER_ID));
         assertThat(offer.getName(), equalTo(OFFER_VARIABLE_RATE_50_LTV));
         assertThat(offer.getAprc(), equalTo(APRC));
+        assertThat(offer.getEar(), equalTo(EAR));
+        assertThat(offer.getSvr(), equalTo(SVR));
+        assertThat(offer.getOfferBalance(), equalTo(OFFER_BALANCE));
         assertThat(offer.getHasFee(), equalTo(true));
         assertThat(offer.getInitialPayment(), equalTo(INITIAL_PAYMENT));
         assertThat(offer.getInitialRate(), equalTo(INITIAL_RATE));
         assertThat(offer.getInitialTerm(), equalTo(LOAN_TERM));
+        assertThat(offer.getReversionTerm(), equalTo(REVERSION_TERM));
+        assertThat(offer.getTerm(), equalTo(LOAN_TERM));
+        assertThat(offer.getMaximumLoanAmount(), equalTo(MAX_LOAN_AMOUNT));
         assertThat(offer.getProductFee(), equalTo(FEE));
         assertThat(offer.getTotalAmountRepaid(), equalTo(TOTAL_AMOUNT_REPAID));
         assertThat(offer.getHasProductFeeAddedToLoan(), equalTo(true));
         assertThat(offer.getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
         assertThat(offer.getIsVariable(), equalTo(true));
+
+        assertErcData(offer);
+    }
+
+    private void assertErcData(ProductOfferDto offer) {
+        var ercData = offer.getErcData();
         assertThat(offer.getHasErc(), equalTo(true));
         assertThat(offer.getErcPeriodYears(), equalTo(2));
         assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
 
-        var ercData = offer.getErcData();
         assertThat(ercData.get(0).getPeriod(), equalTo(1));
         assertThat(ercData.get(0).getErcAmount(), equalTo(ERC_AMOUNT));
         assertThat(ercData.get(0).getErcBalance(), equalTo(ERC_BALANCE));

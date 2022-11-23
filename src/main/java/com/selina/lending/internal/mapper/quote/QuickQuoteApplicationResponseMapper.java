@@ -36,6 +36,7 @@ public interface QuickQuoteApplicationResponseMapper {
     QuickQuoteResponse mapToQuickQuoteResponse(FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse);
 
     @Mapping(source = "product.name", target = "name")
+    @Mapping(source = "product.code", target = "code")
     @Mapping(source = "product.isVariable", target = "isVariable")
     @Mapping(source = "product.hasErc", target = "hasErc")
     @Mapping(source = "product.ercShortCode", target = "ercShortCode")
@@ -43,12 +44,19 @@ public interface QuickQuoteApplicationResponseMapper {
     @Mapping(source = "offer.hasFee", target = "hasFee")
     @Mapping(source = "offer.productFee", target = "productFee")
     @Mapping(source = "offer.aprc", target = "aprc")
+    @Mapping(source = "offer.ear", target = "ear")
+    @Mapping(source = "offer.svr", target = "svr")
     @Mapping(source = "offer.initialRate", target = "initialRate")
     @Mapping(source = "offer.initialPayment", target = "initialPayment")
     @Mapping(source = "offer.initialTerm", target = "initialTerm")
+    @Mapping(source = "offer.term", target = "term")
+    @Mapping(source = "offer.reversionTerm", target = "reversionTerm")
     @Mapping(source = "offer.totalAmountRepaid", target = "totalAmountRepaid")
+    @Mapping(source = "offer.maximumLoanAmount", target = "maximumLoanAmount")
+    @Mapping(source = "offer.offerBalance", target = "offerBalance")
     @Mapping(source = "offer.requestedLoanAmount", target = "requestedLoanAmount")
     @Mapping(source = "offer.hasProductFeeAddedToLoan", target = "hasProductFeeAddedToLoan")
+    @Mapping(source = "offer.decision", target = "decision")
     @Mapping(source = "offer.ercPeriodYears", target = "ercPeriodYears")
     @Mapping(source = "offer.ercData", target = "ercData")
     ProductOfferDto mapToProductOfferDto(Product product);
