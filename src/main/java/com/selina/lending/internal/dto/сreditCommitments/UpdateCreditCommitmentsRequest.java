@@ -17,16 +17,36 @@
 
 package com.selina.lending.internal.dto.сreditCommitments;
 
-import com.selina.lending.internal.dto.ApplicationRequest;
-import lombok.EqualsAndHashCode;
+import com.selina.lending.internal.dto.CreditPolicyDto;
+import com.selina.lending.internal.dto.DetailDto;
+import com.selina.lending.internal.dto.PublicInformationDto;
+import com.selina.lending.internal.dto.VotersRollDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @NoArgsConstructor
 @SuperBuilder
 @Getter
-@EqualsAndHashCode(callSuper = true)
-public class UpdateCreditCommitmentsRequest extends ApplicationRequest {
+public class UpdateCreditCommitmentsRequest {
 
+    private CCSystemDto system;
+    private CCUserDto user;
+    private PublicInformationDto publicInformation;
+    private VotersRollDto votersRoll;
+    private CreditPolicyDto creditPolicy;
+}
+
+class CCSystemDto {
+    List<DetailDto> detail;
+    List<DetailDto> summary;
+    List<DetailDto> underwriterNotes;
+}
+
+class CCUserDto {
+    List<DetailDto> detail;
+    List<DetailDto> summary;
+    List<DetailDto> underwriterNotes;
 }
