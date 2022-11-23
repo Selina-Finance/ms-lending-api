@@ -69,4 +69,10 @@ public class LendingController implements LendingOperations {
         var applicationResponse = createApplicationService.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
+
+    @Override
+    public ResponseEntity<Void> selectProductOffer(String externalApplicationId, String productCode) {
+        updateApplicationService.selectProductOffer(externalApplicationId, productCode);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -15,13 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.service;
+package com.selina.lending.internal.service.application.domain;
 
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import lombok.Builder;
+import lombok.Value;
 
-public interface UpdateApplicationService {
-    ApplicationResponse updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest);
-    SelectProductResponse selectProductOffer (String externalApplicationId, String productCode);
+@Builder
+@Value
+public class SelectProductResponse {
+    String message;
+    String id;
 }
