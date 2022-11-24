@@ -80,35 +80,29 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     private SelectProductResponse middlewareApiSelectProductFallback(FeignException.FeignServerException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return SelectProductResponse.builder().build();
+        throw remoteResourceProblemException(e);
     }
 
     private SelectProductResponse middlewareApiSelectProductFallback(feign.RetryableException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return SelectProductResponse.builder().build();
+        throw remoteResourceProblemException(e);
     }
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return Optional.empty();
+        throw remoteResourceProblemException(e);
     }
 
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(feign.RetryableException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return Optional.empty();
+        throw remoteResourceProblemException(e);
     }
 
     private ApplicationResponse middlewareApiFallback(FeignException.FeignServerException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return ApplicationResponse.builder().build();
+        throw remoteResourceProblemException(e);
     }
 
     private ApplicationResponse middlewareApiFallback(feign.RetryableException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return ApplicationResponse.builder().build();
+        throw remoteResourceProblemException(e);
     }
 
-    private void defaultMiddlewareFallback(Exception e) {
+    private RemoteResourceProblemException remoteResourceProblemException(Exception e) {
         log.error("Middleware is unavailable. {} {}", e.getCause(), e.getMessage());
         throw new RemoteResourceProblemException();
     }
