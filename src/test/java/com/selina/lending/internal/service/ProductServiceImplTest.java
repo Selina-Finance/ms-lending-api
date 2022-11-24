@@ -43,10 +43,14 @@ import com.selina.lending.internal.service.application.domain.SelectProductRespo
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
 
+    private static final String PRODUCT_CODE = "PR01";
+    private static final String APPLICATION_ID = UUID.randomUUID().toString();
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
     private static final String SOURCE_ACCOUNT = "sourceAccount";
+
     @Mock
     private ApplicationIdentifier applicationIdentifier;
+
     @Mock
     private MiddlewareRepository middlewareRepository;
 
@@ -62,32 +66,28 @@ class ProductServiceImplTest {
     @Test
     void shouldSuccessfullySelectProduct() {
         //Given
-        var productCode = "PR01";
-        var appId = UUID.randomUUID().toString();
         var selectProductResponse = SelectProductResponse.builder().id("appId").message("success").build();
         when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getId()).thenReturn(appId);
+        when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
-        when(middlewareRepository.selectProduct(appId, productCode)).thenReturn(selectProductResponse);
+        when(middlewareRepository.selectProduct(APPLICATION_ID, PRODUCT_CODE)).thenReturn(selectProductResponse);
 
         //When
-        var response = productService.selectProductOffer(EXTERNAL_APPLICATION_ID, productCode);
+        var response = productService.selectProductOffer(EXTERNAL_APPLICATION_ID, PRODUCT_CODE);
 
         //Then
         assertThat(response).isEqualTo(selectProductResponse);
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(1)).selectProduct(appId, productCode);
+        verify(middlewareRepository, times(1)).selectProduct(APPLICATION_ID, PRODUCT_CODE);
     }
 
     @Test
     void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToSelectProduct() {
         //Given
-        var productCode = "PR01";
-        var appId = UUID.randomUUID().toString();
         when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
@@ -96,12 +96,12 @@ class ProductServiceImplTest {
 
         //When
         var exception = assertThrows(AccessDeniedException.class,
-                () -> productService.selectProductOffer(EXTERNAL_APPLICATION_ID, productCode) );
+                () -> productService.selectProductOffer(EXTERNAL_APPLICATION_ID, PRODUCT_CODE) );
 
         //Then
         assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(HttpStatus.FORBIDDEN.getReasonPhrase());
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(0)).selectProduct(appId, productCode);
+        verify(middlewareRepository, times(0)).selectProduct(APPLICATION_ID, PRODUCT_CODE);
     }
 }

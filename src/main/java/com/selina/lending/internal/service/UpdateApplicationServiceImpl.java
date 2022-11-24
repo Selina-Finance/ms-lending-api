@@ -25,9 +25,6 @@ import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class UpdateApplicationServiceImpl implements UpdateApplicationService {
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
