@@ -152,14 +152,15 @@ class MiddlewareRepositoryTest {
         // Given
         var id = UUID.randomUUID().toString();
         var productCode = "PR01";
-        var apiResponse = SelectProductResponse.builder().build();
+        var apiResponse = SelectProductResponse.builder().id("appId").message("success").build();
         when(middlewareApi.selectProduct(id, productCode)).thenReturn(apiResponse);
 
         // When
         var result = middlewareRepository.selectProduct(id, productCode);
 
         // Then
-        assertThat(result).isEqualTo(apiResponse);
+        assertThat(result.getId()). isEqualTo("appId");
+        assertThat(result.getMessage()). isEqualTo("success");
         verify(middlewareApi, times(1)).selectProduct(id, productCode);
     }
 
