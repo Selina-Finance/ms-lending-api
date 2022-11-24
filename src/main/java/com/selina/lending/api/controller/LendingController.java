@@ -25,9 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.SelectProductResponse;
 import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
+import com.selina.lending.internal.mapper.SelectProductResponseMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.RetrieveApplicationService;
 import com.selina.lending.internal.service.UpdateApplicationService;
@@ -71,8 +73,15 @@ public class LendingController implements LendingOperations {
     }
 
     @Override
-    public ResponseEntity<Void> selectProductOffer(String externalApplicationId, String productCode) {
-        updateApplicationService.selectProductOffer(externalApplicationId, productCode);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SelectProductResponse> selectProductOffer(String externalApplicationId, String productCode) {
+        var selectProductResponse = updateApplicationService.selectProductOffer(externalApplicationId, productCode);
+        var response = SelectProductResponseMapper.INSTANCE.mapToSelectProductResponseDto(selectProductResponse);
+        enrichResponse(response, externalApplicationId, productCode);
+        return ResponseEntity.ok(response);
+    }
+
+    private void enrichResponse(SelectProductResponse response, String externalApplicationId, String productCode) {
+        response.setExternalApplicationId(externalApplicationId);
+        response.setProductCode(productCode);
     }
 }

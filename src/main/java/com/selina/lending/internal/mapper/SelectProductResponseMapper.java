@@ -15,15 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.mapper;
 
-import lombok.Builder;
-import lombok.Data;
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
-@Builder
-@Data
-public class SelectProductResponse {
-    private String message;
-    private String externalApplicationId;
-    private String productCode;
+import com.selina.lending.internal.dto.SelectProductResponse;
+
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface SelectProductResponseMapper {
+    SelectProductResponseMapper INSTANCE = Mappers.getMapper(SelectProductResponseMapper.class);
+
+    SelectProductResponse mapToSelectProductResponseDto(
+            com.selina.lending.internal.service.application.domain.SelectProductResponse selectProductResponse);
 }

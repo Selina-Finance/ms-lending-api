@@ -21,15 +21,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
@@ -37,6 +41,7 @@ import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateApplicationServiceImplTest {
@@ -127,5 +132,51 @@ class UpdateApplicationServiceImplTest {
         verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
         verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
                 SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+    }
+
+    @Test
+    void shouldSuccessfullySelectProduct() {
+        //Given
+        var productCode = "PR01";
+        var appId = UUID.randomUUID().toString();
+        var selectProductResponse = SelectProductResponse.builder().id("appId").message("success").build();
+        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(applicationIdentifier.getId()).thenReturn(appId);
+        when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
+                EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
+        when(middlewareRepository.selectProduct(appId, productCode)).thenReturn(selectProductResponse);
+
+        //When
+        var response = updateApplicationService.selectProductOffer(EXTERNAL_APPLICATION_ID, productCode);
+
+        //Then
+        assertThat(response).isEqualTo(selectProductResponse);
+        verify(middlewareApplicationServiceRepository, times(1)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        verify(middlewareRepository, times(1)).selectProduct(appId, productCode);
+    }
+
+    @Test
+    void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToSelectProduct() {
+        //Given
+        var productCode = "PR01";
+        var appId = UUID.randomUUID().toString();
+        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
+                EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(applicationIdentifier.getSourceAccount()).thenReturn("not permitted");
+        doThrow(new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE)).when(accessManagementService).checkSourceAccountAccessPermitted("not permitted");
+
+        //When
+        var exception = assertThrows(AccessDeniedException.class,
+                () -> updateApplicationService.selectProductOffer(EXTERNAL_APPLICATION_ID, productCode) );
+
+        //Then
+        assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(HttpStatus.FORBIDDEN.getReasonPhrase());
+        verify(middlewareApplicationServiceRepository, times(1)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        verify(middlewareRepository, times(0)).selectProduct(appId, productCode);
     }
 }

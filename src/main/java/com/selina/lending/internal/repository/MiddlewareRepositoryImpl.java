@@ -66,6 +66,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return appResponse;
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiSelectProductFallback")
     @Override
     public SelectProductResponse selectProduct(String id, String productCode) {
         log.info("Request to select product for [applicationId={}] [productCode={}]", id, productCode);
@@ -78,6 +79,15 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
     }
 
+    private SelectProductResponse middlewareApiSelectProductFallback(FeignException.FeignServerException e) { //NOSONAR
+        defaultMiddlewareFallback(e);
+        return SelectProductResponse.builder().build();
+    }
+
+    private SelectProductResponse middlewareApiSelectProductFallback(feign.RetryableException e) { //NOSONAR
+        defaultMiddlewareFallback(e);
+        return SelectProductResponse.builder().build();
+    }
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) { //NOSONAR
         defaultMiddlewareFallback(e);
         return Optional.empty();

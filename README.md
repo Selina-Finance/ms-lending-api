@@ -133,9 +133,6 @@ Project is: _in progress_
 
   - DIP with Credit Commitment applications
 
-  - Quick Quote applications
-
-
 ## License
 
 This project is open-source and available under the [Apache 2.0 License](https://choosealicense.com/licenses/apache-2.0/).

@@ -43,6 +43,7 @@ import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
 import feign.FeignException;
 import feign.Request;
@@ -143,6 +144,64 @@ class MiddlewareRepositoryTest {
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
+    }
+
+
+    @Test
+    void shouldCallHttpClientWhenSelectProductInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+        var productCode = "PR01";
+        var apiResponse = SelectProductResponse.builder().build();
+        when(middlewareApi.selectProduct(id, productCode)).thenReturn(apiResponse);
+
+        // When
+        var result = middlewareRepository.selectProduct(id, productCode);
+
+        // Then
+        assertThat(result).isEqualTo(apiResponse);
+        verify(middlewareApi, times(1)).selectProduct(id, productCode);
+    }
+
+
+    @Test
+    void shouldThrowFeignClientExceptionWhenSelectProductThrowsNotFoundException() {
+        //Given
+        String notFoundMsg = "not found";
+        var id = UUID.randomUUID().toString();
+        var productCode = "PR01";
+
+        //When
+        when(middlewareApi.selectProduct(id, productCode)).thenThrow(
+                new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
+                        notFoundMsg.getBytes(), null));
+
+        var exception = assertThrows(FeignException.FeignClientException.class,
+                () -> middlewareRepository.selectProduct(id, productCode));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
+        verify(middlewareApi, times(1)).selectProduct(id, productCode);
+    }
+
+    @Test
+    void shouldThrowFeignServerExceptionWhenSelectProductThrowsInternalServerException() {
+        //Given
+        String errorMsg = "error";
+        var id = UUID.randomUUID().toString();
+        var productCode = "PR01";
+
+        //When
+        when(middlewareApi.selectProduct(id, productCode)).thenThrow(
+                new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
+                        errorMsg.getBytes(), null));
+
+        var exception = assertThrows(FeignException.FeignServerException.class,
+                () -> middlewareRepository.selectProduct(id, productCode));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(errorMsg);
+        verify(middlewareApi, times(1)).selectProduct(id, productCode);
     }
 
     @Test

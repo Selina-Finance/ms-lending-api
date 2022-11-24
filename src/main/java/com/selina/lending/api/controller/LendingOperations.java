@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.SelectProductResponse;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -105,13 +106,17 @@ public interface LendingOperations {
             @ApiResponse(
                     responseCode = "200",
                     description = "Product offer selected",
-                    content = @Content),
-           @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
+                    content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = SelectProductResponse.class))
+                    }),
+           @ApiResponse(responseCode = "400", description = "externalApplicationId or productCode invalid", content = @Content),
            @ApiResponse(responseCode = "401", content = @Content),
            @ApiResponse(responseCode = "403", content = @Content),
            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content)
     })
     @PutMapping(value = "/{externalApplicationId}/product/{productCode}")
-    ResponseEntity selectProductOffer(@Parameter(description = "externalApplicationId of application", required = true) @PathVariable String externalApplicationId,
-    @Parameter (description = "productCode of the product offer to select", required = true) @PathVariable String productCode);
+    ResponseEntity <SelectProductResponse> selectProductOffer(@Parameter(description = "externalApplicationId of application", required = true) @PathVariable String externalApplicationId,
+    @Parameter(description = "productCode of the product offer to select", required = true) @PathVariable String productCode);
 }
