@@ -24,7 +24,6 @@ import com.selina.lending.internal.repository.MiddlewareApplicationServiceReposi
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,16 +53,6 @@ public class UpdateApplicationServiceImpl implements UpdateApplicationService {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
         }
         return applicationResponse;
-    }
-
-    @Override
-    public SelectProductResponse selectProductOffer(String externalApplicationId, String productCode) {
-        var applicationIdentifier = middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
-        var sourceAccount = middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
-        accessManagementService.checkSourceAccountAccessPermitted(sourceAccount.getSourceAccount());
-
-        log.info("Select product for [externalApplicationId={}] [applicationId={}] [productCode={}] [sourceAccount={}]", externalApplicationId, applicationIdentifier.getId(), productCode, sourceAccount.getSourceAccount());
-        return middlewareRepository.selectProduct(applicationIdentifier.getId(), productCode);
     }
 
     private boolean isAuthorisedToUpdateApplication(String sourceAccount, String externalApplicationId, ApplicationRequest applicationRequest) {

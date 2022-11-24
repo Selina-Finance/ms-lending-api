@@ -17,9 +17,9 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
-public interface UpdateApplicationService {
-    ApplicationResponse updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest);
+public interface ProductService {
+
+    SelectProductResponse selectProductOffer (String externalApplicationId, String productCode);
 }

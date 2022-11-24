@@ -18,12 +18,9 @@
 package com.selina.lending.api.controller;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,7 +41,6 @@ import com.selina.lending.internal.service.RetrieveApplicationService;
 import com.selina.lending.internal.service.UpdateApplicationService;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
 @ExtendWith(MockitoExtension.class)
 class LendingControllerUnitTest {
@@ -111,24 +107,5 @@ class LendingControllerUnitTest {
         assertThat(Objects.requireNonNull(appResponse.getBody()).getRequestType(), equalTo(applicationType));
         assertThat(appResponse.getBody().getApplicationId(), equalTo(id));
         verify(updateApplicationService, times(1)).updateDipApplication(eq(APPLICATION_ID), any());
-    }
-
-    @Test
-    void selectProduct() {
-        //Given
-        var id = UUID.randomUUID().toString();
-        var productCode = "PR01";
-        var message = "Offer selected with success";
-        var selectProductResponse = SelectProductResponse.builder().message(message).id(APPLICATION_ID).build();
-        when(updateApplicationService.selectProductOffer(id, productCode)).thenReturn(selectProductResponse);
-
-        //When
-        var appResponse = lendingController.selectProductOffer(id, productCode);
-
-        //Then
-        assertThat(Objects.requireNonNull(appResponse.getBody()).getExternalApplicationId(), equalTo(id));
-        assertThat(appResponse.getBody().getProductCode(), equalTo(productCode));
-        assertThat(appResponse.getBody().getMessage(), equalTo(message));
-        verify(updateApplicationService, times(1)).selectProductOffer(id, productCode);
     }
 }
