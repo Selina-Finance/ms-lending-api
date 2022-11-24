@@ -33,6 +33,7 @@ import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.SelectProductResponse;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -100,7 +101,8 @@ public interface LendingOperations {
     ResponseEntity<ApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 
 
-//    @Hidden
+
+    @Hidden
     @Operation(description = "Select a product offer for the Decision In Principle (DIP) application")
     @ApiResponses(value = {
             @ApiResponse(
