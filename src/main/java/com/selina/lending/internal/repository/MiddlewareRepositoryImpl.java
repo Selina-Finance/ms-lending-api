@@ -60,6 +60,18 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         log.debug("Create DIP with Credit Commitments application [applicationRequest={}]", applicationRequest);
         enrichApplicationRequest(applicationRequest);
 
+        var appResponse =  middlewareApi.createDipCCApplication(applicationRequest);
+
+        log.info("Finished calling mw to create dipcc application [externalApplicationId={}]", appResponse.getApplication().getExternalApplicationId());
+        return appResponse;
+    }
+
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
+    @Override
+    public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
+        log.debug("Create DIP application [applicationRequest={}]", applicationRequest);
+        enrichApplicationRequest(applicationRequest);
+
         var appResponse =  middlewareApi.createDipApplication(applicationRequest);
 
         log.info("Finished calling mw to create dip application [externalApplicationId={}]", appResponse.getApplication().getExternalApplicationId());

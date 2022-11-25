@@ -98,7 +98,7 @@ class MiddlewareRepositoryTest {
     @Test
     void shouldCallHttpClientWhenCreateApplicationInvoked() {
         // Given
-        when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
+        when(middlewareApi.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
         when(applicationResponse.getApplication()).thenReturn(application);
         when(application.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
 
@@ -108,7 +108,7 @@ class MiddlewareRepositoryTest {
         // Then
         assertThat(result).isEqualTo(applicationResponse);
         verify(applicationRequest, times(1)).setSource(Source.BROKER.toString());
-        verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
+        verify(middlewareApi, times(1)).createDipCCApplication(applicationRequest);
     }
 
 
@@ -136,7 +136,7 @@ class MiddlewareRepositoryTest {
         String notFoundMsg = "not found";
 
         //When
-        when(middlewareApi.createDipApplication(applicationRequest)).thenThrow(
+        when(middlewareApi.createDipCCApplication(applicationRequest)).thenThrow(
                 new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
                         notFoundMsg.getBytes(), null));
 
@@ -240,7 +240,7 @@ class MiddlewareRepositoryTest {
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareApi.createDipApplication(applicationRequest)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
+        when(middlewareApi.createDipCCApplication(applicationRequest)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
 
         var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.createDipCCApplication(applicationRequest));
 
@@ -256,7 +256,7 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
         assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
 
-        verify(middlewareApi, times(5)).createDipApplication(applicationRequest);
+        verify(middlewareApi, times(5)).createDipCCApplication(applicationRequest);
     }
 
     @Test

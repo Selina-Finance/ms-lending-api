@@ -22,4 +22,5 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 
 public interface CreateApplicationService {
     ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest);
+    ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 }

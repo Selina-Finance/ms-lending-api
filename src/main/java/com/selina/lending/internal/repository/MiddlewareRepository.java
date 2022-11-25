@@ -30,6 +30,8 @@ public interface MiddlewareRepository {
 
     ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest);
 
+    ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
+
     SelectProductResponse selectProduct(String id, String productCode);
 }
 

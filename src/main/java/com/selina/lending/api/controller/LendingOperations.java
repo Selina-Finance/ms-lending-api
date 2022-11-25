@@ -96,4 +96,41 @@ public interface LendingOperations {
     })
     @PostMapping(value = "/dipcc")
     ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
+
+    @Operation(description = "Update the Decision In Principle (DIP) application for the given external application id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Application updated",
+                    content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ApplicationResponse.class))
+                    }),
+            @ApiResponse(
+                    responseCode = "400", description = "Application details invalid", content = @Content),
+            @ApiResponse(responseCode = "401", content = @Content),
+            @ApiResponse(responseCode = "403", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content),
+    })
+    @PutMapping(value = "/{externalApplicationId}/dip")
+    ResponseEntity<ApplicationResponse> updateDipApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
+            @Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
+
+    @Operation(description = "Create a new Decision In Principle (DIP) application")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Application created",
+                    content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ApplicationResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
+            @ApiResponse(responseCode = "401", content = @Content),
+            @ApiResponse(responseCode = "403", content = @Content)
+    })
+    @PostMapping(value = "/dip")
+    ResponseEntity<ApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 }

@@ -45,6 +45,12 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
         return middlewareRepository.createDipCCApplication(applicationRequest);
     }
 
+    @Override
+    public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
+        checkApplicationExists(applicationRequest);
+        return middlewareRepository.createDipApplication(applicationRequest);
+    }
+
     private void checkApplicationExists(ApplicationRequest applicationRequest) {
         try {
             var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(applicationRequest.getExternalApplicationId());
