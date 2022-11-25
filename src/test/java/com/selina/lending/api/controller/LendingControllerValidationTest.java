@@ -65,24 +65,24 @@ class LendingControllerValidationTest extends MapperBase {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void createDipApplicationSuccess() throws Exception {
+    void createDipCCApplicationSuccess() throws Exception {
         //Given
         var dipApplicationRequest = getDIPApplicationRequestDto();
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
     }
 
     @Test
-    void createDipApplicationWithEmptyDIPApplicationRequest() throws Exception {
+    void createDipCCApplicationWithEmptyDIPApplicationRequest() throws Exception {
         //Given
         var dipApplicationRequest = DIPApplicationRequest.builder().build();
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -100,7 +100,7 @@ class LendingControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void createDipApplicationWithMissingApplicantsRequest() throws Exception {
+    void createDipCCApplicationWithMissingApplicantsRequest() throws Exception {
         //Given
         var dipApplicationRequest = DIPApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
@@ -110,7 +110,7 @@ class LendingControllerValidationTest extends MapperBase {
                 .build();
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -122,7 +122,7 @@ class LendingControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void updateDipApplicationWithMissingMandatoryLoanInformation() throws Exception {
+    void updateDipCCApplicationWithMissingMandatoryLoanInformation() throws Exception {
         //Given
         var dipApplicationRequest = DIPApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
@@ -133,7 +133,7 @@ class LendingControllerValidationTest extends MapperBase {
                 .build();
 
         //When
-        mockMvc.perform(put("/application/123/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(put("/application/123/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -151,19 +151,19 @@ class LendingControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void updateDipApplicationSuccess() throws Exception {
+    void updateDipCCApplicationSuccess() throws Exception {
         //Given
         var dipApplicationRequest = getDIPApplicationRequestDto();
 
         //When
-        mockMvc.perform(put("/application/123/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(put("/application/123/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
     }
 
     @Test
-    void createDipApplicationWithInvalidDateFormat() throws Exception {
+    void createDipCCApplicationWithInvalidDateFormat() throws Exception {
         //Given
         var employment = EmploymentDto.builder()
                 .employmentStatus(EMPLOYED_STATUS)
@@ -187,7 +187,7 @@ class LendingControllerValidationTest extends MapperBase {
                 .build();
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())

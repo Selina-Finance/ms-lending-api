@@ -28,7 +28,7 @@ public interface MiddlewareRepository {
 
     Optional<ApplicationDecisionResponse> getApplicationById(String id);
 
-    ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
+    ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest);
 
     SelectProductResponse selectProduct(String id, String productCode);
 }

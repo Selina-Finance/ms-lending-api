@@ -56,17 +56,17 @@ public class LendingController implements LendingOperations {
     }
 
     @Override
-    public ResponseEntity<ApplicationResponse> updateDipApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest) {
-        log.info("Update DIP application [externalApplicationId={}]", externalApplicationId);
-        var applicationResponse = updateApplicationService.updateDipApplication(externalApplicationId,
+    public ResponseEntity<ApplicationResponse> updateDipCCApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest) {
+        log.info("Update DIPCC application [externalApplicationId={}]", externalApplicationId);
+        var applicationResponse = updateApplicationService.updateDipCCApplication(externalApplicationId,
                 DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 
     @Override
-    public ResponseEntity<ApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
-        log.info("Create DIP application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
-        var applicationResponse = createApplicationService.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
+    public ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
+        log.info("Create DIPCC application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
+        var applicationResponse = createApplicationService.createDipCCApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 }

@@ -56,8 +56,8 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
     @Override
-    public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
-        log.debug("Create dip application applicationRequest {}", applicationRequest);
+    public ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest) {
+        log.debug("Create DIP with Credit Commitments application [applicationRequest={}]", applicationRequest);
         enrichApplicationRequest(applicationRequest);
 
         var appResponse =  middlewareApi.createDipApplication(applicationRequest);

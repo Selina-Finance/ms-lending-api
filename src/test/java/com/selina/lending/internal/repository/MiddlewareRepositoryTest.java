@@ -103,7 +103,7 @@ class MiddlewareRepositoryTest {
         when(application.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
 
         // When
-        var result = middlewareRepository.createDipApplication(applicationRequest);
+        var result = middlewareRepository.createDipCCApplication(applicationRequest);
 
         // Then
         assertThat(result).isEqualTo(applicationResponse);
@@ -141,7 +141,7 @@ class MiddlewareRepositoryTest {
                         notFoundMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignClientException.class,
-                () -> middlewareRepository.createDipApplication(applicationRequest));
+                () -> middlewareRepository.createDipCCApplication(applicationRequest));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
@@ -242,7 +242,7 @@ class MiddlewareRepositoryTest {
         //When
         when(middlewareApi.createDipApplication(applicationRequest)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
 
-        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.createDipApplication(applicationRequest));
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.createDipCCApplication(applicationRequest));
 
         IntStream.range(0, 10).forEach(x -> {
             try {

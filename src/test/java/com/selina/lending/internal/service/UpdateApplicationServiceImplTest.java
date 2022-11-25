@@ -67,29 +67,29 @@ class UpdateApplicationServiceImplTest {
     private UpdateApplicationServiceImpl updateApplicationService;
 
     @Test
-    void shouldUpdateDipApplication() {
+    void shouldUpdateDipCCApplication() {
         //Given
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
         when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
-        when(middlewareRepository.createDipApplication(any())).thenReturn(applicationResponse);
+        when(middlewareRepository.createDipCCApplication(any())).thenReturn(applicationResponse);
         doNothing().when(middlewareApplicationServiceRepository).deleteApplicationByExternalApplicationId(
                 SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
 
         //When
-        updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
+        updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
 
         //Then
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(1)).createDipApplication(any());
+        verify(middlewareRepository, times(1)).createDipCCApplication(any());
         verify(middlewareApplicationServiceRepository, times(1)).deleteApplicationByExternalApplicationId(
                 SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
     }
 
     @Test
-    void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateApplication() {
+    void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateDipCCApplication() {
         // Given
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
@@ -98,12 +98,12 @@ class UpdateApplicationServiceImplTest {
 
         // When
         var exception = assertThrows(AccessDeniedException.class,
-                () -> updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
+                () -> updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
 
         // Then
         assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
+        verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
         verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
                 SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
     }
@@ -119,12 +119,12 @@ class UpdateApplicationServiceImplTest {
 
         // When
         var exception = assertThrows(AccessDeniedException.class,
-                () -> updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
+                () -> updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
 
         // Then
         assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
+        verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
         verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
                 SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
     }

@@ -32,7 +32,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
@@ -72,14 +71,14 @@ class CreateApplicationServiceImplTest {
         when(applicationRequest.getExternalApplicationId()).thenReturn(id);
         when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(new FeignException.NotFound(notFoundMsg,
                 request(), notFoundMsg.getBytes(), null));
-        when(middlewareRepository.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
+        when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
 
         //When
-        var result = createApplicationService.createDipApplication(applicationRequest);
+        var result = createApplicationService.createDipCCApplication(applicationRequest);
 
         //Then
         assertThat(result).isEqualTo(applicationResponse);
-        verify(middlewareRepository, times(1)).createDipApplication(applicationRequest);
+        verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
     }
 
     @Test
@@ -92,11 +91,11 @@ class CreateApplicationServiceImplTest {
 
         //When
         var exception = assertThrows(BadRequestException.class,
-                () ->  createApplicationService.createDipApplication(applicationRequest));
+                () ->  createApplicationService.createDipCCApplication(applicationRequest));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists "+id);
-        verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
+        verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
 
     }
 
