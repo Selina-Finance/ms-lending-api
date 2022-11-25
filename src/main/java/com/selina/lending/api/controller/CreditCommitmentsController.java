@@ -18,7 +18,7 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.сreditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,11 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 public class CreditCommitmentsController implements CreditCommitmentsOperations {
+
     @Override
     public ResponseEntity<ApplicationResponse> updateCreditCommitments(
             String externalApplicationId,
             UpdateCreditCommitmentsRequest request)
     {
+        log.info("Patch CreditCommitments with [externalApplicationId={}]", externalApplicationId);
         return null;
     }
 }

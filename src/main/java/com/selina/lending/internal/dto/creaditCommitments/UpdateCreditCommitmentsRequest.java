@@ -15,11 +15,13 @@
  *
  */
 
-package com.selina.lending.internal.dto.сreditCommitments;
+package com.selina.lending.internal.dto.creaditCommitments;
 
 import com.selina.lending.internal.dto.CreditPolicyDto;
 import com.selina.lending.internal.dto.DetailDto;
 import com.selina.lending.internal.dto.PublicInformationDto;
+import com.selina.lending.internal.dto.SystemDto;
+import com.selina.lending.internal.dto.UserDto;
 import com.selina.lending.internal.dto.VotersRollDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,22 +33,10 @@ import java.util.List;
 @SuperBuilder
 @Getter
 public class UpdateCreditCommitmentsRequest {
-
-    private CCSystemDto system;
-    private CCUserDto user;
+    private SystemDto system;
+    private UserDto user;
     private PublicInformationDto publicInformation;
     private VotersRollDto votersRoll;
     private CreditPolicyDto creditPolicy;
 }
 
-class CCSystemDto {
-    List<DetailDto> detail;
-    List<DetailDto> summary;
-    List<DetailDto> underwriterNotes;
-}
-
-class CCUserDto {
-    List<DetailDto> detail;
-    List<DetailDto> summary;
-    List<DetailDto> underwriterNotes;
-}

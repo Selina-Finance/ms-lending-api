@@ -18,8 +18,8 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
-import com.selina.lending.internal.dto.сreditCommitments.UpdateCreditCommitmentsRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -56,12 +56,7 @@ public interface CreditCommitmentsOperations {
     })
     @PatchMapping(value = "/{externalApplicationId}/creditcommitments")
     ResponseEntity<ApplicationResponse> updateCreditCommitments(
-            @Parameter(description = "externalApplicationId of application to be updated", required = true)
-            @PathVariable
-            String externalApplicationId,
-
-            @Valid
-            @RequestBody
-            UpdateCreditCommitmentsRequest request
+            @Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
+            @Valid @RequestBody UpdateCreditCommitmentsRequest request
     );
 }
