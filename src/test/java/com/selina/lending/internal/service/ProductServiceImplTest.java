@@ -88,7 +88,6 @@ class ProductServiceImplTest {
     @Test
     void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToSelectProduct() {
         //Given
-        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn("not permitted");
@@ -100,7 +99,6 @@ class ProductServiceImplTest {
 
         //Then
         assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(HttpStatus.FORBIDDEN.getReasonPhrase());
-        verify(middlewareApplicationServiceRepository, times(1)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
         verify(middlewareRepository, times(0)).selectProduct(APPLICATION_ID, PRODUCT_CODE);
     }

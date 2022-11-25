@@ -17,16 +17,14 @@
 
 package com.selina.lending.internal.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
-
 import com.selina.lending.internal.dto.SelectProductResponse;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface SelectProductResponseMapper {
-    SelectProductResponseMapper INSTANCE = Mappers.getMapper(SelectProductResponseMapper.class);
+public class SelectProductResponseMapper {
+    private SelectProductResponseMapper() {}
 
-    SelectProductResponse mapToSelectProductResponseDto(
-            com.selina.lending.internal.service.application.domain.SelectProductResponse selectProductResponse);
+    public static SelectProductResponse mapToSelectProductResponseDto(com.selina.lending.internal.service.application.domain.SelectProductResponse selectProductResponse,
+            String externalApplicationId, String productCode){
+        return SelectProductResponse.builder().externalApplicationId(externalApplicationId).productCode(productCode).message(
+                selectProductResponse.getMessage()).build();
+    }
 }

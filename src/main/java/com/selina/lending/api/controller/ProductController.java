@@ -39,13 +39,8 @@ public class ProductController implements ProductOperations{
     @Override
     public ResponseEntity<SelectProductResponse> selectProductOffer(String externalApplicationId, String productCode) {
         log.info("Select product for [externalApplicationId={}] [productCode={}]", externalApplicationId, productCode);
-        var response = SelectProductResponseMapper.INSTANCE.mapToSelectProductResponseDto(productService.selectProductOffer(externalApplicationId, productCode));
-        enrichResponse(response, externalApplicationId, productCode);
+        var response = SelectProductResponseMapper.mapToSelectProductResponseDto(productService.selectProductOffer(externalApplicationId, productCode),
+                externalApplicationId, productCode);
         return ResponseEntity.ok(response);
-    }
-
-    private void enrichResponse(SelectProductResponse response, String externalApplicationId, String productCode) {
-        response.setExternalApplicationId(externalApplicationId);
-        response.setProductCode(productCode);
     }
 }
