@@ -17,16 +17,13 @@
 
 package com.selina.lending.internal.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
-@Builder(toBuilder = true)
-@Value
-public class ApplicationResponse {
-    String requestType;
-    String applicationId;
-    @Schema (oneOf = DIPApplicationDto.class)
-    ApplicationDto application;
-    SalesforceDto salesforce;
+@Builder
+@Data
+public class SelectProductResponse {
+    private String message;
+    private String externalApplicationId;
+    private String productCode;
 }

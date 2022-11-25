@@ -28,6 +28,7 @@ import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -65,33 +66,43 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return appResponse;
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiSelectProductFallback")
+    @Override
+    public SelectProductResponse selectProduct(String id, String productCode) {
+        log.info("Request to select product for [applicationId={}] [productCode={}]", id, productCode);
+        return middlewareApi.selectProduct(id, productCode);
+    }
+
     private void enrichApplicationRequest(ApplicationRequest applicationRequest) {
         applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
         applicationRequest.setSource(LendingConstants.REQUEST_SOURCE);
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
     }
 
+    private SelectProductResponse middlewareApiSelectProductFallback(FeignException.FeignServerException e) { //NOSONAR
+        throw remoteResourceProblemException(e);
+    }
+
+    private SelectProductResponse middlewareApiSelectProductFallback(feign.RetryableException e) { //NOSONAR
+        throw remoteResourceProblemException(e);
+    }
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return Optional.empty();
+        throw remoteResourceProblemException(e);
     }
 
     private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(feign.RetryableException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return Optional.empty();
+        throw remoteResourceProblemException(e);
     }
 
     private ApplicationResponse middlewareApiFallback(FeignException.FeignServerException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return ApplicationResponse.builder().build();
+        throw remoteResourceProblemException(e);
     }
 
     private ApplicationResponse middlewareApiFallback(feign.RetryableException e) { //NOSONAR
-        defaultMiddlewareFallback(e);
-        return ApplicationResponse.builder().build();
+        throw remoteResourceProblemException(e);
     }
 
-    private void defaultMiddlewareFallback(Exception e) {
+    private RemoteResourceProblemException remoteResourceProblemException(Exception e) {
         log.error("Middleware is unavailable. {} {}", e.getCause(), e.getMessage());
         throw new RemoteResourceProblemException();
     }

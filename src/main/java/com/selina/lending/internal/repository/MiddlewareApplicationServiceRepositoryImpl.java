@@ -80,16 +80,14 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
     }
 
     private ApplicationIdentifier middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) { //NOSONAR
-        defaultFallback(e);
-        return ApplicationIdentifier.builder().build();
+       throw remoteResourceProblemException(e);
     }
 
     private ApplicationIdentifier middlewareGetByExternalIdApiFallback(feign.RetryableException e) { //NOSONAR
-        defaultFallback(e);
-        return ApplicationIdentifier.builder().build();
+        throw remoteResourceProblemException(e);
     }
 
-    private void defaultFallback(Exception e) {
+    private RemoteResourceProblemException remoteResourceProblemException(Exception e) {
         log.error("Middleware application service is unavailable. {} {}", e.getCause(), e.getMessage());
         throw new RemoteResourceProblemException();
     }

@@ -15,18 +15,11 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.service;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
+import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
-@Builder(toBuilder = true)
-@Value
-public class ApplicationResponse {
-    String requestType;
-    String applicationId;
-    @Schema (oneOf = DIPApplicationDto.class)
-    ApplicationDto application;
-    SalesforceDto salesforce;
+public interface ProductService {
+
+    SelectProductResponse selectProductOffer (String externalApplicationId, String productCode);
 }
