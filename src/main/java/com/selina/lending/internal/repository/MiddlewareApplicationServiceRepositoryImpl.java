@@ -56,7 +56,7 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
-    public ApplicationIdentifier getApplicationIdByExternalApplicationId(String externalApplicationId) {
+    public ApplicationIdentifier getAppIdByExternalId(String externalApplicationId) {
         log.info("Request to get application Id by [externalApplicationId={}]", externalApplicationId);
         return middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalApplicationId);
     }

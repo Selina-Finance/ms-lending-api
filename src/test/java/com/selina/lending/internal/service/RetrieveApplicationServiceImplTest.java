@@ -63,7 +63,7 @@ class RetrieveApplicationServiceImplTest {
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
-        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getId()).thenReturn(EXTERNAL_APPLICATION_ID);
 
         //When

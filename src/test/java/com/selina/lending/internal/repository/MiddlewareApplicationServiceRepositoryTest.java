@@ -104,7 +104,7 @@ class MiddlewareApplicationServiceRepositoryTest {
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
 
         //When
-        middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        middlewareRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
 
         //Then
         verify(middlewareApplicationServiceApi, times(1)).getApplicationIdByExternalApplicationId(
@@ -137,7 +137,7 @@ class MiddlewareApplicationServiceRepositoryTest {
                         createRequest(), errorMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignServerException.class,
-                () -> middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID));
+                () -> middlewareRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
@@ -202,7 +202,7 @@ class MiddlewareApplicationServiceRepositoryTest {
                 new FeignException.NotFound("Not found", createRequest(), "not found".getBytes(), null));
 
         var supplier = circuitBreaker.decorateSupplier(
-                () -> middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID));
+                () -> middlewareRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
