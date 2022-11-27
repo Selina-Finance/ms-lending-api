@@ -21,16 +21,17 @@ import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitment
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.creditCommitments.PatchCCResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -54,13 +55,20 @@ class UpdateCreditCommitmentsServiceImplTest {
 
         var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
         when(applicationRepository.getAppIdByExternalId(any())).thenReturn(identifier);
-        when(commitmentsRepository.patchCreditCommitments(any(),any())).thenReturn(new PatchCCResponse());
+
+        when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new PatchCCResponse());
+
+        var newDecisionResponse = ApplicationResponse.builder().build();
+        when(applicationRepository.runDecisioningByAppId(any())).thenReturn(newDecisionResponse);
 
         // When
-        service.patchCreditCommitments(externalId, request);
+        var result = service.patchCreditCommitments(externalId, request);
 
         // Then
+        assertEquals(result, newDecisionResponse);
+
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
         verify(commitmentsRepository, times(1)).patchCreditCommitments(identifier.getId(), request);
+        verify(applicationRepository, times(1)).runDecisioningByAppId(identifier.getId());
     }
 }
