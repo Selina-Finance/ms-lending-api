@@ -18,8 +18,10 @@
 package com.selina.lending.internal.service.creaditCommitments;
 
 import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.application.domain.creditCommitments.PatchCCResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,6 +40,8 @@ import static org.mockito.Mockito.when;
 class UpdateCreditCommitmentsServiceImplTest {
     @Mock
     private MiddlewareApplicationServiceRepository applicationRepository;
+    @Mock
+    private CreditCommitmentsRepository commitmentsRepository;
 
     @InjectMocks
     private UpdateCreditCommitmentsServiceImpl service;
@@ -48,12 +52,15 @@ class UpdateCreditCommitmentsServiceImplTest {
         var externalId = UUID.randomUUID().toString();
         var request = new UpdateCreditCommitmentsRequest();
 
-        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(new ApplicationIdentifier("abc","123"));
+        var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
+        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(identifier);
+        when(commitmentsRepository.patchCreditCommitments(any(),any())).thenReturn(new PatchCCResponse());
 
         // When
         service.patchCreditCommitments(externalId, request);
 
         // Then
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
+        verify(commitmentsRepository, times(1)).patchCreditCommitments(identifier.getId(), request);
     }
 }
