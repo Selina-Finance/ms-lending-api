@@ -17,19 +17,18 @@
 
 package com.selina.lending.internal.repository;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.monitoring.MetricService;
-
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -42,9 +41,15 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
     private final MetricService metricService;
 
     public MiddlewareApplicationServiceRepositoryImpl(MiddlewareApplicationServiceApi middlewareApplicationServiceApi,
-            MetricService metricService) {
+                                                      MetricService metricService) {
         this.middlewareApplicationServiceApi = middlewareApplicationServiceApi;
         this.metricService = metricService;
+    }
+
+    @Override
+    public ApplicationResponse runDecisioningByAppId(String applicationId) {
+        log.info("Request to run decisioning by [applicationId={}]", applicationId);
+        return middlewareApplicationServiceApi.runDecisioningByAppId(applicationId);
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
