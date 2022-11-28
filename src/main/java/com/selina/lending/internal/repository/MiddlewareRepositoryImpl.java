@@ -30,7 +30,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationRequest
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
-import feign.FeignException;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,26 +79,15 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
     }
 
-    private SelectProductResponse middlewareApiSelectProductFallback(FeignException.FeignServerException e) { //NOSONAR
+    private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 
-    private SelectProductResponse middlewareApiSelectProductFallback(feign.RetryableException e) { //NOSONAR
-        throw remoteResourceProblemException(e);
-    }
-    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(FeignException.FeignServerException e) { //NOSONAR
+    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 
-    private Optional<ApplicationDecisionResponse> middlewareGetApiFallback(feign.RetryableException e) { //NOSONAR
-        throw remoteResourceProblemException(e);
-    }
-
-    private ApplicationResponse middlewareApiFallback(FeignException.FeignServerException e) { //NOSONAR
-        throw remoteResourceProblemException(e);
-    }
-
-    private ApplicationResponse middlewareApiFallback(feign.RetryableException e) { //NOSONAR
+    private ApplicationResponse middlewareApiFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 

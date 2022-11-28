@@ -42,11 +42,7 @@ resilience4j:
         slow-call-duration-threshold: 50s
         slow-call-rate-threshold: 60
         failure-rate-threshold: 60
-        ignoreExceptions:
-          - feign.FeignException.FeignClientException
-        recordExceptions:
-          - feign.FeignException.FeignServerException
-          - feign.RetryableException
+        record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
       middleware-application-service-cb:
         wait-duration-in-open-state: 1m
         permitted-number-of-calls-in-half-open-state: 5
@@ -56,11 +52,7 @@ resilience4j:
         slow-call-duration-threshold: 30s
         slow-call-rate-threshold: 60
         failure-rate-threshold: 60
-        ignoreExceptions:
-          - feign.FeignException.FeignClientException
-        recordExceptions:
-          - feign.FeignException.FeignServerException
-          - feign.RetryableException
+        record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
 
 kafka:
   enable: true
