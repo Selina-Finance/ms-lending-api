@@ -17,6 +17,31 @@ spring.security:
         middleware-auth:
           token-uri: https://MW-AUTH_SERVER/oauth2/token
 
+resilience4j:
+  circuitbreaker:
+    circuit-breaker-aspect-order: 1
+    instances:
+      middleware-api-cb:
+        wait-duration-in-open-state: 1m
+        permitted-number-of-calls-in-half-open-state: 5
+        sliding-window-type: count-based
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        slow-call-duration-threshold: 50s
+        slow-call-rate-threshold: 60
+        failure-rate-threshold: 60
+        record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
+      middleware-application-service-cb:
+        wait-duration-in-open-state: 1m
+        permitted-number-of-calls-in-half-open-state: 5
+        sliding-window-type: count-based
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        slow-call-duration-threshold: 30s
+        slow-call-rate-threshold: 60
+        failure-rate-threshold: 60
+        record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
+
 kafka:
   enable: false
   bootstrapAddress: localhost:9092

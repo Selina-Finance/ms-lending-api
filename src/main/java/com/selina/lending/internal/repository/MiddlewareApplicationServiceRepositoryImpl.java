@@ -26,6 +26,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationIdentif
 import com.selina.lending.internal.service.monitoring.MetricService;
 
 import feign.FeignException;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
@@ -79,12 +80,8 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
         metricService.incrementApplicationDeleteFailed();
     }
 
-    private ApplicationIdentifier middlewareGetByExternalIdApiFallback(FeignException.FeignServerException e) { //NOSONAR
+    private ApplicationIdentifier middlewareGetByExternalIdApiFallback(CallNotPermittedException e) { //NOSONAR
        throw remoteResourceProblemException(e);
-    }
-
-    private ApplicationIdentifier middlewareGetByExternalIdApiFallback(feign.RetryableException e) { //NOSONAR
-        throw remoteResourceProblemException(e);
     }
 
     private RemoteResourceProblemException remoteResourceProblemException(Exception e) {

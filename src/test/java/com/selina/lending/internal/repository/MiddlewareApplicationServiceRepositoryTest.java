@@ -25,12 +25,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -56,6 +59,12 @@ class MiddlewareApplicationServiceRepositoryTest {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
 
     private static final String SOURCE_ACCOUNT = "source account";
+
+    @Mock
+    private FeignException.FeignServerException feignServerException;
+
+    @Mock
+    private feign.RetryableException retryableException;
 
     @Mock
     private ApplicationIdentifier applicationIdentifier;
@@ -246,6 +255,40 @@ class MiddlewareApplicationServiceRepositoryTest {
 
         //Then
         verify(middlewareApplicationServiceApi, times(1)).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+    }
+
+
+    @Nested
+    class DeleteApplicationExceptions {
+        @Test
+        void shouldInvokeMiddlewareApiFallbackForFeignServerException()
+                throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+            //Given
+            Method fallback = MiddlewareApplicationServiceRepositoryImpl.class.getDeclaredMethod("deleteApiFallback",
+                    String.class, String.class, FeignException.FeignServerException.class);
+            fallback.setAccessible(true);
+
+            //When
+            fallback.invoke(middlewareRepository, "any", "any", feignServerException);
+
+            //Then
+            verify(metricService, times(1)).incrementApplicationDeleteFailed();
+        }
+
+        @Test
+        void shouldInvokeMiddlewareApiFallbackForRetryableException()
+                throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+            //Given
+            Method fallback = MiddlewareApplicationServiceRepositoryImpl.class.getDeclaredMethod("deleteApiFallback",
+                    String.class, String.class, feign.RetryableException.class);
+            fallback.setAccessible(true);
+
+            //When
+            fallback.invoke(middlewareRepository, "any", "any", retryableException);
+
+            //Then
+            verify(metricService, times(1)).incrementApplicationDeleteFailed();
+        }
     }
 
     private Request createRequest() {
