@@ -100,6 +100,8 @@ public abstract class MapperBase {
     public static final Integer LOAN_AMOUNT = 50000;
     public static final int LOAN_TERM = 5;
     public static final double ALLOCATION_AMOUNT = 50000;
+
+    public static final Double AFFORDABILITY_DEFICIT = 2100.0;
     public static final String ALLOCATION_PURPOSE = "Home improvements";
     public static final String DESIRED_TIME_LINE = "By 3 months";
     public static final Double ESTIMATED_VALUE = 590000.00;
@@ -549,6 +551,7 @@ public abstract class MapperBase {
                 .family(HOMEOWNER_LOAN)
                 .ercPeriodYears(2)
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
+                .affordabilityDeficit(AFFORDABILITY_DEFICIT)
                 .ercShortCode(ERC_SHORT_CODE)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())

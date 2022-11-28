@@ -43,7 +43,7 @@ public interface MiddlewareApi {
     @PostMapping(path = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest);
 
-    @PostMapping(path = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/application/light_decision", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
     @PutMapping(path="/application/{id}/selectProduct/{productCode}")
