@@ -67,7 +67,7 @@ class MiddlewareApplicationServiceRepositoryFallbackTest {
 
             // When
             RemoteResourceProblemException requestException = assertThrows(RemoteResourceProblemException.class,
-                    () -> middlewareRepository.getApplicationIdByExternalApplicationId("id"));
+                    () -> middlewareRepository.getAppIdByExternalId("id"));
 
             // Then
             assertThat(requestException, isA(RemoteResourceProblemException.class));

@@ -47,7 +47,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
 
     private void checkApplicationExists(ApplicationRequest applicationRequest) {
         try {
-            var applicationIdentifier = middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(applicationRequest.getExternalApplicationId());
+            var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(applicationRequest.getExternalApplicationId());
             if (StringUtils.isNotEmpty(applicationIdentifier.getId())) {
                 throw new BadRequestException(APPLICATION_ALREADY_EXISTS_ERROR + " " + applicationRequest.getExternalApplicationId());
             }
