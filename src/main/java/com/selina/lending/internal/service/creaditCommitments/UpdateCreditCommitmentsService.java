@@ -15,17 +15,11 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.service.creaditCommitments;
 
-import java.util.List;
+import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
-import lombok.Builder;
-import lombok.Value;
-
-@Builder
-@Value
-public class UserDto {
-    List<DetailDto> detail;
-    List<DetailDto> summary;
-    List<DetailDto> underwriterNotes;
+public interface UpdateCreditCommitmentsService {
+    ApplicationResponse patchCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request);
 }

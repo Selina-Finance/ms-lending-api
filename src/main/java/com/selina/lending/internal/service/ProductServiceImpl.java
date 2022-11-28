@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
     public SelectProductResponse selectProductOffer(String externalApplicationId, String productCode) {
         var sourceAccount = middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
         accessManagementService.checkSourceAccountAccessPermitted(sourceAccount.getSourceAccount());
-        var applicationIdentifier = middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(externalApplicationId);
+        var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
 
         log.info("Select product for [externalApplicationId={}] [applicationId={}] [productCode={}] [sourceAccount={}]", externalApplicationId, applicationIdentifier.getId(), productCode, sourceAccount.getSourceAccount());
         return middlewareRepository.selectProduct(applicationIdentifier.getId(), productCode);

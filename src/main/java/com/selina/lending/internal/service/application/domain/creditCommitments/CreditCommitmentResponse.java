@@ -15,17 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.service.application.domain.creditCommitments;
 
-import java.util.List;
-
-import lombok.Builder;
-import lombok.Value;
-
-@Builder
-@Value
-public class UserDto {
-    List<DetailDto> detail;
-    List<DetailDto> summary;
-    List<DetailDto> underwriterNotes;
+public class CreditCommitmentResponse {
 }

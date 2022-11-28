@@ -17,23 +17,31 @@
 
 package com.selina.lending.internal.api;
 
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @FeignClient(
         value = "middleware-application-service-api",
         url = "${middleware.application.service.url}")
 public interface MiddlewareApplicationServiceApi {
-    @GetMapping(path = "/application/application-id/{externalApplicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+
+    // TODO: does it realy return body similar to ApplicationResponse
+    @PostMapping(path = "/application/runDecisioning/{applicationId}", produces = APPLICATION_JSON_VALUE)
+    ApplicationResponse runDecisioningByAppId(@PathVariable("applicationId") String applicationId);
+
+    @GetMapping(path = "/application/application-id/{externalApplicationId}", produces = APPLICATION_JSON_VALUE)
     ApplicationIdentifier getApplicationIdByExternalApplicationId(@PathVariable("externalApplicationId") String externalApplicationId);
 
-    @GetMapping(path = "/application/source-account/{externalApplicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/application/source-account/{externalApplicationId}", produces = APPLICATION_JSON_VALUE)
     ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(@PathVariable("externalApplicationId") String externalApplicationId);
 
     @DeleteMapping(path = "/application/external-id/{externalApplicationId}")

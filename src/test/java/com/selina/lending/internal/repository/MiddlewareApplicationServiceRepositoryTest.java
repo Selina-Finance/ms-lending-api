@@ -19,6 +19,7 @@ package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -30,8 +31,10 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
+import com.selina.lending.internal.mapper.MapperBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -56,7 +59,7 @@ import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 
 @ExtendWith(MockitoExtension.class)
-class MiddlewareApplicationServiceRepositoryTest {
+class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
 
     private static final String SOURCE_ACCOUNT = "source account";
@@ -84,6 +87,19 @@ class MiddlewareApplicationServiceRepositoryTest {
     }
 
     @Test
+    void shouldCallHttpClientWhenRunDecisioningByAppIdInvoked() {
+        //Given
+        var appId = UUID.randomUUID().toString();
+        when(middlewareApplicationServiceApi.runDecisioningByAppId(any())).thenReturn(getApplicationResponse());
+
+        //When
+        middlewareRepository.runDecisioningByAppId(appId);
+
+        //Then
+        verify(middlewareApplicationServiceApi, times(1)).runDecisioningByAppId(appId);
+    }
+
+    @Test
     void shouldCallHttpClientWhenGetApplicationSourceAccountByExternalApplicationIdInvoked() {
         //Given
         when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(
@@ -104,7 +120,7 @@ class MiddlewareApplicationServiceRepositoryTest {
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
 
         //When
-        middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        middlewareRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
 
         //Then
         verify(middlewareApplicationServiceApi, times(1)).getApplicationIdByExternalApplicationId(
@@ -137,7 +153,7 @@ class MiddlewareApplicationServiceRepositoryTest {
                         createRequest(), errorMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignServerException.class,
-                () -> middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID));
+                () -> middlewareRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
@@ -202,7 +218,7 @@ class MiddlewareApplicationServiceRepositoryTest {
                 new FeignException.NotFound("Not found", createRequest(), "not found".getBytes(), null));
 
         var supplier = circuitBreaker.decorateSupplier(
-                () -> middlewareRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID));
+                () -> middlewareRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID));
 
         IntStream.range(0, 10).forEach(x -> {
             try {

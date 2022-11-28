@@ -67,7 +67,7 @@ class ProductServiceImplTest {
     void shouldSuccessfullySelectProduct() {
         //Given
         var selectProductResponse = SelectProductResponse.builder().id("appId").message("success").build();
-        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
@@ -80,7 +80,7 @@ class ProductServiceImplTest {
 
         //Then
         assertThat(response).isEqualTo(selectProductResponse);
-        verify(middlewareApplicationServiceRepository, times(1)).getApplicationIdByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
         verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
         verify(middlewareRepository, times(1)).selectProduct(APPLICATION_ID, PRODUCT_CODE);
     }

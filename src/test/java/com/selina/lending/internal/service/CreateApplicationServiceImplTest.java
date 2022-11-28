@@ -70,7 +70,7 @@ class CreateApplicationServiceImplTest {
         String notFoundMsg = "Not found";
         var id = UUID.randomUUID().toString();
         when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(id)).thenThrow(new FeignException.NotFound(notFoundMsg,
+        when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(new FeignException.NotFound(notFoundMsg,
                 request(), notFoundMsg.getBytes(), null));
         when(middlewareRepository.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
 
@@ -87,7 +87,7 @@ class CreateApplicationServiceImplTest {
         //Given
         var id = UUID.randomUUID().toString();
         when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(middlewareApplicationServiceRepository.getApplicationIdByExternalApplicationId(id)).thenReturn(applicationIdentifier);
+        when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getId()).thenReturn("any");
 
         //When

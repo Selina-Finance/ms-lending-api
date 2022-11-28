@@ -56,4 +56,7 @@ public class DetailDto {
     String accountNumber;
     String type;
     String date;
+    Double currentBalance;
+    String interestOnlyBalance;
+    Double amount;
 }

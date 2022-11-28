@@ -18,9 +18,11 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 public interface MiddlewareApplicationServiceRepository {
+    ApplicationResponse runDecisioningByAppId(String applicationId);
     ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(String externalApplicationId);
-    ApplicationIdentifier getApplicationIdByExternalApplicationId(String externalApplicationId);
+    ApplicationIdentifier getAppIdByExternalId(String externalApplicationId);
     void deleteApplicationByExternalApplicationId(String sourceAccount, String externalApplicationId);
 }
