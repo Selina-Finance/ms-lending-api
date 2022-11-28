@@ -35,7 +35,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 )
 public interface CreditCommitmentsApi {
 
-    // TODO: Should we use "v1" in the path?
-    @PatchMapping(path = "/v1/creditcommitments/{id}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PatchMapping(path = "/creditcommitments/{id}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     PatchCCResponse patchCreditCommitments(@PathVariable("id") String id, @RequestBody UpdateCreditCommitmentsRequest request);
 }
