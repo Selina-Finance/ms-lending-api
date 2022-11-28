@@ -17,5 +17,5 @@
 
 package com.selina.lending.internal.service.application.domain.creditCommitments;
 
-public class PatchCCResponse {
+public class CreditCommitmentResponse {
 }

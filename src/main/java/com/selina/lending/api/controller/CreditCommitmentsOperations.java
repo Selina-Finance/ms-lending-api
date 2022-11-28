@@ -36,7 +36,7 @@ import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RequestMapping("/application")
+//@RequestMapping("/application") TODO: hide until we will be ready to open(depends on clear MW contract)
 public interface CreditCommitmentsOperations {
 
     @Operation(description = "Update an application's Credit Commitments for the given external application id")
@@ -46,7 +46,7 @@ public interface CreditCommitmentsOperations {
                     description = "Offers based on updated Credit Commitments",
                     content = {@Content(
                             mediaType = APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = QuickQuoteResponse.class))}),
+                            schema = @Schema(implementation = ApplicationResponse.class))}),
             @ApiResponse(
                     responseCode = "400",
                     description = "Credit Commitments request is invalid", content = @Content),

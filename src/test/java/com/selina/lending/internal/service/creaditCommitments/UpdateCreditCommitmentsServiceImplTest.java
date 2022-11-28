@@ -17,12 +17,14 @@
 
 package com.selina.lending.internal.service.creaditCommitments;
 
+import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.creditCommitments.PatchCCResponse;
+import com.selina.lending.internal.service.application.domain.creditCommitments.CreditCommitmentResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,11 +33,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.selina.lending.api.errors.custom.AccessDeniedException.ACCESS_DENIED_MESSAGE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateCreditCommitmentsServiceImplTest {
@@ -43,6 +50,8 @@ class UpdateCreditCommitmentsServiceImplTest {
     private MiddlewareApplicationServiceRepository applicationRepository;
     @Mock
     private CreditCommitmentsRepository commitmentsRepository;
+    @Mock
+    private AccessManagementService accessManagementService;
 
     @InjectMocks
     private UpdateCreditCommitmentsServiceImpl service;
@@ -56,7 +65,7 @@ class UpdateCreditCommitmentsServiceImplTest {
         var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
         when(applicationRepository.getAppIdByExternalId(any())).thenReturn(identifier);
 
-        when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new PatchCCResponse());
+        when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new CreditCommitmentResponse());
 
         var newDecisionResponse = ApplicationResponse.builder().build();
         when(applicationRepository.runDecisioningByAppId(any())).thenReturn(newDecisionResponse);
@@ -70,5 +79,29 @@ class UpdateCreditCommitmentsServiceImplTest {
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
         verify(commitmentsRepository, times(1)).patchCreditCommitments(identifier.getId(), request);
         verify(applicationRepository, times(1)).runDecisioningByAppId(identifier.getId());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenClientHasNoPermitToManageTheCreditCommitments() {
+        // Given
+        var externalId = UUID.randomUUID().toString();
+        var request = new UpdateCreditCommitmentsRequest();
+
+        var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
+        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(identifier);
+
+        doThrow(new AccessDeniedException(ACCESS_DENIED_MESSAGE))
+                .when(accessManagementService).checkSourceAccountAccessPermitted(any());
+
+        // When
+        var exception = assertThrows(
+                AccessDeniedException.class,
+                () -> service.patchCreditCommitments(externalId, request)
+        );
+
+        //Then
+        assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(FORBIDDEN.getReasonPhrase());
+        verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
+        verify(commitmentsRepository, times(0)).patchCreditCommitments(identifier.getId(), request);
     }
 }

@@ -18,10 +18,10 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.service.application.domain.creditCommitments.PatchCCResponse;
+import com.selina.lending.internal.service.application.domain.creditCommitments.CreditCommitmentResponse;
 
 public interface CreditCommitmentsRepository {
 
-    PatchCCResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request);
+    CreditCommitmentResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request);
 }
 
