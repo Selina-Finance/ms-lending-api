@@ -41,6 +41,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
+import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.monitoring.MetricService;
 
@@ -296,9 +297,7 @@ class MiddlewareApplicationServiceRepositoryTest {
     }
 
     private CircuitBreaker getCircuitBreaker() {
-        var config = CircuitBreakerConfig.custom().failureRateThreshold(60).ignoreExceptions(
-                FeignException.FeignClientException.class).recordExceptions(FeignException.FeignServerException.class,
-                feign.RetryableException.class).slidingWindowSize(5).slidingWindowType(
+        var config = CircuitBreakerConfig.custom().failureRateThreshold(60).recordException(new RecordExceptionPredicate()).slidingWindowSize(5).slidingWindowType(
                 CircuitBreakerConfig.SlidingWindowType.COUNT_BASED).build();
         var registry = CircuitBreakerRegistry.of(config);
         return registry.circuitBreaker("mw-cb");

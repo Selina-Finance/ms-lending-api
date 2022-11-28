@@ -37,6 +37,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApi;
+import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
 import com.selina.lending.internal.dto.Source;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.Application;
@@ -292,8 +293,7 @@ class MiddlewareRepositoryTest {
     private CircuitBreaker getCircuitBreaker() {
         var config = CircuitBreakerConfig.custom()
                 .failureRateThreshold(60)
-                .ignoreExceptions(FeignException.FeignClientException.class)
-                .recordExceptions(FeignException.FeignServerException.class, feign.RetryableException.class)
+                .recordException(new RecordExceptionPredicate())
                 .slidingWindowSize(5)
                 .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
                 .build();

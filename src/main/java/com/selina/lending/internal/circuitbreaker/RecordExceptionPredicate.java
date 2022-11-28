@@ -27,8 +27,7 @@ public class RecordExceptionPredicate implements Predicate<Throwable> {
 
     @Override
     public boolean test(Throwable ex) {
-        return ex instanceof RemoteResourceProblemException && (
-                ex.getCause() instanceof FeignException.FeignServerException
-                        || ex.getCause() instanceof feign.RetryableException);
+        return ex instanceof RemoteResourceProblemException || ex instanceof FeignException.FeignServerException
+                        || ex instanceof feign.RetryableException;
     }
 }
