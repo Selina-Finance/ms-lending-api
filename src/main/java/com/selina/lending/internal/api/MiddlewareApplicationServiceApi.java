@@ -33,6 +33,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         value = "middleware-application-service-api",
         url = "${middleware.application.service.url}")
 public interface MiddlewareApplicationServiceApi {
+
+    // TODO: does it realy return body similar to ApplicationResponse
     @PostMapping(path = "/application/runDecisioning/{applicationId}", produces = APPLICATION_JSON_VALUE)
     ApplicationResponse runDecisioningByAppId(@PathVariable("applicationId") String applicationId);
 
