@@ -19,7 +19,7 @@ package com.selina.lending.api.controller;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,7 +36,8 @@ import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-//@RequestMapping("/application") TODO: hide until we will be ready to open(depends on clear MW contract)
+@Hidden
+@RequestMapping("/application")
 public interface CreditCommitmentsOperations {
 
     @Operation(description = "Update an application's Credit Commitments for the given external application id")
