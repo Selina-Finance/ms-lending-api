@@ -59,4 +59,5 @@ public class DetailDto {
     Double currentBalance;
     String interestOnlyBalance;
     Double amount;
+    String code;
 }

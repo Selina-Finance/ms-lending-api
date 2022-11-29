@@ -15,13 +15,21 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.internal.dto.creaditCommitments;
 
-import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.dto.creaditCommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.dto.CreditCommitmentsDto;
+import lombok.Builder;
+import lombok.Value;
 
-public interface CreditCommitmentsRepository {
-
-    CreditCommitmentResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request);
+@Value
+@Builder
+public class ApplicantCreditCommitments {
+    Long id;
+    Boolean primaryApplicant;
+    String experianId;
+    String searchId;
+    String creditScore;
+    String message;
+    String creditCheck;
+    CreditCommitmentsDto creditCommitments;
 }
-

@@ -17,12 +17,6 @@
 
 package com.selina.lending.internal.dto.creaditCommitments;
 
-import com.selina.lending.internal.dto.CreditPolicyDto;
-import com.selina.lending.internal.dto.DetailDto;
-import com.selina.lending.internal.dto.PublicInformationDto;
-import com.selina.lending.internal.dto.SystemDto;
-import com.selina.lending.internal.dto.UserDto;
-import com.selina.lending.internal.dto.VotersRollDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -33,10 +27,6 @@ import java.util.List;
 @SuperBuilder
 @Getter
 public class UpdateCreditCommitmentsRequest {
-    private SystemDto system;
-    private UserDto user;
-    private PublicInformationDto publicInformation;
-    private VotersRollDto votersRoll;
-    private CreditPolicyDto creditPolicy;
+    List<ApplicantCreditCommitments> applicants;
 }
 
