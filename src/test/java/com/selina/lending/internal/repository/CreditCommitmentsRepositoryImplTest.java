@@ -18,8 +18,8 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.api.CreditCommitmentsApi;
-import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.dto.creaditCommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,18 +43,32 @@ class CreditCommitmentsRepositoryImplTest {
     @InjectMocks
     private CreditCommitmentsRepositoryImpl repository;
 
-
     @Test
     void shouldInvokeHttpClientWhenPatchCreditCommitments() {
         //Given
         var id = UUID.randomUUID().toString();
         var request = new UpdateCreditCommitmentsRequest();
-        when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(new CreditCommitmentResponse());
+        when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(null);
 
         //When
         repository.patchCreditCommitments(id, request);
 
         //Then
         verify(creditCommitmentsApi, times(1)).patchCreditCommitments(id, request);
+    }
+
+    @Test
+    void shouldReturnCreditCommitmentResponseWhenPatchCreditCommitments() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        var request = new UpdateCreditCommitmentsRequest();
+        var response = CreditCommitmentResponse.builder().id("123").build();
+        when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(response);
+
+        //When
+        var result = repository.patchCreditCommitments(id, request);
+
+        //Then
+        assertEquals(result, response);
     }
 }
