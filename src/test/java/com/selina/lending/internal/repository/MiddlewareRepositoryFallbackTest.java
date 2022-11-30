@@ -96,7 +96,7 @@ class MiddlewareRepositoryFallbackTest {
     }
 
     @Nested
-    class CreateApplicationException {
+    class CreateDipApplicationException {
 
         @Test
         void whenCircuitBreakerIsOpenThenThrowRemoteResourceProblemExceptionWithoutCallingMiddleware() {
@@ -106,6 +106,24 @@ class MiddlewareRepositoryFallbackTest {
             // When
             RemoteResourceProblemException requestException = assertThrows(RemoteResourceProblemException.class,
                     () -> middlewareRepository.createDipApplication(applicationRequest));
+
+            // Then
+            assertThat(requestException, isA(RemoteResourceProblemException.class));
+            verifyNoInteractions(middlewareApi);
+        }
+    }
+
+    @Nested
+    class CreateDipCCApplicationException {
+
+        @Test
+        void whenCircuitBreakerIsOpenThenThrowRemoteResourceProblemExceptionWithoutCallingMiddleware() {
+            // Given
+            circuitBreaker.transitionToOpenState();
+
+            // When
+            RemoteResourceProblemException requestException = assertThrows(RemoteResourceProblemException.class,
+                    () -> middlewareRepository.createDipCCApplication(applicationRequest));
 
             // Then
             assertThat(requestException, isA(RemoteResourceProblemException.class));

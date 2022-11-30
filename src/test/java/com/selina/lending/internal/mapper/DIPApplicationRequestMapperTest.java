@@ -88,5 +88,7 @@ class DIPApplicationRequestMapperTest extends MapperBase{
         var priorCharges = applicationRequest.getPropertyDetails().getPriorCharges();
         assertThat(priorCharges.getBalanceOutstanding(), equalTo(OUTSTANDING_BALANCE));
         assertThat(priorCharges.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
+        assertThat(priorCharges.getBalanceConsolidated(), equalTo(BALANCE_CONSOLIDATED));
+        assertThat(priorCharges.getOtherDebtPayments(), equalTo(OTHER_DEBT_PAYMENTS));
     }
 }

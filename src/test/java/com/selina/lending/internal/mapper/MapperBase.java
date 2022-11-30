@@ -164,6 +164,8 @@ public abstract class MapperBase {
     public static final Double APRC = 9.77;
     public static final Double REQUESTED_LOAN_AMOUNT = 50000.0;
     public static final Double OUTSTANDING_BALANCE = 20000.0;
+    public static final Double BALANCE_CONSOLIDATED = 25000.0;
+    public static final Double OTHER_DEBT_PAYMENTS = 5000.0;
     public static final Double MAX_BALANCE_ESIS = 100000.0;
     public static final String ERC_SHORT_CODE = "ERC_01";
     public static final String CODE = "HOL00750";
@@ -373,6 +375,8 @@ public abstract class MapperBase {
         return PriorChargesDto.builder()
                 .monthlyPayment(MONTHLY_PAYMENT)
                 .balanceOutstanding(OUTSTANDING_BALANCE)
+                .otherDebtPayments(OTHER_DEBT_PAYMENTS)
+                .balanceConsolidated(BALANCE_CONSOLIDATED)
                 .build();
     }
 
@@ -506,7 +510,12 @@ public abstract class MapperBase {
     }
 
     private PriorCharges getPriorCharges() {
-        return PriorCharges.builder().monthlyPayment(MONTHLY_PAYMENT).balanceOutstanding(OUTSTANDING_BALANCE).build();
+        return PriorCharges.builder()
+                .monthlyPayment(MONTHLY_PAYMENT)
+                .balanceOutstanding(OUTSTANDING_BALANCE)
+                .otherDebtPayments(OTHER_DEBT_PAYMENTS)
+                .balanceConsolidated(BALANCE_CONSOLIDATED)
+                .build();
     }
 
     protected Application getApplication() {
