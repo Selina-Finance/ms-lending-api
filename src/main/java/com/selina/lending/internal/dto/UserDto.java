@@ -26,6 +26,4 @@ import lombok.Value;
 @Value
 public class UserDto {
     List<DetailDto> detail;
-    List<DetailDto> summary;
-    List<DetailDto> underwriterNotes;
 }

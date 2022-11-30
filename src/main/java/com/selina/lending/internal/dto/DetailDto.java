@@ -58,6 +58,6 @@ public class DetailDto {
     String date;
     Double currentBalance;
     String interestOnlyBalance;
-    Double amount;
+    Integer amount;
     String code;
 }
