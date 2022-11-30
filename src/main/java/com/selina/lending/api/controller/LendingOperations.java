@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -60,6 +62,7 @@ public interface LendingOperations {
     @GetMapping(value = "/{externalApplicationId}")
     ResponseEntity<ApplicationDecisionResponse> getApplication(@Parameter(description = "externalApplicationId of application to be searched", required = true) @PathVariable String externalApplicationId);
 
+    @Hidden
     @Operation(description = "Update the Decision In Principle (DIP) application which has credit commitments for the given external application id")
     @ApiResponses(value = {
             @ApiResponse(
@@ -80,6 +83,7 @@ public interface LendingOperations {
     ResponseEntity<ApplicationResponse> updateDipCCApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
             @Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 
+    @Hidden
     @Operation(description = "Create a new Decision In Principle (DIP) with credit commitments application")
     @ApiResponses(value = {
             @ApiResponse(
