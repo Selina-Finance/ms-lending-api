@@ -15,21 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.dto.creaditCommitments;
+package com.selina.lending.internal.dto.creditCommitments;
 
-import com.selina.lending.internal.dto.CreditCommitmentsDto;
-import lombok.Builder;
-import lombok.Value;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Value
-@Builder
-public class ApplicantCreditCommitments {
-    Long id;
-    Boolean primaryApplicant;
-    String experianId;
-    String searchId;
-    String creditScore;
-    String message;
-    String creditCheck;
-    CreditCommitmentsDto creditCommitments;
+import java.util.List;
+
+@NoArgsConstructor
+@SuperBuilder
+@Getter
+public class UpdateCreditCommitmentsRequest {
+    List<ApplicantCreditCommitments> applicants;
 }
+
