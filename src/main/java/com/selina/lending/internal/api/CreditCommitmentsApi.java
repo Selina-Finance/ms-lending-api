@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @FeignClient(
         value = "credit-commitments-api",
-        url = "${middleware.credit-commitments.url}",
+        url = "${middleware.api.url}",
         configuration = MiddlewareOAuth2Configuration.class
 )
 public interface CreditCommitmentsApi {
