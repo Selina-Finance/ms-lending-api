@@ -42,6 +42,7 @@ public class OfferDto {
     Double totalAmountRepaid;
     Double initialPayment;
     Double reversionPayment;
+    Double affordabilityDeficit;
     String productCode;
     String product;
     String decision;

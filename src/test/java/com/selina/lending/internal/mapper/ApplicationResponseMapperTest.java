@@ -54,7 +54,6 @@ class ApplicationResponseMapperTest extends MapperBase {
         assertThat(applicationDto.getPropertyDetails(), notNullValue());
         assertThat(applicationDto.getPropertyDetails().getPropertyType(), equalTo(PROPERTY_TYPE));
         assertThat(applicationDto.getPropertyDetails().getNumberOfPriorCharges(), equalTo(1));
-        assertThat(applicationDto.getPropertyDetails().getPriorCharges().size(), equalTo(1));
 
         assertPriorCharges(applicationDto);
 
@@ -62,10 +61,8 @@ class ApplicationResponseMapperTest extends MapperBase {
     }
 
     private void assertPriorCharges(DIPApplicationDto applicationDto) {
-        var priorChargesDto = applicationDto.getPropertyDetails().getPriorCharges().get(0);
-        assertThat(priorChargesDto.getName(), equalTo(HSBC));
-        assertThat(priorChargesDto.getRateType(), equalTo(RATE_TYPE));
-        assertThat(priorChargesDto.getRepaymentType(), equalTo(REPAYMENT_TYPE));
+        var priorChargesDto = applicationDto.getPropertyDetails().getPriorCharges();
+        assertThat(priorChargesDto.getBalanceOutstanding(), equalTo(OUTSTANDING_BALANCE));
         assertThat(priorChargesDto.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
     }
 

@@ -96,7 +96,23 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
-    void shouldCallHttpClientWhenCreateApplicationInvoked() {
+    void shouldCallHttpClientWhenCreateDipCCApplicationInvoked() {
+        // Given
+        when(middlewareApi.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
+        when(applicationResponse.getApplication()).thenReturn(application);
+        when(application.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
+
+        // When
+        var result = middlewareRepository.createDipCCApplication(applicationRequest);
+
+        // Then
+        assertThat(result).isEqualTo(applicationResponse);
+        verify(applicationRequest, times(1)).setSource(Source.BROKER.toString());
+        verify(middlewareApi, times(1)).createDipCCApplication(applicationRequest);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenCreateDipApplicationInvoked() {
         // Given
         when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
         when(applicationResponse.getApplication()).thenReturn(application);
@@ -110,7 +126,6 @@ class MiddlewareRepositoryTest {
         verify(applicationRequest, times(1)).setSource(Source.BROKER.toString());
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
-
 
     @Test
     void shouldThrowFeignServerExceptionWhenMiddlewareThrowsInternalServerException() {
@@ -136,12 +151,12 @@ class MiddlewareRepositoryTest {
         String notFoundMsg = "not found";
 
         //When
-        when(middlewareApi.createDipApplication(applicationRequest)).thenThrow(
+        when(middlewareApi.createDipCCApplication(applicationRequest)).thenThrow(
                 new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
                         notFoundMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignClientException.class,
-                () -> middlewareRepository.createDipApplication(applicationRequest));
+                () -> middlewareRepository.createDipCCApplication(applicationRequest));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
@@ -240,9 +255,9 @@ class MiddlewareRepositoryTest {
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareApi.createDipApplication(applicationRequest)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
+        when(middlewareApi.createDipCCApplication(applicationRequest)).thenThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest()));
 
-        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.createDipApplication(applicationRequest));
+        var supplier = circuitBreaker.decorateSupplier(() -> middlewareRepository.createDipCCApplication(applicationRequest));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
@@ -256,7 +271,7 @@ class MiddlewareRepositoryTest {
         assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
         assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
 
-        verify(middlewareApi, times(5)).createDipApplication(applicationRequest);
+        verify(middlewareApi, times(5)).createDipCCApplication(applicationRequest);
     }
 
     @Test

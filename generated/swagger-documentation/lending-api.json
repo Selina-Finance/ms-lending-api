@@ -57,11 +57,11 @@
           "400":{
             "description":"Application details invalid"
           },
-          "401":{
-            "description":"Unauthorized"
-          },
           "403":{
             "description":"Forbidden"
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -69,7 +69,7 @@
     "/application/{externalApplicationId}/dip":{
       "put":{
         "tags":[
-          "lending-controller"
+          "dip-controller"
         ],
         "description":"Update the Decision In Principle (DIP) application for the given external application id",
         "operationId":"updateDipApplication",
@@ -98,8 +98,14 @@
           "400":{
             "description":"Application details invalid"
           },
+          "403":{
+            "description":"Forbidden"
+          },
           "404":{
             "description":"Application not found"
+          },
+          "401":{
+            "description":"Unauthorized"
           },
           "200":{
             "description":"Application updated",
@@ -110,12 +116,6 @@
                 }
               }
             }
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "403":{
-            "description":"Forbidden"
           }
         }
       }
@@ -138,6 +138,9 @@
           "required":true
         },
         "responses":{
+          "400":{
+            "description":"Invalid client credentials"
+          },
           "200":{
             "description":"Authentication token and amount of seconds before it will be expired",
             "content":{
@@ -147,9 +150,6 @@
                 }
               }
             }
-          },
-          "400":{
-            "description":"Invalid client credentials"
           }
         }
       }
@@ -175,6 +175,12 @@
           "400":{
             "description":"Application details invalid"
           },
+          "403":{
+            "description":"Forbidden"
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
           "200":{
             "description":"Quick Quote created",
             "content":{
@@ -184,12 +190,6 @@
                 }
               }
             }
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "403":{
-            "description":"Forbidden"
           }
         }
       }
@@ -197,7 +197,7 @@
     "/application/dip":{
       "post":{
         "tags":[
-          "lending-controller"
+          "dip-controller"
         ],
         "description":"Create a new Decision In Principle (DIP) application",
         "operationId":"createDipApplication",
@@ -215,6 +215,9 @@
           "400":{
             "description":"Application details invalid"
           },
+          "403":{
+            "description":"Forbidden"
+          },
           "200":{
             "description":"Application created",
             "content":{
@@ -227,9 +230,6 @@
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "403":{
-            "description":"Forbidden"
           }
         }
       }
@@ -237,7 +237,7 @@
     "/application/{externalApplicationId}":{
       "get":{
         "tags":[
-          "lending-controller"
+          "dip-controller"
         ],
         "description":"Retrieve the application for the given externalApplicationId",
         "operationId":"getApplication",
@@ -256,6 +256,9 @@
           "404":{
             "description":"Application not found"
           },
+          "401":{
+            "description":"Unauthorized"
+          },
           "200":{
             "description":"Found application",
             "content":{
@@ -265,9 +268,6 @@
                 }
               }
             }
-          },
-          "401":{
-            "description":"Unauthorized"
           }
         }
       }
@@ -717,47 +717,25 @@
       "PriorChargesDto":{
         "type":"object",
         "properties":{
-          "name":{
-            "type":"string"
+          "balanceConsolidated":{
+            "type":"number",
+            "format":"double"
+          },
+          "balanceOutstanding":{
+            "type":"number",
+            "format":"double"
           },
           "monthlyPayment":{
             "type":"number",
             "format":"double"
           },
-          "outstandingBalance":{
-            "type":"number",
-            "format":"double"
-          },
-          "monthlyPaymentVerified":{
-            "type":"number",
-            "format":"double"
-          },
-          "outstandingBalanceVerified":{
-            "type":"number",
-            "format":"double"
-          },
-          "remainingTerm":{
-            "type":"integer",
-            "format":"int32"
-          },
-          "rateType":{
+          "priorChargesYoungestDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string"
           },
-          "repaymentType":{
-            "type":"string"
-          },
-          "fixedRatePeriodEndDate":{
-            "type":"string"
-          },
-          "interestOnlyBalanceOfPartAndPartMortgage":{
+          "otherDebtPayments":{
             "type":"number",
             "format":"double"
-          },
-          "toBeConsolidated":{
-            "type":"boolean"
-          },
-          "status":{
-            "type":"string"
           }
         }
       },
@@ -1556,12 +1534,6 @@
               "$ref":"#/components/schemas/ExpenditureDto"
             }
           },
-          "selectedOffer":{
-            "type":"string"
-          },
-          "selectedProduct":{
-            "type":"string"
-          },
           "applicants":{
             "maxItems":2,
             "minItems":1,
@@ -1764,42 +1736,8 @@
           "isAboveCommercialPropertyDetails":{
             "type":"boolean"
           },
-          "areaOfOutdoorSpace":{
-            "type":"string",
-            "enum":[
-              "None",
-              "Balcony",
-              "Garden",
-              "Terrace",
-              "Very large garden",
-              "Courtyard garden"
-            ]
-          },
-          "finishQuality":{
-            "type":"string"
-          },
-          "valuationVerified":{
-            "type":"number",
-            "format":"double"
-          },
-          "propertyRiskValuation":{
-            "type":"number",
-            "format":"double"
-          },
-          "propertyRiskValuationComment":{
-            "type":"string"
-          },
-          "finalValuationChannel":{
-            "type":"string"
-          },
-          "googleMaps":{
-            "type":"string"
-          },
           "priorCharges":{
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/PriorChargesDto"
-            }
+            "$ref":"#/components/schemas/PriorChargesDto"
           }
         }
       },
@@ -2107,6 +2045,10 @@
             "format":"double"
           },
           "reversionPayment":{
+            "type":"number",
+            "format":"double"
+          },
+          "affordabilityDeficit":{
             "type":"number",
             "format":"double"
           },

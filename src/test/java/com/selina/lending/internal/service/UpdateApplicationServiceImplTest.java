@@ -25,6 +25,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -66,66 +67,135 @@ class UpdateApplicationServiceImplTest {
     @InjectMocks
     private UpdateApplicationServiceImpl updateApplicationService;
 
-    @Test
-    void shouldUpdateDipApplication() {
-        //Given
-        when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
-        when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
-        when(middlewareRepository.createDipApplication(any())).thenReturn(applicationResponse);
-        doNothing().when(middlewareApplicationServiceRepository).deleteApplicationByExternalApplicationId(
-                SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+    @Nested
+    class UpdateDipCCApplication {
+        @Test
+        void shouldUpdateDipCCApplication() {
+            //Given
+            when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+            when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
+            when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
+            when(middlewareRepository.createDipCCApplication(any())).thenReturn(applicationResponse);
+            doNothing().when(middlewareApplicationServiceRepository).deleteApplicationByExternalApplicationId(
+                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
 
-        //When
-        updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
+            //When
+            updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
 
-        //Then
-        verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(1)).createDipApplication(any());
-        verify(middlewareApplicationServiceRepository, times(1)).deleteApplicationByExternalApplicationId(
-                SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+            //Then
+            verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID);
+            verify(middlewareRepository, times(1)).createDipCCApplication(any());
+            verify(middlewareApplicationServiceRepository, times(1)).deleteApplicationByExternalApplicationId(
+                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+        }
+
+        @Test
+        void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateDipCCApplication() {
+            // Given
+            when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+            when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(false);
+
+            // When
+            var exception = assertThrows(AccessDeniedException.class, () -> updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
+
+            // Then
+            assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
+            verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID);
+            verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
+            verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
+                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+        }
+
+        @Test
+        void shouldThrowAccessDeniedExceptionWhenApplicationRequestExternalApplicationIdNotMatched() {
+            // Given
+            when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+            when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
+            when(applicationRequest.getExternalApplicationId()).thenReturn("any id");
+
+            // When
+            var exception = assertThrows(AccessDeniedException.class, () -> updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
+
+            // Then
+            assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
+            verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID);
+            verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
+            verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
+                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+        }
     }
+    @Nested
+    class UpdateDipApplication {
+        @Test
+        void shouldUpdateDipApplication() {
+            //Given
+            when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+            when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
+            when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
+            when(middlewareRepository.createDipApplication(any())).thenReturn(applicationResponse);
+            doNothing().when(middlewareApplicationServiceRepository).deleteApplicationByExternalApplicationId(
+                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
 
-    @Test
-    void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateApplication() {
-        // Given
-        when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(false);
+            //When
+            updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
 
-        // When
-        var exception = assertThrows(AccessDeniedException.class,
-                () -> updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
+            //Then
+            verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID);
+            verify(middlewareRepository, times(1)).createDipApplication(any());
+            verify(middlewareApplicationServiceRepository, times(1)).deleteApplicationByExternalApplicationId(
+                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+        }
+        @Test
+        void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateDipApplication() {
+            // Given
+            when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+            when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(false);
 
-        // Then
-        assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-        verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
-        verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
-                SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
-    }
+            // When
+            var exception = assertThrows(AccessDeniedException.class, () -> updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
 
-    @Test
-    void shouldThrowAccessDeniedExceptionWhenApplicationRequestExternalApplicationIdNotMatched() {
-        // Given
-        when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
-        when(applicationRequest.getExternalApplicationId()).thenReturn("any id");
+            // Then
+            assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
+            verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID);
+            verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
+            verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
+                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+        }
 
-        // When
-        var exception = assertThrows(AccessDeniedException.class,
-                () -> updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
+        @Test
+        void shouldThrowAccessDeniedExceptionWhenApplicationRequestExternalApplicationIdNotMatched() {
+            // Given
+            when(middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+            when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
+            when(applicationRequest.getExternalApplicationId()).thenReturn("any id");
 
-        // Then
-        assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-        verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
-        verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
-                SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+            // When
+            var exception = assertThrows(AccessDeniedException.class, () -> updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest));
+
+            // Then
+            assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
+            verify(middlewareApplicationServiceRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(
+                    EXTERNAL_APPLICATION_ID);
+            verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
+            verify(middlewareApplicationServiceRepository, times(0)).deleteApplicationByExternalApplicationId(
+                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+        }
     }
 }

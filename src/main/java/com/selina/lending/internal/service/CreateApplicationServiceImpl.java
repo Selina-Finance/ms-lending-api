@@ -40,6 +40,12 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     }
 
     @Override
+    public ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest) {
+        checkApplicationExists(applicationRequest);
+        return middlewareRepository.createDipCCApplication(applicationRequest);
+    }
+
+    @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         checkApplicationExists(applicationRequest);
         return middlewareRepository.createDipApplication(applicationRequest);

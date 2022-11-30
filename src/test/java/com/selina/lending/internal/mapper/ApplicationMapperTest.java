@@ -51,6 +51,7 @@ class ApplicationMapperTest extends MapperBase {
         assertThat(applicationDto.getOffers().get(0).getActive(), equalTo(true));
         assertThat(applicationDto.getOffers().get(0).getId(), equalTo(OFFER_ID));
         assertThat(applicationDto.getOffers().get(0).getProductCode(), equalTo(PRODUCT_CODE));
+        assertThat(applicationDto.getOffers().get(0).getAffordabilityDeficit(), equalTo(AFFORDABILITY_DEFICIT));
     }
 
     @Test

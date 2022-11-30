@@ -100,6 +100,8 @@ public abstract class MapperBase {
     public static final Integer LOAN_AMOUNT = 50000;
     public static final int LOAN_TERM = 5;
     public static final double ALLOCATION_AMOUNT = 50000;
+
+    public static final Double AFFORDABILITY_DEFICIT = 2100.0;
     public static final String ALLOCATION_PURPOSE = "Home improvements";
     public static final String DESIRED_TIME_LINE = "By 3 months";
     public static final Double ESTIMATED_VALUE = 590000.00;
@@ -147,10 +149,7 @@ public abstract class MapperBase {
     public static final String UTM_CAMPAIGN = "utm campaign";
     public static final String UTM_SOURCE = "utm source";
     public static final String UTM_MEDIUM = "utm medium";
-    public static final String HSBC = "HSBC";
     public static final Double MONTHLY_PAYMENT = 1000.0;
-    public static final String REPAYMENT_TYPE = "Capital and interest";
-    public static final String RATE_TYPE = "Fixed";
     public static final String RESIDENTIAL_STATUS_OWNER = "Owner";
     public static final Double MAX_ERC = 500.0;
     public static final Double ERC_BALANCE = 50000.0;
@@ -165,6 +164,8 @@ public abstract class MapperBase {
     public static final Double APRC = 9.77;
     public static final Double REQUESTED_LOAN_AMOUNT = 50000.0;
     public static final Double OUTSTANDING_BALANCE = 20000.0;
+    public static final Double BALANCE_CONSOLIDATED = 25000.0;
+    public static final Double OTHER_DEBT_PAYMENTS = 5000.0;
     public static final Double MAX_BALANCE_ESIS = 100000.0;
     public static final String ERC_SHORT_CODE = "ERC_01";
     public static final String CODE = "HOL00750";
@@ -366,16 +367,16 @@ public abstract class MapperBase {
                 .hasAGarage(true)
                 .whenLastPurchased(WHEN_LAST_PURCHASED)
                 .numberOfPriorCharges(1)
-                .priorCharges(List.of(getPriorChargesDto()))
+                .priorCharges(getPriorChargesDto())
                 .build();
     }
 
     private PriorChargesDto getPriorChargesDto() {
-        return PriorChargesDto.builder().name(HSBC)
+        return PriorChargesDto.builder()
                 .monthlyPayment(MONTHLY_PAYMENT)
-                .repaymentType(REPAYMENT_TYPE)
-                .rateType(RATE_TYPE)
-                .outstandingBalance(OUTSTANDING_BALANCE)
+                .balanceOutstanding(OUTSTANDING_BALANCE)
+                .otherDebtPayments(OTHER_DEBT_PAYMENTS)
+                .balanceConsolidated(BALANCE_CONSOLIDATED)
                 .build();
     }
 
@@ -504,13 +505,17 @@ public abstract class MapperBase {
                 .numberOfBedrooms(NUMBER_OF_BEDROOMS)
                 .hasAGarage(true)
                 .numberOfPriorCharges(1)
-                .priorCharges(List.of(getPriorCharges()))
+                .priorCharges(getPriorCharges())
                 .build();
     }
 
     private PriorCharges getPriorCharges() {
-        return PriorCharges.builder().name(HSBC).monthlyPayment(MONTHLY_PAYMENT).repaymentType(REPAYMENT_TYPE).rateType(
-                RATE_TYPE).build();
+        return PriorCharges.builder()
+                .monthlyPayment(MONTHLY_PAYMENT)
+                .balanceOutstanding(OUTSTANDING_BALANCE)
+                .otherDebtPayments(OTHER_DEBT_PAYMENTS)
+                .balanceConsolidated(BALANCE_CONSOLIDATED)
+                .build();
     }
 
     protected Application getApplication() {
@@ -549,6 +554,7 @@ public abstract class MapperBase {
                 .family(HOMEOWNER_LOAN)
                 .ercPeriodYears(2)
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
+                .affordabilityDeficit(AFFORDABILITY_DEFICIT)
                 .ercShortCode(ERC_SHORT_CODE)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())

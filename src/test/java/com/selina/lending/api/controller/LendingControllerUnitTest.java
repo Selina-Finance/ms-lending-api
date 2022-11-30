@@ -66,7 +66,7 @@ class LendingControllerUnitTest {
     private CreateApplicationService createApplicationService;
 
     @InjectMocks
-    private LendingController lendingController;
+    private DIPController lendingController;
 
     @Test
     void getApplication() {
@@ -78,6 +78,35 @@ class LendingControllerUnitTest {
 
         //Then
         verify(retrieveApplicationService, times(1)).getApplicationByExternalApplicationId(APPLICATION_ID);
+    }
+
+    @Test
+    void createDipCCApplication() {
+        //Given
+        when(createApplicationService.createDipCCApplication(any())).thenReturn(mwApplicationResponse);
+
+        //When
+        lendingController.createDipCCApplication(dipApplicationRequest);
+
+        //Then
+        verify(createApplicationService, times(1)).createDipCCApplication(any());
+    }
+
+    @Test
+    void updateDipCCApplication() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        var applicationType = "DIP";
+        var mwApplicationResponse = ApplicationResponse.builder().applicationId(id).applicationType(applicationType).build();
+        when(updateApplicationService.updateDipCCApplication(eq(APPLICATION_ID), any())).thenReturn(mwApplicationResponse);
+
+        //When
+        var appResponse = lendingController.updateDipCCApplication(APPLICATION_ID, dipApplicationRequest);
+
+        //Then
+        assertThat(Objects.requireNonNull(appResponse.getBody()).getRequestType(), equalTo(applicationType));
+        assertThat(appResponse.getBody().getApplicationId(), equalTo(id));
+        verify(updateApplicationService, times(1)).updateDipCCApplication(eq(APPLICATION_ID), any());
     }
 
     @Test

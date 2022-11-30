@@ -68,5 +68,7 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(priorCharges.getNumberPriorCharges(), equalTo(1));
         assertThat(priorCharges.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
         assertThat(priorCharges.getBalanceOutstanding(), equalTo(OUTSTANDING_BALANCE));
+        assertThat(priorCharges.getBalanceConsolidated(), equalTo(BALANCE_CONSOLIDATED));
+        assertThat(priorCharges.getOtherDebtPayments(), equalTo(OTHER_DEBT_PAYMENTS));
     }
 }

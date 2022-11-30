@@ -49,7 +49,7 @@ import feign.Request;
 import feign.RequestTemplate;
 
 @WithMockUser
-@WebMvcTest(value = LendingController.class)
+@WebMvcTest(value = DIPController.class)
 class LendingControllerCircuitBreakerTest extends MapperBase {
 
     @Autowired
@@ -81,16 +81,16 @@ class LendingControllerCircuitBreakerTest extends MapperBase {
     }
 
     @Test
-    void shouldReturnBadGatewayWhenCreateDipApplicationHasMiddlewareProblem() throws Exception {
+    void shouldReturnBadGatewayWhenCreateDipCCApplicationHasMiddlewareProblem() throws Exception {
         //Given
         var requestDto = getDIPApplicationRequestDto();
 
-        when(createApplicationService.createDipApplication(
+        when(createApplicationService.createDipCCApplication(
                 DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(requestDto))).thenThrow(
                 new RemoteResourceProblemException());
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf())
+        mockMvc.perform(post("/application/dipcc").with(csrf())
                         .content(objectMapper.writeValueAsString(requestDto))
                         .contentType(APPLICATION_JSON))
                 //Then
@@ -98,17 +98,17 @@ class LendingControllerCircuitBreakerTest extends MapperBase {
     }
 
     @Test
-    void shouldReturnBadGatewayWhenUpdateDipApplicationHasMiddlewareProblem() throws Exception {
+    void shouldReturnBadGatewayWhenUpdateDipCCApplicationHasMiddlewareProblem() throws Exception {
         //Given
         var dipId = UUID.randomUUID().toString();
         var requestDto = getDIPApplicationRequestDto();
         String jsonRequestDto = objectMapper.writeValueAsString(requestDto);
 
-        doThrow(new RemoteResourceProblemException()).when(updateApplicationService).updateDipApplication(dipId,
+        doThrow(new RemoteResourceProblemException()).when(updateApplicationService).updateDipCCApplication(dipId,
                 DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(requestDto));
 
         //When
-        mockMvc.perform(put("/application/" + dipId + "/dip").with(csrf())
+        mockMvc.perform(put("/application/" + dipId + "/dipcc").with(csrf())
                         .content(jsonRequestDto)
                         .contentType(APPLICATION_JSON))
                 //Then
