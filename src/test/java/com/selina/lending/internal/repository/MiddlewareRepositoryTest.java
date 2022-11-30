@@ -96,7 +96,7 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
-    void shouldCallHttpClientWhenCreateApplicationInvoked() {
+    void shouldCallHttpClientWhenCreateDipCCApplicationInvoked() {
         // Given
         when(middlewareApi.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
         when(applicationResponse.getApplication()).thenReturn(application);
@@ -111,6 +111,21 @@ class MiddlewareRepositoryTest {
         verify(middlewareApi, times(1)).createDipCCApplication(applicationRequest);
     }
 
+    @Test
+    void shouldCallHttpClientWhenCreateDipApplicationInvoked() {
+        // Given
+        when(middlewareApi.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
+        when(applicationResponse.getApplication()).thenReturn(application);
+        when(application.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
+
+        // When
+        var result = middlewareRepository.createDipApplication(applicationRequest);
+
+        // Then
+        assertThat(result).isEqualTo(applicationResponse);
+        verify(applicationRequest, times(1)).setSource(Source.BROKER.toString());
+        verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
+    }
 
     @Test
     void shouldThrowFeignServerExceptionWhenMiddlewareThrowsInternalServerException() {

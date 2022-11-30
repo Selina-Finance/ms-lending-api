@@ -17,8 +17,6 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Value;
 
@@ -78,5 +76,5 @@ public class PropertyDetails {
     String propertyRiskValuationComment;
     String finalValuationChannel;
     String googleMaps;
-    List<PriorCharges> priorCharges;
+    PriorCharges priorCharges;
   }

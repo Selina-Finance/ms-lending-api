@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.UUID;
+import org.junit.jupiter.api.Nested;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,42 +64,81 @@ class CreateApplicationServiceImplTest {
     @InjectMocks
     private CreateApplicationServiceImpl createApplicationService;
 
-    @Test
-    void shouldCreateDipApplication() {
-        //Given
-        String notFoundMsg = "Not found";
-        var id = UUID.randomUUID().toString();
-        when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(new FeignException.NotFound(notFoundMsg,
-                request(), notFoundMsg.getBytes(), null));
-        when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
+    @Nested
+    class CreateDipCCApplication {
 
-        //When
-        var result = createApplicationService.createDipCCApplication(applicationRequest);
+        @Test
+        void shouldCreateDipCCApplication() {
+            //Given
+            String notFoundMsg = "Not found";
+            var id = UUID.randomUUID().toString();
+            when(applicationRequest.getExternalApplicationId()).thenReturn(id);
+            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
+                    new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
+            when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
 
-        //Then
-        assertThat(result).isEqualTo(applicationResponse);
-        verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
+            //When
+            var result = createApplicationService.createDipCCApplication(applicationRequest);
+
+            //Then
+            assertThat(result).isEqualTo(applicationResponse);
+            verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
+        }
+
+        @Test
+        void shouldThrowBadRequestExceptionWhenApplicationWithIdAlreadyExists() {
+            //Given
+            var id = UUID.randomUUID().toString();
+            when(applicationRequest.getExternalApplicationId()).thenReturn(id);
+            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getId()).thenReturn("any");
+
+            //When
+            var exception = assertThrows(BadRequestException.class, () -> createApplicationService.createDipCCApplication(applicationRequest));
+
+            //Then
+            assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists " + id);
+            verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
+
+        }
     }
 
-    @Test
-    void shouldThrowBadRequestExceptionWhenApplicationWithIdAlreadyExists() {
-        //Given
-        var id = UUID.randomUUID().toString();
-        when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getId()).thenReturn("any");
+    @Nested
+    class CreateDipApplication {
+        @Test
+        void shouldCreateDipApplication() {
+            //Given
+            String notFoundMsg = "Not found";
+            var id = UUID.randomUUID().toString();
+            when(applicationRequest.getExternalApplicationId()).thenReturn(id);
+            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
+                    new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
+            when(middlewareRepository.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
 
-        //When
-        var exception = assertThrows(BadRequestException.class,
-                () ->  createApplicationService.createDipCCApplication(applicationRequest));
+            //When
+            var result = createApplicationService.createDipApplication(applicationRequest);
 
-        //Then
-        assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists "+id);
-        verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
+            //Then
+            assertThat(result).isEqualTo(applicationResponse);
+            verify(middlewareRepository, times(1)).createDipApplication(applicationRequest);
+        }
 
+        @Test
+        void shouldThrowBadRequestExceptionWhenApplicationWithIdAlreadyExists() {
+            //Given
+            var id = UUID.randomUUID().toString();
+            when(applicationRequest.getExternalApplicationId()).thenReturn(id);
+            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getId()).thenReturn("any");
+
+            //When
+            var exception = assertThrows(BadRequestException.class, () -> createApplicationService.createDipApplication(applicationRequest));
+
+            //Then
+            assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists " + id);
+            verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
+        }
     }
-
     private Request request() {
         return Request.create(Request.HttpMethod.GET, "url", new HashMap<>(), null, new RequestTemplate());
     }

@@ -81,7 +81,7 @@ class LendingControllerUnitTest {
     }
 
     @Test
-    void createDipApplication() {
+    void createDipCCApplication() {
         //Given
         when(createApplicationService.createDipCCApplication(any())).thenReturn(mwApplicationResponse);
 
@@ -107,5 +107,34 @@ class LendingControllerUnitTest {
         assertThat(Objects.requireNonNull(appResponse.getBody()).getRequestType(), equalTo(applicationType));
         assertThat(appResponse.getBody().getApplicationId(), equalTo(id));
         verify(updateApplicationService, times(1)).updateDipCCApplication(eq(APPLICATION_ID), any());
+    }
+
+    @Test
+    void createDipApplication() {
+        //Given
+        when(createApplicationService.createDipApplication(any())).thenReturn(mwApplicationResponse);
+
+        //When
+        lendingController.createDipApplication(dipApplicationRequest);
+
+        //Then
+        verify(createApplicationService, times(1)).createDipApplication(any());
+    }
+
+    @Test
+    void updateDipApplication() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        var applicationType = "DIP";
+        var mwApplicationResponse = ApplicationResponse.builder().applicationId(id).applicationType(applicationType).build();
+        when(updateApplicationService.updateDipApplication(eq(APPLICATION_ID), any())).thenReturn(mwApplicationResponse);
+
+        //When
+        var appResponse = lendingController.updateDipApplication(APPLICATION_ID, dipApplicationRequest);
+
+        //Then
+        assertThat(Objects.requireNonNull(appResponse.getBody()).getRequestType(), equalTo(applicationType));
+        assertThat(appResponse.getBody().getApplicationId(), equalTo(id));
+        verify(updateApplicationService, times(1)).updateDipApplication(eq(APPLICATION_ID), any());
     }
 }

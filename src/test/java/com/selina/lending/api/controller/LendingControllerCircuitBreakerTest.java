@@ -81,7 +81,7 @@ class LendingControllerCircuitBreakerTest extends MapperBase {
     }
 
     @Test
-    void shouldReturnBadGatewayWhenCreateDipApplicationHasMiddlewareProblem() throws Exception {
+    void shouldReturnBadGatewayWhenCreateDipCCApplicationHasMiddlewareProblem() throws Exception {
         //Given
         var requestDto = getDIPApplicationRequestDto();
 
@@ -98,7 +98,7 @@ class LendingControllerCircuitBreakerTest extends MapperBase {
     }
 
     @Test
-    void shouldReturnBadGatewayWhenUpdateDipApplicationHasMiddlewareProblem() throws Exception {
+    void shouldReturnBadGatewayWhenUpdateDipCCApplicationHasMiddlewareProblem() throws Exception {
         //Given
         var dipId = UUID.randomUUID().toString();
         var requestDto = getDIPApplicationRequestDto();

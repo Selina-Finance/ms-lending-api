@@ -17,8 +17,7 @@
 
 package com.selina.lending.internal.dto;
 
-import java.util.List;
-
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -81,16 +80,7 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
     private Boolean isApplicantResidence;
     private Boolean isAboveCommercialPropertyDetails;
 
-    @Schema(implementation = AreaOutdoorSpace.class)
-    @EnumValue(enumClass = AreaOutdoorSpace.class)
-    private String areaOfOutdoorSpace;
-    private String finishQuality;
-    private Double valuationVerified;
-    private Double propertyRiskValuation;
-    private String propertyRiskValuationComment;
-    private String finalValuationChannel;
-    private String googleMaps;
-
-    private List<PriorChargesDto> priorCharges;
+    @Valid
+    private PriorChargesDto priorCharges;
 }
 

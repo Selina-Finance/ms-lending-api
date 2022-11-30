@@ -149,10 +149,7 @@ public abstract class MapperBase {
     public static final String UTM_CAMPAIGN = "utm campaign";
     public static final String UTM_SOURCE = "utm source";
     public static final String UTM_MEDIUM = "utm medium";
-    public static final String HSBC = "HSBC";
     public static final Double MONTHLY_PAYMENT = 1000.0;
-    public static final String REPAYMENT_TYPE = "Capital and interest";
-    public static final String RATE_TYPE = "Fixed";
     public static final String RESIDENTIAL_STATUS_OWNER = "Owner";
     public static final Double MAX_ERC = 500.0;
     public static final Double ERC_BALANCE = 50000.0;
@@ -368,16 +365,14 @@ public abstract class MapperBase {
                 .hasAGarage(true)
                 .whenLastPurchased(WHEN_LAST_PURCHASED)
                 .numberOfPriorCharges(1)
-                .priorCharges(List.of(getPriorChargesDto()))
+                .priorCharges(getPriorChargesDto())
                 .build();
     }
 
     private PriorChargesDto getPriorChargesDto() {
-        return PriorChargesDto.builder().name(HSBC)
+        return PriorChargesDto.builder()
                 .monthlyPayment(MONTHLY_PAYMENT)
-                .repaymentType(REPAYMENT_TYPE)
-                .rateType(RATE_TYPE)
-                .outstandingBalance(OUTSTANDING_BALANCE)
+                .balanceOutstanding(OUTSTANDING_BALANCE)
                 .build();
     }
 
@@ -506,13 +501,12 @@ public abstract class MapperBase {
                 .numberOfBedrooms(NUMBER_OF_BEDROOMS)
                 .hasAGarage(true)
                 .numberOfPriorCharges(1)
-                .priorCharges(List.of(getPriorCharges()))
+                .priorCharges(getPriorCharges())
                 .build();
     }
 
     private PriorCharges getPriorCharges() {
-        return PriorCharges.builder().name(HSBC).monthlyPayment(MONTHLY_PAYMENT).repaymentType(REPAYMENT_TYPE).rateType(
-                RATE_TYPE).build();
+        return PriorCharges.builder().monthlyPayment(MONTHLY_PAYMENT).balanceOutstanding(OUTSTANDING_BALANCE).build();
     }
 
     protected Application getApplication() {

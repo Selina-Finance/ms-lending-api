@@ -17,22 +17,18 @@
 
 package com.selina.lending.internal.dto;
 
+import javax.validation.constraints.Pattern;
+
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class PriorChargesDto {
-      String name;
+      Double balanceConsolidated;
+      Double balanceOutstanding;
       Double monthlyPayment;
-      Double outstandingBalance;
-      Double monthlyPaymentVerified;
-      Double outstandingBalanceVerified;
-      Integer remainingTerm;
-      String rateType;
-      String repaymentType;
-      String fixedRatePeriodEndDate;
-      Double interestOnlyBalanceOfPartAndPartMortgage;
-      Boolean toBeConsolidated;
-      String status;
+      @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+      String priorChargesYoungestDate;
+      Double otherDebtPayments;
 }

@@ -85,10 +85,8 @@ class DIPApplicationRequestMapperTest extends MapperBase{
     }
 
     private void assertPriorCharges(ApplicationRequest applicationRequest) {
-        var priorCharges = applicationRequest.getPropertyDetails().getPriorCharges().get(0);
-        assertThat(priorCharges.getName(), equalTo(HSBC));
-        assertThat(priorCharges.getRateType(), equalTo(RATE_TYPE));
-        assertThat(priorCharges.getRepaymentType(), equalTo(REPAYMENT_TYPE));
+        var priorCharges = applicationRequest.getPropertyDetails().getPriorCharges();
+        assertThat(priorCharges.getBalanceOutstanding(), equalTo(OUTSTANDING_BALANCE));
         assertThat(priorCharges.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
     }
 }
