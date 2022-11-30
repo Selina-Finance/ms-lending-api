@@ -15,7 +15,21 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.creditCommitments;
+package com.selina.lending.internal.dto.creditCommitments;
 
-public class CreditCommitmentResponse {
+import com.selina.lending.internal.dto.CreditCommitmentsDto;
+import lombok.Builder;
+import lombok.Value;
+
+@Value
+@Builder
+public class ApplicantCreditCommitments {
+    Long id;
+    Boolean primaryApplicant;
+    String experianId;
+    String searchId;
+    String creditScore;
+    String message;
+    String creditCheck;
+    CreditCommitmentsDto creditCommitments;
 }

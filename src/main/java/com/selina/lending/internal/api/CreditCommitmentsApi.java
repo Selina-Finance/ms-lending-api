@@ -18,8 +18,8 @@
 package com.selina.lending.internal.api;
 
 import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
-import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.service.application.domain.creditCommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @FeignClient(
         value = "credit-commitments-api",
-        url = "${middleware.credit-commitments.url}",
+        url = "${middleware.api.url}",
         configuration = MiddlewareOAuth2Configuration.class
 )
 public interface CreditCommitmentsApi {

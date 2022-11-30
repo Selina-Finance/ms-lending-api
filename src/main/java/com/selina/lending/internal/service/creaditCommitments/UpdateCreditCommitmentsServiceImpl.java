@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service.creaditCommitments;
 
-import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.service.AccessManagementService;

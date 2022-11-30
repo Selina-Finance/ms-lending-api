@@ -18,7 +18,7 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.creaditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

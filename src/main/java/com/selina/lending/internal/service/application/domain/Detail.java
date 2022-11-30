@@ -58,4 +58,6 @@ public class Detail {
     String type;
     String date;
     Integer amount;
+    Double currentBalance;
+    String code;
 }
