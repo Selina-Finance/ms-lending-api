@@ -80,7 +80,7 @@ public class LendingController implements LendingOperations {
     }
 
     @Override
-    public ResponseEntity<ApplicationResponse> createDipApplication(DIPApplicationRequest dipApplicationRequest) {
+    public ResponseEntity<ApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
         log.info("Create DIP application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
         var applicationResponse = createApplicationService.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
