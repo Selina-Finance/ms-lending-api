@@ -49,7 +49,7 @@ import feign.Request;
 import feign.RequestTemplate;
 
 @WithMockUser
-@WebMvcTest(value = LendingController.class)
+@WebMvcTest(value = DIPController.class)
 class LendingControllerCircuitBreakerTest extends MapperBase {
 
     @Autowired

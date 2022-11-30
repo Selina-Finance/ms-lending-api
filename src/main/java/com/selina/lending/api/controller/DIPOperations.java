@@ -45,7 +45,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @OpenAPIDefinition(info = @Info(title = "Lending API", description = "Lending API service", license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")))
 @RequestMapping("/application")
-public interface LendingOperations {
+public interface DIPOperations {
     @Operation(description = "Retrieve the application for the given externalApplicationId")
     @ApiResponses(value = {
             @ApiResponse(

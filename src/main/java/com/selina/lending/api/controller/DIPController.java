@@ -36,13 +36,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-public class LendingController implements LendingOperations {
+public class DIPController implements DIPOperations {
 
     private final RetrieveApplicationService retrieveApplicationService;
     private final CreateApplicationService createApplicationService;
     private final UpdateApplicationService updateApplicationService;
 
-    public LendingController(RetrieveApplicationService retrieveApplicationService, CreateApplicationService createApplicationService, UpdateApplicationService updateApplicationService) {
+    public DIPController(RetrieveApplicationService retrieveApplicationService, CreateApplicationService createApplicationService, UpdateApplicationService updateApplicationService) {
         this.retrieveApplicationService = retrieveApplicationService;
         this.createApplicationService = createApplicationService;
         this.updateApplicationService = updateApplicationService;

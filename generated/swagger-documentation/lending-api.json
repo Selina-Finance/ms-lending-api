@@ -44,12 +44,6 @@
           "required":true
         },
         "responses":{
-          "403":{
-            "description":"Forbidden"
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
           "200":{
             "description":"Quick Quote updated",
             "content":{
@@ -62,6 +56,12 @@
           },
           "400":{
             "description":"Application details invalid"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -69,7 +69,7 @@
     "/application/{externalApplicationId}/dip":{
       "put":{
         "tags":[
-          "lending-controller"
+          "dip-controller"
         ],
         "description":"Update the Decision In Principle (DIP) application for the given external application id",
         "operationId":"updateDipApplication",
@@ -95,8 +95,17 @@
           "required":true
         },
         "responses":{
+          "400":{
+            "description":"Application details invalid"
+          },
           "403":{
             "description":"Forbidden"
+          },
+          "404":{
+            "description":"Application not found"
+          },
+          "401":{
+            "description":"Unauthorized"
           },
           "200":{
             "description":"Application updated",
@@ -107,15 +116,6 @@
                 }
               }
             }
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
-          },
-          "404":{
-            "description":"Application not found"
           }
         }
       }
@@ -172,6 +172,15 @@
           "required":true
         },
         "responses":{
+          "400":{
+            "description":"Application details invalid"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
           "200":{
             "description":"Quick Quote created",
             "content":{
@@ -181,15 +190,6 @@
                 }
               }
             }
-          },
-          "403":{
-            "description":"Forbidden"
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
           }
         }
       }
@@ -197,7 +197,7 @@
     "/application/dip":{
       "post":{
         "tags":[
-          "lending-controller"
+          "dip-controller"
         ],
         "description":"Create a new Decision In Principle (DIP) application",
         "operationId":"createDipApplication",
@@ -212,6 +212,12 @@
           "required":true
         },
         "responses":{
+          "400":{
+            "description":"Application details invalid"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
           "200":{
             "description":"Application created",
             "content":{
@@ -222,14 +228,8 @@
               }
             }
           },
-          "403":{
-            "description":"Forbidden"
-          },
           "401":{
             "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
           }
         }
       }
@@ -237,7 +237,7 @@
     "/application/{externalApplicationId}":{
       "get":{
         "tags":[
-          "lending-controller"
+          "dip-controller"
         ],
         "description":"Retrieve the application for the given externalApplicationId",
         "operationId":"getApplication",
@@ -253,6 +253,12 @@
           }
         ],
         "responses":{
+          "404":{
+            "description":"Application not found"
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
           "200":{
             "description":"Found application",
             "content":{
@@ -262,12 +268,6 @@
                 }
               }
             }
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "404":{
-            "description":"Application not found"
           }
         }
       }

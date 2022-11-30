@@ -66,7 +66,7 @@ class LendingControllerUnitTest {
     private CreateApplicationService createApplicationService;
 
     @InjectMocks
-    private LendingController lendingController;
+    private DIPController lendingController;
 
     @Test
     void getApplication() {
