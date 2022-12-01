@@ -48,7 +48,7 @@ public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmen
     }
 
     private void checkAccessPermitted(String externalId) {
-        var identifier = applicationRepository.getApplicationSourceAccountByExternalApplicationId(externalId);
+        var identifier = applicationRepository.getAppSourceAccountByExternalAppId(externalId);
         if (!accessManagementService.isSourceAccountAccessAllowed(identifier.getSourceAccount())) {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalId);
         }

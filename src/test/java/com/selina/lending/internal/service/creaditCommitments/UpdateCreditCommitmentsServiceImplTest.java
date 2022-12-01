@@ -63,7 +63,7 @@ class UpdateCreditCommitmentsServiceImplTest {
         var request = new UpdateCreditCommitmentsRequest();
 
         var sourceAccount = new ApplicationIdentifier(null, "the-source-account-id");
-        when(applicationRepository.getApplicationSourceAccountByExternalApplicationId(any())).thenReturn(sourceAccount);
+        when(applicationRepository.getAppSourceAccountByExternalAppId(any())).thenReturn(sourceAccount);
         when(accessManagementService.isSourceAccountAccessAllowed(any())).thenReturn(true);
 
         var applicationId = new ApplicationIdentifier("the-app-id-abc", null);
@@ -80,7 +80,7 @@ class UpdateCreditCommitmentsServiceImplTest {
         // Then
         assertEquals(result, newDecisionResponse);
 
-        verify(applicationRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(externalId);
+        verify(applicationRepository, times(1)).getAppSourceAccountByExternalAppId(externalId);
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
         verify(commitmentsRepository, times(1)).patchCreditCommitments(applicationId.getId(), request);
         verify(applicationRepository, times(1)).runDecisioningByAppId(applicationId.getId());
@@ -93,7 +93,7 @@ class UpdateCreditCommitmentsServiceImplTest {
         var request = new UpdateCreditCommitmentsRequest();
 
         var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
-        when(applicationRepository.getApplicationSourceAccountByExternalApplicationId(any())).thenReturn(identifier);
+        when(applicationRepository.getAppSourceAccountByExternalAppId(any())).thenReturn(identifier);
 
         doThrow(new AccessDeniedException(ACCESS_DENIED_MESSAGE))
                 .when(accessManagementService).isSourceAccountAccessAllowed(any());
@@ -106,7 +106,7 @@ class UpdateCreditCommitmentsServiceImplTest {
 
         //Then
         assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(FORBIDDEN.getReasonPhrase());
-        verify(applicationRepository, times(1)).getApplicationSourceAccountByExternalApplicationId(externalId);
+        verify(applicationRepository, times(1)).getAppSourceAccountByExternalAppId(externalId);
         verify(applicationRepository, times(0)).getAppIdByExternalId(externalId);
         verify(commitmentsRepository, times(0)).patchCreditCommitments(identifier.getId(), request);
         verify(applicationRepository, times(0)).runDecisioningByAppId(identifier.getId());

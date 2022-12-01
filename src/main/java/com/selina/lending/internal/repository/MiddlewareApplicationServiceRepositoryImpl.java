@@ -54,25 +54,25 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
-    public ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(String externalApplicationId) {
-        log.info("Request to get application sourceAccount by [externalApplicationId={}]", externalApplicationId);
-        return middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
+    public ApplicationIdentifier getAppSourceAccountByExternalAppId(String externalAppId) {
+        log.info("Request to get application sourceAccount by [externalApplicationId={}]", externalAppId);
+        return middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(externalAppId);
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
-    public ApplicationIdentifier getAppIdByExternalId(String externalApplicationId) {
-        log.info("Request to get application Id by [externalApplicationId={}]", externalApplicationId);
-        return middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalApplicationId);
+    public ApplicationIdentifier getAppIdByExternalId(String externalAppId) {
+        log.info("Request to get application Id by [externalApplicationId={}]", externalAppId);
+        return middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalAppId);
     }
 
     @Retry(name = "middleware-application-service-retry", fallbackMethod = "deleteApiFallback")
     @Override
     @Async("taskExecutor")
-    public void deleteApplicationByExternalApplicationId(String sourceAccount, String externalApplicationId) {
-        log.info("Request to delete application by [externalApplicationId={}] [sourceAccount={}]", externalApplicationId, sourceAccount);
-        middlewareApplicationServiceApi.deleteApplicationByExternalApplicationId(sourceAccount, externalApplicationId);
-        log.info("Application deleted [externalApplicationId={}] [sourceAccount={}]", externalApplicationId, sourceAccount);
+    public void deleteAppByExternalApplicationId(String sourceAccount, String externalAppId) {
+        log.info("Request to delete application by [externalApplicationId={}] [sourceAccount={}]", externalAppId, sourceAccount);
+        middlewareApplicationServiceApi.deleteApplicationByExternalApplicationId(sourceAccount, externalAppId);
+        log.info("Application deleted [externalApplicationId={}] [sourceAccount={}]", externalAppId, sourceAccount);
     }
 
     private void deleteApiFallback(String sourceAccount, String externalApplicationId, FeignException.FeignServerException e) { //NOSONAR
