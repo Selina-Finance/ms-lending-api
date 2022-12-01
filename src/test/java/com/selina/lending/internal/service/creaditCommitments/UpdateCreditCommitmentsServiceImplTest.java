@@ -18,13 +18,13 @@
 package com.selina.lending.internal.service.creaditCommitments;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentResponse;
 import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,8 +62,12 @@ class UpdateCreditCommitmentsServiceImplTest {
         var externalId = UUID.randomUUID().toString();
         var request = new UpdateCreditCommitmentsRequest();
 
-        var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
-        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(identifier);
+        var sourceAccount = new ApplicationIdentifier(null, "the-source-account-id");
+        when(applicationRepository.getAppSourceAccountByExternalAppId(any())).thenReturn(sourceAccount);
+        when(accessManagementService.isSourceAccountAccessAllowed(any())).thenReturn(true);
+
+        var applicationId = new ApplicationIdentifier("the-app-id-abc", null);
+        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(applicationId);
 
         when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new CreditCommitmentResponse());
 
@@ -76,9 +80,10 @@ class UpdateCreditCommitmentsServiceImplTest {
         // Then
         assertEquals(result, newDecisionResponse);
 
+        verify(applicationRepository, times(1)).getAppSourceAccountByExternalAppId(externalId);
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
-        verify(commitmentsRepository, times(1)).patchCreditCommitments(identifier.getId(), request);
-        verify(applicationRepository, times(1)).runDecisioningByAppId(identifier.getId());
+        verify(commitmentsRepository, times(1)).patchCreditCommitments(applicationId.getId(), request);
+        verify(applicationRepository, times(1)).runDecisioningByAppId(applicationId.getId());
     }
 
     @Test
@@ -88,10 +93,10 @@ class UpdateCreditCommitmentsServiceImplTest {
         var request = new UpdateCreditCommitmentsRequest();
 
         var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
-        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(identifier);
+        when(applicationRepository.getAppSourceAccountByExternalAppId(any())).thenReturn(identifier);
 
         doThrow(new AccessDeniedException(ACCESS_DENIED_MESSAGE))
-                .when(accessManagementService).checkSourceAccountAccessPermitted(any());
+                .when(accessManagementService).isSourceAccountAccessAllowed(any());
 
         // When
         var exception = assertThrows(
@@ -101,7 +106,9 @@ class UpdateCreditCommitmentsServiceImplTest {
 
         //Then
         assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(FORBIDDEN.getReasonPhrase());
-        verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
+        verify(applicationRepository, times(1)).getAppSourceAccountByExternalAppId(externalId);
+        verify(applicationRepository, times(0)).getAppIdByExternalId(externalId);
         verify(commitmentsRepository, times(0)).patchCreditCommitments(identifier.getId(), request);
+        verify(applicationRepository, times(0)).runDecisioningByAppId(identifier.getId());
     }
 }

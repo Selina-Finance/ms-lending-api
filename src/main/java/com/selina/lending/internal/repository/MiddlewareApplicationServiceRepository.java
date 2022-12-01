@@ -22,7 +22,10 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 
 public interface MiddlewareApplicationServiceRepository {
     ApplicationResponse runDecisioningByAppId(String applicationId);
-    ApplicationIdentifier getApplicationSourceAccountByExternalApplicationId(String externalApplicationId);
-    ApplicationIdentifier getAppIdByExternalId(String externalApplicationId);
-    void deleteApplicationByExternalApplicationId(String sourceAccount, String externalApplicationId);
+
+    ApplicationIdentifier getAppSourceAccountByExternalAppId(String externalAppId);
+
+    ApplicationIdentifier getAppIdByExternalId(String externalAppId);
+
+    void deleteAppByExternalApplicationId(String sourceAccount, String externalAppId);
 }

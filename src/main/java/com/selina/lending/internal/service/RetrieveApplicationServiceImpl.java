@@ -40,7 +40,7 @@ public class RetrieveApplicationServiceImpl implements RetrieveApplicationServic
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId) {
-        var sourceAccount = middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
+        var sourceAccount = middlewareApplicationServiceRepository.getAppSourceAccountByExternalAppId(externalApplicationId);
         accessManagementService.checkSourceAccountAccessPermitted(sourceAccount.getSourceAccount());
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
         return middlewareRepository.getApplicationById(applicationIdentifier.getId());

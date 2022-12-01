@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public SelectProductResponse selectProductOffer(String externalApplicationId, String productCode) {
-        var sourceAccount = middlewareApplicationServiceRepository.getApplicationSourceAccountByExternalApplicationId(externalApplicationId);
+        var sourceAccount = middlewareApplicationServiceRepository.getAppSourceAccountByExternalAppId(externalApplicationId);
         accessManagementService.checkSourceAccountAccessPermitted(sourceAccount.getSourceAccount());
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
 

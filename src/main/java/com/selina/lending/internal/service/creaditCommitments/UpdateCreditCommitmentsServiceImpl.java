@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.service.creaditCommitments;
 
+import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
@@ -39,9 +40,17 @@ public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmen
 
     @Override
     public ApplicationResponse patchCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request) {
-        var identifier = applicationRepository.getAppIdByExternalId(externalId);
-        accessManagementService.checkSourceAccountAccessPermitted(identifier.getSourceAccount());
-        var patchCCResponse = commitmentsRepository.patchCreditCommitments(identifier.getId(), request);
-        return applicationRepository.runDecisioningByAppId(identifier.getId());
+        checkAccessPermitted(externalId);
+
+        var applicationId = applicationRepository.getAppIdByExternalId(externalId).getId();
+        commitmentsRepository.patchCreditCommitments(applicationId, request);
+        return applicationRepository.runDecisioningByAppId(applicationId);
+    }
+
+    private void checkAccessPermitted(String externalId) {
+        var identifier = applicationRepository.getAppSourceAccountByExternalAppId(externalId);
+        if (!accessManagementService.isSourceAccountAccessAllowed(identifier.getSourceAccount())) {
+            throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalId);
+        }
     }
 }

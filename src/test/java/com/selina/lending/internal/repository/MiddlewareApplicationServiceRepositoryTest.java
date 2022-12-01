@@ -106,7 +106,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
 
         //When
-        middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+        middlewareRepository.getAppSourceAccountByExternalAppId(EXTERNAL_APPLICATION_ID);
 
         //Then
         verify(middlewareApplicationServiceApi, times(1)).getApplicationSourceAccountByExternalApplicationId(
@@ -134,7 +134,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
                 EXTERNAL_APPLICATION_ID);
 
         //When
-        middlewareRepository.deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+        middlewareRepository.deleteAppByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
 
         //Then
         verify(middlewareApplicationServiceApi, times(1)).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT,
@@ -171,7 +171,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
                         notFoundMsg.getBytes(), null));
 
         var exception = assertThrows(FeignException.FeignClientException.class,
-                () -> middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID));
+                () -> middlewareRepository.getAppSourceAccountByExternalAppId(EXTERNAL_APPLICATION_ID));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
@@ -189,7 +189,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
                         null));
 
         var supplier = circuitBreaker.decorateSupplier(
-                () -> middlewareRepository.getApplicationSourceAccountByExternalApplicationId(EXTERNAL_APPLICATION_ID));
+                () -> middlewareRepository.getAppSourceAccountByExternalAppId(EXTERNAL_APPLICATION_ID));
 
         IntStream.range(0, 10).forEach(x -> {
             try {
@@ -246,7 +246,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
                 EXTERNAL_APPLICATION_ID);
 
         try {
-            Runnable runnable = () -> middlewareRepository.deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT,
+            Runnable runnable = () -> middlewareRepository.deleteAppByExternalApplicationId(SOURCE_ACCOUNT,
                     EXTERNAL_APPLICATION_ID);
             retryConfig.executeRunnable(runnable);
         } catch (Exception ignore) {}
@@ -265,7 +265,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
                 EXTERNAL_APPLICATION_ID);
 
         try {
-            Runnable runnable = () -> middlewareRepository.deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT,
+            Runnable runnable = () -> middlewareRepository.deleteAppByExternalApplicationId(SOURCE_ACCOUNT,
                     EXTERNAL_APPLICATION_ID);
             retryConfig.executeRunnable(runnable);
         } catch (Exception ignore) {}
