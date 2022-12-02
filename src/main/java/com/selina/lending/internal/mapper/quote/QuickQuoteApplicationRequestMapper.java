@@ -55,7 +55,7 @@ public class QuickQuoteApplicationRequestMapper {
 
     private static PriorCharges mapPriorCharges(QuickQuotePropertyDetailsDto propertyDetailsDto) {
         PriorCharges priorCharges = null;
-        if (propertyDetailsDto != null) {
+        if (propertyDetailsDto != null && propertyDetailsDto.getPriorCharges() != null) {
             PriorChargesDto priorChargesDto = propertyDetailsDto.getPriorCharges();
             priorCharges = PriorCharges.builder()
                     .numberPriorCharges(propertyDetailsDto.getNumberOfPriorCharges())
