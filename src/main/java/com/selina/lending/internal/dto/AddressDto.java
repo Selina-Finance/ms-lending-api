@@ -41,6 +41,7 @@ public class AddressDto {
 
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z &\\-.']*$")
+    @Schema(example = "London")
     String city;
 
     @NotBlank
@@ -54,9 +55,11 @@ public class AddressDto {
     String country;
 
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String fromDate;
 
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String toDate;
 
     enum AddressType {

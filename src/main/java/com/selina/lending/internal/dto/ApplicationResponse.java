@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.dto;
 
+import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentDto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
@@ -29,4 +31,5 @@ public class ApplicationResponse {
     @Schema (oneOf = DIPApplicationDto.class)
     ApplicationDto application;
     SalesforceDto salesforce;
+    CreditCommitmentDto creditCommitment;
 }

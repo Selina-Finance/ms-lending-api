@@ -19,11 +19,16 @@ package com.selina.lending.internal.service.application.domain;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
-@Value
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class User {
     List<Detail> detail;
+    Summary summary;
 }

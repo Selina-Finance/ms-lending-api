@@ -20,24 +20,24 @@ package com.selina.lending.internal.service.application.domain;
 import java.util.Date;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class Detail {
     String id;
     String status;
     String applicant;
+    String name;
+    String dateOfBirth;
     String category;
-    Date startDate;
-    Date endDate;
-    Date lastUpdatedDate;
-    Date settlementDate;
+    String startDate;
+    String endDate;
+    String lastUpdatedDate;
+    String settlementDate;
     Integer remainingTerm;
     Double outstandingBalance;
-    Double outstandingBalanceVerified;
     Double monthlyPayment;
-    Double monthlyPaymentVerified;
     Double creditLimit;
     Boolean securityProperty;
     String paymentProfileShort;
@@ -50,13 +50,12 @@ public class Detail {
     String repaymentVehicle;
     String costOfRepaymentVehicle;
     String interestRateType;
-    Date fixedRatePeriodEndDate;
+    String fixedRatePeriodEndDate;
     Double amountToConsolidate;
     String reasonToIgnore;
     String lender;
     String accountNumber;
     String type;
-    String date;
     Integer amount;
     Double currentBalance;
     String code;

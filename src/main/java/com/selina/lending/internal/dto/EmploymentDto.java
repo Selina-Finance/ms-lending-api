@@ -45,9 +45,11 @@ public class EmploymentDto {
     String city;
 
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String contractStartDate;
 
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String contractEndDate;
     Boolean firstTimeContractor;
     String employerName;
@@ -68,12 +70,16 @@ public class EmploymentDto {
     String percentageOfCompanyOwned;
     String monthAccountingPeriodStarts;
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String whenWasCompanyIncorporated;
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String whenDidYouBeginTrading;
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String startDate;
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String partnershipFormedDate;
     Double percentageOfPartnershipOwned;
     String businessStructure;

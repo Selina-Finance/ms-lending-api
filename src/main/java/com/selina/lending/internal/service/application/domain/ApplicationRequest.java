@@ -26,6 +26,7 @@ import lombok.Data;
 @Data
 public class ApplicationRequest {
     private String applicationType;
+    private Boolean includeCreditCommitment;
     private String source;
     private String sourceClientId;
     private String sourceAccount;

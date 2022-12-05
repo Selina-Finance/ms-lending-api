@@ -15,15 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.mapper;
 
-import java.util.List;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import lombok.Builder;
-import lombok.Value;
+import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentDto;
+import com.selina.lending.internal.service.application.domain.CreditCommitment;
 
-@Builder
-@Value
-public class UserDto {
-    List<DetailDto> detail;
+@Mapper(uses = ApplicantCreditCommitmentsMapper.class)
+public interface CreditCommitmentMapper {
+    CreditCommitmentMapper INSTANCE = Mappers.getMapper(CreditCommitmentMapper.class);
+
+    CreditCommitmentDto mapToCreditCommitment(CreditCommitment creditCommitment);
 }

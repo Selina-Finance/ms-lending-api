@@ -43,6 +43,7 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
 
     @NotBlank
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     private String whenLastPurchased;
 
     @NotNull

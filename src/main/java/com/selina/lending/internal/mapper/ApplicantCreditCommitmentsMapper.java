@@ -18,16 +18,15 @@
 package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.creditCommitments.ApplicantCreditCommitmentsDto;
+import com.selina.lending.internal.service.application.domain.ApplicantCreditCommitments;
 
-@Mapper(uses = {ApplicationMapper.class, SalesforceMapper.class, CreditCommitmentMapper.class})
-public interface ApplicationResponseMapper {
-    ApplicationResponseMapper INSTANCE = Mappers.getMapper(ApplicationResponseMapper.class);
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {CreditCommitmentsDetailMapper.class})
+public interface ApplicantCreditCommitmentsMapper {
+    ApplicantCreditCommitmentsMapper INSTANCE = Mappers.getMapper(ApplicantCreditCommitmentsMapper.class);
 
-    @Mapping(target= "requestType", source = "applicationResponse.applicationType")
-    ApplicationResponse mapToApplicationResponseDto(
-            com.selina.lending.internal.service.application.domain.ApplicationResponse applicationResponse);
+    ApplicantCreditCommitmentsDto mapToApplicantCreditCommitmentsDto(ApplicantCreditCommitments applicantCreditCommitments);
 }

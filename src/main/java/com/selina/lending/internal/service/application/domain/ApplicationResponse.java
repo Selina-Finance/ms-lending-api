@@ -28,4 +28,5 @@ public class ApplicationResponse {
     private String applicationId;
     private Application application;
     private Salesforce salesforce;
+    private CreditCommitment creditCommitment;
 }

@@ -48,12 +48,14 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.service.application.domain.ApplicantCreditCommitments;
 import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.Checklist;
 import com.selina.lending.internal.service.application.domain.CreditCheck;
-import com.selina.lending.internal.service.application.domain.CreditCommitments;
+import com.selina.lending.internal.service.application.domain.CreditCommitment;
+import com.selina.lending.internal.service.application.domain.CreditCommitmentsDetail;
 import com.selina.lending.internal.service.application.domain.CreditPolicy;
 import com.selina.lending.internal.service.application.domain.Detail;
 import com.selina.lending.internal.service.application.domain.Document;
@@ -75,6 +77,7 @@ import com.selina.lending.internal.service.application.domain.PublicInformation;
 import com.selina.lending.internal.service.application.domain.Required;
 import com.selina.lending.internal.service.application.domain.RuleOutcome;
 import com.selina.lending.internal.service.application.domain.Salesforce;
+import com.selina.lending.internal.service.application.domain.Summary;
 import com.selina.lending.internal.service.application.domain.System;
 import com.selina.lending.internal.service.application.domain.Underwriting;
 import com.selina.lending.internal.service.application.domain.User;
@@ -100,7 +103,6 @@ public abstract class MapperBase {
     public static final Integer LOAN_AMOUNT = 50000;
     public static final int LOAN_TERM = 5;
     public static final double ALLOCATION_AMOUNT = 50000;
-
     public static final Double AFFORDABILITY_DEFICIT = 2100.0;
     public static final String ALLOCATION_PURPOSE = "Home improvements";
     public static final String DESIRED_TIME_LINE = "By 3 months";
@@ -139,7 +141,7 @@ public abstract class MapperBase {
     public static final String CREDIT_CHECK_REF = "6HVRQLKGFH";
     public static final String DOCUMENT_TYPE = "passport";
     public static final String DETAIL_ID = "detailId123";
-    public static final String DETAIL_ACCOUNT_NUMBER = "8227422";
+    public static final String STATUS = "Active";
     public static final String UNDERWRITER = "Madeline Scott";
     public static final String UNDERWRITING_STAGE = "Underwriting Stage";
     public static final String SALESFORCE_OPPORTUNITY_ID = "0062z000003YtBkAAK";
@@ -562,7 +564,7 @@ public abstract class MapperBase {
     }
 
     protected ApplicationResponse getApplicationResponse(){
-        return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).build();
+        return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
     }
 
     protected ApplicationDecisionResponse getApplicationDecisionResponse() {
@@ -634,8 +636,17 @@ public abstract class MapperBase {
         return Lead.builder().utmCampaign(UTM_CAMPAIGN).utmMedium(UTM_MEDIUM).utmSource(UTM_SOURCE).build();
     }
 
-    public CreditCommitments getCreditCommitments() {
-        return CreditCommitments.builder().creditPolicy(getCreditPolicy())
+
+    private CreditCommitment getCreditCommitment() {
+        return CreditCommitment.builder().applicants(List.of(getApplicantCreditCommitment())).build();
+    }
+
+    private ApplicantCreditCommitments getApplicantCreditCommitment() {
+        return ApplicantCreditCommitments.builder().creditCommitments(getCreditCommitments()).primaryApplicant(true).creditScore(CREDIT_SCORE).build();
+    }
+
+    public CreditCommitmentsDetail getCreditCommitments() {
+        return CreditCommitmentsDetail.builder().creditPolicy(getCreditPolicy())
                 .system(getSystem()).creditPolicy(getCreditPolicy()).votersRoll(getVotersRoll())
                 .publicInformation(getPublicInformation())
                 .user(getUser())
@@ -659,13 +670,17 @@ public abstract class MapperBase {
     }
 
     private Detail getDetail() {
-        return Detail.builder().id(DETAIL_ID).accountNumber(DETAIL_ACCOUNT_NUMBER).build();
+        return Detail.builder().id(DETAIL_ID).status(STATUS).build();
     }
 
     private System getSystem() {
-        return System.builder().detail(List.of(getDetail())).build();
+        return System.builder().detail(List.of(getDetail())).summary(getSummary()).build();
     }
 
+
+    private Summary getSummary() {
+        return Summary.builder().numberAccounts(2).outstandingBalance(OUTSTANDING_BALANCE).build();
+    }
     private Underwriting getUnderwriting() {
         return Underwriting.builder().underwritingOwner(UNDERWRITER).stageName(UNDERWRITING_STAGE).build();
     }

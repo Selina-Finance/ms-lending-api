@@ -18,10 +18,10 @@
 package com.selina.lending.internal.service.application.domain;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class CreditCheck {
     String serviceUsed;
     String requestId;
