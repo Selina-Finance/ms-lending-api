@@ -40,6 +40,7 @@ public class IncomeItemDto {
     Double amountVerified;
 
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String incomeDate;
     String relatedYear;
     String frequency;

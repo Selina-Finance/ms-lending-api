@@ -17,16 +17,16 @@
 
 package com.selina.lending.internal.dto.creditCommitments;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 public class UpdateCreditCommitmentsRequest {
-    List<ApplicantCreditCommitments> applicants;
+    List<ApplicantCreditCommitmentsDto> applicants;
 }
 

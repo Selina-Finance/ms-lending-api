@@ -17,18 +17,17 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import java.util.List;
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-public class System {
-    List<Detail> detail;
-    Summary summary;
+@Data
+public class ApplicantCreditCommitments {
+    Long id;
+    Boolean primaryApplicant;
+    String experianId;
+    String searchId;
+    Integer creditScore;
+    String message;
+    CreditCommitmentsDetail creditCommitments;
 }

@@ -58,7 +58,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @Override
     public ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest) {
         log.debug("Create DIP with Credit Commitments application [applicationRequest={}]", applicationRequest);
-        enrichApplicationRequest(applicationRequest);
+        enrichApplicationRequest(applicationRequest, true);
 
         var appResponse =  middlewareApi.createDipCCApplication(applicationRequest);
 
@@ -70,7 +70,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         log.debug("Create DIP application [applicationRequest={}]", applicationRequest);
-        enrichApplicationRequest(applicationRequest);
+        enrichApplicationRequest(applicationRequest, false);
 
         var appResponse =  middlewareApi.createDipApplication(applicationRequest);
 
@@ -85,8 +85,9 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApi.selectProduct(id, productCode);
     }
 
-    private void enrichApplicationRequest(ApplicationRequest applicationRequest) {
+    private void enrichApplicationRequest(ApplicationRequest applicationRequest, boolean includeCreditCommitments) {
         applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
+        applicationRequest.setIncludeCreditCommitment(includeCreditCommitments);
         applicationRequest.setSource(LendingConstants.REQUEST_SOURCE);
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
     }

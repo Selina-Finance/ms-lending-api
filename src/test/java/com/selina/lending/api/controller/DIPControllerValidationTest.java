@@ -49,7 +49,7 @@ import com.selina.lending.internal.service.UpdateApplicationService;
 @WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
-class LendingControllerValidationTest extends MapperBase {
+class DIPControllerValidationTest extends MapperBase {
 
     @Autowired
     private MockMvc mockMvc;

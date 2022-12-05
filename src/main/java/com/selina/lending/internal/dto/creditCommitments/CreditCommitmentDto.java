@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.dto.creditCommitments;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class CreditPolicyDto {
-    List<DetailDto> detail;
+public class CreditCommitmentDto {
+
+    List<ApplicantCreditCommitmentsDto> applicants;
 }

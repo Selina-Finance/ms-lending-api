@@ -15,20 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.dto.creditCommitments;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
+import com.selina.lending.internal.dto.DetailDto;
+
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-public class System {
-    List<Detail> detail;
-    Summary summary;
+@Value
+public class UserDto {
+    List<DetailDto> detail;
+    SummaryDto summary;
 }

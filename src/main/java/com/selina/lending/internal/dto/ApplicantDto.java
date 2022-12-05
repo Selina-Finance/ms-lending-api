@@ -64,6 +64,7 @@ public class ApplicantDto {
 
     @NotNull
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
     private String dateOfBirth;
     private Integer numberOfAdultDependants;
     private Integer numberOfChildDependants;

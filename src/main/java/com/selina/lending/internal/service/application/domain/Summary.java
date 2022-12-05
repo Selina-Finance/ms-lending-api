@@ -15,17 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.service.application.domain;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class CreditCommitmentsDto {
-    SystemDto system;
-    UserDto user;
-    PublicInformationDto publicInformation;
-    VotersRollDto votersRoll;
-    CreditPolicyDto creditPolicy;
+public class Summary {
+    Integer numberAccounts;
+    Integer numberActiveAccounts;
+    Double outstandingBalance;
+    Integer numberInfo;
+    Integer totalValue;
 }

@@ -18,11 +18,11 @@
 package com.selina.lending.internal.service.application.domain;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
-public class CreditCommitments {
+@Data
+public class CreditCommitmentsDetail {
     System system;
     User user;
     PublicInformation publicInformation;

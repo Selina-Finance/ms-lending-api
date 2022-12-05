@@ -44,6 +44,15 @@
           "required":true
         },
         "responses":{
+          "400":{
+            "description":"Application details invalid"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
           "200":{
             "description":"Quick Quote updated",
             "content":{
@@ -53,15 +62,6 @@
                 }
               }
             }
-          },
-          "400":{
-            "description":"Application details invalid"
-          },
-          "403":{
-            "description":"Forbidden"
-          },
-          "401":{
-            "description":"Unauthorized"
           }
         }
       }
@@ -104,9 +104,6 @@
           "404":{
             "description":"Application not found"
           },
-          "401":{
-            "description":"Unauthorized"
-          },
           "200":{
             "description":"Application updated",
             "content":{
@@ -116,6 +113,9 @@
                 }
               }
             }
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -138,9 +138,6 @@
           "required":true
         },
         "responses":{
-          "400":{
-            "description":"Invalid client credentials"
-          },
           "200":{
             "description":"Authentication token and amount of seconds before it will be expired",
             "content":{
@@ -150,6 +147,9 @@
                 }
               }
             }
+          },
+          "400":{
+            "description":"Invalid client credentials"
           }
         }
       }
@@ -256,9 +256,6 @@
           "404":{
             "description":"Application not found"
           },
-          "401":{
-            "description":"Unauthorized"
-          },
           "200":{
             "description":"Found application",
             "content":{
@@ -268,6 +265,9 @@
                 }
               }
             }
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -301,7 +301,8 @@
           },
           "city":{
             "pattern":"^[a-zA-Z &\\-.']*$",
-            "type":"string"
+            "type":"string",
+            "example":"London"
           },
           "postcode":{
             "type":"string"
@@ -330,11 +331,13 @@
           },
           "fromDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "toDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           }
         }
       },
@@ -385,11 +388,13 @@
           },
           "contractStartDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "contractEndDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "firstTimeContractor":{
             "type":"boolean"
@@ -447,19 +452,23 @@
           },
           "whenWasCompanyIncorporated":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "whenDidYouBeginTrading":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "startDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "partnershipFormedDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "percentageOfPartnershipOwned":{
             "type":"number",
@@ -651,7 +660,8 @@
           },
           "incomeDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "relatedYear":{
             "type":"string"
@@ -731,7 +741,8 @@
           },
           "priorChargesYoungestDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "otherDebtPayments":{
             "type":"number",
@@ -791,7 +802,8 @@
           },
           "dateOfBirth":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "numberOfAdultDependants":{
             "type":"integer",
@@ -1194,7 +1206,8 @@
           },
           "dateOfBirth":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "numberOfAdultDependants":{
             "type":"integer",
@@ -1632,7 +1645,8 @@
           },
           "whenLastPurchased":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "example":"2001-01-01"
           },
           "purchaseValue":{
             "type":"number",
@@ -1849,6 +1863,37 @@
           }
         }
       },
+      "ApplicantCreditCommitmentsDto":{
+        "type":"object",
+        "properties":{
+          "id":{
+            "type":"integer",
+            "format":"int64"
+          },
+          "primaryApplicant":{
+            "type":"boolean"
+          },
+          "experianId":{
+            "type":"string"
+          },
+          "searchId":{
+            "type":"string"
+          },
+          "creditScore":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "message":{
+            "type":"string"
+          },
+          "creditCheck":{
+            "type":"string"
+          },
+          "creditCommitments":{
+            "$ref":"#/components/schemas/CreditCommitmentsDetailDto"
+          }
+        }
+      },
       "ApplicationDto":{
         "type":"object",
         "properties":{
@@ -1908,6 +1953,9 @@
           },
           "salesforce":{
             "$ref":"#/components/schemas/SalesforceDto"
+          },
+          "creditCommitment":{
+            "$ref":"#/components/schemas/CreditCommitmentDto"
           }
         }
       },
@@ -1919,6 +1967,48 @@
           },
           "required":{
             "$ref":"#/components/schemas/RequiredDto"
+          }
+        }
+      },
+      "CreditCommitmentDto":{
+        "type":"object",
+        "properties":{
+          "applicants":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/ApplicantCreditCommitmentsDto"
+            }
+          }
+        }
+      },
+      "CreditCommitmentsDetailDto":{
+        "type":"object",
+        "properties":{
+          "system":{
+            "$ref":"#/components/schemas/SystemDto"
+          },
+          "user":{
+            "$ref":"#/components/schemas/UserDto"
+          },
+          "publicInformation":{
+            "$ref":"#/components/schemas/PublicInformationDto"
+          },
+          "votersRoll":{
+            "$ref":"#/components/schemas/VotersRollDto"
+          },
+          "creditPolicy":{
+            "$ref":"#/components/schemas/CreditPolicyDto"
+          }
+        }
+      },
+      "CreditPolicyDto":{
+        "type":"object",
+        "properties":{
+          "detail":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DetailDto"
+            }
           }
         }
       },
@@ -1977,6 +2067,129 @@
             "items":{
               "$ref":"#/components/schemas/OfferDto"
             }
+          }
+        }
+      },
+      "DetailDto":{
+        "type":"object",
+        "properties":{
+          "id":{
+            "type":"string"
+          },
+          "status":{
+            "type":"string"
+          },
+          "applicant":{
+            "type":"string"
+          },
+          "name":{
+            "type":"string"
+          },
+          "dateOfBirth":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "category":{
+            "type":"string"
+          },
+          "startDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "endDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "lastUpdatedDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "settlementDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "remainingTerm":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "outstandingBalance":{
+            "type":"number",
+            "format":"double"
+          },
+          "monthlyPayment":{
+            "type":"number",
+            "format":"double"
+          },
+          "creditLimit":{
+            "type":"number",
+            "format":"double"
+          },
+          "securityProperty":{
+            "type":"boolean"
+          },
+          "paymentProfileShort":{
+            "type":"string"
+          },
+          "paymentProfileLong":{
+            "type":"string"
+          },
+          "adverseCredit":{
+            "type":"boolean"
+          },
+          "consolidate":{
+            "type":"boolean"
+          },
+          "ignore":{
+            "type":"boolean"
+          },
+          "repaymentType":{
+            "type":"string"
+          },
+          "repaymentVehicle":{
+            "type":"string"
+          },
+          "costOfRepaymentVehicle":{
+            "type":"string"
+          },
+          "interestRateType":{
+            "type":"string"
+          },
+          "fixedRatePeriodEndDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "amountToConsolidate":{
+            "type":"number",
+            "format":"double"
+          },
+          "reasonToIgnore":{
+            "type":"string"
+          },
+          "lender":{
+            "type":"string"
+          },
+          "type":{
+            "type":"string"
+          },
+          "currentBalance":{
+            "type":"number",
+            "format":"double"
+          },
+          "interestOnlyBalance":{
+            "type":"string"
+          },
+          "amount":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "code":{
+            "type":"string"
           }
         }
       },
@@ -2121,6 +2334,14 @@
           }
         }
       },
+      "PublicInformationDto":{
+        "type":"object",
+        "properties":{
+          "system":{
+            "$ref":"#/components/schemas/SystemDto"
+          }
+        }
+      },
       "RequiredDto":{
         "type":"object",
         "properties":{
@@ -2164,6 +2385,70 @@
           },
           "reference":{
             "type":"string"
+          }
+        }
+      },
+      "SummaryDto":{
+        "type":"object",
+        "properties":{
+          "numberAccounts":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "numberActiveAccounts":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "outstandingBalance":{
+            "type":"number",
+            "format":"double"
+          },
+          "numberInfo":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "totalValue":{
+            "type":"integer",
+            "format":"int32"
+          }
+        }
+      },
+      "SystemDto":{
+        "type":"object",
+        "properties":{
+          "detail":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DetailDto"
+            }
+          },
+          "summary":{
+            "$ref":"#/components/schemas/SummaryDto"
+          }
+        }
+      },
+      "UserDto":{
+        "type":"object",
+        "properties":{
+          "detail":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DetailDto"
+            }
+          },
+          "summary":{
+            "$ref":"#/components/schemas/SummaryDto"
+          }
+        }
+      },
+      "VotersRollDto":{
+        "type":"object",
+        "properties":{
+          "detail":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DetailDto"
+            }
           }
         }
       },

@@ -15,20 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.mapper;
 
-import java.util.List;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.selina.lending.internal.dto.creditCommitments.SummaryDto;
+import com.selina.lending.internal.service.application.domain.Summary;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-public class System {
-    List<Detail> detail;
-    Summary summary;
+@Mapper
+public interface SummaryMapper {
+    SummaryMapper INSTANCE = Mappers.getMapper(SummaryMapper.class);
+
+    SummaryDto mapToSummaryDto(Summary summary);
 }

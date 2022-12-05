@@ -50,7 +50,7 @@ import feign.RequestTemplate;
 
 @WithMockUser
 @WebMvcTest(value = DIPController.class)
-class LendingControllerCircuitBreakerTest extends MapperBase {
+class DIPControllerCircuitBreakerTest extends MapperBase {
 
     @Autowired
     private MockMvc mockMvc;

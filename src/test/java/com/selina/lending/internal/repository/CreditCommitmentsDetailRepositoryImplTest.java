@@ -35,7 +35,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CreditCommitmentsRepositoryImplTest {
+class CreditCommitmentsDetailRepositoryImplTest {
 
     @Mock
     private CreditCommitmentsApi creditCommitmentsApi;

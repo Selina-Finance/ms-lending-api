@@ -43,7 +43,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @ExtendWith(MockitoExtension.class)
-class LendingControllerUnitTest {
+class DIPControllerUnitTest {
 
     private static final String APPLICATION_ID = UUID.randomUUID().toString();
 

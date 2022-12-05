@@ -17,8 +17,9 @@
 
 package com.selina.lending.internal.dto;
 
-import java.util.Date;
+import javax.validation.constraints.Pattern;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
@@ -28,16 +29,26 @@ public class DetailDto {
     String id;
     String status;
     String applicant;
+    String name;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    String dateOfBirth;
     String category;
-    Date startDate;
-    Date endDate;
-    Date lastUpdatedDate;
-    Date settlementDate;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    String startDate;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    String endDate;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    String lastUpdatedDate;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    String settlementDate;
     Integer remainingTerm;
     Double outstandingBalance;
-    Double outstandingBalanceVerified;
     Double monthlyPayment;
-    Double monthlyPaymentVerified;
     Double creditLimit;
     Boolean securityProperty;
     String paymentProfileShort;
@@ -49,13 +60,13 @@ public class DetailDto {
     String repaymentVehicle;
     String costOfRepaymentVehicle;
     String interestRateType;
-    Date fixedRatePeriodEndDate;
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    String fixedRatePeriodEndDate;
     Double amountToConsolidate;
     String reasonToIgnore;
     String lender;
-    String accountNumber;
     String type;
-    String date;
     Double currentBalance;
     String interestOnlyBalance;
     Integer amount;
