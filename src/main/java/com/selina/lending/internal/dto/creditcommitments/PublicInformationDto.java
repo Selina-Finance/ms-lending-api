@@ -15,18 +15,13 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditCommitments;
-
-import java.util.List;
-
-import com.selina.lending.internal.dto.DetailDto;
+package com.selina.lending.internal.dto.creditcommitments;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class VotersRollDto {
-    List<DetailDto> detail;
+public class PublicInformationDto {
+    SystemDto system;
 }
-

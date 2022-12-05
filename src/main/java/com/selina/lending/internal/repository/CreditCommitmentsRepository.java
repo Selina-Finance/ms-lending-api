@@ -17,8 +17,8 @@
 
 package com.selina.lending.internal.repository;
 
-import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
 
 public interface CreditCommitmentsRepository {
 

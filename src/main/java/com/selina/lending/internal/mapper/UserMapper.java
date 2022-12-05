@@ -20,7 +20,7 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.creditCommitments.UserDto;
+import com.selina.lending.internal.dto.creditcommitments.UserDto;
 import com.selina.lending.internal.service.application.domain.User;
 
 @Mapper(uses = {DetailMapper.class, SummaryMapper.class})

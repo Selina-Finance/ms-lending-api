@@ -15,13 +15,11 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditCommitments;
+package com.selina.lending.internal.service.creditcommitments;
 
-import lombok.Builder;
-import lombok.Value;
+import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
-@Builder
-@Value
-public class PublicInformationDto {
-    SystemDto system;
+public interface UpdateCreditCommitmentsService {
+    ApplicationResponse patchCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request);
 }
