@@ -100,20 +100,6 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
     }
 
     @Test
-    void shouldCallHttpClientWhenGetApplicationSourceAccountByExternalApplicationIdInvoked() {
-        //Given
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-
-        //When
-        middlewareRepository.getAppSourceAccountByExternalAppId(EXTERNAL_APPLICATION_ID);
-
-        //Then
-        verify(middlewareApplicationServiceApi, times(1)).getApplicationSourceAccountByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID);
-    }
-
-    @Test
     void shouldCallHttpClientWhenGetApplicationIdByExternalApplicationIdInvoked() {
         //Given
         when(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(
@@ -157,54 +143,6 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
-    }
-
-    @Test
-    void shouldThrowFeignClientExceptionWhenMiddlewareThrowsNotFoundException() {
-        //Given
-        String notFoundMsg = "not found";
-
-        //When
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID)).thenThrow(
-                new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
-                        notFoundMsg.getBytes(), null));
-
-        var exception = assertThrows(FeignException.FeignClientException.class,
-                () -> middlewareRepository.getAppSourceAccountByExternalAppId(EXTERNAL_APPLICATION_ID));
-
-        //Then
-        assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
-    }
-
-    @Test
-    void shouldOpenCircuitBreakerWhenFeignServerExceptionTriggersFallback() {
-        //Given
-        var circuitBreaker = getCircuitBreaker();
-
-        //When
-        when(middlewareApplicationServiceApi.getApplicationSourceAccountByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID)).thenThrow(
-                new FeignException.InternalServerError("Internal Server Error", createRequest(), "error".getBytes(),
-                        null));
-
-        var supplier = circuitBreaker.decorateSupplier(
-                () -> middlewareRepository.getAppSourceAccountByExternalAppId(EXTERNAL_APPLICATION_ID));
-
-        IntStream.range(0, 10).forEach(x -> {
-            try {
-                supplier.get();
-            } catch (Exception ignore) {
-            }
-        });
-
-        //Then
-        var metrics = circuitBreaker.getMetrics();
-        assertThat(metrics.getNumberOfFailedCalls()).isEqualTo(5);
-        assertThat(metrics.getNumberOfNotPermittedCalls()).isEqualTo(5);
-
-        verify(middlewareApplicationServiceApi, times(5)).getApplicationSourceAccountByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID);
     }
 
     @Test

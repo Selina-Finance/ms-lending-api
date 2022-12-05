@@ -20,6 +20,7 @@ package com.selina.lending.internal.mapper.quote;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.time.LocalDate;
 
@@ -32,7 +33,7 @@ import com.selina.lending.internal.service.application.domain.quote.FilterQuickQ
 class QuickQuoteApplicationRequestMapperTest extends MapperBase {
 
     @Test
-    void mapToFilteredQuickQuoteApplicationRequestFromQuickQuoteApplicationRequestDto() {
+    void shouldMapToFilteredQuickQuoteApplicationRequest() {
         //Given
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
@@ -54,6 +55,21 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertPropertyDetails(application);
 
         assertPriorCharges(applicationRequest);
+    }
+
+    @Test
+    void shouldMapToFilteredQuickQuoteApplicationRequestWithNoPriorCharges() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getPropertyDetails().setPriorCharges(null);
+
+        //When
+        var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+        //Then
+        assertThat(applicationRequest.getApplication().getPropertyDetails(), notNullValue());
+        assertPropertyDetails(applicationRequest.getApplication());
+        assertThat(applicationRequest.getOptions().getPriorCharges(), nullValue());
     }
 
     private void assertPropertyDetails(Application application) {

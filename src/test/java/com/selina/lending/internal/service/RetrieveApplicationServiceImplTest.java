@@ -59,12 +59,10 @@ class RetrieveApplicationServiceImplTest {
     @Test
     void shouldGetApplicationByExternalApplicationId() {
         //Given
-        when(middlewareApplicationServiceRepository.getAppSourceAccountByExternalAppId(
-                EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
-        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
         when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(applicationIdentifier.getId()).thenReturn(EXTERNAL_APPLICATION_ID);
+        doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
 
         //When
         retrieveApplicationService.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID);
@@ -76,7 +74,7 @@ class RetrieveApplicationServiceImplTest {
     @Test
     void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToGetApplication() {
         //Given
-        when(middlewareApplicationServiceRepository.getAppSourceAccountByExternalAppId(
+        when(middlewareApplicationServiceRepository.getAppIdByExternalId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         doThrow(new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE)).when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
