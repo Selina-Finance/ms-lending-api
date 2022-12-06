@@ -17,25 +17,6 @@
 
 package com.selina.lending.internal.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.IntStream;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
 import com.selina.lending.internal.dto.Source;
@@ -45,13 +26,32 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
-
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpStatus;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {
@@ -162,7 +162,7 @@ class MiddlewareRepositoryTest {
         assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
     }
 
-
+    //----
     @Test
     void shouldCallHttpClientWhenSelectProductInvoked() {
         // Given
@@ -175,8 +175,8 @@ class MiddlewareRepositoryTest {
         var result = middlewareRepository.selectProduct(id, productCode);
 
         // Then
-        assertThat(result.getId()). isEqualTo("appId");
-        assertThat(result.getMessage()). isEqualTo("success");
+        assertThat(result.getId()).isEqualTo("appId");
+        assertThat(result.getMessage()).isEqualTo("success");
         verify(middlewareApi, times(1)).selectProduct(id, productCode);
     }
 
@@ -219,6 +219,59 @@ class MiddlewareRepositoryTest {
         //Then
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
         verify(middlewareApi, times(1)).selectProduct(id, productCode);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenDownloadEsisDocByIdInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+
+        var apiResponse = new ByteArrayResource(new byte[0]);
+        when(middlewareApi.downloadEsisByAppId(any())).thenReturn(apiResponse);
+
+        // When
+        var result = middlewareRepository.downloadEsisDocByAppId(id);
+
+        // Then
+        assertThat(result).isNotNull();
+        verify(middlewareApi, times(1)).downloadEsisByAppId(id);
+    }
+
+    @Test
+    void shouldThrowFeignClientExceptionWhenDownloadEsisDocThrowsNotFoundException() {
+        //Given
+        String notFoundMsg = "not found";
+        var id = UUID.randomUUID().toString();
+
+        when(middlewareApi.downloadEsisByAppId(any())).thenThrow(
+                new FeignException.FeignClientException(HttpStatus.NOT_FOUND.value(), notFoundMsg, createRequest(),
+                        notFoundMsg.getBytes(), null));
+        //When
+        var exception = assertThrows(FeignException.FeignClientException.class,
+                () -> middlewareRepository.downloadEsisDocByAppId(id));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
+        verify(middlewareApi, times(1)).downloadEsisByAppId(id);
+    }
+
+    @Test
+    void shouldThrowFeignServerExceptionWhenDownloadEsisThrowsInternalServerException() {
+        //Given
+        String errorMsg = "error";
+        var id = UUID.randomUUID().toString();
+
+        when(middlewareApi.downloadEsisByAppId(any())).thenThrow(
+                new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
+                        errorMsg.getBytes(), null));
+
+        //When
+        var exception = assertThrows(FeignException.FeignServerException.class,
+                () -> middlewareRepository.downloadEsisDocByAppId(id));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(errorMsg);
+        verify(middlewareApi, times(1)).downloadEsisByAppId(id);
     }
 
     @Test

@@ -17,10 +17,6 @@
 
 package com.selina.lending.internal.repository;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.dto.LendingConstants;
@@ -29,10 +25,13 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
-
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -60,7 +59,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         log.debug("Create DIP with Credit Commitments application [applicationRequest={}]", applicationRequest);
         enrichApplicationRequest(applicationRequest, true);
 
-        var appResponse =  middlewareApi.createDipCCApplication(applicationRequest);
+        var appResponse = middlewareApi.createDipCCApplication(applicationRequest);
 
         log.info("Finished calling mw to create dipcc application [externalApplicationId={}]", appResponse.getApplication().getExternalApplicationId());
         return appResponse;
@@ -72,7 +71,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         log.debug("Create DIP application [applicationRequest={}]", applicationRequest);
         enrichApplicationRequest(applicationRequest, false);
 
-        var appResponse =  middlewareApi.createDipApplication(applicationRequest);
+        var appResponse = middlewareApi.createDipApplication(applicationRequest);
 
         log.info("Finished calling mw to create dip application [externalApplicationId={}]", appResponse.getApplication().getExternalApplicationId());
         return appResponse;
@@ -83,6 +82,13 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public SelectProductResponse selectProduct(String id, String productCode) {
         log.info("Request to select product for [applicationId={}] [productCode={}]", id, productCode);
         return middlewareApi.selectProduct(id, productCode);
+    }
+
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareEsisApiFallback")
+    @Override
+    public Resource downloadEsisDocByAppId(String id) {
+        log.info("Request to download esis doc by [applicationId={}]", id);
+        return middlewareApi.downloadEsisByAppId(id);
     }
 
     private void enrichApplicationRequest(ApplicationRequest applicationRequest, boolean includeCreditCommitments) {
@@ -101,6 +107,10 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     private ApplicationResponse middlewareApiFallback(CallNotPermittedException e) { //NOSONAR
+        throw remoteResourceProblemException(e);
+    }
+
+    private Resource middlewareEsisApiFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 
