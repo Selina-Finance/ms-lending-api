@@ -27,7 +27,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,15 +70,15 @@ class CreditCommitmentsDetailControllerUnitTest extends MapperBase {
     }
 
     @Test
-    void whenGetEsisCCDocThenCallGetEsisCCService() {
+    void whenGetEsisCCDocThenCallGetEsisCCService() throws IOException {
         //Given
         var externalId = UUID.randomUUID().toString();
 
-        var response = new Byte[]{};
-        when(esisDocService.getByExternalAppId(any())).thenReturn(response);
+        var resource = new ByteArrayResource(new byte[0]);
+        when(esisDocService.getByExternalAppId(any())).thenReturn(resource);
 
         //When
-        var result = controller.getEsisDoc(externalId);
+        var result = controller.downloadEsisDoc(externalId);
 
         //Then
         assertNotNull(result.getBody());

@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,7 +36,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
+import java.io.IOException;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
 @Hidden
 @RequestMapping("/application")
@@ -62,24 +66,23 @@ public interface CreditCommitmentsOperations {
             @Valid @RequestBody UpdateCreditCommitmentsRequest request
     );
 
-    @Operation(description = "Fetch an application's ESIS pdf document")
+    @Operation(description = "Download an application's ESIS pdf document")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "Offers based on updated Credit Commitments",
-                    content = {@Content(
-                            mediaType = APPLICATION_JSON_VALUE, // TODO: what media type?
-                            schema = @Schema(implementation = ApplicationResponse.class))}), // TODO: remove the schema from this request?
+                    content = {@Content(mediaType = APPLICATION_PDF_VALUE)}),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Request is invalid", content = @Content),
+                    description = "Request is invalid",
+                    content = @Content),
             @ApiResponse(responseCode = "401", content = @Content),
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content),
     })
     @GetMapping(value = "/{externalApplicationId}/esis-document")
-    ResponseEntity<Byte[]> getEsisDoc(
+    ResponseEntity<Resource> downloadEsisDoc(
             @Parameter(description = "externalApplicationId of the application related to the ESIS doc", required = true) @PathVariable String externalApplicationId
-    );
+    ) throws IOException;
 
 }

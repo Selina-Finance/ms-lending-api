@@ -22,8 +22,13 @@ import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitments
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -43,5 +48,21 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
 
         var response = service.patchCreditCommitments(externalApplicationId, request);
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(response));
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadEsisDoc(String externalApplicationId) throws IOException {
+        log.info("Request to fetch ESIS pdf with [externalApplicationId={}]", externalApplicationId);
+
+        Resource resource = esisDocService.getByExternalAppId(externalApplicationId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
     }
 }

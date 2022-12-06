@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.service.creaditCommitments;
 
+import org.springframework.core.io.Resource;
+
 public interface EsisDocService {
-    Byte[] getByExternalAppId(String externalAppId);
+    Resource getByExternalAppId(String externalAppId);
 }

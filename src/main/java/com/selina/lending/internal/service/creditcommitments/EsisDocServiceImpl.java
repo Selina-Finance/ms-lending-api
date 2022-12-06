@@ -17,12 +17,14 @@
 
 package com.selina.lending.internal.service.creaditCommitments;
 
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EsisDocServiceImpl implements EsisDocService {
+
     @Override
-    public Byte[] getByExternalAppId(String externalAppId) {
-        return new Byte[0];
+    public Resource getByExternalAppId(String externalAppId) {
+        return null;
     }
 }
