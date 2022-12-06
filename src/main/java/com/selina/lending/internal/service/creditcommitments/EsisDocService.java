@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.service.creaditCommitments;
+package com.selina.lending.internal.service.creditcommitments;
 
 import org.springframework.core.io.Resource;
 

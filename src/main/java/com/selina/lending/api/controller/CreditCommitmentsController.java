@@ -20,6 +20,7 @@ package com.selina.lending.api.controller;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
+import com.selina.lending.internal.service.creditcommitments.EsisDocService;
 import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -34,10 +35,12 @@ import java.io.IOException;
 @RestController
 public class CreditCommitmentsController implements CreditCommitmentsOperations {
 
-    private final UpdateCreditCommitmentsService service;
+    private final UpdateCreditCommitmentsService updateCreditCommitmentsService;
+    private final EsisDocService esisDocService;
 
-    public CreditCommitmentsController(UpdateCreditCommitmentsService service) {
-        this.service = service;
+    public CreditCommitmentsController(UpdateCreditCommitmentsService updateCreditCommitmentsService, EsisDocService esisDocService) {
+        this.updateCreditCommitmentsService = updateCreditCommitmentsService;
+        this.esisDocService = esisDocService;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
             UpdateCreditCommitmentsRequest request) {
         log.info("Patch CreditCommitments with [externalApplicationId={}]", externalApplicationId);
 
-        var response = service.patchCreditCommitments(externalApplicationId, request);
+        var response = updateCreditCommitmentsService.patchCreditCommitments(externalApplicationId, request);
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(response));
     }
 
