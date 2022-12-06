@@ -17,14 +17,32 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
+import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.internal.service.AccessManagementService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EsisDocServiceImpl implements EsisDocService {
 
+    private final MiddlewareApplicationServiceRepository applicationRepository;
+    private final AccessManagementService accessManagementService;
+    private final MiddlewareRepository middlewareRepository;
+
+    public EsisDocServiceImpl(MiddlewareApplicationServiceRepository applicationRepository,
+                              AccessManagementService accessManagementService,
+                              MiddlewareRepository middlewareRepository) {
+        this.applicationRepository = applicationRepository;
+        this.accessManagementService = accessManagementService;
+        this.middlewareRepository = middlewareRepository;
+    }
+
     @Override
     public Resource getByExternalAppId(String externalAppId) {
-        return null;
+        var identifier = applicationRepository.getAppIdByExternalId(externalAppId);
+        accessManagementService.checkSourceAccountAccessPermitted(identifier.getSourceAccount());
+
+        return middlewareRepository.downloadEsisDocByAppId(identifier.getId());
     }
 }
