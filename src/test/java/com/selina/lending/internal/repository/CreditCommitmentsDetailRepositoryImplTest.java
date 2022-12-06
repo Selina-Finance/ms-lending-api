@@ -18,8 +18,8 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.api.CreditCommitmentsApi;
-import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

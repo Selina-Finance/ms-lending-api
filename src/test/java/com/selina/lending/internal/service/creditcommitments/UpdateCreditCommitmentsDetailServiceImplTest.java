@@ -15,16 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.service.creaditCommitments;
+package com.selina.lending.internal.service.creditcommitments;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,6 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -62,12 +64,10 @@ class UpdateCreditCommitmentsDetailServiceImplTest {
         var externalId = UUID.randomUUID().toString();
         var request = new UpdateCreditCommitmentsRequest();
 
-        var sourceAccount = new ApplicationIdentifier(null, "the-source-account-id");
-        when(applicationRepository.getAppSourceAccountByExternalAppId(any())).thenReturn(sourceAccount);
-        when(accessManagementService.isSourceAccountAccessAllowed(any())).thenReturn(true);
+        var applicationIdentifier = new ApplicationIdentifier("the-app-id-abc", "sourceAccount");
+        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(applicationIdentifier);
 
-        var applicationId = new ApplicationIdentifier("the-app-id-abc", null);
-        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(applicationId);
+        doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(any());
 
         when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new CreditCommitmentResponse());
 
@@ -80,10 +80,10 @@ class UpdateCreditCommitmentsDetailServiceImplTest {
         // Then
         assertEquals(result, newDecisionResponse);
 
-        verify(applicationRepository, times(1)).getAppSourceAccountByExternalAppId(externalId);
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
-        verify(commitmentsRepository, times(1)).patchCreditCommitments(applicationId.getId(), request);
-        verify(applicationRepository, times(1)).runDecisioningByAppId(applicationId.getId());
+        verify(accessManagementService, times(1)).checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
+        verify(commitmentsRepository, times(1)).patchCreditCommitments(applicationIdentifier.getId(), request);
+        verify(applicationRepository, times(1)).runDecisioningByAppId(applicationIdentifier.getId());
     }
 
     @Test
@@ -93,10 +93,10 @@ class UpdateCreditCommitmentsDetailServiceImplTest {
         var request = new UpdateCreditCommitmentsRequest();
 
         var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
-        when(applicationRepository.getAppSourceAccountByExternalAppId(any())).thenReturn(identifier);
+        when(applicationRepository.getAppIdByExternalId(any())).thenReturn(identifier);
 
         doThrow(new AccessDeniedException(ACCESS_DENIED_MESSAGE))
-                .when(accessManagementService).isSourceAccountAccessAllowed(any());
+                .when(accessManagementService).checkSourceAccountAccessPermitted(any());
 
         // When
         var exception = assertThrows(
@@ -106,8 +106,8 @@ class UpdateCreditCommitmentsDetailServiceImplTest {
 
         //Then
         assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(FORBIDDEN.getReasonPhrase());
-        verify(applicationRepository, times(1)).getAppSourceAccountByExternalAppId(externalId);
-        verify(applicationRepository, times(0)).getAppIdByExternalId(externalId);
+        verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
+        verify(accessManagementService, times(1)).checkSourceAccountAccessPermitted(identifier.getSourceAccount());
         verify(commitmentsRepository, times(0)).patchCreditCommitments(identifier.getId(), request);
         verify(applicationRepository, times(0)).runDecisioningByAppId(identifier.getId());
     }

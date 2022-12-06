@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditCommitments;
+package com.selina.lending.internal.dto.creditcommitments;
 
 import lombok.Builder;
 import lombok.Value;

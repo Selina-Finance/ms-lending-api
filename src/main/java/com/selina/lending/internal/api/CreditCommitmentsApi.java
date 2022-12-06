@@ -18,8 +18,8 @@
 package com.selina.lending.internal.api;
 
 import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
-import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.dto.creditCommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;

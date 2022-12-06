@@ -69,8 +69,6 @@ class ProductServiceImplTest {
         var selectProductResponse = SelectProductResponse.builder().id("appId").message("success").build();
         when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
-        when(middlewareApplicationServiceRepository.getAppSourceAccountByExternalAppId(
-                EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
         when(middlewareRepository.selectProduct(APPLICATION_ID, PRODUCT_CODE)).thenReturn(selectProductResponse);
@@ -81,14 +79,13 @@ class ProductServiceImplTest {
         //Then
         assertThat(response).isEqualTo(selectProductResponse);
         verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
-        verify(middlewareApplicationServiceRepository, times(1)).getAppSourceAccountByExternalAppId(EXTERNAL_APPLICATION_ID);
         verify(middlewareRepository, times(1)).selectProduct(APPLICATION_ID, PRODUCT_CODE);
     }
 
     @Test
     void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToSelectProduct() {
         //Given
-        when(middlewareApplicationServiceRepository.getAppSourceAccountByExternalAppId(
+        when(middlewareApplicationServiceRepository.getAppIdByExternalId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn("not permitted");
         doThrow(new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE)).when(accessManagementService).checkSourceAccountAccessPermitted("not permitted");
@@ -99,7 +96,7 @@ class ProductServiceImplTest {
 
         //Then
         assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(HttpStatus.FORBIDDEN.getReasonPhrase());
-        verify(middlewareApplicationServiceRepository, times(1)).getAppSourceAccountByExternalAppId(EXTERNAL_APPLICATION_ID);
+        verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
         verify(middlewareRepository, times(0)).selectProduct(APPLICATION_ID, PRODUCT_CODE);
     }
 }

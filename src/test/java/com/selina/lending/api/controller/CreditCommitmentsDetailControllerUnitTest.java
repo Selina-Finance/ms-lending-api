@@ -17,9 +17,9 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.creaditCommitments.UpdateCreditCommitmentsService;
+import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

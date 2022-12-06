@@ -74,21 +74,4 @@ class MiddlewareApplicationServiceRepositoryFallbackTest {
             verifyNoInteractions(middlewareApi);
         }
     }
-
-    @Nested
-    class GetApplicationSourceAccountExceptions {
-        @Test
-        void whenCircuitBreakerIsOpenThenThrowRemoteResourceProblemExceptionWithoutCallingMiddleware() {
-            // Given
-            circuitBreaker.transitionToOpenState();
-
-            // When
-            RemoteResourceProblemException requestException = assertThrows(RemoteResourceProblemException.class,
-                    () -> middlewareRepository.getAppSourceAccountByExternalAppId("id"));
-
-            // Then
-            assertThat(requestException, isA(RemoteResourceProblemException.class));
-            verifyNoInteractions(middlewareApi);
-        }
-    }
 }

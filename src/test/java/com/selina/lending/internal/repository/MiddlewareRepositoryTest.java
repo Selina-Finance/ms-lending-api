@@ -108,7 +108,6 @@ class MiddlewareRepositoryTest {
         // Then
         assertThat(result).isEqualTo(applicationResponse);
         verify(applicationRequest, times(1)).setSource(Source.BROKER.toString());
-        verify(applicationRequest, times(1)).setIncludeCreditCommitment(true);
         verify(middlewareApi, times(1)).createDipCCApplication(applicationRequest);
     }
 
@@ -125,7 +124,6 @@ class MiddlewareRepositoryTest {
         // Then
         assertThat(result).isEqualTo(applicationResponse);
         verify(applicationRequest, times(1)).setSource(Source.BROKER.toString());
-        verify(applicationRequest, times(1)).setIncludeCreditCommitment(false);
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 

@@ -15,20 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditCommitments;
+package com.selina.lending.internal.dto.creditcommitments;
+
+import java.util.List;
+
+import com.selina.lending.internal.dto.DetailDto;
 
 import lombok.Builder;
 import lombok.Value;
 
-@Value
 @Builder
-public class ApplicantCreditCommitmentsDto {
-    Long id;
-    Boolean primaryApplicant;
-    String experianId;
-    String searchId;
-    Integer creditScore;
-    String message;
-    String creditCheck;
-    CreditCommitmentsDetailDto creditCommitments;
+@Value
+public class VotersRollDto {
+    List<DetailDto> detail;
 }
+

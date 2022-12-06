@@ -18,9 +18,9 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.creditCommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
-import com.selina.lending.internal.service.creaditCommitments.UpdateCreditCommitmentsService;
+import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
