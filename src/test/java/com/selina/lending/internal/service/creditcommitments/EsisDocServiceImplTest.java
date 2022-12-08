@@ -79,7 +79,7 @@ class EsisDocServiceImplTest {
     }
 
     @Test
-    void shouldReturnDowndloadedResourceWhenGetByExternalAppId() {
+    void shouldReturnDownloadedResourceWhenGetByExternalAppId() {
         // Given
         var externalId = UUID.randomUUID().toString();
 

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.dto.DetailDto;
 
-class CreditCommitmentsDetailDetailMapperTest extends MapperBase {
+class CreditCommitmentsDetailMapperTest extends MapperBase {
 
     @Test
     void mapToCreditCommitmentsDto() {
