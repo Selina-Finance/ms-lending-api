@@ -162,7 +162,6 @@ class MiddlewareRepositoryTest {
         assertThat(exception.getMessage()).isEqualTo(notFoundMsg);
     }
 
-    //----
     @Test
     void shouldCallHttpClientWhenSelectProductInvoked() {
         // Given

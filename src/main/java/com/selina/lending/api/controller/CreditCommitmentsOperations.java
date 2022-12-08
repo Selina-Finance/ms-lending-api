@@ -80,7 +80,7 @@ public interface CreditCommitmentsOperations {
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content),
     })
-    @GetMapping(value = "/{externalApplicationId}/esis-document")
+    @GetMapping(value = "/{externalApplicationId}/esis")
     ResponseEntity<Resource> downloadEsisDoc(
             @Parameter(description = "externalApplicationId of the application related to the ESIS doc", required = true) @PathVariable String externalApplicationId
     ) throws IOException;
