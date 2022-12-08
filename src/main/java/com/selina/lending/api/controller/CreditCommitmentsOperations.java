@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-
 import java.io.IOException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -80,8 +79,8 @@ public interface CreditCommitmentsOperations {
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content),
     })
-    @GetMapping(value = "/{externalApplicationId}/esis")
-    ResponseEntity<Resource> downloadEsisDoc(
+    @GetMapping(value = "/{externalApplicationId}/esis", produces = APPLICATION_PDF_VALUE)
+    ResponseEntity<Resource> downloadEsis(
             @Parameter(description = "externalApplicationId of the application related to the ESIS doc", required = true) @PathVariable String externalApplicationId
     ) throws IOException;
 

@@ -76,7 +76,7 @@ class CreditCommitmentsControllerUnitTest extends MapperBase {
         when(esisDocService.getByExternalAppId(any())).thenReturn(resource);
 
         //When
-        var result = controller.downloadEsisDoc(externalId);
+        var result = controller.downloadEsis(externalId);
 
         //Then
         assertNotNull(result.getBody());

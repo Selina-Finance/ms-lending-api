@@ -54,7 +54,7 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
     }
 
     @Override
-    public ResponseEntity<Resource> downloadEsisDoc(String externalApplicationId) throws IOException {
+    public ResponseEntity<Resource> downloadEsis(String externalApplicationId) throws IOException {
         log.info("Request to fetch ESIS pdf with [externalApplicationId={}]", externalApplicationId);
 
         Resource resource = esisDocService.getByExternalAppId(externalApplicationId);
@@ -65,7 +65,6 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
         return ResponseEntity.ok()
                 .headers(headers)
                 .contentLength(resource.contentLength())
-                .contentType(MediaType.APPLICATION_PDF)
                 .body(resource);
     }
 }
