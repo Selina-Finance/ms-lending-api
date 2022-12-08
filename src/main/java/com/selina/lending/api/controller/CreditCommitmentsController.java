@@ -21,6 +21,7 @@ import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.service.creditcommitments.EsisDocService;
+import com.selina.lending.internal.mapper.UpdateCreditCommitmentsRequestMapper;
 import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -47,9 +48,9 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
     public ResponseEntity<ApplicationResponse> updateCreditCommitments(
             String externalApplicationId,
             UpdateCreditCommitmentsRequest request) {
-        log.info("Patch CreditCommitments with [externalApplicationId={}]", externalApplicationId);
+        log.info("Update CreditCommitments with [externalApplicationId={}]", externalApplicationId);
 
-        var response = updateCreditCommitmentsService.patchCreditCommitments(externalApplicationId, request);
+        var response = service.updateCreditCommitments(externalApplicationId, UpdateCreditCommitmentsRequestMapper.INSTANCE.mapToUpdateCreditCommitmentsRequest(request));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(response));
     }
 

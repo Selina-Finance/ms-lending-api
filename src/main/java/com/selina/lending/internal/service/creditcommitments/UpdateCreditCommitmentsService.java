@@ -17,9 +17,9 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
 public interface UpdateCreditCommitmentsService {
-    ApplicationResponse patchCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request);
+    ApplicationResponse updateCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request);
 }

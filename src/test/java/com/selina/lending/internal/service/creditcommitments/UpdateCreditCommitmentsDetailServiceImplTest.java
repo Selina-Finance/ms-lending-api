@@ -19,12 +19,12 @@ package com.selina.lending.internal.service.creditcommitments;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +62,7 @@ class UpdateCreditCommitmentsDetailServiceImplTest {
     void shouldInvokeRemoteResourcesInOrderWhenPatchCreditCommitments() {
         // Given
         var externalId = UUID.randomUUID().toString();
-        var request = new UpdateCreditCommitmentsRequest();
+        var request = UpdateCreditCommitmentsRequest.builder().build();
 
         var applicationIdentifier = new ApplicationIdentifier("the-app-id-abc", "sourceAccount");
         when(applicationRepository.getAppIdByExternalId(any())).thenReturn(applicationIdentifier);
@@ -75,7 +75,7 @@ class UpdateCreditCommitmentsDetailServiceImplTest {
         when(applicationRepository.runDecisioningByAppId(any())).thenReturn(newDecisionResponse);
 
         // When
-        var result = service.patchCreditCommitments(externalId, request);
+        var result = service.updateCreditCommitments(externalId, request);
 
         // Then
         assertEquals(result, newDecisionResponse);
@@ -90,7 +90,7 @@ class UpdateCreditCommitmentsDetailServiceImplTest {
     void shouldThrowExceptionWhenClientHasNoPermitToManageTheCreditCommitments() {
         // Given
         var externalId = UUID.randomUUID().toString();
-        var request = new UpdateCreditCommitmentsRequest();
+        var request = UpdateCreditCommitmentsRequest.builder().build();
 
         var identifier = new ApplicationIdentifier("the-app-id-abc", "the-source-account-id");
         when(applicationRepository.getAppIdByExternalId(any())).thenReturn(identifier);
@@ -101,7 +101,7 @@ class UpdateCreditCommitmentsDetailServiceImplTest {
         // When
         var exception = assertThrows(
                 AccessDeniedException.class,
-                () -> service.patchCreditCommitments(externalId, request)
+                () -> service.updateCreditCommitments(externalId, request)
         );
 
         //Then

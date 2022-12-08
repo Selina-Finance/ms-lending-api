@@ -17,11 +17,12 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +39,7 @@ public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmen
     }
 
     @Override
-    public ApplicationResponse patchCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request) {
+    public ApplicationResponse updateCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request) {
         var applicationIdentifier = applicationRepository.getAppIdByExternalId(externalId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
         commitmentsRepository.patchCreditCommitments(applicationIdentifier.getId(), request);

@@ -46,6 +46,9 @@ class CreditCommitmentsControllerUnitTest extends MapperBase {
     @Mock
     private EsisDocService esisDocService;
 
+    @Mock
+    private UpdateCreditCommitmentsRequest updateCreditCommitmentsRequest;
+
     @InjectMocks
     private CreditCommitmentsController controller;
 
@@ -53,17 +56,18 @@ class CreditCommitmentsControllerUnitTest extends MapperBase {
     void whenUpdateCreditCommitmentsThenCallUpdateCCService() {
         //Given
         var externalId = UUID.randomUUID().toString();
-        var request = new UpdateCreditCommitmentsRequest();
 
         var response = getApplicationResponse();
+        when(service.updateCreditCommitments(any(), any())).thenReturn(response);
         when(updateCreditCommitmentsService.patchCreditCommitments(any(), any())).thenReturn(response);
 
         //When
-        var result = controller.updateCreditCommitments(externalId, request);
+        var result = controller.updateCreditCommitments(externalId, updateCreditCommitmentsRequest);
 
         //Then
         assertNotNull(result.getBody());
         assertEquals(result.getBody().getApplicationId(), response.getApplicationId());
+        verify(service, times(1)).updateCreditCommitments(eq(externalId), any());
         verify(updateCreditCommitmentsService, times(1)).patchCreditCommitments(externalId, request);
     }
 
