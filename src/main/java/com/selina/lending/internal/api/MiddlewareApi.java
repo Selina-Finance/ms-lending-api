@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
+
 @FeignClient(
         value = "middleware-api",
         url = "${middleware.api.url}",
@@ -49,6 +51,6 @@ public interface MiddlewareApi {
     @PutMapping(path = "/application/{id}/selectProduct/{productCode}")
     SelectProductResponse selectProduct(@PathVariable("id") String id, @PathVariable("productCode") String productCode);
 
-    @GetMapping(value = "/application/{id}/esis-document")
+    @GetMapping(value = "/application/{id}/esis-document", produces = APPLICATION_PDF_VALUE)
     Resource downloadEsisByAppId(@PathVariable String id);
 }
