@@ -17,18 +17,20 @@
 
 package com.selina.lending.internal.api;
 
+import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
 @FeignClient(
         value = "middleware-api",
@@ -46,6 +48,9 @@ public interface MiddlewareApi {
     @PostMapping(path = "/application/light_decision", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
-    @PutMapping(path="/application/{id}/selectProduct/{productCode}")
+    @PutMapping(path = "/application/{id}/selectProduct/{productCode}")
     SelectProductResponse selectProduct(@PathVariable("id") String id, @PathVariable("productCode") String productCode);
+
+    @GetMapping(value = "/application/{id}/esis-document", produces = APPLICATION_PDF_VALUE)
+    Resource downloadEsisByAppId(@PathVariable String id);
 }

@@ -23,10 +23,13 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import org.springframework.core.io.Resource;
 
 public interface MiddlewareRepository {
 
     Optional<ApplicationDecisionResponse> getApplicationById(String id);
+
+    Resource downloadEsisDocByAppId(String id);
 
     ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest);
 

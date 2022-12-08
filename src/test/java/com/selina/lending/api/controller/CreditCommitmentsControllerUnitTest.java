@@ -19,28 +19,32 @@ package com.selina.lending.api.controller;
 
 import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.creditcommitments.EsisDocService;
 import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CreditCommitmentsDetailControllerUnitTest extends MapperBase {
+class CreditCommitmentsControllerUnitTest extends MapperBase {
 
     @Mock
-    private UpdateCreditCommitmentsService service;
+    private UpdateCreditCommitmentsService updateCreditCommitmentsService;
+    @Mock
+    private EsisDocService esisDocService;
 
     @InjectMocks
     private CreditCommitmentsController controller;
@@ -52,7 +56,7 @@ class CreditCommitmentsDetailControllerUnitTest extends MapperBase {
         var request = new UpdateCreditCommitmentsRequest();
 
         var response = getApplicationResponse();
-        when(service.patchCreditCommitments(any(), any())).thenReturn(response);
+        when(updateCreditCommitmentsService.patchCreditCommitments(any(), any())).thenReturn(response);
 
         //When
         var result = controller.updateCreditCommitments(externalId, request);
@@ -60,6 +64,22 @@ class CreditCommitmentsDetailControllerUnitTest extends MapperBase {
         //Then
         assertNotNull(result.getBody());
         assertEquals(result.getBody().getApplicationId(), response.getApplicationId());
-        verify(service, times(1)).patchCreditCommitments(externalId, request);
+        verify(updateCreditCommitmentsService, times(1)).patchCreditCommitments(externalId, request);
+    }
+
+    @Test
+    void whenGetEsisCCDocThenCallGetEsisCCService() throws IOException {
+        //Given
+        var externalId = UUID.randomUUID().toString();
+
+        var resource = new ByteArrayResource(new byte[0]);
+        when(esisDocService.getByExternalAppId(any())).thenReturn(resource);
+
+        //When
+        var result = controller.downloadEsis(externalId);
+
+        //Then
+        assertNotNull(result.getBody());
+        verify(esisDocService, times(1)).getByExternalAppId(externalId);
     }
 }
