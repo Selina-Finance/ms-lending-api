@@ -15,13 +15,16 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.internal.mapper;
 
-import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
-public interface CreditCommitmentsRepository {
+@Mapper (uses = ApplicantCreditCommitmentsMapper.class)
+public interface UpdateCreditCommitmentsRequestMapper {
+    UpdateCreditCommitmentsRequestMapper INSTANCE = Mappers.getMapper(UpdateCreditCommitmentsRequestMapper.class);
 
-    CreditCommitmentResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request);
+    UpdateCreditCommitmentsRequest mapToUpdateCreditCommitmentsRequest(com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest request);
 }
-

@@ -19,7 +19,8 @@ package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.api.CreditCommitmentsApi;
 import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CreditCommitmentsDetailRepositoryImplTest {
+class CreditCommitmentsRepositoryImplTest {
 
     @Mock
     private CreditCommitmentsApi creditCommitmentsApi;
@@ -47,8 +48,8 @@ class CreditCommitmentsDetailRepositoryImplTest {
     void shouldInvokeHttpClientWhenPatchCreditCommitments() {
         //Given
         var id = UUID.randomUUID().toString();
-        var request = new UpdateCreditCommitmentsRequest();
-        when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(null);
+        var request = UpdateCreditCommitmentsRequest.builder().build();
+                   when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(null);
 
         //When
         repository.patchCreditCommitments(id, request);
@@ -61,7 +62,7 @@ class CreditCommitmentsDetailRepositoryImplTest {
     void shouldReturnCreditCommitmentResponseWhenPatchCreditCommitments() {
         //Given
         var id = UUID.randomUUID().toString();
-        var request = new UpdateCreditCommitmentsRequest();
+        var request = UpdateCreditCommitmentsRequest.builder().build();
         var response = CreditCommitmentResponse.builder().id("123").build();
         when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(response);
 

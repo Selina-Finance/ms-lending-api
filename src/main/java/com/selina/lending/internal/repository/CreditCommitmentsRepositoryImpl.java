@@ -19,8 +19,9 @@ package com.selina.lending.internal.repository;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.CreditCommitmentsApi;
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
+
 import feign.FeignException;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;

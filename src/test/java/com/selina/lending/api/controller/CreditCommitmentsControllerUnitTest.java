@@ -17,10 +17,17 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.creditcommitments.EsisDocService;
-import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,15 +35,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 
-import java.io.IOException;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.creditcommitments.EsisDocService;
+import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 
 @ExtendWith(MockitoExtension.class)
 class CreditCommitmentsControllerUnitTest extends MapperBase {
@@ -46,6 +48,9 @@ class CreditCommitmentsControllerUnitTest extends MapperBase {
     @Mock
     private EsisDocService esisDocService;
 
+    @Mock
+    private UpdateCreditCommitmentsRequest updateCreditCommitmentsRequest;
+
     @InjectMocks
     private CreditCommitmentsController controller;
 
@@ -53,18 +58,17 @@ class CreditCommitmentsControllerUnitTest extends MapperBase {
     void whenUpdateCreditCommitmentsThenCallUpdateCCService() {
         //Given
         var externalId = UUID.randomUUID().toString();
-        var request = new UpdateCreditCommitmentsRequest();
 
         var response = getApplicationResponse();
-        when(updateCreditCommitmentsService.patchCreditCommitments(any(), any())).thenReturn(response);
+        when(updateCreditCommitmentsService.updateCreditCommitments(any(), any())).thenReturn(response);
 
         //When
-        var result = controller.updateCreditCommitments(externalId, request);
+        var result = controller.updateCreditCommitments(externalId, updateCreditCommitmentsRequest);
 
         //Then
         assertNotNull(result.getBody());
         assertEquals(result.getBody().getApplicationId(), response.getApplicationId());
-        verify(updateCreditCommitmentsService, times(1)).patchCreditCommitments(externalId, request);
+        verify(updateCreditCommitmentsService, times(1)).updateCreditCommitments(eq(externalId), any());
     }
 
     @Test

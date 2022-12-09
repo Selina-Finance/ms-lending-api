@@ -17,8 +17,6 @@
 
 package com.selina.lending.internal.service.application.domain;
 
-import java.util.Date;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -54,7 +52,6 @@ public class Detail {
     Double amountToConsolidate;
     String reasonToIgnore;
     String lender;
-    String accountNumber;
     String type;
     Integer amount;
     Double currentBalance;
