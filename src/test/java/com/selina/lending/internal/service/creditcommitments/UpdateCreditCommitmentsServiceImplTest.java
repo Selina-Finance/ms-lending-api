@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @ExtendWith(MockitoExtension.class)
-class UpdateCreditCommitmentsDetailServiceImplTest {
+class UpdateCreditCommitmentsServiceImplTest {
     @Mock
     private MiddlewareApplicationServiceRepository applicationRepository;
     @Mock
