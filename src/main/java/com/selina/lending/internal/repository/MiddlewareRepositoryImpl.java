@@ -17,6 +17,11 @@
 
 package com.selina.lending.internal.repository;
 
+import java.util.Optional;
+
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.dto.LendingConstants;
@@ -25,13 +30,10 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -89,6 +91,13 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public Resource downloadEsisDocByAppId(String id) {
         log.info("Request to download esis doc by [applicationId={}]", id);
         return middlewareApi.downloadEsisByAppId(id);
+    }
+
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
+    @Override
+    public ApplicationResponse runDecisioningByAppId(String applicationId) {
+        log.info("Request to run decisioning by [applicationId={}]", applicationId);
+        return middlewareApi.runDecisioningByAppId(applicationId);
     }
 
     private void enrichApplicationRequest(ApplicationRequest applicationRequest, boolean includeCreditCommitments) {
