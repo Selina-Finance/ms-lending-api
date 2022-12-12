@@ -23,6 +23,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
+import com.selina.lending.internal.dto.PropertyDetailValueDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.mapper.config.DIPPropertyDetailsMapperConfig;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
@@ -34,6 +35,9 @@ public interface PropertyDetailsMapper {
     @InheritConfiguration(name = "mapDipPropertyDetailsDto")
     @Mapping(target = "whenLastPurchased", source = "propertyDetails.whenHasLastPurchased")
     DIPPropertyDetailsDto mapToPropertyDetailsDto (PropertyDetails propertyDetails);
+
+    @InheritConfiguration(name = "mapDipPropertyDetailsDto")
+    PropertyDetailValueDto mapToPropertyDetailValueDto (PropertyDetails propertyDetails);
 
     @InheritConfiguration(name = "mapPropertyDetails")
     @Mapping(target = "whenHasLastPurchased", source = "dipPropertyDetailsDto.whenLastPurchased")

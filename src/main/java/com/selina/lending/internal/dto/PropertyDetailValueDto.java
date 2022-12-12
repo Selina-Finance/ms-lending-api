@@ -15,13 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.internal.dto;
 
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import lombok.Builder;
+import lombok.Data;
 
-public interface MiddlewareApplicationServiceRepository {
+@Builder
+@Data
+public class PropertyDetailValueDto {
 
-    ApplicationIdentifier getAppIdByExternalId(String externalAppId);
-
-    void deleteAppByExternalApplicationId(String sourceAccount, String externalAppId);
+    private Double estimatedValue;
 }

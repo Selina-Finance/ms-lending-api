@@ -19,11 +19,12 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
+import org.springframework.core.io.Resource;
+
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
-import org.springframework.core.io.Resource;
 
 public interface MiddlewareRepository {
 
@@ -36,5 +37,7 @@ public interface MiddlewareRepository {
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
     SelectProductResponse selectProduct(String id, String productCode);
+
+    ApplicationResponse runDecisioningByAppId(String applicationId);
 }
 

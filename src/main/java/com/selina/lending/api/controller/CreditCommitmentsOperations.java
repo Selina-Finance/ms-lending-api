@@ -84,7 +84,7 @@ public interface CreditCommitmentsOperations {
     })
     @GetMapping(value = "/{externalApplicationId}/esis", produces = APPLICATION_PDF_VALUE)
     ResponseEntity<Resource> downloadEsis(
-            @Parameter(description = "externalApplicationId of the application related to the ESIS doc", required = true) @PathVariable String externalApplicationId
+            @Parameter(description = "externalApplicationId of the application related to the ESIS document", required = true) @PathVariable String externalApplicationId
     ) throws IOException;
 
 }

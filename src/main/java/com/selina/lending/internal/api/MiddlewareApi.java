@@ -17,11 +17,9 @@
 
 package com.selina.lending.internal.api;
 
-import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -30,7 +28,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
+import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
 @FeignClient(
         value = "middleware-api",
@@ -53,4 +55,8 @@ public interface MiddlewareApi {
 
     @GetMapping(value = "/application/{id}/esis-document", produces = APPLICATION_PDF_VALUE)
     Resource downloadEsisByAppId(@PathVariable String id);
+
+    @PostMapping(path = "/application/runDecisioning/{applicationId}", produces = APPLICATION_JSON_VALUE)
+    ApplicationResponse runDecisioningByAppId(@PathVariable("applicationId") String applicationId);
+
 }

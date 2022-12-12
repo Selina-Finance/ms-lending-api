@@ -17,6 +17,27 @@
 
 package com.selina.lending.internal.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpStatus;
+
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
 import com.selina.lending.internal.dto.Source;
@@ -26,32 +47,13 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpStatus;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.IntStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {
@@ -111,6 +113,19 @@ class MiddlewareRepositoryTest {
         verify(middlewareApi, times(1)).createDipCCApplication(applicationRequest);
     }
 
+
+    @Test
+    void shouldCallHttpClientWhenRunDecisioningByAppIdInvoked() {
+        //Given
+        var appId = UUID.randomUUID().toString();
+        when(middlewareApi.runDecisioningByAppId(any())).thenReturn(applicationResponse);
+
+        //When
+        middlewareRepository.runDecisioningByAppId(appId);
+
+        //Then
+        verify(middlewareApi, times(1)).runDecisioningByAppId(appId);
+    }
     @Test
     void shouldCallHttpClientWhenCreateDipApplicationInvoked() {
         // Given

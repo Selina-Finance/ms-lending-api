@@ -17,24 +17,6 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.repository.CreditCommitmentsRepository;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
-import com.selina.lending.internal.service.AccessManagementService;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.UUID;
-
-import static com.selina.lending.api.errors.custom.AccessDeniedException.ACCESS_DENIED_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,10 +28,32 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
+import static com.selina.lending.api.errors.custom.AccessDeniedException.ACCESS_DENIED_MESSAGE;
+
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.repository.CreditCommitmentsRepository;
+import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.internal.service.AccessManagementService;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
+
 @ExtendWith(MockitoExtension.class)
 class UpdateCreditCommitmentsServiceImplTest {
     @Mock
     private MiddlewareApplicationServiceRepository applicationRepository;
+    @Mock
+    private MiddlewareRepository middlewareRepository;
     @Mock
     private CreditCommitmentsRepository commitmentsRepository;
     @Mock
@@ -72,7 +76,7 @@ class UpdateCreditCommitmentsServiceImplTest {
         when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new CreditCommitmentResponse());
 
         var newDecisionResponse = ApplicationResponse.builder().build();
-        when(applicationRepository.runDecisioningByAppId(any())).thenReturn(newDecisionResponse);
+        when(middlewareRepository.runDecisioningByAppId(any())).thenReturn(newDecisionResponse);
 
         // When
         var result = service.updateCreditCommitments(externalId, request);
@@ -83,7 +87,7 @@ class UpdateCreditCommitmentsServiceImplTest {
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
         verify(accessManagementService, times(1)).checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
         verify(commitmentsRepository, times(1)).patchCreditCommitments(applicationIdentifier.getId(), request);
-        verify(applicationRepository, times(1)).runDecisioningByAppId(applicationIdentifier.getId());
+        verify(middlewareRepository, times(1)).runDecisioningByAppId(applicationIdentifier.getId());
     }
 
     @Test
@@ -109,6 +113,6 @@ class UpdateCreditCommitmentsServiceImplTest {
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
         verify(accessManagementService, times(1)).checkSourceAccountAccessPermitted(identifier.getSourceAccount());
         verify(commitmentsRepository, times(0)).patchCreditCommitments(identifier.getId(), request);
-        verify(applicationRepository, times(0)).runDecisioningByAppId(identifier.getId());
+        verify(middlewareRepository, times(0)).runDecisioningByAppId(identifier.getId());
     }
 }

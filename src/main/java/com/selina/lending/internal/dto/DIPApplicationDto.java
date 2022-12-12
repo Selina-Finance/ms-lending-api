@@ -29,8 +29,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DIPApplicationDto extends ApplicationDto {
-    private List<DIPApplicantDto> applicants;
-    private AdvancedLoanInformationDto loanInformation;
-    private DIPPropertyDetailsDto propertyDetails;
+    private List<ApplicantDto> applicants;
+    private LoanInformationDto loanInformation;
+    private PropertyDetailValueDto propertyDetails;
     private List<OfferDto> offers;
 }

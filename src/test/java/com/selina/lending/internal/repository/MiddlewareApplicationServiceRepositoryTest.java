@@ -19,7 +19,6 @@ package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -31,10 +30,8 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.stream.IntStream;
 
-import com.selina.lending.internal.mapper.MapperBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -45,6 +42,7 @@ import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
+import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.monitoring.MetricService;
 
@@ -86,18 +84,6 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
         middlewareRepository = new MiddlewareApplicationServiceRepositoryImpl(middlewareApplicationServiceApi, metricService);
     }
 
-    @Test
-    void shouldCallHttpClientWhenRunDecisioningByAppIdInvoked() {
-        //Given
-        var appId = UUID.randomUUID().toString();
-        when(middlewareApplicationServiceApi.runDecisioningByAppId(any())).thenReturn(getApplicationResponse());
-
-        //When
-        middlewareRepository.runDecisioningByAppId(appId);
-
-        //Then
-        verify(middlewareApplicationServiceApi, times(1)).runDecisioningByAppId(appId);
-    }
 
     @Test
     void shouldCallHttpClientWhenGetApplicationIdByExternalApplicationIdInvoked() {

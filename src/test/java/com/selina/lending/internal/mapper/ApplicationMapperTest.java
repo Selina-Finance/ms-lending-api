@@ -43,11 +43,7 @@ class ApplicationMapperTest extends MapperBase {
         assertThat(applicationDto.getRequestType(), equalTo(DIP_APPLICATION_TYPE));
         assertThat(applicationDto.getLoanInformation().getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(applicationDto.getLoanInformation().getRequestedLoanAmount(), equalTo(LOAN_AMOUNT));
-        assertThat(applicationDto.getLoanInformation().getFacilities().size(), equalTo(1));
-        assertThat(applicationDto.getLoanInformation().getFacilities().get(0).getAllocationAmount(), equalTo(ALLOCATION_AMOUNT));
-        assertThat(applicationDto.getLoanInformation().getFacilities().get(0).getAllocationPurpose(), equalTo(ALLOCATION_PURPOSE));
-        assertThat(applicationDto.getPropertyDetails().getAddressLine1(), equalTo(ADDRESS_LINE_1));
-        assertThat(applicationDto.getPropertyDetails().getAddressLine2(), equalTo(ADDRESS_LINE_2));
+        assertThat(applicationDto.getPropertyDetails().getEstimatedValue(), equalTo(ESTIMATED_VALUE));
         assertThat(applicationDto.getOffers().get(0).getActive(), equalTo(true));
         assertThat(applicationDto.getOffers().get(0).getId(), equalTo(OFFER_ID));
         assertThat(applicationDto.getOffers().get(0).getProductCode(), equalTo(PRODUCT_CODE));
@@ -72,9 +68,7 @@ class ApplicationMapperTest extends MapperBase {
         assertThat(application.getApplicationType(), equalTo(DIP_APPLICATION_TYPE));
         assertThat(application.getLoanInformation().getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(application.getLoanInformation().getRequestedLoanAmount(), equalTo(LOAN_AMOUNT));
-        assertThat(application.getLoanInformation().getFacilities().size(), equalTo(1));
-        assertThat(application.getPropertyDetails().getAddressLine1(), equalTo(ADDRESS_LINE_1));
-        assertThat(application.getPropertyDetails().getAddressLine2(), equalTo(ADDRESS_LINE_2));
+        assertThat(application.getPropertyDetails().getEstimatedValue(), equalTo(ESTIMATED_VALUE));
         assertThat(application.getOffers().get(0).getActive(), equalTo(true));
         assertThat(application.getOffers().get(0).getId(), equalTo(OFFER_ID));
         assertThat(application.getOffers().get(0).getProductCode(), equalTo(PRODUCT_CODE));

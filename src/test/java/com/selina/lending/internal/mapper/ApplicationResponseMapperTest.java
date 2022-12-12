@@ -52,13 +52,7 @@ class ApplicationResponseMapperTest extends MapperBase {
         assertThat(applicationDto.getApplicants().get(0).getAddresses().size(), equalTo(1));
         assertThat(applicationDto.getLoanInformation(), notNullValue());
         assertThat(applicationDto.getLoanInformation().getLoanPurpose(), equalTo(LOAN_PURPOSE));
-        assertThat(applicationDto.getLoanInformation().getFacilities(), notNullValue());
-        assertThat(applicationDto.getLoanInformation().getFacilities().size(), equalTo(1));
         assertThat(applicationDto.getPropertyDetails(), notNullValue());
-        assertThat(applicationDto.getPropertyDetails().getPropertyType(), equalTo(PROPERTY_TYPE));
-        assertThat(applicationDto.getPropertyDetails().getNumberOfPriorCharges(), equalTo(1));
-
-        assertPriorCharges(applicationDto);
 
         assertOffers(applicationDto);
 
@@ -84,12 +78,6 @@ class ApplicationResponseMapperTest extends MapperBase {
     private void assertDetail(DetailDto detailDto) {
         assertThat(detailDto.getId(), equalTo(DETAIL_ID));
         assertThat(detailDto.getStatus(), equalTo(STATUS));
-    }
-
-    private void assertPriorCharges(DIPApplicationDto applicationDto) {
-        var priorChargesDto = applicationDto.getPropertyDetails().getPriorCharges();
-        assertThat(priorChargesDto.getBalanceOutstanding(), equalTo(OUTSTANDING_BALANCE));
-        assertThat(priorChargesDto.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
     }
 
     private void assertOffers(DIPApplicationDto applicationDto) {
