@@ -42,6 +42,7 @@ import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.dto.OfferDto;
 import com.selina.lending.internal.dto.PreviousNameDto;
 import com.selina.lending.internal.dto.PriorChargesDto;
+import com.selina.lending.internal.dto.PropertyDetailValueDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.dto.creditcommitments.ApplicantCreditCommitmentsDto;
@@ -408,6 +409,9 @@ public abstract class MapperBase {
                 POSTCODE).estimatedValue(ESTIMATED_VALUE).build();
     }
 
+    protected PropertyDetailValueDto getProperyDetailValueDto() {
+        return PropertyDetailValueDto.builder().estimatedValue(ESTIMATED_VALUE).build();
+    }
     protected DIPPropertyDetailsDto getDIPPropertyDetailsDto() {
         return DIPPropertyDetailsDto.builder()
                 .addressLine1(ADDRESS_LINE_1)
@@ -460,7 +464,7 @@ public abstract class MapperBase {
     protected DIPApplicationDto getDIPApplicationDto() {
         return DIPApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).status(DECISIONING_ACCEPT).createdDate(CREATED_DATE).applicants(
                 List.of(getDIPApplicantDto())).loanInformation(getAdvancedLoanInformationDto()).propertyDetails(
-                getDIPPropertyDetailsDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
+                getProperyDetailValueDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
     }
 
     protected Applicant getApplicant() {
