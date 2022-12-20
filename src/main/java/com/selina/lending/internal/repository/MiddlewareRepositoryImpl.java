@@ -105,6 +105,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         applicationRequest.setIncludeCreditCommitment(includeCreditCommitments);
         applicationRequest.setSource(LendingConstants.REQUEST_SOURCE);
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
+        applicationRequest.setStageOverwrite(LendingConstants.STAGE_OVERWRITE);
     }
 
     private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR
