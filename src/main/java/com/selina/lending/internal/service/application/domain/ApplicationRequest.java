@@ -40,4 +40,5 @@ public class ApplicationRequest {
     private Fees fees;
     private List<Applicant> applicants;
     private List<Expenditure> expenditure;
+    private String stageOverwrite;
 }

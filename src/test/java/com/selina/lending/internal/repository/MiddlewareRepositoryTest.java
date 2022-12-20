@@ -139,6 +139,7 @@ class MiddlewareRepositoryTest {
         // Then
         assertThat(result).isEqualTo(applicationResponse);
         verify(applicationRequest, times(1)).setSource(Source.BROKER.toString());
+        verify(applicationRequest, times(1)).setStageOverwrite("Dip - Credit Commitments");
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 
