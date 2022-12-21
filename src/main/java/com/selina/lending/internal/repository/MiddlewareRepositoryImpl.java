@@ -72,6 +72,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         log.debug("Create DIP application [applicationRequest={}]", applicationRequest);
         enrichApplicationRequest(applicationRequest, false);
+        applicationRequest.setStageOverwrite(LendingConstants.STAGE_OVERWRITE);
 
         var appResponse = middlewareApi.createDipApplication(applicationRequest);
 
@@ -105,7 +106,6 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         applicationRequest.setIncludeCreditCommitment(includeCreditCommitments);
         applicationRequest.setSource(LendingConstants.REQUEST_SOURCE);
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
-        applicationRequest.setStageOverwrite(LendingConstants.STAGE_OVERWRITE);
     }
 
     private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR
