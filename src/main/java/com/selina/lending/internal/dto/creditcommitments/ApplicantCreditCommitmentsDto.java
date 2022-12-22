@@ -17,11 +17,15 @@
 
 package com.selina.lending.internal.dto.creditcommitments;
 
+import com.selina.lending.api.validator.Conditional;
+import com.selina.lending.api.validator.EnumValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
+@Conditional(selected = "ignore", values = {"true"}, required = {"reasonToIgnore"})
 public class ApplicantCreditCommitmentsDto {
     Long id;
     Boolean primaryApplicant;
@@ -31,4 +35,28 @@ public class ApplicantCreditCommitmentsDto {
     String message;
     String creditCheck;
     CreditCommitmentsDetailDto creditCommitments;
+    Boolean ignore;
+    @Schema(implementation = ReasonToIgnore.class)
+    @EnumValue(enumClass = ReasonToIgnore.class)
+    String reasonToIgnore;
+
+
+    enum ReasonToIgnore {
+        IS_SELF_FUNDING("Item is a self funding buy-to-let"),
+        WILL_BE_REPAID("Item will be repaid/cleared - evidence to be provided"),
+        IS_WRONGLY_ATTRIBUTED("Item is wrongly attributed"),
+        IS_DISPUTED("Item is disputed - Experian to be updated"),
+        TERM_LESS_SIX_MONTHS("Remaining term is less than 6 months");
+
+        final String value;
+
+        ReasonToIgnore(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }
