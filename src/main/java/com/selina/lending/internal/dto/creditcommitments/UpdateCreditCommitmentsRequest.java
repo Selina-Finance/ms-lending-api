@@ -23,10 +23,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
+
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 public class UpdateCreditCommitmentsRequest {
+    @Valid
     List<ApplicantCreditCommitmentsDto> applicants;
 }
 
