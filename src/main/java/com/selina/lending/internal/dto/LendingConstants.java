@@ -27,7 +27,7 @@ public final class LendingConstants {
 
     public static final String PRODUCT_CODE_ALL = "All";
 
-    public static final String REQUEST_SOURCE =  Source.BROKER.toString();
+    public static final String REQUEST_SOURCE =  Source.LENDING_API.toString();
 
     public static final String STAGE_OVERWRITE =  "Dip - Credit Commitments";
 
