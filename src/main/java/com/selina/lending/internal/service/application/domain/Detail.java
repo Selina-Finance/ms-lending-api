@@ -23,7 +23,7 @@ import lombok.Data;
 @Builder
 @Data
 public class Detail {
-    String id;
+    Integer id;
     String status;
     String applicant;
     String name;

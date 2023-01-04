@@ -17,13 +17,37 @@
 
 package com.selina.lending;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.selina.lending.api.controller.CreditCommitmentsController;
+import com.selina.lending.api.controller.DIPController;
+import com.selina.lending.api.controller.ProductController;
+import com.selina.lending.api.controller.QuickQuoteController;
 
 @SpringBootTest
 class LendingServiceApplicationTests {
 
+	@Autowired
+	private DIPController dipController;
+
+	@Autowired
+	private QuickQuoteController quickQuoteController;
+
+	@Autowired
+	private CreditCommitmentsController creditCommitmentsController;
+
+	@Autowired
+	private ProductController productController;
+
 	@Test
 	void contextLoads() {
+		assertNotNull(dipController);
+		assertNotNull(quickQuoteController);
+		assertNotNull(creditCommitmentsController);
+		assertNotNull(productController);
 	}
 }
