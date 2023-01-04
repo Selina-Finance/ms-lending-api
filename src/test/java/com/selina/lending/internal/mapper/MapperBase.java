@@ -151,7 +151,7 @@ public abstract class MapperBase {
     public static final int CREDIT_SCORE = 900;
     public static final String CREDIT_CHECK_REF = "6HVRQLKGFH";
     public static final String DOCUMENT_TYPE = "passport";
-    public static final String DETAIL_ID = "detailId123";
+    public static final Integer DETAIL_ID = 123;
     public static final String STATUS = "Active";
     public static final String UNDERWRITER = "Madeline Scott";
     public static final String UNDERWRITING_STAGE = "Underwriting Stage";
@@ -409,7 +409,7 @@ public abstract class MapperBase {
                 POSTCODE).estimatedValue(ESTIMATED_VALUE).build();
     }
 
-    protected PropertyDetailValueDto getProperyDetailValueDto() {
+    protected PropertyDetailValueDto getPropertyDetailValueDto() {
         return PropertyDetailValueDto.builder().estimatedValue(ESTIMATED_VALUE).build();
     }
     protected DIPPropertyDetailsDto getDIPPropertyDetailsDto() {
@@ -464,7 +464,7 @@ public abstract class MapperBase {
     protected DIPApplicationDto getDIPApplicationDto() {
         return DIPApplicationDto.builder().id(APPLICATION_ID).externalApplicationId(EXTERNAL_APPLICATION_ID).status(DECISIONING_ACCEPT).createdDate(CREATED_DATE).applicants(
                 List.of(getDIPApplicantDto())).loanInformation(getAdvancedLoanInformationDto()).propertyDetails(
-                getProperyDetailValueDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
+                getPropertyDetailValueDto()).requestType(DIP_APPLICATION_TYPE).offers(List.of(getOfferDto())).build();
     }
 
     protected Applicant getApplicant() {
