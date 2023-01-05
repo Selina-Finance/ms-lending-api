@@ -17,21 +17,35 @@
 
 package com.selina.lending.config.security;
 
+import com.selina.lending.config.security.permissions.PermissionsVoter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Import(SecurityProblemSupport.class)
-@Configuration(proxyBeanMethods = false)
+@Configuration(proxyBeanMethods = true)
 public class SecurityConfig {
 
-    private final SecurityProblemSupport problemSupport;
+    public static final String LOGIN_URL = "/auth/token";
 
-    public SecurityConfig(SecurityProblemSupport problemSupport) {
+    private final SecurityProblemSupport problemSupport;
+    private final PermissionsVoter permissionsVoter;
+
+    public SecurityConfig(SecurityProblemSupport problemSupport, PermissionsVoter permissionsVoter) {
         this.problemSupport = problemSupport;
+        this.permissionsVoter = permissionsVoter;
     }
 
     @Bean
@@ -39,7 +53,7 @@ public class SecurityConfig {
         http
                 .csrf()
                 .ignoringAntMatchers("/actuator/**")
-                .ignoringAntMatchers("/auth/token")
+                .ignoringAntMatchers(LOGIN_URL)
                 .and()
                 .cors()
                 .and()
@@ -53,7 +67,7 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
-                .antMatchers("/auth/token").permitAll()
+                .antMatchers(LOGIN_URL).permitAll()
 
                 .and()
                 .authorizeRequests()
@@ -63,6 +77,20 @@ public class SecurityConfig {
                 .and()
                 .oauth2ResourceServer()
                 .jwt();
+
+        http.authorizeRequests().accessDecisionManager(accessDecisionManager());
+
         return http.build();
+    }
+
+    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        List<AccessDecisionVoter<? extends Object>> decisionVoters = Arrays.asList(
+                new WebExpressionVoter(),
+                new RoleVoter(),
+                new AuthenticatedVoter(),
+                permissionsVoter
+        );
+        return new UnanimousBased(decisionVoters);
     }
 }
