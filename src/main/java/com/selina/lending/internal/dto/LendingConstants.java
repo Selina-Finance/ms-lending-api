@@ -29,7 +29,7 @@ public final class LendingConstants {
 
     public static final String REQUEST_SOURCE =  Source.LENDING_API.toString();
 
-    public static final String STAGE_OVERWRITE =  "Dip - Credit Commitments";
+    public static final String STAGE_OVERWRITE =  "DIP - Credit Commitments";
 
     public static final String EXAMPLE_DATE = "2001-01-01";
 

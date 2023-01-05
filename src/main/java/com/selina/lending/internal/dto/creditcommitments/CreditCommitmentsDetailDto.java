@@ -17,12 +17,15 @@
 
 package com.selina.lending.internal.dto.creditcommitments;
 
+import javax.validation.Valid;
+
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class CreditCommitmentsDetailDto {
+    @Valid
     SystemDto system;
     UserDto user;
     PublicInformationDto publicInformation;
