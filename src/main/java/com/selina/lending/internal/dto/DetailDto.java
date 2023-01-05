@@ -19,12 +19,16 @@ package com.selina.lending.internal.dto;
 
 import javax.validation.constraints.Pattern;
 
+import com.selina.lending.api.validator.Conditional;
+import com.selina.lending.api.validator.EnumValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
+@Conditional(selected = "ignore", values = {"true"}, required = {"reasonToIgnore"})
 public class DetailDto {
     Integer id;
     String status;
@@ -64,6 +68,9 @@ public class DetailDto {
     @Schema(example = LendingConstants.EXAMPLE_DATE)
     String fixedRatePeriodEndDate;
     Double amountToConsolidate;
+
+    @Schema(implementation = ReasonToIgnore.class)
+    @EnumValue(enumClass = ReasonToIgnore.class)
     String reasonToIgnore;
     String lender;
     String type;
@@ -71,4 +78,24 @@ public class DetailDto {
     String interestOnlyBalance;
     Integer amount;
     String code;
+
+
+    enum ReasonToIgnore {
+        IS_SELF_FUNDING("Item is a self funding buy-to-let"),
+        WILL_BE_REPAID("Item will be repaid/cleared - evidence to be provided"),
+        IS_WRONGLY_ATTRIBUTED("Item is wrongly attributed"),
+        IS_DISPUTED("Item is disputed - Experian to be updated"),
+        TERM_LESS_SIX_MONTHS("Remaining term is less than 6 months");
+
+        final String value;
+
+        ReasonToIgnore(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

@@ -19,6 +19,8 @@ package com.selina.lending.internal.dto.creditcommitments;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.selina.lending.internal.dto.DetailDto;
 
 import lombok.Builder;
@@ -27,6 +29,7 @@ import lombok.Value;
 @Builder
 @Value
 public class SystemDto {
+    @Valid
     List<DetailDto> detail;
     SummaryDto summary;
 }
