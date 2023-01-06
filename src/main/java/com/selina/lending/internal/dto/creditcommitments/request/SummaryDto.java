@@ -15,21 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments;
-
-import java.util.List;
-
-import javax.validation.Valid;
-
-import com.selina.lending.internal.dto.DetailDto;
+package com.selina.lending.internal.dto.creditcommitments.request;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class SystemDto {
-    @Valid
-    List<DetailDto> detail;
-    SummaryDto summary;
+public class SummaryDto {
+    Integer numberAccounts;
+    Integer numberActiveAccounts;
+    Double outstandingBalance;
+    Integer numberInfo;
+    Integer totalValue;
 }
+

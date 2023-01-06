@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import com.selina.lending.internal.dto.DIPApplicationDto;
 import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.DetailDto;
+import com.selina.lending.internal.dto.creditcommitments.response.DetailResponseDto;
 
 class ApplicationResponseMapperTest extends MapperBase {
 
@@ -75,7 +75,7 @@ class ApplicationResponseMapperTest extends MapperBase {
         assertThat(commitmentDetails.getSystem().getSummary().getOutstandingBalance(), equalTo(OUTSTANDING_BALANCE));
     }
 
-    private void assertDetail(DetailDto detailDto) {
+    private void assertDetail(DetailResponseDto detailDto) {
         assertThat(detailDto.getId(), equalTo(DETAIL_ID));
         assertThat(detailDto.getStatus(), equalTo(STATUS));
     }

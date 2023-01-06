@@ -29,11 +29,11 @@ import javax.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.DetailDto;
-import com.selina.lending.internal.dto.creditcommitments.ApplicantCreditCommitmentsDto;
-import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentsDetailDto;
-import com.selina.lending.internal.dto.creditcommitments.SystemDto;
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.request.DetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
+import com.selina.lending.internal.dto.creditcommitments.request.CreditCommitmentsDetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.SystemDto;
+import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 
 class CCReasonToIgnoreValidationTest {
     private static Validator validator;

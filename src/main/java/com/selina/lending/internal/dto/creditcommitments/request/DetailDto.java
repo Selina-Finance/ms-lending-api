@@ -15,12 +15,13 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.dto.creditcommitments.request;
 
 import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.Conditional;
 import com.selina.lending.api.validator.EnumValue;
+import com.selina.lending.internal.dto.LendingConstants;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

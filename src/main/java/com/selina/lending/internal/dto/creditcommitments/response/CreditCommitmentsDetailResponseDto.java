@@ -15,23 +15,20 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
 import javax.validation.Valid;
 
 import lombok.Builder;
 import lombok.Value;
 
-@Value
 @Builder
-public class ApplicantCreditCommitmentsDto {
-    Long id;
-    Boolean primaryApplicant;
-    String experianId;
-    String searchId;
-    Integer creditScore;
-    String message;
-    String creditCheck;
+@Value
+public class CreditCommitmentsDetailResponseDto {
     @Valid
-    CreditCommitmentsDetailDto creditCommitments;
+    SystemResponseDto system;
+    UserResponseDto user;
+    PublicInformationResponseDto publicInformation;
+    VotersRollResponseDto votersRoll;
+    CreditPolicyDto creditPolicy;
 }

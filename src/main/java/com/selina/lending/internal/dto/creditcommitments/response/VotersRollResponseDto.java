@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class CreditCommitmentDto {
-
-    List<ApplicantCreditCommitmentsDto> applicants;
+public class VotersRollResponseDto {
+    List<DetailResponseDto> detail;
 }
+

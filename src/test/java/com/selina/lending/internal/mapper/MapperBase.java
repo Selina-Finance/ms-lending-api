@@ -30,7 +30,8 @@ import com.selina.lending.internal.dto.DIPApplicantDto;
 import com.selina.lending.internal.dto.DIPApplicationDto;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
-import com.selina.lending.internal.dto.DetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.DetailDto;
+import com.selina.lending.internal.dto.creditcommitments.response.DetailResponseDto;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.dto.ErcDto;
 import com.selina.lending.internal.dto.ExpenditureDto;
@@ -45,15 +46,18 @@ import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailValueDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.dto.RequiredDto;
-import com.selina.lending.internal.dto.creditcommitments.ApplicantCreditCommitmentsDto;
-import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentsDetailDto;
-import com.selina.lending.internal.dto.creditcommitments.CreditPolicyDto;
-import com.selina.lending.internal.dto.creditcommitments.PublicInformationDto;
-import com.selina.lending.internal.dto.creditcommitments.SummaryDto;
-import com.selina.lending.internal.dto.creditcommitments.SystemDto;
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.dto.creditcommitments.UserDto;
-import com.selina.lending.internal.dto.creditcommitments.VotersRollDto;
+import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
+import com.selina.lending.internal.dto.creditcommitments.request.CreditCommitmentsDetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.SummaryDto;
+import com.selina.lending.internal.dto.creditcommitments.request.SystemDto;
+import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentsDetailResponseDto;
+import com.selina.lending.internal.dto.creditcommitments.response.CreditPolicyDto;
+import com.selina.lending.internal.dto.creditcommitments.response.PublicInformationResponseDto;
+import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.response.SummaryResponseDto;
+import com.selina.lending.internal.dto.creditcommitments.response.SystemResponseDto;
+import com.selina.lending.internal.dto.creditcommitments.response.UserResponseDto;
+import com.selina.lending.internal.dto.creditcommitments.response.VotersRollResponseDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
@@ -224,43 +228,59 @@ public abstract class MapperBase {
     }
 
     private ApplicantCreditCommitmentsDto getApplicantCreditCommitmentDto() {
-        return ApplicantCreditCommitmentsDto.builder().creditCommitments(getCreditCommitmentsDetailDto()).primaryApplicant(true).creditScore(CREDIT_SCORE).build();
+        return ApplicantCreditCommitmentsDto.builder().creditCommitments(getCreditCommitmentsDetailDto()).primaryApplicant(true).id(1L).build();
     }
 
     public CreditCommitmentsDetailDto getCreditCommitmentsDetailDto() {
-        return CreditCommitmentsDetailDto.builder().creditPolicy(getCreditPolicyDto())
-                .system(getSystemDto()).creditPolicy(getCreditPolicyDto()).votersRoll(getVotersRollDto())
+        return CreditCommitmentsDetailDto.builder()
+                .system(getSystemDto()).build();
+    }
+    private SystemDto getSystemDto() {
+        return SystemDto.builder().detail(List.of(getDetailDto())).summary(getSummaryDto()).build();
+    }
+
+    private SummaryDto getSummaryDto() {
+        return SummaryDto.builder().numberAccounts(2).outstandingBalance(OUTSTANDING_BALANCE).build();
+    }
+
+    private DetailDto getDetailDto() {
+        return DetailDto.builder().id(DETAIL_ID).status(STATUS).build();
+    }
+
+    public CreditCommitmentsDetailResponseDto getCreditCommitmentsDetailResponseDto() {
+        return CreditCommitmentsDetailResponseDto.builder().creditPolicy(getCreditPolicyDto())
+                .system(getSystemResponseDto()).creditPolicy(getCreditPolicyDto()).votersRoll(getVotersRollDto())
                 .publicInformation(getPublicInformationDto())
                 .user(getUserDto())
                 .build();
     }
 
-    private UserDto getUserDto() {
-        return UserDto.builder().detail(List.of(getDetailDto())).build();
+    private UserResponseDto getUserDto() {
+        return UserResponseDto.builder().detail(List.of(getDetailResponseDto())).build();
     }
 
-    private PublicInformationDto getPublicInformationDto() {
-        return PublicInformationDto.builder().system(getSystemDto()).build();
+    private PublicInformationResponseDto getPublicInformationDto() {
+        return PublicInformationResponseDto.builder().system(getSystemResponseDto()).build();
     }
 
-    private VotersRollDto getVotersRollDto() {
-        return VotersRollDto.builder().detail(List.of(getDetailDto())).build();
+    private VotersRollResponseDto getVotersRollDto() {
+        return VotersRollResponseDto.builder().detail(List.of(getDetailResponseDto())).build();
     }
 
     private CreditPolicyDto getCreditPolicyDto() {
-        return CreditPolicyDto.builder().detail(List.of(getDetailDto())).build();
+        return CreditPolicyDto.builder().detail(List.of(getDetailResponseDto())).build();
     }
-    private DetailDto getDetailDto() {
-        return DetailDto.builder().id(DETAIL_ID).status(STATUS).build();
-    }
-
-    private SystemDto getSystemDto() {
-        return SystemDto.builder().detail(List.of(getDetailDto())).summary(getSummaryDto()).build();
+    private DetailResponseDto getDetailResponseDto() {
+        return DetailResponseDto.builder().id(DETAIL_ID).status(STATUS).build();
     }
 
+    private SystemResponseDto getSystemResponseDto() {
+        return SystemResponseDto.builder().detail(List.of(getDetailResponseDto())).summary(getSummaryResponseDto()).build();
+    }
 
-    private SummaryDto getSummaryDto() {
-        return SummaryDto.builder().numberAccounts(2).outstandingBalance(OUTSTANDING_BALANCE).build();
+
+    private SummaryResponseDto getSummaryResponseDto() {
+        return SummaryResponseDto.builder().numberAccounts(2).outstandingBalance(OUTSTANDING_BALANCE).build();
     }
 
     protected FeesDto getFeesDto() {

@@ -20,12 +20,12 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.creditcommitments.VotersRollDto;
+import com.selina.lending.internal.dto.creditcommitments.response.VotersRollResponseDto;
 import com.selina.lending.internal.service.application.domain.VotersRoll;
 
 @Mapper(uses = {DetailMapper.class})
 public interface VotersRollMapper {
     VotersRollMapper INSTANCE = Mappers.getMapper(VotersRollMapper.class);
 
-    VotersRollDto mapToVotersRollDto(VotersRoll votersRoll);
+    VotersRollResponseDto mapToVotersRollDto(VotersRoll votersRoll);
 }

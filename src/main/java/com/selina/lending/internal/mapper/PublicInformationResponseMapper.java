@@ -15,21 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.mapper;
 
-import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
+import com.selina.lending.internal.dto.creditcommitments.response.PublicInformationResponseDto;
+import com.selina.lending.internal.service.application.domain.PublicInformation;
 
-@Builder(toBuilder = true)
-@Value
-public class ApplicationResponse {
-    String requestType;
-    String applicationId;
-    @Schema (oneOf = DIPApplicationDto.class)
-    ApplicationDto application;
-    SalesforceDto salesforce;
-    CreditCommitmentDto creditCommitment;
+@Mapper(uses = {SystemMapper.class})
+public interface PublicInformationResponseMapper {
+    PublicInformationResponseMapper INSTANCE = Mappers.getMapper(PublicInformationResponseMapper.class);
+
+    PublicInformationResponseDto mapToPublicInformationDto(PublicInformation publicInformation);
 }

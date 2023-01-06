@@ -15,21 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
-import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentDto;
+import java.util.List;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.Valid;
+
 import lombok.Builder;
 import lombok.Value;
 
-@Builder(toBuilder = true)
+@Builder
 @Value
-public class ApplicationResponse {
-    String requestType;
-    String applicationId;
-    @Schema (oneOf = DIPApplicationDto.class)
-    ApplicationDto application;
-    SalesforceDto salesforce;
-    CreditCommitmentDto creditCommitment;
+public class SystemResponseDto {
+    @Valid
+    List<DetailResponseDto> detail;
+    SummaryResponseDto summary;
 }

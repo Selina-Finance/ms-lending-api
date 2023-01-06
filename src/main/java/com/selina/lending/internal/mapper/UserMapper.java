@@ -20,12 +20,12 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.creditcommitments.UserDto;
+import com.selina.lending.internal.dto.creditcommitments.response.UserResponseDto;
 import com.selina.lending.internal.service.application.domain.User;
 
 @Mapper(uses = {DetailMapper.class, SummaryMapper.class})
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserDto mapToUserDto(User user);
+    UserResponseDto mapToUserDto(User user);
 }

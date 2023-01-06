@@ -35,7 +35,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.creditcommitments.EsisDocService;
 import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;

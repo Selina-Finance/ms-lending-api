@@ -20,10 +20,10 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentsDetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.CreditCommitmentsDetailDto;
 import com.selina.lending.internal.service.application.domain.CreditCommitmentsDetail;
 
-@Mapper(uses = {SystemMapper.class, UserMapper.class, PublicInformationMapper.class, VotersRollMapper.class, CreditPolicyMapper.class})
+@Mapper(uses = {SystemMapper.class, UserMapper.class, PublicInformationResponseMapper.class, VotersRollMapper.class, CreditPolicyMapper.class})
 public interface CreditCommitmentsDetailMapper {
     CreditCommitmentsDetailMapper INSTANCE = Mappers.getMapper(CreditCommitmentsDetailMapper.class);
 

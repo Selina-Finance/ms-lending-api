@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.DetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.DetailDto;
 
 class CreditCommitmentsDetailMapperTest extends MapperBase {
 
@@ -35,11 +35,7 @@ class CreditCommitmentsDetailMapperTest extends MapperBase {
         var creditCommitmentsDto = CreditCommitmentsDetailMapper.INSTANCE.mapToCreditCommitmentsDto(creditCommitments);
 
         //Then
-        assertDetails(creditCommitmentsDto.getCreditPolicy().getDetail().get(0));
         assertDetails(creditCommitmentsDto.getSystem().getDetail().get(0));
-        assertDetails(creditCommitmentsDto.getVotersRoll().getDetail().get(0));
-        assertDetails(creditCommitmentsDto.getPublicInformation().getSystem().getDetail().get(0));
-        assertDetails(creditCommitmentsDto.getUser().getDetail().get(0));
   }
 
     private void assertDetails(DetailDto detailDto) {

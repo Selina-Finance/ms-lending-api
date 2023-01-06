@@ -25,7 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.mapper.UpdateCreditCommitmentsRequestMapper;
 import com.selina.lending.internal.service.creditcommitments.EsisDocService;
