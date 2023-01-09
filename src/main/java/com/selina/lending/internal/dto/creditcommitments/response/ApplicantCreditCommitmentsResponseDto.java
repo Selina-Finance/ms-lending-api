@@ -30,7 +30,6 @@ public class ApplicantCreditCommitmentsResponseDto {
     String experianId;
     String searchId;
     Integer creditScore;
-    String message;
-    String creditCheck;
-    @Valid CreditCommitmentsDetailResponseDto creditCommitments;
+    @Valid
+    CreditCommitmentsDetailResponseDto creditCommitments;
 }

@@ -23,8 +23,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.DIPApplicationDto;
 import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPApplicationDto;
 import com.selina.lending.internal.dto.creditcommitments.response.DetailResponseDto;
 
 class ApplicationResponseMapperTest extends MapperBase {
@@ -68,8 +68,6 @@ class ApplicationResponseMapperTest extends MapperBase {
         var commitmentDetails = creditCommitment.getApplicants().get(0).getCreditCommitments();
         assertDetail(commitmentDetails.getSystem().getDetail().get(0));
         assertDetail(commitmentDetails.getUser().getDetail().get(0));
-        assertDetail(commitmentDetails.getVotersRoll().getDetail().get(0));
-        assertDetail(commitmentDetails.getCreditPolicy().getDetail().get(0));
 
         assertThat(commitmentDetails.getSystem().getSummary().getNumberAccounts(),equalTo(2));
         assertThat(commitmentDetails.getSystem().getSummary().getOutstandingBalance(), equalTo(OUTSTANDING_BALANCE));

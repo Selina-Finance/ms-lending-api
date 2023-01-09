@@ -27,5 +27,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 public class CreditCommitmentsDetailDto {
-    @Valid SystemDto system;
+    @Valid
+    private SystemDto system;
+
+    @Valid
+    private UserDto user;
 }

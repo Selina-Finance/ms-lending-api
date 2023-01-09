@@ -21,13 +21,14 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-@Value
+@NoArgsConstructor
+@SuperBuilder
+@Data
 public class SystemDto {
     @Valid
     List<DetailDto> detail;
-    SummaryDto summary;
 }

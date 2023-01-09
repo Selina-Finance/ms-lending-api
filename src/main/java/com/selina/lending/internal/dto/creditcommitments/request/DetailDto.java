@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.dto.creditcommitments.request;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.validator.Conditional;
@@ -30,7 +31,9 @@ import lombok.Value;
 @Builder
 @Value
 @Conditional(selected = "ignore", values = {"true"}, required = {"reasonToIgnore"})
+@Conditional(selected = "consolidate", values = {"true"}, required = {"amountToConsolidate"})
 public class DetailDto {
+    @NotNull
     Integer id;
     String status;
     String applicant;
@@ -47,17 +50,12 @@ public class DetailDto {
     String endDate;
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
     @Schema(example = LendingConstants.EXAMPLE_DATE)
-    String lastUpdatedDate;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
     String settlementDate;
     Integer remainingTerm;
     Double outstandingBalance;
     Double monthlyPayment;
     Double creditLimit;
     Boolean securityProperty;
-    String paymentProfileShort;
-    String paymentProfileLong;
     Boolean adverseCredit;
     Boolean consolidate;
     Boolean ignore;

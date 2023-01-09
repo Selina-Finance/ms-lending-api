@@ -17,18 +17,12 @@
 
 package com.selina.lending.internal.dto.creditcommitments.response;
 
-import javax.validation.Valid;
-
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 public class CreditCommitmentsDetailResponseDto {
-    @Valid
     SystemResponseDto system;
     UserResponseDto user;
-    PublicInformationResponseDto publicInformation;
-    VotersRollResponseDto votersRoll;
-    CreditPolicyDto creditPolicy;
 }

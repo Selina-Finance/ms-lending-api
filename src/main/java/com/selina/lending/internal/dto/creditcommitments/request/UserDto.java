@@ -15,16 +15,20 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto.creditcommitments.request;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-import com.selina.lending.internal.dto.creditcommitments.response.CreditPolicyDto;
-import com.selina.lending.internal.service.application.domain.CreditPolicy;
+import java.util.List;
 
-@Mapper(uses = {DetailMapper.class})
-public interface CreditPolicyMapper {
-    CreditPolicyMapper INSTANCE = Mappers.getMapper(CreditPolicyMapper.class);
+import javax.validation.Valid;
 
-    CreditPolicyDto mapToCreditPolicyDto(CreditPolicy creditPolicy);
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+@NoArgsConstructor
+@SuperBuilder
+@Data
+public class UserDto {
+    @Valid
+    List<DetailDto> detail;
 }

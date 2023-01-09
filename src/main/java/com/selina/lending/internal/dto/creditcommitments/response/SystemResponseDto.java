@@ -19,15 +19,14 @@ package com.selina.lending.internal.dto.creditcommitments.response;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import lombok.Builder;
-import lombok.Value;
-
-@Builder
-@Value
+@NoArgsConstructor
+@SuperBuilder
+@Data
 public class SystemResponseDto {
-    @Valid
     List<DetailResponseDto> detail;
     SummaryResponseDto summary;
 }

@@ -19,6 +19,7 @@ package com.selina.lending.internal.dto.creditcommitments.request;
 
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Value;
@@ -28,6 +29,7 @@ import lombok.Value;
 @Builder
 public class ApplicantCreditCommitmentsDto {
     Long id;
+    @NotNull
     Boolean primaryApplicant;
     @Valid
     CreditCommitmentsDetailDto creditCommitments;

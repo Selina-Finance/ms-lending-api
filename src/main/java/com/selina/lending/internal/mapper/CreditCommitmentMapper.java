@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentDto;
 import com.selina.lending.internal.service.application.domain.CreditCommitment;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = ApplicantCreditCommitmentsMapper.class)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CreditCommitmentMapper {
     CreditCommitmentMapper INSTANCE = Mappers.getMapper(CreditCommitmentMapper.class);
 

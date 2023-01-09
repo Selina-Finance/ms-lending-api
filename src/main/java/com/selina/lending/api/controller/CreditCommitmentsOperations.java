@@ -27,8 +27,8 @@ import javax.validation.Valid;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -47,7 +47,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/application")
 public interface CreditCommitmentsOperations {
 
-    @Operation(description = "Update an application's Credit Commitments for the given external application id")
+    @Operation(description = "Update an application's Credit Commitments for the given external application id. Additional commitments should be added to the User section")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -62,7 +62,7 @@ public interface CreditCommitmentsOperations {
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content),
     })
-    @PutMapping(value = "/{externalApplicationId}/creditcommitments")
+    @PatchMapping(value = "/{externalApplicationId}/creditcommitments")
     ResponseEntity<ApplicationResponse> updateCreditCommitments(
             @Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
             @Valid @RequestBody UpdateCreditCommitmentsRequest request
