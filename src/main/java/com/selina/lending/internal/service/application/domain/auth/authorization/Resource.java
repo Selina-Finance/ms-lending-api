@@ -15,20 +15,12 @@
  *
  */
 
-package com.selina.lending.internal.service;
+package com.selina.lending.internal.service.application.domain.auth.authorization;
 
-import com.selina.lending.internal.dto.permissions.ResourceDto;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Slf4j
-@Service
-public class PermissionServiceImpl implements PermissionService {
-
-
-    @Override
-    public boolean isAccessDenied(ResourceDto resource, String userToken) {
-        log.debug("Request to check is access denied to resource: {}", resource);
-        return false;
-    }
+public record Resource(
+        String name,
+        List<String> scopes
+) {
 }

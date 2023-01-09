@@ -1,6 +1,7 @@
 middleware.api.url: http://TBC
 middleware.application.service.url: http://TBC
 selection.service.url: http://selection-service
+authorization.api.url: https://ms-selection-jx-staging.selinadev.co.uk
 
 spring.security:
   oauth2:
