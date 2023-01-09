@@ -47,7 +47,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/application")
 public interface CreditCommitmentsOperations {
 
-    @Operation(description = "Update an application's Credit Commitments for the given external application id. Additional commitments should be added to the User section")
+    @Operation(description = "Update an application's Credit Commitments for the given external application id.")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
