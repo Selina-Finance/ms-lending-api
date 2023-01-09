@@ -15,15 +15,12 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.auth.authorization;
+package com.selina.lending.internal.service.permissions.helpers;
 
-import lombok.Builder;
+public class HttpUrlToAuthTranslationHelper {
 
-import java.util.Set;
+    public static String toAuthResourceName(String url){
+        return null;
+    }
 
-@Builder
-public record Resource(
-        String name,
-        Set<String> scopes
-) {
 }

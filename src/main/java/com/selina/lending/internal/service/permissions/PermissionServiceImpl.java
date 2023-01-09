@@ -17,11 +17,15 @@
 
 package com.selina.lending.internal.service.permissions;
 
-import com.selina.lending.internal.dto.permissions.ResourceDto;
+import com.selina.lending.internal.dto.permissions.AskedResourceDto;
 import com.selina.lending.internal.repository.auth.PermissionsRepository;
-import com.selina.lending.internal.service.permissions.PermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import static com.selina.lending.internal.service.permissions.helpers.HttpMethodToAuthTranslationHelper.toAuthScope;
+import static com.selina.lending.internal.service.permissions.helpers.HttpUrlToAuthTranslationHelper.toAuthResourceName;
+import static com.selina.lending.internal.service.permissions.helpers.PermissionsCalculationHelper.isUserResourcesContainsAskedResource;
+
 
 @Slf4j
 @Service
@@ -34,8 +38,14 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public boolean isAccessDenied(ResourceDto resource, String userToken) {
+    public boolean isAccessDenied(AskedResourceDto resource, String userToken) {
         log.info("Checking access to resource: {}", resource);
-        return repository.getByUserToken(userToken).isEmpty();
+        var userResources = repository.getByUserToken(userToken);
+        return !isUserResourcesContainsAskedResource(
+                userResources,
+                toAuthResourceName(resource.url()),
+                toAuthScope(resource.method())
+        );
     }
+
 }

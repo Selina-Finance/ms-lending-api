@@ -15,15 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.auth.authorization;
+package com.selina.lending.internal.service.permissions.helpers;
 
-import lombok.Builder;
+import com.selina.lending.internal.dto.permissions.AskedResourceDto;
+import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 
-import java.util.Set;
+import java.util.List;
 
-@Builder
-public record Resource(
-        String name,
-        Set<String> scopes
-) {
+public class PermissionsCalculationHelper {
+
+    public static boolean isUserResourcesContainsAskedResource(
+            List<Resource> userResources,
+            String askedName,
+            String askedScope) {
+        return false;
+    }
 }

@@ -17,8 +17,27 @@
 
 package com.selina.lending.internal.dto.permissions;
 
-public record ResourceDto(
+public record AskedResourceDto(
         String method,
         String url
 ) {
+    public String authTranslatedMethod() {
+        return null;
+    }
+
+    enum HttpMethodAuthTranslation {
+        READ("Read"),
+        WRITE("Write");
+
+        final String value;
+
+        HttpMethodAuthTranslation(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

@@ -17,7 +17,7 @@
 
 package com.selina.lending.config.security.permissions;
 
-import com.selina.lending.internal.dto.permissions.ResourceDto;
+import com.selina.lending.internal.dto.permissions.AskedResourceDto;
 import com.selina.lending.internal.service.permissions.PermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -51,14 +51,14 @@ public class PermissionsVoter implements AccessDecisionVoter {
                 return ACCESS_ABSTAIN; // not granted or not deny. The decision will be based on other voters
             }
 
-            return isGranted((JwtAuthenticationToken) authentication, new ResourceDto(method, url));
+            return isGranted((JwtAuthenticationToken) authentication, new AskedResourceDto(method, url));
         } catch (Exception e) {
             log.error("Can't parse input data to make an authorization decision", e);
         }
         return ACCESS_ABSTAIN; // not granted or not deny. The decision will be based on other voters
     }
 
-    private Integer isGranted(JwtAuthenticationToken authentication, ResourceDto resource) {
+    private Integer isGranted(JwtAuthenticationToken authentication, AskedResourceDto resource) {
         String userToken = authentication.getToken().getTokenValue();
         return permissionService.isAccessDenied(resource, userToken) ? ACCESS_DENIED : ACCESS_GRANTED;
     }

@@ -17,8 +17,8 @@
 
 package com.selina.lending.internal.service.permissions;
 
-import com.selina.lending.internal.dto.permissions.ResourceDto;
+import com.selina.lending.internal.dto.permissions.AskedResourceDto;
 
 public interface PermissionService {
-    boolean isAccessDenied(ResourceDto resource, String userToken);
+    boolean isAccessDenied(AskedResourceDto resource, String userToken);
 }
