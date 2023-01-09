@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.service;
+package com.selina.lending.internal.service.permissions;
 
 import com.selina.lending.internal.dto.permissions.ResourceDto;
 

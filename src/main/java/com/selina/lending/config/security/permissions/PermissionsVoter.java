@@ -18,7 +18,7 @@
 package com.selina.lending.config.security.permissions;
 
 import com.selina.lending.internal.dto.permissions.ResourceDto;
-import com.selina.lending.internal.service.PermissionService;
+import com.selina.lending.internal.service.permissions.PermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;

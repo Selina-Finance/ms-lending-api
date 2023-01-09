@@ -17,8 +17,11 @@
 
 package com.selina.lending.internal.service.application.domain.auth.authorization;
 
+import lombok.Builder;
+
 import java.util.List;
 
+@Builder
 public record Resource(
         String name,
         List<String> scopes
