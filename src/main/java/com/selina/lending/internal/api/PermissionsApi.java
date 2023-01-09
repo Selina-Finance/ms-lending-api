@@ -30,7 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         url = "${authorization.api.url}",
         configuration = MainAuthOauth2Configuration.class
 )
-public interface AuthorizationApi {
+public interface PermissionsApi {
 
     @PostMapping(path = "/v1/authz/permissions", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     PermissionsResponse getPermissions(GetPermissionsRequest request);

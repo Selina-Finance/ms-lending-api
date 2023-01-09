@@ -17,22 +17,26 @@
 
 package com.selina.lending.internal.repository.auth;
 
-import com.selina.lending.internal.api.AuthorizationApi;
+import com.selina.lending.internal.api.PermissionsApi;
 import com.selina.lending.internal.dto.auth.GetPermissionsRequest;
-import com.selina.lending.internal.service.application.domain.auth.authorization.PermissionsResponse;
+import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
-public class AuthorizationRepositoryImpl implements AuthorizationRepository {
+public class PermissionsApiRepository implements PermissionsRepository {
 
-    private final AuthorizationApi authorizationApi;
+    private final PermissionsApi permissionsApi;
 
-    public AuthorizationRepositoryImpl(AuthorizationApi authorizationApi) {
-        this.authorizationApi = authorizationApi;
+    public PermissionsApiRepository(PermissionsApi permissionsApi) {
+        this.permissionsApi = permissionsApi;
     }
 
     @Override
-    public PermissionsResponse getUserPermissions(String userToken) {
-        return authorizationApi.getPermissions(new GetPermissionsRequest(userToken));
+    public List<Resource> getByUserToken(String userToken) {
+        return new ArrayList<>();
+//        return permissionsApi.getPermissions(new GetPermissionsRequest(userToken));
     }
 }

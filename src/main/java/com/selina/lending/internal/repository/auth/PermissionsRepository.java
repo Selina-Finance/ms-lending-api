@@ -17,9 +17,10 @@
 
 package com.selina.lending.internal.repository.auth;
 
-import com.selina.lending.internal.dto.permissions.ResourceDto;
-import com.selina.lending.internal.service.application.domain.auth.authorization.PermissionsResponse;
+import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 
-public interface AuthorizationRepository {
-    PermissionsResponse getUserPermissions(String userToken);
+import java.util.List;
+
+public interface PermissionsRepository {
+    List<Resource> getByUserToken(String userToken);
 }
