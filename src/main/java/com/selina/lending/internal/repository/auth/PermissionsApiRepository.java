@@ -19,12 +19,16 @@ package com.selina.lending.internal.repository.auth;
 
 import com.selina.lending.internal.api.PermissionsApi;
 import com.selina.lending.internal.dto.auth.GetPermissionsRequest;
+import com.selina.lending.internal.service.application.domain.auth.authorization.PermissionsResponse;
 import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Component
 public class PermissionsApiRepository implements PermissionsRepository {
 
@@ -36,7 +40,14 @@ public class PermissionsApiRepository implements PermissionsRepository {
 
     @Override
     public List<Resource> getByUserToken(String userToken) {
-        return new ArrayList<>();
-//        return permissionsApi.getPermissions(new GetPermissionsRequest(userToken));
+        try {
+            var response = permissionsApi.getPermissions(new GetPermissionsRequest(userToken));
+            return Optional.ofNullable(response)
+                    .map(PermissionsResponse::resources)
+                    .orElse(Collections.emptyList());
+        } catch (Exception e) {
+            log.error("Error while calling permissionsApi", e);
+            return Collections.emptyList();
+        }
     }
 }
