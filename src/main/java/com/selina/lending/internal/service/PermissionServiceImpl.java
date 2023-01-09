@@ -18,6 +18,7 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.permissions.ResourceDto;
+import com.selina.lending.internal.repository.auth.AuthorizationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +26,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class PermissionServiceImpl implements PermissionService {
 
+    private final AuthorizationRepository repository;
+
+    public PermissionServiceImpl(AuthorizationRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public boolean isAccessDenied(ResourceDto resource, String userToken) {
         log.debug("Request to check is access denied to resource: {}", resource);
-        return false;
+        return repository.getUserPermissions(userToken).resources().isEmpty();
     }
 }

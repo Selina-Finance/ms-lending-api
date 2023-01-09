@@ -53,7 +53,7 @@ public class PermissionsVoter implements AccessDecisionVoter {
 
             return isGranted((JwtAuthenticationToken) authentication, new ResourceDto(method, url));
         } catch (Exception e) {
-            log.error("Can't parse input data to make an authorization decision");
+            log.error("Can't parse input data to make an authorization decision", e);
         }
         return ACCESS_ABSTAIN; // not granted or not deny. The decision will be based on other voters
     }

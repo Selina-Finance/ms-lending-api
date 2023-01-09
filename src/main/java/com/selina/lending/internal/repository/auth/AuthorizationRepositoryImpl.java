@@ -18,6 +18,7 @@
 package com.selina.lending.internal.repository.auth;
 
 import com.selina.lending.internal.api.AuthorizationApi;
+import com.selina.lending.internal.dto.auth.GetPermissionsRequest;
 import com.selina.lending.internal.service.application.domain.auth.authorization.PermissionsResponse;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +32,7 @@ public class AuthorizationRepositoryImpl implements AuthorizationRepository {
     }
 
     @Override
-    public PermissionsResponse getUserPermissions() {
-        return null;
+    public PermissionsResponse getUserPermissions(String userToken) {
+        return authorizationApi.getPermissions(new GetPermissionsRequest(userToken));
     }
 }

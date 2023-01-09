@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.api;
 
-import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
+import com.selina.lending.config.security.clientOAuth2.MainAuthOauth2Configuration;
 import com.selina.lending.internal.dto.auth.GetPermissionsRequest;
 import com.selina.lending.internal.service.application.domain.auth.authorization.PermissionsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -28,7 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @FeignClient(
         value = "authorization-api",
         url = "${authorization.api.url}",
-        configuration = MiddlewareOAuth2Configuration.class
+        configuration = MainAuthOauth2Configuration.class
 )
 public interface AuthorizationApi {
 
