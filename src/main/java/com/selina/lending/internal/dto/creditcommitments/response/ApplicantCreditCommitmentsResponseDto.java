@@ -17,8 +17,6 @@
 
 package com.selina.lending.internal.dto.creditcommitments.response;
 
-import javax.validation.Valid;
-
 import lombok.Builder;
 import lombok.Value;
 
@@ -30,6 +28,5 @@ public class ApplicantCreditCommitmentsResponseDto {
     String experianId;
     String searchId;
     Integer creditScore;
-    @Valid
     CreditCommitmentsDetailResponseDto creditCommitments;
 }

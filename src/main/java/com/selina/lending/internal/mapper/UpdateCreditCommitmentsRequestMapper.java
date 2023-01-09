@@ -23,7 +23,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
-@Mapper (unmappedTargetPolicy = ReportingPolicy.IGNORE )
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UpdateCreditCommitmentsRequestMapper {
     UpdateCreditCommitmentsRequestMapper INSTANCE = Mappers.getMapper(UpdateCreditCommitmentsRequestMapper.class);
 
