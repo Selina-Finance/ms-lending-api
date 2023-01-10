@@ -15,18 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
 import lombok.Builder;
 import lombok.Value;
 
-@Builder
 @Value
-public class SummaryDto {
-    Integer numberAccounts;
-    Integer numberActiveAccounts;
-    Double outstandingBalance;
-    Integer numberInfo;
-    Integer totalValue;
+@Builder
+public class ApplicantCreditCommitmentsResponseDto {
+    Long id;
+    Boolean primaryApplicant;
+    String experianId;
+    String searchId;
+    Integer creditScore;
+    CreditCommitmentsDetailResponseDto creditCommitments;
+    PublicInformationResponseDto publicInformation;
 }
-

@@ -15,18 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
 import java.util.List;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-public class CreditCommitmentResponse {
-    String id;
-    List<ApplicantCreditCommitmentsDto> applicants;
+@Data
+public class SystemResponseDto {
+    List<DetailResponseDto> detail;
+    SummaryResponseDto summary;
 }

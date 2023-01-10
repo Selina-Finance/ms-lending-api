@@ -15,17 +15,16 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import java.util.List;
 
-import com.selina.lending.internal.dto.creditcommitments.VotersRollDto;
-import com.selina.lending.internal.service.application.domain.VotersRoll;
+import lombok.Builder;
+import lombok.Value;
 
-@Mapper(uses = {DetailMapper.class})
-public interface VotersRollMapper {
-    VotersRollMapper INSTANCE = Mappers.getMapper(VotersRollMapper.class);
+@Builder
+@Value
+public class CreditCommitmentDto {
 
-    VotersRollDto mapToVotersRollDto(VotersRoll votersRoll);
+    List<ApplicantCreditCommitmentsResponseDto> applicants;
 }

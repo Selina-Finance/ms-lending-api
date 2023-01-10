@@ -15,18 +15,20 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto.creditcommitments.request;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import java.util.List;
 
-import com.selina.lending.internal.dto.creditcommitments.SystemDto;
-import com.selina.lending.internal.service.application.domain.System;
+import javax.validation.Valid;
 
-@Mapper(uses = {DetailMapper.class, SummaryMapper.class})
-public interface SystemMapper {
-    SystemMapper INSTANCE = Mappers.getMapper(SystemMapper.class);
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-    SystemDto mapToSystemDto(System system);
+@NoArgsConstructor
+@SuperBuilder
+@Data
+public class SystemDto {
+    @Valid
+    List<DetailDto> detail;
 }
-

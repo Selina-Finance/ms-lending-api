@@ -18,13 +18,15 @@
 package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
-@Mapper (uses = ApplicantCreditCommitmentsMapper.class)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UpdateCreditCommitmentsRequestMapper {
     UpdateCreditCommitmentsRequestMapper INSTANCE = Mappers.getMapper(UpdateCreditCommitmentsRequestMapper.class);
 
-    UpdateCreditCommitmentsRequest mapToUpdateCreditCommitmentsRequest(com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest request);
+    UpdateCreditCommitmentsRequest mapToUpdateCreditCommitmentsRequest(
+            com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest request);
 }

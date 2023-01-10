@@ -15,17 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments;
-
-import java.util.List;
-
-import com.selina.lending.internal.dto.DetailDto;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class CreditPolicyDto {
-    List<DetailDto> detail;
+public class SummaryResponseDto {
+    Integer numberAccounts;
+    Integer numberActiveAccounts;
+    Double outstandingBalance;
+    Integer numberInfo;
+    Integer totalValue;
 }
+

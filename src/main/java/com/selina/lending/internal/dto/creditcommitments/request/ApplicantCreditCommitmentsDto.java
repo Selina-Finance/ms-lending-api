@@ -15,18 +15,23 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto.creditcommitments.request;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.PreviousNameDto;
-import com.selina.lending.internal.service.application.domain.PreviousName;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-@Mapper
-public interface PreviousNameMapper {
-    PreviousNameMapper INSTANCE = Mappers.getMapper(PreviousNameMapper.class);
+import lombok.Builder;
+import lombok.Value;
 
-    PreviousNameDto mapToPreviousNameDto (PreviousName previousName);
-    PreviousName mapToPreviousName(PreviousNameDto previousNameDto);
+
+@Value
+@Builder
+public class ApplicantCreditCommitmentsDto {
+    Long id;
+    @NotNull
+    Boolean primaryApplicant;
+    @Valid
+    CreditCommitmentsDetailDto creditCommitments;
+    PublicInformationDto publicInformation;
 }

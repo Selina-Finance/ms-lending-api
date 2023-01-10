@@ -15,17 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import java.util.List;
 
-import com.selina.lending.internal.dto.DetailDto;
-import com.selina.lending.internal.service.application.domain.Detail;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Mapper
-public interface DetailMapper {
-    DetailMapper INSTANCE = Mappers.getMapper(DetailMapper.class);
-
-    DetailDto mapToDetailsDto(Detail detail);
+@NoArgsConstructor
+@SuperBuilder
+@Getter
+public class CreditCommitmentResponse {
+    String id;
+    List<ApplicantCreditCommitmentsResponseDto> applicants;
 }

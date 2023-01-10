@@ -27,7 +27,7 @@ import com.selina.lending.internal.mapper.config.DIPApplicantMapperConfig;
 import com.selina.lending.internal.service.application.domain.Applicant;
 
 @Mapper(config = DIPApplicantMapperConfig.class, uses = {AddressMapper.class,
-        ChecklistMapper.class, IncomeMapper.class, PreviousNameMapper.class, EmploymentMapper.class})
+        ChecklistMapper.class, IncomeMapper.class, EmploymentMapper.class})
 public interface DIPApplicantMapper {
     DIPApplicantMapper INSTANCE = Mappers.getMapper(DIPApplicantMapper.class);
 

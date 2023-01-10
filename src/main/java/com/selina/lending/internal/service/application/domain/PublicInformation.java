@@ -17,11 +17,16 @@
 
 package com.selina.lending.internal.service.application.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class PublicInformation {
     System system;
+    User user;
 }

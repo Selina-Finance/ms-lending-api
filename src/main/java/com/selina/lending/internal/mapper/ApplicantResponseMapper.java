@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 import com.selina.lending.internal.dto.ApplicantResponseDto;
 import com.selina.lending.internal.service.application.domain.Applicant;
 
-@Mapper(uses = {AddressMapper.class, ChecklistMapper.class, IncomeMapper.class, PreviousNameMapper.class,
+@Mapper(uses = {AddressMapper.class, ChecklistMapper.class, IncomeMapper.class,
         EmploymentMapper.class, CreditCheckMapper.class, DocumentMapper.class})
 public interface ApplicantResponseMapper {
     ApplicantResponseMapper INSTANCE = Mappers.getMapper(ApplicantResponseMapper.class);

@@ -27,13 +27,13 @@ import javax.validation.Valid;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,7 +62,7 @@ public interface CreditCommitmentsOperations {
             @ApiResponse(responseCode = "403", content = @Content),
             @ApiResponse(responseCode = "404", content = @Content),
     })
-    @PutMapping(value = "/{externalApplicationId}/creditcommitments")
+    @PatchMapping(value = "/{externalApplicationId}/creditcommitments")
     ResponseEntity<ApplicationResponse> updateCreditCommitments(
             @Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
             @Valid @RequestBody UpdateCreditCommitmentsRequest request

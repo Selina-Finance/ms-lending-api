@@ -29,11 +29,11 @@ import javax.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.DetailDto;
-import com.selina.lending.internal.dto.creditcommitments.ApplicantCreditCommitmentsDto;
-import com.selina.lending.internal.dto.creditcommitments.CreditCommitmentsDetailDto;
-import com.selina.lending.internal.dto.creditcommitments.SystemDto;
-import com.selina.lending.internal.dto.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.request.DetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
+import com.selina.lending.internal.dto.creditcommitments.request.CreditCommitmentsDetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.SystemDto;
+import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 
 class CCReasonToIgnoreValidationTest {
     private static Validator validator;
@@ -49,10 +49,10 @@ class CCReasonToIgnoreValidationTest {
     void shouldInvalidateWhenIgnoreButReasonIsAbsent() {
         //Given
         var updateCCRequest = UpdateCreditCommitmentsRequest.builder().applicants(
-                List.of(ApplicantCreditCommitmentsDto.builder()
+                List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true)
                         .creditCommitments(CreditCommitmentsDetailDto.builder()
                                 .system(SystemDto.builder()
-                                        .detail(List.of(DetailDto.builder().ignore(true).build()))
+                                        .detail(List.of(DetailDto.builder().id(1).ignore(true).build()))
                                         .build())
                                 .build())
                         .build())).build();
@@ -72,9 +72,9 @@ class CCReasonToIgnoreValidationTest {
     void shouldInvalidateWhenIgnoreButReasonIsNotAcceptable() {
         //Given
         var updateCCRequest = UpdateCreditCommitmentsRequest.builder().applicants(
-                List.of(ApplicantCreditCommitmentsDto.builder()
+                List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true)
                         .creditCommitments(CreditCommitmentsDetailDto.builder()
-                                .system(SystemDto.builder().detail(List.of(DetailDto.builder()
+                                .system(SystemDto.builder().detail(List.of(DetailDto.builder().id(1)
                                         .ignore(true)
                                         .reasonToIgnore("bla-bla")
                                         .build())).build())
@@ -96,9 +96,9 @@ class CCReasonToIgnoreValidationTest {
     void shouldBeValidWhenIgnoreAndReasonAcceptable() {
         //Given
         var updateCCRequest = UpdateCreditCommitmentsRequest.builder().applicants(
-                List.of(ApplicantCreditCommitmentsDto.builder()
+                List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true)
                         .creditCommitments(CreditCommitmentsDetailDto.builder()
-                                .system(SystemDto.builder().detail(List.of(DetailDto.builder()
+                                .system(SystemDto.builder().detail(List.of(DetailDto.builder().id(1)
                                         .ignore(true)
                                         .reasonToIgnore("Item is disputed - Experian to be updated")
                                         .build())).build())
@@ -116,7 +116,7 @@ class CCReasonToIgnoreValidationTest {
     void shouldBeValidWhenDoNotPassIgnoreAndReasonToIgnore() {
         //Given
         var updateCCRequest = UpdateCreditCommitmentsRequest.builder().applicants(
-                List.of(ApplicantCreditCommitmentsDto.builder().build())).build();
+                List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true).build())).build();
 
         //When
         var violations = validator.validate(updateCCRequest);
@@ -129,10 +129,10 @@ class CCReasonToIgnoreValidationTest {
     void shouldBeValidWhenPassIgnoreAsFalse() {
         //Given
         var updateCCRequest = UpdateCreditCommitmentsRequest.builder().applicants(
-                List.of(ApplicantCreditCommitmentsDto.builder()
+                List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true)
                         .creditCommitments(CreditCommitmentsDetailDto.builder()
                                 .system(SystemDto.builder()
-                                        .detail(List.of(DetailDto.builder().ignore(false).build()))
+                                        .detail(List.of(DetailDto.builder().id(1).ignore(false).build()))
                                         .build())
                                 .build())
                         .build())).build();

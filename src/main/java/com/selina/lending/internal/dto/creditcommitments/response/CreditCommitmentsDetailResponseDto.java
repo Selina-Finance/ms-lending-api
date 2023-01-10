@@ -15,17 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import lombok.Builder;
+import lombok.Value;
 
-import com.selina.lending.internal.dto.creditcommitments.CreditPolicyDto;
-import com.selina.lending.internal.service.application.domain.CreditPolicy;
-
-@Mapper(uses = {DetailMapper.class})
-public interface CreditPolicyMapper {
-    CreditPolicyMapper INSTANCE = Mappers.getMapper(CreditPolicyMapper.class);
-
-    CreditPolicyDto mapToCreditPolicyDto(CreditPolicy creditPolicy);
+@Builder
+@Value
+public class CreditCommitmentsDetailResponseDto {
+    SystemResponseDto system;
+    UserResponseDto user;
 }

@@ -15,14 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 @Builder
-@Data
-public class Detail {
+@Value
+public class DetailResponseDto {
     Integer id;
     String status;
     String applicant;
@@ -44,7 +44,6 @@ public class Detail {
     Boolean consolidate;
     Boolean ignore;
     String repaymentType;
-    String interestOnlyBalance;
     String repaymentVehicle;
     String costOfRepaymentVehicle;
     String interestRateType;
@@ -53,8 +52,8 @@ public class Detail {
     String reasonToIgnore;
     String lender;
     String type;
-    Integer amount;
     Double currentBalance;
+    String interestOnlyBalance;
+    Double amount;
     String code;
-    String date;
 }
