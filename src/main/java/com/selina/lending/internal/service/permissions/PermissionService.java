@@ -17,10 +17,11 @@
 
 package com.selina.lending.internal.service.permissions;
 
+import com.selina.lending.internal.dto.AskedResource;
 import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 
 import java.util.List;
 
 public interface PermissionService {
-    boolean isAccessDenied(List<Resource> userResources, Resource askedResource);
+    boolean isAccessDenied(AskedResource asked, List<Resource> permitted);
 }

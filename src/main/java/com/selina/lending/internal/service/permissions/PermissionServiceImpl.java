@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service.permissions;
 
-import com.selina.lending.internal.repository.auth.PermissionsRepository;
+import com.selina.lending.internal.dto.AskedResource;
 import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,9 +30,16 @@ import java.util.List;
 public class PermissionServiceImpl implements PermissionService {
 
     @Override
-    public boolean isAccessDenied(List<Resource> userResources, Resource askedResource) {
-        log.debug("Checking access of asked resource: {} in resources: {}", askedResource, userResources);
+    public boolean isAccessDenied(AskedResource asked, List<Resource> permitted) {
+        log.debug("Checking access of asked resource: {} in permitted: {}", asked, permitted);
 
-        return false;
+        return permitted.stream()
+                .filter(resource -> resource.name().equals(asked.name()))
+                .findFirst()
+                .map(Resource::scopes)
+                .filter(scopes -> !scopes.isEmpty())
+                .filter(scopes -> scopes.contains(asked.scope()))
+                .isEmpty();
+
     }
 }

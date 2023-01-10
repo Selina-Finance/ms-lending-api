@@ -18,10 +18,9 @@
 package com.selina.lending.internal.service.permissions.annotation;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.internal.dto.AskedResource;
 import com.selina.lending.internal.repository.auth.PermissionsRepository;
-import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 import com.selina.lending.internal.service.permissions.PermissionService;
-import com.selina.lending.internal.service.permissions.annotation.Permission;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -30,8 +29,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 @Slf4j
 @Aspect
 @Component
@@ -39,7 +36,7 @@ public class PermissionAspect {
     private final PermissionService service;
     private final PermissionsRepository repository;
 
-    public PermissionAspect(PermissionService service,PermissionsRepository repository) {
+    public PermissionAspect(PermissionService service, PermissionsRepository repository) {
         this.service = service;
         this.repository = repository;
     }
@@ -49,13 +46,13 @@ public class PermissionAspect {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var userToken = (Jwt) authentication.getPrincipal();
 
-        var userResources = repository.getByUserToken(userToken.getTokenValue());
-        var askedResource = Resource.builder()
+        var permittedResources = repository.getByUserToken(userToken.getTokenValue());
+        var askedResource = AskedResource.builder()
                 .name(permission.resource())
-                .scopes(Set.of(permission.scope()))
+                .scope(permission.scope())
                 .build();
 
-        if (service.isAccessDenied(userResources, askedResource)) {
+        if (service.isAccessDenied(askedResource, permittedResources)) {
             throw new AccessDeniedException("Sorry, but you have no access to this resource");
         }
 

@@ -15,29 +15,13 @@
  *
  */
 
-package com.selina.lending.internal.dto.permissions;
+package com.selina.lending.internal.dto;
 
-public record AskedResourceDto(
-        String method,
-        String url
+import lombok.Builder;
+
+@Builder
+public record AskedResource(
+        String name,
+        String scope
 ) {
-    public String authTranslatedMethod() {
-        return null;
-    }
-
-    enum HttpMethodAuthTranslation {
-        READ("Read"),
-        WRITE("Write");
-
-        final String value;
-
-        HttpMethodAuthTranslation(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
 }
