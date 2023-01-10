@@ -56,4 +56,5 @@ public class Detail {
     Integer amount;
     Double currentBalance;
     String code;
+    String date;
 }

@@ -29,4 +29,5 @@ public class ApplicantCreditCommitmentsResponseDto {
     String searchId;
     Integer creditScore;
     CreditCommitmentsDetailResponseDto creditCommitments;
+    PublicInformationResponseDto publicInformation;
 }

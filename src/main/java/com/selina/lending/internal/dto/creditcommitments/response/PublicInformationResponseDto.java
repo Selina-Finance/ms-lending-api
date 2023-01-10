@@ -15,18 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.dto.creditcommitments.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-public class PublicInformation {
-    System system;
-    User user;
+@Data
+public class PublicInformationResponseDto {
+    SystemResponseDto system;
+    UserResponseDto user;
 }

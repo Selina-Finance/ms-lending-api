@@ -47,6 +47,7 @@ import com.selina.lending.internal.dto.RequiredDto;
 import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
 import com.selina.lending.internal.dto.creditcommitments.request.CreditCommitmentsDetailDto;
 import com.selina.lending.internal.dto.creditcommitments.request.DetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.PublicInformationDto;
 import com.selina.lending.internal.dto.creditcommitments.request.SystemDto;
 import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.dto.creditcommitments.request.UserDto;
@@ -220,13 +221,18 @@ public abstract class MapperBase {
     }
 
     private ApplicantCreditCommitmentsDto getApplicantCreditCommitmentDto() {
-        return ApplicantCreditCommitmentsDto.builder().creditCommitments(getCreditCommitmentsDetailDto()).primaryApplicant(true).id(1L).build();
+        return ApplicantCreditCommitmentsDto.builder().publicInformation(getPublicInformationDto()).creditCommitments(getCreditCommitmentsDetailDto()).primaryApplicant(true).id(1L).build();
     }
 
     public CreditCommitmentsDetailDto getCreditCommitmentsDetailDto() {
         return CreditCommitmentsDetailDto.builder()
                 .system(getSystemDto()).user(getUserDto()).build();
     }
+
+    public PublicInformationDto getPublicInformationDto() {
+        return PublicInformationDto.builder().user(getUserDto()).build();
+    }
+
     private SystemDto getSystemDto() {
         return SystemDto.builder().detail(List.of(getDetailDto())).build();
     }
@@ -677,13 +683,16 @@ public abstract class MapperBase {
     }
 
     private ApplicantCreditCommitments getApplicantCreditCommitment() {
-        return ApplicantCreditCommitments.builder().creditCommitments(getCreditCommitments()).primaryApplicant(true).creditScore(CREDIT_SCORE).build();
+        return ApplicantCreditCommitments.builder()
+                .votersRoll(getVotersRoll())
+                .creditPolicy(getCreditPolicy())
+                .publicInformation(getPublicInformation())
+                .creditCommitments(getCreditCommitments()).primaryApplicant(true).creditScore(CREDIT_SCORE).build();
     }
 
     public CreditCommitmentsDetail getCreditCommitments() {
-        return CreditCommitmentsDetail.builder().creditPolicy(getCreditPolicy())
-                .system(getSystem()).creditPolicy(getCreditPolicy()).votersRoll(getVotersRoll())
-                .publicInformation(getPublicInformation())
+        return CreditCommitmentsDetail.builder()
+                .system(getSystem())
                 .user(getUser())
                 .build();
     }

@@ -75,9 +75,11 @@ public class DetailDto {
     String type;
     Double currentBalance;
     String interestOnlyBalance;
-    Integer amount;
+    Double amount;
     String code;
-
+    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    String date;
 
     enum ReasonToIgnore {
         IS_SELF_FUNDING("Item is a self funding buy-to-let"),

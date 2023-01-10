@@ -30,4 +30,7 @@ public class ApplicantCreditCommitments {
     Integer creditScore;
     String message;
     CreditCommitmentsDetail creditCommitments;
+    PublicInformation publicInformation;
+    VotersRoll votersRoll;
+    CreditPolicy creditPolicy;
 }

@@ -25,7 +25,4 @@ import lombok.Data;
 public class CreditCommitmentsDetail {
     System system;
     User user;
-    PublicInformation publicInformation;
-    VotersRoll votersRoll;
-    CreditPolicy creditPolicy;
 }

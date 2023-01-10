@@ -54,6 +54,6 @@ public class DetailResponseDto {
     String type;
     Double currentBalance;
     String interestOnlyBalance;
-    Integer amount;
+    Double amount;
     String code;
 }

@@ -42,6 +42,7 @@ class UpdateCreditCommitmentsRequestMapperTest extends MapperBase {
         assertThat(appCreditCommitment.getId()).isEqualTo(request.getApplicants().get(0).getId());
         assertDetails(appCreditCommitment.getCreditCommitments().getSystem().getDetail().get(0));
         assertDetails(appCreditCommitment.getCreditCommitments().getUser().getDetail().get(0));
+        assertDetails(appCreditCommitment.getPublicInformation().getUser().getDetail().get(0));
     }
 
     private void assertDetails(Detail detail) {

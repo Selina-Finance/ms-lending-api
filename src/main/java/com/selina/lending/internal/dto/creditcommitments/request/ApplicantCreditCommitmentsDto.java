@@ -33,5 +33,5 @@ public class ApplicantCreditCommitmentsDto {
     Boolean primaryApplicant;
     @Valid
     CreditCommitmentsDetailDto creditCommitments;
-
+    PublicInformationDto publicInformation;
 }
