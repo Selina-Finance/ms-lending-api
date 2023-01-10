@@ -19,6 +19,7 @@ package com.selina.lending.api.controller;
 
 import java.io.IOException;
 
+import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,7 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
     }
 
     @Override
+    @Permission(resource = "QQ", scope = "Read")
     public ResponseEntity<Resource> downloadEsis(String externalApplicationId) throws IOException {
         log.info("Request to fetch ESIS pdf with [externalApplicationId={}]", externalApplicationId);
 

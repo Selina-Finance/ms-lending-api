@@ -19,6 +19,7 @@ package com.selina.lending.api.controller;
 
 import javax.validation.Valid;
 
+import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -136,5 +137,6 @@ public interface DIPOperations {
             @ApiResponse(responseCode = "403", content = @Content)
     })
     @PostMapping(value = "/dip")
+    @Permission(resource = "DIP", scope="Create")
     ResponseEntity<ApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 }

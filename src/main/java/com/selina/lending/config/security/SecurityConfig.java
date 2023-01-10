@@ -17,7 +17,6 @@
 
 package com.selina.lending.config.security;
 
-import com.selina.lending.config.security.permissions.PermissionsVoter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,17 +34,15 @@ import java.util.Arrays;
 import java.util.List;
 
 @Import(SecurityProblemSupport.class)
-@Configuration(proxyBeanMethods = true)
+@Configuration(proxyBeanMethods = false)
 public class SecurityConfig {
 
     public static final String LOGIN_URL = "/auth/token";
 
     private final SecurityProblemSupport problemSupport;
-    private final PermissionsVoter permissionsVoter;
 
-    public SecurityConfig(SecurityProblemSupport problemSupport, PermissionsVoter permissionsVoter) {
+    public SecurityConfig(SecurityProblemSupport problemSupport) {
         this.problemSupport = problemSupport;
-        this.permissionsVoter = permissionsVoter;
     }
 
     @Bean
@@ -78,19 +75,19 @@ public class SecurityConfig {
                 .oauth2ResourceServer()
                 .jwt();
 
-        http.authorizeRequests().accessDecisionManager(accessDecisionManager());
+//        http.authorizeRequests().accessDecisionManager(accessDecisionManager());
 
         return http.build();
     }
 
-    @Bean
-    public AccessDecisionManager accessDecisionManager() {
-        List<AccessDecisionVoter<? extends Object>> decisionVoters = Arrays.asList(
-                new WebExpressionVoter(),
-                new RoleVoter(),
-                new AuthenticatedVoter(),
-                permissionsVoter
-        );
-        return new UnanimousBased(decisionVoters);
-    }
+//    @Bean
+//    public AccessDecisionManager accessDecisionManager() {
+//        List<AccessDecisionVoter<? extends Object>> decisionVoters = Arrays.asList(
+//                new WebExpressionVoter(),
+//                new RoleVoter(),
+//                new AuthenticatedVoter(),
+//                permissionsVoter
+//        );
+//        return new UnanimousBased(decisionVoters);
+//    }
 }

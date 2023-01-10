@@ -15,12 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.service.permissions.helpers;
+package com.selina.lending.internal.service.permissions.annotation;
 
-public class HttpUrlToAuthTranslationHelper {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public static String toAuthResourceName(String url){
-        return null;
-    }
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 
+@Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Permission {
+    String resource() default "";
+    String scope() default "";
 }

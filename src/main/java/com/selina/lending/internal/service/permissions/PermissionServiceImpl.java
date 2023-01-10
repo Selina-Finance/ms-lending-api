@@ -17,35 +17,22 @@
 
 package com.selina.lending.internal.service.permissions;
 
-import com.selina.lending.internal.dto.permissions.AskedResourceDto;
 import com.selina.lending.internal.repository.auth.PermissionsRepository;
+import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static com.selina.lending.internal.service.permissions.helpers.HttpMethodToAuthTranslationHelper.toAuthScope;
-import static com.selina.lending.internal.service.permissions.helpers.HttpUrlToAuthTranslationHelper.toAuthResourceName;
-import static com.selina.lending.internal.service.permissions.helpers.PermissionsCalculationHelper.isUserResourcesContainsAskedResource;
+import java.util.List;
 
 
 @Slf4j
 @Service
 public class PermissionServiceImpl implements PermissionService {
 
-    private final PermissionsRepository repository;
-
-    public PermissionServiceImpl(PermissionsRepository repository) {
-        this.repository = repository;
-    }
-
     @Override
-    public boolean isAccessDenied(AskedResourceDto resource, String userToken) {
-        log.info("Checking access to resource: {}", resource);
-        var userResources = repository.getByUserToken(userToken);
-        return !isUserResourcesContainsAskedResource(
-                userResources,
-                toAuthResourceName(resource.url()),
-                toAuthScope(resource.method())
-        );
-    }
+    public boolean isAccessDenied(List<Resource> userResources, Resource askedResource) {
+        log.debug("Checking access of asked resource: {} in resources: {}", askedResource, userResources);
 
+        return false;
+    }
 }
