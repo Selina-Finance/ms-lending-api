@@ -20,7 +20,7 @@ package com.selina.lending.internal.dto;
 import lombok.Builder;
 
 @Builder
-public record AskedResource(
+public record RequestedResource(
         String name,
         String scope
 ) {

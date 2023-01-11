@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service.permissions;
 
-import com.selina.lending.internal.dto.AskedResource;
+import com.selina.lending.internal.dto.RequestedResource;
 import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,11 +39,11 @@ class PermissionServiceTest {
     @Test
     void shouldDenyAccessWhenPermittedResourcesIsEmpty() {
         //Given
-        var asked = new AskedResource(null, null);
+        var requested = new RequestedResource(null, null);
         List<Resource> permitted = Collections.emptyList();
 
         //When
-        var isDenied = permissionService.isAccessDenied(asked, permitted);
+        var isDenied = permissionService.isAccessDenied(requested, permitted);
 
         //Then
         assertThat(isDenied).isTrue();
@@ -52,13 +52,13 @@ class PermissionServiceTest {
     @Test
     void shouldDenyAccessWhenUserResourcesHaveNoMatchesByName() {
         //Given
-        var asked = AskedResource.builder().name("DIP").build();
+        var requested = RequestedResource.builder().name("DIP").build();
         List<Resource> permitted = List.of(
                 Resource.builder().name("QQ").build()
         );
 
         //When
-        var isDenied = permissionService.isAccessDenied(asked, permitted);
+        var isDenied = permissionService.isAccessDenied(requested, permitted);
 
         //Then
         assertThat(isDenied).isTrue();
@@ -67,29 +67,29 @@ class PermissionServiceTest {
     @Test
     void shouldDenyAccessWhenUserResourcesHaveMatchesByNameButDifferentScope() {
         //Given
-        var asked = AskedResource.builder().name("DIP").scope("Write").build();
+        var requested = RequestedResource.builder().name("DIP").scope("Write").build();
         List<Resource> permitted = List.of(
                 Resource.builder().name("DIP").scopes(Set.of("Read")).build()
         );
 
         //When
-        var isDenied = permissionService.isAccessDenied(asked, permitted);
+        var isDenied = permissionService.isAccessDenied(requested, permitted);
 
         //Then
         assertThat(isDenied).isTrue();
     }
 
     @Test
-    void shouldAllowAccessWhenAskedMatchesAndNameAndScopeOfPermitted() {
+    void shouldAllowAccessWhenrequestedMatchesAndNameAndScopeOfPermitted() {
         //Given
-        var asked = AskedResource.builder().name("DIP").scope("Write").build();
+        var requested = RequestedResource.builder().name("DIP").scope("Write").build();
         List<Resource> permitted = List.of(
                 Resource.builder().name("QQ").scopes(Set.of("Read", "Write", "Update")).build(),
                 Resource.builder().name("DIP").scopes(Set.of("Read", "Write", "Update")).build()
         );
 
         //When
-        var isDenied = permissionService.isAccessDenied(asked, permitted);
+        var isDenied = permissionService.isAccessDenied(requested, permitted);
 
         //Then
         assertThat(isDenied).isFalse();

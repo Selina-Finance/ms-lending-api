@@ -18,7 +18,7 @@
 package com.selina.lending.internal.service.permissions.annotation;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.dto.AskedResource;
+import com.selina.lending.internal.dto.RequestedResource;
 import com.selina.lending.internal.repository.auth.PermissionsRepository;
 import com.selina.lending.internal.service.permissions.PermissionService;
 import lombok.extern.slf4j.Slf4j;
@@ -49,14 +49,14 @@ public class PermissionAspect {
         var userToken = (Jwt) authentication.getPrincipal();
 
         var permittedResources = repository.getByUserToken(userToken.getTokenValue());
-        var askedResource = AskedResource.builder()
+        var requestedResource = RequestedResource.builder()
                 .name(permission.resource())
                 .scope(permission.scope())
                 .build();
 
-        if (service.isAccessDenied(askedResource, permittedResources)) {
+        if (service.isAccessDenied(requestedResource, permittedResources)) {
             var clientId = userToken.getClaims().get("clientId");
-            log.error("Client: {} tries to access denied resource: {}", clientId, askedResource);
+            log.error("Client: {} tries to access denied resource: {}", clientId, requestedResource);
             throw new AccessDeniedException("Sorry, but you have no access to this resource");
         }
 
