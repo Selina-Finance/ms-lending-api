@@ -17,18 +17,20 @@
 
 package com.selina.lending.api.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.selina.lending.internal.dto.SelectProductResponse;
 import com.selina.lending.internal.mapper.SelectProductResponseMapper;
 import com.selina.lending.internal.service.ProductService;
-
+import com.selina.lending.internal.service.permissions.annotation.Permission;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.DIP_CC;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
 
 @RestController
 @Slf4j
-public class ProductController implements ProductOperations{
+public class ProductController implements ProductOperations {
 
     private final ProductService productService;
 
@@ -37,6 +39,7 @@ public class ProductController implements ProductOperations{
     }
 
     @Override
+    @Permission(resource = DIP_CC, scope = Update)
     public ResponseEntity<SelectProductResponse> selectProductOffer(String externalApplicationId, String productCode) {
         log.info("Select product for [externalApplicationId={}] [productCode={}]", externalApplicationId, productCode);
         var response = SelectProductResponseMapper.mapToSelectProductResponseDto(productService.selectProductOffer(externalApplicationId, productCode),

@@ -28,6 +28,8 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Configuration(proxyBeanMethods = false)
 public class SecurityConfig {
 
+    public static final String LOGIN_URL = "/auth/token";
+
     private final SecurityProblemSupport problemSupport;
 
     public SecurityConfig(SecurityProblemSupport problemSupport) {
@@ -39,7 +41,7 @@ public class SecurityConfig {
         http
                 .csrf()
                 .ignoringAntMatchers("/actuator/**")
-                .ignoringAntMatchers("/auth/token")
+                .ignoringAntMatchers(LOGIN_URL)
                 .and()
                 .cors()
                 .and()
@@ -53,7 +55,7 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
-                .antMatchers("/auth/token").permitAll()
+                .antMatchers(LOGIN_URL).permitAll()
 
                 .and()
                 .authorizeRequests()
@@ -63,6 +65,8 @@ public class SecurityConfig {
                 .and()
                 .oauth2ResourceServer()
                 .jwt();
+
         return http.build();
     }
+
 }

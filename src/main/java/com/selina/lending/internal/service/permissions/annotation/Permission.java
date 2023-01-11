@@ -15,15 +15,26 @@
  *
  */
 
-package com.selina.lending.api.errors.custom;
+package com.selina.lending.internal.service.permissions.annotation;
 
-import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class AccessDeniedException extends AbstractThrowableProblem { //NOSONAR
-    public static final String ACCESS_DENIED_MESSAGE = "Access denied for application";
+@Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Permission {
+    Resource resource();
 
-    public AccessDeniedException(String details) {
-        super(null, "Error processing request", Status.FORBIDDEN, details);
+    Scope scope();
+
+    enum Resource {
+        DIP, DIP_CC, CC, QQ, APPLICATION
     }
+
+    enum Scope {
+        Create, Read, Update
+    }
+
 }

@@ -15,15 +15,9 @@
  *
  */
 
-package com.selina.lending.api.errors.custom;
+package com.selina.lending.internal.dto.auth;
 
-import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
-
-public class AccessDeniedException extends AbstractThrowableProblem { //NOSONAR
-    public static final String ACCESS_DENIED_MESSAGE = "Access denied for application";
-
-    public AccessDeniedException(String details) {
-        super(null, "Error processing request", Status.FORBIDDEN, details);
-    }
+public record GetPermissionsRequest(
+        String userAccessToken
+) {
 }

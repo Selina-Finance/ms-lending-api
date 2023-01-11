@@ -15,15 +15,13 @@
  *
  */
 
-package com.selina.lending.api.errors.custom;
+package com.selina.lending.internal.service.permissions;
 
-import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
+import com.selina.lending.internal.dto.RequestedResource;
+import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
 
-public class AccessDeniedException extends AbstractThrowableProblem { //NOSONAR
-    public static final String ACCESS_DENIED_MESSAGE = "Access denied for application";
+import java.util.List;
 
-    public AccessDeniedException(String details) {
-        super(null, "Error processing request", Status.FORBIDDEN, details);
-    }
+public interface PermissionService {
+    boolean isAccessDenied(RequestedResource requestedResource, List<Resource> permitted);
 }
