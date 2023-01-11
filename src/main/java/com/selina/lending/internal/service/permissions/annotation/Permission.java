@@ -22,12 +22,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permission {
-    String resource() default "";
-    String scope() default "";
+    Resource resource();
+
+    Scope scope();
+
+    enum Resource {
+        DIP, DIP_CC, CC, QQ, APPLICATION
+    }
+
+    enum Scope {
+        Create, Read, Update
+    }
+
 }

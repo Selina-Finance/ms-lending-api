@@ -50,8 +50,8 @@ public class PermissionAspect {
 
         var permittedResources = repository.getByUserToken(userToken.getTokenValue());
         var requestedResource = RequestedResource.builder()
-                .name(permission.resource())
-                .scope(permission.scope())
+                .name(permission.resource().name())
+                .scope(permission.scope().name())
                 .build();
 
         if (service.isAccessDenied(requestedResource, permittedResources)) {

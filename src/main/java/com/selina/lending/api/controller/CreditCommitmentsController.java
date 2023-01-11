@@ -34,6 +34,10 @@ import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitm
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.CC;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Read;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
+
 @Slf4j
 @RestController
 public class CreditCommitmentsController implements CreditCommitmentsOperations {
@@ -47,7 +51,7 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
     }
 
     @Override
-    @Permission(resource = "CC", scope = "Update")
+    @Permission(resource = CC, scope = Update)
     public ResponseEntity<ApplicationResponse> updateCreditCommitments(
             String externalApplicationId,
             UpdateCreditCommitmentsRequest request) {
@@ -58,7 +62,7 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
     }
 
     @Override
-    @Permission(resource = "CC", scope = "Read")
+    @Permission(resource = CC, scope = Read)
     public ResponseEntity<Resource> downloadEsis(String externalApplicationId) throws IOException {
         log.info("Request to fetch ESIS pdf with [externalApplicationId={}]", externalApplicationId);
 

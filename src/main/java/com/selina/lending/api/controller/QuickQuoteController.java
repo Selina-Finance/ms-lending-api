@@ -30,6 +30,10 @@ import com.selina.lending.internal.service.FilterApplicationService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.QQ;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Create;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
+
 @RestController
 @Slf4j
 public class QuickQuoteController implements QuickQuoteOperations {
@@ -41,7 +45,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
     @Override
-    @Permission(resource = "QQ", scope = "Create")
+    @Permission(resource = QQ, scope = Create)
     public ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Create Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
@@ -49,7 +53,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
     @Override
-    @Permission(resource = "QQ", scope = "Update")
+    @Permission(resource = QQ, scope = Update)
     public ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(String externalApplicationId,
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Update Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());

@@ -59,6 +59,8 @@ class PermissionAspectTest {
     @Test
     void shouldContinueProcessingWhenServiceAllowedAccess() throws Throwable {
         //Given
+        when(permission.resource()).thenReturn(Permission.Resource.DIP);
+        when(permission.scope()).thenReturn(Permission.Scope.Read);
         mockSecurity();
         when(service.isAccessDenied(any(), any())).thenReturn(false);
 
@@ -72,6 +74,8 @@ class PermissionAspectTest {
     @Test
     void shouldThrowAccessDeniedWhenServiceDeniedTheAccessToTheResource() throws Throwable {
         //Given
+        when(permission.resource()).thenReturn(Permission.Resource.DIP);
+        when(permission.scope()).thenReturn(Permission.Scope.Read);
         mockSecurity();
         when(service.isAccessDenied(any(), any())).thenReturn(true);
 
