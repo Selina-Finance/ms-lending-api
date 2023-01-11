@@ -55,6 +55,8 @@ public class PermissionAspect {
                 .build();
 
         if (service.isAccessDenied(askedResource, permittedResources)) {
+            var clientId = userToken.getClaims().get("clientId");
+            log.error("Client: {} tries to access denied resource: {}", clientId, askedResource);
             throw new AccessDeniedException("Sorry, but you have no access to this resource");
         }
 
