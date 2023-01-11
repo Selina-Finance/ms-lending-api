@@ -20,18 +20,9 @@ package com.selina.lending.config.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.vote.AuthenticatedVoter;
-import org.springframework.security.access.vote.RoleVoter;
-import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Import(SecurityProblemSupport.class)
 @Configuration(proxyBeanMethods = false)
@@ -75,19 +66,7 @@ public class SecurityConfig {
                 .oauth2ResourceServer()
                 .jwt();
 
-//        http.authorizeRequests().accessDecisionManager(accessDecisionManager());
-
         return http.build();
     }
 
-//    @Bean
-//    public AccessDecisionManager accessDecisionManager() {
-//        List<AccessDecisionVoter<? extends Object>> decisionVoters = Arrays.asList(
-//                new WebExpressionVoter(),
-//                new RoleVoter(),
-//                new AuthenticatedVoter(),
-//                permissionsVoter
-//        );
-//        return new UnanimousBased(decisionVoters);
-//    }
 }
