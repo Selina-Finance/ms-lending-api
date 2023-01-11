@@ -31,7 +31,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public boolean isAccessDenied(AskedResource asked, List<Resource> permitted) {
-        log.debug("Checking access of asked resource: {} in permitted: {}", asked, permitted);
+        log.info("Checking access of asked resource: {} in permitted: {}", asked, permitted);
 
         return permitted.stream()
                 .filter(resource -> resource.name().equals(asked.name()))
