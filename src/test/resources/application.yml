@@ -43,6 +43,9 @@ resilience4j:
         failure-rate-threshold: 60
         record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
 
+
+authorization:
+  enable: false
 kafka:
   enable: false
   bootstrapAddress: localhost:9092
