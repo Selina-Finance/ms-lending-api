@@ -22,13 +22,13 @@ import org.springframework.context.annotation.Bean;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-public class MainAuthOauth2Configuration {
+public class MsAuthorizationOauth2Configuration {
 
-    private static final String OAUTH2_SERVER_NAME = "main-auth";
+    private static final String OAUTH2_SERVER_NAME = "ms-authorization-auth";
 
     private final OAuth2Provider oauth2Provider;
 
-    public MainAuthOauth2Configuration(OAuth2Provider oauth2Provider) {
+    public MsAuthorizationOauth2Configuration(OAuth2Provider oauth2Provider) {
         this.oauth2Provider = oauth2Provider;
     }
 
