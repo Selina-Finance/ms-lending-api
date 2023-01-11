@@ -47,6 +47,7 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
     }
 
     @Override
+    @Permission(resource = "CC", scope = "Update")
     public ResponseEntity<ApplicationResponse> updateCreditCommitments(
             String externalApplicationId,
             UpdateCreditCommitmentsRequest request) {
@@ -57,7 +58,7 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
     }
 
     @Override
-    @Permission(resource = "QQ", scope = "Read")
+    @Permission(resource = "CC", scope = "Read")
     public ResponseEntity<Resource> downloadEsis(String externalApplicationId) throws IOException {
         log.info("Request to fetch ESIS pdf with [externalApplicationId={}]", externalApplicationId);
 

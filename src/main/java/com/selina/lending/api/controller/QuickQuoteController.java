@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.controller;
 
+import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +41,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
     @Override
+    @Permission(resource = "QQ", scope = "Create")
     public ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Create Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
@@ -47,6 +49,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
     @Override
+    @Permission(resource = "QQ", scope = "Update")
     public ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(String externalApplicationId,
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Update Quick Quote application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());

@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.controller;
 
+import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +38,7 @@ public class ProductController implements ProductOperations{
     }
 
     @Override
+    @Permission(resource = "DIP", scope = "Update")
     public ResponseEntity<SelectProductResponse> selectProductOffer(String externalApplicationId, String productCode) {
         log.info("Select product for [externalApplicationId={}] [productCode={}]", externalApplicationId, productCode);
         var response = SelectProductResponseMapper.mapToSelectProductResponseDto(productService.selectProductOffer(externalApplicationId, productCode),

@@ -19,6 +19,7 @@ package com.selina.lending.api.controller;
 
 import javax.validation.Valid;
 
+import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,6 +50,7 @@ public class DIPController implements DIPOperations {
     }
 
     @Override
+    @Permission(resource = "APPLICATION", scope = "Read")
     public ResponseEntity<ApplicationDecisionResponse> getApplication(String externalApplicationId) {
         log.info("Get application [externalApplicationId={}]", externalApplicationId);
         var applicationResponse = retrieveApplicationService.getApplicationByExternalApplicationId(externalApplicationId);
@@ -56,6 +58,7 @@ public class DIPController implements DIPOperations {
     }
 
     @Override
+    @Permission(resource = "DIP_CC", scope = "Update")
     public ResponseEntity<ApplicationResponse> updateDipCCApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest) {
         log.info("Update DIPCC application [externalApplicationId={}]", externalApplicationId);
         var applicationResponse = updateApplicationService.updateDipCCApplication(externalApplicationId,
@@ -64,6 +67,7 @@ public class DIPController implements DIPOperations {
     }
 
     @Override
+    @Permission(resource = "DIP_CC", scope = "Create")
     public ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
         log.info("Create DIPCC application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
         var applicationResponse = createApplicationService.createDipCCApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
@@ -71,6 +75,7 @@ public class DIPController implements DIPOperations {
     }
 
     @Override
+    @Permission(resource = "DIP", scope = "Update")
     public ResponseEntity<ApplicationResponse> updateDipApplication(String externalApplicationId,
             DIPApplicationRequest dipApplicationRequest) {
         log.info("Update DIP application [externalApplicationId={}]", externalApplicationId);
@@ -80,6 +85,7 @@ public class DIPController implements DIPOperations {
     }
 
     @Override
+    @Permission(resource = "DIP", scope = "Create")
     public ResponseEntity<ApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
         log.info("Create DIP application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
         var applicationResponse = createApplicationService.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
