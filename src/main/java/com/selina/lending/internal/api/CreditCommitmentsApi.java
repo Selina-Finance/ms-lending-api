@@ -18,10 +18,12 @@
 package com.selina.lending.internal.api;
 
 import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
-import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.PatchCreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +38,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public interface CreditCommitmentsApi {
 
     @PatchMapping(path = "/creditcommitments/{id}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    CreditCommitmentResponse patchCreditCommitments(@PathVariable("id") String id, @RequestBody
+    PatchCreditCommitmentResponse patchCreditCommitments(@PathVariable("id") String id, @RequestBody
     UpdateCreditCommitmentsRequest request);
+
+    @GetMapping(path = "/creditcommitments/{id}", produces = APPLICATION_JSON_VALUE)
+    CreditCommitmentResponse getCreditCommitments(@PathVariable("id") String id);
 }

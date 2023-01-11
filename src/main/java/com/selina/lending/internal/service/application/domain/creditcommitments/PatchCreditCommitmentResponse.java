@@ -15,15 +15,20 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.internal.service.application.domain.creditcommitments;
 
-import com.selina.lending.internal.service.application.domain.creditcommitments.PatchCreditCommitmentResponse;
-import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
+import java.util.List;
 
-public interface CreditCommitmentsRepository {
+import com.selina.lending.internal.service.application.domain.ApplicantCreditCommitments;
 
-    PatchCreditCommitmentResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request);
-    CreditCommitmentResponse getCreditCommitments(String id);
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+@NoArgsConstructor
+@SuperBuilder
+@Getter
+public class PatchCreditCommitmentResponse {
+    String id;
+    List<ApplicantCreditCommitments> applicants;
 }
-

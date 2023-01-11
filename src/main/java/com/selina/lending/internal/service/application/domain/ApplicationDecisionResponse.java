@@ -71,4 +71,5 @@ public class ApplicationDecisionResponse {
     private List<Expenditure> expenditure;
     private Lead lead;
     private Intermediary intermediary;
+    private CreditCommitment creditCommitment;
 }

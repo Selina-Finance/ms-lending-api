@@ -35,6 +35,7 @@ import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
 
 @ExtendWith(MockitoExtension.class)
 class RetrieveApplicationServiceImplTest {
@@ -52,6 +53,9 @@ class RetrieveApplicationServiceImplTest {
 
     @Mock
     private AccessManagementService accessManagementService;
+
+    @Mock
+    private RetrieveCreditCommitmentsService retrieveCreditCommitmentsService;
 
     @InjectMocks
     private RetrieveApplicationServiceImpl retrieveApplicationService;

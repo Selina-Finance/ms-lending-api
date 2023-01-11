@@ -19,7 +19,8 @@ package com.selina.lending.internal.repository;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.CreditCommitmentsApi;
-import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.PatchCreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
 import feign.FeignException;
@@ -39,12 +40,18 @@ public class CreditCommitmentsRepositoryImpl implements CreditCommitmentsReposit
 
     @Retry(name = "middleware-application-service-retry", fallbackMethod = "patchCCFallback")
     @Override
-    public CreditCommitmentResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request) {
+    public PatchCreditCommitmentResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request) {
         log.info("Request to patch credit commitments by [applicationId={}]", id);
         return commitmentsApi.patchCreditCommitments(id, request);
     }
 
-    private CreditCommitmentResponse patchCCFallback(FeignException.FeignServerException e) { //NOSONAR
+    @Override
+    public CreditCommitmentResponse getCreditCommitments(String id) {
+        log.info("Request to get credit commitments by [applicationId={}]", id);
+        return commitmentsApi.getCreditCommitments(id);
+    }
+
+    private PatchCreditCommitmentResponse patchCCFallback(FeignException.FeignServerException e) { //NOSONAR
         log.error("CreditCommitments service is unavailable. {} {}", e.getCause(), e.getMessage());
         throw new RemoteResourceProblemException();
     }

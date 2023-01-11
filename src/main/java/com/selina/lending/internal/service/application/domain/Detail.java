@@ -40,6 +40,7 @@ public class Detail {
     Boolean securityProperty;
     String paymentProfileShort;
     String paymentProfileLong;
+    Boolean joint;
     Boolean adverseCredit;
     Boolean consolidate;
     Boolean ignore;

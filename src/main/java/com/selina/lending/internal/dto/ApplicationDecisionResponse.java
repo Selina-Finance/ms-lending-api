@@ -20,6 +20,8 @@ package com.selina.lending.internal.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentDto;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -63,4 +65,5 @@ public class ApplicationDecisionResponse {
     LeadDto lead;
     IntermediaryDto intermediary;
     UnderwritingDto underwriting;
+    CreditCommitmentDto creditCommitment;
 }
