@@ -20,19 +20,30 @@ package com.selina.lending.internal.service.creditcommitments;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
+import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+
+import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
 
 @Service
 public class RetrieveCreditCommitmentsServiceImpl implements RetrieveCreditCommitmentsService {
 
     private final CreditCommitmentsRepository commitmentsRepository;
+    private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private final AccessManagementService accessManagementService;
     
-    public RetrieveCreditCommitmentsServiceImpl(CreditCommitmentsRepository commitmentsRepository) {
+    public RetrieveCreditCommitmentsServiceImpl(CreditCommitmentsRepository commitmentsRepository, MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository,
+            AccessManagementService accessManagementService) {
         this.commitmentsRepository = commitmentsRepository;
+        this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
+        this.accessManagementService = accessManagementService;
     }
     
     @Override
-    public CreditCommitmentResponse getCreditCommitments(String id) {
-        return commitmentsRepository.getCreditCommitments(id);
+    public CreditCommitmentResponse getCreditCommitments(String externalAppId) {
+        var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalAppId);
+        accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
+
+        return commitmentsRepository.getCreditCommitments(applicationIdentifier.getId());
     }
 }

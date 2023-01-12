@@ -18,6 +18,7 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.internal.api.CreditCommitmentsApi;
+import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.PatchCreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
@@ -41,6 +42,9 @@ class CreditCommitmentsRepositoryImplTest {
     @Mock
     private CreditCommitmentsApi creditCommitmentsApi;
 
+    @Mock
+    private CreditCommitmentResponse creditCommitmentResponse;
+
     @InjectMocks
     private CreditCommitmentsRepositoryImpl repository;
 
@@ -59,11 +63,11 @@ class CreditCommitmentsRepositoryImplTest {
     }
 
     @Test
-    void shouldReturnCreditCommitmentResponseWhenPatchCreditCommitments() {
+    void shouldReturnPatchCreditCommitmentResponseWhenPatchCreditCommitments() {
         //Given
         var id = UUID.randomUUID().toString();
         var request = UpdateCreditCommitmentsRequest.builder().build();
-        var response = PatchCreditCommitmentResponse.builder().id("123").build();
+        var response = PatchCreditCommitmentResponse.builder().id(id).build();
         when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(response);
 
         //When
@@ -71,5 +75,19 @@ class CreditCommitmentsRepositoryImplTest {
 
         //Then
         assertEquals(result, response);
+    }
+
+    @Test
+    void shouldReturnCreditCommitmentsResponseWhenGetCreditCommitments() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        when(creditCommitmentsApi.getCreditCommitments(id)).thenReturn(creditCommitmentResponse);
+
+        //When
+        var result = repository.getCreditCommitments(id);
+
+        //Then
+        assertEquals(result, creditCommitmentResponse);
+        verify(creditCommitmentsApi, times(1)).getCreditCommitments(id);
     }
 }

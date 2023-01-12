@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -87,4 +88,21 @@ public interface CreditCommitmentsOperations {
             @Parameter(description = "externalApplicationId of the application related to the ESIS document", required = true) @PathVariable String externalApplicationId
     ) throws IOException;
 
+
+
+    @Operation(description = "Retrieve the Credit Commitments for the given external application id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Returns the Credit Commitments for the application",
+                    content = {@Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CreditCommitmentResponse.class))}),
+            @ApiResponse(responseCode = "401", content = @Content),
+            @ApiResponse(responseCode = "403", content = @Content),
+            @ApiResponse(responseCode = "404", content = @Content),
+    })
+    @GetMapping(value = "/{externalApplicationId}/creditcommitments")
+    ResponseEntity<CreditCommitmentResponse> getCreditCommitments(
+            @Parameter(description = "externalApplicationId of application", required = true) @PathVariable String externalApplicationId);
 }

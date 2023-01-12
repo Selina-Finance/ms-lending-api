@@ -24,40 +24,24 @@ import org.springframework.stereotype.Service;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
 
 @Service
 public class RetrieveApplicationServiceImpl implements RetrieveApplicationService {
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
     private final AccessManagementService accessManagementService;
-    private final RetrieveCreditCommitmentsService retrieveCreditCommitmentsService;
 
     public RetrieveApplicationServiceImpl(MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository, MiddlewareRepository middlewareRepository,
-            AccessManagementService accessManagementService, RetrieveCreditCommitmentsService retrieveCreditCommitmentsService) {
+            AccessManagementService accessManagementService) {
         this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
         this.middlewareRepository = middlewareRepository;
         this.accessManagementService = accessManagementService;
-        this.retrieveCreditCommitmentsService = retrieveCreditCommitmentsService;
     }
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId) {
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
-
-        Optional<ApplicationDecisionResponse> response = middlewareRepository.getApplicationById(applicationIdentifier.getId());
-        //Get the commitments but use try catch
-        try {
-            if (response.isPresent()) {
-                CreditCommitmentResponse creditCommitments = retrieveCreditCommitmentsService.getCreditCommitments(
-                        applicationIdentifier.getId());
-                response.get().setCreditCommitment(creditCommitments.getCreditCommitment());
-            }
-        } catch (Exception e) {
-            //log error
-        }
-        return response;
+        return middlewareRepository.getApplicationById(applicationIdentifier.getId());
     }
 }

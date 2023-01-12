@@ -24,6 +24,7 @@ import com.selina.lending.internal.service.application.domain.creditcommitments.
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
 import feign.FeignException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,7 @@ public class CreditCommitmentsRepositoryImpl implements CreditCommitmentsReposit
         return commitmentsApi.patchCreditCommitments(id, request);
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "getCCFallback")
     @Override
     public CreditCommitmentResponse getCreditCommitments(String id) {
         log.info("Request to get credit commitments by [applicationId={}]", id);
@@ -52,7 +54,12 @@ public class CreditCommitmentsRepositoryImpl implements CreditCommitmentsReposit
     }
 
     private PatchCreditCommitmentResponse patchCCFallback(FeignException.FeignServerException e) { //NOSONAR
-        log.error("CreditCommitments service is unavailable. {} {}", e.getCause(), e.getMessage());
+        log.error("Patch CreditCommitments service is unavailable. {} {}", e.getCause(), e.getMessage());
+        throw new RemoteResourceProblemException();
+    }
+
+    private CreditCommitmentResponse getCCFallback(FeignException.FeignServerException e) { //NOSONAR
+        log.error("Get CreditCommitments service is unavailable. {} {}", e.getCause(), e.getMessage());
         throw new RemoteResourceProblemException();
     }
 }
