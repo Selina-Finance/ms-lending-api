@@ -84,6 +84,7 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
     }
 
     @Override
+    @Permission(resource = CC, scope = Read)
     public ResponseEntity<CreditCommitmentResponse> getCreditCommitments(String externalApplicationId) {
         log.info("Get CreditCommitments with [externalApplicationId={}]", externalApplicationId);
 
