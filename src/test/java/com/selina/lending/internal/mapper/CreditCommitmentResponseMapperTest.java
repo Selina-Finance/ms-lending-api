@@ -19,7 +19,9 @@ package com.selina.lending.internal.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+
 import org.junit.jupiter.api.Test;
+
 import com.selina.lending.internal.dto.creditcommitments.response.DetailResponseDto;
 
 class CreditCommitmentResponseMapperTest extends MapperBase {
@@ -33,7 +35,8 @@ class CreditCommitmentResponseMapperTest extends MapperBase {
         var mappedResponse = CreditCommitmentResponseMapper.INSTANCE.mapToCreditCommitmentResponse(response);
 
         //Then
-        assertThat(mappedResponse.getCreditCommitment().getApplicants().size(), equalTo(getCreditCommitmentResponse().getCreditCommitment().getApplicants().size()));
+        assertThat(mappedResponse.getCreditCommitment().getApplicants().size(),
+                equalTo(getCreditCommitmentResponse().getCreditCommitment().getApplicants().size()));
 
         var applicant = mappedResponse.getCreditCommitment().getApplicants().get(0);
         assertThat(applicant.getPrimaryApplicant(), equalTo(true));
