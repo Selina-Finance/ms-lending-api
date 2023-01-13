@@ -57,6 +57,7 @@ public class DetailDto {
     Double creditLimit;
     Boolean securityProperty;
     Boolean adverseCredit;
+    Boolean joint;
     Boolean consolidate;
     Boolean ignore;
     String repaymentType;

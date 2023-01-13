@@ -39,13 +39,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.creditcommitments.PatchCreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
 @ExtendWith(MockitoExtension.class)
@@ -73,7 +73,7 @@ class UpdateCreditCommitmentsServiceImplTest {
 
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(any());
 
-        when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new CreditCommitmentResponse());
+        when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new PatchCreditCommitmentResponse());
 
         var newDecisionResponse = ApplicationResponse.builder().build();
         when(middlewareRepository.runDecisioningByAppId(any())).thenReturn(newDecisionResponse);

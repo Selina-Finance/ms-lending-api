@@ -15,13 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments.response;
+package com.selina.lending.internal.mapper;
 
-import lombok.Builder;
-import lombok.Value;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@Builder
-@Value
-public class CreditCommitmentResponse {
-    CreditCommitmentDto creditCommitment;
+import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
+
+@Mapper
+public interface CreditCommitmentResponseMapper {
+    CreditCommitmentResponseMapper INSTANCE = Mappers.getMapper(CreditCommitmentResponseMapper.class);
+
+    CreditCommitmentResponse mapToCreditCommitmentResponse(
+            com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse response);
 }

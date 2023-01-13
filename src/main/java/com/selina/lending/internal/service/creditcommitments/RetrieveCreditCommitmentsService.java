@@ -15,13 +15,10 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments.response;
+package com.selina.lending.internal.service.creditcommitments;
 
-import lombok.Builder;
-import lombok.Value;
+import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
 
-@Builder
-@Value
-public class CreditCommitmentResponse {
-    CreditCommitmentDto creditCommitment;
+public interface RetrieveCreditCommitmentsService {
+    CreditCommitmentResponse getCreditCommitments(String externalAppId);
 }

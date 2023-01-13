@@ -38,6 +38,7 @@ import org.springframework.core.io.ByteArrayResource;
 import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.creditcommitments.EsisDocService;
+import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
 import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +46,10 @@ class CreditCommitmentsControllerUnitTest extends MapperBase {
 
     @Mock
     private UpdateCreditCommitmentsService updateCreditCommitmentsService;
+
+    @Mock
+    private RetrieveCreditCommitmentsService retrieveCreditCommitmentsService;
+
     @Mock
     private EsisDocService esisDocService;
 
@@ -85,5 +90,20 @@ class CreditCommitmentsControllerUnitTest extends MapperBase {
         //Then
         assertNotNull(result.getBody());
         verify(esisDocService, times(1)).getByExternalAppId(externalId);
+    }
+
+    @Test
+    void whenGetCreditCommitmentsThenCallGetCreditCommitmentsService() {
+        //Given
+        var externalId = UUID.randomUUID().toString();
+        var response = getCreditCommitmentResponse();
+        when(retrieveCreditCommitmentsService.getCreditCommitments(externalId)).thenReturn(response);
+
+        //When
+        var result = controller.getCreditCommitments(externalId);
+
+        //Then
+        assertNotNull(result.getBody());
+        verify(retrieveCreditCommitmentsService, times(1)).getCreditCommitments(externalId);
     }
 }

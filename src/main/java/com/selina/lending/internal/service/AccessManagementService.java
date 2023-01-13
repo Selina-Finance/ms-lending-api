@@ -36,6 +36,6 @@ public class AccessManagementService {
         }
     }
     public boolean isSourceAccountAccessAllowed(String sourceAccount) {
-        return tokenService.retrieveSourceAccount().equals(sourceAccount);
+        return sourceAccount.equals(tokenService.retrieveSourceAccount());
     }
 }

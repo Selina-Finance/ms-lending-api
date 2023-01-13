@@ -90,6 +90,7 @@ import com.selina.lending.internal.service.application.domain.System;
 import com.selina.lending.internal.service.application.domain.Underwriting;
 import com.selina.lending.internal.service.application.domain.User;
 import com.selina.lending.internal.service.application.domain.VotersRoll;
+import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
@@ -677,6 +678,9 @@ public abstract class MapperBase {
         return Lead.builder().utmCampaign(UTM_CAMPAIGN).utmMedium(UTM_MEDIUM).utmSource(UTM_SOURCE).build();
     }
 
+    public CreditCommitmentResponse getCreditCommitmentResponse() {
+        return CreditCommitmentResponse.builder().creditCommitment(getCreditCommitment()).build();
+    }
 
     private CreditCommitment getCreditCommitment() {
         return CreditCommitment.builder().applicants(List.of(getApplicantCreditCommitment())).build();
@@ -702,7 +706,7 @@ public abstract class MapperBase {
     }
 
     private PublicInformation getPublicInformation() {
-        return PublicInformation.builder().system(getSystem()).build();
+        return PublicInformation.builder().user(getUser()).system(getSystem()).build();
     }
 
     private VotersRoll getVotersRoll() {

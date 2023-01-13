@@ -93,4 +93,16 @@ class AccessManagementServiceTest {
         //Then
         assertThat(accessAllowed, equalTo(false));
     }
+
+    @Test
+    void isSourceAccountAccessAllowedWhenTokenServiceSourceAccountNullReturnsFalse() {
+        //Given
+        when(tokenService.retrieveSourceAccount()).thenReturn(null);
+
+        //When
+        boolean accessAllowed = accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT);
+
+        //Then
+        assertThat(accessAllowed, equalTo(false));
+    }
 }

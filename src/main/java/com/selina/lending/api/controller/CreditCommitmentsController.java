@@ -27,9 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
 import com.selina.lending.internal.mapper.ApplicationResponseMapper;
+import com.selina.lending.internal.mapper.CreditCommitmentResponseMapper;
 import com.selina.lending.internal.mapper.UpdateCreditCommitmentsRequestMapper;
 import com.selina.lending.internal.service.creditcommitments.EsisDocService;
+import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
 import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,11 +46,14 @@ import static com.selina.lending.internal.service.permissions.annotation.Permiss
 public class CreditCommitmentsController implements CreditCommitmentsOperations {
 
     private final UpdateCreditCommitmentsService updateCreditCommitmentsService;
+    private final RetrieveCreditCommitmentsService retrieveCreditCommitmentsService;
     private final EsisDocService esisDocService;
 
-    public CreditCommitmentsController(UpdateCreditCommitmentsService updateCreditCommitmentsService, EsisDocService esisDocService) {
+    public CreditCommitmentsController(UpdateCreditCommitmentsService updateCreditCommitmentsService, EsisDocService esisDocService,
+            RetrieveCreditCommitmentsService retrieveCreditCommitmentsService) {
         this.updateCreditCommitmentsService = updateCreditCommitmentsService;
         this.esisDocService = esisDocService;
+        this.retrieveCreditCommitmentsService = retrieveCreditCommitmentsService;
     }
 
     @Override
@@ -75,5 +81,14 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
                 .headers(headers)
                 .contentLength(resource.contentLength())
                 .body(resource);
+    }
+
+    @Override
+    @Permission(resource = CC, scope = Read)
+    public ResponseEntity<CreditCommitmentResponse> getCreditCommitments(String externalApplicationId) {
+        log.info("Get CreditCommitments with [externalApplicationId={}]", externalApplicationId);
+
+        var response = retrieveCreditCommitmentsService.getCreditCommitments(externalApplicationId);
+        return ResponseEntity.ok(CreditCommitmentResponseMapper.INSTANCE.mapToCreditCommitmentResponse(response));
     }
 }

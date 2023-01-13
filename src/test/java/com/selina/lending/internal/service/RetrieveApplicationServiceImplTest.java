@@ -35,9 +35,11 @@ import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
 
 @ExtendWith(MockitoExtension.class)
 class RetrieveApplicationServiceImplTest {
+    private static final String APPLICATION_ID = "appId";
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
     private static final String SOURCE_ACCOUNT = "sourceAccount";
     private static final String ACCESS_DENIED_MSG = "Error processing request: Access denied for application";
@@ -53,6 +55,9 @@ class RetrieveApplicationServiceImplTest {
     @Mock
     private AccessManagementService accessManagementService;
 
+    @Mock
+    private RetrieveCreditCommitmentsService retrieveCreditCommitmentsService;
+
     @InjectMocks
     private RetrieveApplicationServiceImpl retrieveApplicationService;
 
@@ -61,14 +66,14 @@ class RetrieveApplicationServiceImplTest {
         //Given
         when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
-        when(applicationIdentifier.getId()).thenReturn(EXTERNAL_APPLICATION_ID);
+        when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
 
         //When
         retrieveApplicationService.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID);
 
         //Then
-        verify(middlewareRepository, times(1)).getApplicationById(EXTERNAL_APPLICATION_ID);
+        verify(middlewareRepository, times(1)).getApplicationById(APPLICATION_ID);
     }
 
     @Test
@@ -85,6 +90,6 @@ class RetrieveApplicationServiceImplTest {
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-        verify(middlewareRepository, times(0)).getApplicationById(EXTERNAL_APPLICATION_ID);
+        verify(middlewareRepository, times(0)).getApplicationById(APPLICATION_ID);
     }
 }
