@@ -94,13 +94,6 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApi.downloadEsisByAppId(id);
     }
 
-    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
-    @Override
-    public ApplicationResponse runDecisioningByAppId(String applicationId) {
-        log.info("Request to run decisioning by [applicationId={}]", applicationId);
-        return middlewareApi.runDecisioningByAppId(applicationId);
-    }
-
     private void enrichApplicationRequest(ApplicationRequest applicationRequest, boolean includeCreditCommitments) {
         applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
         applicationRequest.setIncludeCreditCommitment(includeCreditCommitments);

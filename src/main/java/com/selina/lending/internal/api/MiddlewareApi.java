@@ -22,7 +22,6 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,13 +40,13 @@ import com.selina.lending.internal.service.application.domain.SelectProductRespo
 )
 public interface MiddlewareApi {
 
-    @GetMapping(path = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/application/{id}", produces = APPLICATION_JSON_VALUE)
     ApplicationDecisionResponse getApplicationById(@PathVariable("id") String id);
 
-    @PostMapping(path = "/application/dip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/application/dip", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest);
 
-    @PostMapping(path = "/application/light_decision", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/application/light_decision", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
     @PutMapping(path = "/application/{id}/selectProduct/{productCode}")
@@ -55,8 +54,4 @@ public interface MiddlewareApi {
 
     @GetMapping(value = "/application/{id}/esis-document", produces = APPLICATION_PDF_VALUE)
     Resource downloadEsisByAppId(@PathVariable String id);
-
-    @PostMapping(path = "/application/runDecisioning/{applicationId}", produces = APPLICATION_JSON_VALUE)
-    ApplicationResponse runDecisioningByAppId(@PathVariable("applicationId") String applicationId);
-
 }
