@@ -113,19 +113,6 @@ class MiddlewareRepositoryTest {
         verify(middlewareApi, times(1)).createDipCCApplication(applicationRequest);
     }
 
-
-    @Test
-    void shouldCallHttpClientWhenRunDecisioningByAppIdInvoked() {
-        //Given
-        var appId = UUID.randomUUID().toString();
-        when(middlewareApi.runDecisioningByAppId(any())).thenReturn(applicationResponse);
-
-        //When
-        middlewareRepository.runDecisioningByAppId(appId);
-
-        //Then
-        verify(middlewareApi, times(1)).runDecisioningByAppId(appId);
-    }
     @Test
     void shouldCallHttpClientWhenCreateDipApplicationInvoked() {
         // Given

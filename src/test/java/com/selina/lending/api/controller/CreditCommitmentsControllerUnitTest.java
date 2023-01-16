@@ -17,10 +17,10 @@
 
 package com.selina.lending.api.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -63,16 +63,12 @@ class CreditCommitmentsControllerUnitTest extends MapperBase {
     void whenUpdateCreditCommitmentsThenCallUpdateCCService() {
         //Given
         var externalId = UUID.randomUUID().toString();
-
-        var response = getApplicationResponse();
-        when(updateCreditCommitmentsService.updateCreditCommitments(any(), any())).thenReturn(response);
+        doNothing().when(updateCreditCommitmentsService).updateCreditCommitments(any(), any());
 
         //When
-        var result = controller.updateCreditCommitments(externalId, updateCreditCommitmentsRequest);
+        controller.updateCreditCommitments(externalId, updateCreditCommitmentsRequest);
 
         //Then
-        assertNotNull(result.getBody());
-        assertEquals(result.getBody().getApplicationId(), response.getApplicationId());
         verify(updateCreditCommitmentsService, times(1)).updateCreditCommitments(eq(externalId), any());
     }
 

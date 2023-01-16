@@ -25,10 +25,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
-import com.selina.lending.internal.mapper.ApplicationResponseMapper;
 import com.selina.lending.internal.mapper.CreditCommitmentResponseMapper;
 import com.selina.lending.internal.mapper.UpdateCreditCommitmentsRequestMapper;
 import com.selina.lending.internal.service.creditcommitments.EsisDocService;
@@ -58,13 +56,13 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
 
     @Override
     @Permission(resource = CC, scope = Update)
-    public ResponseEntity<ApplicationResponse> updateCreditCommitments(
+    public void updateCreditCommitments(
             String externalApplicationId,
             UpdateCreditCommitmentsRequest request) {
         log.info("Update CreditCommitments with [externalApplicationId={}]", externalApplicationId);
 
-        var response = updateCreditCommitmentsService.updateCreditCommitments(externalApplicationId, UpdateCreditCommitmentsRequestMapper.INSTANCE.mapToUpdateCreditCommitmentsRequest(request));
-        return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(response));
+        updateCreditCommitmentsService.updateCreditCommitments(externalApplicationId, UpdateCreditCommitmentsRequestMapper.INSTANCE.mapToUpdateCreditCommitmentsRequest(request));
+        ResponseEntity.noContent().build();
     }
 
     @Override

@@ -51,8 +51,8 @@ public interface CreditCommitmentsOperations {
     @Operation(description = "Update an application's Credit Commitments for the given external application id")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Offers based on updated Credit Commitments",
+                    responseCode = "204",
+                    description = "Credit Commitments updated",
                     content = {@Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ApplicationResponse.class))}),
@@ -64,7 +64,7 @@ public interface CreditCommitmentsOperations {
             @ApiResponse(responseCode = "404", content = @Content),
     })
     @PatchMapping(value = "/{externalApplicationId}/creditcommitments")
-    ResponseEntity<ApplicationResponse> updateCreditCommitments(
+    void updateCreditCommitments(
             @Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
             @Valid @RequestBody UpdateCreditCommitmentsRequest request
     );

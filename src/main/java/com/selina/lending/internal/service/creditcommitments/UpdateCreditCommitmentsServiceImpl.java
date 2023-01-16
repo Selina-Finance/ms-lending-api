@@ -21,33 +21,27 @@ import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
-import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
 @Service
 public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmentsService {
 
-    private final MiddlewareRepository middlewareRepository;
-
     private final MiddlewareApplicationServiceRepository applicationRepository;
     private final CreditCommitmentsRepository commitmentsRepository;
     private final AccessManagementService accessManagementService;
 
-    public UpdateCreditCommitmentsServiceImpl(MiddlewareRepository middlewareRepository, CreditCommitmentsRepository commitmentsRepository,
+    public UpdateCreditCommitmentsServiceImpl(CreditCommitmentsRepository commitmentsRepository,
             AccessManagementService accessManagementService,  MiddlewareApplicationServiceRepository applicationRepository) {
-        this.middlewareRepository = middlewareRepository;
         this.commitmentsRepository = commitmentsRepository;
         this.accessManagementService = accessManagementService;
         this.applicationRepository = applicationRepository;
     }
 
     @Override
-    public ApplicationResponse updateCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request) {
+    public void updateCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request) {
         var applicationIdentifier = applicationRepository.getAppIdByExternalId(externalId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
         commitmentsRepository.patchCreditCommitments(applicationIdentifier.getId(), request);
-        return middlewareRepository.runDecisioningByAppId(applicationIdentifier.getId());
     }
 }
