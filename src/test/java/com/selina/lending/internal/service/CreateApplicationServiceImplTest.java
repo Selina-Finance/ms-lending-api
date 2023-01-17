@@ -101,6 +101,21 @@ class CreateApplicationServiceImplTest {
             verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
 
         }
+
+        @Test
+        void shouldCreateDipCCApplicationWhenNoApplicationIdentifierIdReturned() {
+            //Given
+            var id = UUID.randomUUID().toString();
+            when(applicationRequest.getExternalApplicationId()).thenReturn(id);
+            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
+            when(applicationIdentifier.getId()).thenReturn(null);
+
+            //When
+            createApplicationService.createDipCCApplication(applicationRequest);
+
+            //Then
+            verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
+        }
     }
 
     @Nested

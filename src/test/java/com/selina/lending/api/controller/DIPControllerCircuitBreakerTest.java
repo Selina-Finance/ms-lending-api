@@ -38,7 +38,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
-import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
+import com.selina.lending.internal.mapper.DIPCCApplicationRequestMapper;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.RetrieveApplicationService;
@@ -83,10 +83,10 @@ class DIPControllerCircuitBreakerTest extends MapperBase {
     @Test
     void shouldReturnBadGatewayWhenCreateDipCCApplicationHasMiddlewareProblem() throws Exception {
         //Given
-        var requestDto = getDIPApplicationRequestDto();
+        var requestDto = getDIPCCApplicationRequestDto();
 
         when(createApplicationService.createDipCCApplication(
-                DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(requestDto))).thenThrow(
+                DIPCCApplicationRequestMapper.INSTANCE.mapToApplicationRequest(requestDto))).thenThrow(
                 new RemoteResourceProblemException());
 
         //When
@@ -101,11 +101,11 @@ class DIPControllerCircuitBreakerTest extends MapperBase {
     void shouldReturnBadGatewayWhenUpdateDipCCApplicationHasMiddlewareProblem() throws Exception {
         //Given
         var dipId = UUID.randomUUID().toString();
-        var requestDto = getDIPApplicationRequestDto();
+        var requestDto = getDIPCCApplicationRequestDto();
         String jsonRequestDto = objectMapper.writeValueAsString(requestDto);
 
         doThrow(new RemoteResourceProblemException()).when(updateApplicationService).updateDipCCApplication(dipId,
-                DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(requestDto));
+                DIPCCApplicationRequestMapper.INSTANCE.mapToApplicationRequest(requestDto));
 
         //When
         mockMvc.perform(put("/application/" + dipId + "/dipcc").with(csrf())

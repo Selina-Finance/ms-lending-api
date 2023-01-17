@@ -17,9 +17,12 @@
 
 package com.selina.lending.api.controller;
 
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.CC;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Read;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
+
 import java.io.IOException;
 
-import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -32,12 +35,9 @@ import com.selina.lending.internal.mapper.UpdateCreditCommitmentsRequestMapper;
 import com.selina.lending.internal.service.creditcommitments.EsisDocService;
 import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
 import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
+import com.selina.lending.internal.service.permissions.annotation.Permission;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.CC;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Read;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
 
 @Slf4j
 @RestController
@@ -56,13 +56,13 @@ public class CreditCommitmentsController implements CreditCommitmentsOperations 
 
     @Override
     @Permission(resource = CC, scope = Update)
-    public void updateCreditCommitments(
+    public ResponseEntity<Void> updateCreditCommitments(
             String externalApplicationId,
             UpdateCreditCommitmentsRequest request) {
         log.info("Update CreditCommitments with [externalApplicationId={}]", externalApplicationId);
 
         updateCreditCommitmentsService.updateCreditCommitments(externalApplicationId, UpdateCreditCommitmentsRequestMapper.INSTANCE.mapToUpdateCreditCommitmentsRequest(request));
-        ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Override

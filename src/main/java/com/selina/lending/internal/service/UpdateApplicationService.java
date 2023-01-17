@@ -21,6 +21,6 @@ import com.selina.lending.internal.service.application.domain.ApplicationRequest
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 public interface UpdateApplicationService {
-    ApplicationResponse updateDipCCApplication(String externalApplicationId, ApplicationRequest applicationRequest);
+    void updateDipCCApplication(String externalApplicationId, ApplicationRequest applicationRequest);
     ApplicationResponse updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest);
 }

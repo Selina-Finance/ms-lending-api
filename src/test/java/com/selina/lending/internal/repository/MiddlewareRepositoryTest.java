@@ -20,6 +20,7 @@ package com.selina.lending.internal.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -128,6 +129,19 @@ class MiddlewareRepositoryTest {
         verify(applicationRequest, times(1)).setSource(Source.LENDING_API.toString());
         verify(applicationRequest, times(1)).setStageOverwrite("DIP - Credit Commitments");
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenPatchApplicationInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+        doNothing().when(middlewareApi).patchApplication(id, applicationRequest);
+
+        // When
+        middlewareRepository.patchApplication(id, applicationRequest);
+
+        // Then
+        verify(middlewareApi, times(1)).patchApplication(id, applicationRequest);
     }
 
     @Test

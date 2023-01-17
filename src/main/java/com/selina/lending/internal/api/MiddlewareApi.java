@@ -23,6 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,4 +55,7 @@ public interface MiddlewareApi {
 
     @GetMapping(value = "/application/{id}/esis-document", produces = APPLICATION_PDF_VALUE)
     Resource downloadEsisByAppId(@PathVariable String id);
+
+    @PatchMapping(value = "/application/{id}", consumes = APPLICATION_JSON_VALUE)
+    void patchApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
 }

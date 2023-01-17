@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,6 +37,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.RetrieveApplicationService;
 import com.selina.lending.internal.service.UpdateApplicationService;
@@ -55,6 +57,10 @@ class DIPControllerUnitTest {
 
     @Mock
     private DIPApplicationRequest dipApplicationRequest;
+
+
+    @Mock
+    private DIPCCApplicationRequest dipccApplicationRequest;
 
     @Mock
     private RetrieveApplicationService retrieveApplicationService;
@@ -86,7 +92,7 @@ class DIPControllerUnitTest {
         when(createApplicationService.createDipCCApplication(any())).thenReturn(mwApplicationResponse);
 
         //When
-        lendingController.createDipCCApplication(dipApplicationRequest);
+        lendingController.createDipCCApplication(dipccApplicationRequest);
 
         //Then
         verify(createApplicationService, times(1)).createDipCCApplication(any());
@@ -95,17 +101,12 @@ class DIPControllerUnitTest {
     @Test
     void updateDipCCApplication() {
         //Given
-        var id = UUID.randomUUID().toString();
-        var applicationType = "DIP";
-        var mwApplicationResponse = ApplicationResponse.builder().applicationId(id).applicationType(applicationType).build();
-        when(updateApplicationService.updateDipCCApplication(eq(APPLICATION_ID), any())).thenReturn(mwApplicationResponse);
+        doNothing().when(updateApplicationService).updateDipCCApplication(eq(APPLICATION_ID), any());
 
         //When
-        var appResponse = lendingController.updateDipCCApplication(APPLICATION_ID, dipApplicationRequest);
+        lendingController.updateDipCCApplication(APPLICATION_ID, dipccApplicationRequest);
 
         //Then
-        assertThat(Objects.requireNonNull(appResponse.getBody()).getRequestType(), equalTo(applicationType));
-        assertThat(appResponse.getBody().getApplicationId(), equalTo(id));
         verify(updateApplicationService, times(1)).updateDipCCApplication(eq(APPLICATION_ID), any());
     }
 

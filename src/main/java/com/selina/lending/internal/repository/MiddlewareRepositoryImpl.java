@@ -87,6 +87,13 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApi.selectProduct(id, productCode);
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareUpdateAppFallback")
+    @Override
+    public void patchApplication(String id, ApplicationRequest applicationRequest) {
+        log.info("Update application for [applicationId={}]", id);
+        middlewareApi.patchApplication(id, applicationRequest);
+    }
+
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareEsisApiFallback")
     @Override
     public Resource downloadEsisDocByAppId(String id) {
@@ -113,6 +120,9 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         throw remoteResourceProblemException(e);
     }
 
+    private void middlewareUpdateAppFallback(CallNotPermittedException e) { //NOSONAR
+        throw remoteResourceProblemException(e);
+    }
     private Resource middlewareEsisApiFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }

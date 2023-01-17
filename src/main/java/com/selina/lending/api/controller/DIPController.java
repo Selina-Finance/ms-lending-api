@@ -17,30 +17,32 @@
 
 package com.selina.lending.api.controller;
 
-import javax.validation.Valid;
-
-import com.selina.lending.internal.service.permissions.annotation.Permission;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.selina.lending.internal.dto.ApplicationDecisionResponse;
-import com.selina.lending.internal.dto.ApplicationResponse;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
-import com.selina.lending.internal.mapper.ApplicationResponseMapper;
-import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
-import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.RetrieveApplicationService;
-import com.selina.lending.internal.service.UpdateApplicationService;
-
-import lombok.extern.slf4j.Slf4j;
-
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.APPLICATION;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.DIP;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.DIP_CC;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Create;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Read;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
+
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.selina.lending.internal.dto.ApplicationDecisionResponse;
+import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
+import com.selina.lending.internal.mapper.ApplicationResponseMapper;
+import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
+import com.selina.lending.internal.mapper.DIPCCApplicationRequestMapper;
+import com.selina.lending.internal.service.CreateApplicationService;
+import com.selina.lending.internal.service.RetrieveApplicationService;
+import com.selina.lending.internal.service.UpdateApplicationService;
+import com.selina.lending.internal.service.permissions.annotation.Permission;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
@@ -66,18 +68,18 @@ public class DIPController implements DIPOperations {
 
     @Override
     @Permission(resource = DIP_CC, scope = Update)
-    public ResponseEntity<ApplicationResponse> updateDipCCApplication(String externalApplicationId, DIPApplicationRequest dipApplicationRequest) {
+    public ResponseEntity<Void> updateDipCCApplication(String externalApplicationId, DIPCCApplicationRequest request) {
         log.info("Update DIPCC application [externalApplicationId={}]", externalApplicationId);
-        var applicationResponse = updateApplicationService.updateDipCCApplication(externalApplicationId,
-                DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
-        return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
+        updateApplicationService.updateDipCCApplication(externalApplicationId,
+                DIPCCApplicationRequestMapper.INSTANCE.mapToApplicationRequest(request));
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @Permission(resource = DIP_CC, scope = Create)
-    public ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
-        log.info("Create DIPCC application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
-        var applicationResponse = createApplicationService.createDipCCApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
+    public ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid DIPCCApplicationRequest request) {
+        log.info("Create DIPCC application with [externalApplicationId={}]", request.getExternalApplicationId());
+        var applicationResponse = createApplicationService.createDipCCApplication(DIPCCApplicationRequestMapper.INSTANCE.mapToApplicationRequest(request));
         return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 
