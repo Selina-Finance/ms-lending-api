@@ -39,7 +39,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.IntegrationTest;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.CreateApplicationService;
@@ -67,7 +67,7 @@ class DIPControllerValidationTest extends MapperBase {
     @Test
     void createDipCCApplicationSuccess() throws Exception {
         //Given
-        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
 
         //When
         mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -79,7 +79,7 @@ class DIPControllerValidationTest extends MapperBase {
     @Test
     void createDipCCApplicationWithEmptyDIPApplicationRequest() throws Exception {
         //Given
-        var dipApplicationRequest = DIPApplicationRequest.builder().build();
+        var dipApplicationRequest = DIPCCApplicationRequest.builder().build();
 
         //When
         mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -102,11 +102,11 @@ class DIPControllerValidationTest extends MapperBase {
     @Test
     void createDipCCApplicationWithMissingApplicantsRequest() throws Exception {
         //Given
-        var dipApplicationRequest = DIPApplicationRequest.builder()
+        var dipApplicationRequest = DIPCCApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
-                .propertyDetails(getDIPPropertyDetailsDto())
+                .propertyDetails(getDIPCCPropertyDetailsDto())
                 .build();
 
         //When
@@ -124,12 +124,12 @@ class DIPControllerValidationTest extends MapperBase {
     @Test
     void updateDipCCApplicationWithMissingMandatoryLoanInformation() throws Exception {
         //Given
-        var dipApplicationRequest = DIPApplicationRequest.builder()
+        var dipApplicationRequest = DIPCCApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .applicants(List.of(getDIPApplicantDto()))
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(AdvancedLoanInformationDto.builder().loanPurpose("invalid loanPurpose").facilities(List.of(getFacilityDto())).build())
-                .propertyDetails(getDIPPropertyDetailsDto())
+                .propertyDetails(getDIPCCPropertyDetailsDto())
                 .build();
 
         //When
@@ -153,13 +153,13 @@ class DIPControllerValidationTest extends MapperBase {
     @Test
     void updateDipCCApplicationSuccess() throws Exception {
         //Given
-        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
 
         //When
         mockMvc.perform(put("/application/123/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -178,12 +178,12 @@ class DIPControllerValidationTest extends MapperBase {
         var applicant = getDIPApplicantDto();
         applicant.setEmployment(employment);
 
-        var dipApplicationRequest = DIPApplicationRequest.builder()
+        var dipApplicationRequest = DIPCCApplicationRequest.builder()
                 .applicants(List.of(applicant))
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
-                .propertyDetails(getDIPPropertyDetailsDto())
+                .propertyDetails(getDIPCCPropertyDetailsDto())
                 .build();
 
         //When

@@ -29,6 +29,8 @@ import com.selina.lending.internal.dto.ChecklistDto;
 import com.selina.lending.internal.dto.DIPApplicantDto;
 import com.selina.lending.internal.dto.DIPApplicationDto;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.internal.dto.DIPCCPropertyDetailsDto;
 import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.dto.ErcDto;
@@ -201,6 +203,18 @@ public abstract class MapperBase {
                 .applicants(List.of(getDIPApplicantDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPPropertyDetailsDto())
+                .fees(getFeesDto())
+                .build();
+    }
+
+
+    protected DIPCCApplicationRequest getDIPCCApplicationRequestDto() {
+        return DIPCCApplicationRequest.builder()
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .expenditure(List.of(getExpenditureDto()))
+                .applicants(List.of(getDIPApplicantDto()))
+                .loanInformation(getAdvancedLoanInformationDto())
+                .propertyDetails(getDIPCCPropertyDetailsDto())
                 .fees(getFeesDto())
                 .build();
     }
@@ -412,6 +426,26 @@ public abstract class MapperBase {
                 .whenLastPurchased(WHEN_LAST_PURCHASED)
                 .numberOfPriorCharges(1)
                 .priorCharges(getPriorChargesDto())
+                .build();
+    }
+
+
+    protected DIPCCPropertyDetailsDto getDIPCCPropertyDetailsDto() {
+        return DIPCCPropertyDetailsDto.builder()
+                .addressLine1(ADDRESS_LINE_1)
+                .addressLine2(ADDRESS_LINE_2)
+                .buildingName(BUILDING_NAME)
+                .buildingNumber(BUILDING_NUMBER)
+                .city(CITY)
+                .country(COUNTRY)
+                .county(COUNTY)
+                .postcode(POSTCODE)
+                .estimatedValue(ESTIMATED_VALUE)
+                .purchaseValue(PURCHASE_VALUE)
+                .propertyType(PROPERTY_TYPE)
+                .numberOfBedrooms(NUMBER_OF_BEDROOMS)
+                .hasAGarage(true)
+                .whenLastPurchased(WHEN_LAST_PURCHASED)
                 .build();
     }
 

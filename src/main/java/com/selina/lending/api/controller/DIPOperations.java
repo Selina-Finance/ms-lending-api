@@ -17,9 +17,22 @@
 
 package com.selina.lending.api.controller;
 
+import javax.validation.Valid;
+
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.ApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,16 +43,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.validation.Valid;
 
 @OpenAPIDefinition(info = @Info(title = "Lending API", description = "Lending API service", license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")))
 @RequestMapping("/application")
@@ -64,13 +67,9 @@ public interface DIPOperations {
     @Operation(description = "Update the Decision In Principle (DIP) application which has credit commitments for the given external application id")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "204",
                     description = "Application updated",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ApplicationResponse.class))
-                    }),
+                    content = @Content),
             @ApiResponse(
                     responseCode = "400", description = "Application details invalid", content = @Content),
             @ApiResponse(responseCode = "401", content = @Content),
@@ -78,8 +77,8 @@ public interface DIPOperations {
             @ApiResponse(responseCode = "404", description = "Application not found", content = @Content),
     })
     @PutMapping(value = "/{externalApplicationId}/dipcc")
-    ResponseEntity<ApplicationResponse> updateDipCCApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
-                                                               @Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
+    ResponseEntity<Void> updateDipCCApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
+                                                               @Valid @RequestBody DIPCCApplicationRequest request);
 
     @Hidden
     @Operation(description = "Create a new Decision In Principle (DIP) with credit commitments application")
@@ -97,7 +96,7 @@ public interface DIPOperations {
             @ApiResponse(responseCode = "403", content = @Content)
     })
     @PostMapping(value = "/dipcc")
-    ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
+    ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid @RequestBody DIPCCApplicationRequest request);
 
     @Operation(description = "Update the Decision In Principle (DIP) application for the given external application id")
     @ApiResponses(value = {

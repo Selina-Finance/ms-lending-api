@@ -64,7 +64,7 @@ public interface CreditCommitmentsOperations {
             @ApiResponse(responseCode = "404", content = @Content),
     })
     @PatchMapping(value = "/{externalApplicationId}/creditcommitments")
-    void updateCreditCommitments(
+    ResponseEntity<Void> updateCreditCommitments(
             @Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
             @Valid @RequestBody UpdateCreditCommitmentsRequest request
     );

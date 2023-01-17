@@ -15,22 +15,20 @@
  *
  */
 
-package com.selina.lending.internal.mapper.config;
+package com.selina.lending.internal.mapper;
 
 import org.mapstruct.InheritConfiguration;
-import org.mapstruct.MapperConfig;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.internal.mapper.config.DIPCCApplicationRequestMapperConfig;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 
-@MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface DIPApplicationRequestMapperConfig extends ApplicationRequestMapperConfig {
-    @InheritConfiguration(name = "mapApplicationRequest")
-    void mapDipApplicationRequest(DIPApplicationRequest dipApplicationRequest, @MappingTarget ApplicationRequest applicationRequest);
-    @InheritConfiguration(name = "mapApplicationRequest")
-    void mapDipCCApplicationRequest(DIPCCApplicationRequest dipApplicationRequest, @MappingTarget ApplicationRequest applicationRequest);
+@Mapper(config = DIPCCApplicationRequestMapperConfig.class, uses = {DIPApplicantMapper.class, FeesMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class, ExpenditureMapper.class})
+public interface DIPCCApplicationRequestMapper {
+    DIPCCApplicationRequestMapper INSTANCE = Mappers.getMapper(DIPCCApplicationRequestMapper.class);
 
+    @InheritConfiguration(name = "mapDipCCApplicationRequest")
+    ApplicationRequest mapToApplicationRequest(DIPCCApplicationRequest dipApplicationRequest);
 }

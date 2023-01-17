@@ -51,5 +51,4 @@ public class PropertyDetailsDto {
     private Double estimatedValue;
 
     private Integer propertyInternalFloorSpace;
-    private Integer numberOfPriorCharges;
 }

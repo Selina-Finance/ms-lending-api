@@ -20,6 +20,7 @@ package com.selina.lending.internal.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,6 +43,9 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 @ExtendWith(MockitoExtension.class)
 class UpdateApplicationServiceImplTest {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
+
+    private static final String APPLICATION_ID = "appId";
+
     private static final String SOURCE_ACCOUNT = "sourceAccount";
     private static final String ACCESS_DENIED_MSG =
             "Error processing request: Access denied for application " + EXTERNAL_APPLICATION_ID;
@@ -72,24 +76,20 @@ class UpdateApplicationServiceImplTest {
         @Test
         void shouldUpdateDipCCApplication() {
             //Given
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(
-                    EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+            when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(
+                    applicationIdentifier);
+            when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
             when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
             when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
-            when(middlewareRepository.createDipCCApplication(any())).thenReturn(applicationResponse);
-            doNothing().when(middlewareApplicationServiceRepository).deleteAppByExternalApplicationId(
-                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+            doNothing().when(middlewareRepository).patchApplication(any(), any());
 
             //When
             updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
 
             //Then
-            verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
-                    EXTERNAL_APPLICATION_ID);
-            verify(middlewareRepository, times(1)).createDipCCApplication(any());
-            verify(middlewareApplicationServiceRepository, times(1)).deleteAppByExternalApplicationId(
-                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
+            verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
+            verify(middlewareRepository, times(1)).patchApplication(eq(APPLICATION_ID), any());
         }
 
         @Test
@@ -108,8 +108,6 @@ class UpdateApplicationServiceImplTest {
             verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
-            verify(middlewareApplicationServiceRepository, times(0)).deleteAppByExternalApplicationId(
-                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
         }
 
         @Test
@@ -129,8 +127,6 @@ class UpdateApplicationServiceImplTest {
             verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(0)).createDipCCApplication(applicationRequest);
-            verify(middlewareApplicationServiceRepository, times(0)).deleteAppByExternalApplicationId(
-                    SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
         }
     }
     @Nested

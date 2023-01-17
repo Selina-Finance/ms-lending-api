@@ -17,7 +17,6 @@
 
 package com.selina.lending.internal.dto;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -34,7 +33,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DIPPropertyDetailsDto extends PropertyDetailsDto {
+public class DIPCCPropertyDetailsDto extends PropertyDetailsDto {
 
     @NotBlank
     @Schema(implementation = PropertyType.class)
@@ -80,9 +79,5 @@ public class DIPPropertyDetailsDto extends PropertyDetailsDto {
     private Boolean notResidentialUse;
     private Boolean isApplicantResidence;
     private Boolean isAboveCommercialPropertyDetails;
-    private Integer numberOfPriorCharges;
-
-    @Valid
-    private PriorChargesDto priorCharges;
 }
 

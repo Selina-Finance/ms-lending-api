@@ -37,5 +37,7 @@ public interface MiddlewareRepository {
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
     SelectProductResponse selectProduct(String id, String productCode);
+
+    void patchApplication(String id, ApplicationRequest applicationRequest);
 }
 
