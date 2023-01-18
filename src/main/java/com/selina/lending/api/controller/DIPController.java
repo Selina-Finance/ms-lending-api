@@ -85,12 +85,12 @@ public class DIPController implements DIPOperations {
 
     @Override
     @Permission(resource = DIP, scope = Update)
-    public ResponseEntity<ApplicationResponse> updateDipApplication(String externalApplicationId,
+    public ResponseEntity<Void> updateDipApplication(String externalApplicationId,
             DIPApplicationRequest dipApplicationRequest) {
         log.info("Update DIP application [externalApplicationId={}]", externalApplicationId);
-        var applicationResponse = updateApplicationService.updateDipApplication(externalApplicationId,
+        updateApplicationService.updateDipApplication(externalApplicationId,
                 DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
-        return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
+        return ResponseEntity.noContent().build();
     }
 
     @Override

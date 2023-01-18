@@ -39,12 +39,8 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
             "**ALERT** Unable to delete application [externalApplicationId=%s] [sourceAccount=%s]";
     private final MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
-    private final MetricService metricService;
-
-    public MiddlewareApplicationServiceRepositoryImpl(MiddlewareApplicationServiceApi middlewareApplicationServiceApi,
-                                                      MetricService metricService) {
+    public MiddlewareApplicationServiceRepositoryImpl(MiddlewareApplicationServiceApi middlewareApplicationServiceApi) {
         this.middlewareApplicationServiceApi = middlewareApplicationServiceApi;
-        this.metricService = metricService;
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
@@ -52,25 +48,6 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
     public ApplicationIdentifier getAppIdByExternalId(String externalAppId) {
         log.info("Request to get application Id by [externalApplicationId={}]", externalAppId);
         return middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalAppId);
-    }
-
-    @Retry(name = "middleware-application-service-retry", fallbackMethod = "deleteApiFallback")
-    @Override
-    @Async("taskExecutor")
-    public void deleteAppByExternalApplicationId(String sourceAccount, String externalAppId) {
-        log.info("Request to delete application by [externalApplicationId={}] [sourceAccount={}]", externalAppId, sourceAccount);
-        middlewareApplicationServiceApi.deleteApplicationByExternalApplicationId(sourceAccount, externalAppId);
-        log.info("Application deleted [externalApplicationId={}] [sourceAccount={}]", externalAppId, sourceAccount);
-    }
-
-    private void deleteApiFallback(String sourceAccount, String externalApplicationId, FeignException.FeignServerException e) { //NOSONAR
-        log.error(String.format(DELETE_FAILED_ERROR, externalApplicationId, sourceAccount), e);
-        metricService.incrementApplicationDeleteFailed();
-    }
-
-    private void deleteApiFallback(String sourceAccount, String externalApplicationId, feign.RetryableException e) { //NOSONAR
-        log.error(String.format(DELETE_FAILED_ERROR, externalApplicationId, sourceAccount), e);
-        metricService.incrementApplicationDeleteFailed();
     }
 
     private ApplicationIdentifier middlewareGetByExternalIdApiFallback(CallNotPermittedException e) { //NOSONAR
