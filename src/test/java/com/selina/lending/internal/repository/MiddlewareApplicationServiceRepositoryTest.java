@@ -19,21 +19,13 @@ package com.selina.lending.internal.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.time.Duration;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -44,7 +36,6 @@ import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
-import com.selina.lending.internal.service.monitoring.MetricService;
 
 import feign.FeignException;
 import feign.Request;
@@ -52,21 +43,10 @@ import feign.RequestTemplate;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryConfig;
-import io.github.resilience4j.retry.RetryRegistry;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
-
-    private static final String SOURCE_ACCOUNT = "source account";
-
-    @Mock
-    private FeignException.FeignServerException feignServerException;
-
-    @Mock
-    private feign.RetryableException retryableException;
 
     @Mock
     private ApplicationIdentifier applicationIdentifier;
@@ -74,14 +54,11 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
     @Mock
     private MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
-    @Mock
-    private MetricService metricService;
-
     private MiddlewareApplicationServiceRepository middlewareRepository;
 
     @BeforeEach
     void setUp() {
-        middlewareRepository = new MiddlewareApplicationServiceRepositoryImpl(middlewareApplicationServiceApi, metricService);
+        middlewareRepository = new MiddlewareApplicationServiceRepositoryImpl(middlewareApplicationServiceApi);
     }
 
 
@@ -96,20 +73,6 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
 
         //Then
         verify(middlewareApplicationServiceApi, times(1)).getApplicationIdByExternalApplicationId(
-                EXTERNAL_APPLICATION_ID);
-    }
-
-    @Test
-    void shouldCallHttpClientWhenDeleteApplicationByExternalApplicationIdInvoked() {
-        //Given
-        doNothing().when(middlewareApplicationServiceApi).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT,
-                EXTERNAL_APPLICATION_ID);
-
-        //When
-        middlewareRepository.deleteAppByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
-
-        //Then
-        verify(middlewareApplicationServiceApi, times(1)).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT,
                 EXTERNAL_APPLICATION_ID);
     }
 
@@ -160,78 +123,6 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
                 EXTERNAL_APPLICATION_ID);
     }
 
-    @Test
-    void shouldTriggerRetryWhenDeleteThrowsRetryableExceptions() {
-        //Given
-        var retryConfig = getRetryConfig();
-
-        //When
-        doThrow(new feign.RetryableException(-1, "", Request.HttpMethod.GET, new Date(), createRequest())).when(middlewareApplicationServiceApi).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT,
-                EXTERNAL_APPLICATION_ID);
-
-        try {
-            Runnable runnable = () -> middlewareRepository.deleteAppByExternalApplicationId(SOURCE_ACCOUNT,
-                    EXTERNAL_APPLICATION_ID);
-            retryConfig.executeRunnable(runnable);
-        } catch (Exception ignore) {}
-
-        //Then
-        verify(middlewareApplicationServiceApi, times(3)).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
-    }
-
-    @Test
-    void shouldNotTriggerRetryWhenFeignClientExceptionThrown() {
-        //Given
-        var retryConfig = getRetryConfig();
-
-        //When
-        doThrow(new FeignException.NotFound("Not found", createRequest(), "not found".getBytes(), null)).when(middlewareApplicationServiceApi).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT,
-                EXTERNAL_APPLICATION_ID);
-
-        try {
-            Runnable runnable = () -> middlewareRepository.deleteAppByExternalApplicationId(SOURCE_ACCOUNT,
-                    EXTERNAL_APPLICATION_ID);
-            retryConfig.executeRunnable(runnable);
-        } catch (Exception ignore) {}
-
-        //Then
-        verify(middlewareApplicationServiceApi, times(1)).deleteApplicationByExternalApplicationId(SOURCE_ACCOUNT, EXTERNAL_APPLICATION_ID);
-    }
-
-
-    @Nested
-    class DeleteApplicationExceptions {
-        @Test
-        void shouldInvokeMiddlewareApiFallbackForFeignServerException()
-                throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-            //Given
-            Method fallback = MiddlewareApplicationServiceRepositoryImpl.class.getDeclaredMethod("deleteApiFallback",
-                    String.class, String.class, FeignException.FeignServerException.class);
-            fallback.setAccessible(true);
-
-            //When
-            fallback.invoke(middlewareRepository, "any", "any", feignServerException);
-
-            //Then
-            verify(metricService, times(1)).incrementApplicationDeleteFailed();
-        }
-
-        @Test
-        void shouldInvokeMiddlewareApiFallbackForRetryableException()
-                throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-            //Given
-            Method fallback = MiddlewareApplicationServiceRepositoryImpl.class.getDeclaredMethod("deleteApiFallback",
-                    String.class, String.class, feign.RetryableException.class);
-            fallback.setAccessible(true);
-
-            //When
-            fallback.invoke(middlewareRepository, "any", "any", retryableException);
-
-            //Then
-            verify(metricService, times(1)).incrementApplicationDeleteFailed();
-        }
-    }
-
     private Request createRequest() {
         return Request.create(Request.HttpMethod.GET, "url", new HashMap<>(), null, new RequestTemplate());
     }
@@ -241,16 +132,5 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
                 CircuitBreakerConfig.SlidingWindowType.COUNT_BASED).build();
         var registry = CircuitBreakerRegistry.of(config);
         return registry.circuitBreaker("mw-cb");
-    }
-
-    private Retry getRetryConfig() {
-        var config = RetryConfig.custom()
-                .maxAttempts(3)
-                .waitDuration(Duration.ofMillis(1000))
-                .retryExceptions(FeignException.FeignServerException.class,feign.RetryableException.class)
-                .ignoreExceptions(FeignException.FeignClientException.class)
-                .build();
-        var registry = RetryRegistry.of(config);
-        return registry.retry("mw-retry");
     }
 }

@@ -17,34 +17,22 @@
 
 package com.selina.lending.internal.repository;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
-import com.selina.lending.internal.service.monitoring.MetricService;
-
-import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApplicationServiceRepository {
-
-    public static final String DELETE_FAILED_ERROR =
-            "**ALERT** Unable to delete application [externalApplicationId=%s] [sourceAccount=%s]";
     private final MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
 
-    private final MetricService metricService;
-
-    public MiddlewareApplicationServiceRepositoryImpl(MiddlewareApplicationServiceApi middlewareApplicationServiceApi,
-                                                      MetricService metricService) {
+    public MiddlewareApplicationServiceRepositoryImpl(MiddlewareApplicationServiceApi middlewareApplicationServiceApi) {
         this.middlewareApplicationServiceApi = middlewareApplicationServiceApi;
-        this.metricService = metricService;
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
@@ -52,25 +40,6 @@ public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApp
     public ApplicationIdentifier getAppIdByExternalId(String externalAppId) {
         log.info("Request to get application Id by [externalApplicationId={}]", externalAppId);
         return middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalAppId);
-    }
-
-    @Retry(name = "middleware-application-service-retry", fallbackMethod = "deleteApiFallback")
-    @Override
-    @Async("taskExecutor")
-    public void deleteAppByExternalApplicationId(String sourceAccount, String externalAppId) {
-        log.info("Request to delete application by [externalApplicationId={}] [sourceAccount={}]", externalAppId, sourceAccount);
-        middlewareApplicationServiceApi.deleteApplicationByExternalApplicationId(sourceAccount, externalAppId);
-        log.info("Application deleted [externalApplicationId={}] [sourceAccount={}]", externalAppId, sourceAccount);
-    }
-
-    private void deleteApiFallback(String sourceAccount, String externalApplicationId, FeignException.FeignServerException e) { //NOSONAR
-        log.error(String.format(DELETE_FAILED_ERROR, externalApplicationId, sourceAccount), e);
-        metricService.incrementApplicationDeleteFailed();
-    }
-
-    private void deleteApiFallback(String sourceAccount, String externalApplicationId, feign.RetryableException e) { //NOSONAR
-        log.error(String.format(DELETE_FAILED_ERROR, externalApplicationId, sourceAccount), e);
-        metricService.incrementApplicationDeleteFailed();
     }
 
     private ApplicationIdentifier middlewareGetByExternalIdApiFallback(CallNotPermittedException e) { //NOSONAR

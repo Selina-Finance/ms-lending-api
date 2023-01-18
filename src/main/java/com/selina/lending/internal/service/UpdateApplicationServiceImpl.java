@@ -23,7 +23,6 @@ import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 @Service
 public class UpdateApplicationServiceImpl implements UpdateApplicationService {
@@ -50,16 +49,13 @@ public class UpdateApplicationServiceImpl implements UpdateApplicationService {
     }
 
     @Override
-    public ApplicationResponse updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
-        ApplicationResponse applicationResponse;
+    public void updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
         if (isAuthorisedToUpdateApplication(applicationIdentifier.getSourceAccount(), externalApplicationId, applicationRequest)) {
-            applicationResponse = middlewareRepository.createDipApplication(applicationRequest);
-            middlewareApplicationServiceRepository.deleteAppByExternalApplicationId(applicationIdentifier.getSourceAccount(), externalApplicationId);
+            middlewareRepository.patchApplication(applicationIdentifier.getId(), applicationRequest);
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
         }
-        return applicationResponse;
     }
 
     private boolean isAuthorisedToUpdateApplication(String sourceAccount, String externalApplicationId, ApplicationRequest applicationRequest) {
