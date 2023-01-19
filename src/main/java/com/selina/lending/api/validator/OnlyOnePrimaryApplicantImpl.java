@@ -28,16 +28,17 @@ import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCredit
 public class OnlyOnePrimaryApplicantImpl implements ConstraintValidator<OnlyOnePrimaryApplicant, List<?>> {
 
     @Override
-    public boolean isValid(List<?> objects, ConstraintValidatorContext constraintValidatorContext) {
-        if(objects != null) {
-            if (objects.get(0) instanceof DIPApplicantDto) {
-                return objects.stream().map(DIPApplicantDto.class::cast).filter(applicant -> applicant.getPrimaryApplicant() != null).filter(
-                        DIPApplicantDto::getPrimaryApplicant).count() == 1;
-            }
-
-            if (objects.get(0) instanceof ApplicantCreditCommitmentsDto) {
-                return objects.stream().map(ApplicantCreditCommitmentsDto.class::cast).filter(applicant -> applicant.getPrimaryApplicant() != null).filter(
-                        ApplicantCreditCommitmentsDto::getPrimaryApplicant).count() == 1;
+    public boolean isValid(List<?> list, ConstraintValidatorContext constraintValidatorContext) {
+        if (list != null) {
+            Object obj = list.get(0);
+            if (obj instanceof DIPApplicantDto) {
+                return list.stream().map(DIPApplicantDto.class::cast)
+                        .filter(applicant -> applicant.getPrimaryApplicant() != null)
+                        .filter(DIPApplicantDto::getPrimaryApplicant).count() == 1;
+            } else {
+                return list.stream().map(ApplicantCreditCommitmentsDto.class::cast)
+                        .filter(applicant -> applicant.getPrimaryApplicant() != null)
+                        .filter(ApplicantCreditCommitmentsDto::getPrimaryApplicant).count() == 1;
             }
         }
         return false;

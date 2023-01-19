@@ -19,7 +19,6 @@ package com.selina.lending.api.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-
 import java.util.List;
 
 import javax.validation.Validation;
@@ -66,10 +65,23 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnInvalidWhenPrimaryApplicantNotSet() {
             //Given
-            var applicants = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().build()));
+            var request = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
+
+            //Then
+            assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
+                    equalTo(true));
+        }
+
+        @Test
+        void shouldReturnInvalidWhenApplicantListNotSet() {
+            //Given
+            var request = UpdateCreditCommitmentsRequest.builder().build();
+
+            //When
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
@@ -79,10 +91,10 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnInvalidWhenNoPrimaryApplicant() {
             //Given
-            var applicants = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(false).build()));
+            var request = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(false).build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
@@ -92,11 +104,11 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnValidIfOnlyOnePrimaryApplicantInList() {
             //Given
-            var applicants = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true).build(),
+            var request = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true).build(),
                     ApplicantCreditCommitmentsDto.builder().primaryApplicant(false).build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
@@ -106,11 +118,11 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnInvalidWhenNoPrimaryApplicantInList() {
             //Given
-            var applicants = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(false).build(),
+            var request = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(false).build(),
                     ApplicantCreditCommitmentsDto.builder().primaryApplicant(false).build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
@@ -120,11 +132,11 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnInvalidWhenTwoPrimaryApplicantsInList() {
             //Given
-            var applicants = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true).build(),
+            var request = buildRequest(List.of(ApplicantCreditCommitmentsDto.builder().primaryApplicant(true).build(),
                     ApplicantCreditCommitmentsDto.builder().primaryApplicant(true).build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
@@ -154,23 +166,38 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnInvalidWhenPrimaryApplicantNotSet() {
             //Given
-            var applicants = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().build()));
+            var request = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
                     equalTo(true));
         }
 
+
+        @Test
+        void shouldReturnInvalidWhenApplicantListNotSet() {
+            //Given
+            var request = DIPApplicationRequest.builder().build();
+
+            //When
+            var violations = validator.validate(request);
+
+            //Then
+            assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
+                    equalTo(true));
+        }
+
+
         @Test
         void shouldReturnInvalidWhenNoPrimaryApplicant() {
             //Given
-            var applicants = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().primaryApplicant(false).build()));
+            var request = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().primaryApplicant(false).build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
@@ -180,11 +207,11 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnValidIfOnlyOnePrimaryApplicantInList() {
             //Given
-            var applicants = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().primaryApplicant(true).build(),
+            var request = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().primaryApplicant(true).build(),
                     DIPApplicantDto.builder().primaryApplicant(false).build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
@@ -194,11 +221,11 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnInvalidWhenNoPrimaryApplicantInList() {
             //Given
-            var applicants = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().primaryApplicant(false).build(),
+            var request = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().primaryApplicant(false).build(),
                     DIPApplicantDto.builder().primaryApplicant(false).build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
@@ -208,11 +235,11 @@ class OnlyOnePrimaryApplicantImplTest {
         @Test
         void shouldReturnInvalidWhenTwoPrimaryApplicantsInList() {
             //Given
-            var applicants = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().primaryApplicant(true).build(),
+            var request = buildDIPApplicationRequest(List.of(DIPApplicantDto.builder().primaryApplicant(true).build(),
                     DIPApplicantDto.builder().primaryApplicant(true).build()));
 
             //When
-            var violations = validator.validate(applicants);
+            var violations = validator.validate(request);
 
             //Then
             assertThat(violations.stream().anyMatch(m -> m.getMessage().equals("must have one primary applicant")),
