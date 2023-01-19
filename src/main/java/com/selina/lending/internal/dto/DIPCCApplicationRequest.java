@@ -23,6 +23,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.selina.lending.api.validator.OnlyOnePrimaryApplicant;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +39,7 @@ public class DIPCCApplicationRequest extends ApplicationRequest {
     @NotNull
     @Size(message = "applicants is required", min = 1, max = 2)
     @Valid
+    @OnlyOnePrimaryApplicant
     private List<DIPApplicantDto> applicants;
 
     @NotNull

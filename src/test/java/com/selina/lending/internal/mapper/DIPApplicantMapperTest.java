@@ -20,7 +20,6 @@ package com.selina.lending.internal.mapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
@@ -45,9 +44,7 @@ class DIPApplicantMapperTest extends MapperBase {
         assertThat(applicant.getMobilePhoneNumber() ,equalTo(MOBILE_NUMBER));
         assertThat(applicant.getDateOfBirth(), equalTo(DOB));
         assertThat(applicant.getAddresses().size(), equalTo(1));
-        assertThat(applicant.getIdentifier(), equalTo(1));
         assertThat(applicant.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
-        assertThat(applicant.getLivedInCurrentAddressFor3Years(), equalTo(true));
         assertThat(applicant.getEmployment().getEmployerName(), equalTo(EMPLOYER_NAME));
         assertThat(applicant.getIncome().getIncome().size(), equalTo(1));
         assertThat(applicant.getIncome().getIncome().get(0).getAmount(), equalTo(INCOME_AMOUNT));
@@ -94,9 +91,8 @@ class DIPApplicantMapperTest extends MapperBase {
         assertThat(dipApplicantDto.getEmailAddress(), equalTo(EMAIL_ADDRESS));
         assertThat(dipApplicantDto.getMobileNumber() ,equalTo(MOBILE_NUMBER));
         assertThat(dipApplicantDto.getDateOfBirth(), equalTo(DOB));
-        assertThat(dipApplicantDto.getIdentifier(), equalTo(1));
+        assertThat(dipApplicantDto.getPrimaryApplicant(), equalTo(true));
         assertThat(dipApplicantDto.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
-        assertThat(dipApplicantDto.getLivedInCurrentAddressFor3Years(), equalTo(true));
         assertThat(dipApplicantDto.getAddresses().size(), equalTo(1));
         assertThat(dipApplicantDto.getEmployment().getEmployerName(), equalTo(EMPLOYER_NAME));
         assertThat(dipApplicantDto.getIncome(), notNullValue());

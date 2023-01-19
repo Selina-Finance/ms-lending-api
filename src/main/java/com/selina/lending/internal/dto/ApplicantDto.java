@@ -69,11 +69,6 @@ public class ApplicantDto {
     private Integer numberOfAdultDependants;
     private Integer numberOfChildDependants;
 
-    @NotNull
-    private Boolean livedInCurrentAddressFor3Years;
-    private Boolean applicant2LivesWithApplicant1For3Years;
-    private Boolean applicant2LivesWithApplicant1;
-
     @Schema(implementation = ResidentialStatus.class, description = "If residential status value is not in the enum list, use best match e.g. Private Tenant map to 'Owner Occupier'")
     @EnumValue(enumClass = ResidentialStatus.class)
     private String residentialStatus;

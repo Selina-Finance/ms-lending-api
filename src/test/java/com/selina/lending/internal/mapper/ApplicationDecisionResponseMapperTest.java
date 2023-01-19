@@ -92,7 +92,6 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
     private void assertApplicant(ApplicationDecisionResponse responseDto) {
         var applicantDto = (ApplicantResponseDto) responseDto.getApplicants().get(0);
         assertThat(applicantDto.getFirstName(), equalTo(FIRST_NAME));
-        assertThat(applicantDto.getLivedInCurrentAddressFor3Years(), equalTo(true));
         assertThat(applicantDto.getAddresses().size(), equalTo(1));
         assertThat(applicantDto.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
         assertThat(applicantDto.getPreviousNames().get(0).getFirstName(), equalTo(FIRST_NAME));

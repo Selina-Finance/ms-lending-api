@@ -20,10 +20,10 @@ package com.selina.lending.internal.service.application.domain;
 import java.util.List;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class Applicant {
     String title;
     String emailAddress;
@@ -35,14 +35,12 @@ public class Applicant {
     String dateOfBirth;
     Integer numberOfAdultDependants;
     Integer numberOfChildDependants;
-    Boolean livedInCurrentAddressFor3Years;
-    Boolean applicant2LivesWithApplicant1For3Years;
-    Boolean applicant2LivesWithApplicant1;
     Boolean applicantUsedAnotherName;
     Integer estimatedRetirementAge;
     String maritalStatus;
     String nationality;
     String residentialStatus;
+    Boolean primaryApplicant;
     Integer identifier;
     Incomes income;
     Employment employment;

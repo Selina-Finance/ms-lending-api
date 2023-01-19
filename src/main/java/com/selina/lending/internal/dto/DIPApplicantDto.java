@@ -54,7 +54,7 @@ public class DIPApplicantDto extends ApplicantDto {
     private String nationality;
 
     @NotNull
-    private Integer identifier;
+    private Boolean primaryApplicant;
 
     @Valid
     @NotNull

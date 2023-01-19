@@ -26,6 +26,7 @@ import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.dto.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
@@ -91,6 +92,8 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @Override
     public void patchApplication(String id, ApplicationRequest applicationRequest) {
         log.info("Update application for [applicationId={}]", id);
+
+        applicationRequest.getApplicants().forEach(this::setIdentifier);
         middlewareApi.patchApplication(id, applicationRequest);
     }
 
@@ -106,6 +109,10 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         applicationRequest.setIncludeCreditCommitment(includeCreditCommitments);
         applicationRequest.setSource(LendingConstants.REQUEST_SOURCE);
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
+        applicationRequest.getApplicants().forEach(this::setIdentifier);
+    }
+    private void setIdentifier(Applicant applicant) {
+        applicant.setIdentifier(Boolean.TRUE.equals(applicant.getPrimaryApplicant()) ?  0 : 1);
     }
 
     private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR

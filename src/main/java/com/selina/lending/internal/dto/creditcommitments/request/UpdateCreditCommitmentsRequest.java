@@ -25,11 +25,14 @@ import lombok.experimental.SuperBuilder;
 
 import javax.validation.Valid;
 
+import com.selina.lending.api.validator.OnlyOnePrimaryApplicant;
+
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 public class UpdateCreditCommitmentsRequest {
     @Valid
+    @OnlyOnePrimaryApplicant
     List<ApplicantCreditCommitmentsDto> applicants;
 }
 
