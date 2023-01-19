@@ -42,7 +42,6 @@ class ApplicantMapperTest extends MapperBase {
         assertThat(applicant.getMobilePhoneNumber() ,equalTo(MOBILE_NUMBER));
         assertThat(applicant.getDateOfBirth(), equalTo(DOB));
         assertThat(applicant.getAddresses().size(), equalTo(1));
-        assertThat(applicant.getLivedInCurrentAddressFor3Years(), equalTo(true));
         assertThat(applicant.getIncome().getIncome().size(), equalTo(1));
         assertThat(applicant.getIncome().getIncome().get(0).getAmount(), equalTo(INCOME_AMOUNT));
         assertThat(applicant.getIncome().getIncome().get(0).getType(), equalTo(INCOME_TYPE));

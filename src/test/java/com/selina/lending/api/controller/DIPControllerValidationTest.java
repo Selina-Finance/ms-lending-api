@@ -88,15 +88,17 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                .andExpect(jsonPath("$.violations", hasSize(4)))
+                .andExpect(jsonPath("$.violations", hasSize(5)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants"))
-                .andExpect(jsonPath("$.violations[0].message").value("must not be null"))
-                .andExpect(jsonPath("$.violations[1].field").value("externalApplicationId"))
-                .andExpect(jsonPath("$.violations[1].message").value("must not be blank"))
-                .andExpect(jsonPath("$.violations[2].field").value("loanInformation"))
-                .andExpect(jsonPath("$.violations[2].message").value("must not be null"))
-                .andExpect(jsonPath("$.violations[3].field").value("propertyDetails"))
-                .andExpect(jsonPath("$.violations[3].message").value("must not be null"));
+                .andExpect(jsonPath("$.violations[0].message").value("must have one primary applicant"))
+                .andExpect(jsonPath("$.violations[1].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[1].message").value("must not be null"))
+                .andExpect(jsonPath("$.violations[2].field").value("externalApplicationId"))
+                .andExpect(jsonPath("$.violations[2].message").value("must not be blank"))
+                .andExpect(jsonPath("$.violations[3].field").value("loanInformation"))
+                .andExpect(jsonPath("$.violations[3].message").value("must not be null"))
+                .andExpect(jsonPath("$.violations[4].field").value("propertyDetails"))
+                .andExpect(jsonPath("$.violations[4].message").value("must not be null"));
     }
 
     @Test
@@ -116,9 +118,11 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations", hasSize(2)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants"))
-                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+                .andExpect(jsonPath("$.violations[0].message").value("must have one primary applicant"))
+                .andExpect(jsonPath("$.violations[1].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[1].message").value("must not be null"));
     }
 
     @Test

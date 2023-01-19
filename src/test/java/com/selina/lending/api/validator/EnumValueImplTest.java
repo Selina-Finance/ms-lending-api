@@ -159,7 +159,7 @@ import com.selina.lending.internal.dto.LoanInformationDto;
         var violations = validator.validate(applicant);
 
         //Then
-        assertThat(violations.size(), equalTo(17));
+        assertThat(violations.size(), equalTo(16));
 
         var violationPropertyPath = getViolationPropertyPath(
                 violations.stream().map(ConstraintViolation::getPropertyPath));

@@ -40,18 +40,18 @@ public class UpdateApplicationServiceImpl implements UpdateApplicationService {
 
     @Override
     public void updateDipCCApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
-        var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
-        if (isAuthorisedToUpdateApplication(applicationIdentifier.getSourceAccount(), externalApplicationId, applicationRequest)) {
-            middlewareRepository.patchApplication(applicationIdentifier.getId(), applicationRequest);
-        } else {
-            throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
-        }
+        patchApplication(externalApplicationId, applicationRequest);
     }
 
     @Override
     public void updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
+        patchApplication(externalApplicationId, applicationRequest);
+    }
+
+    private void patchApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
-        if (isAuthorisedToUpdateApplication(applicationIdentifier.getSourceAccount(), externalApplicationId, applicationRequest)) {
+        if (isAuthorisedToUpdateApplication(applicationIdentifier.getSourceAccount(), externalApplicationId,
+                applicationRequest)) {
             middlewareRepository.patchApplication(applicationIdentifier.getId(), applicationRequest);
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);

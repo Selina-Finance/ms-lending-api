@@ -35,9 +35,6 @@ public class ApplicantResponseDto {
     String dateOfBirth;
     Integer numberOfAdultDependants;
     Integer numberOfChildDependants;
-    Boolean livedInCurrentAddressFor3Years;
-    Boolean applicant2LivesWithApplicant1For3Years;
-    Boolean applicant2LivesWithApplicant1;
     Boolean applicantConsentedToSoftCreditCheck;
     Boolean hasAnyCriminalConvictions;
     Boolean hasBeenSubjectToDebtSolutionsInPart6Years;

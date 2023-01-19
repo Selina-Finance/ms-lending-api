@@ -15,20 +15,20 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.validator;
 
-import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentDto;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
+import javax.validation.Constraint;
+import javax.validation.Payload;
 
-@Builder(toBuilder = true)
-@Value
-public class ApplicationResponse {
-    String requestType;
-    String applicationId;
-    @Schema (oneOf = DIPApplicationDto.class)
-    ApplicationDto application;
-    CreditCommitmentDto creditCommitment;
+@Documented
+@Constraint(validatedBy = OnlyOnePrimaryApplicantImpl.class)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface OnlyOnePrimaryApplicant {
+    String message() default "must have one primary applicant";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }
