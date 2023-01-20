@@ -23,19 +23,19 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.Test;
 
-import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationDto;
 import com.selina.lending.internal.dto.creditcommitments.response.DetailResponseDto;
 
 class ApplicationResponseMapperTest extends MapperBase {
 
     @Test
-    void mapToApplicationResponseDto() {
+    void mapToDIPCCApplicationResponseDto() {
         //Given
         var applicationResponse = getApplicationResponse();
 
         //When
-        var applicationResponseDto = ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse);
+        var applicationResponseDto = DIPCCApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse);
 
         //Then
         assertThat(applicationResponseDto.getApplicationId(), equalTo(APPLICATION_ID));
@@ -59,8 +59,36 @@ class ApplicationResponseMapperTest extends MapperBase {
         assertCreditCommitment(applicationResponseDto);
     }
 
-    private void assertCreditCommitment(ApplicationResponse applicationResponse) {
-        var creditCommitment = applicationResponse.getCreditCommitment();
+    @Test
+    void mapToDIPApplicationResponseDto() {
+        //Given
+        var applicationResponse = getApplicationResponse();
+
+        //When
+        var applicationResponseDto = DIPApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse);
+
+        //Then
+        assertThat(applicationResponseDto.getApplicationId(), equalTo(APPLICATION_ID));
+        assertThat(applicationResponseDto.getRequestType(), equalTo(DIP_APPLICATION_TYPE));
+        assertThat(applicationResponseDto.getApplication(), notNullValue());
+
+        var applicationDto = (DIPApplicationDto) applicationResponseDto.getApplication();
+
+        assertThat(applicationDto.getId(), equalTo(APPLICATION_ID));
+        assertThat(applicationDto.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+        assertThat(applicationDto.getRequestType(), equalTo(DIP_APPLICATION_TYPE));
+        assertThat(applicationDto.getApplicants(), notNullValue());
+        assertThat(applicationDto.getApplicants().size(), equalTo(1));
+        assertThat(applicationDto.getApplicants().get(0).getAddresses().size(), equalTo(1));
+        assertThat(applicationDto.getLoanInformation(), notNullValue());
+        assertThat(applicationDto.getLoanInformation().getLoanPurpose(), equalTo(LOAN_PURPOSE));
+        assertThat(applicationDto.getPropertyDetails(), notNullValue());
+
+        assertOffers(applicationDto);
+    }
+
+    private void assertCreditCommitment(DIPCCApplicationResponse response) {
+        var creditCommitment = response.getCreditCommitment();
         assertThat(creditCommitment.getApplicants().size(), equalTo(1));
         assertThat(creditCommitment.getApplicants().get(0).getPrimaryApplicant(), equalTo(true));
         assertThat(creditCommitment.getApplicants().get(0).getCreditScore(), equalTo(CREDIT_SCORE));

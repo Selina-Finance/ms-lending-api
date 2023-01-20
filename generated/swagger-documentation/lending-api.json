@@ -44,6 +44,15 @@
           "required":true
         },
         "responses":{
+          "400":{
+            "description":"Application details invalid"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
           "200":{
             "description":"Quick Quote updated",
             "content":{
@@ -53,15 +62,6 @@
                 }
               }
             }
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
-          },
-          "403":{
-            "description":"Forbidden"
           }
         }
       }
@@ -95,11 +95,8 @@
           "required":true
         },
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
-          "404":{
-            "description":"Application not found"
+          "204":{
+            "description":"Application updated"
           },
           "400":{
             "description":"Application details invalid"
@@ -107,8 +104,11 @@
           "403":{
             "description":"Forbidden"
           },
-          "204":{
-            "description":"Application updated"
+          "404":{
+            "description":"Application not found"
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -131,6 +131,9 @@
           "required":true
         },
         "responses":{
+          "400":{
+            "description":"Invalid client credentials"
+          },
           "200":{
             "description":"Authentication token and amount of seconds before it will be expired",
             "content":{
@@ -140,9 +143,6 @@
                 }
               }
             }
-          },
-          "400":{
-            "description":"Invalid client credentials"
           }
         }
       }
@@ -175,14 +175,14 @@
               }
             }
           },
-          "401":{
-            "description":"Unauthorized"
-          },
           "400":{
             "description":"Application details invalid"
           },
           "403":{
             "description":"Forbidden"
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -205,24 +205,24 @@
           "required":true
         },
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
           "400":{
             "description":"Application details invalid"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "401":{
+            "description":"Unauthorized"
           },
           "200":{
             "description":"Application created",
             "content":{
               "application/json":{
                 "schema":{
-                  "$ref":"#/components/schemas/ApplicationResponse"
+                  "$ref":"#/components/schemas/DIPApplicationResponse"
                 }
               }
             }
-          },
-          "403":{
-            "description":"Forbidden"
           }
         }
       }
@@ -246,12 +246,6 @@
           }
         ],
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
-          "404":{
-            "description":"Application not found"
-          },
           "200":{
             "description":"Found application",
             "content":{
@@ -261,6 +255,12 @@
                 }
               }
             }
+          },
+          "404":{
+            "description":"Application not found"
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -751,7 +751,6 @@
           "firstName",
           "income",
           "lastName",
-          "livedInCurrentAddressFor3Years",
           "mobileNumber",
           "title"
         ],
@@ -805,15 +804,6 @@
           "numberOfChildDependants":{
             "type":"integer",
             "format":"int32"
-          },
-          "livedInCurrentAddressFor3Years":{
-            "type":"boolean"
-          },
-          "applicant2LivesWithApplicant1For3Years":{
-            "type":"boolean"
-          },
-          "applicant2LivesWithApplicant1":{
-            "type":"boolean"
           },
           "residentialStatus":{
             "type":"string",
@@ -1150,13 +1140,12 @@
           "employment",
           "estimatedRetirementAge",
           "firstName",
-          "identifier",
           "income",
           "lastName",
-          "livedInCurrentAddressFor3Years",
           "maritalStatus",
           "mobileNumber",
           "nationality",
+          "primaryApplicant",
           "title"
         ],
         "type":"object",
@@ -1209,15 +1198,6 @@
           "numberOfChildDependants":{
             "type":"integer",
             "format":"int32"
-          },
-          "livedInCurrentAddressFor3Years":{
-            "type":"boolean"
-          },
-          "applicant2LivesWithApplicant1For3Years":{
-            "type":"boolean"
-          },
-          "applicant2LivesWithApplicant1":{
-            "type":"boolean"
           },
           "residentialStatus":{
             "type":"string",
@@ -1499,9 +1479,8 @@
               "Unknown"
             ]
           },
-          "identifier":{
-            "type":"integer",
-            "format":"int32"
+          "primaryApplicant":{
+            "type":"boolean"
           },
           "employment":{
             "$ref":"#/components/schemas/EmploymentDto"
@@ -1879,34 +1858,6 @@
           }
         }
       },
-      "ApplicantCreditCommitmentsResponseDto":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"integer",
-            "format":"int64"
-          },
-          "primaryApplicant":{
-            "type":"boolean"
-          },
-          "experianId":{
-            "type":"string"
-          },
-          "searchId":{
-            "type":"string"
-          },
-          "creditScore":{
-            "type":"integer",
-            "format":"int32"
-          },
-          "creditCommitments":{
-            "$ref":"#/components/schemas/CreditCommitmentsDetailResponseDto"
-          },
-          "publicInformation":{
-            "$ref":"#/components/schemas/PublicInformationResponseDto"
-          }
-        }
-      },
       "ApplicantDto":{
         "required":[
           "addresses",
@@ -1915,7 +1866,6 @@
           "firstName",
           "income",
           "lastName",
-          "livedInCurrentAddressFor3Years",
           "mobileNumber",
           "title"
         ],
@@ -1969,15 +1919,6 @@
           "numberOfChildDependants":{
             "type":"integer",
             "format":"int32"
-          },
-          "livedInCurrentAddressFor3Years":{
-            "type":"boolean"
-          },
-          "applicant2LivesWithApplicant1For3Years":{
-            "type":"boolean"
-          },
-          "applicant2LivesWithApplicant1":{
-            "type":"boolean"
           },
           "residentialStatus":{
             "type":"string",
@@ -2043,26 +1984,6 @@
           }
         ]
       },
-      "ApplicationResponse":{
-        "type":"object",
-        "properties":{
-          "requestType":{
-            "type":"string"
-          },
-          "applicationId":{
-            "type":"string"
-          },
-          "application":{
-            "$ref":"#/components/schemas/ApplicationDto"
-          },
-          "salesforce":{
-            "$ref":"#/components/schemas/SalesforceDto"
-          },
-          "creditCommitment":{
-            "$ref":"#/components/schemas/CreditCommitmentDto"
-          }
-        }
-      },
       "ChecklistDto":{
         "type":"object",
         "properties":{
@@ -2071,28 +1992,6 @@
           },
           "required":{
             "$ref":"#/components/schemas/RequiredDto"
-          }
-        }
-      },
-      "CreditCommitmentDto":{
-        "type":"object",
-        "properties":{
-          "applicants":{
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/ApplicantCreditCommitmentsResponseDto"
-            }
-          }
-        }
-      },
-      "CreditCommitmentsDetailResponseDto":{
-        "type":"object",
-        "properties":{
-          "system":{
-            "$ref":"#/components/schemas/SystemResponseDto"
-          },
-          "user":{
-            "$ref":"#/components/schemas/UserResponseDto"
           }
         }
       },
@@ -2154,118 +2053,17 @@
           }
         }
       },
-      "DetailResponseDto":{
+      "DIPApplicationResponse":{
         "type":"object",
         "properties":{
-          "id":{
-            "type":"integer",
-            "format":"int32"
-          },
-          "status":{
+          "requestType":{
             "type":"string"
           },
-          "applicant":{
+          "applicationId":{
             "type":"string"
           },
-          "name":{
-            "type":"string"
-          },
-          "dateOfBirth":{
-            "type":"string"
-          },
-          "category":{
-            "type":"string"
-          },
-          "startDate":{
-            "type":"string"
-          },
-          "endDate":{
-            "type":"string"
-          },
-          "lastUpdatedDate":{
-            "type":"string"
-          },
-          "settlementDate":{
-            "type":"string"
-          },
-          "remainingTerm":{
-            "type":"integer",
-            "format":"int32"
-          },
-          "outstandingBalance":{
-            "type":"number",
-            "format":"double"
-          },
-          "monthlyPayment":{
-            "type":"number",
-            "format":"double"
-          },
-          "creditLimit":{
-            "type":"number",
-            "format":"double"
-          },
-          "securityProperty":{
-            "type":"boolean"
-          },
-          "paymentProfileShort":{
-            "type":"string"
-          },
-          "paymentProfileLong":{
-            "type":"string"
-          },
-          "joint":{
-            "type":"boolean"
-          },
-          "adverseCredit":{
-            "type":"boolean"
-          },
-          "consolidate":{
-            "type":"boolean"
-          },
-          "ignore":{
-            "type":"boolean"
-          },
-          "repaymentType":{
-            "type":"string"
-          },
-          "repaymentVehicle":{
-            "type":"string"
-          },
-          "costOfRepaymentVehicle":{
-            "type":"string"
-          },
-          "interestRateType":{
-            "type":"string"
-          },
-          "fixedRatePeriodEndDate":{
-            "type":"string"
-          },
-          "amountToConsolidate":{
-            "type":"number",
-            "format":"double"
-          },
-          "reasonToIgnore":{
-            "type":"string"
-          },
-          "lender":{
-            "type":"string"
-          },
-          "type":{
-            "type":"string"
-          },
-          "currentBalance":{
-            "type":"number",
-            "format":"double"
-          },
-          "interestOnlyBalance":{
-            "type":"string"
-          },
-          "amount":{
-            "type":"number",
-            "format":"double"
-          },
-          "code":{
-            "type":"string"
+          "application":{
+            "$ref":"#/components/schemas/ApplicationDto"
           }
         }
       },
@@ -2419,17 +2217,6 @@
           }
         }
       },
-      "PublicInformationResponseDto":{
-        "type":"object",
-        "properties":{
-          "system":{
-            "$ref":"#/components/schemas/SystemResponseDto"
-          },
-          "user":{
-            "$ref":"#/components/schemas/UserResponseDto"
-          }
-        }
-      },
       "RequiredDto":{
         "type":"object",
         "properties":{
@@ -2447,85 +2234,6 @@
                 "type":"string"
               }
             }
-          }
-        }
-      },
-      "SalesforceDto":{
-        "type":"object",
-        "properties":{
-          "contactName":{
-            "type":"string"
-          },
-          "opportunityId":{
-            "type":"string"
-          },
-          "brokerAccountId":{
-            "type":"string"
-          },
-          "accountId":{
-            "type":"string"
-          },
-          "opportunityName":{
-            "type":"string"
-          },
-          "ownerId":{
-            "type":"string"
-          },
-          "reference":{
-            "type":"string"
-          }
-        }
-      },
-      "SummaryResponseDto":{
-        "type":"object",
-        "properties":{
-          "numberAccounts":{
-            "type":"integer",
-            "format":"int32"
-          },
-          "numberActiveAccounts":{
-            "type":"integer",
-            "format":"int32"
-          },
-          "outstandingBalance":{
-            "type":"number",
-            "format":"double"
-          },
-          "numberInfo":{
-            "type":"integer",
-            "format":"int32"
-          },
-          "totalValue":{
-            "type":"integer",
-            "format":"int32"
-          }
-        }
-      },
-      "SystemResponseDto":{
-        "type":"object",
-        "properties":{
-          "detail":{
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/DetailResponseDto"
-            }
-          },
-          "summary":{
-            "$ref":"#/components/schemas/SummaryResponseDto"
-          }
-        }
-      },
-      "UserResponseDto":{
-        "type":"object",
-        "properties":{
-          "detail":{
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/DetailResponseDto"
-            }
-          },
-          "summary":{
-            "$ref":"#/components/schemas/SummaryResponseDto"
           }
         }
       },
@@ -2563,15 +2271,6 @@
           "numberOfChildDependants":{
             "type":"integer",
             "format":"int32"
-          },
-          "livedInCurrentAddressFor3Years":{
-            "type":"boolean"
-          },
-          "applicant2LivesWithApplicant1For3Years":{
-            "type":"boolean"
-          },
-          "applicant2LivesWithApplicant1":{
-            "type":"boolean"
           },
           "applicantConsentedToSoftCreditCheck":{
             "type":"boolean"
@@ -2916,6 +2615,32 @@
           "propertyInternalFloorSpace":{
             "type":"integer",
             "format":"int32"
+          }
+        }
+      },
+      "SalesforceDto":{
+        "type":"object",
+        "properties":{
+          "contactName":{
+            "type":"string"
+          },
+          "opportunityId":{
+            "type":"string"
+          },
+          "brokerAccountId":{
+            "type":"string"
+          },
+          "accountId":{
+            "type":"string"
+          },
+          "opportunityName":{
+            "type":"string"
+          },
+          "ownerId":{
+            "type":"string"
+          },
+          "reference":{
+            "type":"string"
           }
         }
       },

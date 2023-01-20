@@ -29,8 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
-import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 
 import io.swagger.v3.oas.annotations.Hidden;
@@ -89,14 +90,14 @@ public interface DIPOperations {
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ApplicationResponse.class))
+                                    schema = @Schema(implementation = DIPCCApplicationResponse.class))
                     }),
             @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
             @ApiResponse(responseCode = "401", content = @Content),
             @ApiResponse(responseCode = "403", content = @Content)
     })
     @PostMapping(value = "/dipcc")
-    ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid @RequestBody DIPCCApplicationRequest request);
+    ResponseEntity<DIPCCApplicationResponse> createDipCCApplication(@Valid @RequestBody DIPCCApplicationRequest request);
 
     @Operation(description = "Update the Decision In Principle (DIP) application for the given external application id")
     @ApiResponses(value = {
@@ -122,12 +123,12 @@ public interface DIPOperations {
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ApplicationResponse.class))
+                                    schema = @Schema(implementation = DIPApplicationResponse.class))
                     }),
             @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
             @ApiResponse(responseCode = "401", content = @Content),
             @ApiResponse(responseCode = "403", content = @Content)
     })
     @PostMapping(value = "/dip")
-    ResponseEntity<ApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
+    ResponseEntity<DIPApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);
 }

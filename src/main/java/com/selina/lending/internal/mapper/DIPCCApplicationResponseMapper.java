@@ -21,13 +21,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 
 @Mapper(uses = {ApplicationMapper.class, SalesforceMapper.class, CreditCommitmentMapper.class})
-public interface ApplicationResponseMapper {
-    ApplicationResponseMapper INSTANCE = Mappers.getMapper(ApplicationResponseMapper.class);
+public interface DIPCCApplicationResponseMapper {
+    DIPCCApplicationResponseMapper INSTANCE = Mappers.getMapper(DIPCCApplicationResponseMapper.class);
 
     @Mapping(target= "requestType", source = "applicationResponse.applicationType")
-    ApplicationResponse mapToApplicationResponseDto(
+    DIPCCApplicationResponse mapToApplicationResponseDto(
             com.selina.lending.internal.service.application.domain.ApplicationResponse applicationResponse);
 }
