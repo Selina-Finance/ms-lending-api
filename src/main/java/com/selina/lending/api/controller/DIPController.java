@@ -30,12 +30,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
-import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
-import com.selina.lending.internal.mapper.ApplicationResponseMapper;
+import com.selina.lending.internal.mapper.DIPCCApplicationResponseMapper;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
+import com.selina.lending.internal.mapper.DIPApplicationResponseMapper;
 import com.selina.lending.internal.mapper.DIPCCApplicationRequestMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.RetrieveApplicationService;
@@ -77,10 +79,10 @@ public class DIPController implements DIPOperations {
 
     @Override
     @Permission(resource = DIP_CC, scope = Create)
-    public ResponseEntity<ApplicationResponse> createDipCCApplication(@Valid DIPCCApplicationRequest request) {
+    public ResponseEntity<DIPCCApplicationResponse> createDipCCApplication(@Valid DIPCCApplicationRequest request) {
         log.info("Create DIPCC application with [externalApplicationId={}]", request.getExternalApplicationId());
         var applicationResponse = createApplicationService.createDipCCApplication(DIPCCApplicationRequestMapper.INSTANCE.mapToApplicationRequest(request));
-        return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
+        return ResponseEntity.ok(DIPCCApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 
     @Override
@@ -95,9 +97,9 @@ public class DIPController implements DIPOperations {
 
     @Override
     @Permission(resource = DIP, scope = Create)
-    public ResponseEntity<ApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
+    public ResponseEntity<DIPApplicationResponse> createDipApplication(@Valid DIPApplicationRequest dipApplicationRequest) {
         log.info("Create DIP application with [externalApplicationId={}]", dipApplicationRequest.getExternalApplicationId());
         var applicationResponse = createApplicationService.createDipApplication(DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest));
-        return ResponseEntity.ok(ApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
+        return ResponseEntity.ok(DIPApplicationResponseMapper.INSTANCE.mapToApplicationResponseDto(applicationResponse));
     }
 }

@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
 
@@ -55,7 +55,7 @@ public interface CreditCommitmentsOperations {
                     description = "Credit Commitments updated",
                     content = {@Content(
                             mediaType = APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ApplicationResponse.class))}),
+                            schema = @Schema(implementation = DIPCCApplicationResponse.class))}),
             @ApiResponse(
                     responseCode = "400",
                     description = "Credit Commitments request is invalid", content = @Content),

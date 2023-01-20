@@ -18,8 +18,7 @@
 package com.selina.lending.messaging.publisher.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.internal.dto.ApplicationRequest;
-import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
@@ -54,7 +53,7 @@ public class BrokerRequestEventMapper {
                                                          String clientId) {
         try {
             var requestBody = objectMapper.readValue(httpRequest.getContentAsByteArray(), DIPApplicationRequest.class);
-            var responseBody = objectMapper.readValue(httpResponse.getContentAsByteArray(), ApplicationResponse.class);
+            var responseBody = objectMapper.readValue(httpResponse.getContentAsByteArray(), DIPApplicationResponse.class);
 
             if (responseBody.getApplication() == null || responseBody.getApplication().getStatus() == null) {
                 return Optional.empty();

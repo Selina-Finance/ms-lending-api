@@ -19,7 +19,7 @@ package com.selina.lending.messaging.publisher.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.internal.dto.ApplicationDto;
-import com.selina.lending.internal.dto.ApplicationResponse;
+import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
@@ -75,8 +75,8 @@ class BrokerRequestEventMapperTest extends MapperBase {
         var response = new MockHttpServletResponse();
         response.setStatus(httpResponseCode);
 
-        ApplicationResponse appResponse = ApplicationResponse.builder().application(getDIPApplicationDto()).build();
-        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
+        DIPApplicationResponse appResponse = DIPApplicationResponse.builder().application(getDIPApplicationDto()).build();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationResponse.class)).thenReturn(appResponse);
         String responseAsAString = "app_response_as_a_string";
         when(objectMapper.writeValueAsString(appResponse)).thenReturn(responseAsAString);
 
@@ -171,8 +171,8 @@ class BrokerRequestEventMapperTest extends MapperBase {
         var appRequest = getDIPApplicationRequestDto();
         when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
 
-        ApplicationResponse appResponse = ApplicationResponse.builder().application(getDIPApplicationDto()).build();
-        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
+        DIPApplicationResponse appResponse = DIPApplicationResponse.builder().application(getDIPApplicationDto()).build();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationResponse.class)).thenReturn(appResponse);
 
         // When
         var optResult = mapper.dipToKpiEvent(
@@ -196,7 +196,7 @@ class BrokerRequestEventMapperTest extends MapperBase {
 
         var appRequest = getDIPApplicationRequestDto();
         when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
-        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenThrow(new IOException("error"));
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationResponse.class)).thenThrow(new IOException("error"));
 
         // When
         var optResult = mapper.dipToKpiEvent(
@@ -219,8 +219,8 @@ class BrokerRequestEventMapperTest extends MapperBase {
         var appRequest = getDIPApplicationRequestDto();
         when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
 
-        ApplicationResponse appResponse = ApplicationResponse.builder().build();
-        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
+        DIPApplicationResponse appResponse = DIPApplicationResponse.builder().build();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationResponse.class)).thenReturn(appResponse);
 
         // When
         var optResult = mapper.dipToKpiEvent(
@@ -243,8 +243,8 @@ class BrokerRequestEventMapperTest extends MapperBase {
         var appRequest = getDIPApplicationRequestDto();
         when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
 
-        var appResponse = ApplicationResponse.builder().application(ApplicationDto.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build()).build();
-        when(objectMapper.readValue(new byte[]{}, ApplicationResponse.class)).thenReturn(appResponse);
+        var appResponse = DIPApplicationResponse.builder().application(ApplicationDto.builder().externalApplicationId(EXTERNAL_APPLICATION_ID).build()).build();
+        when(objectMapper.readValue(new byte[]{}, DIPApplicationResponse.class)).thenReturn(appResponse);
 
         // When
         var optResult = mapper.dipToKpiEvent(
