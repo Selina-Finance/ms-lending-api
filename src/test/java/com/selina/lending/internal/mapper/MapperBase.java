@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.mapper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -187,6 +189,16 @@ public abstract class MapperBase {
     public static final String DECISIONING_ACCEPT = "Decisioning Accept";
     public static final Integer REVERSION_TERM = 3;
     public static final Double MAX_LOAN_AMOUNT = 50000.0;
+
+    public static final Date MODIFIED_DATE;
+
+    static {
+        try {
+            MODIFIED_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2023-01-22 11:00:00");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     protected ApplicationRequest getApplicationRequestDto() {
         return ApplicationRequest.builder()
@@ -647,6 +659,7 @@ public abstract class MapperBase {
                 .expenditure(List.of(getExpenditure()))
                 .fees(getFees())
                 .createdDate(CREATED_DATE)
+                .modifiedDate(MODIFIED_DATE)
                 .underwriting(getUnderwriting())
                 .lead(getLead())
                 .intermediary(getIntermediary())
