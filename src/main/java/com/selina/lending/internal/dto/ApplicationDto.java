@@ -17,7 +17,11 @@
 
 package com.selina.lending.internal.dto;
 
+import static com.selina.lending.internal.dto.LendingConstants.DATE_TIME_FORMAT;
+
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +40,8 @@ public class ApplicationDto {
     private String requestType;
     private String status;
     private String applicationStage;
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     private Date statusDate;
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     private Date createdDate;
 }

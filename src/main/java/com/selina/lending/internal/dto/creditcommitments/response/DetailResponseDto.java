@@ -17,6 +17,10 @@
 
 package com.selina.lending.internal.dto.creditcommitments.response;
 
+import static com.selina.lending.internal.dto.LendingConstants.DATE_FORMAT;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -29,9 +33,13 @@ public class DetailResponseDto {
     String name;
     String dateOfBirth;
     String category;
+    @JsonFormat(pattern = DATE_FORMAT)
     String startDate;
+    @JsonFormat(pattern = DATE_FORMAT)
     String endDate;
+    @JsonFormat(pattern = DATE_FORMAT)
     String lastUpdatedDate;
+    @JsonFormat(pattern = DATE_FORMAT)
     String settlementDate;
     Integer remainingTerm;
     Double outstandingBalance;

@@ -18,15 +18,19 @@
 package com.selina.lending.api.controller;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.IntegrationTest;
@@ -208,5 +214,20 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations[3].message").value("must match yyyy-MM-dd format"))
                 .andExpect(jsonPath("$.violations[4].field").value("applicants[0].employment.whenWasCompanyIncorporated"))
                 .andExpect(jsonPath("$.violations[4].message").value("must match yyyy-MM-dd format"));
+    }
+
+    @Test
+    void getApplicationSuccessWithDateTimeFormatted() throws Exception {
+        //Given
+        var response = getApplicationDecisionResponse();
+        when(retrieveApplicationService.getApplicationByExternalApplicationId("1")).thenReturn(Optional.of(response));
+
+        //When
+        mockMvc.perform(get("/application/{externalApplicationId}", "1").with(csrf())
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("modifiedDate").value("2023-01-22T11:00:00.000000"));
+
     }
 }

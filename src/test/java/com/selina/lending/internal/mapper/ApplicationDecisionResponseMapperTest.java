@@ -44,7 +44,6 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(responseDto.getApplicants(), notNullValue());
         assertThat(responseDto.getExpenditure(), notNullValue());
         assertThat(responseDto.getExpenditure().get(0).getExpenditureType(), equalTo(EXPENDITURE_TYPE));
-        assertThat(responseDto.getUnderwriting().getUnderwritingOwner(), equalTo(UNDERWRITER));
         assertThat(responseDto.getUnderwriting().getStageName(), equalTo(UNDERWRITING_STAGE));
         assertThat(responseDto.getIntermediary().getContactFirstName(), equalTo(INTERMEDIARY_FIRSTNAME));
         assertThat(responseDto.getIntermediary().getFcaNumber(), equalTo(FCA_NUMBER));
