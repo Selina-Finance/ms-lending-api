@@ -153,7 +153,6 @@ public abstract class MapperBase {
     public static final String DOCUMENT_TYPE = "passport";
     public static final Integer DETAIL_ID = 123;
     public static final String STATUS = "Active";
-    public static final String UNDERWRITER = "Madeline Scott";
     public static final String UNDERWRITING_STAGE = "Underwriting Stage";
     public static final String SALESFORCE_OPPORTUNITY_ID = "0062z000003YtBkAAK";
     public static final String SALESFORCE_ACCOUNT_ID = "837312";
@@ -757,6 +756,6 @@ public abstract class MapperBase {
         return Summary.builder().numberAccounts(2).outstandingBalance(OUTSTANDING_BALANCE).build();
     }
     private Underwriting getUnderwriting() {
-        return Underwriting.builder().underwritingOwner(UNDERWRITER).stageName(UNDERWRITING_STAGE).build();
+        return Underwriting.builder().stageName(UNDERWRITING_STAGE).build();
     }
 }

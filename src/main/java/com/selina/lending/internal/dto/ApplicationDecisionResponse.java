@@ -17,8 +17,12 @@
 
 package com.selina.lending.internal.dto;
 
+import static com.selina.lending.internal.dto.LendingConstants.DATE_TIME_FORMAT;
+
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
 import lombok.Value;
@@ -35,11 +39,14 @@ public class ApplicationDecisionResponse {
     String reference;
     String selectedOffer;
     String selectedProduct;
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     Date createdDate;
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     Date modifiedDate;
     String decision;
     String status;
     String currentStatusDescription;
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     Date statusDate;
     Boolean hasAcceptedTermsAndConditionsAndPrivacyPolicy;
     Boolean hasConsentToSubmitFundingApplication;

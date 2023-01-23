@@ -17,6 +17,10 @@
 
 package com.selina.lending.internal.dto;
 
+import static com.selina.lending.internal.dto.LendingConstants.DATE_TIME_FORMAT;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Builder;
 import lombok.Value;
 
@@ -27,6 +31,7 @@ public class CreditCheckDto {
     String requestId;
     String requestTimeStamp;
     String responseId;
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     String responseTimeStamp;
     String responseStatus;
     Integer creditScore;
