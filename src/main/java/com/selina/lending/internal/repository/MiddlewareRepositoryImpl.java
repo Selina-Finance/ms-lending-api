@@ -97,6 +97,18 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         middlewareApi.patchApplication(id, applicationRequest);
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
+    @Override
+    public ApplicationResponse checkAffordability(String id) {
+        log.info("Check affordability for [applicationId={}]", id);
+
+        var response = middlewareApi.checkAffordability(id);
+
+        log.info("Affordability check completed for [applicationId={}]", id);
+
+        return response;
+    }
+
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareEsisApiFallback")
     @Override
     public Resource downloadEsisDocByAppId(String id) {

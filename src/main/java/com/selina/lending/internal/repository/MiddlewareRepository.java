@@ -39,5 +39,7 @@ public interface MiddlewareRepository {
     SelectProductResponse selectProduct(String id, String productCode);
 
     void patchApplication(String id, ApplicationRequest applicationRequest);
+
+    ApplicationResponse checkAffordability(String id);
 }
 

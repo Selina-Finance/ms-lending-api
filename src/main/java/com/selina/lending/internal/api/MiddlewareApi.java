@@ -58,4 +58,7 @@ public interface MiddlewareApi {
 
     @PatchMapping(value = "/application/{id}", consumes = APPLICATION_JSON_VALUE)
     void patchApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
+
+    @GetMapping(path = "/application/{id}/checkAffordability", produces = APPLICATION_JSON_VALUE)
+    ApplicationResponse checkAffordability(@PathVariable("id") String id);
 }
