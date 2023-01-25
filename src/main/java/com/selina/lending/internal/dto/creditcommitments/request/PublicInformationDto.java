@@ -19,10 +19,12 @@ package com.selina.lending.internal.dto.creditcommitments.request;
 
 import javax.validation.Valid;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@NoArgsConstructor
+@SuperBuilder
 @Data
 public class PublicInformationDto {
     @Valid
