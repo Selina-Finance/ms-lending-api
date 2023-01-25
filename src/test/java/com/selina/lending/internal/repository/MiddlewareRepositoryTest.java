@@ -20,6 +20,7 @@ package com.selina.lending.internal.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -142,6 +143,40 @@ class MiddlewareRepositoryTest {
 
         // Then
         verify(middlewareApi, times(1)).patchApplication(id, applicationRequest);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenCheckAffordabilityInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+        var apiResponse = ApplicationResponse.builder().build();
+        when(middlewareApi.checkAffordability(id)).thenReturn(apiResponse);
+
+        // When
+        var result = middlewareRepository.checkAffordability(id);
+
+        // Then
+        assertThat(result).isEqualTo(apiResponse);
+        verify(middlewareApi, times(1)).checkAffordability(id);
+    }
+
+    @Test
+    void shouldThrowFeignServerExceptionWhenCheckAffordabilityThrowsInternalServerException() {
+        //Given
+        String errorMsg = "error";
+        var id = UUID.randomUUID().toString();
+
+        when(middlewareApi.checkAffordability(anyString())).thenThrow(
+                new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
+                        errorMsg.getBytes(), null));
+
+        //When
+        var exception = assertThrows(FeignException.FeignServerException.class,
+                () -> middlewareRepository.checkAffordability(id));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(errorMsg);
+        verify(middlewareApi, times(1)).checkAffordability(id);
     }
 
     @Test

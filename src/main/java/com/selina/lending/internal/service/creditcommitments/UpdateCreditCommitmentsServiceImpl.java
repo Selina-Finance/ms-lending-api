@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
@@ -28,14 +29,18 @@ import com.selina.lending.internal.service.application.domain.creditcommitments.
 public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmentsService {
 
     private final MiddlewareApplicationServiceRepository applicationRepository;
+    private final MiddlewareRepository middlewareRepository;
+
     private final CreditCommitmentsRepository commitmentsRepository;
     private final AccessManagementService accessManagementService;
 
     public UpdateCreditCommitmentsServiceImpl(CreditCommitmentsRepository commitmentsRepository,
-            AccessManagementService accessManagementService,  MiddlewareApplicationServiceRepository applicationRepository) {
+            AccessManagementService accessManagementService,  MiddlewareApplicationServiceRepository applicationRepository,
+            MiddlewareRepository middlewareRepository) {
         this.commitmentsRepository = commitmentsRepository;
         this.accessManagementService = accessManagementService;
         this.applicationRepository = applicationRepository;
+        this.middlewareRepository = middlewareRepository;
     }
 
     @Override
@@ -43,5 +48,6 @@ public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmen
         var applicationIdentifier = applicationRepository.getAppIdByExternalId(externalId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
         commitmentsRepository.patchCreditCommitments(applicationIdentifier.getId(), request);
+        middlewareRepository.checkAffordability(applicationIdentifier.getId());
     }
 }

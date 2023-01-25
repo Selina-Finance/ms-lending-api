@@ -20,6 +20,7 @@ package com.selina.lending.internal.service.creditcommitments;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -40,19 +41,26 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.PatchCreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateCreditCommitmentsServiceImplTest {
     @Mock
+    private MiddlewareRepository middlewareRepository;
+    @Mock
     private MiddlewareApplicationServiceRepository applicationRepository;
     @Mock
     private CreditCommitmentsRepository commitmentsRepository;
     @Mock
     private AccessManagementService accessManagementService;
+
+    @Mock
+    private ApplicationResponse applicationResponse;
 
     @InjectMocks
     private UpdateCreditCommitmentsServiceImpl service;
@@ -69,6 +77,7 @@ class UpdateCreditCommitmentsServiceImplTest {
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(any());
 
         when(commitmentsRepository.patchCreditCommitments(any(), any())).thenReturn(new PatchCreditCommitmentResponse());
+        when(middlewareRepository.checkAffordability(anyString())).thenReturn(applicationResponse);
 
         // When
         service.updateCreditCommitments(externalId, request);
@@ -77,6 +86,7 @@ class UpdateCreditCommitmentsServiceImplTest {
         verify(applicationRepository, times(1)).getAppIdByExternalId(externalId);
         verify(accessManagementService, times(1)).checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
         verify(commitmentsRepository, times(1)).patchCreditCommitments(applicationIdentifier.getId(), request);
+        verify(middlewareRepository, times(1)).checkAffordability(applicationIdentifier.getId());
     }
 
     @Test
