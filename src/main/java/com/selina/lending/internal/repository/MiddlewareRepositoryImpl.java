@@ -24,9 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
-import com.selina.lending.internal.dto.LendingConstants;
-import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.enricher.MiddlewareRequestEnricher;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
@@ -42,11 +40,12 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
     private final MiddlewareApi middlewareApi;
 
-    private final TokenService tokenService;
+    private final MiddlewareRequestEnricher middlewareRequestEnricher;
 
-    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi, TokenService tokenService) {
+
+    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi, MiddlewareRequestEnricher middlewareRequestEnricher) {
         this.middlewareApi = middlewareApi;
-        this.tokenService = tokenService;
+        this.middlewareRequestEnricher = middlewareRequestEnricher;
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareGetApiFallback")
@@ -60,7 +59,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @Override
     public ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest) {
         log.debug("Create DIP with Credit Commitments application [applicationRequest={}]", applicationRequest);
-        enrichApplicationRequest(applicationRequest, true);
+        middlewareRequestEnricher.enrichCreateDipCCApplicationRequest(applicationRequest);
 
         var appResponse = middlewareApi.createDipCCApplication(applicationRequest);
 
@@ -72,8 +71,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         log.debug("Create DIP application [applicationRequest={}]", applicationRequest);
-        enrichApplicationRequest(applicationRequest, false);
-        applicationRequest.setStageOverwrite(LendingConstants.STAGE_OVERWRITE);
+        middlewareRequestEnricher.enrichCreateDipApplicationRequest(applicationRequest);
 
         var appResponse = middlewareApi.createDipApplication(applicationRequest);
 
@@ -92,8 +90,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     @Override
     public void patchApplication(String id, ApplicationRequest applicationRequest) {
         log.info("Update application for [applicationId={}]", id);
-
-        applicationRequest.getApplicants().forEach(this::setIdentifier);
+        middlewareRequestEnricher.enrichPatchApplicationRequest(applicationRequest);
         middlewareApi.patchApplication(id, applicationRequest);
     }
 
@@ -114,17 +111,6 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     public Resource downloadEsisDocByAppId(String id) {
         log.info("Request to download esis doc by [applicationId={}]", id);
         return middlewareApi.downloadEsisByAppId(id);
-    }
-
-    private void enrichApplicationRequest(ApplicationRequest applicationRequest, boolean includeCreditCommitments) {
-        applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
-        applicationRequest.setIncludeCreditCommitment(includeCreditCommitments);
-        applicationRequest.setSource(LendingConstants.REQUEST_SOURCE);
-        applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
-        applicationRequest.getApplicants().forEach(this::setIdentifier);
-    }
-    private void setIdentifier(Applicant applicant) {
-        applicant.setIdentifier(Boolean.TRUE.equals(applicant.getPrimaryApplicant()) ?  0 : 1);
     }
 
     private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR
