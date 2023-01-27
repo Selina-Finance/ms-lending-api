@@ -34,7 +34,6 @@ import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -64,7 +63,6 @@ public interface DIPOperations {
     @GetMapping(value = "/{externalApplicationId}")
     ResponseEntity<ApplicationDecisionResponse> getApplication(@Parameter(description = "externalApplicationId of application to be searched", required = true) @PathVariable String externalApplicationId);
 
-    @Hidden
     @Operation(description = "Update the Decision In Principle (DIP) application which has credit commitments for the given external application id")
     @ApiResponses(value = {
             @ApiResponse(
@@ -81,7 +79,6 @@ public interface DIPOperations {
     ResponseEntity<Void> updateDipCCApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
                                                                @Valid @RequestBody DIPCCApplicationRequest request);
 
-    @Hidden
     @Operation(description = "Create a new Decision In Principle (DIP) with credit commitments application")
     @ApiResponses(value = {
             @ApiResponse(

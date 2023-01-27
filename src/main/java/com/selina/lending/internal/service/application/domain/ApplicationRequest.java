@@ -35,6 +35,7 @@ public class ApplicationRequest {
     private String selectedOffer;
     private String selectedProduct;
     private String externalApplicationId;
+    private Boolean runDecisioning;
     private LoanInformation loanInformation;
     private PropertyDetails propertyDetails;
     private Fees fees;

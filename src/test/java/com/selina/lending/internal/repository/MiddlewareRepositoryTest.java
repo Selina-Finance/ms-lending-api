@@ -42,8 +42,7 @@ import org.springframework.http.HttpStatus;
 
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
-import com.selina.lending.internal.dto.Source;
-import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.enricher.MiddlewareRequestEnricher;
 import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
@@ -77,11 +76,11 @@ class MiddlewareRepositoryTest {
     private MiddlewareRepository middlewareRepository;
 
     @Mock
-    private TokenService tokenService;
+    private MiddlewareRequestEnricher middlewareRequestEnricher;
 
     @BeforeEach
     void setUp() {
-        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, tokenService);
+        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, middlewareRequestEnricher);
     }
 
     @Test
@@ -111,7 +110,7 @@ class MiddlewareRepositoryTest {
 
         // Then
         assertThat(result).isEqualTo(applicationResponse);
-        verify(applicationRequest, times(1)).setSource(Source.LENDING_API.toString());
+        verify(middlewareRequestEnricher, times(1)).enrichCreateDipCCApplicationRequest(applicationRequest);
         verify(middlewareApi, times(1)).createDipCCApplication(applicationRequest);
     }
 
@@ -127,8 +126,7 @@ class MiddlewareRepositoryTest {
 
         // Then
         assertThat(result).isEqualTo(applicationResponse);
-        verify(applicationRequest, times(1)).setSource(Source.LENDING_API.toString());
-        verify(applicationRequest, times(1)).setStageOverwrite("DIP - Credit Commitments");
+        verify(middlewareRequestEnricher, times(1)).enrichCreateDipApplicationRequest(applicationRequest);
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
     }
 
@@ -142,6 +140,7 @@ class MiddlewareRepositoryTest {
         middlewareRepository.patchApplication(id, applicationRequest);
 
         // Then
+        verify(middlewareRequestEnricher, times(1)).enrichPatchApplicationRequest(applicationRequest);
         verify(middlewareApi, times(1)).patchApplication(id, applicationRequest);
     }
 

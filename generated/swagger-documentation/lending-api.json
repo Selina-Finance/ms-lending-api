@@ -44,14 +44,14 @@
           "required":true
         },
         "responses":{
-          "400":{
-            "description":"Application details invalid"
+          "401":{
+            "description":"Unauthorized"
           },
           "403":{
             "description":"Forbidden"
           },
-          "401":{
-            "description":"Unauthorized"
+          "400":{
+            "description":"Application details invalid"
           },
           "200":{
             "description":"Quick Quote updated",
@@ -62,6 +62,106 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/application/{externalApplicationId}/product/{productCode}":{
+      "put":{
+        "tags":[
+          "product-controller"
+        ],
+        "description":"Select a product offer for the Decision In Principle (DIP) application",
+        "operationId":"selectProductOffer",
+        "parameters":[
+          {
+            "name":"externalApplicationId",
+            "in":"path",
+            "description":"externalApplicationId of application",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "name":"productCode",
+            "in":"path",
+            "description":"productCode of the product offer to select",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"Product offer selected",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/SelectProductResponse"
+                }
+              }
+            }
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "400":{
+            "description":"externalApplicationId or productCode invalid"
+          },
+          "404":{
+            "description":"Application not found"
+          }
+        }
+      }
+    },
+    "/application/{externalApplicationId}/dipcc":{
+      "put":{
+        "tags":[
+          "dip-controller"
+        ],
+        "description":"Update the Decision In Principle (DIP) application which has credit commitments for the given external application id",
+        "operationId":"updateDipCCApplication",
+        "parameters":[
+          {
+            "name":"externalApplicationId",
+            "in":"path",
+            "description":"externalApplicationId of application to be updated",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/DIPCCApplicationRequest"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "204":{
+            "description":"Application updated"
+          },
+          "400":{
+            "description":"Application details invalid"
+          },
+          "404":{
+            "description":"Application not found"
           }
         }
       }
@@ -95,20 +195,20 @@
           "required":true
         },
         "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
           "204":{
             "description":"Application updated"
           },
           "400":{
             "description":"Application details invalid"
           },
-          "403":{
-            "description":"Forbidden"
-          },
           "404":{
             "description":"Application not found"
-          },
-          "401":{
-            "description":"Unauthorized"
           }
         }
       }
@@ -165,6 +265,15 @@
           "required":true
         },
         "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "400":{
+            "description":"Application details invalid"
+          },
           "200":{
             "description":"Quick Quote created",
             "content":{
@@ -174,15 +283,46 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/application/dipcc":{
+      "post":{
+        "tags":[
+          "dip-controller"
+        ],
+        "description":"Create a new Decision In Principle (DIP) with credit commitments application",
+        "operationId":"createDipCCApplication",
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/DIPCCApplicationRequest"
+              }
+            }
           },
-          "400":{
-            "description":"Application details invalid"
+          "required":true
+        },
+        "responses":{
+          "401":{
+            "description":"Unauthorized"
           },
           "403":{
             "description":"Forbidden"
           },
-          "401":{
-            "description":"Unauthorized"
+          "200":{
+            "description":"Application created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/DIPCCApplicationResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Application details invalid"
           }
         }
       }
@@ -205,14 +345,14 @@
           "required":true
         },
         "responses":{
-          "400":{
-            "description":"Application details invalid"
+          "401":{
+            "description":"Unauthorized"
           },
           "403":{
             "description":"Forbidden"
           },
-          "401":{
-            "description":"Unauthorized"
+          "400":{
+            "description":"Application details invalid"
           },
           "200":{
             "description":"Application created",
@@ -223,6 +363,99 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/application/{externalApplicationId}/creditcommitments":{
+      "get":{
+        "tags":[
+          "credit-commitments-controller"
+        ],
+        "description":"Retrieve the Credit Commitments for the given external application id",
+        "operationId":"getCreditCommitments",
+        "parameters":[
+          {
+            "name":"externalApplicationId",
+            "in":"path",
+            "description":"externalApplicationId of application",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
+          "200":{
+            "description":"Returns the Credit Commitments for the application",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/CreditCommitmentResponse"
+                }
+              }
+            }
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "404":{
+            "description":"Not Found"
+          }
+        }
+      },
+      "patch":{
+        "tags":[
+          "credit-commitments-controller"
+        ],
+        "description":"Update an application's Credit Commitments for the given external application id",
+        "operationId":"updateCreditCommitments",
+        "parameters":[
+          {
+            "name":"externalApplicationId",
+            "in":"path",
+            "description":"externalApplicationId of application to be updated",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/UpdateCreditCommitmentsRequest"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "204":{
+            "description":"Credit Commitments updated",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/DIPCCApplicationResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Credit Commitments request is invalid"
+          },
+          "404":{
+            "description":"Not Found"
           }
         }
       }
@@ -256,11 +489,53 @@
               }
             }
           },
+          "401":{
+            "description":"Unauthorized"
+          },
           "404":{
             "description":"Application not found"
+          }
+        }
+      }
+    },
+    "/application/{externalApplicationId}/esis":{
+      "get":{
+        "tags":[
+          "credit-commitments-controller"
+        ],
+        "description":"Download an application's ESIS pdf document",
+        "operationId":"downloadEsis",
+        "parameters":[
+          {
+            "name":"externalApplicationId",
+            "in":"path",
+            "description":"externalApplicationId of the application related to the ESIS document",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"ESIS pdf document for the application",
+            "content":{
+              "application/pdf":{
+
+              }
+            }
           },
           "401":{
             "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden"
+          },
+          "400":{
+            "description":"Request is invalid"
+          },
+          "404":{
+            "description":"Not Found"
           }
         }
       }
@@ -1079,6 +1354,20 @@
           }
         }
       },
+      "SelectProductResponse":{
+        "type":"object",
+        "properties":{
+          "message":{
+            "type":"string"
+          },
+          "externalApplicationId":{
+            "type":"string"
+          },
+          "productCode":{
+            "type":"string"
+          }
+        }
+      },
       "AdvancedLoanInformationDto":{
         "required":[
           "facilities",
@@ -1493,6 +1782,341 @@
           }
         }
       },
+      "DIPCCApplicationRequest":{
+        "required":[
+          "applicants",
+          "externalApplicationId",
+          "loanInformation",
+          "propertyDetails"
+        ],
+        "type":"object",
+        "properties":{
+          "sourceClientId":{
+            "type":"string"
+          },
+          "reference":{
+            "type":"string"
+          },
+          "externalApplicationId":{
+            "maxLength":100,
+            "minLength":4,
+            "type":"string"
+          },
+          "expenditure":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/ExpenditureDto"
+            }
+          },
+          "applicants":{
+            "maxItems":2,
+            "minItems":1,
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DIPApplicantDto"
+            }
+          },
+          "loanInformation":{
+            "$ref":"#/components/schemas/AdvancedLoanInformationDto"
+          },
+          "propertyDetails":{
+            "$ref":"#/components/schemas/DIPCCPropertyDetailsDto"
+          },
+          "fees":{
+            "$ref":"#/components/schemas/FeesDto"
+          }
+        }
+      },
+      "DIPCCPropertyDetailsDto":{
+        "required":[
+          "addressLine1",
+          "city",
+          "estimatedValue",
+          "numberOfBedrooms",
+          "postcode",
+          "propertyType",
+          "purchaseValue",
+          "whenLastPurchased"
+        ],
+        "type":"object",
+        "properties":{
+          "addressLine1":{
+            "type":"string"
+          },
+          "addressLine2":{
+            "type":"string"
+          },
+          "city":{
+            "type":"string"
+          },
+          "postcode":{
+            "type":"string"
+          },
+          "buildingName":{
+            "type":"string"
+          },
+          "buildingNumber":{
+            "type":"string"
+          },
+          "subBuildingName":{
+            "type":"string"
+          },
+          "propertyName":{
+            "type":"string"
+          },
+          "udprn":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "poBox":{
+            "type":"string"
+          },
+          "county":{
+            "type":"string"
+          },
+          "country":{
+            "type":"string"
+          },
+          "estimatedValue":{
+            "type":"number",
+            "format":"double"
+          },
+          "propertyInternalFloorSpace":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "propertyType":{
+            "type":"string",
+            "enum":[
+              "Detached bungalow",
+              "Semi-detached bungalow",
+              "Terraced bungalow",
+              "Detached house",
+              "Semi-detached house",
+              "Terraced house",
+              "Flat or maisonette in converted house",
+              "Purpose-built flat or maisonette",
+              "Other",
+              "Studio flat"
+            ]
+          },
+          "whenLastPurchased":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "purchaseValue":{
+            "type":"number",
+            "format":"double"
+          },
+          "numberOfBedrooms":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "numberOfBathrooms":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "numberOfParkingSpaces":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "hasBeenAffectedByJapaneseKnotWeed":{
+            "type":"boolean"
+          },
+          "hasBeenBuiltInThePast2Years":{
+            "type":"boolean"
+          },
+          "hasSection20NoticeServed":{
+            "type":"boolean"
+          },
+          "hasSharedOwnership":{
+            "type":"boolean"
+          },
+          "hasSufferedFromSubsidence":{
+            "type":"boolean"
+          },
+          "is4thFloorOrHigherWithoutLift":{
+            "type":"boolean"
+          },
+          "isHmoOrMub":{
+            "type":"boolean"
+          },
+          "isListedAsGradeIOrGradeIiOrA":{
+            "type":"boolean"
+          },
+          "notOfStandardConstruction":{
+            "type":"boolean"
+          },
+          "constructionYear":{
+            "type":"string"
+          },
+          "tenure":{
+            "type":"string",
+            "enum":[
+              "Leasehold",
+              "Freehold",
+              "Leasehold with Share of Freehold",
+              "Commonhold"
+            ]
+          },
+          "isThePropertyAnExLocalAuthority":{
+            "type":"boolean"
+          },
+          "hasAGarage":{
+            "type":"boolean"
+          },
+          "yearsRemainingOnLease":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "hometrackConfidenceLevel":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "hometrackValuation":{
+            "type":"number",
+            "format":"double"
+          },
+          "ricsValuation":{
+            "type":"number",
+            "format":"double"
+          },
+          "buildingWarrantyCertificate":{
+            "type":"string"
+          },
+          "isAboveCommercialProperty":{
+            "type":"boolean"
+          },
+          "typeOfCommercialPremises":{
+            "type":"string"
+          },
+          "floorsInBuilding":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "floorOfFlat":{
+            "type":"string"
+          },
+          "notResidentialUse":{
+            "type":"boolean"
+          },
+          "isApplicantResidence":{
+            "type":"boolean"
+          },
+          "isAboveCommercialPropertyDetails":{
+            "type":"boolean"
+          }
+        }
+      },
+      "FacilityDto":{
+        "type":"object",
+        "properties":{
+          "allocationAmount":{
+            "type":"number",
+            "format":"double"
+          },
+          "allocationPurpose":{
+            "type":"string",
+            "enum":[
+              "Debt consolidation",
+              "Home improvements",
+              "Holiday",
+              "Medical bills",
+              "Property - Second home purchase",
+              "Property - Buy-to-let purchase",
+              "School fees / further education",
+              "Tax bills",
+              "Vehicle purchase",
+              "Wedding",
+              "Business purposes",
+              "Contingency",
+              "Other",
+              "None"
+            ]
+          }
+        }
+      },
+      "FeesDto":{
+        "required":[
+          "addAdviceFeeToLoan",
+          "addArrangementFeeToLoan",
+          "addCommissionFeeToLoan",
+          "addProductFeesToFacility",
+          "addThirdPartyFeeToLoan",
+          "addValuationFeeToLoan",
+          "adviceFee",
+          "arrangementFee",
+          "commissionFee",
+          "thirdPartyFee",
+          "valuationFee"
+        ],
+        "type":"object",
+        "properties":{
+          "adviceFee":{
+            "type":"number",
+            "format":"double"
+          },
+          "arrangementFee":{
+            "type":"number",
+            "format":"double"
+          },
+          "commissionFee":{
+            "type":"number",
+            "format":"double"
+          },
+          "thirdPartyFee":{
+            "type":"number",
+            "format":"double"
+          },
+          "valuationFee":{
+            "type":"number",
+            "format":"double"
+          },
+          "intermediaryFeeAmount":{
+            "type":"number",
+            "format":"double"
+          },
+          "addAdviceFeeToLoan":{
+            "type":"boolean"
+          },
+          "addArrangementFeeToLoan":{
+            "type":"boolean"
+          },
+          "addCommissionFeeToLoan":{
+            "type":"boolean"
+          },
+          "addThirdPartyFeeToLoan":{
+            "type":"boolean"
+          },
+          "addValuationFeeToLoan":{
+            "type":"boolean"
+          },
+          "addProductFeesToFacility":{
+            "type":"boolean"
+          },
+          "addIntermediaryFeeToLoan":{
+            "type":"boolean"
+          }
+        }
+      },
+      "PreviousNameDto":{
+        "type":"object",
+        "properties":{
+          "title":{
+            "type":"string"
+          },
+          "firstName":{
+            "type":"string"
+          },
+          "middleName":{
+            "type":"string"
+          },
+          "lastName":{
+            "type":"string"
+          }
+        }
+      },
       "DIPApplicationRequest":{
         "required":[
           "applicants",
@@ -1727,114 +2351,6 @@
           }
         }
       },
-      "FacilityDto":{
-        "type":"object",
-        "properties":{
-          "allocationAmount":{
-            "type":"number",
-            "format":"double"
-          },
-          "allocationPurpose":{
-            "type":"string",
-            "enum":[
-              "Debt consolidation",
-              "Home improvements",
-              "Holiday",
-              "Medical bills",
-              "Property - Second home purchase",
-              "Property - Buy-to-let purchase",
-              "School fees / further education",
-              "Tax bills",
-              "Vehicle purchase",
-              "Wedding",
-              "Business purposes",
-              "Contingency",
-              "Other",
-              "None"
-            ]
-          }
-        }
-      },
-      "FeesDto":{
-        "required":[
-          "addAdviceFeeToLoan",
-          "addArrangementFeeToLoan",
-          "addCommissionFeeToLoan",
-          "addProductFeesToFacility",
-          "addThirdPartyFeeToLoan",
-          "addValuationFeeToLoan",
-          "adviceFee",
-          "arrangementFee",
-          "commissionFee",
-          "thirdPartyFee",
-          "valuationFee"
-        ],
-        "type":"object",
-        "properties":{
-          "adviceFee":{
-            "type":"number",
-            "format":"double"
-          },
-          "arrangementFee":{
-            "type":"number",
-            "format":"double"
-          },
-          "commissionFee":{
-            "type":"number",
-            "format":"double"
-          },
-          "thirdPartyFee":{
-            "type":"number",
-            "format":"double"
-          },
-          "valuationFee":{
-            "type":"number",
-            "format":"double"
-          },
-          "intermediaryFeeAmount":{
-            "type":"number",
-            "format":"double"
-          },
-          "addAdviceFeeToLoan":{
-            "type":"boolean"
-          },
-          "addArrangementFeeToLoan":{
-            "type":"boolean"
-          },
-          "addCommissionFeeToLoan":{
-            "type":"boolean"
-          },
-          "addThirdPartyFeeToLoan":{
-            "type":"boolean"
-          },
-          "addValuationFeeToLoan":{
-            "type":"boolean"
-          },
-          "addProductFeesToFacility":{
-            "type":"boolean"
-          },
-          "addIntermediaryFeeToLoan":{
-            "type":"boolean"
-          }
-        }
-      },
-      "PreviousNameDto":{
-        "type":"object",
-        "properties":{
-          "title":{
-            "type":"string"
-          },
-          "firstName":{
-            "type":"string"
-          },
-          "middleName":{
-            "type":"string"
-          },
-          "lastName":{
-            "type":"string"
-          }
-        }
-      },
       "Credentials":{
         "type":"object",
         "properties":{
@@ -1855,6 +2371,34 @@
           "expiresIn":{
             "type":"integer",
             "format":"int32"
+          }
+        }
+      },
+      "ApplicantCreditCommitmentsResponseDto":{
+        "type":"object",
+        "properties":{
+          "id":{
+            "type":"integer",
+            "format":"int64"
+          },
+          "primaryApplicant":{
+            "type":"boolean"
+          },
+          "experianId":{
+            "type":"string"
+          },
+          "searchId":{
+            "type":"string"
+          },
+          "creditScore":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "creditCommitments":{
+            "$ref":"#/components/schemas/CreditCommitmentsDetailResponseDto"
+          },
+          "publicInformation":{
+            "$ref":"#/components/schemas/PublicInformationResponseDto"
           }
         }
       },
@@ -1995,6 +2539,28 @@
           }
         }
       },
+      "CreditCommitmentDto":{
+        "type":"object",
+        "properties":{
+          "applicants":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/ApplicantCreditCommitmentsResponseDto"
+            }
+          }
+        }
+      },
+      "CreditCommitmentsDetailResponseDto":{
+        "type":"object",
+        "properties":{
+          "system":{
+            "$ref":"#/components/schemas/SystemResponseDto"
+          },
+          "user":{
+            "$ref":"#/components/schemas/UserResponseDto"
+          }
+        }
+      },
       "DIPApplicationDto":{
         "type":"object",
         "properties":{
@@ -2053,7 +2619,7 @@
           }
         }
       },
-      "DIPApplicationResponse":{
+      "DIPCCApplicationResponse":{
         "type":"object",
         "properties":{
           "requestType":{
@@ -2064,6 +2630,124 @@
           },
           "application":{
             "$ref":"#/components/schemas/ApplicationDto"
+          },
+          "creditCommitment":{
+            "$ref":"#/components/schemas/CreditCommitmentDto"
+          }
+        }
+      },
+      "DetailResponseDto":{
+        "type":"object",
+        "properties":{
+          "id":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "status":{
+            "type":"string"
+          },
+          "applicant":{
+            "type":"string"
+          },
+          "name":{
+            "type":"string"
+          },
+          "dateOfBirth":{
+            "type":"string"
+          },
+          "category":{
+            "type":"string"
+          },
+          "startDate":{
+            "type":"string"
+          },
+          "endDate":{
+            "type":"string"
+          },
+          "lastUpdatedDate":{
+            "type":"string"
+          },
+          "settlementDate":{
+            "type":"string"
+          },
+          "remainingTerm":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "outstandingBalance":{
+            "type":"number",
+            "format":"double"
+          },
+          "monthlyPayment":{
+            "type":"number",
+            "format":"double"
+          },
+          "creditLimit":{
+            "type":"number",
+            "format":"double"
+          },
+          "securityProperty":{
+            "type":"boolean"
+          },
+          "paymentProfileShort":{
+            "type":"string"
+          },
+          "paymentProfileLong":{
+            "type":"string"
+          },
+          "joint":{
+            "type":"boolean"
+          },
+          "adverseCredit":{
+            "type":"boolean"
+          },
+          "consolidate":{
+            "type":"boolean"
+          },
+          "ignore":{
+            "type":"boolean"
+          },
+          "repaymentType":{
+            "type":"string"
+          },
+          "repaymentVehicle":{
+            "type":"string"
+          },
+          "costOfRepaymentVehicle":{
+            "type":"string"
+          },
+          "interestRateType":{
+            "type":"string"
+          },
+          "fixedRatePeriodEndDate":{
+            "type":"string"
+          },
+          "amountToConsolidate":{
+            "type":"number",
+            "format":"double"
+          },
+          "reasonToIgnore":{
+            "type":"string"
+          },
+          "lender":{
+            "type":"string"
+          },
+          "type":{
+            "type":"string"
+          },
+          "currentBalance":{
+            "type":"number",
+            "format":"double"
+          },
+          "interestOnlyBalance":{
+            "type":"string"
+          },
+          "amount":{
+            "type":"number",
+            "format":"double"
+          },
+          "code":{
+            "type":"string"
           }
         }
       },
@@ -2217,6 +2901,17 @@
           }
         }
       },
+      "PublicInformationResponseDto":{
+        "type":"object",
+        "properties":{
+          "system":{
+            "$ref":"#/components/schemas/SystemResponseDto"
+          },
+          "user":{
+            "$ref":"#/components/schemas/UserResponseDto"
+          }
+        }
+      },
       "RequiredDto":{
         "type":"object",
         "properties":{
@@ -2233,6 +2928,277 @@
               "items":{
                 "type":"string"
               }
+            }
+          }
+        }
+      },
+      "SummaryResponseDto":{
+        "type":"object",
+        "properties":{
+          "numberAccounts":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "numberActiveAccounts":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "outstandingBalance":{
+            "type":"number",
+            "format":"double"
+          },
+          "numberInfo":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "totalValue":{
+            "type":"integer",
+            "format":"int32"
+          }
+        }
+      },
+      "SystemResponseDto":{
+        "type":"object",
+        "properties":{
+          "detail":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DetailResponseDto"
+            }
+          },
+          "summary":{
+            "$ref":"#/components/schemas/SummaryResponseDto"
+          }
+        }
+      },
+      "UserResponseDto":{
+        "type":"object",
+        "properties":{
+          "detail":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DetailResponseDto"
+            }
+          },
+          "summary":{
+            "$ref":"#/components/schemas/SummaryResponseDto"
+          }
+        }
+      },
+      "DIPApplicationResponse":{
+        "type":"object",
+        "properties":{
+          "requestType":{
+            "type":"string"
+          },
+          "applicationId":{
+            "type":"string"
+          },
+          "application":{
+            "$ref":"#/components/schemas/ApplicationDto"
+          }
+        }
+      },
+      "ApplicantCreditCommitmentsDto":{
+        "required":[
+          "primaryApplicant"
+        ],
+        "type":"object",
+        "properties":{
+          "id":{
+            "type":"integer",
+            "format":"int64"
+          },
+          "primaryApplicant":{
+            "type":"boolean"
+          },
+          "creditCommitments":{
+            "$ref":"#/components/schemas/CreditCommitmentsDetailDto"
+          },
+          "publicInformation":{
+            "$ref":"#/components/schemas/PublicInformationDto"
+          }
+        }
+      },
+      "CreditCommitmentsDetailDto":{
+        "type":"object",
+        "properties":{
+          "system":{
+            "$ref":"#/components/schemas/SystemDto"
+          },
+          "user":{
+            "$ref":"#/components/schemas/UserDto"
+          }
+        }
+      },
+      "DetailDto":{
+        "required":[
+          "id"
+        ],
+        "type":"object",
+        "properties":{
+          "id":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "status":{
+            "type":"string"
+          },
+          "applicant":{
+            "type":"string"
+          },
+          "name":{
+            "type":"string"
+          },
+          "dateOfBirth":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "category":{
+            "type":"string"
+          },
+          "startDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "endDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "settlementDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "remainingTerm":{
+            "type":"integer",
+            "format":"int32"
+          },
+          "outstandingBalance":{
+            "type":"number",
+            "format":"double"
+          },
+          "monthlyPayment":{
+            "type":"number",
+            "format":"double"
+          },
+          "creditLimit":{
+            "type":"number",
+            "format":"double"
+          },
+          "securityProperty":{
+            "type":"boolean"
+          },
+          "adverseCredit":{
+            "type":"boolean"
+          },
+          "joint":{
+            "type":"boolean"
+          },
+          "consolidate":{
+            "type":"boolean"
+          },
+          "ignore":{
+            "type":"boolean"
+          },
+          "repaymentType":{
+            "type":"string"
+          },
+          "repaymentVehicle":{
+            "type":"string"
+          },
+          "costOfRepaymentVehicle":{
+            "type":"string"
+          },
+          "interestRateType":{
+            "type":"string"
+          },
+          "fixedRatePeriodEndDate":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          },
+          "amountToConsolidate":{
+            "type":"number",
+            "format":"double"
+          },
+          "reasonToIgnore":{
+            "type":"string",
+            "enum":[
+              "Item is a self funding buy-to-let",
+              "Item will be repaid/cleared - evidence to be provided",
+              "Item is wrongly attributed",
+              "Item is disputed - Experian to be updated",
+              "Remaining term is less than 6 months"
+            ]
+          },
+          "lender":{
+            "type":"string"
+          },
+          "type":{
+            "type":"string"
+          },
+          "currentBalance":{
+            "type":"number",
+            "format":"double"
+          },
+          "interestOnlyBalance":{
+            "type":"string"
+          },
+          "amount":{
+            "type":"number",
+            "format":"double"
+          },
+          "code":{
+            "type":"string"
+          },
+          "date":{
+            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type":"string",
+            "example":"2001-01-01"
+          }
+        }
+      },
+      "PublicInformationDto":{
+        "type":"object",
+        "properties":{
+          "user":{
+            "$ref":"#/components/schemas/UserDto"
+          }
+        }
+      },
+      "SystemDto":{
+        "type":"object",
+        "properties":{
+          "detail":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DetailDto"
+            }
+          }
+        }
+      },
+      "UpdateCreditCommitmentsRequest":{
+        "type":"object",
+        "properties":{
+          "applicants":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/ApplicantCreditCommitmentsDto"
+            }
+          }
+        }
+      },
+      "UserDto":{
+        "type":"object",
+        "properties":{
+          "detail":{
+            "type":"array",
+            "items":{
+              "$ref":"#/components/schemas/DetailDto"
             }
           }
         }
@@ -2656,78 +3622,19 @@
           "disbursementType":{
             "type":"string"
           },
-          "underwritingOwner":{
-            "type":"string"
-          },
-          "underwrittenBy":{
-            "type":"string"
-          },
-          "initialDisbursalsAmount":{
-            "type":"string"
-          },
-          "initialDisbursalAmountVerified":{
-            "type":"string"
-          },
-          "amountRequestedApplication":{
-            "type":"number",
-            "format":"double"
-          },
-          "statusCollateral":{
-            "type":"string"
-          },
-          "statusId":{
-            "type":"string"
-          },
-          "statusIncome":{
-            "type":"string"
-          },
-          "statusDebtExpenditure":{
-            "type":"string"
-          },
-          "approvalSecondaryUnderwriter":{
-            "type":"string"
-          },
-          "approvalFourEyes":{
-            "type":"string"
-          },
-          "investor":{
-            "type":"string"
-          },
-          "offerDocsReady":{
-            "type":"boolean"
-          },
-          "offerDocsSigned":{
-            "type":"boolean"
-          },
-          "conveyancing":{
-            "type":"string"
-          },
-          "speaksWithCall":{
-            "type":"string"
-          },
-          "stageReason":{
-            "type":"string"
-          },
-          "stageSubReasonDetail":{
-            "type":"string"
-          },
-          "dateOfDisbursement":{
-            "type":"string"
-          },
           "adviceFromBrokerSubmitter":{
             "type":"boolean"
           },
-          "decisionStage":{
+          "initialDisbursalsAmount":{
             "type":"string"
-          },
-          "ownerId":{
-            "type":"string"
-          },
-          "secondaryOpportunityOwner":{
-            "type":"string"
-          },
-          "statusAml":{
-            "type":"string"
+          }
+        }
+      },
+      "CreditCommitmentResponse":{
+        "type":"object",
+        "properties":{
+          "creditCommitment":{
+            "$ref":"#/components/schemas/CreditCommitmentDto"
           }
         }
       }

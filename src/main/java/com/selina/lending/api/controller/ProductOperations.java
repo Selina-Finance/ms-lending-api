@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.selina.lending.internal.dto.SelectProductResponse;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,7 +35,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/application")
 public interface ProductOperations {
 
-    @Hidden
     @Operation(description = "Select a product offer for the Decision In Principle (DIP) application")
     @ApiResponses(value = {
             @ApiResponse(

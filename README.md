@@ -131,8 +131,6 @@ Project is: _in progress_
 ## Feature requests and roadmap
   - Asynchronous requests for creating/updating applications
 
-  - DIP with Credit Commitment applications
-
 ## License
 
 This project is open-source and available under the [Apache 2.0 License](https://choosealicense.com/licenses/apache-2.0/).
