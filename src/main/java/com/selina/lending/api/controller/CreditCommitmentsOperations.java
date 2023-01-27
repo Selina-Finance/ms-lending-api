@@ -36,7 +36,6 @@ import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,7 +43,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-@Hidden
 @RequestMapping("/application")
 public interface CreditCommitmentsOperations {
 
