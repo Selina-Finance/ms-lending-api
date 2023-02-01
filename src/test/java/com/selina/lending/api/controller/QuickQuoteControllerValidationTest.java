@@ -51,11 +51,17 @@ class QuickQuoteControllerValidationTest extends MapperBase {
     void createQuickQuoteWithInvalidLoanAmountAndTerm() throws Exception {
         //Given
         QuickQuoteApplicationRequest request = getQuickQuoteApplicationRequestDto();
-        request.setLoanInformation(LoanInformationDto.builder().numberOfApplicants(1).requestedLoanAmount(1000).requestedLoanTerm(2).loanPurpose(LOAN_PURPOSE).build());
+        request.setLoanInformation(LoanInformationDto.builder()
+                .numberOfApplicants(1)
+                .requestedLoanAmount(1000)
+                .requestedLoanTerm(2)
+                .loanPurpose(LOAN_PURPOSE)
+                .build());
 
         //When
-        mockMvc.perform(post("/application/quickquote").with(csrf()).content(objectMapper.writeValueAsString(request))
-                .contentType(APPLICATION_JSON))
+        mockMvc.perform(post("/application/quickquote").with(csrf())
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
