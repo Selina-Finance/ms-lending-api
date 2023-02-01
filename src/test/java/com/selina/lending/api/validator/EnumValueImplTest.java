@@ -59,7 +59,7 @@ import com.selina.lending.internal.dto.LoanInformationDto;
         //Given
         var loanInformationDto = LoanInformationDto.builder()
                 .requestedLoanAmount(10000)
-                .requestedLoanTerm(3)
+                .requestedLoanTerm(5)
                 .numberOfApplicants(1)
                 .loanPurpose(INVALID_VALUE)
                 .build();
