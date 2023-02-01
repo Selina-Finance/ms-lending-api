@@ -22,6 +22,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -37,6 +38,7 @@ public class ApplicationRequest {
 
     @NotBlank
     @Size(min = 4, max = 100)
+    @Schema(description = "a unique identifier you provide for the application")
     private String externalApplicationId;
     private List<ExpenditureDto> expenditure;
 

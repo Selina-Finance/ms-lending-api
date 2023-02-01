@@ -20,6 +20,8 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Range;
+
 import com.selina.lending.api.validator.EnumValue;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,9 +34,13 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class LoanInformationDto {
     @NotNull
+    @Range(min = 10000, max = 1000000)
+    @Schema(description = "the requested loan amount (min 10000, max 1000000)")
     private Integer requestedLoanAmount;
 
     @NotNull
+    @Range(min = 5, max = 30)
+    @Schema(description = "the requested loan term in years (min 5, max 30)")
     private Integer requestedLoanTerm;
 
     @NotNull
