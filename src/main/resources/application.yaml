@@ -34,23 +34,23 @@ resilience4j:
     circuit-breaker-aspect-order: 1
     instances:
       middleware-api-cb:
-        wait-duration-in-open-state: 1m
-        permitted-number-of-calls-in-half-open-state: 5
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 10
         sliding-window-type: count-based
-        sliding-window-size: 10
-        minimum-number-of-calls: 5
-        slow-call-duration-threshold: 50s
-        slow-call-rate-threshold: 60
+        sliding-window-size: 15
+        minimum-number-of-calls: 10
+        slow-call-duration-threshold: 60s
+        slow-call-rate-threshold: 80
         failure-rate-threshold: 60
         record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
       middleware-application-service-cb:
-        wait-duration-in-open-state: 1m
-        permitted-number-of-calls-in-half-open-state: 5
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 10
         sliding-window-type: count-based
-        sliding-window-size: 10
-        minimum-number-of-calls: 5
+        sliding-window-size: 15
+        minimum-number-of-calls: 10
         slow-call-duration-threshold: 30s
-        slow-call-rate-threshold: 60
+        slow-call-rate-threshold: 80
         failure-rate-threshold: 60
         record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
 
