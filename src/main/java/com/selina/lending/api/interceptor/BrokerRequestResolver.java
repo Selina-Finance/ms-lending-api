@@ -18,7 +18,6 @@
 package com.selina.lending.api.interceptor;
 
 import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
 import com.selina.lending.messaging.publisher.mapper.BrokerRequestEventMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,6 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.time.Instant;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -47,9 +45,7 @@ public class BrokerRequestResolver {
     }
 
     public void handle(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, Instant started) {
-        var optEvent = isQuickQuoteRequest(request)
-                ? mapper.quickQuoteToKpiEvent(request, response, started, tokenService.retrieveSourceAccount())
-                : mapper.dipToKpiEvent(request, response, started, tokenService.retrieveSourceAccount());
+        var optEvent = mapper.toEvent(request, response, started, tokenService.retrieveSourceAccount());
 
         optEvent.ifPresentOrElse(
                 publisher::publish,

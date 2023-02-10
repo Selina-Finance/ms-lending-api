@@ -18,25 +18,21 @@
 package com.selina.lending.messaging.publisher.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.internal.dto.ApplicationDto;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
 import com.selina.lending.internal.mapper.MapperBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
 import java.time.Instant;
 
+import static org.apache.commons.codec.CharEncoding.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -44,8 +40,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class BrokerRequestEventMapperTest extends MapperBase {
     private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
-    @Mock
-    private ObjectMapper objectMapper;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @InjectMocks
     private BrokerRequestEventMapper mapper;
@@ -55,38 +51,29 @@ class BrokerRequestEventMapperTest extends MapperBase {
         // Given
         var clientId = "the-broker-id";
         var started = Instant.now();
-        var foreignRequestId = "123";
         var uriPath = "/application/123";
         var httpMethod = "POST";
         var ip = "192.0.0.1";
 
-        var httpRequest = new MockHttpServletRequest();
-        httpRequest.setRequestURI(uriPath);
-        httpRequest.setMethod(httpMethod);
-        httpRequest.setRemoteAddr(ip);
-        httpRequest.addHeader(REQUEST_ID_HEADER_NAME, foreignRequestId);
+        var request = Mockito.mock(ContentCachingRequestWrapper.class);
+        when(request.getRequestURI()).thenReturn(uriPath);
+        when(request.getMethod()).thenReturn(httpMethod);
+        when(request.getRemoteAddr()).thenReturn(ip);
+        var requestBody = getDIPApplicationRequestDto();
+        var requestAsAString = objectMapper.writeValueAsString(requestBody);
+        when(request.getContentAsByteArray()).thenReturn(requestAsAString.getBytes());
+        when(request.getCharacterEncoding()).thenReturn(UTF_8);
 
-        var appRequest = getDIPApplicationRequestDto();
-        when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
-        String requestAsAString = "app_request_as_a_string";
-        when(objectMapper.writeValueAsString(appRequest)).thenReturn(requestAsAString);
-
+        var response = Mockito.mock(ContentCachingResponseWrapper.class);
         var httpResponseCode = 200;
-        var response = new MockHttpServletResponse();
-        response.setStatus(httpResponseCode);
-
-        DIPApplicationResponse appResponse = DIPApplicationResponse.builder().application(getDIPApplicationDto()).build();
-        when(objectMapper.readValue(new byte[]{}, DIPApplicationResponse.class)).thenReturn(appResponse);
-        String responseAsAString = "app_response_as_a_string";
-        when(objectMapper.writeValueAsString(appResponse)).thenReturn(responseAsAString);
+        when(response.getStatus()).thenReturn(httpResponseCode);
+        var responseBody = DIPApplicationResponse.builder().application(getDIPApplicationDto()).build();
+        var responseAsAString = objectMapper.writeValueAsString(responseBody);
+        when(response.getContentAsByteArray()).thenReturn(responseAsAString.getBytes());
+        when(response.getCharacterEncoding()).thenReturn(UTF_8);
 
         // When
-        var optResult = mapper.toEvent(
-                new ContentCachingRequestWrapper(httpRequest),
-                new ContentCachingResponseWrapper(response),
-                started,
-                clientId
-        );
+        var optResult = mapper.toEvent(request, response, started, clientId);
 
         // Then
         assertTrue(optResult.isPresent());
@@ -104,22 +91,30 @@ class BrokerRequestEventMapperTest extends MapperBase {
     }
 
     @Test
-    void shouldReturnEmptyWhenCanNotProperlyReadResponse() throws IOException {
+    void shouldReturnEmptyWhenErrorParsingRequest() {
         // Given
-        var httpRequest = new MockHttpServletRequest();
-        var response = new MockHttpServletResponse();
+        var request = Mockito.mock(ContentCachingRequestWrapper.class);
+        var response = Mockito.mock(ContentCachingResponseWrapper.class);
 
-        var appRequest = getDIPApplicationRequestDto();
-        when(objectMapper.readValue(new byte[]{}, DIPApplicationRequest.class)).thenReturn(appRequest);
-        when(objectMapper.readValue(new byte[]{}, DIPApplicationResponse.class)).thenThrow(new IOException("error"));
+        when(request.getContentAsByteArray()).thenThrow(new IndexOutOfBoundsException("error"));
 
         // When
-        var optResult = mapper.toEvent(
-                new ContentCachingRequestWrapper(httpRequest),
-                new ContentCachingResponseWrapper(response),
-                Instant.now(),
-                "the-broker-id"
-        );
+        var optResult = mapper.toEvent(request, response, Instant.now(), "the-broker-id");
+
+        // Then
+        assertTrue(optResult.isEmpty());
+    }
+
+    @Test
+    void shouldReturnEmptyWhenErrorParsingResponse() {
+        // Given
+        var request = Mockito.mock(ContentCachingRequestWrapper.class);
+        var response = Mockito.mock(ContentCachingResponseWrapper.class);
+
+        when(response.getContentAsByteArray()).thenThrow(new IndexOutOfBoundsException("error"));
+
+        // When
+        var optResult = mapper.toEvent(request, response, Instant.now(), "the-broker-id");
 
         // Then
         assertTrue(optResult.isEmpty());

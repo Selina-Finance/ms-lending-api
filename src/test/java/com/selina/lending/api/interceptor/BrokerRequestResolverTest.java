@@ -58,7 +58,7 @@ class BrokerRequestResolverTest {
         // Given
         var request = new MockHttpServletRequest();
 
-        when(mapper.dipToKpiEvent(any(), any(), any(), any())).thenReturn(Optional.empty());
+        when(mapper.toEvent(any(), any(), any(), any())).thenReturn(Optional.empty());
 
         // When
         resolver.handle(new ContentCachingRequestWrapper(request), null, null);
@@ -74,7 +74,7 @@ class BrokerRequestResolverTest {
         var response = new MockHttpServletResponse();
         var started = Instant.now();
         var event = buildBrokerRequestKpiEvent();
-        when(mapper.dipToKpiEvent(any(), any(), any(), any())).thenReturn(Optional.of(event));
+        when(mapper.toEvent(any(), any(), any(), any())).thenReturn(Optional.of(event));
 
         // When
         resolver.handle(
@@ -86,48 +86,5 @@ class BrokerRequestResolverTest {
         // Then
         verify(publisher, times(1)).publish(event);
     }
-    
-    @Test
-    void shouldCallQuickQuoteMapperWhenQuickQuoteRequest() {
-        // Given
-        var uriPath = "/application/quickquote";
-        var request = new MockHttpServletRequest();
-        request.setRequestURI(uriPath);
 
-        var response = new MockHttpServletResponse();
-        var started = Instant.now();
-        when(mapper.quickQuoteToKpiEvent(any(), any(), any(), any())).thenReturn(Optional.empty());
-
-        // When
-        resolver.handle(
-                new ContentCachingRequestWrapper(request),
-                new ContentCachingResponseWrapper(response),
-                started
-        );
-
-        // Then
-        verify(mapper, times(1)).quickQuoteToKpiEvent(any(), any(), any(), any());
-    }
-
-    @Test
-    void shouldCallDipMapperAsDefault() {
-        // Given
-        var uriPath = "/application/abra-cadabra";
-        var request = new MockHttpServletRequest();
-        request.setRequestURI(uriPath);
-
-        var response = new MockHttpServletResponse();
-        var started = Instant.now();
-        when(mapper.dipToKpiEvent(any(), any(), any(), any())).thenReturn(Optional.empty());
-
-        // When
-        resolver.handle(
-                new ContentCachingRequestWrapper(request),
-                new ContentCachingResponseWrapper(response),
-                started
-        );
-
-        // Then
-        verify(mapper, times(1)).dipToKpiEvent(any(), any(), any(), any());
-    }
 }
