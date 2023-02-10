@@ -57,7 +57,7 @@ class BrokerRequestEventPublisherTest {
         publisher.publish(event);
 
         // Then
-        verify(kafkaTemplate, times(1)).send(injectedFromConfigTopicName, event.requestId(), event);
+        verify(kafkaTemplate, times(1)).send(injectedFromConfigTopicName, event.source(), event);
     }
 
 }

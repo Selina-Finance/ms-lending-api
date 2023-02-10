@@ -122,8 +122,6 @@ public class BrokerRequestEventMapper {
         var requestId = Optional.ofNullable(httpRequest.getHeader(REQUEST_ID_HEADER_NAME)).orElse(UUID.randomUUID().toString());
 
         return Optional.of(BrokerRequestKpiEvent.builder()
-                .requestId(requestId)
-                .externalApplicationId(externalId)
                 .source(clientId)
                 .uriPath(httpRequest.getRequestURI())
                 .httpMethod(httpRequest.getMethod())
@@ -132,9 +130,34 @@ public class BrokerRequestEventMapper {
                 .ip(getRemoteAddr(httpRequest))
                 .started(started)
                 .finished(Instant.now())
-                .decision(decision)
                 .httpResponseCode(httpResponse.getStatus())
                 .build());
     }
 
+    public Optional<BrokerRequestKpiEvent> toEvent(
+            ContentCachingRequestWrapper request,
+            ContentCachingResponseWrapper response,
+            Instant started,
+            String source) {
+        try {
+
+
+            return Optional.of(BrokerRequestKpiEvent.builder()
+                    .ip(getRemoteAddr(request))
+                    .source(source)
+                    .uriPath(request.getRequestURI())
+                    .httpMethod(request.getMethod())
+                    .httpRequestBody(requestBody)
+                    .httpResponseBody(responseBody)
+                    .httpResponseCode(response.getStatus())
+                    .started(started)
+                    .finished(Instant.now())
+                    .build());
+
+
+        } catch (Exception e) {
+            log.error("Can't map event. Reason: {}", e.getMessage());
+            return Optional.empty();
+        }
+    }
 }

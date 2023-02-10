@@ -28,14 +28,11 @@ public class BrokerRequestEventTestHelper {
 
     public static BrokerRequestKpiEvent buildBrokerRequestKpiEvent() {
         return BrokerRequestKpiEvent.builder()
-                .requestId(UUID.randomUUID().toString())
-                .externalApplicationId(UUID.randomUUID().toString())
                 .source(SOURCE)
                 .uriPath("/test")
                 .httpMethod("GET")
                 .ip("127.0.0.1")
                 .started(Instant.now())
-                .decision("Approved")
                 .httpResponseCode(200)
                 .finished(Instant.now().plus(1, ChronoUnit.MINUTES))
                 .build();
