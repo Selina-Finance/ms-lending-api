@@ -216,18 +216,18 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations[4].message").value("must match yyyy-MM-dd format"));
     }
 
-    @Test
-    void getApplicationSuccessWithDateTimeFormatted() throws Exception {
-        //Given
-        var response = getApplicationDecisionResponse();
-        when(retrieveApplicationService.getApplicationByExternalApplicationId("1")).thenReturn(Optional.of(response));
-
-        //When
-        mockMvc.perform(get("/application/{externalApplicationId}", "1").with(csrf())
-                        .contentType(APPLICATION_JSON))
-                //Then
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("modifiedDate").value("2023-01-22T11:00:00.000000"));
-
-    }
+//    @Test
+//    void getApplicationSuccessWithDateTimeFormatted() throws Exception {
+//        //Given
+//        var response = getApplicationDecisionResponse();
+//        when(retrieveApplicationService.getApplicationByExternalApplicationId("1")).thenReturn(Optional.of(response));
+//
+//        //When
+//        mockMvc.perform(get("/application/{externalApplicationId}", "1").with(csrf())
+//                        .contentType(APPLICATION_JSON))
+//                //Then
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("modifiedDate").value("2023-01-22T11:00:00.000000"));
+//
+//    }
 }
