@@ -30,17 +30,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Objects;
 
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
+import static com.selina.lending.config.security.SecurityConfig.LOGIN_URL;
 
 @Slf4j
 @Component
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestKpiFilter extends OncePerRequestFilter {
-
-    private static final String APPLICATION_PATH = "application";
 
     private final BrokerRequestResolver kpiResolver;
 
@@ -51,7 +47,7 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (isObservedBrokerRequest(request)) {
+        if (isTracked(request)) {
             ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
             ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
             var started = Instant.now();
@@ -65,9 +61,8 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
         }
     }
 
-    private static boolean isObservedBrokerRequest(HttpServletRequest request) {
-        return (Objects.equals(request.getMethod(), POST.name()) || Objects.equals(request.getMethod(), PUT.name()))
-                && request.getRequestURI().contains(APPLICATION_PATH);
+    private static boolean isTracked(HttpServletRequest request) {
+        return !LOGIN_URL.equals(request.getRequestURI());
     }
 
 }

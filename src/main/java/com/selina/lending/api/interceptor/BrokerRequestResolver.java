@@ -32,8 +32,7 @@ import java.time.Instant;
 @Component
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestResolver {
-    private static final String QUICK_QUOTE_PATH = "quickquote";
-
+    
     private final BrokerRequestEventPublisher publisher;
     private final BrokerRequestEventMapper mapper;
     private final TokenService tokenService;
@@ -51,11 +50,6 @@ public class BrokerRequestResolver {
                 publisher::publish,
                 () -> log.warn("BrokerRequestKpiEvent won't be published due to mapping problem")
         );
-    }
-
-
-    private boolean isQuickQuoteRequest(ContentCachingRequestWrapper httpRequest) {
-        return httpRequest.getRequestURI().contains(QUICK_QUOTE_PATH);
     }
 
 }

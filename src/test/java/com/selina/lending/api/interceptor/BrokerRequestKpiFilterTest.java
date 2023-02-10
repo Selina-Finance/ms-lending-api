@@ -41,10 +41,10 @@ class BrokerRequestKpiFilterTest {
     private BrokerRequestKpiFilter filter;
 
     @Test
-    void shouldNotCallBrokerHandlerWhenNotApplicatonPath() throws Exception {
+    void shouldNotInvokeResolverWhenLoginRequest() throws Exception {
         // Given
         var request = new MockHttpServletRequest();
-        request.setRequestURI("/not-app-path");
+        request.setRequestURI("/auth/token");
         request.setMethod("POST");
         var response = new MockHttpServletResponse();
         var filterChain = new MockFilterChain();
@@ -57,7 +57,7 @@ class BrokerRequestKpiFilterTest {
     }
 
     @Test
-    void shouldCallBrokerHandlerWhenPOSTApplicaton() throws Exception {
+    void shouldInvokeResolverWhenRequestIsTracked() throws Exception {
         // Given
         var request = new MockHttpServletRequest();
         request.setRequestURI("/application");
@@ -70,37 +70,5 @@ class BrokerRequestKpiFilterTest {
 
         // Then
         verify(resolver, times(1)).handle(any(), any(), any());
-    }
-
-    @Test
-    void shouldCallBrokerHandlerWhenPUTApplicaton() throws Exception {
-        // Given
-        var request = new MockHttpServletRequest();
-        request.setRequestURI("/application");
-        request.setMethod("PUT");
-        var response = new MockHttpServletResponse();
-        var filterChain = new MockFilterChain();
-
-        // When
-        filter.doFilterInternal(request, response, filterChain);
-
-        // Then
-        verify(resolver, times(1)).handle(any(), any(), any());
-    }
-
-    @Test
-    void shouldCallBrokerHandlerWhenGETApplicaton() throws Exception {
-        // Given
-        var request = new MockHttpServletRequest();
-        request.setRequestURI("/application");
-        request.setMethod("GET");
-        var response = new MockHttpServletResponse();
-        var filterChain = new MockFilterChain();
-
-        // When
-        filter.doFilterInternal(request, response, filterChain);
-
-        // Then
-        verifyNoInteractions(resolver);
     }
 }
