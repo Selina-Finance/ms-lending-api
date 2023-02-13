@@ -57,6 +57,54 @@ class BrokerRequestKpiFilterTest {
     }
 
     @Test
+    void shouldNotInvokeResolverWhenActuatorRequest() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/actuator/health");
+        request.setMethod("POST");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verifyNoInteractions(resolver);
+    }
+
+    @Test
+    void shouldNotInvokeResolverWhenSwaggerRequest() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/swagger-ui/1");
+        request.setMethod("GET");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verifyNoInteractions(resolver);
+    }
+
+    @Test
+    void shouldNotInvokeResolverWhenApiDocsRequest() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/v3/api-docs");
+        request.setMethod("GET");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verifyNoInteractions(resolver);
+    }
+
+    @Test
     void shouldInvokeResolverWhenRequestIsTracked() throws Exception {
         // Given
         var request = new MockHttpServletRequest();

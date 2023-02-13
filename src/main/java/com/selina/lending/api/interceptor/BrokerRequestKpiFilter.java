@@ -31,7 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
 
+import static com.selina.lending.config.security.SecurityConfig.ACTUATOR_URL;
+import static com.selina.lending.config.security.SecurityConfig.API_DOCS_URL;
 import static com.selina.lending.config.security.SecurityConfig.LOGIN_URL;
+import static com.selina.lending.config.security.SecurityConfig.SWAGGER_URL;
 
 @Slf4j
 @Component
@@ -62,7 +65,13 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
     }
 
     private static boolean isTracked(HttpServletRequest request) {
-        return !LOGIN_URL.equals(request.getRequestURI());
+        return isNotUnderUrl(request.getRequestURI(), LOGIN_URL)
+                && isNotUnderUrl(request.getRequestURI(), ACTUATOR_URL)
+                && isNotUnderUrl(request.getRequestURI(), SWAGGER_URL)
+                && isNotUnderUrl(request.getRequestURI(), API_DOCS_URL);
     }
 
+    private static boolean isNotUnderUrl(String requestUri, String url) {
+        return !requestUri.startsWith(url);
+    }
 }
