@@ -23,8 +23,6 @@ import java.time.Instant;
 
 @Builder(toBuilder = true)
 public record BrokerRequestKpiEvent(
-        String requestId,
-        String externalApplicationId,
         String ip,
         String source,
         String uriPath,
@@ -32,12 +30,11 @@ public record BrokerRequestKpiEvent(
         String httpRequestBody,
         String httpResponseBody,
         Integer httpResponseCode,
-        String decision,
         Instant started,
         Instant finished
 ) implements KafkaEvent {
     @Override
     public String key() {
-        return requestId;
+        return source;
     }
 }

@@ -29,6 +29,9 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 public class SecurityConfig {
 
     public static final String LOGIN_URL = "/auth/token";
+    public static final String ACTUATOR_URL = "/actuator";
+    public static final String SWAGGER_URL = "/swagger-ui";
+    public static final String API_DOCS_URL = "/v3/api-docs";
 
     private final SecurityProblemSupport problemSupport;
 
@@ -40,7 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
-                .ignoringAntMatchers("/actuator/**")
+                .ignoringAntMatchers(ACTUATOR_URL + "/**")
                 .ignoringAntMatchers(LOGIN_URL)
                 .and()
                 .cors()
@@ -51,10 +54,10 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/actuator/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/v3/api-docs/**").permitAll()
+                .antMatchers(ACTUATOR_URL + "/**").permitAll()
+                .antMatchers(SWAGGER_URL + "/**").permitAll()
+                .antMatchers(SWAGGER_URL + ".html").permitAll()
+                .antMatchers(API_DOCS_URL + "/**").permitAll()
                 .antMatchers(LOGIN_URL).permitAll()
 
                 .and()

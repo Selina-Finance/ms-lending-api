@@ -30,17 +30,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Objects;
 
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
+import static com.selina.lending.config.security.SecurityConfig.ACTUATOR_URL;
+import static com.selina.lending.config.security.SecurityConfig.API_DOCS_URL;
+import static com.selina.lending.config.security.SecurityConfig.LOGIN_URL;
+import static com.selina.lending.config.security.SecurityConfig.SWAGGER_URL;
 
 @Slf4j
 @Component
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestKpiFilter extends OncePerRequestFilter {
-
-    private static final String APPLICATION_PATH = "application";
 
     private final BrokerRequestResolver kpiResolver;
 
@@ -51,7 +50,7 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (isObservedBrokerRequest(request)) {
+        if (isTracked(request)) {
             ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
             ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
             var started = Instant.now();
@@ -65,9 +64,14 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
         }
     }
 
-    private static boolean isObservedBrokerRequest(HttpServletRequest request) {
-        return (Objects.equals(request.getMethod(), POST.name()) || Objects.equals(request.getMethod(), PUT.name()))
-                && request.getRequestURI().contains(APPLICATION_PATH);
+    private static boolean isTracked(HttpServletRequest request) {
+        return isNotUnderUrl(request.getRequestURI(), LOGIN_URL)
+                && isNotUnderUrl(request.getRequestURI(), ACTUATOR_URL)
+                && isNotUnderUrl(request.getRequestURI(), SWAGGER_URL)
+                && isNotUnderUrl(request.getRequestURI(), API_DOCS_URL);
     }
 
+    private static boolean isNotUnderUrl(String requestUri, String url) {
+        return !requestUri.startsWith(url);
+    }
 }

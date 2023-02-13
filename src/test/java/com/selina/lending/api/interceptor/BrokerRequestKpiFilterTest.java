@@ -41,10 +41,10 @@ class BrokerRequestKpiFilterTest {
     private BrokerRequestKpiFilter filter;
 
     @Test
-    void shouldNotCallBrokerHandlerWhenNotApplicatonPath() throws Exception {
+    void shouldNotInvokeResolverWhenLoginRequest() throws Exception {
         // Given
         var request = new MockHttpServletRequest();
-        request.setRequestURI("/not-app-path");
+        request.setRequestURI("/auth/token");
         request.setMethod("POST");
         var response = new MockHttpServletResponse();
         var filterChain = new MockFilterChain();
@@ -57,10 +57,10 @@ class BrokerRequestKpiFilterTest {
     }
 
     @Test
-    void shouldCallBrokerHandlerWhenPOSTApplicaton() throws Exception {
+    void shouldNotInvokeResolverWhenActuatorRequest() throws Exception {
         // Given
         var request = new MockHttpServletRequest();
-        request.setRequestURI("/application");
+        request.setRequestURI("/actuator/health");
         request.setMethod("POST");
         var response = new MockHttpServletResponse();
         var filterChain = new MockFilterChain();
@@ -69,30 +69,14 @@ class BrokerRequestKpiFilterTest {
         filter.doFilterInternal(request, response, filterChain);
 
         // Then
-        verify(resolver, times(1)).handle(any(), any(), any());
+        verifyNoInteractions(resolver);
     }
 
     @Test
-    void shouldCallBrokerHandlerWhenPUTApplicaton() throws Exception {
+    void shouldNotInvokeResolverWhenSwaggerRequest() throws Exception {
         // Given
         var request = new MockHttpServletRequest();
-        request.setRequestURI("/application");
-        request.setMethod("PUT");
-        var response = new MockHttpServletResponse();
-        var filterChain = new MockFilterChain();
-
-        // When
-        filter.doFilterInternal(request, response, filterChain);
-
-        // Then
-        verify(resolver, times(1)).handle(any(), any(), any());
-    }
-
-    @Test
-    void shouldCallBrokerHandlerWhenGETApplicaton() throws Exception {
-        // Given
-        var request = new MockHttpServletRequest();
-        request.setRequestURI("/application");
+        request.setRequestURI("/swagger-ui/1");
         request.setMethod("GET");
         var response = new MockHttpServletResponse();
         var filterChain = new MockFilterChain();
@@ -102,5 +86,37 @@ class BrokerRequestKpiFilterTest {
 
         // Then
         verifyNoInteractions(resolver);
+    }
+
+    @Test
+    void shouldNotInvokeResolverWhenApiDocsRequest() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/v3/api-docs");
+        request.setMethod("GET");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verifyNoInteractions(resolver);
+    }
+
+    @Test
+    void shouldInvokeResolverWhenRequestIsTracked() throws Exception {
+        // Given
+        var request = new MockHttpServletRequest();
+        request.setRequestURI("/application");
+        request.setMethod("POST");
+        var response = new MockHttpServletResponse();
+        var filterChain = new MockFilterChain();
+
+        // When
+        filter.doFilterInternal(request, response, filterChain);
+
+        // Then
+        verify(resolver, times(1)).handle(any(), any(), any());
     }
 }
