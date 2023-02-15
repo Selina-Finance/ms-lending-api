@@ -36,13 +36,13 @@ import lombok.experimental.SuperBuilder;
 public class DIPCCPropertyDetailsDto extends PropertyDetailsDto {
 
     @NotBlank
-    @Schema(implementation = PropertyType.class)
+    @Schema(implementation = PropertyType.class, description = "the type of property")
     @EnumValue(enumClass = PropertyType.class)
     private String propertyType;
 
     @NotBlank
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE, description = "when was this property last purchased")
     private String whenLastPurchased;
 
     @NotNull

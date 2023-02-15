@@ -17,6 +17,10 @@
 
 package com.selina.lending.api.controller;
 
+import static com.selina.lending.internal.dto.LendingConstants.ACCESS_DENIED_EXAMPLE;
+import static com.selina.lending.internal.dto.LendingConstants.NOT_FOUND_EXAMPLE;
+import static com.selina.lending.internal.dto.LendingConstants.OFFER_SELECTED_EXAMPLE;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +32,7 @@ import com.selina.lending.internal.dto.SelectProductResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -42,16 +47,18 @@ public interface ProductOperations {
                     description = "Product offer selected",
                     content = {
                         @Content(
+                                examples = {@ExampleObject(value = OFFER_SELECTED_EXAMPLE)},
                                 mediaType = MediaType.APPLICATION_JSON_VALUE,
                                 schema = @Schema(implementation = SelectProductResponse.class)
                         )
                     }),
-            @ApiResponse(
-                    responseCode = "400", description = "externalApplicationId or productCode invalid", content = @Content
-            ),
             @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content)})
+            @ApiResponse(responseCode = "403",
+                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
+            ),
+            @ApiResponse(responseCode = "404", description = "Application not found",
+                    content = @Content (examples = {@ExampleObject(value = NOT_FOUND_EXAMPLE)})
+            )})
     @PutMapping(value = "/{externalApplicationId}/product/{productCode}")
     ResponseEntity<SelectProductResponse> selectProductOffer(
             @Parameter(description = "externalApplicationId of application", required = true) @PathVariable String externalApplicationId,

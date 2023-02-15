@@ -67,6 +67,7 @@ public class ApplicantDto {
     @Schema(example = LendingConstants.EXAMPLE_DATE)
     private String dateOfBirth;
     private Integer numberOfAdultDependants;
+    @Schema(description = "number of dependants under 16 years old")
     private Integer numberOfChildDependants;
 
     @Schema(implementation = ResidentialStatus.class, description = "If residential status value is not in the enum list, use best match e.g. Private Tenant map to 'Owner Occupier'")

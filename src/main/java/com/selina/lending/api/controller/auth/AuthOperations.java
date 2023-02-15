@@ -21,6 +21,7 @@ import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.internal.dto.auth.Credentials;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import static com.selina.lending.internal.dto.LendingConstants.INVALID_CREDENTIALS_EXAMPLE;
 
 public interface AuthOperations {
 
@@ -45,7 +48,9 @@ public interface AuthOperations {
                                     mediaType = APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = TokenResponse.class))
                     }),
-            @ApiResponse(responseCode = "400", description = "Invalid client credentials", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid client credentials",
+                    content = @Content (examples = {@ExampleObject(value = INVALID_CREDENTIALS_EXAMPLE)})
+            ),
     })
     @PostMapping(value = "/auth/token")
     ResponseEntity<TokenResponse> createToken(@Valid @RequestBody Credentials credentials);

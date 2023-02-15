@@ -33,6 +33,9 @@ import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import static com.selina.lending.internal.dto.LendingConstants.NOT_FOUND_EXAMPLE;
+import static com.selina.lending.internal.dto.LendingConstants.BAD_REQUEST_EXAMPLE;
+import static com.selina.lending.internal.dto.LendingConstants.ACCESS_DENIED_EXAMPLE;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +43,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -47,6 +51,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @OpenAPIDefinition(info = @Info(title = "Lending API", description = "Lending API service", license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")))
 @RequestMapping("/application")
 public interface DIPOperations {
+
+
     @Operation(description = "Retrieve the application for the given externalApplicationId")
     @ApiResponses(value = {
             @ApiResponse(
@@ -58,7 +64,9 @@ public interface DIPOperations {
                                     schema = @Schema(implementation = ApplicationDecisionResponse.class))
                     }),
             @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Application not found",
+                    content = @Content (examples = {@ExampleObject(value = NOT_FOUND_EXAMPLE)})
+            )
     })
     @GetMapping(value = "/{externalApplicationId}")
     ResponseEntity<ApplicationDecisionResponse> getApplication(@Parameter(description = "externalApplicationId of application to be searched", required = true) @PathVariable String externalApplicationId);
@@ -70,10 +78,18 @@ public interface DIPOperations {
                     description = "Application updated",
                     content = @Content),
             @ApiResponse(
-                    responseCode = "400", description = "Application details invalid", content = @Content),
-            @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content),
+                    responseCode = "400", description = "Application details invalid",
+                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
+            ),
+            @ApiResponse(responseCode = "401",
+                    content = @Content
+            ),
+            @ApiResponse(responseCode = "403",
+                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
+            ),
+            @ApiResponse(responseCode = "404", description = "Application not found",
+                    content = @Content (examples = {@ExampleObject(value = NOT_FOUND_EXAMPLE)})
+            ),
     })
     @PutMapping(value = "/{externalApplicationId}/dipcc")
     ResponseEntity<Void> updateDipCCApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
@@ -89,9 +105,13 @@ public interface DIPOperations {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = DIPCCApplicationResponse.class))
                     }),
-            @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Application details invalid",
+                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
+            ),
             @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content)
+            @ApiResponse(responseCode = "403",
+                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
+            )
     })
     @PostMapping(value = "/dipcc")
     ResponseEntity<DIPCCApplicationResponse> createDipCCApplication(@Valid @RequestBody DIPCCApplicationRequest request);
@@ -103,10 +123,16 @@ public interface DIPOperations {
                     description = "Application updated",
                     content = @Content),
             @ApiResponse(
-                    responseCode = "400", description = "Application details invalid", content = @Content),
+                    responseCode = "400", description = "Application details invalid",
+                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
+            ),
             @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Application not found", content = @Content),
+            @ApiResponse(responseCode = "403",
+                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
+            ),
+            @ApiResponse(responseCode = "404", description = "Application not found",
+                    content = @Content (examples = {@ExampleObject(value = NOT_FOUND_EXAMPLE)})
+            ),
     })
     @PutMapping(value = "/{externalApplicationId}/dip")
     ResponseEntity<Void> updateDipApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
@@ -122,9 +148,13 @@ public interface DIPOperations {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = DIPApplicationResponse.class))
                     }),
-            @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Application details invalid",
+                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
+            ),
             @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content)
+            @ApiResponse(responseCode = "403",
+                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
+            )
     })
     @PostMapping(value = "/dip")
     ResponseEntity<DIPApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);

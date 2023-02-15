@@ -35,7 +35,7 @@ public class EmploymentDto {
     @EnumValue(enumClass = EmploymentStatus.class)
     String employmentStatus;
     Boolean inProbationPeriod;
-    @Schema(implementation = EmploymentType.class)
+    @Schema(implementation = EmploymentType.class, description = "type of employment")
     @EnumValue(enumClass = EmploymentType.class)
     String employmentType;
     String employerPhoneNumber;
@@ -45,11 +45,11 @@ public class EmploymentDto {
     String city;
 
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE, description = "when did the employment start")
     String contractStartDate;
 
     @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Schema(example = LendingConstants.EXAMPLE_DATE, description = "when did the employment end")
     String contractEndDate;
     Boolean firstTimeContractor;
     String employerName;
@@ -59,11 +59,11 @@ public class EmploymentDto {
     Boolean ownSharesInThisCompany;
     Double shareHolding;
     String registeredCompanyName;
-    @Schema(implementation = SelfEmployed.class)
+    @Schema(implementation = SelfEmployed.class, description = "is the applicant self employed")
     @EnumValue(enumClass = SelfEmployed.class)
     String selfEmployed;
     String fiscalYearReportedIncomeRelatesTo;
-    @Schema(implementation = SelfEmployedLength.class)
+    @Schema(implementation = SelfEmployedLength.class, description = "what is the length the applicant has been self employed")
     @EnumValue(enumClass = SelfEmployedLength.class)
     String lengthSelfEmployed;
     String companyRegistrationNumber;
@@ -83,7 +83,7 @@ public class EmploymentDto {
     String partnershipFormedDate;
     Double percentageOfPartnershipOwned;
     String businessStructure;
-    @Schema(implementation = Industry.class)
+    @Schema(implementation = Industry.class, description = "the applicant company industry")
     @EnumValue(enumClass = Industry.class)
     String industry;
 

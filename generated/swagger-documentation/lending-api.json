@@ -44,6 +44,18 @@
           "required":true
         },
         "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "200":{
             "description":"Quick Quote updated",
             "content":{
@@ -54,14 +66,25 @@
               }
             }
           },
-          "403":{
-            "description":"Forbidden"
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
           }
         }
       }
@@ -94,27 +117,47 @@
           }
         ],
         "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "200":{
             "description":"Product offer selected",
             "content":{
               "application/json":{
                 "schema":{
                   "$ref":"#/components/schemas/SelectProductResponse"
+                },
+                "example":{
+                  "message":"Offer selected with success",
+                  "externalApplicationId":"external id",
+                  "productCode":"product code"
                 }
               }
             }
           },
-          "400":{
-            "description":"externalApplicationId or productCode invalid"
-          },
-          "403":{
-            "description":"Forbidden"
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "404":{
-            "description":"Application not found"
           }
         }
       }
@@ -148,20 +191,52 @@
           "required":true
         },
         "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "204":{
             "description":"Application updated"
           },
-          "403":{
-            "description":"Forbidden"
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
-          },
-          "404":{
-            "description":"Application not found"
           }
         }
       }
@@ -195,20 +270,52 @@
           "required":true
         },
         "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "204":{
             "description":"Application updated"
           },
-          "403":{
-            "description":"Forbidden"
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
-          },
-          "404":{
-            "description":"Application not found"
           }
         }
       }
@@ -231,15 +338,24 @@
           "required":true
         },
         "responses":{
-          "400":{
-            "description":"Invalid client credentials"
-          },
           "200":{
             "description":"Authentication token and amount of seconds before it will be expired",
             "content":{
               "application/json":{
                 "schema":{
                   "$ref":"#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Invalid client credentials",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Bad Request",
+                  "status":400,
+                  "detail":"message details"
                 }
               }
             }
@@ -265,6 +381,18 @@
           "required":true
         },
         "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "200":{
             "description":"Quick Quote created",
             "content":{
@@ -275,14 +403,25 @@
               }
             }
           },
-          "403":{
-            "description":"Forbidden"
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
           }
         }
       }
@@ -305,6 +444,18 @@
           "required":true
         },
         "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "200":{
             "description":"Application created",
             "content":{
@@ -315,14 +466,25 @@
               }
             }
           },
-          "403":{
-            "description":"Forbidden"
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
           }
         }
       }
@@ -346,13 +508,16 @@
         },
         "responses":{
           "403":{
-            "description":"Forbidden"
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "400":{
-            "description":"Application details invalid"
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
           "200":{
             "description":"Application created",
@@ -363,6 +528,26 @@
                 }
               }
             }
+          },
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -386,8 +571,29 @@
           }
         ],
         "responses":{
+          "404":{
+            "description":"Not Found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
           "403":{
-            "description":"Forbidden"
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
           "200":{
             "description":"Returns the Credit Commitments for the application",
@@ -401,9 +607,6 @@
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "404":{
-            "description":"Not Found"
           }
         }
       },
@@ -435,27 +638,52 @@
           "required":true
         },
         "responses":{
-          "403":{
-            "description":"Forbidden"
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "204":{
-            "description":"Credit Commitments updated",
+          "404":{
+            "description":"Not Found",
             "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/DIPCCApplicationResponse"
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
                 }
               }
             }
           },
-          "400":{
-            "description":"Credit Commitments request is invalid"
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
-          "404":{
-            "description":"Not Found"
+          "204":{
+            "description":"Credit Commitments updated"
+          },
+          "400":{
+            "description":"Credit Commitments request is invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401":{
+            "description":"Unauthorized"
           }
         }
       }
@@ -479,6 +707,18 @@
           }
         ],
         "responses":{
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
           "200":{
             "description":"Found application",
             "content":{
@@ -491,9 +731,6 @@
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "404":{
-            "description":"Application not found"
           }
         }
       }
@@ -517,11 +754,29 @@
           }
         ],
         "responses":{
-          "400":{
-            "description":"Request is invalid"
+          "404":{
+            "description":"Not Found",
+            "content":{
+              "application/pdf":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
           },
           "403":{
-            "description":"Forbidden"
+            "description":"Forbidden",
+            "content":{
+              "application/pdf":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
           "200":{
             "description":"ESIS pdf document for the application",
@@ -533,9 +788,6 @@
           },
           "401":{
             "description":"Unauthorized"
-          },
-          "404":{
-            "description":"Not Found"
           }
         }
       }
@@ -632,6 +884,7 @@
           },
           "employmentType":{
             "type":"string",
+            "description":"type of employment",
             "enum":[
               "Permanent (full-time)",
               "Permanent (part-time)",
@@ -657,11 +910,13 @@
           "contractStartDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string",
+            "description":"when did the employment start",
             "example":"2001-01-01"
           },
           "contractEndDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string",
+            "description":"when did the employment end",
             "example":"2001-01-01"
           },
           "firstTimeContractor":{
@@ -691,6 +946,7 @@
           },
           "selfEmployed":{
             "type":"string",
+            "description":"is the applicant self employed",
             "enum":[
               "Limited company",
               "Sole trader",
@@ -703,6 +959,7 @@
           },
           "lengthSelfEmployed":{
             "type":"string",
+            "description":"what is the length the applicant has been self employed",
             "enum":[
               "Less than a year",
               "Between 1 and 2 years",
@@ -747,6 +1004,7 @@
           },
           "industry":{
             "type":"string",
+            "description":"the applicant company industry",
             "enum":[
               "Agriculture",
               "Apparel",
@@ -958,20 +1216,22 @@
         "properties":{
           "requestedLoanAmount":{
             "type":"integer",
-            "description":"the requested loan amount (min 10000, max 1000000)",
+            "description":"the amount the applicant wishes to borrow (min 10000, max 1000000)",
             "format":"int32"
           },
           "requestedLoanTerm":{
             "type":"integer",
-            "description":"the requested loan term in years (min 5, max 30)",
+            "description":"the length of time in years for which the applicant wishes to repay the loan for (min 5, max 30)",
             "format":"int32"
           },
           "numberOfApplicants":{
             "type":"integer",
+            "description":"the number of applicants 1 or 2",
             "format":"int32"
           },
           "loanPurpose":{
             "type":"string",
+            "description":"the purpose of which this applicant requires a loan",
             "enum":[
               "Debt consolidation",
               "Home improvements",
@@ -1080,6 +1340,7 @@
           },
           "numberOfChildDependants":{
             "type":"integer",
+            "description":"number of dependants under 16 years old",
             "format":"int32"
           },
           "residentialStatus":{
@@ -1203,7 +1464,9 @@
           },
           "whenLastPurchased":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string"
+            "type":"string",
+            "description":"when was this property last purchased",
+            "example":"2001-01-01"
           },
           "purchaseValue":{
             "type":"number",
@@ -1383,20 +1646,22 @@
         "properties":{
           "requestedLoanAmount":{
             "type":"integer",
-            "description":"the requested loan amount (min 10000, max 1000000)",
+            "description":"the amount the applicant wishes to borrow (min 10000, max 1000000)",
             "format":"int32"
           },
           "requestedLoanTerm":{
             "type":"integer",
-            "description":"the requested loan term in years (min 5, max 30)",
+            "description":"the length of time in years for which the applicant wishes to repay the loan for (min 5, max 30)",
             "format":"int32"
           },
           "numberOfApplicants":{
             "type":"integer",
+            "description":"the number of applicants 1 or 2",
             "format":"int32"
           },
           "loanPurpose":{
             "type":"string",
+            "description":"the purpose of which this applicant requires a loan",
             "enum":[
               "Debt consolidation",
               "Home improvements",
@@ -1491,6 +1756,7 @@
           },
           "numberOfChildDependants":{
             "type":"integer",
+            "description":"number of dependants under 16 years old",
             "format":"int32"
           },
           "residentialStatus":{
@@ -1893,6 +2159,7 @@
           },
           "propertyType":{
             "type":"string",
+            "description":"the type of property",
             "enum":[
               "Detached bungalow",
               "Semi-detached bungalow",
@@ -1909,6 +2176,7 @@
           "whenLastPurchased":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string",
+            "description":"when was this property last purchased",
             "example":"2001-01-01"
           },
           "purchaseValue":{
@@ -2229,6 +2497,7 @@
           },
           "propertyType":{
             "type":"string",
+            "description":"the property type",
             "enum":[
               "Detached bungalow",
               "Semi-detached bungalow",
@@ -2245,6 +2514,7 @@
           "whenLastPurchased":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string",
+            "description":"when was this property last purchased",
             "example":"2001-01-01"
           },
           "purchaseValue":{
@@ -2469,6 +2739,7 @@
           },
           "numberOfChildDependants":{
             "type":"integer",
+            "description":"number of dependants under 16 years old",
             "format":"int32"
           },
           "residentialStatus":{
@@ -3046,13 +3317,15 @@
         "properties":{
           "id":{
             "type":"integer",
+            "description":"the id of the credit commitment",
             "format":"int32"
           },
           "status":{
             "type":"string"
           },
           "applicant":{
-            "type":"string"
+            "type":"string",
+            "description":"1 for primary applicant"
           },
           "name":{
             "type":"string"
@@ -3068,16 +3341,19 @@
           "startDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string",
+            "description":"the start date for the credit commitment",
             "example":"2001-01-01"
           },
           "endDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string",
+            "description":"the end date for the credit commitment",
             "example":"2001-01-01"
           },
           "settlementDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string",
+            "description":"the date the commitment was settled for a commitment where the commitment status is Settled",
             "example":"2001-01-01"
           },
           "remainingTerm":{
@@ -3130,10 +3406,12 @@
           },
           "amountToConsolidate":{
             "type":"number",
+            "description":"the amount to consolidate if consolidate is true",
             "format":"double"
           },
           "reasonToIgnore":{
             "type":"string",
+            "description":"the reason to ignore the credit commitment if ignore is true",
             "enum":[
               "Item is a self funding buy-to-let",
               "Item will be repaid/cleared - evidence to be provided",

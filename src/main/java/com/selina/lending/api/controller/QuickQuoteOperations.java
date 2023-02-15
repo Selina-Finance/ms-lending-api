@@ -17,6 +17,9 @@
 
 package com.selina.lending.api.controller;
 
+import static com.selina.lending.internal.dto.LendingConstants.ACCESS_DENIED_EXAMPLE;
+import static com.selina.lending.internal.dto.LendingConstants.BAD_REQUEST_EXAMPLE;
+
 import javax.validation.Valid;
 
 import org.springframework.http.MediaType;
@@ -33,6 +36,7 @@ import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -51,9 +55,13 @@ public interface QuickQuoteOperations {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = QuickQuoteResponse.class))
                     }),
-            @ApiResponse(responseCode = "400", description = "Application details invalid", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Application details invalid",
+                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
+            ),
             @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content)
+            @ApiResponse(responseCode = "403",
+                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
+            )
     })
     @PostMapping(value = "/quickquote")
     ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(@Valid @RequestBody
@@ -70,9 +78,13 @@ public interface QuickQuoteOperations {
                                     schema = @Schema(implementation = QuickQuoteResponse.class))
                     }),
             @ApiResponse(
-                    responseCode = "400", description = "Application details invalid", content = @Content),
+                    responseCode = "400", description = "Application details invalid",
+                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
+            ),
             @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403", content = @Content),
+            @ApiResponse(responseCode = "403",
+                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
+            ),
     })
     @PutMapping(value = "/{externalApplicationId}/quickquote")
     ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable
