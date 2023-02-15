@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.validator.EnumValue;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,13 +37,13 @@ import lombok.experimental.SuperBuilder;
 public class DIPCCPropertyDetailsDto extends PropertyDetailsDto {
 
     @NotBlank
-    @Schema(implementation = PropertyType.class)
+    @Schema(implementation = PropertyType.class, description = "the type of property")
     @EnumValue(enumClass = PropertyType.class)
     private String propertyType;
 
     @NotBlank
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "when was this property last purchased")
     private String whenLastPurchased;
 
     @NotNull

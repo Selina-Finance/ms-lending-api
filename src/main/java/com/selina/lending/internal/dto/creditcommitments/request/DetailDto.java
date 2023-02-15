@@ -20,9 +20,9 @@ package com.selina.lending.internal.dto.creditcommitments.request;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.validator.Conditional;
 import com.selina.lending.api.validator.EnumValue;
-import com.selina.lending.internal.dto.LendingConstants;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -34,22 +34,24 @@ import lombok.Value;
 @Conditional(selected = "consolidate", values = {"true"}, required = {"amountToConsolidate"})
 public class DetailDto {
     @NotNull
+    @Schema(description = "the id of the credit commitment")
     Integer id;
     String status;
+    @Schema(description = "1 for primary applicant")
     String applicant;
     String name;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String dateOfBirth;
     String category;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "the start date for the credit commitment")
     String startDate;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "the end date for the credit commitment")
     String endDate;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "the date the commitment was settled for a commitment where the commitment status is Settled")
     String settlementDate;
     Integer remainingTerm;
     Double outstandingBalance;
@@ -64,12 +66,13 @@ public class DetailDto {
     String repaymentVehicle;
     String costOfRepaymentVehicle;
     String interestRateType;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String fixedRatePeriodEndDate;
+    @Schema(description = "the amount to consolidate if consolidate is true")
     Double amountToConsolidate;
 
-    @Schema(implementation = ReasonToIgnore.class)
+    @Schema(implementation = ReasonToIgnore.class, description = "the reason to ignore the credit commitment if ignore is true")
     @EnumValue(enumClass = ReasonToIgnore.class)
     String reasonToIgnore;
     String lender;
@@ -78,8 +81,8 @@ public class DetailDto {
     String interestOnlyBalance;
     Double amount;
     String code;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String date;
 
     enum ReasonToIgnore {
