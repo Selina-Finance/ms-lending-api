@@ -18,8 +18,6 @@
 package com.selina.lending.internal.dto;
 
 public final class LendingConstants {
-    public static final String DATE_PATTERN = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
-    public static final String DATE_INVALID_MESSAGE = "must match yyyy-MM-dd format";
 
     public static final String SOURCE_ACCOUNT_JWT_CLAIM_NAME = "sourceAccount";
 
@@ -31,23 +29,6 @@ public final class LendingConstants {
 
     public static final String STAGE_OVERWRITE = "DIP - Credit Commitments";
 
-    public static final String EXAMPLE_DATE = "2001-01-01";
-
-    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS";
-
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
-
-    public static final String INVALID_CREDENTIALS_EXAMPLE = "{\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"message details\"\n }";
-    public static final String BAD_REQUEST_EXAMPLE =
-            "{\n    \"title\": \"Constraint Violation\",\n    \"status\": 400,\n    \"violations\": [\n   {\n \"field\": \"field\",\n   \"message\": \"value is not valid\"\n }\n    ]\n }";
-
-    public static final String ACCESS_DENIED_EXAMPLE =
-            "{\n    \"title\": \"Error processing request\",\n    \"status\": 403,\n    \"detail\": \"Sorry, but you have no access to this resource\"\n}";
-
-    public static final String NOT_FOUND_EXAMPLE =
-            "{\n    \"title\": \"Not Found\",\n    \"status\": 404,\n    \"detail\": \"message details\"\n}";
-
-    public static final String OFFER_SELECTED_EXAMPLE = "{\n   \"message\": \"Offer selected with success\",\n  \"externalApplicationId\": \"external id\",\n   \"productCode\": \"product code\"\n}";
     private LendingConstants() {
 
     }

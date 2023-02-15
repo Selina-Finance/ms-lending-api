@@ -21,6 +21,7 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.validator.Conditional;
 import com.selina.lending.api.validator.EnumValue;
 
@@ -54,12 +55,12 @@ public class AddressDto {
     String county;
     String country;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String fromDate;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String toDate;
 
     enum AddressType {

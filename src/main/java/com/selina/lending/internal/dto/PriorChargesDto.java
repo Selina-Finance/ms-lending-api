@@ -19,6 +19,8 @@ package com.selina.lending.internal.dto;
 
 import javax.validation.constraints.Pattern;
 
+import com.selina.lending.api.controller.SwaggerConstants;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
@@ -29,8 +31,8 @@ public class PriorChargesDto {
       Double balanceConsolidated;
       Double balanceOutstanding;
       Double monthlyPayment;
-      @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-      @Schema(example = LendingConstants.EXAMPLE_DATE)
+      @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+      @Schema(example = SwaggerConstants.EXAMPLE_DATE)
       String priorChargesYoungestDate;
       Double otherDebtPayments;
 }

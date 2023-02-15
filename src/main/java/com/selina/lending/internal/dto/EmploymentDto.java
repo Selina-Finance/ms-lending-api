@@ -20,6 +20,7 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.validator.EnumValue;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,12 +45,12 @@ public class EmploymentDto {
     String addressLine2;
     String city;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE, description = "when did the employment start")
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "when did the employment start")
     String contractStartDate;
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE, description = "when did the employment end")
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "when did the employment end")
     String contractEndDate;
     Boolean firstTimeContractor;
     String employerName;
@@ -69,17 +70,17 @@ public class EmploymentDto {
     String companyRegistrationNumber;
     String percentageOfCompanyOwned;
     String monthAccountingPeriodStarts;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String whenWasCompanyIncorporated;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String whenDidYouBeginTrading;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String startDate;
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE)
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String partnershipFormedDate;
     Double percentageOfPartnershipOwned;
     String businessStructure;

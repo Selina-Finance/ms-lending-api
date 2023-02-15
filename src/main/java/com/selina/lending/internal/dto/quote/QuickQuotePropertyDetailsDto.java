@@ -19,7 +19,7 @@ package com.selina.lending.internal.dto.quote;
 
 import javax.validation.constraints.Pattern;
 
-import com.selina.lending.internal.dto.LendingConstants;
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 
@@ -35,8 +35,8 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class QuickQuotePropertyDetailsDto extends PropertyDetailsDto {
 
-    @Pattern(regexp = LendingConstants.DATE_PATTERN, message = LendingConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = LendingConstants.EXAMPLE_DATE, description = "when was this property last purchased")
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "when was this property last purchased")
     private String whenLastPurchased;
 
     private Double purchaseValue;

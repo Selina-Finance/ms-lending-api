@@ -17,8 +17,8 @@
 
 package com.selina.lending.api.controller;
 
-import static com.selina.lending.internal.dto.LendingConstants.ACCESS_DENIED_EXAMPLE;
-import static com.selina.lending.internal.dto.LendingConstants.BAD_REQUEST_EXAMPLE;
+import static com.selina.lending.api.controller.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
+import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
 
 import javax.validation.Valid;
 
