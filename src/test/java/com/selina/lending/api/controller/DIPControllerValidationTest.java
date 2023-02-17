@@ -18,13 +18,13 @@
 package com.selina.lending.api.controller;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,9 +40,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import com.selina.lending.IntegrationTest;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
@@ -68,10 +68,11 @@ class DIPControllerValidationTest extends MapperBase {
 
     @MockBean
     private CreateApplicationService createApplicationService;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void createDipCCApplicationSuccess() throws Exception {
+    void shouldCreateDipCCApplicationSuccessfully() throws Exception {
         //Given
         var dipApplicationRequest = getDIPCCApplicationRequestDto();
 
@@ -83,7 +84,7 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void createDipCCApplicationWithEmptyDIPApplicationRequest() throws Exception {
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithEmptyDIPApplicationRequest() throws Exception {
         //Given
         var dipApplicationRequest = DIPCCApplicationRequest.builder().build();
 
@@ -108,7 +109,7 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void createDipCCApplicationWithMissingApplicantsRequest() throws Exception {
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithMissingApplicantsRequest() throws Exception {
         //Given
         var dipApplicationRequest = DIPCCApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
@@ -132,7 +133,7 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void updateDipCCApplicationWithMissingMandatoryLoanInformation() throws Exception {
+    void shouldGiveValidationErrorWhenUpdateDipCCApplicationWithMissingMandatoryLoanInformation() throws Exception {
         //Given
         var dipApplicationRequest = DIPCCApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
@@ -161,7 +162,7 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void updateDipCCApplicationSuccess() throws Exception {
+    void shouldUpdateDipCCApplicationSuccessfully() throws Exception {
         //Given
         var dipApplicationRequest = getDIPCCApplicationRequestDto();
 
@@ -173,7 +174,7 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void createDipCCApplicationWithInvalidDateFormat() throws Exception {
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithInvalidDateFormat() throws Exception {
         //Given
         var employment = EmploymentDto.builder()
                 .employmentStatus(EMPLOYED_STATUS)
@@ -217,18 +218,23 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void getApplicationSuccessWithDateTimeFormatted() throws Exception {
+    void shouldGetApplicationWithDateTimeInExpectedFormat() throws Exception {
         //Given
+        var expectedDatePattern = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{6}$";
         var response = getApplicationDecisionResponse();
         when(retrieveApplicationService.getApplicationByExternalApplicationId("1")).thenReturn(Optional.of(response));
 
         //When
-        mockMvc.perform(get("/application/{externalApplicationId}", "1").with(csrf())
+        MvcResult result = mockMvc.perform(get("/application/{externalApplicationId}", "1").with(csrf())
                         .contentType(APPLICATION_JSON))
                 //Then
-                .andExpect(status().isOk());
-                // TODO: find a way to make it independent of timezones
-                // .andExpect(jsonPath("modifiedDate").value("2023-01-22T11:00:00.000000"));
+                .andExpect(status().isOk())
+                .andReturn();
 
+        String createdDate = JsonPath.read(result.getResponse().getContentAsString(), "$.createdDate");
+        String modifiedDate = JsonPath.read(result.getResponse().getContentAsString(), "$.modifiedDate");
+
+        assertTrue(modifiedDate.matches(expectedDatePattern));
+        assertTrue(createdDate.matches(expectedDatePattern));
     }
 }
