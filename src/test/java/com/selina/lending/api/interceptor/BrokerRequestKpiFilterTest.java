@@ -19,6 +19,8 @@ package com.selina.lending.api.interceptor;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -40,60 +42,13 @@ class BrokerRequestKpiFilterTest {
     @InjectMocks
     private BrokerRequestKpiFilter filter;
 
-    @Test
-    void shouldNotInvokeResolverWhenLoginRequest() throws Exception {
+    @ParameterizedTest
+    @CsvSource({"/auth/token,POST", "/actuator/health,POST", "/swagger-ui/1, GET", "/v3/api-docs,GET"})
+    void shouldNotInvokeResolverWhenRequestIsNotTracked(String url, String httpMethod) throws Exception {
         // Given
         var request = new MockHttpServletRequest();
-        request.setRequestURI("/auth/token");
-        request.setMethod("POST");
-        var response = new MockHttpServletResponse();
-        var filterChain = new MockFilterChain();
-
-        // When
-        filter.doFilterInternal(request, response, filterChain);
-
-        // Then
-        verifyNoInteractions(resolver);
-    }
-
-    @Test
-    void shouldNotInvokeResolverWhenActuatorRequest() throws Exception {
-        // Given
-        var request = new MockHttpServletRequest();
-        request.setRequestURI("/actuator/health");
-        request.setMethod("POST");
-        var response = new MockHttpServletResponse();
-        var filterChain = new MockFilterChain();
-
-        // When
-        filter.doFilterInternal(request, response, filterChain);
-
-        // Then
-        verifyNoInteractions(resolver);
-    }
-
-    @Test
-    void shouldNotInvokeResolverWhenSwaggerRequest() throws Exception {
-        // Given
-        var request = new MockHttpServletRequest();
-        request.setRequestURI("/swagger-ui/1");
-        request.setMethod("GET");
-        var response = new MockHttpServletResponse();
-        var filterChain = new MockFilterChain();
-
-        // When
-        filter.doFilterInternal(request, response, filterChain);
-
-        // Then
-        verifyNoInteractions(resolver);
-    }
-
-    @Test
-    void shouldNotInvokeResolverWhenApiDocsRequest() throws Exception {
-        // Given
-        var request = new MockHttpServletRequest();
-        request.setRequestURI("/v3/api-docs");
-        request.setMethod("GET");
+        request.setRequestURI(url);
+        request.setMethod(httpMethod);
         var response = new MockHttpServletResponse();
         var filterChain = new MockFilterChain();
 
