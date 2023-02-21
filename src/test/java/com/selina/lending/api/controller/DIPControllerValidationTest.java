@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -236,5 +238,39 @@ class DIPControllerValidationTest extends MapperBase {
 
         assertTrue(modifiedDate.matches(expectedDatePattern));
         assertTrue(createdDate.matches(expectedDatePattern));
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = { "a_b@a.co.uk", "b+c@testing.tech", "foo.bar@gmail.com", "test-email12@123.com" })
+    void shouldCreateDIPApplicationWhenEmailAddressIsValid(String email) throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).setEmailAddress(email);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk()) ;
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "a@a", "b+c@test", "foo", "test-email@123." })
+    void shouldGiveValidationErrorWhenCreateDIPApplicationWithInvalidEmail(String email) throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).setEmailAddress(email);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].emailAddress"))
+                .andExpect(jsonPath("$.violations[0].message").value("emailAddress is not valid"));
     }
 }

@@ -44,7 +44,7 @@ public class ApplicantDto {
     @EnumValue(enumClass = Title.class)
     private String title;
 
-    @Email(message = "emailAddress is not valid", regexp = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,3}")
+    @Email(message = "emailAddress is not valid", regexp = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}")
     @NotBlank
     private String emailAddress;
 
