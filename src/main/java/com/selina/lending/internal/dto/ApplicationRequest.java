@@ -32,8 +32,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class ApplicationRequest {
 
-    private String sourceClientId;
-
     private String reference;
 
     @NotBlank

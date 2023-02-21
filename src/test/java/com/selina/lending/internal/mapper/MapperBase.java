@@ -191,6 +191,7 @@ public abstract class MapperBase {
     public static final Double MAX_LOAN_AMOUNT = 50000.0;
 
     public static final Date MODIFIED_DATE;
+    public static final String SOURCE_CLIENT_ID = "a-client-id";
 
     static {
         try {
@@ -210,6 +211,7 @@ public abstract class MapperBase {
     protected DIPApplicationRequest getDIPApplicationRequestDto() {
         return DIPApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .sourceClientId(SOURCE_CLIENT_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .applicants(List.of(getDIPApplicantDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
@@ -221,6 +223,7 @@ public abstract class MapperBase {
 
     protected DIPCCApplicationRequest getDIPCCApplicationRequestDto() {
         return DIPCCApplicationRequest.builder()
+                .sourceClientId(SOURCE_CLIENT_ID)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .applicants(List.of(getDIPApplicantDto()))

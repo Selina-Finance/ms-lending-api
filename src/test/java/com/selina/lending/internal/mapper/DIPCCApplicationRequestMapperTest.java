@@ -38,6 +38,7 @@ class DIPCCApplicationRequestMapperTest extends MapperBase{
 
         //Then
         assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+        assertThat(applicationRequest.getSourceClientId(), equalTo(SOURCE_CLIENT_ID));
         assertThat(applicationRequest.getExpenditure(), notNullValue());
         assertThat(applicationRequest.getExpenditure().size(), equalTo(1));
         assertThat(applicationRequest.getExpenditure().get(0).getExpenditureType(), equalTo(EXPENDITURE_TYPE));
