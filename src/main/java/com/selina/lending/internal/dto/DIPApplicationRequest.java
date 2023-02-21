@@ -38,6 +38,10 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class DIPApplicationRequest extends ApplicationRequest {
 
+
+    @NotNull
+    private String sourceClientId;
+
     @NotNull
     @Size(message = "applicants is required", min = 1, max = 2)
     @Valid

@@ -97,7 +97,7 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                .andExpect(jsonPath("$.violations", hasSize(5)))
+                .andExpect(jsonPath("$.violations", hasSize(6)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                 .andExpect(jsonPath("$.violations[0].message").value("must have one primary applicant"))
                 .andExpect(jsonPath("$.violations[1].field").value("applicants"))
@@ -107,7 +107,9 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations[3].field").value("loanInformation"))
                 .andExpect(jsonPath("$.violations[3].message").value("must not be null"))
                 .andExpect(jsonPath("$.violations[4].field").value("propertyDetails"))
-                .andExpect(jsonPath("$.violations[4].message").value("must not be null"));
+                .andExpect(jsonPath("$.violations[4].message").value("must not be null"))
+                .andExpect(jsonPath("$.violations[5].field").value("sourceClientId"))
+                .andExpect(jsonPath("$.violations[5].message").value("must not be null"));
     }
 
     @Test
@@ -115,6 +117,7 @@ class DIPControllerValidationTest extends MapperBase {
         //Given
         var dipApplicationRequest = DIPCCApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .sourceClientId(SOURCE_CLIENT_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPCCPropertyDetailsDto())
@@ -139,6 +142,7 @@ class DIPControllerValidationTest extends MapperBase {
         //Given
         var dipApplicationRequest = DIPCCApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .sourceClientId(SOURCE_CLIENT_ID)
                 .applicants(List.of(getDIPApplicantDto()))
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(AdvancedLoanInformationDto.builder().loanPurpose("invalid loanPurpose").facilities(List.of(getFacilityDto())).build())
@@ -194,6 +198,7 @@ class DIPControllerValidationTest extends MapperBase {
         var dipApplicationRequest = DIPCCApplicationRequest.builder()
                 .applicants(List.of(applicant))
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .sourceClientId(SOURCE_CLIENT_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPCCPropertyDetailsDto())
