@@ -50,7 +50,6 @@ public class Employment {
     String monthAccountingPeriodStarts;
     String whenWasCompanyIncorporated;
     String whenDidYouBeginTrading;
-    String startDate;
     String partnershipFormedDate;
     Double percentageOfPartnershipOwned;
     String businessStructure;

@@ -191,17 +191,8 @@
           "required":true
         },
         "responses":{
-          "404":{
-            "description":"Application not found",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
-                }
-              }
-            }
+          "204":{
+            "description":"Application updated"
           },
           "400":{
             "description":"Application details invalid",
@@ -220,6 +211,18 @@
               }
             }
           },
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
           "401":{
             "description":"Unauthorized"
           },
@@ -234,9 +237,6 @@
                 }
               }
             }
-          },
-          "204":{
-            "description":"Application updated"
           }
         }
       }
@@ -270,17 +270,8 @@
           "required":true
         },
         "responses":{
-          "404":{
-            "description":"Application not found",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
-                }
-              }
-            }
+          "204":{
+            "description":"Application updated"
           },
           "400":{
             "description":"Application details invalid",
@@ -299,6 +290,18 @@
               }
             }
           },
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
           "401":{
             "description":"Unauthorized"
           },
@@ -313,9 +316,6 @@
                 }
               }
             }
-          },
-          "204":{
-            "description":"Application updated"
           }
         }
       }
@@ -398,6 +398,16 @@
               }
             }
           },
+          "200":{
+            "description":"Quick Quote created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/QuickQuoteResponse"
+                }
+              }
+            }
+          },
           "401":{
             "description":"Unauthorized"
           },
@@ -409,16 +419,6 @@
                   "title":"Error processing request",
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
-          },
-          "200":{
-            "description":"Quick Quote created",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/QuickQuoteResponse"
                 }
               }
             }
@@ -464,6 +464,16 @@
           "401":{
             "description":"Unauthorized"
           },
+          "200":{
+            "description":"Application created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/DIPCCApplicationResponse"
+                }
+              }
+            }
+          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -472,16 +482,6 @@
                   "title":"Error processing request",
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
-          },
-          "200":{
-            "description":"Application created",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/DIPCCApplicationResponse"
                 }
               }
             }
@@ -571,6 +571,18 @@
           }
         ],
         "responses":{
+          "404":{
+            "description":"Not Found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
           "200":{
             "description":"Returns the Credit Commitments for the application",
             "content":{
@@ -592,18 +604,6 @@
                   "title":"Error processing request",
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
-          },
-          "404":{
-            "description":"Not Found",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
                 }
               }
             }
@@ -638,21 +638,6 @@
           "required":true
         },
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
-          },
           "404":{
             "description":"Not Found",
             "content":{
@@ -664,9 +649,6 @@
                 }
               }
             }
-          },
-          "204":{
-            "description":"Credit Commitments updated"
           },
           "400":{
             "description":"Credit Commitments request is invalid",
@@ -681,6 +663,24 @@
                       "message":"value is not valid"
                     }
                   ]
+                }
+              }
+            }
+          },
+          "204":{
+            "description":"Credit Commitments updated"
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
                 }
               }
             }
@@ -754,21 +754,6 @@
           }
         ],
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "application/pdf":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
-          },
           "404":{
             "description":"Not Found",
             "content":{
@@ -781,11 +766,26 @@
               }
             }
           },
+          "401":{
+            "description":"Unauthorized"
+          },
           "200":{
             "description":"ESIS pdf document for the application",
             "content":{
               "application/pdf":{
 
+              }
+            }
+          },
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "application/pdf":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
               }
             }
           }
@@ -981,11 +981,6 @@
             "example":"2001-01-01"
           },
           "whenDidYouBeginTrading":{
-            "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
-            "type":"string",
-            "example":"2001-01-01"
-          },
-          "startDate":{
             "pattern":"^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
             "type":"string",
             "example":"2001-01-01"
