@@ -78,9 +78,6 @@ public class EmploymentDto {
     String whenDidYouBeginTrading;
     @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
-    String startDate;
-    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
-    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String partnershipFormedDate;
     Double percentageOfPartnershipOwned;
     String businessStructure;
