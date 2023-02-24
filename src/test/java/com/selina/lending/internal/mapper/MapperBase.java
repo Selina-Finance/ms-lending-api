@@ -192,6 +192,8 @@ public abstract class MapperBase {
 
     public static final Date MODIFIED_DATE;
     public static final String SOURCE_CLIENT_ID = "a-client-id";
+    public static final String STATUS_0 = "Status 0";
+    public static final Double LTV_CAP = 0.50;
 
     static {
         try {
@@ -675,6 +677,7 @@ public abstract class MapperBase {
                 .products(List.of(Product.builder()
                         .isVariable(true)
                         .family(HOMEOWNER_LOAN)
+                        .category(STATUS_0)
                         .code(CODE)
                         .hasErc(true)
                         .ercShortCode(ERC_SHORT_CODE)
@@ -702,6 +705,7 @@ public abstract class MapperBase {
                 .productFee(FEE)
                 .requestedLoanAmount(REQUESTED_LOAN_AMOUNT)
                 .hasProductFeeAddedToLoan(true)
+                .ltvCap(LTV_CAP)
                 .ercPeriodYears(2)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())

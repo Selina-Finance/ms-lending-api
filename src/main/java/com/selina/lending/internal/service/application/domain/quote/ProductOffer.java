@@ -43,6 +43,7 @@ public class ProductOffer {
     Integer term;
     Integer initialTerm;
     Integer reversionTerm;
+    Double ltvCap;
     Boolean hasProductFeeAddedToLoan;
     String decision;
     Double maxErc;
