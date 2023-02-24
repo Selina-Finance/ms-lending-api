@@ -192,7 +192,7 @@ public abstract class MapperBase {
 
     public static final Date MODIFIED_DATE;
     public static final String SOURCE_CLIENT_ID = "a-client-id";
-    public static final String STATUS_0 = "Status 0";
+    public static final String CATEGORY_STATUS_0 = "Status 0";
     public static final Double LTV_CAP = 0.50;
 
     static {
@@ -639,6 +639,7 @@ public abstract class MapperBase {
                 .checklist(getChecklist())
                 .ruleOutcomes(List.of(getRuleOutcome()))
                 .family(HOMEOWNER_LOAN)
+                .category(CATEGORY_STATUS_0)
                 .ercPeriodYears(2)
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
                 .affordabilityDeficit(AFFORDABILITY_DEFICIT)
@@ -677,7 +678,7 @@ public abstract class MapperBase {
                 .products(List.of(Product.builder()
                         .isVariable(true)
                         .family(HOMEOWNER_LOAN)
-                        .category(STATUS_0)
+                        .category(CATEGORY_STATUS_0)
                         .code(CODE)
                         .hasErc(true)
                         .ercShortCode(ERC_SHORT_CODE)

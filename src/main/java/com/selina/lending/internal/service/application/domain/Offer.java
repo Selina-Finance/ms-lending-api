@@ -64,6 +64,7 @@ public class Offer {
     Integer maximumAdvancePrime;
     Boolean isVariable;
     String family;
+    String category;
     String ercShortCode;
     Integer ercPeriodYears;
     Double maximumBalanceEsis;
