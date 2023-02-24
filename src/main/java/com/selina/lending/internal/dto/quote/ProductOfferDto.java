@@ -47,6 +47,8 @@ public class ProductOfferDto {
     Double ear;
     Double svr;
     String family;
+    String category;
+    Double ltvCap;
     String decision;
     Boolean hasErc;
     Double maxErc;

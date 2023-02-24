@@ -43,6 +43,7 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
 
         assertThat(offer.getId(), equalTo(OFFER_ID));
         assertThat(offer.getName(), equalTo(OFFER_VARIABLE_RATE_50_LTV));
+        assertThat(offer.getCategory(), equalTo(STATUS_0));
         assertThat(offer.getAprc(), equalTo(APRC));
         assertThat(offer.getEar(), equalTo(EAR));
         assertThat(offer.getSvr(), equalTo(SVR));
@@ -59,6 +60,7 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
         assertThat(offer.getHasProductFeeAddedToLoan(), equalTo(true));
         assertThat(offer.getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
         assertThat(offer.getIsVariable(), equalTo(true));
+        assertThat(offer.getLtvCap(), equalTo(LTV_CAP));
 
         assertErcData(offer);
     }

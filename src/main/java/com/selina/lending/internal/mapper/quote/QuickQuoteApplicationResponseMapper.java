@@ -56,6 +56,7 @@ public interface QuickQuoteApplicationResponseMapper {
     @Mapping(source = "offer.offerBalance", target = "offerBalance")
     @Mapping(source = "offer.requestedLoanAmount", target = "requestedLoanAmount")
     @Mapping(source = "offer.hasProductFeeAddedToLoan", target = "hasProductFeeAddedToLoan")
+    @Mapping(source = "offer.ltvCap", target = "ltvCap")
     @Mapping(source = "offer.decision", target = "decision")
     @Mapping(source = "offer.ercPeriodYears", target = "ercPeriodYears")
     @Mapping(source = "offer.ercData", target = "ercData")
