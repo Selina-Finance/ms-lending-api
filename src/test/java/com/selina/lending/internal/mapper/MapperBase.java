@@ -639,6 +639,7 @@ public abstract class MapperBase {
                 .checklist(getChecklist())
                 .ruleOutcomes(List.of(getRuleOutcome()))
                 .family(HOMEOWNER_LOAN)
+                .category(STATUS_0)
                 .ercPeriodYears(2)
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
                 .affordabilityDeficit(AFFORDABILITY_DEFICIT)
