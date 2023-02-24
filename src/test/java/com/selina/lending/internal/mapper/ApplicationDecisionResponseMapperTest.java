@@ -61,7 +61,7 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(responseDto.getOffers(), notNullValue());
         assertThat(responseDto.getOffers().size(), equalTo(1));
         assertThat(offer.getProductCode(), equalTo(PRODUCT_CODE));
-        assertThat(offer.getCategory(), equalTo(STATUS_0));
+        assertThat(offer.getCategory(), equalTo(CATEGORY_STATUS_0));
         assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
         assertThat(responseDto.getFees().getArrangementFee(), equalTo(ARRANGEMENT_FEE));
         assertThat(offer.getErcData().size(), equalTo(2));
