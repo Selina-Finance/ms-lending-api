@@ -25,7 +25,10 @@ import com.selina.lending.internal.repository.MiddlewareApplicationServiceReposi
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class RetrieveCreditCommitmentsServiceImpl implements RetrieveCreditCommitmentsService {
 
     private final CreditCommitmentsRepository commitmentsRepository;
@@ -43,7 +46,7 @@ public class RetrieveCreditCommitmentsServiceImpl implements RetrieveCreditCommi
     public CreditCommitmentResponse getCreditCommitments(String externalAppId) {
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalAppId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
-
+        log.info("Get credit commitments for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalAppId);
         return commitmentsRepository.getCreditCommitments(applicationIdentifier.getId());
     }
 }

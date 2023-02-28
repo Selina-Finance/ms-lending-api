@@ -26,8 +26,10 @@ import com.selina.lending.internal.service.application.domain.ApplicationRequest
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class CreateApplicationServiceImpl implements CreateApplicationService {
     private static final String APPLICATION_ALREADY_EXISTS_ERROR = "Application already exists";
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
@@ -54,6 +56,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     private void checkApplicationExists(ApplicationRequest applicationRequest) {
         try {
             var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(applicationRequest.getExternalApplicationId());
+            log.info("Check if application already exists [externalApplicationId={}], [sourceAccount={}]", applicationRequest.getExternalApplicationId(), applicationIdentifier.getSourceAccount());
             if (StringUtils.isNotEmpty(applicationIdentifier.getId())) {
                 throw new BadRequestException(APPLICATION_ALREADY_EXISTS_ERROR + " " + applicationRequest.getExternalApplicationId());
             }

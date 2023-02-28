@@ -24,7 +24,10 @@ import com.selina.lending.internal.repository.MiddlewareApplicationServiceReposi
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UpdateApplicationServiceImpl implements UpdateApplicationService {
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
@@ -52,6 +55,7 @@ public class UpdateApplicationServiceImpl implements UpdateApplicationService {
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
         if (isAuthorisedToUpdateApplication(applicationIdentifier.getSourceAccount(), externalApplicationId,
                 applicationRequest)) {
+            log.info("Patch application for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalApplicationId);
             middlewareRepository.patchApplication(applicationIdentifier.getId(), applicationRequest);
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);

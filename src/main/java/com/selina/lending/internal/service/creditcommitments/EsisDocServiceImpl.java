@@ -23,7 +23,10 @@ import com.selina.lending.internal.service.AccessManagementService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class EsisDocServiceImpl implements EsisDocService {
 
     private final MiddlewareApplicationServiceRepository applicationRepository;
@@ -42,7 +45,7 @@ public class EsisDocServiceImpl implements EsisDocService {
     public Resource getByExternalAppId(String externalAppId) {
         var identifier = applicationRepository.getAppIdByExternalId(externalAppId);
         accessManagementService.checkSourceAccountAccessPermitted(identifier.getSourceAccount());
-
+        log.info("Download ESIS document for [sourceAccount={}], [externalApplicationId={}]", identifier.getSourceAccount(), externalAppId);
         return middlewareRepository.downloadEsisDocByAppId(identifier.getId());
     }
 }

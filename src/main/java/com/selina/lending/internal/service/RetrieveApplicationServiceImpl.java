@@ -25,7 +25,10 @@ import com.selina.lending.internal.repository.MiddlewareApplicationServiceReposi
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class RetrieveApplicationServiceImpl implements RetrieveApplicationService {
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
@@ -42,6 +45,8 @@ public class RetrieveApplicationServiceImpl implements RetrieveApplicationServic
     public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId) {
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
+
+        log.info("Get application by Id for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalApplicationId);
         return middlewareRepository.getApplicationById(applicationIdentifier.getId());
     }
 }
