@@ -25,7 +25,10 @@ import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmentsService {
 
     private final MiddlewareApplicationServiceRepository applicationRepository;
@@ -47,6 +50,7 @@ public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmen
     public void updateCreditCommitments(String externalId, UpdateCreditCommitmentsRequest request) {
         var applicationIdentifier = applicationRepository.getAppIdByExternalId(externalId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
+        log.info("Update credit commitments for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalId);
         commitmentsRepository.patchCreditCommitments(applicationIdentifier.getId(), request);
         middlewareRepository.checkAffordability(applicationIdentifier.getId());
     }
