@@ -28,6 +28,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.selina.lending.api.controller.SwaggerConstants;
+import com.selina.lending.api.converter.ToLowerCase;
 import com.selina.lending.api.validator.EnumValue;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,6 +47,7 @@ public class ApplicantDto {
 
     @Email(message = "emailAddress is not valid", regexp = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}")
     @NotBlank
+    @ToLowerCase
     private String emailAddress;
 
     @NotBlank
