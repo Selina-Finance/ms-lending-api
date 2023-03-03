@@ -222,6 +222,27 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithInvalidTitle() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).setTitle("invalid title");
+        dipApplicationRequest.getApplicants().get(0).getPreviousNames().get(0).setTitle("invalid title");
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(2)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].previousNames[0].title"))
+                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"))
+                .andExpect(jsonPath("$.violations[1].field").value("applicants[0].title"))
+                .andExpect(jsonPath("$.violations[1].message").value("value is not valid"));
+    }
+
+    @Test
     void shouldGetApplicationWithDateTimeInExpectedFormat() throws Exception {
         //Given
         var expectedDatePattern = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{6}$";

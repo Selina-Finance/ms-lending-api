@@ -59,6 +59,8 @@ public class DIPApplicantDto extends ApplicantDto {
     @Valid
     @NotNull
     private EmploymentDto employment;
+
+    @Valid
     private List<PreviousNameDto> previousNames;
 
     enum MaritalStatus {

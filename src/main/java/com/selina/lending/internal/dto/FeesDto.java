@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
@@ -65,6 +66,7 @@ public class FeesDto {
 
     @NotNull
     @JsonProperty("addProductFeesToFacility")
+    @Schema(description = "should the product fees be added to the loan amount")
     private Boolean isAddProductFeesToFacility;
 
     private Double intermediaryFeeAmount;
