@@ -17,14 +17,19 @@
 
 package com.selina.lending.internal.dto;
 
+import com.selina.lending.api.validator.EnumValue;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class PreviousNameDto {
-    String title;
-    String firstName;
-    String middleName;
-    String lastName;
+    @Schema(implementation = ApplicantDto.Title.class)
+    @EnumValue(enumClass = ApplicantDto.Title.class)
+    private String title;
+    private String firstName;
+    private String middleName;
+    private String lastName;
 }
