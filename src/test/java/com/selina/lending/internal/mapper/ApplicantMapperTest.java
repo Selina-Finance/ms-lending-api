@@ -17,11 +17,11 @@
 
 package com.selina.lending.internal.mapper;
 
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
-import org.junit.jupiter.api.Test;
 
 class ApplicantMapperTest extends MapperBase {
 
@@ -39,7 +39,7 @@ class ApplicantMapperTest extends MapperBase {
         assertThat(applicant.getLastName(), equalTo(LAST_NAME));
         assertThat(applicant.getGender(), equalTo(GENDER));
         assertThat(applicant.getEmailAddress(), equalTo(EMAIL_ADDRESS));
-        assertThat(applicant.getMobilePhoneNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(applicant.getMobilePhoneNumber(), equalTo(MOBILE_NUMBER));
         assertThat(applicant.getDateOfBirth(), equalTo(DOB));
         assertThat(applicant.getAddresses().size(), equalTo(1));
         assertThat(applicant.getIncome().getIncome().size(), equalTo(1));
@@ -64,7 +64,7 @@ class ApplicantMapperTest extends MapperBase {
         assertThat(applicantDto.getLastName(), equalTo(LAST_NAME));
         assertThat(applicantDto.getGender(), equalTo(GENDER));
         assertThat(applicantDto.getEmailAddress(), equalTo(EMAIL_ADDRESS));
-        assertThat(applicantDto.getMobileNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(applicantDto.getMobileNumber(), equalTo(MOBILE_NUMBER));
         assertThat(applicantDto.getDateOfBirth(), equalTo(DOB));
         assertThat(applicantDto.getAddresses().size(), equalTo(1));
     }

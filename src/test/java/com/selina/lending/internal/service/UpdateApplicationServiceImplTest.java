@@ -17,6 +17,18 @@
 
 package com.selina.lending.internal.service;
 
+import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,19 +38,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
-import com.selina.lending.internal.repository.MiddlewareRepository;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateApplicationServiceImplTest {
@@ -126,6 +125,7 @@ class UpdateApplicationServiceImplTest {
             verify(middlewareRepository, times(0)).patchApplication(anyString(), any());
         }
     }
+
     @Nested
     class UpdateDipApplication {
         @Test
@@ -147,6 +147,7 @@ class UpdateApplicationServiceImplTest {
                     EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(1)).patchApplication(eq(APPLICATION_ID), any());
         }
+
         @Test
         void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateDipApplication() {
             // Given

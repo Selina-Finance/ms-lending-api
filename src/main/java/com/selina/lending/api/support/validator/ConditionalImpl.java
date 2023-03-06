@@ -15,14 +15,13 @@
  *
  */
 
-package com.selina.lending.api.validator;
+package com.selina.lending.api.support.validator;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

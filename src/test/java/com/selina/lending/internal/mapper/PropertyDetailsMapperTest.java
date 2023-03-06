@@ -17,11 +17,11 @@
 
 package com.selina.lending.internal.mapper;
 
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
-import org.junit.jupiter.api.Test;
 
 class PropertyDetailsMapperTest extends MapperBase {
 
@@ -45,6 +45,7 @@ class PropertyDetailsMapperTest extends MapperBase {
         assertThat(propertyDetailsDto.getCounty(), equalTo(COUNTY));
         assertThat(propertyDetailsDto.getWhenLastPurchased(), equalTo(WHEN_LAST_PURCHASED));
     }
+
     @Test
     void mapToDIPPropertyDetailsDto() {
         //Given

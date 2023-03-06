@@ -17,22 +17,21 @@
 
 package com.selina.lending.internal.enricher;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
+import com.selina.lending.internal.dto.LendingConstants;
+import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.selina.lending.internal.dto.LendingConstants;
-import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.Applicant;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRequestEnricherTest {

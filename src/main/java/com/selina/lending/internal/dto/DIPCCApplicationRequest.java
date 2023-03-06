@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.selina.lending.api.validator.OnlyOnePrimaryApplicant;
+import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

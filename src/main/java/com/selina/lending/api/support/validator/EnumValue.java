@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.api.validator;
+package com.selina.lending.api.support.validator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -17,32 +17,30 @@
 
 package com.selina.lending.internal.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.HashMap;
-import java.util.UUID;
-import org.junit.jupiter.api.Nested;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashMap;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CreateApplicationServiceImplTest {
@@ -63,6 +61,10 @@ class CreateApplicationServiceImplTest {
 
     @InjectMocks
     private CreateApplicationServiceImpl createApplicationService;
+
+    private Request request() {
+        return Request.create(Request.HttpMethod.GET, "url", new HashMap<>(), null, new RequestTemplate());
+    }
 
     @Nested
     class CreateDipCCApplication {
@@ -153,8 +155,5 @@ class CreateApplicationServiceImplTest {
             assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists " + id);
             verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
         }
-    }
-    private Request request() {
-        return Request.create(Request.HttpMethod.GET, "url", new HashMap<>(), null, new RequestTemplate());
     }
 }

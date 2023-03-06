@@ -17,15 +17,14 @@
 
 package com.selina.lending.internal.mapper;
 
+import com.selina.lending.internal.dto.DIPApplicationDto;
+import com.selina.lending.internal.dto.DIPCCApplicationResponse;
+import com.selina.lending.internal.dto.creditcommitments.response.DetailResponseDto;
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-
-import org.junit.jupiter.api.Test;
-
-import com.selina.lending.internal.dto.DIPCCApplicationResponse;
-import com.selina.lending.internal.dto.DIPApplicationDto;
-import com.selina.lending.internal.dto.creditcommitments.response.DetailResponseDto;
 
 class ApplicationResponseMapperTest extends MapperBase {
 
@@ -97,7 +96,7 @@ class ApplicationResponseMapperTest extends MapperBase {
         assertDetail(commitmentDetails.getSystem().getDetail().get(0));
         assertDetail(commitmentDetails.getUser().getDetail().get(0));
 
-        assertThat(commitmentDetails.getSystem().getSummary().getNumberAccounts(),equalTo(2));
+        assertThat(commitmentDetails.getSystem().getSummary().getNumberAccounts(), equalTo(2));
         assertThat(commitmentDetails.getSystem().getSummary().getOutstandingBalance(), equalTo(OUTSTANDING_BALANCE));
     }
 

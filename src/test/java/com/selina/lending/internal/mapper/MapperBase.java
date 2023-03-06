@@ -17,12 +17,6 @@
 
 package com.selina.lending.internal.mapper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-
 import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.ApplicantDto;
@@ -99,6 +93,12 @@ import com.selina.lending.internal.service.application.domain.quote.FilteredQuic
 import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+
 public abstract class MapperBase {
     public static final String TITLE = "Mrs.";
     public static final String FIRST_NAME = "Sally";
@@ -142,7 +142,6 @@ public abstract class MapperBase {
     public static final String OFFER_ID = "offer123";
     public static final String PRODUCT_CODE = "All";
     public static final String EXPENDITURE_TYPE = "Utilities";
-    protected static final Double ARRANGEMENT_FEE = 1000.00;
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
     public static final String RULE_OUTCOME = "Granted";
     public static final String REQUIRED_PASSPORT = "Passport";
@@ -189,11 +188,11 @@ public abstract class MapperBase {
     public static final String DECISIONING_ACCEPT = "Decisioning Accept";
     public static final Integer REVERSION_TERM = 3;
     public static final Double MAX_LOAN_AMOUNT = 50000.0;
-
     public static final Date MODIFIED_DATE;
     public static final String SOURCE_CLIENT_ID = "a-client-id";
     public static final String CATEGORY_STATUS_0 = "Status 0";
     public static final Double LTV_CAP = 0.50;
+    protected static final Double ARRANGEMENT_FEE = 1000.00;
 
     static {
         try {
@@ -267,6 +266,7 @@ public abstract class MapperBase {
     private SystemDto getSystemDto() {
         return SystemDto.builder().detail(List.of(getDetailDto())).build();
     }
+
     private UserDto getUserDto() {
         return UserDto.builder().detail(List.of(getDetailDto())).build();
     }
@@ -326,6 +326,7 @@ public abstract class MapperBase {
                 .income(getIncomeDto())
                 .build();
     }
+
     protected QuickQuoteApplicantDto getQuickQuoteApplicantDto() {
         return QuickQuoteApplicantDto.builder()
                 .title(TITLE)
@@ -404,8 +405,8 @@ public abstract class MapperBase {
 
     protected QuickQuotePropertyDetailsDto getQuickQuotePropertyDetailsDto() {
         return QuickQuotePropertyDetailsDto.builder().addressLine1(ADDRESS_LINE_1).addressLine2(ADDRESS_LINE_2).buildingName(
-                BUILDING_NAME).buildingNumber(BUILDING_NUMBER).city(CITY).country(COUNTRY).county(COUNTY).postcode(
-                POSTCODE).estimatedValue(ESTIMATED_VALUE).whenLastPurchased(WHEN_LAST_PURCHASED)
+                        BUILDING_NAME).buildingNumber(BUILDING_NUMBER).city(CITY).country(COUNTRY).county(COUNTY).postcode(
+                        POSTCODE).estimatedValue(ESTIMATED_VALUE).whenLastPurchased(WHEN_LAST_PURCHASED)
                 .purchaseValue(PURCHASE_VALUE).numberOfPriorCharges(1).priorCharges(getPriorChargesDto()).build();
     }
 
@@ -418,6 +419,7 @@ public abstract class MapperBase {
     protected PropertyDetailValueDto getPropertyDetailValueDto() {
         return PropertyDetailValueDto.builder().estimatedValue(ESTIMATED_VALUE).build();
     }
+
     protected DIPPropertyDetailsDto getDIPPropertyDetailsDto() {
         return DIPPropertyDetailsDto.builder()
                 .addressLine1(ADDRESS_LINE_1)
@@ -479,6 +481,7 @@ public abstract class MapperBase {
     protected List<ErcDto> getErcDto() {
         return List.of(ErcDto.builder().ercFee(ERC_FEE).period(1).ercAmount(ERC_AMOUNT).ercBalance(ERC_BALANCE).build());
     }
+
     protected OfferDto getOfferDto() {
         return OfferDto.builder().active(true).id(OFFER_ID).hasFee(true)
                 .checklist(getChecklistDto())
@@ -523,6 +526,7 @@ public abstract class MapperBase {
     private Document getDocument() {
         return Document.builder().documentType(DOCUMENT_TYPE).build();
     }
+
     private CreditCheck getCreditCheck() {
         return CreditCheck.builder().serviceUsed(CREDIT_CHECK_SERVICE_USED).hardCheckCompleted(false).creditCheckReference(CREDIT_CHECK_REF).creditScore(CREDIT_SCORE).build();
     }
@@ -617,6 +621,7 @@ public abstract class MapperBase {
                 .offers(List.of(getOffer()))
                 .build();
     }
+
     protected Required getRequired() {
         return Required.builder().all(List.of(REQUIRED_PASSPORT)).build();
     }
@@ -649,7 +654,7 @@ public abstract class MapperBase {
                 .build();
     }
 
-    protected ApplicationResponse getApplicationResponse(){
+    protected ApplicationResponse getApplicationResponse() {
         return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
     }
 
@@ -776,6 +781,7 @@ public abstract class MapperBase {
     private Summary getSummary() {
         return Summary.builder().numberAccounts(2).outstandingBalance(OUTSTANDING_BALANCE).build();
     }
+
     private Underwriting getUnderwriting() {
         return Underwriting.builder().stageName(UNDERWRITING_STAGE).build();
     }

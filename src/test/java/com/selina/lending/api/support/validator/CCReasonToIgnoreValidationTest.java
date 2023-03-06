@@ -15,25 +15,23 @@
  *
  */
 
-package com.selina.lending.api.validator;
+package com.selina.lending.api.support.validator;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
-import java.util.List;
+import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
+import com.selina.lending.internal.dto.creditcommitments.request.CreditCommitmentsDetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.DetailDto;
+import com.selina.lending.internal.dto.creditcommitments.request.SystemDto;
+import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import com.selina.lending.internal.dto.creditcommitments.request.DetailDto;
-import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
-import com.selina.lending.internal.dto.creditcommitments.request.CreditCommitmentsDetailDto;
-import com.selina.lending.internal.dto.creditcommitments.request.SystemDto;
-import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class CCReasonToIgnoreValidationTest {
     private static Validator validator;

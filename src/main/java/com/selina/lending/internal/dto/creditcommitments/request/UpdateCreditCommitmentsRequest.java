@@ -25,7 +25,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.validation.Valid;
 
-import com.selina.lending.api.validator.OnlyOnePrimaryApplicant;
+import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
 @NoArgsConstructor
 @SuperBuilder

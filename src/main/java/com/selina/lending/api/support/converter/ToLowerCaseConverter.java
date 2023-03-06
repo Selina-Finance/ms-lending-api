@@ -15,15 +15,16 @@
  *
  */
 
-package com.selina.lending.api.validator;
+package com.selina.lending.api.support.converter;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.fasterxml.jackson.databind.util.StdConverter;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Conditionals {
-    Conditional[] value();
+public class ToLowerCaseConverter extends StdConverter<String, String> {
+    @Override
+    public String convert(String value) {
+        if (value == null){
+            return null;
+        }
+        return value.toLowerCase();
+    }
 }

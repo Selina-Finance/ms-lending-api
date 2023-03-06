@@ -15,26 +15,7 @@
  *
  */
 
-package com.selina.lending.api.validator;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Path;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+package com.selina.lending.api.support.validator;
 
 import com.selina.lending.internal.dto.ApplicationRequest;
 import com.selina.lending.internal.dto.DIPApplicantDto;
@@ -43,7 +24,25 @@ import com.selina.lending.internal.dto.ExpenditureDto;
 import com.selina.lending.internal.dto.IncomeDto;
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
- class EnumValueImplTest {
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Path;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+
+class EnumValueImplTest {
     private static final String INVALID_VALUE = "invalid";
     private static Validator validator;
 

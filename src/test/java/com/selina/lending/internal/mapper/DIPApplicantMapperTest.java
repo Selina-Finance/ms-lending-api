@@ -17,11 +17,11 @@
 
 package com.selina.lending.internal.mapper;
 
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-
-import org.junit.jupiter.api.Test;
 
 class DIPApplicantMapperTest extends MapperBase {
 
@@ -41,7 +41,7 @@ class DIPApplicantMapperTest extends MapperBase {
         assertThat(applicant.getApplicantUsedAnotherName(), equalTo(false));
         assertThat(applicant.getEmailAddress(), equalTo(EMAIL_ADDRESS));
         assertThat(applicant.getNationality(), equalTo(NATIONALITY));
-        assertThat(applicant.getMobilePhoneNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(applicant.getMobilePhoneNumber(), equalTo(MOBILE_NUMBER));
         assertThat(applicant.getDateOfBirth(), equalTo(DOB));
         assertThat(applicant.getAddresses().size(), equalTo(1));
         assertThat(applicant.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
@@ -69,7 +69,7 @@ class DIPApplicantMapperTest extends MapperBase {
         assertThat(applicantDto.getLastName(), equalTo(LAST_NAME));
         assertThat(applicantDto.getGender(), equalTo(GENDER));
         assertThat(applicantDto.getEmailAddress(), equalTo(EMAIL_ADDRESS));
-        assertThat(applicantDto.getMobileNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(applicantDto.getMobileNumber(), equalTo(MOBILE_NUMBER));
         assertThat(applicantDto.getDateOfBirth(), equalTo(DOB));
         assertThat(applicantDto.getAddresses().size(), equalTo(1));
     }
@@ -89,7 +89,7 @@ class DIPApplicantMapperTest extends MapperBase {
         assertThat(dipApplicantDto.getGender(), equalTo(GENDER));
         assertThat(dipApplicantDto.getNationality(), equalTo(NATIONALITY));
         assertThat(dipApplicantDto.getEmailAddress(), equalTo(EMAIL_ADDRESS));
-        assertThat(dipApplicantDto.getMobileNumber() ,equalTo(MOBILE_NUMBER));
+        assertThat(dipApplicantDto.getMobileNumber(), equalTo(MOBILE_NUMBER));
         assertThat(dipApplicantDto.getDateOfBirth(), equalTo(DOB));
         assertThat(dipApplicantDto.getPrimaryApplicant(), equalTo(true));
         assertThat(dipApplicantDto.getEstimatedRetirementAge(), equalTo(ESTIMATED_RETIREMENT_AGE));
