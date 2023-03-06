@@ -17,14 +17,16 @@
 
 package com.selina.lending.internal.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import java.util.HashMap;
-import java.util.stream.IntStream;
-
+import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
+import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
+import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,17 +34,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
-import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
-import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import java.util.HashMap;
+import java.util.stream.IntStream;
 
-import feign.FeignException;
-import feign.Request;
-import feign.RequestTemplate;
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareApplicationServiceRepositoryTest extends MapperBase {

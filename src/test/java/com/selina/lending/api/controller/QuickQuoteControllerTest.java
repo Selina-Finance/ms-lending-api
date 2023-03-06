@@ -17,6 +17,20 @@
 
 package com.selina.lending.api.controller;
 
+import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.FilterApplicationService;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Objects;
+import java.util.UUID;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,21 +39,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.util.Objects;
-import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.FilterApplicationService;
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 
 @ExtendWith(MockitoExtension.class)
 class QuickQuoteControllerTest {
@@ -69,7 +68,7 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
-        verify(filterApplicationService,times(1)).filter(any());
+        verify(filterApplicationService, times(1)).filter(any());
     }
 
     @Test
@@ -85,7 +84,7 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
-        verify(filterApplicationService,times(1)).filter(any());
+        verify(filterApplicationService, times(1)).filter(any());
     }
 
     @Test

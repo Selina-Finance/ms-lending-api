@@ -17,11 +17,11 @@
 
 package com.selina.lending.internal.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isA;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verifyNoInteractions;
-
+import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
+import com.selina.lending.internal.service.monitoring.MetricService;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,12 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
-import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
-import com.selina.lending.internal.service.monitoring.MetricService;
-
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isA;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @SpringBootTest
 class MiddlewareApplicationServiceRepositoryFallbackTest {
@@ -58,6 +56,7 @@ class MiddlewareApplicationServiceRepositoryFallbackTest {
         circuitBreaker = circuitBreakerRegistry.find("middleware-application-service-cb").get();
         circuitBreaker.transitionToClosedState();
     }
+
     @Nested
     class GetApplicationByIdExceptions {
         @Test

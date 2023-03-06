@@ -15,10 +15,10 @@
  *
  */
 
-package com.selina.lending.api.validator;
+package com.selina.lending.api.support.validator;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -26,15 +26,14 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Repeatable(Conditionals.class)
-@Target({ElementType.TYPE})
+@Documented
+@Constraint(validatedBy = EnumValueImpl.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ConditionalImpl.class})
-public @interface Conditional {
-    String message() default "This field is required";
+@Target(ElementType.FIELD)
+public @interface EnumValue {
+    Class<? extends Enum<?>> enumClass();
+    String message() default "value is not valid";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-    String selected();
-    String[] required();
-    String[] values();
 }
+

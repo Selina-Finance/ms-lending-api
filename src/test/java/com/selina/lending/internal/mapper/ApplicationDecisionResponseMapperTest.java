@@ -17,16 +17,15 @@
 
 package com.selina.lending.internal.mapper;
 
+import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
+import com.selina.lending.internal.dto.ApplicantResponseDto;
+import com.selina.lending.internal.dto.ApplicationDecisionResponse;
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.notNullValue;
-
-import org.junit.jupiter.api.Test;
-
-import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.ApplicantResponseDto;
-import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 
 class ApplicationDecisionResponseMapperTest extends MapperBase {
 

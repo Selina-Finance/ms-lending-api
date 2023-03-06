@@ -15,26 +15,24 @@
  *
  */
 
-package com.selina.lending.api.validator;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import java.util.List;
-
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import org.junit.jupiter.api.Nested;
+package com.selina.lending.api.support.validator;
 
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPApplicantDto;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
 import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class OnlyOnePrimaryApplicantImplTest {
     private static Validator validator;
@@ -147,6 +145,7 @@ class OnlyOnePrimaryApplicantImplTest {
             return UpdateCreditCommitmentsRequest.builder().applicants(applicants).build();
         }
     }
+
     @Nested
     class ValidateDIPApplicantDto {
 

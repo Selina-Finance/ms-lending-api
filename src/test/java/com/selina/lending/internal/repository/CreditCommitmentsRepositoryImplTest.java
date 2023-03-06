@@ -21,7 +21,6 @@ import com.selina.lending.internal.api.CreditCommitmentsApi;
 import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.PatchCreditCommitmentResponse;
 import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,7 +52,7 @@ class CreditCommitmentsRepositoryImplTest {
         //Given
         var id = UUID.randomUUID().toString();
         var request = UpdateCreditCommitmentsRequest.builder().build();
-                   when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(null);
+        when(creditCommitmentsApi.patchCreditCommitments(any(), any())).thenReturn(null);
 
         //When
         repository.patchCreditCommitments(id, request);

@@ -17,6 +17,30 @@
 
 package com.selina.lending.api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
+import com.selina.lending.IntegrationTest;
+import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
+import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.internal.dto.EmploymentDto;
+import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.CreateApplicationService;
+import com.selina.lending.internal.service.RetrieveApplicationService;
+import com.selina.lending.internal.service.UpdateApplicationService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.List;
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -29,49 +53,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
-import com.selina.lending.IntegrationTest;
-import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.DIPCCApplicationRequest;
-import com.selina.lending.internal.dto.EmploymentDto;
-import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.RetrieveApplicationService;
-import com.selina.lending.internal.service.UpdateApplicationService;
-
 @WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
 class DIPControllerValidationTest extends MapperBase {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private RetrieveApplicationService retrieveApplicationService;
-
     @MockBean
     private UpdateApplicationService updateApplicationService;
-
     @MockBean
     private CreateApplicationService createApplicationService;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void shouldCreateDipCCApplicationSuccessfully() throws Exception {
@@ -265,7 +260,7 @@ class DIPControllerValidationTest extends MapperBase {
 
 
     @ParameterizedTest
-    @ValueSource(strings = { "a_b@a.co.uk", "b+c@testing.tech", "foo.bar@gmail.com", "test-email12@123.com" })
+    @ValueSource(strings = {"a_b@a.co.uk", "b+c@testing.tech", "foo.bar@gmail.com", "test-email12@123.com"})
     void shouldCreateDIPApplicationWhenEmailAddressIsValid(String email) throws Exception {
         //Given
         var dipApplicationRequest = getDIPApplicationRequestDto();
@@ -275,11 +270,11 @@ class DIPControllerValidationTest extends MapperBase {
         mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
-                .andExpect(status().isOk()) ;
+                .andExpect(status().isOk());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "a@a", "b+c@test", "foo", "test-email@123." })
+    @ValueSource(strings = {"a@a", "b+c@test", "foo", "test-email@123."})
     void shouldGiveValidationErrorWhenCreateDIPApplicationWithInvalidEmail(String email) throws Exception {
         //Given
         var dipApplicationRequest = getDIPApplicationRequestDto();

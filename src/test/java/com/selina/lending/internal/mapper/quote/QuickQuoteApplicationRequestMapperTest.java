@@ -17,18 +17,17 @@
 
 package com.selina.lending.internal.mapper.quote;
 
+import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.application.domain.quote.Application;
+import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-
-import java.time.LocalDate;
-
-import org.junit.jupiter.api.Test;
-
-import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 
 class QuickQuoteApplicationRequestMapperTest extends MapperBase {
 

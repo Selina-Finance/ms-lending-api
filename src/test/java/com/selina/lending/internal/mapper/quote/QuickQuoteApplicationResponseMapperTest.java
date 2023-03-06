@@ -17,14 +17,13 @@
 
 package com.selina.lending.internal.mapper.quote;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
-import org.junit.jupiter.api.Test;
-
 import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class QuickQuoteApplicationResponseMapperTest extends MapperBase {
 

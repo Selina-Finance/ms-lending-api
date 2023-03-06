@@ -17,11 +17,12 @@
 
 package com.selina.lending.internal.mapper;
 
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.junit.jupiter.api.Test;
-class AddressMapperTest extends MapperBase{
+class AddressMapperTest extends MapperBase {
 
     @Test
     void mapToAddress() {

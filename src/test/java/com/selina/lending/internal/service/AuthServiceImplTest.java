@@ -17,8 +17,8 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.internal.dto.auth.Credentials;
+import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.internal.repository.auth.AuthRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

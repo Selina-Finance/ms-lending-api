@@ -17,6 +17,26 @@
 
 package com.selina.lending.api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.internal.mapper.DIPCCApplicationRequestMapper;
+import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.CreateApplicationService;
+import com.selina.lending.internal.service.RetrieveApplicationService;
+import com.selina.lending.internal.service.UpdateApplicationService;
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.HashMap;
+import java.util.UUID;
+
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -26,45 +46,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
-import com.selina.lending.internal.mapper.DIPCCApplicationRequestMapper;
-import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.RetrieveApplicationService;
-import com.selina.lending.internal.service.UpdateApplicationService;
-
-import feign.FeignException;
-import feign.Request;
-import feign.RequestTemplate;
-
 @WithMockUser
 @WebMvcTest(value = DIPController.class)
 class DIPControllerCircuitBreakerTest extends MapperBase {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private RetrieveApplicationService retrieveApplicationService;
-
     @MockBean
     private UpdateApplicationService updateApplicationService;
-
     @MockBean
     private CreateApplicationService createApplicationService;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void shouldReturnBadGatewayWhenGetDipApplicationHasMiddlewareProblem() throws Exception {

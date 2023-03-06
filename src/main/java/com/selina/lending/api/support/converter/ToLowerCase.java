@@ -15,20 +15,18 @@
  *
  */
 
-package com.selina.lending.api.validator;
+package com.selina.lending.api.support.converter;
 
-import java.lang.annotation.Documented;
+import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
-
-@Documented
-@Constraint(validatedBy = OnlyOnePrimaryApplicantImpl.class)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnlyOnePrimaryApplicant {
-    String message() default "must have one primary applicant";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+@JacksonAnnotationsInside
+@JsonSerialize(converter = ToLowerCaseConverter.class)
+@JsonDeserialize(converter = ToLowerCaseConverter.class)
+public @interface ToLowerCase {
 }

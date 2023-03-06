@@ -17,17 +17,11 @@
 
 package com.selina.lending.api.controller;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.util.UUID;
-
+import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.creditcommitments.EsisDocService;
+import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
+import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,11 +29,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 
-import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.creditcommitments.EsisDocService;
-import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
-import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
+import java.io.IOException;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CreditCommitmentsControllerUnitTest extends MapperBase {

@@ -17,12 +17,12 @@
 
 package com.selina.lending.internal.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
+import com.selina.lending.internal.service.application.domain.Detail;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
-import com.selina.lending.internal.service.application.domain.Detail;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class UpdateCreditCommitmentsRequestMapperTest extends MapperBase {
 

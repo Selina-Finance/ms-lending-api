@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.api.converter;
+package com.selina.lending.api.support.converter;
 
 import org.junit.jupiter.api.Test;
 
