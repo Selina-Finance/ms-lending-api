@@ -38,7 +38,7 @@ class ToLowerCaseConverterTest {
     }
 
     @Test
-    void shouldReturnLoverCasedValueWhenValueIsNotNull() {
+    void shouldReturnLowerCasedValueWhenValueIsNotNull() {
         // Given
         String value = "aBC123@GMAIL.COM";
         String expected = "abc123@gmail.com";
