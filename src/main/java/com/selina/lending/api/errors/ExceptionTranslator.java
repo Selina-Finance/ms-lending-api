@@ -17,32 +17,30 @@
 
 package com.selina.lending.api.errors;
 
-import static com.selina.lending.api.errors.ErrorConstants.UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL;
-import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EXCEPTION_DETAIL;
-import static com.selina.lending.api.errors.ErrorConstants.VIOLATIONS_KEY;
-
-import java.net.URI;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
+import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
+import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
-import org.zalando.problem.spring.common.HttpStatusAdapter;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
-import feign.FeignException;
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.Nullable;
+import java.net.URI;
+import java.util.Optional;
+
+import static com.selina.lending.api.errors.ErrorConstants.DOWNSTREAM_EXCEPTION_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EXCEPTION_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.VIOLATIONS_KEY;
 
 @Slf4j
 @ControllerAdvice
@@ -75,7 +73,8 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     @Override
     public ProblemBuilder prepare(@NotNull final Throwable throwable, @NotNull final StatusType status, @NotNull final URI type) {
         if (throwable instanceof FeignException feignException) {
-            return buildProblem(new HttpStatusAdapter(HttpStatus.valueOf(feignException.status())), feignException.contentUTF8(), feignException);
+            log.error("Remote service exception", throwable);
+            return buildProblem(Status.BAD_GATEWAY, DOWNSTREAM_EXCEPTION_DETAIL, throwable);
         }
 
         if (isHttpMessageConversionException(throwable)) {
