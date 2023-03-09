@@ -17,19 +17,26 @@
 
 package com.selina.lending.internal.repository.auth;
 
+import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.internal.api.AuthApi;
 import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.internal.service.application.domain.auth.AuthApiTokenResponse;
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import static feign.Request.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -75,5 +82,44 @@ class AuthRepositoryImplTest {
 
         // Then
         verify(authApi, times(1)).login(expectedAuthApiRequestParams);
+    }
+
+    @Test
+    void shouldWrapToLendingApiBadRequestWhenFeignBadRequest() {
+        // Given
+        var credentials = new Credentials("the-client-id", "client-super-secret");
+
+        var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
+        var feignException = new FeignException.BadRequest("Bad Request", request, "wrong credentials".getBytes(), null);
+        when(authApi.login(any())).thenThrow(feignException);
+
+        var expectedAuthApiRequestParams = Map.of(
+                "client_id", credentials.clientId(),
+                "client_secret", credentials.clientSecret(),
+                "grant_type", "client_credentials"
+        );
+
+        // When
+        var exception = assertThrows(BadRequestException.class, () -> authRepository.getTokenByCredentials(credentials));
+
+        // Then
+        assertThat(exception.getTitle()).isEqualTo(feignException.getMessage());
+        assertThat(exception.getDetail()).isEqualTo(feignException.contentUTF8());
+    }
+
+    @Test
+    void shouldThrowWhenNotFeignBadRequest() {
+        // Given
+        var credentials = new Credentials("the-client-id", "client-super-secret");
+
+        var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
+        var feignException = new FeignException.NotAcceptable("Not Acceptable", request, "".getBytes(), null);
+        when(authApi.login(any())).thenThrow(feignException);
+
+        // When
+        var exception = assertThrows(feignException.getClass(), () -> authRepository.getTokenByCredentials(credentials));
+
+        // Then
+        assertThat(exception).isEqualTo(feignException);
     }
 }

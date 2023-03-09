@@ -79,12 +79,12 @@ class AuthControllerWebApiTest {
     }
 
     @Test
-    void shouldReturn400BadRequestWhenCreateTokenFailed() throws Exception {
+    void shouldReturn502BadGatewayWhenCreateTokenFailed() throws Exception {
         //Given
         var credentials = new Credentials("broker", "super-secret");
 
         var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
-        var exception = new FeignException.BadRequest("Bad request", request, "bad request".getBytes(), null);
+        var exception = new FeignException.InternalServerError("Internal error", request, "the error msg".getBytes(), null);
         when(authService.getTokenByCredentials(credentials)).thenThrow(exception);
 
         //When
@@ -95,7 +95,7 @@ class AuthControllerWebApiTest {
                                 .contentType(APPLICATION_JSON)
                 )
                 //Then
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isBadGateway())
                 .andExpect(content().contentType(APPLICATION_PROBLEM_JSON));
     }
 }
