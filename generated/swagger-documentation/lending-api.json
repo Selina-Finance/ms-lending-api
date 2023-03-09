@@ -44,23 +44,6 @@
           "required":true
         },
         "responses":{
-          "400":{
-            "description":"Application details invalid",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Constraint Violation",
-                  "status":400,
-                  "violations":[
-                    {
-                      "field":"field",
-                      "message":"value is not valid"
-                    }
-                  ]
-                }
-              }
-            }
-          },
           "401":{
             "description":"Unauthorized"
           },
@@ -82,6 +65,23 @@
                   "title":"Error processing request",
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
                 }
               }
             }
@@ -117,20 +117,23 @@
           }
         ],
         "responses":{
-          "404":{
-            "description":"Application not found",
+          "401":{
+            "description":"Unauthorized"
+          },
+          "200":{
+            "description":"Product offer selected",
             "content":{
-              "*/*":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/SelectProductResponse"
+                },
                 "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
+                  "message":"Offer selected with success",
+                  "externalApplicationId":"external id",
+                  "productCode":"product code"
                 }
               }
             }
-          },
-          "401":{
-            "description":"Unauthorized"
           },
           "403":{
             "description":"Forbidden",
@@ -144,17 +147,14 @@
               }
             }
           },
-          "200":{
-            "description":"Product offer selected",
+          "404":{
+            "description":"Application not found",
             "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/SelectProductResponse"
-                },
+              "*/*":{
                 "example":{
-                  "message":"Offer selected with success",
-                  "externalApplicationId":"external id",
-                  "productCode":"product code"
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
                 }
               }
             }
@@ -191,8 +191,20 @@
           "required":true
         },
         "responses":{
-          "204":{
-            "description":"Application updated"
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
           "400":{
             "description":"Application details invalid",
@@ -223,20 +235,8 @@
               }
             }
           },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
+          "204":{
+            "description":"Application updated"
           }
         }
       }
@@ -270,8 +270,20 @@
           "required":true
         },
         "responses":{
-          "204":{
-            "description":"Application updated"
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
           "400":{
             "description":"Application details invalid",
@@ -302,20 +314,8 @@
               }
             }
           },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
+          "204":{
+            "description":"Application updated"
           }
         }
       }
@@ -338,6 +338,16 @@
           "required":true
         },
         "responses":{
+          "200":{
+            "description":"Authentication token and amount of seconds before it will be expired",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
           "400":{
             "description":"Invalid client credentials",
             "content":{
@@ -346,16 +356,6 @@
                   "title":"Bad Request",
                   "status":400,
                   "detail":"message details"
-                }
-              }
-            }
-          },
-          "200":{
-            "description":"Authentication token and amount of seconds before it will be expired",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/TokenResponse"
                 }
               }
             }
@@ -381,19 +381,17 @@
           "required":true
         },
         "responses":{
-          "400":{
-            "description":"Application details invalid",
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden",
             "content":{
               "*/*":{
                 "example":{
-                  "title":"Constraint Violation",
-                  "status":400,
-                  "violations":[
-                    {
-                      "field":"field",
-                      "message":"value is not valid"
-                    }
-                  ]
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
                 }
               }
             }
@@ -408,17 +406,19 @@
               }
             }
           },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "403":{
-            "description":"Forbidden",
+          "400":{
+            "description":"Application details invalid",
             "content":{
               "*/*":{
                 "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
                 }
               }
             }
@@ -444,19 +444,17 @@
           "required":true
         },
         "responses":{
-          "400":{
-            "description":"Application details invalid",
+          "401":{
+            "description":"Unauthorized"
+          },
+          "409":{
+            "description":"Conflict",
             "content":{
               "*/*":{
                 "example":{
-                  "title":"Constraint Violation",
-                  "status":400,
-                  "violations":[
-                    {
-                      "field":"field",
-                      "message":"value is not valid"
-                    }
-                  ]
+                  "title":"Error processing request",
+                  "status":409,
+                  "detail":"message details"
                 }
               }
             }
@@ -471,9 +469,6 @@
               }
             }
           },
-          "401":{
-            "description":"Unauthorized"
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -482,6 +477,23 @@
                   "title":"Error processing request",
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
                 }
               }
             }
@@ -507,6 +519,43 @@
           "required":true
         },
         "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
+          "409":{
+            "description":"Conflict",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":409,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"Application created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/DIPApplicationResponse"
+                }
+              }
+            }
+          },
           "400":{
             "description":"Application details invalid",
             "content":{
@@ -520,31 +569,6 @@
                       "message":"value is not valid"
                     }
                   ]
-                }
-              }
-            }
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "200":{
-            "description":"Application created",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/DIPApplicationResponse"
-                }
-              }
-            }
-          },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
                 }
               }
             }
@@ -581,6 +605,9 @@
               }
             }
           },
+          "401":{
+            "description":"Unauthorized"
+          },
           "404":{
             "description":"Not Found",
             "content":{
@@ -592,9 +619,6 @@
                 }
               }
             }
-          },
-          "401":{
-            "description":"Unauthorized"
           },
           "403":{
             "description":"Forbidden",
@@ -655,6 +679,9 @@
               }
             }
           },
+          "401":{
+            "description":"Unauthorized"
+          },
           "404":{
             "description":"Not Found",
             "content":{
@@ -667,12 +694,6 @@
               }
             }
           },
-          "204":{
-            "description":"Credit Commitments updated"
-          },
-          "401":{
-            "description":"Unauthorized"
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -684,6 +705,9 @@
                 }
               }
             }
+          },
+          "204":{
+            "description":"Credit Commitments updated"
           }
         }
       }
@@ -707,18 +731,6 @@
           }
         ],
         "responses":{
-          "404":{
-            "description":"Application not found",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
-                }
-              }
-            }
-          },
           "401":{
             "description":"Unauthorized"
           },
@@ -728,6 +740,18 @@
               "application/json":{
                 "schema":{
                   "$ref":"#/components/schemas/ApplicationDecisionResponse"
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
                 }
               }
             }
@@ -754,6 +778,9 @@
           }
         ],
         "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
           "404":{
             "description":"Not Found",
             "content":{
@@ -766,17 +793,6 @@
               }
             }
           },
-          "401":{
-            "description":"Unauthorized"
-          },
-          "200":{
-            "description":"ESIS pdf document for the application",
-            "content":{
-              "application/pdf":{
-
-              }
-            }
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -786,6 +802,14 @@
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
                 }
+              }
+            }
+          },
+          "200":{
+            "description":"ESIS pdf document for the application",
+            "content":{
+              "application/pdf":{
+
               }
             }
           }
@@ -814,17 +838,25 @@
             ]
           },
           "addressLine1":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "addressLine2":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "city":{
+            "maxLength":255,
+            "minLength":3,
             "pattern":"^[a-zA-Z &\\-.']*$",
             "type":"string",
             "example":"London"
           },
           "postcode":{
+            "maxLength":8,
+            "minLength":3,
             "type":"string"
           },
           "buildingName":{
@@ -844,9 +876,13 @@
             "type":"string"
           },
           "county":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "country":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "fromDate":{
@@ -1188,16 +1224,7 @@
             "type":"string"
           },
           "frequency":{
-            "type":"string",
-            "enum":[
-              "Weekly",
-              "Bi-Weekly",
-              "Monthly",
-              "Quarterly",
-              "Semi-Annually",
-              "Annually",
-              "Daily"
-            ]
+            "type":"string"
           },
           "contractDaysWorkedWeeklyReported":{
             "type":"number",
@@ -1317,9 +1344,13 @@
             "type":"string"
           },
           "firstName":{
+            "maxLength":255,
+            "minLength":2,
             "type":"string"
           },
           "lastName":{
+            "maxLength":255,
+            "minLength":2,
             "type":"string"
           },
           "middleName":{
@@ -1419,15 +1450,23 @@
         "type":"object",
         "properties":{
           "addressLine1":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "addressLine2":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "city":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "postcode":{
+            "maxLength":8,
+            "minLength":3,
             "type":"string"
           },
           "buildingName":{
@@ -1450,9 +1489,13 @@
             "type":"string"
           },
           "county":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "country":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "estimatedValue":{
@@ -1737,9 +1780,13 @@
             "type":"string"
           },
           "firstName":{
+            "maxLength":255,
+            "minLength":2,
             "type":"string"
           },
           "lastName":{
+            "maxLength":255,
+            "minLength":2,
             "type":"string"
           },
           "middleName":{
@@ -2087,6 +2134,8 @@
             }
           },
           "sourceClientId":{
+            "maxLength":255,
+            "minLength":4,
             "type":"string"
           },
           "applicants":{
@@ -2122,15 +2171,23 @@
         "type":"object",
         "properties":{
           "addressLine1":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "addressLine2":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "city":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "postcode":{
+            "maxLength":8,
+            "minLength":3,
             "type":"string"
           },
           "buildingName":{
@@ -2153,9 +2210,13 @@
             "type":"string"
           },
           "county":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "country":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "estimatedValue":{
@@ -2435,6 +2496,8 @@
             }
           },
           "sourceClientId":{
+            "maxLength":255,
+            "minLength":4,
             "type":"string"
           },
           "applicants":{
@@ -2470,15 +2533,23 @@
         "type":"object",
         "properties":{
           "addressLine1":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "addressLine2":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "city":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "postcode":{
+            "maxLength":8,
+            "minLength":3,
             "type":"string"
           },
           "buildingName":{
@@ -2501,9 +2572,13 @@
             "type":"string"
           },
           "county":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "country":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "estimatedValue":{
@@ -2731,9 +2806,13 @@
             "type":"string"
           },
           "firstName":{
+            "maxLength":255,
+            "minLength":2,
             "type":"string"
           },
           "lastName":{
+            "maxLength":255,
+            "minLength":2,
             "type":"string"
           },
           "middleName":{
@@ -3845,15 +3924,23 @@
         "type":"object",
         "properties":{
           "addressLine1":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "addressLine2":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "city":{
+            "maxLength":255,
+            "minLength":3,
             "type":"string"
           },
           "postcode":{
+            "maxLength":8,
+            "minLength":3,
             "type":"string"
           },
           "buildingName":{
@@ -3876,9 +3963,13 @@
             "type":"string"
           },
           "county":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "country":{
+            "maxLength":60,
+            "minLength":2,
             "type":"string"
           },
           "estimatedValue":{

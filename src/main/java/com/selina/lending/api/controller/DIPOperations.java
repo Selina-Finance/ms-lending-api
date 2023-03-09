@@ -33,6 +33,8 @@ import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+
+import static com.selina.lending.api.controller.SwaggerConstants.CONFLICT_EXAMPLE;
 import static com.selina.lending.api.controller.SwaggerConstants.NOT_FOUND_EXAMPLE;
 import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
 import static com.selina.lending.api.controller.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
@@ -89,7 +91,7 @@ public interface DIPOperations {
             ),
             @ApiResponse(responseCode = "404", description = "Application not found",
                     content = @Content (examples = {@ExampleObject(value = NOT_FOUND_EXAMPLE)})
-            ),
+            )
     })
     @PutMapping(value = "/{externalApplicationId}/dipcc")
     ResponseEntity<Void> updateDipCCApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
@@ -111,7 +113,10 @@ public interface DIPOperations {
             @ApiResponse(responseCode = "401", content = @Content),
             @ApiResponse(responseCode = "403",
                     content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
-            )
+            ),
+            @ApiResponse(responseCode = "409",
+                    content = @Content (examples = {@ExampleObject(value = CONFLICT_EXAMPLE)
+            }))
     })
     @PostMapping(value = "/dipcc")
     ResponseEntity<DIPCCApplicationResponse> createDipCCApplication(@Valid @RequestBody DIPCCApplicationRequest request);
@@ -132,7 +137,7 @@ public interface DIPOperations {
             ),
             @ApiResponse(responseCode = "404", description = "Application not found",
                     content = @Content (examples = {@ExampleObject(value = NOT_FOUND_EXAMPLE)})
-            ),
+            )
     })
     @PutMapping(value = "/{externalApplicationId}/dip")
     ResponseEntity<Void> updateDipApplication(@Parameter(description = "externalApplicationId of application to be updated", required = true) @PathVariable String externalApplicationId,
@@ -154,7 +159,10 @@ public interface DIPOperations {
             @ApiResponse(responseCode = "401", content = @Content),
             @ApiResponse(responseCode = "403",
                     content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
-            )
+            ),
+            @ApiResponse(responseCode = "409",
+                    content = @Content (examples = {@ExampleObject(value = CONFLICT_EXAMPLE)
+            }))
     })
     @PostMapping(value = "/dip")
     ResponseEntity<DIPApplicationResponse> createDipApplication(@Valid @RequestBody DIPApplicationRequest dipApplicationRequest);

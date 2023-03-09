@@ -40,6 +40,7 @@ public class DIPApplicationRequest extends ApplicationRequest {
 
 
     @NotNull
+    @Size(min = 4, max = 255)
     private String sourceClientId;
 
     @NotNull

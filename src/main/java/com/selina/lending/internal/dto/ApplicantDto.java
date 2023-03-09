@@ -55,9 +55,11 @@ public class ApplicantDto {
     private String mobileNumber;
 
     @NotBlank
+    @Size(min = 2, max = 255)
     private String firstName;
 
     @NotBlank
+    @Size(min = 2, max = 255)
     private String lastName;
     private String middleName;
 

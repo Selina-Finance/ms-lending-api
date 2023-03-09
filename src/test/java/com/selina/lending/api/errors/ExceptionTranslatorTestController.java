@@ -95,6 +95,11 @@ public class ExceptionTranslatorTestController {
         throw new FeignException.BadRequest("Bad request", request, "bad request".getBytes(), null);
     }
 
+    @GetMapping("/conflict-exception")
+    public void conflictException() {
+        throw new com.selina.lending.api.errors.custom.ConflictException("conflict request");
+    }
+
     @GetMapping("/feign-not-found-exception")
     public void feignNotFoundException() {
         var request = Request.create(Request.HttpMethod.GET, "/feign-not-found-exception",
@@ -117,7 +122,6 @@ public class ExceptionTranslatorTestController {
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "test response status")
-    @SuppressWarnings("serial")
     public static class TestResponseStatusException extends RuntimeException {
     }
 }

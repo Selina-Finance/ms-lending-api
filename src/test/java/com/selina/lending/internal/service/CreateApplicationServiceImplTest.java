@@ -18,6 +18,7 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.api.errors.custom.BadRequestException;
+import com.selina.lending.api.errors.custom.ConflictException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
@@ -88,7 +89,7 @@ class CreateApplicationServiceImplTest {
         }
 
         @Test
-        void shouldThrowBadRequestExceptionWhenApplicationWithIdAlreadyExists() {
+        void shouldThrowConflictExceptionWhenApplicationWithIdAlreadyExists() {
             //Given
             var id = UUID.randomUUID().toString();
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
@@ -96,7 +97,7 @@ class CreateApplicationServiceImplTest {
             when(applicationIdentifier.getId()).thenReturn("any");
 
             //When
-            var exception = assertThrows(BadRequestException.class, () -> createApplicationService.createDipCCApplication(applicationRequest));
+            var exception = assertThrows(ConflictException.class, () -> createApplicationService.createDipCCApplication(applicationRequest));
 
             //Then
             assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists " + id);
@@ -141,7 +142,7 @@ class CreateApplicationServiceImplTest {
         }
 
         @Test
-        void shouldThrowBadRequestExceptionWhenApplicationWithIdAlreadyExists() {
+        void shouldThrowConflictExceptionWhenApplicationWithIdAlreadyExists() {
             //Given
             var id = UUID.randomUUID().toString();
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
@@ -149,7 +150,7 @@ class CreateApplicationServiceImplTest {
             when(applicationIdentifier.getId()).thenReturn("any");
 
             //When
-            var exception = assertThrows(BadRequestException.class, () -> createApplicationService.createDipApplication(applicationRequest));
+            var exception = assertThrows(ConflictException.class, () -> createApplicationService.createDipApplication(applicationRequest));
 
             //Then
             assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists " + id);
