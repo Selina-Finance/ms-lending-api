@@ -20,6 +20,7 @@ package com.selina.lending.internal.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.validator.Conditional;
@@ -37,22 +38,30 @@ public class AddressDto {
     @EnumValue(enumClass = AddressType.class)
     String addressType;
     @NotBlank
+    @Size(min = 3, max = 255)
     String addressLine1;
+    @Size(min = 3, max = 255)
     String addressLine2;
 
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z &\\-.']*$")
     @Schema(example = "London")
+    @Size(min = 3, max = 255)
     String city;
 
     @NotBlank
+    @Size(min = 3, max = 8)
     String postcode;
     String buildingName;
     String buildingNumber;
     String subBuildingName;
     Integer udprn;
     String poBox;
+
+    @Size(min = 2, max = 60)
     String county;
+
+    @Size(min = 2, max = 60)
     String country;
 
     @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)

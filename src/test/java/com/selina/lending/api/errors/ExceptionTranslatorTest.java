@@ -119,7 +119,7 @@ class ExceptionTranslatorTest {
     @Test
     void handleBadRequestException() throws Exception {
         // Given
-        var expectedTitle = "Error processing request";
+        var expectedTitle = "Bad Request";
         var expectedDetail = "bad request";
 
         // When
@@ -269,6 +269,22 @@ class ExceptionTranslatorTest {
 
                 //Then
                 .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value(expectedTitle))
+                .andExpect(jsonPath("$.detail").value(expectedMsg));
+    }
+
+    @Test
+    void handleConflictException() throws Exception {
+        //Given
+        String expectedMsg = "conflict request";
+        String expectedTitle = "Error processing request";
+
+        //When
+        mockMvc.perform(get("/api/exception-translator-test/conflict-exception"))
+
+                //Then
+                .andExpect(status().isConflict())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value(expectedTitle))
                 .andExpect(jsonPath("$.detail").value(expectedMsg));

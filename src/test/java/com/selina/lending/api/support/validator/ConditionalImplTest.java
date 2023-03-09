@@ -34,7 +34,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 class ConditionalImplTest {
     private static final String PREVIOUS_ADDRESS_TYPE = "previous";
-    private static final String POSTCODE = "postal code";
+    private static final String POSTCODE = "SW12 8AE";
     private static final String ADDRESS_LINE_1 = "address 1";
     private static final String CITY = "city";
     private static final String FROM_DATE = "2010-07-21";

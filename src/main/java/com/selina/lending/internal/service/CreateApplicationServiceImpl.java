@@ -19,7 +19,7 @@ package com.selina.lending.internal.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import com.selina.lending.api.errors.custom.BadRequestException;
+import com.selina.lending.api.errors.custom.ConflictException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
@@ -58,7 +58,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
             var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(applicationRequest.getExternalApplicationId());
             log.info("Check if application already exists [externalApplicationId={}], [sourceAccount={}]", applicationRequest.getExternalApplicationId(), applicationIdentifier.getSourceAccount());
             if (StringUtils.isNotEmpty(applicationIdentifier.getId())) {
-                throw new BadRequestException(APPLICATION_ALREADY_EXISTS_ERROR + " " + applicationRequest.getExternalApplicationId());
+                throw new ConflictException(APPLICATION_ALREADY_EXISTS_ERROR + " " + applicationRequest.getExternalApplicationId());
             }
         } catch (FeignException.NotFound ignore) {
             //application does not exist, so we can safely ignore this exception and create the application

@@ -19,6 +19,7 @@ package com.selina.lending.internal.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,13 +31,17 @@ import lombok.experimental.SuperBuilder;
 public class PropertyDetailsDto {
 
     @NotBlank
+    @Size(min = 3, max = 255)
     private String addressLine1;
+    @Size(min = 3, max = 255)
     private String addressLine2;
 
     @NotBlank
+    @Size(min = 3, max = 255)
     private String city;
 
     @NotBlank
+    @Size(min = 3, max = 8)
     private String postcode;
     private String buildingName;
     private String buildingNumber;
@@ -44,7 +49,11 @@ public class PropertyDetailsDto {
     private String propertyName;
     private Integer udprn;
     private String poBox;
+
+    @Size(min = 2, max = 60)
     private String county;
+
+    @Size(min = 2, max = 60)
     private String country;
 
     @NotNull

@@ -25,6 +25,10 @@ public class SwaggerConstants {
             "{\n    \"title\": \"Error processing request\",\n    \"status\": 403,\n    \"detail\": \"Sorry, but you have no access to this resource\"\n}";
     public static final String NOT_FOUND_EXAMPLE =
             "{\n    \"title\": \"Not Found\",\n    \"status\": 404,\n    \"detail\": \"message details\"\n}";
+
+    public static final String CONFLICT_EXAMPLE =
+            "{\n    \"title\": \"Error processing request\",\n    \"status\": 409,\n    \"detail\": \"message details\"\n}";
+
     public static final String OFFER_SELECTED_EXAMPLE = "{\n   \"message\": \"Offer selected with success\",\n  \"externalApplicationId\": \"external id\",\n   \"productCode\": \"product code\"\n}";
     public static final String DATE_PATTERN = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
     public static final String DATE_INVALID_MESSAGE = "must match yyyy-MM-dd format";
