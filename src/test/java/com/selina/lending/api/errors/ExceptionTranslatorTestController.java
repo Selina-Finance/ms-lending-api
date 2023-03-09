@@ -95,6 +95,13 @@ public class ExceptionTranslatorTestController {
         throw new FeignException.BadRequest("Bad request", request, "bad request".getBytes(), null);
     }
 
+    @GetMapping("/feign-internal-server-error-exception")
+    public void feignInternalServerErrorException() {
+        var request = Request.create(Request.HttpMethod.GET, "/feign-internal-server-error-exception",
+                new HashMap<>(), null, new RequestTemplate());
+        throw new FeignException.InternalServerError("Internal Server Error", request, "the error msg".getBytes(), null);
+    }
+
     @GetMapping("/conflict-exception")
     public void conflictException() {
         throw new com.selina.lending.api.errors.custom.ConflictException("conflict request");
