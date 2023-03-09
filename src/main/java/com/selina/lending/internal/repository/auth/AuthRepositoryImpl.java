@@ -17,9 +17,11 @@
 
 package com.selina.lending.internal.repository.auth;
 
+import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.internal.api.AuthApi;
-import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.internal.dto.auth.Credentials;
+import com.selina.lending.internal.dto.auth.TokenResponse;
+import feign.FeignException;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -35,13 +37,20 @@ public class AuthRepositoryImpl implements AuthRepository {
 
     @Override
     public TokenResponse getTokenByCredentials(Credentials credentials) {
+        try {
+            var apiResponse = authApi.login(Map.of(
+                            "client_id", credentials.clientId(),
+                            "client_secret", credentials.clientSecret(),
+                            "grant_type", "client_credentials"
+                    )
+            );
+            return new TokenResponse(apiResponse.access_token(), apiResponse.expires_in());
+        } catch (FeignException feignException) {
+            if (feignException.status() == 400) {
+                throw new BadRequestException(feignException.contentUTF8());
+            }
+            throw feignException;
+        }
 
-        var apiResponse = authApi.login(Map.of(
-                        "client_id", credentials.clientId(),
-                        "client_secret", credentials.clientSecret(),
-                        "grant_type", "client_credentials"
-                )
-        );
-        return new TokenResponse(apiResponse.access_token(), apiResponse.expires_in());
     }
 }

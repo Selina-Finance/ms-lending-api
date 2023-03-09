@@ -243,16 +243,48 @@ class ExceptionTranslatorTest {
     }
 
     @Test
+    void handleConflictException() throws Exception {
+        //Given
+        String expectedMsg = "conflict request";
+        String expectedTitle = "Error processing request";
+
+        //When
+        mockMvc.perform(get("/api/exception-translator-test/conflict-exception"))
+
+                //Then
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value(expectedTitle))
+                .andExpect(jsonPath("$.detail").value(expectedMsg));
+    }
+
+    @Test
     void handleFeignBadRequestException() throws Exception {
         //Given
-        String expectedMsg = "bad request";
-        String expectedTitle = "Bad Request";
+        String expectedMsg = "Sorry, unable to process your request";
+        String expectedTitle = "Bad Gateway";
 
         //When
         mockMvc.perform(get("/api/exception-translator-test/feign-bad-request-exception"))
 
                 //Then
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isBadGateway())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value(expectedTitle))
+                .andExpect(jsonPath("$.detail").value(expectedMsg));
+    }
+
+    @Test
+    void handleFeignInternalServerErrorException() throws Exception {
+        //Given
+        String expectedMsg = "Sorry, unable to process your request";
+        String expectedTitle = "Bad Gateway";
+
+        //When
+        mockMvc.perform(get("/api/exception-translator-test/feign-internal-server-error-exception"))
+
+                //Then
+                .andExpect(status().isBadGateway())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value(expectedTitle))
                 .andExpect(jsonPath("$.detail").value(expectedMsg));
@@ -274,19 +306,4 @@ class ExceptionTranslatorTest {
                 .andExpect(jsonPath("$.detail").value(expectedMsg));
     }
 
-    @Test
-    void handleConflictException() throws Exception {
-        //Given
-        String expectedMsg = "conflict request";
-        String expectedTitle = "Error processing request";
-
-        //When
-        mockMvc.perform(get("/api/exception-translator-test/conflict-exception"))
-
-                //Then
-                .andExpect(status().isConflict())
-                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(jsonPath("$.title").value(expectedTitle))
-                .andExpect(jsonPath("$.detail").value(expectedMsg));
-    }
 }
