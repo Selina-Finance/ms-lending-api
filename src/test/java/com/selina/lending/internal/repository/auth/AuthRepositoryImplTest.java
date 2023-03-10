@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.repository.auth;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.internal.api.AuthApi;
 import com.selina.lending.internal.dto.auth.Credentials;
@@ -47,6 +49,8 @@ class AuthRepositoryImplTest {
 
     @Mock
     private AuthApi authApi;
+    @Mock
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private AuthRepositoryImpl authRepository;
@@ -85,26 +89,23 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    void shouldWrapToLendingApiBadRequestWhenFeignBadRequest() {
+    void shouldWrapToLendingApiBadRequestWhenFeignBadRequest() throws JsonProcessingException {
         // Given
-        var credentials = new Credentials("the-client-id", "client-super-secret");
+        var credentials = new Credentials("", "");
 
         var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
-        var feignException = new FeignException.BadRequest("Bad Request", request, "wrong credentials".getBytes(), null);
+        var feignException = new FeignException.BadRequest("Bad Request", request, "".getBytes(), null);
         when(authApi.login(any())).thenThrow(feignException);
 
-        var expectedAuthApiRequestParams = Map.of(
-                "client_id", credentials.clientId(),
-                "client_secret", credentials.clientSecret(),
-                "grant_type", "client_credentials"
-        );
+        var errorDetails = new AuthApi.ErrorDetails("invalid_client", "Invalid client credentials");
+        when(objectMapper.readValue(feignException.contentUTF8(), AuthApi.ErrorDetails.class)).thenReturn(errorDetails);
 
         // When
         var exception = assertThrows(BadRequestException.class, () -> authRepository.getTokenByCredentials(credentials));
 
         // Then
-        assertThat(exception.getTitle()).isEqualTo(feignException.getMessage());
-        assertThat(exception.getDetail()).isEqualTo(feignException.contentUTF8());
+        assertThat(exception.getTitle()).isEqualTo("Bad Request");
+        assertThat(exception.getDetail()).isEqualTo("Invalid client credentials");
     }
 
     @Test
