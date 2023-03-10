@@ -18,7 +18,11 @@
 package com.selina.lending.api.controller;
 
 public class SwaggerConstants {
-    public static final String INVALID_CREDENTIALS_EXAMPLE = "{\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"message details\"\n }";
+    public static final String INVALID_CREDENTIALS_EXAMPLE = "{\n" +
+            "    \"title\": \"Bad Request\",\n" +
+            "    \"status\": 400,\n" +
+            "    \"detail\": \"Invalid client credentials\"\n" +
+            "}";
     public static final String BAD_REQUEST_EXAMPLE =
             "{\n    \"title\": \"Constraint Violation\",\n    \"status\": 400,\n    \"violations\": [\n   {\n \"field\": \"field\",\n   \"message\": \"value is not valid\"\n }\n    ]\n }";
     public static final String ACCESS_DENIED_EXAMPLE =

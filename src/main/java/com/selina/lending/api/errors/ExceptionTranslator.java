@@ -30,7 +30,6 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.Status;
 import org.zalando.problem.StatusType;
-import org.zalando.problem.spring.common.HttpStatusAdapter;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
@@ -40,6 +39,7 @@ import java.net.URI;
 import java.util.Optional;
 
 import static com.selina.lending.api.errors.ErrorConstants.DOWNSTREAM_EXCEPTION_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.NOT_FOUND_EXCEPTION_DETAIL;
 import static com.selina.lending.api.errors.ErrorConstants.UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL;
 import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EXCEPTION_DETAIL;
 import static com.selina.lending.api.errors.ErrorConstants.VIOLATIONS_KEY;
@@ -75,11 +75,11 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     @Override
     public ProblemBuilder prepare(@NotNull final Throwable throwable, @NotNull final StatusType status, @NotNull final URI type) {
         if (throwable instanceof FeignException feignException) {
-            if (isThisTypeShouldBeSuppressed(feignException)) {
-                log.error("Suppressed remote service exception", throwable);
-                return buildProblem(Status.BAD_GATEWAY, DOWNSTREAM_EXCEPTION_DETAIL, throwable);
+            log.error("Suppressed remote service exception", throwable);
+            if (is404(feignException)) {
+                return buildProblem(Status.NOT_FOUND, NOT_FOUND_EXCEPTION_DETAIL, throwable);
             }
-            return buildProblem(new HttpStatusAdapter(HttpStatus.valueOf(feignException.status())), feignException.contentUTF8(), feignException);
+            return buildProblem(Status.BAD_GATEWAY, DOWNSTREAM_EXCEPTION_DETAIL, throwable);
         }
 
         if (isHttpMessageConversionException(throwable)) {
@@ -93,8 +93,8 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         return buildProblem(status, throwable.getMessage(), throwable);
     }
 
-    private boolean isThisTypeShouldBeSuppressed(FeignException feignException) {
-        return feignException.status() == 400 || feignException.status() == 500;
+    private boolean is404(FeignException feignException) {
+        return feignException.status() == HttpStatus.NOT_FOUND.value();
     }
 
     private ProblemBuilder buildProblem(StatusType status, String detail, Throwable throwable) {

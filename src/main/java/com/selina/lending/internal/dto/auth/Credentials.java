@@ -17,7 +17,11 @@
 
 package com.selina.lending.internal.dto.auth;
 
+import javax.validation.constraints.NotBlank;
+
 public record Credentials(
+        @NotBlank
         String clientId,
+        @NotBlank
         String clientSecret
 ) {}

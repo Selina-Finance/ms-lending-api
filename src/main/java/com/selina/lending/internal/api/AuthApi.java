@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.selina.lending.internal.service.application.domain.auth.AuthApiTokenResponse;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
@@ -51,4 +52,9 @@ public interface AuthApi {
             return new SpringFormEncoder(new SpringEncoder(converters));
         }
     }
+
+    record ErrorDetails(
+            @JsonProperty("error") String error,
+            @JsonProperty("error_description") String description
+    ){}
 }

@@ -17,8 +17,8 @@
 
 package com.selina.lending.api.controller.auth;
 
-import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.internal.dto.auth.Credentials;
+import com.selina.lending.internal.dto.auth.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
+import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
 import static com.selina.lending.api.controller.SwaggerConstants.INVALID_CREDENTIALS_EXAMPLE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public interface AuthOperations {
 
@@ -48,9 +48,14 @@ public interface AuthOperations {
                                     mediaType = APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = TokenResponse.class))
                     }),
-            @ApiResponse(responseCode = "400", description = "Invalid client credentials",
-                    content = @Content (examples = {@ExampleObject(value = INVALID_CREDENTIALS_EXAMPLE)})
-            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Request is invalid",
+                    content = {
+                            @Content(mediaType = "application/problem+json", examples = {@ExampleObject(value = INVALID_CREDENTIALS_EXAMPLE)}),
+                            @Content(mediaType = "application/json", examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})}
+
+            )
     })
     @PostMapping(value = "/auth/token")
     ResponseEntity<TokenResponse> createToken(@Valid @RequestBody Credentials credentials);

@@ -23,6 +23,7 @@ public final class ErrorConstants {
     public static final String UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL = "Unable to convert http message";
     public static final String UNEXPECTED_RUNTIME_EXCEPTION_DETAIL = "Unexpected runtime exception";
     public static final String DOWNSTREAM_EXCEPTION_DETAIL = "Sorry, unable to process your request";
+    public static final String NOT_FOUND_EXCEPTION_DETAIL = "The entity does not exist";
 
     private ErrorConstants() {
     }
