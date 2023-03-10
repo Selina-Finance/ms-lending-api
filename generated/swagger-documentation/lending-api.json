@@ -352,11 +352,23 @@
             "description":"Invalid client credentials",
             "content":{
               "*/*":{
-                "example":{
-                  "title":"Bad Request",
-                  "status":400,
-                  "detail":"message details"
-                }
+                "example":[
+                  {
+                    "title": "Bad Request",
+                    "status": 400,
+                    "detail": "Invalid client credentials"
+                  },
+                  {
+                    "title": "Constraint Violation",
+                    "status": 400,
+                    "violations": [
+                      {
+                        "field": "field",
+                        "message": "value is not valid"
+                      }
+                    ]
+                  }
+                ]
               }
             }
           }

@@ -52,11 +52,11 @@ public interface AuthOperations {
             @ApiResponse(
                     responseCode = "400",
                     description = "Request is invalid",
-                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
-            ),
-            @ApiResponse(responseCode = "400", description = "Invalid client credentials",
-                    content = @Content (examples = {@ExampleObject(value = INVALID_CREDENTIALS_EXAMPLE)})
-            ),
+                    content = {
+                            @Content(mediaType = "application/problem+json", examples = {@ExampleObject(value = INVALID_CREDENTIALS_EXAMPLE)}),
+                                    @Content(mediaType = "application/json", examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})}
+
+            )
     })
     @PostMapping(value = "/auth/token")
     ResponseEntity<TokenResponse> createToken(@Valid @RequestBody Credentials credentials);
