@@ -17,7 +17,6 @@
 
 package com.selina.lending.internal.repository.auth;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.internal.api.AuthApi;
@@ -26,6 +25,7 @@ import com.selina.lending.internal.dto.auth.TokenResponse;
 import feign.FeignException;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -52,12 +52,12 @@ public class AuthRepositoryImpl implements AuthRepository {
             );
             return new TokenResponse(apiResponse.access_token(), apiResponse.expires_in());
         } catch (FeignException feignException) {
-            throw (isBadRequest(feignException)) ? toLaBadRequest(feignException) : feignException;
+            throw (isBadRequest(feignException)) ? toCustomBadRequest(feignException) : feignException;
         }
     }
 
     @NotNull
-    private BadRequestException toLaBadRequest(FeignException feignException) {
+    private BadRequestException toCustomBadRequest(FeignException feignException) {
         var details = getDetails(feignException);
         return new BadRequestException(details.description());
     }
@@ -68,6 +68,6 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     private static boolean isBadRequest(FeignException feignException) {
-        return feignException.status() == 400;
+        return feignException.status() == HttpStatus.BAD_REQUEST.value();
     }
 }

@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 
+import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import static com.selina.lending.api.controller.SwaggerConstants.INVALID_CREDENTIALS_EXAMPLE;
@@ -48,6 +49,11 @@ public interface AuthOperations {
                                     mediaType = APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = TokenResponse.class))
                     }),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Request is invalid",
+                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
+            ),
             @ApiResponse(responseCode = "400", description = "Invalid client credentials",
                     content = @Content (examples = {@ExampleObject(value = INVALID_CREDENTIALS_EXAMPLE)})
             ),

@@ -21,6 +21,7 @@ import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -75,7 +76,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     public ProblemBuilder prepare(@NotNull final Throwable throwable, @NotNull final StatusType status, @NotNull final URI type) {
         if (throwable instanceof FeignException feignException) {
             log.error("Suppressed remote service exception", throwable);
-            if (isThis404(feignException)) {
+            if (is404(feignException)) {
                 return buildProblem(Status.NOT_FOUND, NOT_FOUND_EXCEPTION_DETAIL, throwable);
             }
             return buildProblem(Status.BAD_GATEWAY, DOWNSTREAM_EXCEPTION_DETAIL, throwable);
@@ -92,8 +93,8 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         return buildProblem(status, throwable.getMessage(), throwable);
     }
 
-    private boolean isThis404(FeignException feignException) {
-        return feignException.status() == 404;
+    private boolean is404(FeignException feignException) {
+        return feignException.status() == HttpStatus.NOT_FOUND.value();
     }
 
     private ProblemBuilder buildProblem(StatusType status, String detail, Throwable throwable) {
