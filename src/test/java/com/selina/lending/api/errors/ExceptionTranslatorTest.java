@@ -293,8 +293,9 @@ class ExceptionTranslatorTest {
     @Test
     void handleFeignNotFoundRequestException() throws Exception {
         //Given
-        String expectedMsg = "not found";
         String expectedTitle = "Not Found";
+        String expectedMsg = "The entity does not exist";
+
 
         //When
         mockMvc.perform(get("/api/exception-translator-test/feign-not-found-exception"))
