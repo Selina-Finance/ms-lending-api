@@ -116,6 +116,22 @@ class MiddlewareRequestEnricherTest {
         //Then
         assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(isApplicantResidence));
     }
+
+    @Test
+    void shouldSetIsApplicantResidenceWhenOnlyOneAddressWithNoAddressType() {
+        //Given
+        var request = ApplicationRequest.builder().applicants(List.of(Applicant.builder()
+                .primaryApplicant(true).addresses(List.of(Address.builder().postcode("CODE").build()))
+                .build())).propertyDetails(PropertyDetails.builder().postcode("CODE").build()).build();
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+
+        //When
+        enricher.enrichCreateDipCCApplicationRequest(request);
+
+        //Then
+        assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(true));
+    }
+
     @Test
     void enrichPatchApplicationRequest() {
         //Given

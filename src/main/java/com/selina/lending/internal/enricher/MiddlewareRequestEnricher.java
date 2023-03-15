@@ -17,9 +17,8 @@
 
 package com.selina.lending.internal.enricher;
 
+import java.util.List;
 import java.util.Optional;
-
-import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
 
@@ -70,24 +69,27 @@ public class MiddlewareRequestEnricher {
             currentAddress.ifPresent(
                     address -> propertyDetails.setIsApplicantResidence(isEquals(applicationRequest, address))
             );
-
         }
     }
 
-    private static boolean isEquals(ApplicationRequest applicationRequest, Address address) {
+    private boolean isEquals(ApplicationRequest applicationRequest, Address address) {
         return address.getPostcode().equals(applicationRequest.getPropertyDetails().getPostcode());
     }
 
-    @NotNull
-    private static Optional<Address> getPrimaryApplicantCurrentAddress(ApplicationRequest applicationRequest) {
+    private Optional<Address> getPrimaryApplicantCurrentAddress(ApplicationRequest applicationRequest) {
         return applicationRequest.getApplicants()
                 .stream()
                 .filter(Applicant::getPrimaryApplicant)
                 .findFirst()
-                .flatMap(applicant -> applicant.getAddresses().stream()
-                        .filter(address -> address.getAddressType().equals(ADDRESS_TYPE_CURRENT))
-                        .findFirst());
+                .map(applicant -> getAddress(applicant.getAddresses()))
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+    }
 
+    private Optional<Address> getAddress(List<Address> addresses) {
+        return addresses.size() == 1 ? Optional.of(addresses.get(0)) : addresses.stream()
+                .filter(address -> address.getAddressType().equals(ADDRESS_TYPE_CURRENT))
+                .findFirst();
     }
 
     private void setIdentifier(Applicant applicant) {
