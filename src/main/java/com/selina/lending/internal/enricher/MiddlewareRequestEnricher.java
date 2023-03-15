@@ -27,6 +27,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationRequest
 @Service
 public class MiddlewareRequestEnricher {
 
+    protected static final String ADDRESS_TYPE_CURRENT = "current";
     private final TokenService tokenService;
 
     public MiddlewareRequestEnricher(TokenService tokenService) {
@@ -53,6 +54,25 @@ public class MiddlewareRequestEnricher {
         applicationRequest.setSource(LendingConstants.REQUEST_SOURCE);
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
         applicationRequest.getApplicants().forEach(this::setIdentifier);
+        setIsApplicantResidenceIfNotSet(applicationRequest);
+    }
+
+    private void setIsApplicantResidenceIfNotSet(ApplicationRequest applicationRequest) {
+        if (applicationRequest.getPropertyDetails().getIsApplicantResidence() == null) {
+            var primaryApplicant = applicationRequest.getApplicants()
+                    .stream()
+                    .filter(Applicant::getPrimaryApplicant)
+                    .findFirst();
+
+            if (primaryApplicant.isPresent()) {
+                var currentAddress = primaryApplicant.get().getAddresses().stream().filter(
+                        address -> address.getAddressType().equals(ADDRESS_TYPE_CURRENT)).findFirst();
+                applicationRequest.getPropertyDetails().setIsApplicantResidence(
+                        currentAddress.isPresent() && currentAddress.get()
+                                .getPostcode()
+                                .equals(applicationRequest.getPropertyDetails().getPostcode()));
+            }
+        }
     }
 
     private void setIdentifier(Applicant applicant) {

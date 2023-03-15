@@ -17,21 +17,26 @@
 
 package com.selina.lending.internal.enricher;
 
-import com.selina.lending.internal.dto.LendingConstants;
-import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.Applicant;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.when;
+
+import static com.selina.lending.internal.enricher.MiddlewareRequestEnricher.ADDRESS_TYPE_CURRENT;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.when;
+import com.selina.lending.internal.dto.LendingConstants;
+import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.Address;
+import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.internal.service.application.domain.PropertyDetails;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRequestEnricherTest {
@@ -50,8 +55,10 @@ class MiddlewareRequestEnricherTest {
     @Test
     void enrichCreateDipCCApplicationRequest() {
         //Given
-        var request = ApplicationRequest.builder().applicants(
-                List.of(Applicant.builder().primaryApplicant(true).build())).build();
+        var request = ApplicationRequest.builder().applicants(List.of(Applicant.builder()
+                .primaryApplicant(true)
+                .addresses(List.of(Address.builder().addressType(ADDRESS_TYPE_CURRENT).postcode("CODE").build()))
+                .build())).propertyDetails(PropertyDetails.builder().postcode("CODE2").build()).build();
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
 
         //When
@@ -63,14 +70,19 @@ class MiddlewareRequestEnricherTest {
         assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(0));
         assertThat(request.getIncludeCreditCommitment(), equalTo(true));
         assertThat(request.getProductCode(), equalTo(LendingConstants.PRODUCT_CODE_ALL));
+        assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(false));
     }
 
     @Test
     void enrichCreateDipApplicationRequest() {
         //Given
-        var request = ApplicationRequest.builder().applicants(
-                List.of(Applicant.builder().primaryApplicant(true).build(),
-                        Applicant.builder().primaryApplicant(false).build())).build();
+        var request = ApplicationRequest.builder().applicants(List.of(Applicant.builder()
+                .primaryApplicant(true)
+                .addresses(List.of(Address.builder().addressType(ADDRESS_TYPE_CURRENT).postcode("CODE").build(),
+                        Address.builder().addressType("previous").postcode("oldcode").build()))
+                .build(), Applicant.builder().primaryApplicant(false).addresses(List.of(Address.builder().addressType(
+                "current").postcode("CODE").build())).build())).propertyDetails(
+                PropertyDetails.builder().postcode("CODE").build()).build();
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
 
         //When
@@ -84,6 +96,7 @@ class MiddlewareRequestEnricherTest {
         assertThat(request.getIncludeCreditCommitment(), equalTo(false));
         assertThat(request.getProductCode(), equalTo(LendingConstants.PRODUCT_CODE_ALL));
         assertThat(request.getStageOverwrite(), equalTo(LendingConstants.STAGE_OVERWRITE));
+        assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(true));
     }
 
     @Test
