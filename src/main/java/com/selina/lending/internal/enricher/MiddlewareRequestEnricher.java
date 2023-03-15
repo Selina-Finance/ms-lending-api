@@ -17,16 +17,23 @@
 
 package com.selina.lending.internal.enricher;
 
+import java.util.Optional;
+
+import javax.validation.constraints.NotNull;
+
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.dto.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.internal.service.application.domain.PropertyDetails;
 
 @Service
 public class MiddlewareRequestEnricher {
 
+    protected static final String ADDRESS_TYPE_CURRENT = "current";
     private final TokenService tokenService;
 
     public MiddlewareRequestEnricher(TokenService tokenService) {
@@ -53,6 +60,34 @@ public class MiddlewareRequestEnricher {
         applicationRequest.setSource(LendingConstants.REQUEST_SOURCE);
         applicationRequest.setProductCode(LendingConstants.PRODUCT_CODE_ALL);
         applicationRequest.getApplicants().forEach(this::setIdentifier);
+        setIsApplicantResidenceIfNotSet(applicationRequest);
+    }
+
+    private void setIsApplicantResidenceIfNotSet(ApplicationRequest applicationRequest) {
+        PropertyDetails propertyDetails = applicationRequest.getPropertyDetails();
+        if (propertyDetails.getIsApplicantResidence() == null) {
+            var currentAddress = getPrimaryApplicantCurrentAddress(applicationRequest);
+            currentAddress.ifPresent(
+                    address -> propertyDetails.setIsApplicantResidence(isEquals(applicationRequest, address))
+            );
+
+        }
+    }
+
+    private static boolean isEquals(ApplicationRequest applicationRequest, Address address) {
+        return address.getPostcode().equals(applicationRequest.getPropertyDetails().getPostcode());
+    }
+
+    @NotNull
+    private static Optional<Address> getPrimaryApplicantCurrentAddress(ApplicationRequest applicationRequest) {
+        return applicationRequest.getApplicants()
+                .stream()
+                .filter(Applicant::getPrimaryApplicant)
+                .findFirst()
+                .flatMap(applicant -> applicant.getAddresses().stream()
+                        .filter(address -> address.getAddressType().equals(ADDRESS_TYPE_CURRENT))
+                        .findFirst());
+
     }
 
     private void setIdentifier(Applicant applicant) {
