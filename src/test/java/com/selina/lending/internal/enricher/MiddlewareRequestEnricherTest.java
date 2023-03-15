@@ -81,7 +81,7 @@ class MiddlewareRequestEnricherTest {
                 .addresses(List.of(Address.builder().addressType(ADDRESS_TYPE_CURRENT).postcode("CODE").build(),
                         Address.builder().addressType("previous").postcode("oldcode").build()))
                 .build(), Applicant.builder().primaryApplicant(false).addresses(List.of(Address.builder().addressType(
-                "current").postcode("CODE").build())).build())).propertyDetails(
+                ADDRESS_TYPE_CURRENT).postcode("CODE").build())).build())).propertyDetails(
                 PropertyDetails.builder().postcode("CODE").build()).build();
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
 
