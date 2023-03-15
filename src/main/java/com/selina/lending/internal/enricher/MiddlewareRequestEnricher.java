@@ -29,7 +29,10 @@ import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class MiddlewareRequestEnricher {
 
     protected static final String ADDRESS_TYPE_CURRENT = "current";
@@ -50,6 +53,7 @@ public class MiddlewareRequestEnricher {
 
     public void enrichPatchApplicationRequest(ApplicationRequest applicationRequest) {
         applicationRequest.getApplicants().forEach(this::setIdentifier);
+        setIsApplicantResidenceIfNotSet(applicationRequest);
         applicationRequest.setRunDecisioning(true);
     }
 
@@ -65,10 +69,13 @@ public class MiddlewareRequestEnricher {
     private void setIsApplicantResidenceIfNotSet(ApplicationRequest applicationRequest) {
         PropertyDetails propertyDetails = applicationRequest.getPropertyDetails();
         if (propertyDetails.getIsApplicantResidence() == null) {
-            var currentAddress = getPrimaryApplicantCurrentAddress(applicationRequest);
-            currentAddress.ifPresent(
-                    address -> propertyDetails.setIsApplicantResidence(isEquals(applicationRequest, address))
-            );
+            try {
+                var currentAddress = getPrimaryApplicantCurrentAddress(applicationRequest);
+                currentAddress.ifPresent(
+                        address -> propertyDetails.setIsApplicantResidence(isEquals(applicationRequest, address)));
+            } catch (Exception e) {
+                log.error("Unable to set isApplicantResidence in request ", e);
+            }
         }
     }
 
