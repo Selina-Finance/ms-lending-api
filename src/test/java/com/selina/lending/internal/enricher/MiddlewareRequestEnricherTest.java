@@ -147,6 +147,7 @@ class MiddlewareRequestEnricherTest {
         assertThat(request.getRunDecisioning(), equalTo(true));
         assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(0));
         assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(1));
+        assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(true));
     }
 
     @Test
@@ -156,8 +157,10 @@ class MiddlewareRequestEnricherTest {
                 .primaryApplicant(true)
                 .addresses(List.of(Address.builder().postcode("CODE").build(),
                         Address.builder().postcode("oldcode").build()))
-                .build(), Applicant.builder().primaryApplicant(false).addresses(List.of(Address.builder().postcode("CODE").build())).build())).propertyDetails(
-                PropertyDetails.builder().postcode("CODE").build()).build();
+                .build(), Applicant.builder()
+                .primaryApplicant(false)
+                .addresses(List.of(Address.builder().postcode("CODE").build()))
+                .build())).propertyDetails(PropertyDetails.builder().postcode("CODE").build()).build();
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
 
         //When
