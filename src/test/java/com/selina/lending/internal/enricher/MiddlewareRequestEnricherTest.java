@@ -28,6 +28,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -99,6 +101,21 @@ class MiddlewareRequestEnricherTest {
         assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(true));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"true", "false"})
+    void shouldNotEvaluateIsApplicantResidenceWhenIsApplicantResidencePassedInRequest(boolean isApplicantResidence) {
+        //Given
+        var request = ApplicationRequest.builder().applicants(List.of(Applicant.builder()
+                .primaryApplicant(true)
+                .build())).propertyDetails(PropertyDetails.builder().isApplicantResidence(isApplicantResidence).build()).build();
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+
+        //When
+        enricher.enrichCreateDipCCApplicationRequest(request);
+
+        //Then
+        assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(isApplicantResidence));
+    }
     @Test
     void enrichPatchApplicationRequest() {
         //Given
