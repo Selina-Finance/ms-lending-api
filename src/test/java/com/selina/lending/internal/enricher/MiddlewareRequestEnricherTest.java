@@ -116,12 +116,29 @@ class MiddlewareRequestEnricherTest {
         //Then
         assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(isApplicantResidence));
     }
+
+    @Test
+    void shouldNotSetIsApplicantResidenceWhenOnlyOneAddressWithNoAddressType() {
+        //Given
+        var request = ApplicationRequest.builder().applicants(List.of(Applicant.builder()
+                .primaryApplicant(true).addresses(List.of(Address.builder().postcode("CODE").build()))
+                .build())).propertyDetails(PropertyDetails.builder().postcode("CODE").build()).build();
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+
+        //When
+        enricher.enrichCreateDipCCApplicationRequest(request);
+
+        //Then
+        assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(true));
+    }
+
     @Test
     void enrichPatchApplicationRequest() {
         //Given
         var request = ApplicationRequest.builder().applicants(
                 List.of(Applicant.builder().primaryApplicant(true).build(),
-                        Applicant.builder().primaryApplicant(false).build())).build();
+                        Applicant.builder().primaryApplicant(false).build()))
+                .propertyDetails(PropertyDetails.builder().isApplicantResidence(true).build()).build();
 
         //When
         enricher.enrichPatchApplicationRequest(request);
@@ -130,5 +147,33 @@ class MiddlewareRequestEnricherTest {
         assertThat(request.getRunDecisioning(), equalTo(true));
         assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(0));
         assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(1));
+        assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(true));
+    }
+
+    @Test
+    void shouldNotSetIsApplicantResidenceWhenUnableToDetermineCurrentAddressTypeInAddressList() {
+        //Given
+        var request = ApplicationRequest.builder().applicants(List.of(Applicant.builder()
+                .primaryApplicant(true)
+                .addresses(List.of(Address.builder().postcode("CODE").build(),
+                        Address.builder().postcode("oldcode").build()))
+                .build(), Applicant.builder()
+                .primaryApplicant(false)
+                .addresses(List.of(Address.builder().postcode("CODE").build()))
+                .build())).propertyDetails(PropertyDetails.builder().postcode("CODE").build()).build();
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+
+        //When
+        enricher.enrichCreateDipApplicationRequest(request);
+
+        //Then
+        assertThat(request.getSourceAccount(), equalTo(SOURCE_ACCOUNT));
+        assertThat(request.getSource(), equalTo(LendingConstants.REQUEST_SOURCE));
+        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(0));
+        assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(1));
+        assertThat(request.getIncludeCreditCommitment(), equalTo(false));
+        assertThat(request.getProductCode(), equalTo(LendingConstants.PRODUCT_CODE_ALL));
+        assertThat(request.getStageOverwrite(), equalTo(LendingConstants.STAGE_OVERWRITE));
+        assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(null));
     }
 }

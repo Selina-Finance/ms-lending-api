@@ -17,9 +17,8 @@
 
 package com.selina.lending.internal.enricher;
 
+import java.util.List;
 import java.util.Optional;
-
-import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,10 @@ import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class MiddlewareRequestEnricher {
 
     protected static final String ADDRESS_TYPE_CURRENT = "current";
@@ -51,6 +53,7 @@ public class MiddlewareRequestEnricher {
 
     public void enrichPatchApplicationRequest(ApplicationRequest applicationRequest) {
         applicationRequest.getApplicants().forEach(this::setIdentifier);
+        setIsApplicantResidenceIfNotSet(applicationRequest);
         applicationRequest.setRunDecisioning(true);
     }
 
@@ -66,28 +69,34 @@ public class MiddlewareRequestEnricher {
     private void setIsApplicantResidenceIfNotSet(ApplicationRequest applicationRequest) {
         PropertyDetails propertyDetails = applicationRequest.getPropertyDetails();
         if (propertyDetails.getIsApplicantResidence() == null) {
-            var currentAddress = getPrimaryApplicantCurrentAddress(applicationRequest);
-            currentAddress.ifPresent(
-                    address -> propertyDetails.setIsApplicantResidence(isEquals(applicationRequest, address))
-            );
-
+            try {
+                var currentAddress = getPrimaryApplicantCurrentAddress(applicationRequest);
+                currentAddress.ifPresent(
+                        address -> propertyDetails.setIsApplicantResidence(isEquals(applicationRequest, address)));
+            } catch (Exception e) {
+                log.error("Unable to set isApplicantResidence in request ", e);
+            }
         }
     }
 
-    private static boolean isEquals(ApplicationRequest applicationRequest, Address address) {
+    private boolean isEquals(ApplicationRequest applicationRequest, Address address) {
         return address.getPostcode().equals(applicationRequest.getPropertyDetails().getPostcode());
     }
 
-    @NotNull
-    private static Optional<Address> getPrimaryApplicantCurrentAddress(ApplicationRequest applicationRequest) {
+    private Optional<Address> getPrimaryApplicantCurrentAddress(ApplicationRequest applicationRequest) {
         return applicationRequest.getApplicants()
                 .stream()
                 .filter(Applicant::getPrimaryApplicant)
                 .findFirst()
-                .flatMap(applicant -> applicant.getAddresses().stream()
-                        .filter(address -> address.getAddressType().equals(ADDRESS_TYPE_CURRENT))
-                        .findFirst());
+                .map(applicant -> getAddress(applicant.getAddresses()))
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+    }
 
+    private Optional<Address> getAddress(List<Address> addresses) {
+        return addresses.size() == 1 ? Optional.of(addresses.get(0)) : addresses.stream()
+                .filter(address -> address.getAddressType().equals(ADDRESS_TYPE_CURRENT))
+                .findFirst();
     }
 
     private void setIdentifier(Applicant applicant) {
