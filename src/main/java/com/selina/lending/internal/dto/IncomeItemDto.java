@@ -51,7 +51,6 @@ public class IncomeItemDto {
     enum IncomeType {
         ARMED_FORCES_PENSION("Armed forces pension"),
         BEREAVEMENT_ALLOWANCE("Bereavement allowance"),
-        BASE_SALARY("Base salary"),
         BONUS("Bonus"),
         CAR_ALLOWANCE("Car allowance"),
         CARERS_ALLOWANCE("Carers allowance"),
