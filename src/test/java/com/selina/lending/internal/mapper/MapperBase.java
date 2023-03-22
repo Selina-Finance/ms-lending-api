@@ -665,7 +665,6 @@ public abstract class MapperBase {
         return ApplicationDecisionResponse.builder()
                 .id(APPLICATION_ID)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
-                .brokerSubmitterEmail(BROKER_SUBMITTER_EMAIL)
                 .applicants(List.of(getApplicant()))
                 .applicationType(DIP_APPLICATION_TYPE)
                 .loanInformation(getLoanInformation())
