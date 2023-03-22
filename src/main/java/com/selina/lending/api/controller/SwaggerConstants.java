@@ -40,5 +40,7 @@ public class SwaggerConstants {
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS";
     public static final String DATE_FORMAT = "yyyy-MM-dd";
 
+    public static final String EMAIL_PATTERN = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}";
+
     private SwaggerConstants() {}
 }
