@@ -17,14 +17,19 @@
 
 package com.selina.lending.internal.dto;
 
+import static com.selina.lending.api.controller.SwaggerConstants.EMAIL_PATTERN;
+
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.selina.lending.api.support.converter.ToLowerCase;
 import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +42,10 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 public class DIPApplicationRequest extends ApplicationRequest {
-
+    @Schema(description = "the email address of the broker submitting the application. They should have an account on our Broker Portal")
+    @Email(message = "brokerSubmitterEmail is not valid", regexp = EMAIL_PATTERN)
+    @ToLowerCase
+    private String brokerSubmitterEmail;
 
     @NotNull
     @Size(min = 4, max = 255)

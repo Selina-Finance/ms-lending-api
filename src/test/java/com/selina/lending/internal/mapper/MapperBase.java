@@ -193,6 +193,7 @@ public abstract class MapperBase {
     public static final String CATEGORY_STATUS_0 = "Status 0";
     public static final Double LTV_CAP = 0.50;
     protected static final Double ARRANGEMENT_FEE = 1000.00;
+    protected static final String BROKER_SUBMITTER_EMAIL = "broker_submitter@email.co.uk";
 
     static {
         try {
@@ -218,6 +219,7 @@ public abstract class MapperBase {
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPPropertyDetailsDto())
                 .fees(getFeesDto())
+                .brokerSubmitterEmail(BROKER_SUBMITTER_EMAIL)
                 .build();
     }
 
@@ -226,6 +228,7 @@ public abstract class MapperBase {
         return DIPCCApplicationRequest.builder()
                 .sourceClientId(SOURCE_CLIENT_ID)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .brokerSubmitterEmail(BROKER_SUBMITTER_EMAIL)
                 .expenditure(List.of(getExpenditureDto()))
                 .applicants(List.of(getDIPApplicantDto()))
                 .loanInformation(getAdvancedLoanInformationDto())
