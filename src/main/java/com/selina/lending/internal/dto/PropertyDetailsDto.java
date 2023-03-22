@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.selina.lending.api.support.validator.AtLeastOneNotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -28,6 +29,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Data
+@AtLeastOneNotBlank(fields = {"buildingName", "buildingNumber"})
 public class PropertyDetailsDto {
 
     @NotBlank
