@@ -37,6 +37,7 @@ class DIPCCApplicationRequestMapperTest extends MapperBase {
 
         //Then
         assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+        assertThat(applicationRequest.getBrokerSubmitterEmail(), equalTo(BROKER_SUBMITTER_EMAIL));
         assertThat(applicationRequest.getSourceClientId(), equalTo(SOURCE_CLIENT_ID));
         assertThat(applicationRequest.getExpenditure(), notNullValue());
         assertThat(applicationRequest.getExpenditure().size(), equalTo(1));

@@ -47,16 +47,6 @@
           "401":{
             "description":"Unauthorized"
           },
-          "200":{
-            "description":"Quick Quote updated",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/QuickQuoteResponse"
-                }
-              }
-            }
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -82,6 +72,16 @@
                       "message":"value is not valid"
                     }
                   ]
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"Quick Quote updated",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/QuickQuoteResponse"
                 }
               }
             }
@@ -120,17 +120,14 @@
           "401":{
             "description":"Unauthorized"
           },
-          "200":{
-            "description":"Product offer selected",
+          "404":{
+            "description":"Application not found",
             "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/SelectProductResponse"
-                },
+              "*/*":{
                 "example":{
-                  "message":"Offer selected with success",
-                  "externalApplicationId":"external id",
-                  "productCode":"product code"
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
                 }
               }
             }
@@ -147,14 +144,17 @@
               }
             }
           },
-          "404":{
-            "description":"Application not found",
+          "200":{
+            "description":"Product offer selected",
             "content":{
-              "*/*":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/SelectProductResponse"
+                },
                 "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
+                  "message":"Offer selected with success",
+                  "externalApplicationId":"external id",
+                  "productCode":"product code"
                 }
               }
             }
@@ -194,6 +194,18 @@
           "401":{
             "description":"Unauthorized"
           },
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -219,18 +231,6 @@
                       "message":"value is not valid"
                     }
                   ]
-                }
-              }
-            }
-          },
-          "404":{
-            "description":"Application not found",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
                 }
               }
             }
@@ -273,6 +273,18 @@
           "401":{
             "description":"Unauthorized"
           },
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
+              }
+            }
+          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -302,18 +314,6 @@
               }
             }
           },
-          "404":{
-            "description":"Application not found",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
-                }
-              }
-            }
-          },
           "204":{
             "description":"Application updated"
           }
@@ -338,6 +338,30 @@
           "required":true
         },
         "responses":{
+          "400":{
+            "description":"Request is invalid",
+            "content":{
+              "application/problem+json":{
+                "example":{
+                  "title":"Bad Request",
+                  "status":400,
+                  "detail":"Invalid client credentials"
+                }
+              },
+              "application/json":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
+                }
+              }
+            }
+          },
           "200":{
             "description":"Authentication token and amount of seconds before it will be expired",
             "content":{
@@ -345,30 +369,6 @@
                 "schema":{
                   "$ref":"#/components/schemas/TokenResponse"
                 }
-              }
-            }
-          },
-          "400":{
-            "description":"Invalid client credentials",
-            "content":{
-              "*/*":{
-                "example":[
-                  {
-                    "title": "Bad Request",
-                    "status": 400,
-                    "detail": "Invalid client credentials"
-                  },
-                  {
-                    "title": "Constraint Violation",
-                    "status": 400,
-                    "violations": [
-                      {
-                        "field": "field",
-                        "message": "value is not valid"
-                      }
-                    ]
-                  }
-                ]
               }
             }
           }
@@ -408,16 +408,6 @@
               }
             }
           },
-          "200":{
-            "description":"Quick Quote created",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/QuickQuoteResponse"
-                }
-              }
-            }
-          },
           "400":{
             "description":"Application details invalid",
             "content":{
@@ -431,6 +421,16 @@
                       "message":"value is not valid"
                     }
                   ]
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"Quick Quote created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/QuickQuoteResponse"
                 }
               }
             }
@@ -459,28 +459,6 @@
           "401":{
             "description":"Unauthorized"
           },
-          "409":{
-            "description":"Conflict",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":409,
-                  "detail":"message details"
-                }
-              }
-            }
-          },
-          "200":{
-            "description":"Application created",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/DIPCCApplicationResponse"
-                }
-              }
-            }
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -506,6 +484,28 @@
                       "message":"value is not valid"
                     }
                   ]
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"Application created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/DIPCCApplicationResponse"
+                }
+              }
+            }
+          },
+          "409":{
+            "description":"Conflict",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":409,
+                  "detail":"message details"
                 }
               }
             }
@@ -534,18 +534,6 @@
           "401":{
             "description":"Unauthorized"
           },
-          "409":{
-            "description":"Conflict",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":409,
-                  "detail":"message details"
-                }
-              }
-            }
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -554,16 +542,6 @@
                   "title":"Error processing request",
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
-          },
-          "200":{
-            "description":"Application created",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/DIPApplicationResponse"
                 }
               }
             }
@@ -581,6 +559,28 @@
                       "message":"value is not valid"
                     }
                   ]
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"Application created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/DIPApplicationResponse"
+                }
+              }
+            }
+          },
+          "409":{
+            "description":"Conflict",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":409,
+                  "detail":"message details"
                 }
               }
             }
@@ -607,6 +607,21 @@
           }
         ],
         "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "200":{
             "description":"Returns the Credit Commitments for the application",
             "content":{
@@ -617,9 +632,6 @@
               }
             }
           },
-          "401":{
-            "description":"Unauthorized"
-          },
           "404":{
             "description":"Not Found",
             "content":{
@@ -628,18 +640,6 @@
                   "title":"Not Found",
                   "status":404,
                   "detail":"message details"
-                }
-              }
-            }
-          },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
                 }
               }
             }
@@ -674,6 +674,9 @@
           "required":true
         },
         "responses":{
+          "401":{
+            "description":"Unauthorized"
+          },
           "400":{
             "description":"Credit Commitments request is invalid",
             "content":{
@@ -691,8 +694,17 @@
               }
             }
           },
-          "401":{
-            "description":"Unauthorized"
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
           "404":{
             "description":"Not Found",
@@ -702,18 +714,6 @@
                   "title":"Not Found",
                   "status":404,
                   "detail":"message details"
-                }
-              }
-            }
-          },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
                 }
               }
             }
@@ -746,16 +746,6 @@
           "401":{
             "description":"Unauthorized"
           },
-          "200":{
-            "description":"Found application",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/ApplicationDecisionResponse"
-                }
-              }
-            }
-          },
           "404":{
             "description":"Application not found",
             "content":{
@@ -764,6 +754,16 @@
                   "title":"Not Found",
                   "status":404,
                   "detail":"message details"
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"Found application",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/ApplicationDecisionResponse"
                 }
               }
             }
@@ -793,18 +793,6 @@
           "401":{
             "description":"Unauthorized"
           },
-          "404":{
-            "description":"Not Found",
-            "content":{
-              "application/pdf":{
-                "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
-                }
-              }
-            }
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -822,6 +810,18 @@
             "content":{
               "application/pdf":{
 
+              }
+            }
+          },
+          "404":{
+            "description":"Not Found",
+            "content":{
+              "application/pdf":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
+                }
               }
             }
           }
@@ -1181,7 +1181,6 @@
             "enum":[
               "Armed forces pension",
               "Bereavement allowance",
-              "Base salary",
               "Bonus",
               "Car allowance",
               "Carers allowance",
@@ -2145,6 +2144,10 @@
               "$ref":"#/components/schemas/ExpenditureDto"
             }
           },
+          "brokerSubmitterEmail":{
+            "type":"string",
+            "description":"the email address of the broker submitting the application. They should have an account on our Broker Portal"
+          },
           "sourceClientId":{
             "maxLength":255,
             "minLength":4,
@@ -2507,6 +2510,10 @@
               "$ref":"#/components/schemas/ExpenditureDto"
             }
           },
+          "brokerSubmitterEmail":{
+            "type":"string",
+            "description":"the email address of the broker submitting the application. They should have an account on our Broker Portal"
+          },
           "sourceClientId":{
             "maxLength":255,
             "minLength":4,
@@ -2735,6 +2742,10 @@
         }
       },
       "Credentials":{
+        "required":[
+          "clientId",
+          "clientSecret"
+        ],
         "type":"object",
         "properties":{
           "clientId":{
