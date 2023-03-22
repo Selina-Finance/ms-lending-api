@@ -36,6 +36,7 @@ public class ApplicationDecisionResponse {
     private String sourceUserId;
     private String sourceBrokerUserId;
     private String externalApplicationId;
+    private String brokerSubmitterEmail;
     private String reference;
     private String selectedOffer;
     private String selectedProduct;

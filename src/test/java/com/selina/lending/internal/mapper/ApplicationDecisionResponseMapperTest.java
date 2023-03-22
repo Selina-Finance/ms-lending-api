@@ -40,6 +40,7 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         //Then
         assertThat(responseDto.getId(), equalTo(APPLICATION_ID));
         assertThat(responseDto.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+        assertThat(responseDto.getBrokerSubmitterEmail(), equalTo(BROKER_SUBMITTER_EMAIL));
         assertThat(responseDto.getApplicants(), notNullValue());
         assertThat(responseDto.getExpenditure(), notNullValue());
         assertThat(responseDto.getExpenditure().get(0).getExpenditureType(), equalTo(EXPENDITURE_TYPE));
