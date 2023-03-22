@@ -17,22 +17,23 @@
 
 package com.selina.lending.internal.dto;
 
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import com.selina.lending.api.controller.SwaggerConstants;
+import com.selina.lending.api.support.validator.AtLeastOneNotBlank;
 import com.selina.lending.api.support.validator.Conditional;
 import com.selina.lending.api.support.validator.EnumValue;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-@Value
+@NoArgsConstructor
+@SuperBuilder
+@Data
 @Conditional(selected = "addressType", values = {"previous"}, required = {"fromDate", "toDate"})
+@AtLeastOneNotBlank(fields = {"buildingName", "buildingNumber"})
 public class AddressDto {
     @Schema(implementation = AddressType.class)
     @EnumValue(enumClass = AddressType.class)

@@ -291,4 +291,52 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations[0].field").value("applicants[0].emailAddress"))
                 .andExpect(jsonPath("$.violations[0].message").value("emailAddress is not valid"));
     }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifiedApplicantAddressBuildingNameAndBuildingNumber() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        var addressDto = dipApplicationRequest.getApplicants().get(0).getAddresses().get(0);
+        addressDto.setBuildingName("");
+        addressDto.setBuildingNumber(null);
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].addresses[0]"))
+                .andExpect(jsonPath("$.violations[0].message").value("At least one of these fields must be specified: [buildingName, buildingNumber]"));
+    }
+
+    @Test
+    void shouldCreateDipCCApplicationWhenAtLeastApplicantAddressBuildingNameIsSpecified() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        var addressDto = dipApplicationRequest.getApplicants().get(0).getAddresses().get(0);
+        addressDto.setBuildingNumber(null);
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldCreateDipCCApplicationWhenAtLeastApplicantAddressBuildingNumberIsSpecified() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        var addressDto = dipApplicationRequest.getApplicants().get(0).getAddresses().get(0);
+        addressDto.setBuildingName(null);
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
 }
