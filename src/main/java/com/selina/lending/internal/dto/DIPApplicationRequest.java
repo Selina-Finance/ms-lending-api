@@ -20,9 +20,11 @@ package com.selina.lending.internal.dto;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.selina.lending.api.support.converter.ToLowerCase;
 import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
 import lombok.EqualsAndHashCode;
@@ -37,7 +39,9 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 public class DIPApplicationRequest extends ApplicationRequest {
-
+    @Email(message = "brokerSubmitterEmail is not valid", regexp = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}")
+    @ToLowerCase
+    private String brokerSubmitterEmail;
 
     @NotNull
     @Size(min = 4, max = 255)
