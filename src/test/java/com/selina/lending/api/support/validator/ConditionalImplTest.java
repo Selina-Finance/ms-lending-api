@@ -40,6 +40,7 @@ class ConditionalImplTest {
     private static final String FROM_DATE = "2010-07-21";
     private static final String TO_DATE = "2018-09-19";
     private static final String CURRENT_ADDRESS_TYPE = "current";
+    private static final String BUILDING_NUMBER = "10";
     private static Validator validator;
 
     @BeforeAll
@@ -56,6 +57,7 @@ class ConditionalImplTest {
                 .addressLine1(ADDRESS_LINE_1)
                 .city(CITY)
                 .postcode(POSTCODE)
+                .buildingNumber(BUILDING_NUMBER)
                 .addressType(PREVIOUS_ADDRESS_TYPE).build();
 
         //When
@@ -76,6 +78,7 @@ class ConditionalImplTest {
                 .addressLine1(ADDRESS_LINE_1)
                 .city(CITY)
                 .postcode(POSTCODE)
+                .buildingNumber(BUILDING_NUMBER)
                 .addressType(PREVIOUS_ADDRESS_TYPE)
                 .fromDate(FROM_DATE)
                 .toDate(TO_DATE)
@@ -95,6 +98,7 @@ class ConditionalImplTest {
                 .addressLine1(ADDRESS_LINE_1)
                 .city(CITY)
                 .postcode(POSTCODE)
+                .buildingNumber(BUILDING_NUMBER)
                 .addressType(CURRENT_ADDRESS_TYPE)
                 .build();
 
