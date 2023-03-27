@@ -25,6 +25,8 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.request.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.response.QuickQuoteCCResponse;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
@@ -70,6 +72,11 @@ class MiddlewareRepositoryTest {
     @Mock
     private Application application;
 
+    @Mock
+    private QuickQuoteCCRequest quickQuoteCCRequest;
+
+    @Mock
+    private QuickQuoteCCResponse quickQuoteCCResponse;
 
     private MiddlewareRepository middlewareRepository;
 
@@ -126,6 +133,21 @@ class MiddlewareRepositoryTest {
         assertThat(result).isEqualTo(applicationResponse);
         verify(middlewareRequestEnricher, times(1)).enrichCreateDipApplicationRequest(applicationRequest);
         verify(middlewareApi, times(1)).createDipApplication(applicationRequest);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenCreateQuickQuoteCCApplicationInvoked() {
+        // Given
+        when(middlewareApi.createQuickQuoteCCApplication(quickQuoteCCRequest)).thenReturn(quickQuoteCCResponse);
+        when(quickQuoteCCResponse.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
+
+        // When
+        var result = middlewareRepository.createQuickQuoteCCApplication(quickQuoteCCRequest);
+
+        // Then
+        assertThat(result).isEqualTo(quickQuoteCCResponse);
+        verify(middlewareRequestEnricher, times(1)).enrichCreateQuickQuoteCCRequest(quickQuoteCCRequest);
+        verify(middlewareApi, times(1)).createQuickQuoteCCApplication(quickQuoteCCRequest);
     }
 
     @Test
