@@ -1,4 +1,4 @@
-package com.selina.lending.internal.service.application.domain.quotecc.response;
+package com.selina.lending.internal.service.application.domain.quotecc;
 
 import com.selina.lending.internal.service.application.domain.Offer;
 import lombok.Builder;
@@ -11,5 +11,5 @@ import java.util.List;
 public class QuickQuoteCCResponse {
     String externalApplicationId;
     String status;
-    List<Offer> offers; //
+    List<Offer> offers;
 }

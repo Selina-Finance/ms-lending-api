@@ -19,8 +19,8 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
-import com.selina.lending.internal.service.application.domain.quotecc.request.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.response.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 

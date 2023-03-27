@@ -20,7 +20,7 @@ package com.selina.lending.internal.enricher;
 import java.util.List;
 import java.util.Optional;
 
-import com.selina.lending.internal.service.application.domain.quotecc.request.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.dto.LendingConstants;

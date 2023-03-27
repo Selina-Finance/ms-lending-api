@@ -20,8 +20,8 @@ package com.selina.lending.internal.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
-import com.selina.lending.internal.service.application.domain.quotecc.request.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.response.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;

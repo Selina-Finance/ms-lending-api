@@ -25,8 +25,8 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
-import com.selina.lending.internal.service.application.domain.quotecc.request.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.response.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
