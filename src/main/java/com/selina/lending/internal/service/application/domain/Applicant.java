@@ -45,6 +45,8 @@ public class Applicant {
     Incomes income;
     Employment employment;
     List<PreviousName> previousNames;
+    Boolean applicant2LivesWithApplicant1;
+    Boolean applicant2LivesWithApplicant1For3Years;
     List<Address> addresses;
     CreditCheck creditCheck;
     Checklist checklist;

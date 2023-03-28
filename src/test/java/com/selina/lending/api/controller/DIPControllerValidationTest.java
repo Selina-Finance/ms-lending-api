@@ -387,4 +387,144 @@ class DIPControllerValidationTest extends MapperBase {
                 //Then
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifyingSecondApplicantLivingStatusWithFirstApplicant() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+        secondApplicant.setApplicant2LivesWithApplicant1For3Years(false);
+
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("The field 'applicant2LivesWithApplicant1' is required for the second applicant"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifyingSecondApplicantLivingStatusWithFirstApplicantFor3Years() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+        secondApplicant.setApplicant2LivesWithApplicant1(false);
+
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("The field 'applicant2LivesWithApplicant1For3Years' is required for the second applicant"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifyingSecondApplicantAnyLivingStatusWithFirstApplicant() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(2)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("The field 'applicant2LivesWithApplicant1' is required for the second applicant"))
+                .andExpect(jsonPath("$.violations[1].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[1].message").value("The field 'applicant2LivesWithApplicant1For3Years' is required for the second applicant"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingSecondApplicantLivingStatusWithFirstApplicant() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+        secondApplicant.setApplicant2LivesWithApplicant1For3Years(false);
+
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("The field 'applicant2LivesWithApplicant1' is required for the second applicant"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingSecondApplicantLivingStatusWithFirstApplicantFor3Years() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+        secondApplicant.setApplicant2LivesWithApplicant1(false);
+
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("The field 'applicant2LivesWithApplicant1For3Years' is required for the second applicant"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingSecondApplicantAnyLivingStatusWithFirstApplicant() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(2)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("The field 'applicant2LivesWithApplicant1' is required for the second applicant"))
+                .andExpect(jsonPath("$.violations[1].field").value("applicants"))
+                .andExpect(jsonPath("$.violations[1].message").value("The field 'applicant2LivesWithApplicant1For3Years' is required for the second applicant"));
+    }
 }

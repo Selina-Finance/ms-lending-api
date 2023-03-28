@@ -81,6 +81,9 @@ public class ApplicantDto {
     @EnumValue(enumClass = ResidentialStatus.class)
     private String residentialStatus;
 
+    private Boolean applicant2LivesWithApplicant1;
+    private Boolean applicant2LivesWithApplicant1For3Years;
+
     @NotNull
     @Valid
     @NotEmpty
