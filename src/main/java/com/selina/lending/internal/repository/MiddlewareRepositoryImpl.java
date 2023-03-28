@@ -19,6 +19,8 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +81,18 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return appResponse;
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiCreateQuickQuoteCCFallback")
+    @Override
+    public QuickQuoteCCResponse createQuickQuoteCCApplication(QuickQuoteCCRequest applicationRequest) {
+        log.debug("Create QQ with Credit Commitments application [applicationRequest={}]", applicationRequest);
+        middlewareRequestEnricher.enrichCreateQuickQuoteCCRequest(applicationRequest);
+
+        var appResponse = middlewareApi.createQuickQuoteCCApplication(applicationRequest);
+
+        log.info("Finished calling mw to create qqcc application [externalApplicationId={}]", appResponse.getExternalApplicationId());
+        return appResponse;
+    }
+
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiSelectProductFallback")
     @Override
     public SelectProductResponse selectProduct(String id, String productCode) {
@@ -122,6 +136,10 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     private ApplicationResponse middlewareApiFallback(CallNotPermittedException e) { //NOSONAR
+        throw remoteResourceProblemException(e);
+    }
+
+    private QuickQuoteCCResponse middlewareApiCreateQuickQuoteCCFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 

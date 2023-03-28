@@ -19,6 +19,8 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import org.springframework.core.io.Resource;
 
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
@@ -35,6 +37,8 @@ public interface MiddlewareRepository {
     ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest);
 
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
+
+    QuickQuoteCCResponse createQuickQuoteCCApplication(QuickQuoteCCRequest applicationRequest);
 
     SelectProductResponse selectProduct(String id, String productCode);
 
