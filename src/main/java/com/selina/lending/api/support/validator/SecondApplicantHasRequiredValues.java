@@ -27,7 +27,7 @@ import java.lang.annotation.RetentionPolicy;
 @Constraint(validatedBy = SecondApplicantHasRequiredValuesImpl.class)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SecondApplicantHasRequiredValues {
-    String message() default "must have one primary applicant";
+    String message() default "The second applicant must have the required values";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
