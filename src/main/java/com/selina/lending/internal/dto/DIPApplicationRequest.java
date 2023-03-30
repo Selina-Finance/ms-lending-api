@@ -29,6 +29,7 @@ import javax.validation.constraints.Size;
 import com.selina.lending.api.support.converter.ToLowerCase;
 import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
+import com.selina.lending.api.support.validator.SecondApplicantHasRequiredValues;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -55,6 +56,7 @@ public class DIPApplicationRequest extends ApplicationRequest {
     @Size(message = "applicants is required", min = 1, max = 2)
     @Valid
     @OnlyOnePrimaryApplicant
+    @SecondApplicantHasRequiredValues
     private List<DIPApplicantDto> applicants;
 
     @NotNull

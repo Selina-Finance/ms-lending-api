@@ -29,15 +29,18 @@ import javax.validation.constraints.Size;
 import com.selina.lending.api.support.converter.ToLowerCase;
 import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
+import com.selina.lending.api.support.validator.SecondApplicantHasRequiredValues;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @SuperBuilder
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class DIPCCApplicationRequest extends ApplicationRequest {
     @Schema(description = "the email address of the broker submitting the application. They should have an account on our Broker Portal")
@@ -53,6 +56,7 @@ public class DIPCCApplicationRequest extends ApplicationRequest {
     @Size(message = "applicants is required", min = 1, max = 2)
     @Valid
     @OnlyOnePrimaryApplicant
+    @SecondApplicantHasRequiredValues
     private List<DIPApplicantDto> applicants;
 
     @NotNull
