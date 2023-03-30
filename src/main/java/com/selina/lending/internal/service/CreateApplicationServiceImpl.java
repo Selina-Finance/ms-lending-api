@@ -35,22 +35,29 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
 
+    private final DecisionMappingService decisionMappingService;
+
     public CreateApplicationServiceImpl(MiddlewareRepository middlewareRepository,
-            MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository) {
+            MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository,  DecisionMappingService decisionMappingService) {
         this.middlewareRepository = middlewareRepository;
         this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
+        this.decisionMappingService = decisionMappingService;
     }
 
     @Override
     public ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest) {
         checkApplicationExists(applicationRequest);
-        return middlewareRepository.createDipCCApplication(applicationRequest);
+        ApplicationResponse applicationResponse = middlewareRepository.createDipCCApplication(applicationRequest);
+        decisionMappingService.mapDecision(applicationResponse.getApplication().getOffers());
+        return applicationResponse;
     }
 
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         checkApplicationExists(applicationRequest);
-        return middlewareRepository.createDipApplication(applicationRequest);
+        ApplicationResponse applicationResponse = middlewareRepository.createDipApplication(applicationRequest);
+        decisionMappingService.mapDecision(applicationResponse.getApplication().getOffers());
+        return applicationResponse;
     }
 
     private void checkApplicationExists(ApplicationRequest applicationRequest) {

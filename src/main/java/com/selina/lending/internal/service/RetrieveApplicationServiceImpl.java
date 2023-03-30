@@ -34,11 +34,14 @@ public class RetrieveApplicationServiceImpl implements RetrieveApplicationServic
     private final MiddlewareRepository middlewareRepository;
     private final AccessManagementService accessManagementService;
 
+    private final DecisionMappingService decisionMappingService;
+
     public RetrieveApplicationServiceImpl(MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository, MiddlewareRepository middlewareRepository,
-            AccessManagementService accessManagementService) {
+            AccessManagementService accessManagementService, DecisionMappingService decisionMappingService) {
         this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
         this.middlewareRepository = middlewareRepository;
         this.accessManagementService = accessManagementService;
+        this.decisionMappingService = decisionMappingService;
     }
 
     @Override
@@ -47,6 +50,9 @@ public class RetrieveApplicationServiceImpl implements RetrieveApplicationServic
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
 
         log.info("Get application by Id for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalApplicationId);
-        return middlewareRepository.getApplicationById(applicationIdentifier.getId());
+
+        Optional<ApplicationDecisionResponse> applicationDecisionResponse = middlewareRepository.getApplicationById(applicationIdentifier.getId());
+        applicationDecisionResponse.ifPresent(decisionMappingService::mapDecision);
+        return applicationDecisionResponse;
     }
 }

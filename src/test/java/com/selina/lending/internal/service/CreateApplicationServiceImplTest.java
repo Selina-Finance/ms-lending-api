@@ -17,13 +17,15 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.api.errors.custom.ConflictException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.Offer;
+
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
@@ -35,6 +37,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,6 +63,15 @@ class CreateApplicationServiceImplTest {
     @Mock
     private ApplicationIdentifier applicationIdentifier;
 
+    @Mock
+    private DecisionMappingServiceImpl decisionMappingService;
+
+    @Mock
+    private Application mockApplication;
+
+    @Mock
+    private List<Offer> mockOffers;
+
     @InjectMocks
     private CreateApplicationServiceImpl createApplicationService;
 
@@ -79,6 +91,8 @@ class CreateApplicationServiceImplTest {
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
                     new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
             when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
+            when(applicationResponse.getApplication()).thenReturn(mockApplication);
+            when(mockApplication.getOffers()).thenReturn(mockOffers);
 
             //When
             var result = createApplicationService.createDipCCApplication(applicationRequest);
@@ -86,6 +100,7 @@ class CreateApplicationServiceImplTest {
             //Then
             assertThat(result).isEqualTo(applicationResponse);
             verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
+            verify(decisionMappingService, times(1)).mapDecision(mockOffers);
         }
 
         @Test
@@ -112,12 +127,16 @@ class CreateApplicationServiceImplTest {
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getId()).thenReturn(null);
+            when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
+            when(applicationResponse.getApplication()).thenReturn(mockApplication);
+            when(mockApplication.getOffers()).thenReturn(mockOffers);
 
             //When
             createApplicationService.createDipCCApplication(applicationRequest);
 
             //Then
             verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
+            verify(decisionMappingService,times(1)).mapDecision(mockOffers);
         }
     }
 
@@ -132,6 +151,8 @@ class CreateApplicationServiceImplTest {
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
                     new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
             when(middlewareRepository.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
+            when(applicationResponse.getApplication()).thenReturn(mockApplication);
+            when(mockApplication.getOffers()).thenReturn(mockOffers);
 
             //When
             var result = createApplicationService.createDipApplication(applicationRequest);
@@ -139,6 +160,7 @@ class CreateApplicationServiceImplTest {
             //Then
             assertThat(result).isEqualTo(applicationResponse);
             verify(middlewareRepository, times(1)).createDipApplication(applicationRequest);
+            verify(decisionMappingService, times(1)).mapDecision(mockOffers);
         }
 
         @Test

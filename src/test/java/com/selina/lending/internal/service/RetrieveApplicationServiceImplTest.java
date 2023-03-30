@@ -20,8 +20,8 @@ package com.selina.lending.internal.service;
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
-import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,6 +36,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 @ExtendWith(MockitoExtension.class)
 class RetrieveApplicationServiceImplTest {
     private static final String APPLICATION_ID = "appId";
@@ -45,6 +47,10 @@ class RetrieveApplicationServiceImplTest {
 
     @Mock
     private ApplicationIdentifier applicationIdentifier;
+
+    @Mock
+    private ApplicationDecisionResponse applicationDecisionResponse;
+
     @Mock
     private MiddlewareRepository middlewareRepository;
 
@@ -55,7 +61,7 @@ class RetrieveApplicationServiceImplTest {
     private AccessManagementService accessManagementService;
 
     @Mock
-    private RetrieveCreditCommitmentsService retrieveCreditCommitmentsService;
+    private DecisionMappingService decisionMappingService;
 
     @InjectMocks
     private RetrieveApplicationServiceImpl retrieveApplicationService;
@@ -67,12 +73,14 @@ class RetrieveApplicationServiceImplTest {
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
+        when(middlewareRepository.getApplicationById(APPLICATION_ID)).thenReturn(Optional.of(applicationDecisionResponse));
 
         //When
         retrieveApplicationService.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID);
 
         //Then
         verify(middlewareRepository, times(1)).getApplicationById(APPLICATION_ID);
+        verify(decisionMappingService, times(1)).mapDecision(applicationDecisionResponse);
     }
 
     @Test

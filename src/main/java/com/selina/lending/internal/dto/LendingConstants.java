@@ -29,6 +29,14 @@ public final class LendingConstants {
 
     public static final String STAGE_OVERWRITE = "DIP - Credit Commitments";
 
+    public static final String REFER_DECISION = "Refer";
+
+    public static final String ACCEPT_DECISION = "Accept";
+
+    public static final String DECLINE_DECISION = "Decline";
+
+    public static final String ACCEPT_STATUS = "Decisioning Accept";
+
     private LendingConstants() {
 
     }
