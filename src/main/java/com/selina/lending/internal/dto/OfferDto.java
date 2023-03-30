@@ -63,4 +63,5 @@ public class OfferDto {
     Double maximumBalanceEsis;
     Double maxErc;
     List<ErcDto> ercData;
+    List<RuleOutcomeDto> ruleOutcomes;
 }

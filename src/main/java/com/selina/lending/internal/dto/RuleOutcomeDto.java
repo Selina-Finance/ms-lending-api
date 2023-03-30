@@ -17,24 +17,13 @@
 
 package com.selina.lending.internal.dto;
 
-public final class LendingConstants {
+import lombok.Builder;
+import lombok.Value;
 
-    public static final String SOURCE_ACCOUNT_JWT_CLAIM_NAME = "sourceAccount";
-
-    public static final String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
-
-    public static final String PRODUCT_CODE_ALL = "All";
-
-    public static final String REQUEST_SOURCE = Source.LENDING_API.toString();
-
-    public static final String STAGE_OVERWRITE = "DIP - Credit Commitments";
-
-    public static final String REFER_DECISION = "Refer";
-
-    public static final String ACCEPT_DECISION = "Accept";
-
-    public static final String DECLINE_DECISION = "Decline";
-    private LendingConstants() {
-
-    }
+@Builder
+@Value
+public class RuleOutcomeDto {
+    String name;
+    String description;
+    String outcome;
 }
