@@ -92,6 +92,7 @@ import com.selina.lending.internal.service.application.domain.creditcommitments.
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -170,6 +171,8 @@ public abstract class MapperBase {
     public static final Double ERC_FEE = 0.02;
     public static final String HOMEOWNER_LOAN = "Homeowner";
     public static final String DECISION = "Accepted";
+    public static final String OFFER_DECISION_ACCEPT = "Accept";
+    public static final String OFFER_DECISION_DECLINE = "Decline";
     public static final String OFFER_VARIABLE_RATE_50_LTV = "Variable Rate - 50% LTV";
     public static final Double TOTAL_AMOUNT_REPAID = 60352.20;
     public static final Double INITIAL_RATE = 8.75;
@@ -643,6 +646,10 @@ public abstract class MapperBase {
     }
 
     protected Offer getOffer() {
+        return getOffer(OFFER_DECISION_ACCEPT);
+    }
+
+    protected Offer getOffer(String decision) {
         return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE)
                 .checklist(getChecklist())
                 .ruleOutcomes(List.of(getRuleOutcome()))
@@ -654,11 +661,19 @@ public abstract class MapperBase {
                 .ercShortCode(ERC_SHORT_CODE)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())
+                .decision(decision)
                 .build();
     }
 
     protected ApplicationResponse getApplicationResponse() {
         return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
+    }
+
+    protected QuickQuoteCCResponse getQuickQuoteCCResponse() {
+        return QuickQuoteCCResponse.builder()
+                .status(DECISION)
+                .offers(List.of(getOffer()))
+                .build();
     }
 
     protected ApplicationDecisionResponse getApplicationDecisionResponse() {

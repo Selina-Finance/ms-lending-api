@@ -19,14 +19,17 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.api.errors.custom.ConflictException;
+import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,21 +38,26 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CreateApplicationServiceImplTest {
+class CreateApplicationServiceImplTest extends MapperBase {
     @Mock
     private MiddlewareRepository middlewareRepository;
 
     @Mock
     private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+
+    @Mock
+    private QuickQuoteCCRequest quickQuoteCCRequest;
 
     @Mock
     private ApplicationRequest applicationRequest;
@@ -123,6 +131,7 @@ class CreateApplicationServiceImplTest {
 
     @Nested
     class CreateDipApplication {
+
         @Test
         void shouldCreateDipApplication() {
             //Given
@@ -155,6 +164,42 @@ class CreateApplicationServiceImplTest {
             //Then
             assertThat(exception.getMessage()).isEqualTo("Error processing request: Application already exists " + id);
             verify(middlewareRepository, times(0)).createDipApplication(applicationRequest);
+        }
+    }
+
+    @Nested
+    class CreateQuickQuoteCCApplication {
+
+        @Test
+        void shouldCreateQuickQuoteCCApplication() {
+            //Given
+            var expectedQuickQuoteCCResponse = getQuickQuoteCCResponse();
+
+            when(middlewareRepository.createQuickQuoteCCApplication(quickQuoteCCRequest)).thenReturn(expectedQuickQuoteCCResponse);
+
+            //When
+            var quickQuoteCCResponse = createApplicationService.createQuickQuoteCCApplication(quickQuoteCCRequest);
+
+            //Then
+            assertThat(quickQuoteCCResponse).isEqualTo(expectedQuickQuoteCCResponse);
+        }
+
+        @Test
+        void whenCreateQuickQuoteCCApplicationThenFilterOutDeclinedOffers() {
+            //Given
+            var quickQuoteCCResponse = getQuickQuoteCCResponse();
+            var acceptedOffer = getOffer(OFFER_DECISION_ACCEPT);
+            var declinedOffer = getOffer(OFFER_DECISION_DECLINE);
+            var declinedOffer2 = getOffer("decline");
+            quickQuoteCCResponse.setOffers(List.of(acceptedOffer, declinedOffer, declinedOffer2));
+
+            when(middlewareRepository.createQuickQuoteCCApplication(quickQuoteCCRequest)).thenReturn(quickQuoteCCResponse);
+
+            //When
+            var filteredQuickQuoteCCResponse = createApplicationService.createQuickQuoteCCApplication(quickQuoteCCRequest);
+
+            //Then
+            assertThat(filteredQuickQuoteCCResponse.getOffers()).containsExactly(acceptedOffer);
         }
     }
 }

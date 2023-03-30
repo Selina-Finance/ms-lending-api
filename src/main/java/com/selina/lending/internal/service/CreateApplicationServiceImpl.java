@@ -17,6 +17,9 @@
 
 package com.selina.lending.internal.service;
 
+import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.selina.lending.api.errors.custom.ConflictException;
@@ -28,9 +31,13 @@ import com.selina.lending.internal.service.application.domain.ApplicationRespons
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class CreateApplicationServiceImpl implements CreateApplicationService {
+
+    private static final String OFFER_DECISION_DECLINE = "Decline";
     private static final String APPLICATION_ALREADY_EXISTS_ERROR = "Application already exists";
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
@@ -63,5 +70,18 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
         } catch (FeignException.NotFound ignore) {
             //application does not exist, so we can safely ignore this exception and create the application
         }
+    }
+
+    @Override
+    public QuickQuoteCCResponse createQuickQuoteCCApplication(QuickQuoteCCRequest applicationRequest) {
+        var quickQuoteCCResponse = middlewareRepository.createQuickQuoteCCApplication(applicationRequest);
+        quickQuoteCCResponse.setOffers(filterOutDeclinedOffers(quickQuoteCCResponse.getOffers()));
+        return quickQuoteCCResponse;
+    }
+
+    private List<Offer> filterOutDeclinedOffers(List<Offer> offers) {
+        return offers.stream()
+                .filter(offer -> !OFFER_DECISION_DECLINE.equalsIgnoreCase(offer.getDecision()))
+                .toList();
     }
 }
