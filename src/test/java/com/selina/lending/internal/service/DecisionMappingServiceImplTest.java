@@ -85,6 +85,7 @@ class DecisionMappingServiceImplTest {
     void shouldMapDecisionFromReferToAcceptInApplicationDecisionResponse() {
         //Given
         var appResponse = ApplicationDecisionResponse.builder().decision(REFER_DECISION).status(DECISIONING_REFER).build();
+        appResponse.setOffers(List.of(Offer.builder().decision(REFER_DECISION).build(), Offer.builder().decision(REFER_DECISION).build()));
 
         //When
         decisionMappingService.mapDecision(appResponse);
@@ -92,12 +93,15 @@ class DecisionMappingServiceImplTest {
         //Then
         assertThat(appResponse.getDecision()).isEqualTo(ACCEPT_DECISION);
         assertThat(appResponse.getStatus()).isEqualTo(ACCEPT_STATUS);
+        assertThat(appResponse.getOffers().get(0).getDecision()).isEqualTo(ACCEPT_DECISION);
+        assertThat(appResponse.getOffers().get(1).getDecision()).isEqualTo(ACCEPT_DECISION);
     }
 
     @Test
     void shouldNotMapDecisionWhenDecisionAcceptInApplicationDecisionResponse() {
         //Given
         var appResponse = ApplicationDecisionResponse.builder().decision(ACCEPT_DECISION).status(ACCEPT_STATUS).build();
+        appResponse.setOffers(List.of(Offer.builder().decision(ACCEPT_DECISION).build(), Offer.builder().decision(ACCEPT_DECISION).build()));
 
         //When
         decisionMappingService.mapDecision(appResponse);
@@ -105,12 +109,15 @@ class DecisionMappingServiceImplTest {
         //Then
         assertThat(appResponse.getDecision()).isEqualTo(ACCEPT_DECISION);
         assertThat(appResponse.getStatus()).isEqualTo(ACCEPT_STATUS);
+        assertThat(appResponse.getOffers().get(0).getDecision()).isEqualTo(ACCEPT_DECISION);
+        assertThat(appResponse.getOffers().get(1).getDecision()).isEqualTo(ACCEPT_DECISION);
     }
 
     @Test
     void shouldNotMapDecisionWhenDecisionDeclineInApplicationDecisionResponse() {
         //Given
         var appResponse = ApplicationDecisionResponse.builder().decision(DECLINE_DECISION).status(DECISIONING_DECLINE).build();
+        appResponse.setOffers(List.of(Offer.builder().decision(DECLINE_DECISION).build(), Offer.builder().decision(DECLINE_DECISION).build()));
 
         //When
         decisionMappingService.mapDecision(appResponse);
@@ -118,5 +125,7 @@ class DecisionMappingServiceImplTest {
         //Then
         assertThat(appResponse.getDecision()).isEqualTo(DECLINE_DECISION);
         assertThat(appResponse.getStatus()).isEqualTo(DECISIONING_DECLINE);
+        assertThat(appResponse.getOffers().get(0).getDecision()).isEqualTo(DECLINE_DECISION);
+        assertThat(appResponse.getOffers().get(1).getDecision()).isEqualTo(DECLINE_DECISION);
     }
 }

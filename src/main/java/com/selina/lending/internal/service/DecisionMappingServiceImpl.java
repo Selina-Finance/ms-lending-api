@@ -47,5 +47,7 @@ public class DecisionMappingServiceImpl implements DecisionMappingService {
         if (decisionResponse.getStatus().contains(REFER_DECISION)) {
             decisionResponse.setStatus(ACCEPT_STATUS);
         }
+
+        mapDecision(decisionResponse.getOffers());
     }
 }
