@@ -29,12 +29,6 @@ import com.selina.lending.internal.service.application.domain.RuleOutcome;
 @Component
 public class RuleOutcomeFilterImpl implements RuleOutcomeFilter {
 
-    public List<RuleOutcome> filterRuleOutcomes(List<RuleOutcome> ruleOutcomeList) {
-        return ruleOutcomeList != null && !ruleOutcomeList.isEmpty() ?
-                ruleOutcomeList.stream().filter(this::filterRule).toList() :
-                null;
-
-    }
     @Override
     public void filterOfferRuleOutcomes(String decision, List<Offer> offers) {
         if (DECLINE_DECISION.equalsIgnoreCase(decision)) {
@@ -42,6 +36,12 @@ public class RuleOutcomeFilterImpl implements RuleOutcomeFilter {
         } else {
             removeRuleOutcomes(offers);
         }
+    }
+
+    private List<RuleOutcome> filterRuleOutcomes(List<RuleOutcome> ruleOutcomeList) {
+        return ruleOutcomeList != null && !ruleOutcomeList.isEmpty() ?
+                ruleOutcomeList.stream().filter(this::filterRule).toList() :
+                null;
     }
 
     private void removeRuleOutcomes (List<Offer> offers) {
