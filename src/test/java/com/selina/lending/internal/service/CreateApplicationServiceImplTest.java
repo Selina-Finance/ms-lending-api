@@ -91,8 +91,6 @@ class CreateApplicationServiceImplTest {
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
                     new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
             when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
-            when(applicationResponse.getApplication()).thenReturn(mockApplication);
-            when(mockApplication.getOffers()).thenReturn(mockOffers);
 
             //When
             var result = createApplicationService.createDipCCApplication(applicationRequest);
@@ -100,7 +98,7 @@ class CreateApplicationServiceImplTest {
             //Then
             assertThat(result).isEqualTo(applicationResponse);
             verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
-            verify(decisionMappingService, times(1)).mapDecision(mockOffers);
+            verify(decisionMappingService, times(1)).mapDecision(applicationResponse);
         }
 
         @Test
@@ -128,15 +126,13 @@ class CreateApplicationServiceImplTest {
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getId()).thenReturn(null);
             when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
-            when(applicationResponse.getApplication()).thenReturn(mockApplication);
-            when(mockApplication.getOffers()).thenReturn(mockOffers);
 
             //When
             createApplicationService.createDipCCApplication(applicationRequest);
 
             //Then
             verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
-            verify(decisionMappingService,times(1)).mapDecision(mockOffers);
+            verify(decisionMappingService,times(1)).mapDecision(applicationResponse);
         }
     }
 
@@ -151,8 +147,6 @@ class CreateApplicationServiceImplTest {
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
                     new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
             when(middlewareRepository.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
-            when(applicationResponse.getApplication()).thenReturn(mockApplication);
-            when(mockApplication.getOffers()).thenReturn(mockOffers);
 
             //When
             var result = createApplicationService.createDipApplication(applicationRequest);
@@ -160,7 +154,7 @@ class CreateApplicationServiceImplTest {
             //Then
             assertThat(result).isEqualTo(applicationResponse);
             verify(middlewareRepository, times(1)).createDipApplication(applicationRequest);
-            verify(decisionMappingService, times(1)).mapDecision(mockOffers);
+            verify(decisionMappingService, times(1)).mapDecision(applicationResponse);
         }
 
         @Test

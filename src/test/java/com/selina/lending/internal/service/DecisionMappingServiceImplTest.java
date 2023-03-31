@@ -32,7 +32,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.selina.lending.internal.service.application.domain.Application;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.Offer;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,38 +49,41 @@ class DecisionMappingServiceImplTest {
     @Test
     void shouldMapDecisionFromReferToAccept() {
         //Given
-        List<Offer> offer = List.of(Offer.builder().decision(REFER_DECISION).build(), Offer.builder().decision(REFER_DECISION).build());
+        List<Offer> offers = List.of(Offer.builder().decision(REFER_DECISION).build(), Offer.builder().decision(REFER_DECISION).build());
+        var applicationResponse = ApplicationResponse.builder().application(Application.builder().offers(offers).build()).build();
 
         //When
-        decisionMappingService.mapDecision(offer);
+        decisionMappingService.mapDecision(applicationResponse);
 
         //Then
-        assertThat(offer.get(0).getDecision()).isEqualTo(ACCEPT_DECISION);
-        assertThat(offer.get(1).getDecision()).isEqualTo(ACCEPT_DECISION);
+        assertThat(offers.get(0).getDecision()).isEqualTo(ACCEPT_DECISION);
+        assertThat(offers.get(1).getDecision()).isEqualTo(ACCEPT_DECISION);
     }
 
     @Test
     void shouldNotMapDecisionWhenDecisionIsAccept() {
         //Given
-        List<Offer> offer = List.of(Offer.builder().decision(ACCEPT_DECISION).build());
+        List<Offer> offers = List.of(Offer.builder().decision(ACCEPT_DECISION).build());
+        var applicationResponse = ApplicationResponse.builder().application(Application.builder().offers(offers).build()).build();
 
         //When
-        decisionMappingService.mapDecision(offer);
+        decisionMappingService.mapDecision(applicationResponse);
 
         //Then
-        assertThat(offer.get(0).getDecision()).isEqualTo(ACCEPT_DECISION);
+        assertThat(offers.get(0).getDecision()).isEqualTo(ACCEPT_DECISION);
     }
 
     @Test
     void shouldNotMapDecisionWhenDecisionIsDecline() {
         //Given
-        List<Offer> offer = List.of(Offer.builder().decision(DECLINE_DECISION).build());
+        List<Offer> offers = List.of(Offer.builder().decision(DECLINE_DECISION).build());
+        var applicationResponse = ApplicationResponse.builder().application(Application.builder().offers(offers).build()).build();
 
         //When
-        decisionMappingService.mapDecision(offer);
+        decisionMappingService.mapDecision(applicationResponse);
 
         //Then
-        assertThat(offer.get(0).getDecision()).isEqualTo(DECLINE_DECISION);
+        assertThat(offers.get(0).getDecision()).isEqualTo(DECLINE_DECISION);
     }
 
     @Test

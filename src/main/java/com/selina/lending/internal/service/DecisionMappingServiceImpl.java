@@ -26,12 +26,19 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.Offer;
 
 @Service
 public class DecisionMappingServiceImpl implements DecisionMappingService {
     @Override
-    public void mapDecision(List<Offer> offers) {
+    public void mapDecision(ApplicationResponse applicationResponse) {
+        //TODO check the ApplicationResponse decision and map from Refer to Accept
+
+        mapOffers(applicationResponse.getApplication().getOffers());
+    }
+
+    private void mapOffers(List<Offer> offers) {
         offers.forEach(offer -> {
             if (REFER_DECISION.equalsIgnoreCase(offer.getDecision())) {
                 offer.setDecision(ACCEPT_DECISION);
@@ -48,6 +55,6 @@ public class DecisionMappingServiceImpl implements DecisionMappingService {
             decisionResponse.setStatus(ACCEPT_STATUS);
         }
 
-        mapDecision(decisionResponse.getOffers());
+        mapOffers(decisionResponse.getOffers());
     }
 }

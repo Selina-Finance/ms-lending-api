@@ -48,7 +48,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     public ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest) {
         checkApplicationExists(applicationRequest);
         ApplicationResponse applicationResponse = middlewareRepository.createDipCCApplication(applicationRequest);
-        decisionMappingService.mapDecision(applicationResponse.getApplication().getOffers());
+        decisionMappingService.mapDecision(applicationResponse);
         return applicationResponse;
     }
 
@@ -56,7 +56,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         checkApplicationExists(applicationRequest);
         ApplicationResponse applicationResponse = middlewareRepository.createDipApplication(applicationRequest);
-        decisionMappingService.mapDecision(applicationResponse.getApplication().getOffers());
+        decisionMappingService.mapDecision(applicationResponse);
         return applicationResponse;
     }
 

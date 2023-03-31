@@ -17,12 +17,10 @@
 
 package com.selina.lending.internal.service;
 
-import java.util.List;
-
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 
 public interface DecisionMappingService {
-    void mapDecision(List<Offer> offers);
+    void mapDecision(ApplicationResponse applicationResponse);
     void mapDecision(ApplicationDecisionResponse  decisionResponse);
 }
