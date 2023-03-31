@@ -17,8 +17,11 @@
 
 package com.selina.lending.internal.service.filter;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
+import static com.selina.lending.internal.dto.LendingConstants.DECLINE_DECISION;
+import static com.selina.lending.internal.dto.LendingConstants.REFER_DECISION;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
-import static com.selina.lending.internal.dto.LendingConstants.DECLINE_DECISION;
+import com.selina.lending.internal.service.application.domain.Offer;
 import com.selina.lending.internal.service.application.domain.RuleOutcome;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,35 +44,55 @@ class RuleOutcomeFilterImplTest {
     void shouldFilterRuleOutcomesToOnlyIncludeDecline() {
         //Given
         var ruleOutcomes = List.of(buildRuleOutcome(ACCEPT_DECISION), buildRuleOutcome(DECLINE_DECISION));
+        var offers = List.of(Offer.builder().ruleOutcomes(ruleOutcomes).build());
 
         //When
-        var filteredList = ruleOutcomeFilter.filterRuleOutcomes(ruleOutcomes);
+        ruleOutcomeFilter.filterOfferRuleOutcomes(DECLINE_DECISION, offers);
 
         //Then
-        assertThat(filteredList).hasSize(1);
-        assertThat(filteredList.get(0).getOutcome()).isEqualTo(DECLINE_DECISION);
+        assertThat(offers).hasSize(1);
+        assertThat(offers.get(0).getRuleOutcomes()).hasSize(1);
+        assertThat(offers.get(0).getRuleOutcomes().get(0).getOutcome()).isEqualTo(DECLINE_DECISION);
+    }
+
+    @Test
+    void shouldRemoveRuleOutcomesIfDecisionIsAccept() {
+        //Given
+        var ruleOutcomes = List.of(buildRuleOutcome(ACCEPT_DECISION), buildRuleOutcome(REFER_DECISION),
+                buildRuleOutcome(DECLINE_DECISION));
+        var offers = List.of(Offer.builder().ruleOutcomes(ruleOutcomes).build());
+
+        //When
+        ruleOutcomeFilter.filterOfferRuleOutcomes(ACCEPT_DECISION, offers);
+
+        //Then
+        assertThat(offers).hasSize(1);
+        assertThat(offers.get(0).getRuleOutcomes()).isNull();
     }
 
     @Test
     void shouldNotFilterRuleOutcomesWhenRuleOutcomesIsNull() {
         //Given
+        var offers = List.of(Offer.builder().build());
+
         //When
-        var filteredList = ruleOutcomeFilter.filterRuleOutcomes(null);
+        ruleOutcomeFilter.filterOfferRuleOutcomes(ACCEPT_DECISION, offers);
 
         //Then
-        assertThat(filteredList).isNull();
+        assertThat(offers.get(0).getRuleOutcomes()).isNull();
     }
 
     @Test
     void shouldNotFilterRuleOutcomesWhenRuleOutcomesIsEmpty() {
         //Given
         List<RuleOutcome> ruleOutcomes = new ArrayList<>();
+        var offers = List.of(Offer.builder().ruleOutcomes(ruleOutcomes).build());
 
         //When
-        var filteredList = ruleOutcomeFilter.filterRuleOutcomes(ruleOutcomes);
+        ruleOutcomeFilter.filterOfferRuleOutcomes(ACCEPT_DECISION, offers);
 
         //Then
-        assertThat(filteredList).isNull();
+        assertThat(offers.get(0).getRuleOutcomes()).isNull();
     }
 
     private RuleOutcome buildRuleOutcome(String outcome) {

@@ -19,8 +19,8 @@ package com.selina.lending.internal.service.filter;
 
 import java.util.List;
 
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
+import com.selina.lending.internal.service.application.domain.Offer;
 
 public interface RuleOutcomeFilter {
-    List<RuleOutcome> filterRuleOutcomes(List<RuleOutcome> ruleOutcomeList);
+    void filterOfferRuleOutcomes(String decision, List<Offer> offers);
 }

@@ -18,23 +18,37 @@
 package com.selina.lending.internal.service.filter;
 
 import static com.selina.lending.internal.dto.LendingConstants.DECLINE_DECISION;
-import static com.selina.lending.internal.dto.LendingConstants.REFER_DECISION;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.selina.lending.internal.service.application.domain.Offer;
 import com.selina.lending.internal.service.application.domain.RuleOutcome;
 
 @Component
 public class RuleOutcomeFilterImpl implements RuleOutcomeFilter {
 
-    @Override
     public List<RuleOutcome> filterRuleOutcomes(List<RuleOutcome> ruleOutcomeList) {
-        return ruleOutcomeList != null && !ruleOutcomeList.isEmpty() ? ruleOutcomeList.stream().filter(this::filterRule).toList() : null;
+        return ruleOutcomeList != null && !ruleOutcomeList.isEmpty() ?
+                ruleOutcomeList.stream().filter(this::filterRule).toList() :
+                null;
+
+    }
+    @Override
+    public void filterOfferRuleOutcomes(String decision, List<Offer> offers) {
+        if (DECLINE_DECISION.equalsIgnoreCase(decision)) {
+            offers.forEach(offer -> offer.setRuleOutcomes(filterRuleOutcomes(offer.getRuleOutcomes())));
+        } else {
+            removeRuleOutcomes(offers);
+        }
+    }
+
+    private void removeRuleOutcomes (List<Offer> offers) {
+        offers.forEach(offer -> offer.setRuleOutcomes(null));
     }
 
     private boolean filterRule(RuleOutcome rule) {
-        return rule.getOutcome().equalsIgnoreCase(DECLINE_DECISION) || rule.getOutcome().equalsIgnoreCase(REFER_DECISION);
+        return rule.getOutcome().equalsIgnoreCase(DECLINE_DECISION);
     }
 }
