@@ -25,5 +25,4 @@ import lombok.Value;
 public class RuleOutcomeDto {
     String name;
     String description;
-    String outcome;
 }
