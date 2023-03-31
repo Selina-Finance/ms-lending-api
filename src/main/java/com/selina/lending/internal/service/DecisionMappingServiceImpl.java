@@ -34,6 +34,9 @@ public class DecisionMappingServiceImpl implements DecisionMappingService {
     @Override
     public void mapDecision(ApplicationResponse applicationResponse) {
         //TODO check the ApplicationResponse decision and map from Refer to Accept
+        // if (REFER_DECISION.equalsIgnoreCase(applicationResponse.getDecision()) {
+        // applicationResponse.setDecision(ACCEPT_DECISION)
+        // and then mapOffers (call below)
 
         mapOffers(applicationResponse.getApplication().getOffers());
     }
