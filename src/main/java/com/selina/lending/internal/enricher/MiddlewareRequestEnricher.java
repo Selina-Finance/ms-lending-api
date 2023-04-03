@@ -43,12 +43,12 @@ public class MiddlewareRequestEnricher {
         this.tokenService = tokenService;
     }
 
-    public void enrichCreateDipCCApplicationRequest(ApplicationRequest applicationRequest) {
-        enrichApplicationRequest(applicationRequest, true);
-    }
-
     public void enrichCreateQuickQuoteCCRequest(QuickQuoteCCRequest applicationRequest) {
         applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
+    }
+
+    public void enrichCreateDipCCApplicationRequest(ApplicationRequest applicationRequest) {
+        enrichApplicationRequest(applicationRequest, true);
     }
 
     public void enrichCreateDipApplicationRequest(ApplicationRequest applicationRequest) {

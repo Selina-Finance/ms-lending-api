@@ -25,6 +25,7 @@ import static com.selina.lending.internal.enricher.MiddlewareRequestEnricher.ADD
 
 import java.util.List;
 
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -99,6 +100,20 @@ class MiddlewareRequestEnricherTest {
         assertThat(request.getProductCode(), equalTo(LendingConstants.PRODUCT_CODE_ALL));
         assertThat(request.getStageOverwrite(), equalTo(LendingConstants.STAGE_OVERWRITE));
         assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(true));
+    }
+
+    @Test
+    void shouldEnrichCreateQuickQuoteCCRequest() {
+        //Given
+        var request = QuickQuoteCCRequest.builder().build();
+
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+
+        //When
+        enricher.enrichCreateQuickQuoteCCRequest(request);
+
+        //Then
+        assertThat(request.getSourceAccount(), equalTo(SOURCE_ACCOUNT));
     }
 
     @ParameterizedTest
