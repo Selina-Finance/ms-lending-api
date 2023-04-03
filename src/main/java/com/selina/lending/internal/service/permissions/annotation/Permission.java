@@ -30,7 +30,7 @@ public @interface Permission {
     Scope scope();
 
     enum Resource {
-        DIP, DIP_CC, CC, QQ, APPLICATION
+        DIP, DIP_CC, CC, QQ, QQ_CC, APPLICATION
     }
 
     enum Scope {

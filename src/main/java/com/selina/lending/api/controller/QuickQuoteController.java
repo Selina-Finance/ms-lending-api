@@ -17,6 +17,10 @@
 
 package com.selina.lending.api.controller;
 
+import com.selina.lending.internal.mapper.quotecc.QuickQuoteCCRequestMapper;
+import com.selina.lending.internal.mapper.quotecc.QuickQuoteCCResponseMapper;
+import com.selina.lending.internal.service.CreateApplicationService;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +35,7 @@ import com.selina.lending.internal.service.FilterApplicationService;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.QQ;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.QQ_CC;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Create;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
 
@@ -40,8 +45,11 @@ public class QuickQuoteController implements QuickQuoteOperations {
 
     private final FilterApplicationService filterApplicationService;
 
-    public QuickQuoteController(FilterApplicationService filterApplicationService) {
+    private final CreateApplicationService createApplicationService;
+
+    public QuickQuoteController(FilterApplicationService filterApplicationService, CreateApplicationService createApplicationService) {
         this.filterApplicationService = filterApplicationService;
+        this.createApplicationService = createApplicationService;
     }
 
     @Override
@@ -53,6 +61,14 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
     @Override
+    @Permission(resource = QQ_CC, scope = Create)
+    public ResponseEntity<QuickQuoteResponse> createQuickQuoteCCApplication(
+            QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        log.info("Create Quick Quote CC application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
+        return ResponseEntity.ok(filterQuickQuoteCC(quickQuoteApplicationRequest));
+    }
+
+    @Override
     @Permission(resource = QQ, scope = Update)
     public ResponseEntity<QuickQuoteResponse> updateQuickQuoteApplication(String externalApplicationId,
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
@@ -61,6 +77,15 @@ public class QuickQuoteController implements QuickQuoteOperations {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
         }
         return ResponseEntity.ok(filterQuickQuote(quickQuoteApplicationRequest));
+    }
+
+
+    private QuickQuoteResponse filterQuickQuoteCC(QuickQuoteApplicationRequest quickQuoteApplicationRequest){
+        QuickQuoteCCResponse quickQuoteDecisionResponse = createApplicationService.createQuickQuoteCCApplication(QuickQuoteCCRequestMapper.INSTANCE
+                .mapToQuickQuoteCCRequest(quickQuoteApplicationRequest));
+        QuickQuoteResponse quickQuoteResponse = QuickQuoteCCResponseMapper.INSTANCE.mapToQuickQuoteResponse(quickQuoteDecisionResponse);
+        enrichResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
+        return quickQuoteResponse;
     }
 
     private QuickQuoteResponse filterQuickQuote(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {

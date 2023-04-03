@@ -67,6 +67,32 @@ public interface QuickQuoteOperations {
     ResponseEntity<QuickQuoteResponse> createQuickQuoteApplication(@Valid @RequestBody
     QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 
+
+    @Operation(description = "Create a new Quick Quote CC application")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Quick Quote CC created",
+                    content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = QuickQuoteResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Application details invalid",
+                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
+            ),
+            @ApiResponse(responseCode = "401", content = @Content),
+            @ApiResponse(responseCode = "403",
+                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
+            )
+    })
+    @PostMapping(value = "/quickquotecc")
+    ResponseEntity<QuickQuoteResponse> createQuickQuoteCCApplication(@Valid @RequestBody
+                                                                   QuickQuoteApplicationRequest quickQuoteApplicationRequest);
+
+
+
+
     @Operation(description = "Update the Quick Quote application for the given external application id")
     @ApiResponses(value = {
             @ApiResponse(
