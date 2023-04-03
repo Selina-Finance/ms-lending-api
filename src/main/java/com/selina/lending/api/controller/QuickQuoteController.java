@@ -65,8 +65,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
     public ResponseEntity<QuickQuoteResponse> createQuickQuoteCCApplication(
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         log.info("Create Quick Quote CC application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        var x = filterQuickQuoteCC(quickQuoteApplicationRequest);
-        return ResponseEntity.ok(x);
+        return ResponseEntity.ok(filterQuickQuoteCC(quickQuoteApplicationRequest));
     }
 
     @Override
