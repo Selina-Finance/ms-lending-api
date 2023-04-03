@@ -1,6 +1,5 @@
 package com.selina.lending.internal.mapper;
 
-import com.selina.lending.internal.service.application.domain.PropertyDetails;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

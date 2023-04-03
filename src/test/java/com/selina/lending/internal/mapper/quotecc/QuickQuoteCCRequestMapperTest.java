@@ -1,5 +1,6 @@
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.mapper.quotecc;
 
+import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class QuickQuoteCCRequestMapperTest extends MapperBase{
+public class QuickQuoteCCRequestMapperTest extends MapperBase {
 
     @Test
     void shouldMapToFilteredQuickQuoteApplicationRequest() {

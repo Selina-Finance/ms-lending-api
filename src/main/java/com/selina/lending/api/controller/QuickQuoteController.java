@@ -17,8 +17,8 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.internal.mapper.QuickQuoteCCRequestMapper;
-import com.selina.lending.internal.mapper.QuickQuoteCCResponseMapper;
+import com.selina.lending.internal.mapper.quotecc.QuickQuoteCCRequestMapper;
+import com.selina.lending.internal.mapper.quotecc.QuickQuoteCCResponseMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import com.selina.lending.internal.service.permissions.annotation.Permission;
