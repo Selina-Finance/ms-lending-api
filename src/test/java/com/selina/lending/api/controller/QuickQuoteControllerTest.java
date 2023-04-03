@@ -19,9 +19,12 @@ package com.selina.lending.api.controller;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
 import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -50,10 +53,17 @@ class QuickQuoteControllerTest {
     private FilterApplicationService filterApplicationService;
 
     @Mock
+    private CreateApplicationService createApplicationService;
+
+    @Mock
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
 
     @Mock
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
+
+    @Mock
+    private QuickQuoteCCResponse quickQuoteCCResponse;
+
 
     @Test
     void createQuickQuoteApplication() {
@@ -70,6 +80,23 @@ class QuickQuoteControllerTest {
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
         verify(filterApplicationService, times(1)).filter(any());
     }
+
+    @Test
+    void createQuickQuoteCCApplication() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
+        when(createApplicationService.createQuickQuoteCCApplication(any(QuickQuoteCCRequest.class))).thenReturn(quickQuoteCCResponse);
+
+        //When
+        var response = quickQuoteController.createQuickQuoteCCApplication(quickQuoteApplicationRequest);
+
+        //Then
+        assertNotNull(response);
+        assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
+        verify(createApplicationService, times(1)).createQuickQuoteCCApplication(any());
+    }
+
 
     @Test
     void updateQuickQuoteApplication() {
