@@ -175,8 +175,11 @@ public abstract class MapperBase {
     public static final String OFFER_DECISION_DECLINE = "Decline";
     public static final String OFFER_VARIABLE_RATE_50_LTV = "Variable Rate - 50% LTV";
     public static final Double TOTAL_AMOUNT_REPAID = 60352.20;
+    public static final Double PRODUCT_FEE = 651.1;
     public static final Double INITIAL_RATE = 8.75;
     public static final Double INITIAL_PAYMENT = 411.08;
+    public static final Integer INITIAL_TERM = 5;
+    public static final Double REVERSION_PAYMENT = 5.0;
     public static final Double APRC = 9.77;
     public static final Double REQUESTED_LOAN_AMOUNT = 50000.0;
     public static final Double OUTSTANDING_BALANCE = 20000.0;
@@ -662,6 +665,17 @@ public abstract class MapperBase {
                 .maxErc(MAX_ERC)
                 .ercData(getErc())
                 .decision(decision)
+                .initialRate(INITIAL_RATE)
+                .initialTerm(INITIAL_TERM)
+                .initialPayment(INITIAL_PAYMENT)
+                .reversionPayment(REVERSION_PAYMENT)
+                .reversionTerm(REVERSION_TERM.doubleValue())
+                .isVariable(true)
+                .ltvCap(LTV_CAP)
+                .svr(SVR)
+                .productFee(PRODUCT_FEE)
+                .totalAmountRepaid(TOTAL_AMOUNT_REPAID)
+                .offerBalance(OFFER_BALANCE)
                 .build();
     }
 
@@ -673,6 +687,7 @@ public abstract class MapperBase {
         return QuickQuoteCCResponse.builder()
                 .status(DECISION)
                 .offers(List.of(getOffer()))
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .build();
     }
 
