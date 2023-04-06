@@ -58,7 +58,7 @@ class QuickQuoteControllerTest {
     private CreateApplicationService createApplicationService;
 
     @Spy
-    private ApplicationResponseEnricher applicationResponseEnricher;
+    private ApplicationResponseEnricher applicationResponseEnricher = new ApplicationResponseEnricher("");
 
     @Mock
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;

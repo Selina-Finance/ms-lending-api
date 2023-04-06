@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class ApplicationResponseEnricherTest {
 
     @BeforeEach
     void setup() {
-        enricher = new ApplicationResponseEnricher();
+        enricher = new ApplicationResponseEnricher("http://mf-quick-quote");
     }
 
 
@@ -42,7 +41,6 @@ public class ApplicationResponseEnricherTest {
     @Test
     void enrichQuickQuoteResponseWithProductOffersApplyUrl() {
         // given
-        ReflectionTestUtils.setField(enricher, "quickQuoteBaseUrl", "http://mf-quick-quote");
         var externalApplicationId = UUID.randomUUID().toString();
         var expected = String.format("http://mf-quick-quote?externalApplicationId=%s&offerCode=someProductCode", externalApplicationId);
 

@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ApplicationResponseEnricher {
 
-    @Value(value = "${quickquote.web.url}")
-    private String quickQuoteBaseUrl;
+    public ApplicationResponseEnricher(@Value(value = "${quickquote.web.url}") String quickQuoteBaseUrl) {
+        this.quickQuoteBaseUrl = quickQuoteBaseUrl;
+    }
+
+    private final String quickQuoteBaseUrl;
 
     public void enrichQuickQuoteResponseWithExternalApplicationId(QuickQuoteResponse response, String externalApplicationId) {
         response.setExternalApplicationId(externalApplicationId);
