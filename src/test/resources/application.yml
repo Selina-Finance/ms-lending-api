@@ -2,6 +2,7 @@ middleware.api.url: http://TBC
 middleware.application.service.url: http://TBC
 selection.service.url: http://selection-service
 authorization.api.url: https://ms-authorization
+quickquote.web.url: http://mf-quick-quote
 
 spring.security:
   oauth2:
