@@ -30,5 +30,4 @@ public interface OfferMapper {
 
     OfferDto mapToOfferDto(Offer offer);
     Offer mapToOffer(OfferDto offerDto);
-
 }
