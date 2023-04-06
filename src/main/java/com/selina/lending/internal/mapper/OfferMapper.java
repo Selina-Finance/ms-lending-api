@@ -35,5 +35,5 @@ public interface OfferMapper {
 
     @Mapping(source = "offer.productCode", target = "code")
     @Mapping(source = "offer.product", target = "name")
-    ProductOfferDto mapToProductOffer(Offer offer);
+    ProductOfferDto mapToProductOfferDto(Offer offer);
 }
