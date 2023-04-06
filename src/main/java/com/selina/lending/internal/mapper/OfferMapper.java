@@ -17,9 +17,7 @@
 
 package com.selina.lending.internal.mapper;
 
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -33,7 +31,4 @@ public interface OfferMapper {
     OfferDto mapToOfferDto(Offer offer);
     Offer mapToOffer(OfferDto offerDto);
 
-    @Mapping(source = "offer.productCode", target = "code")
-    @Mapping(source = "offer.product", target = "name")
-    ProductOfferDto mapToProductOfferDto(Offer offer);
 }
