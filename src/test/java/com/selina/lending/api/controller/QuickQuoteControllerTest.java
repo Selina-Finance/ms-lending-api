@@ -19,6 +19,7 @@ package com.selina.lending.api.controller;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
 import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Objects;
@@ -54,6 +56,9 @@ class QuickQuoteControllerTest {
 
     @Mock
     private CreateApplicationService createApplicationService;
+
+    @Spy
+    private ApplicationResponseEnricher applicationResponseEnricher;
 
     @Mock
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;

@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.controller;
 
+import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.mapper.quotecc.QuickQuoteCCRequestMapper;
 import com.selina.lending.internal.mapper.quotecc.QuickQuoteCCResponseMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
@@ -47,9 +48,16 @@ public class QuickQuoteController implements QuickQuoteOperations {
 
     private final CreateApplicationService createApplicationService;
 
-    public QuickQuoteController(FilterApplicationService filterApplicationService, CreateApplicationService createApplicationService) {
+    private final ApplicationResponseEnricher applicationResponseEnricher;
+
+    public QuickQuoteController(
+            FilterApplicationService filterApplicationService,
+            CreateApplicationService createApplicationService,
+            ApplicationResponseEnricher applicationResponseEnricher
+    ) {
         this.filterApplicationService = filterApplicationService;
         this.createApplicationService = createApplicationService;
+        this.applicationResponseEnricher = applicationResponseEnricher;
     }
 
     @Override
@@ -84,7 +92,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
         QuickQuoteCCResponse quickQuoteDecisionResponse = createApplicationService.createQuickQuoteCCApplication(QuickQuoteCCRequestMapper.INSTANCE
                 .mapToQuickQuoteCCRequest(quickQuoteApplicationRequest));
         QuickQuoteResponse quickQuoteResponse = QuickQuoteCCResponseMapper.INSTANCE.mapToQuickQuoteResponse(quickQuoteDecisionResponse);
-        enrichResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
+        applicationResponseEnricher.enrichQuickQuoteResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
         return quickQuoteResponse;
     }
 
@@ -92,11 +100,8 @@ public class QuickQuoteController implements QuickQuoteOperations {
         var filteredQuickQuoteDecisionResponse = filterApplicationService.filter(QuickQuoteApplicationRequestMapper.mapRequest(
                 quickQuoteApplicationRequest));
         var quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
-        enrichResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
+        applicationResponseEnricher.enrichQuickQuoteResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
+        applicationResponseEnricher.enrichQuickQuoteResponseWithProductOffersApplyUrl(quickQuoteResponse);
         return quickQuoteResponse;
-    }
-
-    private void enrichResponseWithExternalApplicationId(QuickQuoteResponse response, String externalApplicationId) {
-        response.setExternalApplicationId(externalApplicationId);
     }
 }
