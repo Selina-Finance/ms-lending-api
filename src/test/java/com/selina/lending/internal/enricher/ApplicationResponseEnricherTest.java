@@ -42,10 +42,11 @@ public class ApplicationResponseEnricherTest {
     void enrichQuickQuoteResponseWithProductOffersApplyUrl() {
         // given
         var externalApplicationId = UUID.randomUUID().toString();
-        var expected = String.format("http://mf-quick-quote?externalApplicationId=%s&offerCode=someProductCode", externalApplicationId);
+        var offerCode = "someProductCode";
+        var expected = String.format("http://mf-quick-quote?externalApplicationId=%s&offerCode=%s", externalApplicationId, offerCode);
 
         List<ProductOfferDto> productOffersList = new ArrayList<>();
-        productOffersList.add(ProductOfferDto.builder().code("someProductCode").build());
+        productOffersList.add(ProductOfferDto.builder().code(offerCode).build());
         var response = QuickQuoteResponse
                 .builder()
                 .externalApplicationId(externalApplicationId)
