@@ -31,6 +31,8 @@ public class QuickQuoteCCResponseMapperTest extends MapperBase {
 
         assertThat(productOfferDto.getId(), equalTo(OFFER_ID));
         assertTrue(productOfferDto.getHasFee());
+        assertThat(productOfferDto.getCode(), equalTo(PRODUCT_CODE));
+        assertThat(productOfferDto.getName(), equalTo(PRODUCT_NAME));
         assertThat(productOfferDto.getFamily(), equalTo(HOMEOWNER_LOAN));
         assertThat(productOfferDto.getCategory(), equalTo(CATEGORY_STATUS_0));
         assertThat(productOfferDto.getErcPeriodYears(), equalTo(2));

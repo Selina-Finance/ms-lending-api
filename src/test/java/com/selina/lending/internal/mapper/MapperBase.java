@@ -142,6 +142,7 @@ public abstract class MapperBase {
     public static final String FROM_DATE = "2000-01-21";
     public static final String OFFER_ID = "offer123";
     public static final String PRODUCT_CODE = "All";
+    public static final String PRODUCT_NAME = "Homeowner loan, Status 0";
     public static final String EXPENDITURE_TYPE = "Utilities";
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
     public static final String RULE_OUTCOME = "Granted";
@@ -655,6 +656,7 @@ public abstract class MapperBase {
     protected Offer getOffer(String decision) {
         return Offer.builder().active(true).id(OFFER_ID).hasFee(true).productCode(PRODUCT_CODE)
                 .checklist(getChecklist())
+                .product(PRODUCT_NAME)
                 .ruleOutcomes(List.of(getRuleOutcome()))
                 .family(HOMEOWNER_LOAN)
                 .category(CATEGORY_STATUS_0)
