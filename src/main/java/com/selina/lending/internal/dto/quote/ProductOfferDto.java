@@ -22,10 +22,10 @@ import java.util.List;
 import com.selina.lending.internal.dto.ErcDto;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class ProductOfferDto {
     String id;
     String code;
@@ -54,5 +54,6 @@ public class ProductOfferDto {
     Double maxErc;
     String ercShortCode;
     Integer ercPeriodYears;
+    String applyUrl;
     List<ErcDto> ercData;
 }
