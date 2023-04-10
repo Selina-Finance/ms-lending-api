@@ -44,6 +44,8 @@ import static org.hamcrest.Matchers.hasItems;
 
 class EnumValueImplTest {
     private static final String INVALID_VALUE = "invalid";
+    public static final Double INCOME_AMOUNT = 15000.00;
+    public static final String INCOME_TYPE = "Gross salary";
     private static Validator validator;
 
     @BeforeAll
@@ -110,9 +112,9 @@ class EnumValueImplTest {
     }
 
     @Test
-    void validateIncome() {
+    void whenIncomeTypeIsInvalidThenFailValidation() {
         //Given
-        var income = IncomeDto.builder().income(List.of(IncomeItemDto.builder().type(INVALID_VALUE).build())).build();
+        var income = IncomeDto.builder().income(List.of(IncomeItemDto.builder().type(INVALID_VALUE).amount(INCOME_AMOUNT).build())).build();
 
         //When
         var violations = validator.validate(income);
@@ -124,6 +126,40 @@ class EnumValueImplTest {
         assertThat(violation.getPropertyPath().toString(), equalTo("income[0].type"));
         assertThat(violation.getMessage(), equalTo("value is not valid"));
         assertThat(violation.getInvalidValue(), equalTo(INVALID_VALUE));
+    }
+
+    @Test
+    void whenIncomeTypeIsNullThenFailValidation() {
+        //Given
+        var income = IncomeDto.builder().income(List.of(IncomeItemDto.builder().type(null).amount(INCOME_AMOUNT).build())).build();
+
+        //When
+        var violations = validator.validate(income);
+
+        //Then
+        assertThat(violations.size(), equalTo(1));
+
+        var violation = violations.iterator().next();
+        assertThat(violation.getPropertyPath().toString(), equalTo("income[0].type"));
+        assertThat(violation.getMessage(), equalTo("must not be null"));
+        assertThat(violation.getInvalidValue(), equalTo(null));
+    }
+
+    @Test
+    void whenIncomeAmountIsNullThenFailValidation() {
+        //Given
+        var income = IncomeDto.builder().income(List.of(IncomeItemDto.builder().type(INCOME_TYPE).amount(null).build())).build();
+
+        //When
+        var violations = validator.validate(income);
+
+        //Then
+        assertThat(violations.size(), equalTo(1));
+
+        var violation = violations.iterator().next();
+        assertThat(violation.getPropertyPath().toString(), equalTo("income[0].amount"));
+        assertThat(violation.getMessage(), equalTo("must not be null"));
+        assertThat(violation.getInvalidValue(), equalTo(null));
     }
 
     @Test

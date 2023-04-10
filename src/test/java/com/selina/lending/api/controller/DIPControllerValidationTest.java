@@ -435,6 +435,60 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifyingApplicantIncomeAmount() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setAmount(null);
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].amount"))
+                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifyingApplicantIncomeType() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setType(null);
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].type"))
+                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifyingIncorrectApplicantIncomeType() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setType("Unsupported value");
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].type"))
+                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
+
+    @Test
     void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifyingSecondApplicantAnyLivingStatusWithFirstApplicant() throws Exception {
         //Given
         var dipApplicationRequest = getDIPCCApplicationRequestDto();
@@ -502,6 +556,60 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                 .andExpect(jsonPath("$.violations[0].message").value("The field 'applicant2LivesWithApplicant1For3Years' is required for the second applicant"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingApplicantIncomeAmount() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setAmount(null);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].amount"))
+                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingApplicantIncomeType() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setType(null);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].type"))
+                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingIncorrectApplicantIncomeType() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setType("Unsupported value");
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].type"))
+                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
     }
 
     @Test
