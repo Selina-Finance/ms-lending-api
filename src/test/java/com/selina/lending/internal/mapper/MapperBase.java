@@ -679,6 +679,11 @@ public abstract class MapperBase {
                 .productFee(PRODUCT_FEE)
                 .totalAmountRepaid(TOTAL_AMOUNT_REPAID)
                 .offerBalance(OFFER_BALANCE)
+                .requestedLoanAmount(REQUESTED_LOAN_AMOUNT)
+                .maximumLoanAmount(MAX_LOAN_AMOUNT)
+                .term(LOAN_TERM)
+                .ear(EAR)
+                .hasErc(true)
                 .build();
     }
 
