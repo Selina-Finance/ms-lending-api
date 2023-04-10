@@ -666,6 +666,7 @@ public abstract class MapperBase {
                 .ercShortCode(ERC_SHORT_CODE)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())
+                .productFeeAddedToLoan(true)
                 .decision(decision)
                 .initialRate(INITIAL_RATE)
                 .initialTerm(INITIAL_TERM)
