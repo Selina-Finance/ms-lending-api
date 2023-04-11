@@ -45,6 +45,8 @@ public class IncomeItemDto {
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String incomeDate;
     String relatedYear;
+    @Schema(implementation = frequency.class)
+    @EnumValue(enumClass = frequency.class)
     String frequency;
     Double contractDaysWorkedWeeklyReported;
     Double contractDayRateReported;
@@ -93,5 +95,23 @@ public class IncomeItemDto {
         public String toString() {
             return this.value;
         }
+    }
+
+    enum frequency {
+        MONTHLY("Monthly"),
+        ANNUALLY("Annually");
+
+
+        final String value;
+
+        frequency(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
     }
 }
