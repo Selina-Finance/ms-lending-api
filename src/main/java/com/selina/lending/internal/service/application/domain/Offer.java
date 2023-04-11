@@ -71,4 +71,9 @@ public class Offer {
     Double maxErc;
     List<Erc> ercData;
     List<RuleOutcome> ruleOutcomes;
+    Double requestedLoanAmount;
+    Double maximumLoanAmount;
+    Integer term;
+    Double ear;
+    Boolean hasErc;
 }
