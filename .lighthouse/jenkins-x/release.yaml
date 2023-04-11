@@ -37,8 +37,16 @@ spec:
           resources: {}
         - name: promote-changelog
           resources: {}
-        - name: promote-helm-release
+        # - name: promote-helm-release
+        #   resources: {}
+        - image: ghcr.io/jenkins-x/jx-boot:3.10.45
+          name: promote-helm-release
           resources: {}
+          script: |
+            #!/usr/bin/env sh
+            source .jx/variables.sh
+            sleep 9000
+            jx gitops helm release          
         - name: promote-jx-promote
           resources: {}
   podTemplate: {}
