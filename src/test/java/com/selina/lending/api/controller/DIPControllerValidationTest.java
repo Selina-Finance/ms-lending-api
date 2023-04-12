@@ -38,6 +38,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -652,5 +653,43 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].frequency"))
                 .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingMainIncome() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var applicant = dipApplicationRequest.getApplicants().get(0);
+        applicant.setIncome(null);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income"))
+                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWhenSpecifyNullForIncomeItemsList() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var applicant = dipApplicationRequest.getApplicants().get(0);
+        applicant.getIncome().setIncome(null);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income"))
+                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
     }
 }
