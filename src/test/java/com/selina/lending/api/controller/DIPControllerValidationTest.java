@@ -701,4 +701,42 @@ class DIPControllerValidationTest extends MapperBase {
                 //Then
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingMainIncome() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var applicant = dipApplicationRequest.getApplicants().get(0);
+        applicant.setIncome(null);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income"))
+                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWhenSpecifyNullForIncomeItemsList() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var applicant = dipApplicationRequest.getApplicants().get(0);
+        applicant.getIncome().setIncome(null);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income"))
+                .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+    }
 }

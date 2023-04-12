@@ -20,6 +20,7 @@ package com.selina.lending.internal.dto;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.selina.lending.api.support.validator.Conditional;
 import com.selina.lending.api.support.validator.EnumValue;
@@ -32,6 +33,7 @@ import lombok.Data;
 @Conditional(selected = "expectsFutureIncomeDecrease", values = {"true"}, required = {"expectsFutureIncomeDecreaseReason"})
 public class IncomeDto {
     @Valid
+    @NotNull
     List<IncomeItemDto> income;
     Boolean doesNotHaveAnyIncome;
     Boolean expectsFutureIncomeDecrease;
