@@ -20,14 +20,19 @@ package com.selina.lending.internal.dto;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class IncomeDto {
+
     @Valid
+    @NotNull
+    @Size(min = 1, message = "at least one income must be specified")
     List<IncomeItemDto> income;
     Boolean doesNotHaveAnyIncome;
     Boolean expectsFutureIncomeDecrease;
