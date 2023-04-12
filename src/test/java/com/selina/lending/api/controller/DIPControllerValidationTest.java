@@ -635,4 +635,22 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations[1].field").value("applicants"))
                 .andExpect(jsonPath("$.violations[1].message").value("The field 'applicant2LivesWithApplicant1For3Years' is required for the second applicant"));
     }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationAndSpecifyingIncorrectIncomeFrequency() throws Exception {
+        // Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setFrequency("Unsupported value");
+
+        // When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                    .contentType(APPLICATION_JSON))
+                 // Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].frequency"))
+                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
 }
