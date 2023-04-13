@@ -49,7 +49,7 @@ public class IncomeDto {
         CHNAGE_IN_EMPLOYMENT("Change in employment"),
         MOVING_TO_PART_TIME_WORK("Moving to part-time work"),
         ECONOMIC_CONDITIONS("Economic conditions"),
-        OTHER("OTHER");
+        OTHER("Other");
 
         final String value;
 
