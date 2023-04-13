@@ -21,17 +21,43 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.selina.lending.api.support.validator.Conditional;
+import com.selina.lending.api.support.validator.EnumValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
+@Conditional(selected = "expectsFutureIncomeDecrease", values = {"true"}, required = {"expectsFutureIncomeDecreaseReason"})
 public class IncomeDto {
     @Valid
     List<IncomeItemDto> income;
     Boolean doesNotHaveAnyIncome;
     Boolean expectsFutureIncomeDecrease;
+    @Schema(implementation = ExpectsFutureIncomeDecreaseReasons.class, description = "the reason if expectsFutureIncomeDecrease is true")
+    @EnumValue(enumClass = ExpectsFutureIncomeDecreaseReasons.class)
     String expectsFutureIncomeDecreaseReason;
     Double contractDayRateVerified;
     Integer contractDaysWorkedWeeklyVerified;
+
+    public enum ExpectsFutureIncomeDecreaseReasons {
+        REDUNDANCY("Redundancy"),
+        MATERNITY_OR_PATERNITY_LEAVE("Maternity or paternity leave"),
+        CHNAGE_IN_EMPLOYMENT("Change in employment"),
+        MOVING_TO_PART_TIME_WORK("Moving to part-time work"),
+        ECONOMIC_CONDITIONS("Economic conditions"),
+        OTHER("OTHER");
+
+        final String value;
+
+        ExpectsFutureIncomeDecreaseReasons(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

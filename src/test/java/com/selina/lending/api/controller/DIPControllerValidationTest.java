@@ -644,13 +644,61 @@ class DIPControllerValidationTest extends MapperBase {
 
         // When
         mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
-                    .contentType(APPLICATION_JSON))
-                 // Then
+                        .contentType(APPLICATION_JSON))
+                // Then
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].frequency"))
+                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingAllowedExpectsFutureIncomeDecreaseReason() throws Exception {
+        // Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecrease(true);
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecreaseReason("Unsupported value");
+
+        // When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].frequency"))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.expectsFutureIncomeDecreaseReason"))
                 .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationHasExpectsFutureIncomeDecreaseTrueButNoReason() throws Exception {
+        // Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecrease(true);
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecreaseReason(null);
+
+        // When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.expectsFutureIncomeDecreaseReason"))
+                .andExpect(jsonPath("$.violations[0].message").value("This field is required"));
+    }
+
+    @Test
+    void shouldGiveNoValidationErrorWhenCreateDipApplicationSpecifyAllowedExpectsFutureIncomeDecreaseFalseButReasonSupplied() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecrease(false);
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecreaseReason("Redundancy");
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
     }
 }
