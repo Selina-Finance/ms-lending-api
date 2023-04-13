@@ -35,7 +35,7 @@ public class IncomeDto {
     List<IncomeItemDto> income;
     Boolean doesNotHaveAnyIncome;
     Boolean expectsFutureIncomeDecrease;
-    @Schema(implementation = ExpectsFutureIncomeDecreaseReasons.class, description = "the reason if  expectsFutureIncomeDecrease is true")
+    @Schema(implementation = ExpectsFutureIncomeDecreaseReasons.class, description = "the reason if expectsFutureIncomeDecrease is true")
     @EnumValue(enumClass = ExpectsFutureIncomeDecreaseReasons.class)
     String expectsFutureIncomeDecreaseReason;
     Double contractDayRateVerified;
