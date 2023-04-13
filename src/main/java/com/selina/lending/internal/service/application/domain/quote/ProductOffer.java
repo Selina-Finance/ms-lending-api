@@ -33,6 +33,7 @@ public class ProductOffer {
     Double maximumLoanAmount;
     Double offerBalance;
     Double aprc;
+    Boolean isAprcHeadline;
     Double ear;
     Double svr;
     Double productFee;

@@ -44,6 +44,7 @@ public interface QuickQuoteApplicationResponseMapper {
     @Mapping(source = "offer.hasFee", target = "hasFee")
     @Mapping(source = "offer.productFee", target = "productFee")
     @Mapping(source = "offer.aprc", target = "aprc")
+    @Mapping(source = "offer.isAprcHeadline", target= "isAprcHeadline")
     @Mapping(source = "offer.ear", target = "ear")
     @Mapping(source = "offer.svr", target = "svr")
     @Mapping(source = "offer.initialRate", target = "initialRate")
