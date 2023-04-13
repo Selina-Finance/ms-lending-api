@@ -635,4 +635,37 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations[1].field").value("applicants"))
                 .andExpect(jsonPath("$.violations[1].message").value("The field 'applicant2LivesWithApplicant1For3Years' is required for the second applicant"));
     }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingAllowedExpectsFutureIncomeDecreaseReason() throws Exception {
+        // Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecrease(true);
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecreaseReason("Unsupported value");
+
+        // When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.expectsFutureIncomeDecreaseReason"))
+                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
+
+    @Test
+    void shouldGiveNoValidationErrorWhenCreateDipApplicationSpecifyAllowedExpectsFutureIncomeDecreaseFalseButReasonSupplied() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecrease(false);
+        dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecreaseReason("Redundancy");
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
 }
