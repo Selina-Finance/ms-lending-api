@@ -38,9 +38,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -738,5 +740,19 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income"))
                 .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+    }
+
+    @Test
+    void shouldCreateDipApplicationWithoutSpecifiedAnyApplicantsIncomeItems() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var applicant = dipApplicationRequest.getApplicants().get(0);
+        applicant.getIncome().setIncome(emptyList());
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
     }
 }
