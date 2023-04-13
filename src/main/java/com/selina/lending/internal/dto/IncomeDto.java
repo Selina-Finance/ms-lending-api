@@ -43,10 +43,10 @@ public class IncomeDto {
 
     public enum ExpectsFutureIncomeDecreaseReasons {
         REDUNDANCY("Redundancy"),
-        MATERNITYORPATERNITYLEAVE("Maternity or paternity leave"),
-        CHNAGEINEMPLOYMENT("Change in employment"),
-        MOVINGTOPARTTIMEWORK("Moving to part-time work"),
-        ECONOMICCONDITIONS("Economic conditions"),
+        MATERNITY_OR_PATERNITY_LEAVE("Maternity or paternity leave"),
+        CHNAGE_IN_EMPLOYMENT("Change in employment"),
+        MOVING_TO_PART_TIME_WORK("Moving to part-time work"),
+        ECONOMIC_CONDITIONS("Economic conditions"),
         OTHER("OTHER");
 
         final String value;
