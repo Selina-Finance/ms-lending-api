@@ -18,8 +18,8 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.service.application.domain.Offer;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.selina.lending.api.errors.custom.ConflictException;
@@ -73,10 +73,10 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     }
 
     @Override
-    public QuickQuoteCCResponse createQuickQuoteCCApplication(QuickQuoteCCRequest applicationRequest) {
-        var quickQuoteCCResponse = middlewareRepository.createQuickQuoteCCApplication(applicationRequest);
-        quickQuoteCCResponse.setOffers(filterOutDeclinedOffers(quickQuoteCCResponse.getOffers()));
-        return quickQuoteCCResponse;
+    public QuickQuoteCFResponse createQuickQuoteCFApplication(QuickQuoteCFRequest applicationRequest) {
+        var quickQuoteCFResponse = middlewareRepository.createQuickQuoteCFApplication(applicationRequest);
+        quickQuoteCFResponse.setOffers(filterOutDeclinedOffers(quickQuoteCFResponse.getOffers()));
+        return quickQuoteCFResponse;
     }
 
     private List<Offer> filterOutDeclinedOffers(List<Offer> offers) {

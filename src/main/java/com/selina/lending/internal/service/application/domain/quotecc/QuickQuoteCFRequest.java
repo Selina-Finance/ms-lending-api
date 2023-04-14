@@ -10,7 +10,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class QuickQuoteCCRequest {
+public class QuickQuoteCFRequest {
     String externalApplicationId;
     String sourceAccount;
     List<Applicant> applicants;

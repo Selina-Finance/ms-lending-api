@@ -24,8 +24,8 @@ import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
 import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -67,7 +67,7 @@ class QuickQuoteControllerTest {
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
 
     @Mock
-    private QuickQuoteCCResponse quickQuoteCCResponse;
+    private QuickQuoteCFResponse quickQuoteCFResponse;
 
 
     @Test
@@ -87,19 +87,19 @@ class QuickQuoteControllerTest {
     }
 
     @Test
-    void createQuickQuoteCCApplication() {
+    void createQuickQuoteCFApplication() {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(createApplicationService.createQuickQuoteCCApplication(any(QuickQuoteCCRequest.class))).thenReturn(quickQuoteCCResponse);
+        when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(quickQuoteCFResponse);
 
         //When
-        var response = quickQuoteController.createQuickQuoteCCApplication(quickQuoteApplicationRequest);
+        var response = quickQuoteController.createQuickQuoteCFApplication(quickQuoteApplicationRequest);
 
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
-        verify(createApplicationService, times(1)).createQuickQuoteCCApplication(any());
+        verify(createApplicationService, times(1)).createQuickQuoteCFApplication(any());
     }
 
 

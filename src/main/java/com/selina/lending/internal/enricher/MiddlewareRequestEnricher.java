@@ -20,7 +20,7 @@ package com.selina.lending.internal.enricher;
 import java.util.List;
 import java.util.Optional;
 
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.dto.LendingConstants;
@@ -43,7 +43,7 @@ public class MiddlewareRequestEnricher {
         this.tokenService = tokenService;
     }
 
-    public void enrichCreateQuickQuoteCCRequest(QuickQuoteCCRequest applicationRequest) {
+    public void enrichCreateQuickQuoteCFRequest(QuickQuoteCFRequest applicationRequest) {
         applicationRequest.setSourceAccount(tokenService.retrieveSourceAccount());
     }
 

@@ -92,7 +92,7 @@ import com.selina.lending.internal.service.application.domain.creditcommitments.
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -691,8 +691,8 @@ public abstract class MapperBase {
         return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
     }
 
-    protected QuickQuoteCCResponse getQuickQuoteCCResponse() {
-        return QuickQuoteCCResponse.builder()
+    protected QuickQuoteCFResponse getQuickQuoteCFResponse() {
+        return QuickQuoteCFResponse.builder()
                 .status(DECISION)
                 .offers(List.of(getOffer()))
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)

@@ -17,7 +17,6 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.api.errors.custom.ConflictException;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
@@ -25,11 +24,10 @@ import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +55,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
     private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
 
     @Mock
-    private QuickQuoteCCRequest quickQuoteCCRequest;
+    private QuickQuoteCFRequest quickQuoteCFRequest;
 
     @Mock
     private ApplicationRequest applicationRequest;
@@ -168,38 +166,38 @@ class CreateApplicationServiceImplTest extends MapperBase {
     }
 
     @Nested
-    class CreateQuickQuoteCCApplication {
+    class CreateQuickQuoteCFApplication {
 
         @Test
-        void shouldCreateQuickQuoteCCApplication() {
+        void shouldCreateQuickQuoteCFApplication() {
             //Given
-            var expectedQuickQuoteCCResponse = getQuickQuoteCCResponse();
+            var expectedQuickQuoteCFResponse = getQuickQuoteCFResponse();
 
-            when(middlewareRepository.createQuickQuoteCCApplication(quickQuoteCCRequest)).thenReturn(expectedQuickQuoteCCResponse);
+            when(middlewareRepository.createQuickQuoteCFApplication(quickQuoteCFRequest)).thenReturn(expectedQuickQuoteCFResponse);
 
             //When
-            var quickQuoteCCResponse = createApplicationService.createQuickQuoteCCApplication(quickQuoteCCRequest);
+            var quickQuoteCFResponse = createApplicationService.createQuickQuoteCFApplication(quickQuoteCFRequest);
 
             //Then
-            assertThat(quickQuoteCCResponse).isEqualTo(expectedQuickQuoteCCResponse);
+            assertThat(quickQuoteCFResponse).isEqualTo(expectedQuickQuoteCFResponse);
         }
 
         @Test
-        void whenCreateQuickQuoteCCApplicationThenFilterOutDeclinedOffers() {
+        void whenCreateQuickQuoteCFApplicationThenFilterOutDeclinedOffers() {
             //Given
-            var quickQuoteCCResponse = getQuickQuoteCCResponse();
+            var quickQuoteCFResponse = getQuickQuoteCFResponse();
             var acceptedOffer = getOffer(OFFER_DECISION_ACCEPT);
             var declinedOffer = getOffer(OFFER_DECISION_DECLINE);
             var declinedOffer2 = getOffer("decline");
-            quickQuoteCCResponse.setOffers(List.of(acceptedOffer, declinedOffer, declinedOffer2));
+            quickQuoteCFResponse.setOffers(List.of(acceptedOffer, declinedOffer, declinedOffer2));
 
-            when(middlewareRepository.createQuickQuoteCCApplication(quickQuoteCCRequest)).thenReturn(quickQuoteCCResponse);
+            when(middlewareRepository.createQuickQuoteCFApplication(quickQuoteCFRequest)).thenReturn(quickQuoteCFResponse);
 
             //When
-            var filteredQuickQuoteCCResponse = createApplicationService.createQuickQuoteCCApplication(quickQuoteCCRequest);
+            var filteredQuickQuoteCFResponse = createApplicationService.createQuickQuoteCFApplication(quickQuoteCFRequest);
 
             //Then
-            assertThat(filteredQuickQuoteCCResponse.getOffers()).containsExactly(acceptedOffer);
+            assertThat(filteredQuickQuoteCFResponse.getOffers()).containsExactly(acceptedOffer);
         }
     }
 }

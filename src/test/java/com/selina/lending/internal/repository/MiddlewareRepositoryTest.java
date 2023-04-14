@@ -25,8 +25,8 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
@@ -73,10 +73,10 @@ class MiddlewareRepositoryTest {
     private Application application;
 
     @Mock
-    private QuickQuoteCCRequest quickQuoteCCRequest;
+    private QuickQuoteCFRequest quickQuoteCFRequest;
 
     @Mock
-    private QuickQuoteCCResponse quickQuoteCCResponse;
+    private QuickQuoteCFResponse quickQuoteCFResponse;
 
     private MiddlewareRepository middlewareRepository;
 
@@ -136,18 +136,18 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
-    void shouldCallHttpClientWhenCreateQuickQuoteCCApplicationInvoked() {
+    void shouldCallHttpClientWhenCreateQuickQuoteCFApplicationInvoked() {
         // Given
-        when(middlewareApi.createQuickQuoteCCApplication(quickQuoteCCRequest)).thenReturn(quickQuoteCCResponse);
-        when(quickQuoteCCResponse.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
+        when(middlewareApi.createQuickQuoteCFApplication(quickQuoteCFRequest)).thenReturn(quickQuoteCFResponse);
+        when(quickQuoteCFResponse.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
 
         // When
-        var result = middlewareRepository.createQuickQuoteCCApplication(quickQuoteCCRequest);
+        var result = middlewareRepository.createQuickQuoteCFApplication(quickQuoteCFRequest);
 
         // Then
-        assertThat(result).isEqualTo(quickQuoteCCResponse);
-        verify(middlewareRequestEnricher, times(1)).enrichCreateQuickQuoteCCRequest(quickQuoteCCRequest);
-        verify(middlewareApi, times(1)).createQuickQuoteCCApplication(quickQuoteCCRequest);
+        assertThat(result).isEqualTo(quickQuoteCFResponse);
+        verify(middlewareRequestEnricher, times(1)).enrichCreateQuickQuoteCFRequest(quickQuoteCFRequest);
+        verify(middlewareApi, times(1)).createQuickQuoteCFApplication(quickQuoteCFRequest);
     }
 
     @Test

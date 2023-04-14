@@ -1,7 +1,7 @@
 package com.selina.lending.internal.mapper.quotecc;
 
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
 import org.junit.jupiter.api.Test;
 
 
@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class QuickQuoteCCRequestMapperTest extends MapperBase {
+public class QuickQuoteCFRequestMapperTest extends MapperBase {
 
     @Test
     void shouldMapToFilteredQuickQuoteApplicationRequest() {
@@ -18,7 +18,7 @@ public class QuickQuoteCCRequestMapperTest extends MapperBase {
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
         //When
-        QuickQuoteCCRequest applicationRequest = QuickQuoteCCRequestMapper.INSTANCE.mapToQuickQuoteCCRequest(quickQuoteApplicationRequest);
+        QuickQuoteCFRequest applicationRequest = QuickQuoteCFRequestMapper.INSTANCE.mapToQuickQuoteCFRequest(quickQuoteApplicationRequest);
 
         //Then
         assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
@@ -39,7 +39,7 @@ public class QuickQuoteCCRequestMapperTest extends MapperBase {
 
     }
 
-    private void assertPropertyDetails(QuickQuoteCCRequest application) {
+    private void assertPropertyDetails(QuickQuoteCFRequest application) {
         var propertyDetails = application.getPropertyDetails();
         assertThat(propertyDetails, notNullValue());
         assertThat(propertyDetails.getAddressLine1(), equalTo(ADDRESS_LINE_1));
@@ -50,7 +50,7 @@ public class QuickQuoteCCRequestMapperTest extends MapperBase {
         assertThat(propertyDetails.getPriorCharges(), notNullValue());
     }
 
-    private void assertLoanInformation(QuickQuoteCCRequest responseDto) {
+    private void assertLoanInformation(QuickQuoteCFRequest responseDto) {
         var loanInformation = responseDto.getLoanInformation();
         assertThat(loanInformation, notNullValue());
         assertThat(loanInformation.getLoanPurpose(), equalTo(LOAN_PURPOSE));

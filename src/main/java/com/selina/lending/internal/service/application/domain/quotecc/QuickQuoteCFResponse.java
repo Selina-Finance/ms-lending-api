@@ -8,7 +8,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class QuickQuoteCCResponse {
+public class QuickQuoteCFResponse {
     String externalApplicationId;
     String status;
     List<Offer> offers;
