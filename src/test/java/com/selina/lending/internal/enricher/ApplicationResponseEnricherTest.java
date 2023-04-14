@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @ExtendWith(MockitoExtension.class)
 public class ApplicationResponseEnricherTest {
@@ -58,5 +59,19 @@ public class ApplicationResponseEnricherTest {
 
         // then
         assertThat(response.getOffers().get(0).getApplyUrl(), equalTo(expected));
+    }
+
+    @Test
+    void enrichQuickQuoteResponseApplyUrlDoesNotOccurIfOffersEmpty() {
+        // Given
+        var externalApplicationId = UUID.randomUUID().toString();
+        var response = QuickQuoteResponse
+                .builder()
+                .externalApplicationId(externalApplicationId)
+                .offers(null)
+                .build();
+
+        // When/Then
+        assertDoesNotThrow(() -> enricher.enrichQuickQuoteResponseWithProductOffersApplyUrl(response));
     }
 }
