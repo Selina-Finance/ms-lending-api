@@ -21,10 +21,12 @@ public class ApplicationResponseEnricher {
 
     public void enrichQuickQuoteResponseWithProductOffersApplyUrl(QuickQuoteResponse response) {
         var offers = response.getOffers();
-        for (ProductOfferDto offer : offers) {
-            offer.setApplyUrl(
-                    this.quickQuoteProductOffersApplyUrlBuilder(response.getExternalApplicationId(), offer.getCode())
-            );
+        if (offers != null) {
+            for (ProductOfferDto offer : offers) {
+                offer.setApplyUrl(
+                        this.quickQuoteProductOffersApplyUrlBuilder(response.getExternalApplicationId(), offer.getCode())
+                );
+            }
         }
     }
 
