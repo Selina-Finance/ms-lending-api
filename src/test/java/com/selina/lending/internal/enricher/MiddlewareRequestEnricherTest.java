@@ -25,7 +25,7 @@ import static com.selina.lending.internal.enricher.MiddlewareRequestEnricher.ADD
 
 import java.util.List;
 
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

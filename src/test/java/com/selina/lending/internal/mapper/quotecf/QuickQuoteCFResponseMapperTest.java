@@ -1,8 +1,8 @@
-package com.selina.lending.internal.mapper.quotecc;
+package com.selina.lending.internal.mapper.quotecf;
 
 import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

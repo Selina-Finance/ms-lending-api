@@ -18,10 +18,10 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
-import com.selina.lending.internal.mapper.quotecc.QuickQuoteCFRequestMapper;
-import com.selina.lending.internal.mapper.quotecc.QuickQuoteCFResponseMapper;
+import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFRequestMapper;
+import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFResponseMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

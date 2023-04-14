@@ -24,7 +24,7 @@ import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;

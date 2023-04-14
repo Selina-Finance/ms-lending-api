@@ -1,4 +1,4 @@
-package com.selina.lending.internal.service.application.domain.quotecc;
+package com.selina.lending.internal.service.application.domain.quotecf;
 
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.LoanInformation;

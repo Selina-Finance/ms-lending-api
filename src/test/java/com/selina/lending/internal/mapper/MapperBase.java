@@ -92,7 +92,7 @@ import com.selina.lending.internal.service.application.domain.creditcommitments.
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

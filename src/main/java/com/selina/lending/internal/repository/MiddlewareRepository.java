@@ -19,8 +19,8 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.springframework.core.io.Resource;
 
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;

@@ -18,8 +18,8 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.service.application.domain.Offer;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCFResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.selina.lending.api.errors.custom.ConflictException;
