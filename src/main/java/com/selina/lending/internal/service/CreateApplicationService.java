@@ -19,11 +19,11 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 
 public interface CreateApplicationService {
     ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest);
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
-    QuickQuoteCCResponse createQuickQuoteCCApplication(QuickQuoteCCRequest applicationRequest);
+    QuickQuoteCFResponse createQuickQuoteCFApplication(QuickQuoteCFRequest applicationRequest);
 }

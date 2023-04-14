@@ -1,4 +1,4 @@
-package com.selina.lending.internal.mapper.quotecc;
+package com.selina.lending.internal.mapper.quotecf;
 
 import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.mapper.ErcMapper;

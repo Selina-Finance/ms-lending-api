@@ -68,11 +68,11 @@ public interface QuickQuoteOperations {
     QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 
 
-    @Operation(description = "Create a new Quick Quote CC application")
+    @Operation(description = "Create a new Quick Quote CF application")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Quick Quote CC created",
+                    description = "Quick Quote CF created",
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -86,8 +86,8 @@ public interface QuickQuoteOperations {
                     content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
             )
     })
-    @PostMapping(value = "/quickquotecc")
-    ResponseEntity<QuickQuoteResponse> createQuickQuoteCCApplication(@Valid @RequestBody
+    @PostMapping(value = "/quickquotecf")
+    ResponseEntity<QuickQuoteResponse> createQuickQuoteCFApplication(@Valid @RequestBody
                                                                    QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 
 

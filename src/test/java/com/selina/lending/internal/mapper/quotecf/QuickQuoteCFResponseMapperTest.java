@@ -1,8 +1,8 @@
-package com.selina.lending.internal.mapper.quotecc;
+package com.selina.lending.internal.mapper.quotecf;
 
 import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -10,15 +10,15 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class QuickQuoteCCResponseMapperTest extends MapperBase {
+public class QuickQuoteCFResponseMapperTest extends MapperBase {
 
     @Test
     void mapToQuickQuoteResponseDecisionAccepted() {
         //Given
-        QuickQuoteCCResponse response = getQuickQuoteCCResponse();
+        QuickQuoteCFResponse response = getQuickQuoteCFResponse();
 
         //When
-        var quickQuoteResponse = QuickQuoteCCResponseMapper.INSTANCE.mapToQuickQuoteResponse(response);
+        var quickQuoteResponse = QuickQuoteCFResponseMapper.INSTANCE.mapToQuickQuoteResponse(response);
 
         //Then
         assertThat(quickQuoteResponse.getStatus(), equalTo(DECISION));

@@ -1,18 +1,18 @@
-package com.selina.lending.internal.mapper.quotecc;
+package com.selina.lending.internal.mapper.quotecf;
 
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.LoanInformationMapper;
 import com.selina.lending.internal.mapper.QuickQuoteApplicantMapper;
 import com.selina.lending.internal.mapper.QuickQuotePropertyDetailsMapper;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {QuickQuoteApplicantMapper.class, LoanInformationMapper.class, QuickQuotePropertyDetailsMapper.class})
-public interface QuickQuoteCCRequestMapper {
+public interface QuickQuoteCFRequestMapper {
 
-    QuickQuoteCCRequestMapper INSTANCE = Mappers.getMapper(QuickQuoteCCRequestMapper.class);
-    QuickQuoteCCRequest mapToQuickQuoteCCRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
+    QuickQuoteCFRequestMapper INSTANCE = Mappers.getMapper(QuickQuoteCFRequestMapper.class);
+    QuickQuoteCFRequest mapToQuickQuoteCFRequest(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 
 }

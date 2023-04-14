@@ -19,8 +19,8 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -81,15 +81,15 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return appResponse;
     }
 
-    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiCreateQuickQuoteCCFallback")
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiCreateQuickQuoteCFFallback")
     @Override
-    public QuickQuoteCCResponse createQuickQuoteCCApplication(QuickQuoteCCRequest applicationRequest) {
-        log.debug("Create QQ with Credit Commitments application [applicationRequest={}]", applicationRequest);
-        middlewareRequestEnricher.enrichCreateQuickQuoteCCRequest(applicationRequest);
+    public QuickQuoteCFResponse createQuickQuoteCFApplication(QuickQuoteCFRequest applicationRequest) {
+        log.debug("Create QQ with Credit File application [applicationRequest={}]", applicationRequest);
+        middlewareRequestEnricher.enrichCreateQuickQuoteCFRequest(applicationRequest);
 
-        var appResponse = middlewareApi.createQuickQuoteCCApplication(applicationRequest);
+        var appResponse = middlewareApi.createQuickQuoteCFApplication(applicationRequest);
 
-        log.info("Finished calling mw to create qqcc application [externalApplicationId={}]", appResponse.getExternalApplicationId());
+        log.info("Finished calling mw to create qqcf application [externalApplicationId={}]", appResponse.getExternalApplicationId());
         return appResponse;
     }
 
@@ -139,7 +139,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         throw remoteResourceProblemException(e);
     }
 
-    private QuickQuoteCCResponse middlewareApiCreateQuickQuoteCCFallback(CallNotPermittedException e) { //NOSONAR
+    private QuickQuoteCFResponse middlewareApiCreateQuickQuoteCFFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 

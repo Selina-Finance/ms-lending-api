@@ -20,7 +20,7 @@ package com.selina.lending.internal.repository;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApi;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ class MiddlewareRepositoryFallbackTest {
     private ApplicationRequest applicationRequest;
 
     @MockBean
-    private QuickQuoteCCRequest quickQuoteCCRequest;
+    private QuickQuoteCFRequest quickQuoteCFRequest;
 
     @MockBean
     private MiddlewareApi middlewareApi;
@@ -134,7 +134,7 @@ class MiddlewareRepositoryFallbackTest {
     }
 
     @Nested
-    class CreateQuickQuoteCCApplicationException {
+    class CreateQuickQuoteCFApplicationException {
 
         @Test
         void whenCircuitBreakerIsOpenThenThrowRemoteResourceProblemExceptionWithoutCallingMiddleware() {
@@ -143,7 +143,7 @@ class MiddlewareRepositoryFallbackTest {
 
             // When
             RemoteResourceProblemException requestException = assertThrows(RemoteResourceProblemException.class,
-                    () -> middlewareRepository.createQuickQuoteCCApplication(quickQuoteCCRequest));
+                    () -> middlewareRepository.createQuickQuoteCFApplication(quickQuoteCFRequest));
 
             // Then
             assertThat(requestException, isA(RemoteResourceProblemException.class));

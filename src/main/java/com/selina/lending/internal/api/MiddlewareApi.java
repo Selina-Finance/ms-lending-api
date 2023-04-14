@@ -20,8 +20,8 @@ package com.selina.lending.internal.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +53,7 @@ public interface MiddlewareApi {
     ApplicationResponse createDipApplication(ApplicationRequest applicationRequest);
 
     @PostMapping(path = "/quote_broker", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    QuickQuoteCCResponse createQuickQuoteCCApplication(QuickQuoteCCRequest applicationRequest);
+    QuickQuoteCFResponse createQuickQuoteCFApplication(QuickQuoteCFRequest applicationRequest);
 
     @PutMapping(path = "/application/{id}/selectProduct/{productCode}")
     SelectProductResponse selectProduct(@PathVariable("id") String id, @PathVariable("productCode") String productCode);

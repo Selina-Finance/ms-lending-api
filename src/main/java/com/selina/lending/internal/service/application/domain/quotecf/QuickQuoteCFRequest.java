@@ -1,4 +1,4 @@
-package com.selina.lending.internal.service.application.domain.quotecc;
+package com.selina.lending.internal.service.application.domain.quotecf;
 
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class QuickQuoteCCRequest {
+public class QuickQuoteCFRequest {
     String externalApplicationId;
     String sourceAccount;
     List<Applicant> applicants;

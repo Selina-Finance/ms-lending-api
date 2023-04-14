@@ -25,7 +25,7 @@ import static com.selina.lending.internal.enricher.MiddlewareRequestEnricher.ADD
 
 import java.util.List;
 
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCRequest;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -103,14 +103,14 @@ class MiddlewareRequestEnricherTest {
     }
 
     @Test
-    void shouldEnrichCreateQuickQuoteCCRequest() {
+    void shouldEnrichCreateQuickQuoteCFRequest() {
         //Given
-        var request = QuickQuoteCCRequest.builder().build();
+        var request = QuickQuoteCFRequest.builder().build();
 
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
 
         //When
-        enricher.enrichCreateQuickQuoteCCRequest(request);
+        enricher.enrichCreateQuickQuoteCFRequest(request);
 
         //Then
         assertThat(request.getSourceAccount(), equalTo(SOURCE_ACCOUNT));

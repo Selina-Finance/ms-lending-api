@@ -18,10 +18,10 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
-import com.selina.lending.internal.mapper.quotecc.QuickQuoteCCRequestMapper;
-import com.selina.lending.internal.mapper.quotecc.QuickQuoteCCResponseMapper;
+import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFRequestMapper;
+import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFResponseMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.application.domain.quotecc.QuickQuoteCCResponse;
+import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import com.selina.lending.internal.service.permissions.annotation.Permission;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +36,7 @@ import com.selina.lending.internal.service.FilterApplicationService;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.QQ;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.QQ_CC;
+import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.QQ_CF;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Create;
 import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
 
@@ -69,11 +69,11 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
     @Override
-    @Permission(resource = QQ_CC, scope = Create)
-    public ResponseEntity<QuickQuoteResponse> createQuickQuoteCCApplication(
+    @Permission(resource = QQ_CF, scope = Create)
+    public ResponseEntity<QuickQuoteResponse> createQuickQuoteCFApplication(
             QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        log.info("Create Quick Quote CC application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        return ResponseEntity.ok(filterQuickQuoteCC(quickQuoteApplicationRequest));
+        log.info("Create Quick Quote CF application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
+        return ResponseEntity.ok(filterQuickQuoteCF(quickQuoteApplicationRequest));
     }
 
     @Override
@@ -88,10 +88,10 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
 
-    private QuickQuoteResponse filterQuickQuoteCC(QuickQuoteApplicationRequest quickQuoteApplicationRequest){
-        QuickQuoteCCResponse quickQuoteDecisionResponse = createApplicationService.createQuickQuoteCCApplication(QuickQuoteCCRequestMapper.INSTANCE
-                .mapToQuickQuoteCCRequest(quickQuoteApplicationRequest));
-        QuickQuoteResponse quickQuoteResponse = QuickQuoteCCResponseMapper.INSTANCE.mapToQuickQuoteResponse(quickQuoteDecisionResponse);
+    private QuickQuoteResponse filterQuickQuoteCF(QuickQuoteApplicationRequest quickQuoteApplicationRequest){
+        QuickQuoteCFResponse quickQuoteDecisionResponse = createApplicationService.createQuickQuoteCFApplication(QuickQuoteCFRequestMapper.INSTANCE
+                .mapToQuickQuoteCFRequest(quickQuoteApplicationRequest));
+        QuickQuoteResponse quickQuoteResponse = QuickQuoteCFResponseMapper.INSTANCE.mapToQuickQuoteResponse(quickQuoteDecisionResponse);
         applicationResponseEnricher.enrichQuickQuoteResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
         return quickQuoteResponse;
     }
