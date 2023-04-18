@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.selina.lending.internal.dto.ApplicationRequest;
+import com.selina.lending.internal.dto.LeadDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 
 import lombok.EqualsAndHashCode;
@@ -51,4 +52,6 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
     @NotNull
     @Valid
     private QuickQuotePropertyDetailsDto propertyDetails;
+
+    LeadDto lead;
 }

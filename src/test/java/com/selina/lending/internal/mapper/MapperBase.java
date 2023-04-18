@@ -37,6 +37,7 @@ import com.selina.lending.internal.dto.FacilityDto;
 import com.selina.lending.internal.dto.FeesDto;
 import com.selina.lending.internal.dto.IncomeDto;
 import com.selina.lending.internal.dto.IncomeItemDto;
+import com.selina.lending.internal.dto.LeadDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.dto.OfferDto;
 import com.selina.lending.internal.dto.PreviousNameDto;
@@ -255,6 +256,7 @@ public abstract class MapperBase {
                 .loanInformation(getLoanInformationDto())
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
                 .applicants(List.of(getQuickQuoteApplicantDto()))
+                .lead(getLeadDto())
                 .build();
     }
 
@@ -360,6 +362,14 @@ public abstract class MapperBase {
     protected EmploymentDto getEmploymentDto() {
         return EmploymentDto.builder().employmentStatus(EMPLOYED_STATUS).employerName(EMPLOYER_NAME)
                 .inProbationPeriod(false)
+                .build();
+    }
+
+    private LeadDto getLeadDto() {
+        return LeadDto.builder()
+                .utmCampaign(UTM_CAMPAIGN)
+                .utmMedium(UTM_MEDIUM)
+                .utmSource(UTM_SOURCE)
                 .build();
     }
 
