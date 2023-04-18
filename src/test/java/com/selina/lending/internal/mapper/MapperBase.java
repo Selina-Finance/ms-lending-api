@@ -184,6 +184,8 @@ public abstract class MapperBase {
     public static final Integer INITIAL_TERM = 5;
     public static final Double REVERSION_PAYMENT = 5.0;
     public static final Double APRC = 9.77;
+
+    public static final Boolean IS_APRC_HEADLINE = false;
     public static final Double REQUESTED_LOAN_AMOUNT = 50000.0;
     public static final Double OUTSTANDING_BALANCE = 20000.0;
     public static final Double BALANCE_CONSOLIDATED = 25000.0;
@@ -742,6 +744,7 @@ public abstract class MapperBase {
                 .id(OFFER_ID)
                 .totalAmountRepaid(TOTAL_AMOUNT_REPAID)
                 .aprc(APRC)
+                .isAprcHeadline(IS_APRC_HEADLINE)
                 .ear(EAR)
                 .svr(SVR)
                 .offerBalance(OFFER_BALANCE)

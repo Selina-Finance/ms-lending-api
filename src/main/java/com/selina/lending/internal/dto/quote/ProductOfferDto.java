@@ -44,6 +44,7 @@ public class ProductOfferDto {
     Double initialRate;
     Double initialPayment;
     Double aprc;
+    Boolean isAprcHeadline;
     Double ear;
     Double svr;
     String family;
