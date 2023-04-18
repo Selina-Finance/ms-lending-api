@@ -44,9 +44,6 @@
           "required":true
         },
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -55,6 +52,19 @@
                   "title":"Error processing request",
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
+          "200":{
+            "description":"Quick Quote updated",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/QuickQuoteResponse"
                 }
               }
             }
@@ -72,16 +82,6 @@
                       "message":"value is not valid"
                     }
                   ]
-                }
-              }
-            }
-          },
-          "200":{
-            "description":"Quick Quote updated",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/QuickQuoteResponse"
                 }
               }
             }
@@ -117,21 +117,6 @@
           }
         ],
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
-          "404":{
-            "description":"Application not found",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Not Found",
-                  "status":404,
-                  "detail":"message details"
-                }
-              }
-            }
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -155,6 +140,21 @@
                   "message":"Offer selected with success",
                   "externalApplicationId":"external id",
                   "productCode":"product code"
+                }
+              }
+            }
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
+          "404":{
+            "description":"Application not found",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Not Found",
+                  "status":404,
+                  "detail":"message details"
                 }
               }
             }
@@ -191,6 +191,18 @@
           "required":true
         },
         "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "401":{
             "description":"Unauthorized"
           },
@@ -206,17 +218,8 @@
               }
             }
           },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
+          "204":{
+            "description":"Application updated"
           },
           "400":{
             "description":"Application details invalid",
@@ -234,9 +237,6 @@
                 }
               }
             }
-          },
-          "204":{
-            "description":"Application updated"
           }
         }
       }
@@ -270,6 +270,18 @@
           "required":true
         },
         "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
           "401":{
             "description":"Unauthorized"
           },
@@ -285,17 +297,8 @@
               }
             }
           },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
+          "204":{
+            "description":"Application updated"
           },
           "400":{
             "description":"Application details invalid",
@@ -313,9 +316,6 @@
                 }
               }
             }
-          },
-          "204":{
-            "description":"Application updated"
           }
         }
       }
@@ -338,6 +338,16 @@
           "required":true
         },
         "responses":{
+          "200":{
+            "description":"Authentication token and amount of seconds before it will be expired",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
           "400":{
             "description":"Request is invalid",
             "content":{
@@ -361,13 +371,66 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/application/quickquotecf":{
+      "post":{
+        "tags":[
+          "quick-quote-controller"
+        ],
+        "description":"Create a new Quick Quote CF application",
+        "operationId":"createQuickQuoteCFApplication",
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/QuickQuoteApplicationRequest"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
           "200":{
-            "description":"Authentication token and amount of seconds before it will be expired",
+            "description":"Quick Quote CF created",
             "content":{
               "application/json":{
                 "schema":{
-                  "$ref":"#/components/schemas/TokenResponse"
+                  "$ref":"#/components/schemas/QuickQuoteResponse"
+                }
+              }
+            }
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
                 }
               }
             }
@@ -393,9 +456,6 @@
           "required":true
         },
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -407,6 +467,9 @@
                 }
               }
             }
+          },
+          "401":{
+            "description":"Unauthorized"
           },
           "400":{
             "description":"Application details invalid",
@@ -456,9 +519,6 @@
           "required":true
         },
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -471,22 +531,8 @@
               }
             }
           },
-          "400":{
-            "description":"Application details invalid",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Constraint Violation",
-                  "status":400,
-                  "violations":[
-                    {
-                      "field":"field",
-                      "message":"value is not valid"
-                    }
-                  ]
-                }
-              }
-            }
+          "401":{
+            "description":"Unauthorized"
           },
           "200":{
             "description":"Application created",
@@ -506,6 +552,23 @@
                   "title":"Error processing request",
                   "status":409,
                   "detail":"message details"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Application details invalid",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Constraint Violation",
+                  "status":400,
+                  "violations":[
+                    {
+                      "field":"field",
+                      "message":"value is not valid"
+                    }
+                  ]
                 }
               }
             }
@@ -531,8 +594,15 @@
           "required":true
         },
         "responses":{
-          "401":{
-            "description":"Unauthorized"
+          "200":{
+            "description":"Application created",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/DIPApplicationResponse"
+                }
+              }
+            }
           },
           "403":{
             "description":"Forbidden",
@@ -542,6 +612,21 @@
                   "title":"Error processing request",
                   "status":403,
                   "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
+          },
+          "401":{
+            "description":"Unauthorized"
+          },
+          "409":{
+            "description":"Conflict",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":409,
+                  "detail":"message details"
                 }
               }
             }
@@ -559,28 +644,6 @@
                       "message":"value is not valid"
                     }
                   ]
-                }
-              }
-            }
-          },
-          "200":{
-            "description":"Application created",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/DIPApplicationResponse"
-                }
-              }
-            }
-          },
-          "409":{
-            "description":"Conflict",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":409,
-                  "detail":"message details"
                 }
               }
             }
@@ -607,9 +670,6 @@
           }
         ],
         "responses":{
-          "401":{
-            "description":"Unauthorized"
-          },
           "403":{
             "description":"Forbidden",
             "content":{
@@ -622,15 +682,8 @@
               }
             }
           },
-          "200":{
-            "description":"Returns the Credit Commitments for the application",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/CreditCommitmentResponse"
-                }
-              }
-            }
+          "401":{
+            "description":"Unauthorized"
           },
           "404":{
             "description":"Not Found",
@@ -640,6 +693,16 @@
                   "title":"Not Found",
                   "status":404,
                   "detail":"message details"
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"Returns the Credit Commitments for the application",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/CreditCommitmentResponse"
                 }
               }
             }
@@ -674,8 +737,17 @@
           "required":true
         },
         "responses":{
-          "401":{
-            "description":"Unauthorized"
+          "403":{
+            "description":"Forbidden",
+            "content":{
+              "*/*":{
+                "example":{
+                  "title":"Error processing request",
+                  "status":403,
+                  "detail":"Sorry, but you have no access to this resource"
+                }
+              }
+            }
           },
           "400":{
             "description":"Credit Commitments request is invalid",
@@ -694,17 +766,8 @@
               }
             }
           },
-          "403":{
-            "description":"Forbidden",
-            "content":{
-              "*/*":{
-                "example":{
-                  "title":"Error processing request",
-                  "status":403,
-                  "detail":"Sorry, but you have no access to this resource"
-                }
-              }
-            }
+          "401":{
+            "description":"Unauthorized"
           },
           "404":{
             "description":"Not Found",
@@ -790,8 +853,13 @@
           }
         ],
         "responses":{
-          "401":{
-            "description":"Unauthorized"
+          "200":{
+            "description":"ESIS pdf document for the application",
+            "content":{
+              "application/pdf":{
+
+              }
+            }
           },
           "403":{
             "description":"Forbidden",
@@ -805,13 +873,8 @@
               }
             }
           },
-          "200":{
-            "description":"ESIS pdf document for the application",
-            "content":{
-              "application/pdf":{
-
-              }
-            }
+          "401":{
+            "description":"Unauthorized"
           },
           "404":{
             "description":"Not Found",
@@ -1139,6 +1202,9 @@
         }
       },
       "IncomeDto":{
+        "required":[
+          "income"
+        ],
         "type":"object",
         "properties":{
           "income":{
@@ -1154,7 +1220,16 @@
             "type":"boolean"
           },
           "expectsFutureIncomeDecreaseReason":{
-            "type":"string"
+            "type":"string",
+            "description":"the reason if expectsFutureIncomeDecrease is true",
+            "enum":[
+              "Redundancy",
+              "Maternity or paternity leave",
+              "Change in employment",
+              "Moving to part-time work",
+              "Economic conditions",
+              "Other"
+            ]
           },
           "contractDayRateVerified":{
             "type":"number",
@@ -1168,6 +1243,7 @@
       },
       "IncomeItemDto":{
         "required":[
+          "amount",
           "type"
         ],
         "type":"object",
@@ -1235,7 +1311,11 @@
             "type":"string"
           },
           "frequency":{
-            "type":"string"
+            "type":"string",
+            "enum":[
+              "Monthly",
+              "Annually"
+            ]
           },
           "contractDaysWorkedWeeklyReported":{
             "type":"number",
@@ -1396,6 +1476,12 @@
               "Owner",
               "Owner Occupier"
             ]
+          },
+          "applicant2LivesWithApplicant1":{
+            "type":"boolean"
+          },
+          "applicant2LivesWithApplicant1For3Years":{
+            "type":"boolean"
           },
           "addresses":{
             "type":"array",
@@ -1657,6 +1743,9 @@
             "type":"integer",
             "format":"int32"
           },
+          "applyUrl":{
+            "type":"string"
+          },
           "ercData":{
             "type":"array",
             "items":{
@@ -1832,6 +1921,12 @@
               "Owner",
               "Owner Occupier"
             ]
+          },
+          "applicant2LivesWithApplicant1":{
+            "type":"boolean"
+          },
+          "applicant2LivesWithApplicant1For3Years":{
+            "type":"boolean"
           },
           "addresses":{
             "type":"array",
@@ -2871,6 +2966,12 @@
               "Owner Occupier"
             ]
           },
+          "applicant2LivesWithApplicant1":{
+            "type":"boolean"
+          },
+          "applicant2LivesWithApplicant1For3Years":{
+            "type":"boolean"
+          },
           "addresses":{
             "type":"array",
             "items":{
@@ -2885,6 +2986,9 @@
       "ApplicationDto":{
         "type":"object",
         "properties":{
+          "decision":{
+            "type":"string"
+          },
           "id":{
             "type":"string"
           },
@@ -2963,6 +3067,9 @@
       "DIPApplicationDto":{
         "type":"object",
         "properties":{
+          "decision":{
+            "type":"string"
+          },
           "id":{
             "type":"string"
           },
@@ -3291,6 +3398,13 @@
             "items":{
               "$ref":"#/components/schemas/ErcDto"
             }
+          },
+          "ruleOutcomes":{
+            "type":"array",
+            "description":"Rule outcomes for Decline and Refer decisions (only DIP applications)",
+            "items":{
+              "$ref":"#/components/schemas/RuleOutcomeDto"
+            }
           }
         }
       },
@@ -3333,6 +3447,21 @@
             }
           }
         }
+      },
+      "RuleOutcomeDto":{
+        "type":"object",
+        "properties":{
+          "name":{
+            "type":"string"
+          },
+          "description":{
+            "type":"string"
+          },
+          "message":{
+            "type":"string"
+          }
+        },
+        "description":"Rule outcomes for Decline and Refer decisions (only DIP applications)"
       },
       "SummaryResponseDto":{
         "type":"object",
@@ -3726,6 +3855,9 @@
             "type":"string"
           },
           "externalApplicationId":{
+            "type":"string"
+          },
+          "brokerSubmitterEmail":{
             "type":"string"
           },
           "reference":{

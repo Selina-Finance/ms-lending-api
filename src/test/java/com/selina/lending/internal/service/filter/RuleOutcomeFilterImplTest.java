@@ -18,7 +18,6 @@
 package com.selina.lending.internal.service.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import static com.selina.lending.internal.dto.LendingConstants.DIP_APPLICATION_TYPE;
 import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
@@ -110,14 +109,25 @@ class RuleOutcomeFilterImplTest {
     @Test
     void shouldNotFilterRuleOutcomesWhenRuleOutcomesIsEmpty() {
         //Given
-        List<RuleOutcome> ruleOutcomes = new ArrayList<>();
-        var offers = List.of(Offer.builder().ruleOutcomes(ruleOutcomes).build());
+        var offers = List.of(Offer.builder().ruleOutcomes(new ArrayList<>()).build());
 
         //When
         ruleOutcomeFilter.filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE , offers);
 
         //Then
         assertThat(offers.get(0).getRuleOutcomes()).isNull();
+    }
+
+    @Test
+    void shouldNotFilterRuleOutcomesWhenRuleOutcomesINull() {
+        //Given
+        List<Offer> offers = null;
+
+        //When
+        ruleOutcomeFilter.filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE ,offers);
+
+        //Then
+        assertThat(offers).isNull();
     }
 
     @Test
