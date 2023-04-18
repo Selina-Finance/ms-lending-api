@@ -26,6 +26,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
+import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
+
 class ApplicationResponseMapperTest extends MapperBase {
 
     @Test
@@ -44,6 +46,7 @@ class ApplicationResponseMapperTest extends MapperBase {
         var applicationDto = (DIPApplicationDto) applicationResponseDto.getApplication();
 
         assertThat(applicationDto.getId(), equalTo(APPLICATION_ID));
+        assertThat(applicationDto.getDecision(), equalTo(ACCEPT_DECISION));
         assertThat(applicationDto.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(applicationDto.getRequestType(), equalTo(DIP_APPLICATION_TYPE));
         assertThat(applicationDto.getApplicants(), notNullValue());
@@ -74,6 +77,7 @@ class ApplicationResponseMapperTest extends MapperBase {
         var applicationDto = (DIPApplicationDto) applicationResponseDto.getApplication();
 
         assertThat(applicationDto.getId(), equalTo(APPLICATION_ID));
+        assertThat(applicationDto.getDecision(), equalTo(ACCEPT_DECISION));
         assertThat(applicationDto.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(applicationDto.getRequestType(), equalTo(DIP_APPLICATION_TYPE));
         assertThat(applicationDto.getApplicants(), notNullValue());
