@@ -29,6 +29,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -94,44 +96,34 @@ class RuleOutcomeFilterImplTest {
         assertThat(offers.get(0).getRuleOutcomes()).isNull();
     }
 
-    @Test
-    void shouldNotFilterRuleOutcomesWhenRuleOutcomesIsNull() {
+    @ParameterizedTest
+    @ValueSource(strings = {REFER_DECISION, DECLINE_DECISION})
+    void shouldNotFilterRuleOutcomesWhenRuleOutcomesIsNull(String decision) {
         //Given
         var offers = List.of(Offer.builder().build());
 
         //When
-        ruleOutcomeFilter.filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE , offers);
+        ruleOutcomeFilter.filterOfferRuleOutcomes(decision, DIP_APPLICATION_TYPE , offers);
 
         //Then
         assertThat(offers.get(0).getRuleOutcomes()).isNull();
     }
 
-    @Test
-    void shouldNotFilterRuleOutcomesWhenRuleOutcomesIsEmpty() {
+    @ParameterizedTest
+    @ValueSource(strings = {REFER_DECISION, DECLINE_DECISION})
+    void shouldNotFilterRuleOutcomesWhenRuleOutcomesIsEmpty(String decision) {
         //Given
         var offers = List.of(Offer.builder().ruleOutcomes(new ArrayList<>()).build());
 
         //When
-        ruleOutcomeFilter.filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE , offers);
+        ruleOutcomeFilter.filterOfferRuleOutcomes(decision, DIP_APPLICATION_TYPE , offers);
 
         //Then
         assertThat(offers.get(0).getRuleOutcomes()).isNull();
     }
 
     @Test
-    void shouldNotFilterRuleOutcomesWhenRuleOutcomesINull() {
-        //Given
-        List<Offer> offers = null;
-
-        //When
-        ruleOutcomeFilter.filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE ,offers);
-
-        //Then
-        assertThat(offers).isNull();
-    }
-
-    @Test
-    void shouldRemoveRuleOutcomesIfApplicationTypeIsQuickQuote() {
+    void shouldRemoveRuleOutcomesApplicationTypeIsQuickQuote() {
         //Given
         List<RuleOutcome> ruleOutcomes =  List.of(buildRuleOutcome(DECLINE_DECISION));
         var offers = List.of(Offer.builder().ruleOutcomes(ruleOutcomes).build());
@@ -153,6 +145,18 @@ class RuleOutcomeFilterImplTest {
 
         //Then
         assertThat(offers).isEmpty();
+    }
+
+    @Test
+    void shouldNotErrorIfOffersIsNullAndDeclineDecisionAndApplicationTypeIsQuickQuote() {
+        //Given
+        List<Offer> offers = null;
+
+        //When
+        ruleOutcomeFilter.filterOfferRuleOutcomes(DECLINE_DECISION, "QuickQuote", null);
+
+        //Then
+        assertThat(offers).isNull();
     }
 
     private RuleOutcome buildRuleOutcome(String outcome) {
