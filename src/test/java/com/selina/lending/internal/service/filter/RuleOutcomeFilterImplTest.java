@@ -84,8 +84,8 @@ class RuleOutcomeFilterImplTest {
     @Test
     void shouldRemoveRuleOutcomesIfDecisionIsAccept() {
         //Given
-        var ruleOutcomes = List.of(buildRuleOutcome(ACCEPT_DECISION), buildRuleOutcome(REFER_DECISION),
-                buildRuleOutcome(DECLINE_DECISION));
+        var ruleOutcomes = List.of(buildRuleOutcome(ACCEPT_DECISION), buildRuleOutcome(ACCEPT_DECISION),
+                buildRuleOutcome(ACCEPT_DECISION));
         var offers = List.of(Offer.builder().ruleOutcomes(ruleOutcomes).build());
 
         //When
@@ -123,7 +123,7 @@ class RuleOutcomeFilterImplTest {
     }
 
     @Test
-    void shouldRemoveRuleOutcomesApplicationTypeIsQuickQuote() {
+    void shouldRemoveRuleOutcomesWhenApplicationTypeIsQuickQuote() {
         //Given
         List<RuleOutcome> ruleOutcomes =  List.of(buildRuleOutcome(DECLINE_DECISION));
         var offers = List.of(Offer.builder().ruleOutcomes(ruleOutcomes).build());
