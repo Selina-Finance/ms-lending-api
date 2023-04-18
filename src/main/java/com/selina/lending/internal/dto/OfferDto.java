@@ -19,6 +19,7 @@ package com.selina.lending.internal.dto;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
@@ -63,4 +64,6 @@ public class OfferDto {
     Double maximumBalanceEsis;
     Double maxErc;
     List<ErcDto> ercData;
+    @Schema(description = "Rule outcomes for Decline and Refer decisions (only DIP applications)")
+    List<RuleOutcomeDto> ruleOutcomes;
 }

@@ -26,6 +26,7 @@ import lombok.Value;
 public class RuleOutcome {
     String name;
     String description;
+    String message;
     String outcome;
 }
 

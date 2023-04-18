@@ -19,11 +19,12 @@ package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.ApplicationDecisionResponse;
 
-@Mapper(uses = {ApplicantResponseMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class, FeesMapper.class,
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ApplicantResponseMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class, FeesMapper.class,
         ExpenditureMapper.class, OfferMapper.class, SalesforceMapper.class,
         IntermediaryMapper.class, LeadMapper.class, UnderwritingMapper.class
 })

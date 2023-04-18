@@ -27,6 +27,7 @@ import com.selina.lending.internal.repository.MiddlewareApplicationServiceReposi
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.filter.RuleOutcomeFilter;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -41,23 +42,33 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     private static final String APPLICATION_ALREADY_EXISTS_ERROR = "Application already exists";
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
+    private final RuleOutcomeFilter ruleOutcomeFilter;
 
     public CreateApplicationServiceImpl(MiddlewareRepository middlewareRepository,
-            MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository) {
+            MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository, RuleOutcomeFilter ruleOutcomeFilter) {
         this.middlewareRepository = middlewareRepository;
         this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
+        this.ruleOutcomeFilter = ruleOutcomeFilter;
     }
 
     @Override
     public ApplicationResponse createDipCCApplication(ApplicationRequest applicationRequest) {
         checkApplicationExists(applicationRequest);
-        return middlewareRepository.createDipCCApplication(applicationRequest);
+        ApplicationResponse applicationResponse = middlewareRepository.createDipCCApplication(applicationRequest);
+        ruleOutcomeFilter.filterOfferRuleOutcomes(applicationResponse.getApplication().getDecision(), applicationResponse.getApplicationType(),
+                applicationResponse.getApplication()
+                        .getOffers());
+        return applicationResponse;
     }
 
     @Override
     public ApplicationResponse createDipApplication(ApplicationRequest applicationRequest) {
         checkApplicationExists(applicationRequest);
-        return middlewareRepository.createDipApplication(applicationRequest);
+        ApplicationResponse applicationResponse = middlewareRepository.createDipApplication(applicationRequest);
+        ruleOutcomeFilter.filterOfferRuleOutcomes(applicationResponse.getApplication().getDecision(), applicationResponse.getApplicationType(),
+                applicationResponse.getApplication()
+                        .getOffers());
+        return applicationResponse;
     }
 
     private void checkApplicationExists(ApplicationRequest applicationRequest) {

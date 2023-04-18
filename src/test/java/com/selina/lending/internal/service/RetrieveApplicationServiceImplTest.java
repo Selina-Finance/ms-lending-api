@@ -20,8 +20,11 @@ package com.selina.lending.internal.service;
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
-import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
+import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.internal.service.filter.RuleOutcomeFilter;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,6 +39,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
+import static com.selina.lending.internal.dto.LendingConstants.DIP_APPLICATION_TYPE;
+import static com.selina.lending.internal.dto.LendingConstants.DECLINE_DECISION;
+
+import java.util.List;
+import java.util.Optional;
+
 @ExtendWith(MockitoExtension.class)
 class RetrieveApplicationServiceImplTest {
     private static final String APPLICATION_ID = "appId";
@@ -45,6 +55,13 @@ class RetrieveApplicationServiceImplTest {
 
     @Mock
     private ApplicationIdentifier applicationIdentifier;
+
+
+    @Mock
+    private ApplicationDecisionResponse applicationDecisionResponse;
+
+    @Mock
+    private List<Offer> offers;
     @Mock
     private MiddlewareRepository middlewareRepository;
 
@@ -55,7 +72,8 @@ class RetrieveApplicationServiceImplTest {
     private AccessManagementService accessManagementService;
 
     @Mock
-    private RetrieveCreditCommitmentsService retrieveCreditCommitmentsService;
+    private RuleOutcomeFilter ruleOutcomeFilter;
+
 
     @InjectMocks
     private RetrieveApplicationServiceImpl retrieveApplicationService;
@@ -67,12 +85,37 @@ class RetrieveApplicationServiceImplTest {
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
+        when(middlewareRepository.getApplicationById(APPLICATION_ID)).thenReturn(Optional.of(applicationDecisionResponse));
+        when(applicationDecisionResponse.getApplicationType()).thenReturn(DIP_APPLICATION_TYPE);
+        when(applicationDecisionResponse.getDecision()).thenReturn(ACCEPT_DECISION);
+        when(applicationDecisionResponse.getOffers()).thenReturn(offers);
 
         //When
         retrieveApplicationService.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID);
 
         //Then
         verify(middlewareRepository, times(1)).getApplicationById(APPLICATION_ID);
+        verify(ruleOutcomeFilter, times(1)).filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE, offers);
+    }
+
+    @Test
+    void shouldGetApplicationByExternalApplicationIdForQuickQuote() {
+        //Given
+        when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
+        doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
+        when(middlewareRepository.getApplicationById(APPLICATION_ID)).thenReturn(Optional.of(applicationDecisionResponse));
+        when(applicationDecisionResponse.getDecision()).thenReturn(ACCEPT_DECISION);
+        when(applicationDecisionResponse.getApplicationType()).thenReturn("QuickQuote");
+        when(applicationDecisionResponse.getOffers()).thenReturn(offers);
+
+        //When
+        retrieveApplicationService.getApplicationByExternalApplicationId(EXTERNAL_APPLICATION_ID);
+
+        //Then
+        verify(middlewareRepository, times(1)).getApplicationById(APPLICATION_ID);
+        verify(ruleOutcomeFilter, times(1)).filterOfferRuleOutcomes(ACCEPT_DECISION, "QuickQuote", offers);
     }
 
     @Test

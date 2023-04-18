@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.internal.service.filter.RuleOutcomeFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,12 +34,14 @@ public class RetrieveApplicationServiceImpl implements RetrieveApplicationServic
     private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
     private final MiddlewareRepository middlewareRepository;
     private final AccessManagementService accessManagementService;
+    private final RuleOutcomeFilter ruleOutcomeFilter;
 
     public RetrieveApplicationServiceImpl(MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository, MiddlewareRepository middlewareRepository,
-            AccessManagementService accessManagementService) {
+            AccessManagementService accessManagementService, RuleOutcomeFilter ruleOutcomeFilter) {
         this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
         this.middlewareRepository = middlewareRepository;
         this.accessManagementService = accessManagementService;
+        this.ruleOutcomeFilter = ruleOutcomeFilter;
     }
 
     @Override
@@ -47,6 +50,12 @@ public class RetrieveApplicationServiceImpl implements RetrieveApplicationServic
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
 
         log.info("Get application by Id for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalApplicationId);
-        return middlewareRepository.getApplicationById(applicationIdentifier.getId());
+        Optional<ApplicationDecisionResponse> response = middlewareRepository.getApplicationById(applicationIdentifier.getId());
+        response.ifPresent(this::filterRuleOutcomes);
+        return response;
+    }
+
+    private void filterRuleOutcomes(ApplicationDecisionResponse response) {
+        ruleOutcomeFilter.filterOfferRuleOutcomes(response.getDecision(), response.getApplicationType(), response.getOffers());
     }
 }
