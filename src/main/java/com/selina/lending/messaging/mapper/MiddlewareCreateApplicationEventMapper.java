@@ -15,8 +15,10 @@ public interface MiddlewareCreateApplicationEventMapper {
 
     String PRODUCT_CODE = "QQ01";
     String SOURCE_ACCOUNT = "Selina Direct Broker Service";
+    String SOURCE = "LendingAPI";
 
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
     @Mapping(target = "sourceAccount", constant = SOURCE_ACCOUNT)
+    @Mapping(target = "source", constant = SOURCE)
     MiddlewareCreateApplicationEvent mapToMiddlewareCreateApplicationEvent(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 }

@@ -76,7 +76,18 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
             assertThat(middlewareCreateApplicationEvent.getSourceAccount(), equalTo("Selina Direct Broker Service"));
         }
 
+        @Test
+        void shouldMapSourceToLendingAPI() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
+            //When
+            var middlewareCreateApplicationEvent = mapper
+                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getSource(), equalTo("LendingAPI"));
+        }
     }
 
     private void assertApplicants(List<Applicant> applicants) {
