@@ -14,7 +14,9 @@ import org.mapstruct.ReportingPolicy;
 public interface MiddlewareCreateApplicationEventMapper {
 
     String PRODUCT_CODE = "QQ01";
+    String SOURCE_ACCOUNT = "Selina Direct Broker Service";
 
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
+    @Mapping(target = "sourceAccount", constant = SOURCE_ACCOUNT)
     MiddlewareCreateApplicationEvent mapToMiddlewareCreateApplicationEvent(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 }

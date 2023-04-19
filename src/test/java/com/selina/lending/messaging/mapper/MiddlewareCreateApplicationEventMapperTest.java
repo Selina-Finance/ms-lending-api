@@ -41,7 +41,6 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
             assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
             assertThat(middlewareCreateApplicationEvent.getLoanInformation().getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT.intValue()));
             assertThat(middlewareCreateApplicationEvent.getLoanInformation().getRequestedLoanTerm(), equalTo(LOAN_TERM));
-            assertNull(middlewareCreateApplicationEvent.getSourceAccount());
             assertApplicants(middlewareCreateApplicationEvent.getApplicants());
             assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
             assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
@@ -50,10 +49,6 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
 
             assertLead(middlewareCreateApplicationEvent.getLead());
         }
-    }
-
-    @Nested
-    class ProductCodeMapping {
 
         @Test
         void shouldMapProductCodeToQQ01() {
@@ -67,6 +62,21 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
             //Then
             assertThat(middlewareCreateApplicationEvent.getProductCode(), equalTo("QQ01"));
         }
+
+        @Test
+        void shouldMapSourceAccountToSelinaDirectBrokerClient() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+
+            //When
+            var middlewareCreateApplicationEvent = mapper
+                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getSourceAccount(), equalTo("Selina Direct Broker Service"));
+        }
+
+
     }
 
     private void assertApplicants(List<Applicant> applicants) {
