@@ -71,19 +71,6 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         }
 
         @Test
-        void shouldMapSourceAccountToSelinaDirectBrokerClient() {
-            //Given
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-
-            //When
-            var middlewareCreateApplicationEvent = mapper
-                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
-
-            //Then
-            assertThat(middlewareCreateApplicationEvent.getSourceAccount(), equalTo("Selina Direct Broker Service"));
-        }
-
-        @Test
         void shouldMapSourceToLendingAPI() {
             //Given
             var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
@@ -94,6 +81,19 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
 
             //Then
             assertThat(middlewareCreateApplicationEvent.getSource(), equalTo("LendingAPI"));
+        }
+
+        @Test
+        void shouldMapApplicationTypeToQuickQuote() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+
+            //When
+            var middlewareCreateApplicationEvent = mapper
+                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getApplicationType(), equalTo("QuickQuote"));
         }
     }
 

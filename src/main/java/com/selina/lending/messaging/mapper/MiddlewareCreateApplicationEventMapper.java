@@ -20,9 +20,11 @@ public abstract class MiddlewareCreateApplicationEventMapper {
 
     private static final String PRODUCT_CODE = "QQ01";
     private static final String SOURCE = "LendingAPI";
+    private static final String APPLICATION_TYPE = "QuickQuote";
 
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
     @Mapping(target = "sourceAccount", expression = "java(tokenService.retrieveSourceAccount())")
     @Mapping(target = "source", constant = SOURCE)
+    @Mapping(target = "applicationType", constant = APPLICATION_TYPE)
     public abstract MiddlewareCreateApplicationEvent mapToMiddlewareCreateApplicationEvent(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 }
