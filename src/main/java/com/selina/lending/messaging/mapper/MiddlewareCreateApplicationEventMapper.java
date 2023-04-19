@@ -4,6 +4,7 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.QuickQuoteApplicantMapper;
 import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
@@ -12,5 +13,8 @@ import org.mapstruct.ReportingPolicy;
         uses = {QuickQuoteApplicantMapper.class})
 public interface MiddlewareCreateApplicationEventMapper {
 
+    String PRODUCT_CODE = "QQ01";
+
+    @Mapping(target = "productCode", constant = PRODUCT_CODE)
     MiddlewareCreateApplicationEvent mapToMiddlewareCreateApplicationEvent(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 }

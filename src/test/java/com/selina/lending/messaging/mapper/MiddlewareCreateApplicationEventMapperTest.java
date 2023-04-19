@@ -7,6 +7,7 @@ import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.Incomes;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,36 +25,50 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
     @Autowired
     MiddlewareCreateApplicationEventMapper mapper;
 
-    @Test
-    void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
-        //Given
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        
-        //When
-        var middlewareCreateApplicationEvent = mapper
-                .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
-        
-        //Then
-        assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+    @Nested
+    class GeneralMapping {
 
-        // TODO
-        //check sourceAccount
-        //check source
-        //check applicationType
-        //check productCode
+        @Test
+        void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-        assertThat(middlewareCreateApplicationEvent.getLoanInformation().getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT.intValue()));
-        assertThat(middlewareCreateApplicationEvent.getLoanInformation().getRequestedLoanTerm(), equalTo(LOAN_TERM));
-        assertNull(middlewareCreateApplicationEvent.getSourceAccount());
-        assertApplicants(middlewareCreateApplicationEvent.getApplicants());
-        assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
-        assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
+            //When
+            var middlewareCreateApplicationEvent = mapper
+                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-        // TODO do we need to send hasGivenConsentForMarketingCommunications ?
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+            assertThat(middlewareCreateApplicationEvent.getLoanInformation().getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT.intValue()));
+            assertThat(middlewareCreateApplicationEvent.getLoanInformation().getRequestedLoanTerm(), equalTo(LOAN_TERM));
+            assertNull(middlewareCreateApplicationEvent.getSourceAccount());
+            assertApplicants(middlewareCreateApplicationEvent.getApplicants());
+            assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
+            assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
 
-        assertLead(middlewareCreateApplicationEvent.getLead());
+            // TODO do we need to send hasGivenConsentForMarketingCommunications ?
+
+            assertLead(middlewareCreateApplicationEvent.getLead());
+        }
     }
-    
+
+    @Nested
+    class ProductCodeMapping {
+
+        @Test
+        void shouldMapProductCodeToQQ01() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+
+            //When
+            var middlewareCreateApplicationEvent = mapper
+                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getProductCode(), equalTo("QQ01"));
+        }
+    }
+
     private void assertApplicants(List<Applicant> applicants) {
         assertThat(applicants.size(), equalTo(1));
 
