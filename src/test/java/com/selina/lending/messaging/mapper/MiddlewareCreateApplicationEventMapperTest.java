@@ -2,6 +2,7 @@ package com.selina.lending.messaging.mapper;
 
 import com.selina.lending.internal.dto.LeadDto;
 import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.Incomes;
@@ -9,8 +10,10 @@ import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
@@ -18,12 +21,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
 
+    @MockBean
+    private TokenService tokenService;
+
     @Autowired
-    MiddlewareCreateApplicationEventMapper mapper;
+    private MiddlewareCreateApplicationEventMapper mapper;
 
     @Nested
     class GeneralMapping {
@@ -87,6 +94,25 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
 
             //Then
             assertThat(middlewareCreateApplicationEvent.getSource(), equalTo("LendingAPI"));
+        }
+    }
+
+    @Nested
+    class SourceAccountMapping {
+
+        @Test
+        void shouldMapSourceAccountToValueFromAccessTokenSourceAccountClaim() {
+            // Given
+            var expectedSourceAccount = "Selina Direct Broker Service";
+            when(tokenService.retrieveSourceAccount()).thenReturn(expectedSourceAccount);
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+
+            // When
+            var middlewareCreateApplicationEvent = mapper
+                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getSourceAccount(), equalTo(expectedSourceAccount));
         }
     }
 
