@@ -18,12 +18,13 @@
 package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.service.application.domain.Income;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface IncomeItemMapper {
     IncomeItemMapper INSTANCE = Mappers.getMapper(IncomeItemMapper.class);
 

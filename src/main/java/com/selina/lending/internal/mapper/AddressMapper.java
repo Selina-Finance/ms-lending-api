@@ -19,12 +19,13 @@ package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.service.application.domain.Address;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AddressMapper {
     AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
 

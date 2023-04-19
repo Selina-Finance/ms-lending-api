@@ -5,9 +5,11 @@ import com.selina.lending.internal.service.application.domain.Applicant;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {AddressMapper.class, IncomeMapper.class, EmploymentMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = {AddressMapper.class, IncomeMapper.class, EmploymentMapper.class})
 public interface QuickQuoteApplicantMapper{
 
     QuickQuoteApplicantMapper INSTANCE = Mappers.getMapper(QuickQuoteApplicantMapper.class);

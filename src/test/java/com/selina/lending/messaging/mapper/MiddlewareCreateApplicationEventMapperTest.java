@@ -8,6 +8,8 @@ import com.selina.lending.internal.service.application.domain.Incomes;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
@@ -16,7 +18,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@SpringBootTest
 public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
+
+    @Autowired
+    MiddlewareCreateApplicationEventMapper mapper;
 
     @Test
     void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
@@ -24,7 +30,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         
         //When
-        var middlewareCreateApplicationEvent = MiddlewareCreateApplicationEventMapper.INSTANCE
+        var middlewareCreateApplicationEvent = mapper
                 .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
         
         //Then
@@ -91,7 +97,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         assertThat(propertyDetails.getAddressLine1(), equalTo(ADDRESS_LINE_1));
         assertThat(propertyDetails.getCity(), equalTo(CITY));
         assertThat(propertyDetails.getPostcode(), equalTo(POSTCODE));
-        assertThat(propertyDetails.getBuildingName(), equalTo(BUILDING_NUMBER));
+        assertThat(propertyDetails.getBuildingNumber(), equalTo(BUILDING_NUMBER));
         assertThat(propertyDetails.getBuildingName(), equalTo(BUILDING_NAME));
         assertThat(propertyDetails.getNumberOfPriorCharges(), equalTo(1));
         assertThat(propertyDetails.getPriorCharges(), notNullValue());
