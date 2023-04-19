@@ -15,31 +15,12 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.service.filter;
 
-import java.util.Date;
 import java.util.List;
 
-import lombok.Builder;
-import lombok.Data;
+import com.selina.lending.internal.service.application.domain.Offer;
 
-@Builder
-@Data
-public class Application {
-    String decision;
-    String id;
-    String source;
-    String sourceClientId;
-    String sourceAccount;
-    String externalApplicationId;
-    String productCode;
-    String applicationType;
-    String status;
-    String applicationStage;
-    Date statusDate;
-    Date createdDate;
-    List<Applicant> applicants;
-    LoanInformation loanInformation;
-    PropertyDetails propertyDetails;
-    List<Offer> offers;
+public interface RuleOutcomeFilter {
+    void filterOfferRuleOutcomes(String decision, String applicationType, List<Offer> offers);
 }

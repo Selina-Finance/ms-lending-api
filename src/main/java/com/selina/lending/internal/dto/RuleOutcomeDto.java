@@ -15,31 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
-
-import java.util.Date;
-import java.util.List;
+package com.selina.lending.internal.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 @Builder
-@Data
-public class Application {
-    String decision;
-    String id;
-    String source;
-    String sourceClientId;
-    String sourceAccount;
-    String externalApplicationId;
-    String productCode;
-    String applicationType;
-    String status;
-    String applicationStage;
-    Date statusDate;
-    Date createdDate;
-    List<Applicant> applicants;
-    LoanInformation loanInformation;
-    PropertyDetails propertyDetails;
-    List<Offer> offers;
+@Value
+public class RuleOutcomeDto {
+    String name;
+    String description;
+    String message;
 }

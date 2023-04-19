@@ -24,7 +24,11 @@ import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.internal.service.application.domain.Application;
+import com.selina.lending.internal.service.application.domain.Offer;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.filter.RuleOutcomeFilter;
+
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
@@ -40,11 +44,12 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
 
 @ExtendWith(MockitoExtension.class)
 class CreateApplicationServiceImplTest extends MapperBase {
@@ -66,6 +71,15 @@ class CreateApplicationServiceImplTest extends MapperBase {
     @Mock
     private ApplicationIdentifier applicationIdentifier;
 
+    @Mock
+    private Application application;
+
+    @Mock
+    private List<Offer> offers;
+
+    @Mock
+    private RuleOutcomeFilter ruleOutcomeFilter;
+
     @InjectMocks
     private CreateApplicationServiceImpl createApplicationService;
 
@@ -85,6 +99,10 @@ class CreateApplicationServiceImplTest extends MapperBase {
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
                     new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
             when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
+            when(applicationResponse.getApplication()).thenReturn(application);
+            when(applicationResponse.getApplicationType()).thenReturn(DIP_APPLICATION_TYPE);
+            when(application.getDecision()).thenReturn(ACCEPT_DECISION);
+            when(application.getOffers()).thenReturn(offers);
 
             //When
             var result = createApplicationService.createDipCCApplication(applicationRequest);
@@ -92,6 +110,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
             //Then
             assertThat(result).isEqualTo(applicationResponse);
             verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
+            verify(ruleOutcomeFilter, times(1)).filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE , offers);
         }
 
         @Test
@@ -118,12 +137,19 @@ class CreateApplicationServiceImplTest extends MapperBase {
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getId()).thenReturn(null);
+            when(applicationResponse.getApplication()).thenReturn(application);
+            when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
+            when(applicationResponse.getApplication()).thenReturn(application);
+            when(applicationResponse.getApplicationType()).thenReturn(DIP_APPLICATION_TYPE);
+            when(application.getDecision()).thenReturn(ACCEPT_DECISION);
+            when(application.getOffers()).thenReturn(offers);
 
             //When
             createApplicationService.createDipCCApplication(applicationRequest);
 
             //Then
             verify(middlewareRepository, times(1)).createDipCCApplication(applicationRequest);
+            verify(ruleOutcomeFilter, times(1)).filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE, offers);
         }
     }
 
@@ -139,6 +165,10 @@ class CreateApplicationServiceImplTest extends MapperBase {
             when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
                     new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
             when(middlewareRepository.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
+            when(applicationResponse.getApplication()).thenReturn(application);
+            when(application.getDecision()).thenReturn(ACCEPT_DECISION);
+            when(applicationResponse.getApplicationType()).thenReturn(DIP_APPLICATION_TYPE);
+            when(application.getOffers()).thenReturn(offers);
 
             //When
             var result = createApplicationService.createDipApplication(applicationRequest);
@@ -146,6 +176,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
             //Then
             assertThat(result).isEqualTo(applicationResponse);
             verify(middlewareRepository, times(1)).createDipApplication(applicationRequest);
+            verify(ruleOutcomeFilter, times(1)).filterOfferRuleOutcomes(ACCEPT_DECISION, DIP_APPLICATION_TYPE, offers);
         }
 
         @Test

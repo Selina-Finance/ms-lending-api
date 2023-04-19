@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.mapper;
 
+import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
+
 import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.ApplicantDto;
@@ -624,6 +626,7 @@ public abstract class MapperBase {
     protected Application getApplication() {
         return Application.builder()
                 .id(APPLICATION_ID)
+                .decision(ACCEPT_DECISION)
                 .createdDate(CREATED_DATE)
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .applicants(List.of(getApplicant()))
@@ -690,7 +693,7 @@ public abstract class MapperBase {
     }
 
     protected ApplicationResponse getApplicationResponse() {
-        return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
+        return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE) .applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
     }
 
     protected QuickQuoteCFResponse getQuickQuoteCFResponse() {

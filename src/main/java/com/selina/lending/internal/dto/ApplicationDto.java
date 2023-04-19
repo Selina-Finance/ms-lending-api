@@ -31,6 +31,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @Data
 public class ApplicationDto {
+    private String decision;
     private String id;
     private String source;
     private String sourceClientId;
