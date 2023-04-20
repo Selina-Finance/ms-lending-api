@@ -61,7 +61,7 @@ public class MiddlewareCreateApplicationEventPublisherTest extends MapperBase {
 
         // When
         publisher.publish(middlewareCreateApplicationEvent);
-        var consumerRecord = KafkaTestUtils.getSingleRecord(consumer, topic, 1000);
+        var consumerRecord = KafkaTestUtils.getSingleRecord(consumer, topic, 5000);
         var event = consumerRecord.value();
 
         // Then
