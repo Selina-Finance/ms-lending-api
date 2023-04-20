@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.mapper;
+package com.selina.lending.messaging.mapper.brokerrequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.internal.dto.DIPApplicationResponse;

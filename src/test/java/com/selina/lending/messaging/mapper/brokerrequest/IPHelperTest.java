@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.mapper;
+package com.selina.lending.messaging.mapper.brokerrequest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
