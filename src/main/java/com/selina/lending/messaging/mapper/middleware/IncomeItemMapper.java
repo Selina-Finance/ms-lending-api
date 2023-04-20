@@ -15,19 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
+package com.selina.lending.messaging.mapper.middleware;
 
+import com.selina.lending.internal.dto.IncomeItemDto;
+import com.selina.lending.internal.service.application.domain.Income;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.ReportingPolicy;
 
-import com.selina.lending.internal.dto.IncomeDto;
-import com.selina.lending.internal.service.application.domain.Incomes;
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface IncomeItemMapper {
 
-@Mapper(uses = {IncomeItemMapper.class})
-public interface IncomeMapper {
-    IncomeMapper INSTANCE = Mappers.getMapper(IncomeMapper.class);
+    IncomeItemDto mapToIncomeItemDto(Income income);
+    Income mapToIncome(IncomeItemDto incomeItemDto);
 
-    IncomeDto mapToIcomeDto(Incomes incomes);
-    Incomes mapToIcomes(IncomeDto incomeDto);
 }

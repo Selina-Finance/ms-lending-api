@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.service.application.domain.Employment;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper
 public interface EmploymentMapper {
     EmploymentMapper INSTANCE = Mappers.getMapper(EmploymentMapper.class);
 

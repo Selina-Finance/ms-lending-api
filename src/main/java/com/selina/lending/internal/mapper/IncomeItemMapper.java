@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.service.application.domain.Income;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper
 public interface IncomeItemMapper {
     IncomeItemMapper INSTANCE = Mappers.getMapper(IncomeItemMapper.class);
 

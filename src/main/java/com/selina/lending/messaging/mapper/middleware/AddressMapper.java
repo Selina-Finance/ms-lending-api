@@ -15,19 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.mapper;
-
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.factory.Mappers;
+package com.selina.lending.messaging.mapper.middleware;
 
 import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.service.application.domain.Address;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AddressMapper {
-    AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
 
     @Mapping(target = "fromDate", source = "address.from")
     @Mapping(target = "toDate", source = "address.to")

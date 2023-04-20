@@ -8,8 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {AddressMapper.class, IncomeMapper.class, EmploymentMapper.class})
+@Mapper(uses = {AddressMapper.class, IncomeMapper.class, EmploymentMapper.class})
 public interface QuickQuoteApplicantMapper{
 
     QuickQuoteApplicantMapper INSTANCE = Mappers.getMapper(QuickQuoteApplicantMapper.class);

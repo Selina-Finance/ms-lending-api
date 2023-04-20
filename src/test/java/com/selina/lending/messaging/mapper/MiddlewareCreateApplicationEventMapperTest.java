@@ -1,5 +1,6 @@
 package com.selina.lending.messaging.mapper;
 
+import com.selina.lending.IntegrationTest;
 import com.selina.lending.internal.dto.LeadDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.TokenService;
@@ -23,14 +24,11 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@IntegrationTest
 public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
 
     @MockBean
     private TokenService tokenService;
-
-    @MockBean
-    private MiddlewareCreateApplicationEventPublisher eventPublisher;
 
     @Autowired
     private MiddlewareCreateApplicationEventMapper mapper;
