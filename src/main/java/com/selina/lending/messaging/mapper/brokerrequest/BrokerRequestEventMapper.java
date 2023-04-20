@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.mapper;
+package com.selina.lending.messaging.mapper.brokerrequest;
 
 import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.selina.lending.messaging.publisher.mapper.IPHelper.getRemoteAddr;
+import static com.selina.lending.messaging.mapper.brokerrequest.IPHelper.getRemoteAddr;
 
 @Slf4j
 @Component

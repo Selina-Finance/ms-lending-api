@@ -27,7 +27,7 @@ import com.selina.lending.internal.service.application.domain.quote.FilteredQuic
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
-import com.selina.lending.messaging.mapper.MiddlewareCreateApplicationEventMapper;
+import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

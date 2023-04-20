@@ -4,7 +4,7 @@ import com.selina.lending.internal.exception.KafkaSendEventException;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
-import com.selina.lending.messaging.mapper.MiddlewareCreateApplicationEventMapper;
+import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.Test;

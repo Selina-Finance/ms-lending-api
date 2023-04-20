@@ -1,4 +1,4 @@
-package com.selina.lending.messaging.mapper;
+package com.selina.lending.messaging.mapper.middleware;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.QuickQuoteApplicantMapper;

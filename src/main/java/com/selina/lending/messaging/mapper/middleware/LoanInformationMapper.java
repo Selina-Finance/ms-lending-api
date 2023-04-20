@@ -1,4 +1,4 @@
-package com.selina.lending.messaging.mapper;
+package com.selina.lending.messaging.mapper.middleware;
 
 import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.service.application.domain.Facility;

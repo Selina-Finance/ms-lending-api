@@ -23,7 +23,7 @@ import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFResponseMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import com.selina.lending.internal.service.permissions.annotation.Permission;
-import com.selina.lending.messaging.mapper.MiddlewareCreateApplicationEventMapper;
+import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

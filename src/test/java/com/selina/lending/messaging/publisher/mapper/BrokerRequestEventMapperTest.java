@@ -20,12 +20,12 @@ package com.selina.lending.messaging.publisher.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.messaging.mapper.brokerrequest.BrokerRequestEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 

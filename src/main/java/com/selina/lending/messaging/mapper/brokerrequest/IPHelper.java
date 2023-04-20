@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.mapper;
+package com.selina.lending.messaging.mapper.brokerrequest;
 
 import org.jetbrains.annotations.NotNull;
 
