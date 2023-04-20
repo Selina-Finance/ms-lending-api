@@ -8,9 +8,7 @@ import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.Incomes;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,8 +17,8 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -32,115 +30,115 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
     @Autowired
     private MiddlewareCreateApplicationEventMapper mapper;
 
-    @Nested
-    class GeneralMapping {
+    @Test
+    void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-        @Test
-        void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
-            //Given
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        //When
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-            //When
-            var middlewareCreateApplicationEvent = mapper
-                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
+        assertApplicants(middlewareCreateApplicationEvent.getApplicants());
+        assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
+        assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
+        assertLead(middlewareCreateApplicationEvent.getLead());
+    }
 
-            //Then
-            assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
-            assertThat(middlewareCreateApplicationEvent.getLoanInformation().getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT.intValue()));
-            assertThat(middlewareCreateApplicationEvent.getLoanInformation().getRequestedLoanTerm(), equalTo(LOAN_TERM));
-            assertApplicants(middlewareCreateApplicationEvent.getApplicants());
-            assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
-            assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
+    @Test
+    void shouldMapProductCodeToQQ01() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-            // TODO do we need to send hasGivenConsentForMarketingCommunications ?
-            // TODO do we need to send facilities ?
+        //When
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-            assertLead(middlewareCreateApplicationEvent.getLead());
-        }
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getProductCode(), equalTo("QQ01"));
+    }
 
-        @Test
-        void shouldMapProductCodeToQQ01() {
-            //Given
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+    @Test
+    void shouldMapSourceToLendingAPI() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-            //When
-            var middlewareCreateApplicationEvent = mapper
-                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+        //When
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-            //Then
-            assertThat(middlewareCreateApplicationEvent.getProductCode(), equalTo("QQ01"));
-        }
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getSource(), equalTo("LendingAPI"));
+    }
 
-        @Test
-        void shouldMapSourceToLendingAPI() {
-            //Given
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+    @Test
+    void shouldMapApplicationTypeToQuickQuote() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-            //When
-            var middlewareCreateApplicationEvent = mapper
-                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+        //When
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-            //Then
-            assertThat(middlewareCreateApplicationEvent.getSource(), equalTo("LendingAPI"));
-        }
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getApplicationType(), equalTo("QuickQuote"));
+    }
 
-        @Test
-        void shouldMapApplicationTypeToQuickQuote() {
-            //Given
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+    @Test
+    void shouldMapSourceAccountToValueFromAccessTokenSourceAccountClaim() {
+        // Given
+        var expectedSourceAccount = "Selina Direct Broker Service";
+        when(tokenService.retrieveSourceAccount()).thenReturn(expectedSourceAccount);
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-            //When
-            var middlewareCreateApplicationEvent = mapper
-                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+        // When
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-            //Then
-            assertThat(middlewareCreateApplicationEvent.getApplicationType(), equalTo("QuickQuote"));
-        }
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getSourceAccount(), equalTo(expectedSourceAccount));
+    }
 
-        @Test
-        void shouldMapSourceAccountToValueFromAccessTokenSourceAccountClaim() {
-            // Given
-            var expectedSourceAccount = "Selina Direct Broker Service";
-            when(tokenService.retrieveSourceAccount()).thenReturn(expectedSourceAccount);
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+    @Test
+    void shouldMapHasGivenConsentForMarketingCommunicationsToTrue() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-            // When
-            var middlewareCreateApplicationEvent = mapper
-                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+        //When
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-            //Then
-            assertThat(middlewareCreateApplicationEvent.getSourceAccount(), equalTo(expectedSourceAccount));
-        }
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(false));
+    }
 
-        @Test
-        void shouldMapHasGivenConsentForMarketingCommunicationsToTrue() {
-            //Given
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+    @Test
+    void shouldMapFeesAddProductFeesToFacilityToFalse() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-            //When
-            var middlewareCreateApplicationEvent = mapper
-                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+        //When
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-            //Then
-            assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(false));
-        }
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getFees().getIsAddProductFeesToFacility(), equalTo(false));
+    }
 
-        @Test
-        void shouldMapFeesAddProductFeesToFacilityToFalse() {
-            //Given
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+    @Test
+    void shouldCreateOneFacilityBasedOnLoadInformationRequestedLoanAmountAndLoanPurpose() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
-            //When
-            var middlewareCreateApplicationEvent = mapper
-                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+        //When
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
 
-            //Then
-            assertThat(middlewareCreateApplicationEvent.getFees().getIsAddProductFeesToFacility(), equalTo(false));
-        }
+        //Then
+        var loanInformation = quickQuoteApplicationRequest.getLoanInformation();
+        var facilities = middlewareCreateApplicationEvent.getLoanInformation().getFacilities();
+
+        assertThat(facilities, hasSize(1));
+        assertThat(facilities.get(0).getAllocationAmount(), equalTo(loanInformation.getRequestedLoanAmount().doubleValue()));
+        assertThat(facilities.get(0).getAllocationPurpose(), equalTo(loanInformation.getLoanPurpose()));
     }
 
     private void assertApplicants(List<Applicant> applicants) {
-        assertThat(applicants.size(), equalTo(1));
+        assertThat(applicants, hasSize(1));
 
         var firstApplicant = applicants.get(0);
         assertThat(firstApplicant.getTitle(), equalTo(TITLE));
@@ -155,7 +153,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
     }
 
     private void assertApplicantAddresses(List<Address> addresses) {
-        assertThat(addresses.size(), equalTo(1));
+        assertThat(addresses, hasSize(1));
 
         var firstAddress = addresses.get(0);
         assertThat(firstAddress.getAddressType(), equalTo(ADDRESS_TYPE));
@@ -168,8 +166,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
     }
 
     private void assertApplicantIncomes(Incomes income) {
-        assertThat(income, notNullValue());
-        assertThat(income.getIncome().size(), equalTo(1));
+        assertThat(income.getIncome(), hasSize(1));
 
         var firstIncome = income.getIncome().get(0);
         assertThat(firstIncome.getType(), equalTo(INCOME_TYPE));
@@ -177,7 +174,6 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
     }
 
     private void assertPropertyDetails(PropertyDetails propertyDetails) {
-        assertThat(propertyDetails, notNullValue());
         assertThat(propertyDetails.getEstimatedValue(), equalTo(ESTIMATED_VALUE));
         assertThat(propertyDetails.getAddressLine1(), equalTo(ADDRESS_LINE_1));
         assertThat(propertyDetails.getCity(), equalTo(CITY));
@@ -189,13 +185,11 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
     }
 
     private void assertLoanInformation(LoanInformation loanInformation) {
-        assertThat(loanInformation, notNullValue());
         assertThat(loanInformation.getRequestedLoanAmount(), equalTo(LOAN_AMOUNT));
         assertThat(loanInformation.getRequestedLoanTerm(), equalTo(LOAN_TERM));
         assertThat(loanInformation.getNumberOfApplicants(), equalTo(1));
         assertThat(loanInformation.getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(loanInformation.getDesiredTimeLine(), equalTo(DESIRED_TIME_LINE));
-        assertNull(loanInformation.getFacilities()); // TODO https://www.notion.so/selinaops/Kafka-Model-08f4585a453f453bb7649828b83260a9?pvs=4#57e3b344c2d64ba495e3401c79276015
     }
 
     private void assertLead(LeadDto lead) {

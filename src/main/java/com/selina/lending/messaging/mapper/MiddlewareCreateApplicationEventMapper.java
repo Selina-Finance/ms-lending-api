@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {QuickQuoteApplicantMapper.class, TokenService.class})
+        uses = {QuickQuoteApplicantMapper.class, LoanInformationMapper.class, TokenService.class})
 public abstract class MiddlewareCreateApplicationEventMapper {
 
     @Autowired
