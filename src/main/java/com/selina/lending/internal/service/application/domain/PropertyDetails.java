@@ -19,9 +19,11 @@ package com.selina.lending.internal.service.application.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Data
+@Jacksonized
 public class PropertyDetails {
     String addressLine1;
     String addressLine2;

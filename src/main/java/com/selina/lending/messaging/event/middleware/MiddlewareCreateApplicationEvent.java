@@ -7,11 +7,13 @@ import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
 @Data
 @Builder
+@Jacksonized
 public class MiddlewareCreateApplicationEvent {
     private String externalApplicationId;
     private String sourceAccount;
