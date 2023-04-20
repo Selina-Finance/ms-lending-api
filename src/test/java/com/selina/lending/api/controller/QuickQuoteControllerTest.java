@@ -26,6 +26,8 @@ import com.selina.lending.internal.service.application.domain.quote.FilterQuickQ
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
+import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
+import com.selina.lending.messaging.mapper.MiddlewareCreateApplicationEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,6 +43,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,6 +53,12 @@ class QuickQuoteControllerTest {
 
     @InjectMocks
     private QuickQuoteController quickQuoteController;
+
+    @Mock
+    private MiddlewareCreateApplicationEventMapper createApplicationEventMapper;
+
+    @Mock
+    private MiddlewareCreateApplicationEvent createApplicationEvent;
 
     @Mock
     private FilterApplicationService filterApplicationService;
@@ -69,13 +78,14 @@ class QuickQuoteControllerTest {
     @Mock
     private QuickQuoteCFResponse quickQuoteCFResponse;
 
-
     @Test
     void createQuickQuoteApplication() {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(filterApplicationService.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest)).thenReturn(createApplicationEvent);
+        when(filterApplicationService.filter(eq(createApplicationEvent), any(FilterQuickQuoteApplicationRequest.class)))
+                .thenReturn(filteredQuickQuoteDecisionResponse);
 
         //When
         var response = quickQuoteController.createQuickQuoteApplication(quickQuoteApplicationRequest);
@@ -83,7 +93,7 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
-        verify(filterApplicationService, times(1)).filter(any());
+        verify(filterApplicationService, times(1)).filter(any(), any());
     }
 
     @Test
@@ -102,13 +112,14 @@ class QuickQuoteControllerTest {
         verify(createApplicationService, times(1)).createQuickQuoteCFApplication(any());
     }
 
-
     @Test
     void updateQuickQuoteApplication() {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(filterApplicationService.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest)).thenReturn(createApplicationEvent);
+        when(filterApplicationService.filter(eq(createApplicationEvent), any(FilterQuickQuoteApplicationRequest.class)))
+                .thenReturn(filteredQuickQuoteDecisionResponse);
 
         //When
         var response = quickQuoteController.updateQuickQuoteApplication(id, quickQuoteApplicationRequest);
@@ -116,7 +127,7 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
-        verify(filterApplicationService, times(1)).filter(any());
+        verify(filterApplicationService, times(1)).filter(any(), any());
     }
 
     @Test

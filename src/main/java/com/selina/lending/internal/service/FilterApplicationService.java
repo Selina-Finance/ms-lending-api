@@ -19,8 +19,10 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
 
 public interface FilterApplicationService {
 
-    FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request);
+    FilteredQuickQuoteDecisionResponse filter(MiddlewareCreateApplicationEvent applicationEvent,
+                                              FilterQuickQuoteApplicationRequest request);
 }
