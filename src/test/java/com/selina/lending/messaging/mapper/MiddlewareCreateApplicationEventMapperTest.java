@@ -9,6 +9,7 @@ import com.selina.lending.internal.service.application.domain.Incomes;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
+import com.selina.lending.messaging.publisher.MiddlewareCreateApplicationEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,9 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
 
     @MockBean
     private TokenService tokenService;
+
+    @MockBean
+    private MiddlewareCreateApplicationEventPublisher eventPublisher;
 
     @Autowired
     private MiddlewareCreateApplicationEventMapper mapper;
