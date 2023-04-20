@@ -21,4 +21,5 @@ public class MiddlewareCreateApplicationEvent {
     private LoanInformation loanInformation;
     private PropertyDetails propertyDetails;
     private LeadDto lead;
+    private Boolean hasGivenConsentForMarketingCommunications;
 }

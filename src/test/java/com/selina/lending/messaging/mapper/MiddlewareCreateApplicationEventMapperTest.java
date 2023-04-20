@@ -53,6 +53,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
             assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
 
             // TODO do we need to send hasGivenConsentForMarketingCommunications ?
+            // TODO do we need to send facilities ?
 
             assertLead(middlewareCreateApplicationEvent.getLead());
         }
@@ -95,10 +96,6 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
             //Then
             assertThat(middlewareCreateApplicationEvent.getApplicationType(), equalTo("QuickQuote"));
         }
-    }
-
-    @Nested
-    class SourceAccountMapping {
 
         @Test
         void shouldMapSourceAccountToValueFromAccessTokenSourceAccountClaim() {
@@ -113,6 +110,19 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
 
             //Then
             assertThat(middlewareCreateApplicationEvent.getSourceAccount(), equalTo(expectedSourceAccount));
+        }
+
+        @Test
+        void shouldMapHasGivenConsentForMarketingCommunicationsToTrue() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+
+            //When
+            var middlewareCreateApplicationEvent = mapper
+                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(false));
         }
     }
 
