@@ -3,6 +3,7 @@ package com.selina.lending.messaging.mapper;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.QuickQuoteApplicantMapper;
 import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,11 +23,19 @@ public abstract class MiddlewareCreateApplicationEventMapper {
     private static final String SOURCE = "LendingAPI";
     private static final String APPLICATION_TYPE = "QuickQuote";
     private static final String HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS = "false";
+    private static final boolean ADD_PRODUCT_FEES_TO_FACILITY = false;
 
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
     @Mapping(target = "sourceAccount", expression = "java(tokenService.retrieveSourceAccount())")
     @Mapping(target = "source", constant = SOURCE)
     @Mapping(target = "applicationType", constant = APPLICATION_TYPE)
     @Mapping(target = "hasGivenConsentForMarketingCommunications", constant = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS)
+    @Mapping(target = "fees", expression = "java(this.createDefaultFees())")
     public abstract MiddlewareCreateApplicationEvent mapToMiddlewareCreateApplicationEvent(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
+
+    Fees createDefaultFees() {
+        return Fees.builder()
+                .isAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY)
+                .build();
+    }
 }

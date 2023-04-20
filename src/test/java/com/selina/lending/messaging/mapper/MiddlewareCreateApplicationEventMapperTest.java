@@ -124,6 +124,19 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
             //Then
             assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(false));
         }
+
+        @Test
+        void shouldMapFeesAddProductFeesToFacilityToFalse() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+
+            //When
+            var middlewareCreateApplicationEvent = mapper
+                    .mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getFees().getIsAddProductFeesToFacility(), equalTo(false));
+        }
     }
 
     private void assertApplicants(List<Applicant> applicants) {
