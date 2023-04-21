@@ -17,11 +17,10 @@
 
 package com.selina.lending.internal.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.service.application.domain.Employment;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface EmploymentMapper {

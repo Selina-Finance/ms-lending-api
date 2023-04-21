@@ -19,7 +19,7 @@ package com.selina.lending.api.interceptor;
 
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
-import com.selina.lending.messaging.publisher.mapper.BrokerRequestEventMapper;
+import com.selina.lending.messaging.mapper.brokerrequest.BrokerRequestEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

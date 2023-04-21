@@ -17,6 +17,8 @@
 
 package com.selina.lending.internal.service;
 
+import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
+import com.selina.lending.messaging.publisher.MiddlewareCreateApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.repository.SelectionServiceRepository;
@@ -25,14 +27,21 @@ import com.selina.lending.internal.service.application.domain.quote.FilteredQuic
 
 @Service
 public class FilterApplicationServiceImpl implements FilterApplicationService {
+
+    private final MiddlewareCreateApplicationEventPublisher eventPublisher;
     private final SelectionServiceRepository selectionServiceRepository;
 
-    public FilterApplicationServiceImpl(SelectionServiceRepository selectionServiceRepository) {
+    public FilterApplicationServiceImpl(MiddlewareCreateApplicationEventPublisher eventPublisher,
+                                        SelectionServiceRepository selectionServiceRepository) {
+        this.eventPublisher = eventPublisher;
         this.selectionServiceRepository = selectionServiceRepository;
     }
 
     @Override
-    public FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request) {
-        return selectionServiceRepository.filter(request);
+    public FilteredQuickQuoteDecisionResponse filter(MiddlewareCreateApplicationEvent applicationEvent,
+                                                     FilterQuickQuoteApplicationRequest request) {
+        var decisionResponse = selectionServiceRepository.filter(request);
+        eventPublisher.publish(applicationEvent);
+        return decisionResponse;
     }
 }

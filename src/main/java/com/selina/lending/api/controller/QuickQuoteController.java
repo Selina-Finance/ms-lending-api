@@ -23,6 +23,7 @@ import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFResponseMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import com.selina.lending.internal.service.permissions.annotation.Permission;
+import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,17 +45,18 @@ import static com.selina.lending.internal.service.permissions.annotation.Permiss
 @Slf4j
 public class QuickQuoteController implements QuickQuoteOperations {
 
+    private final MiddlewareCreateApplicationEventMapper createApplicationEventMapper;
     private final FilterApplicationService filterApplicationService;
-
     private final CreateApplicationService createApplicationService;
-
     private final ApplicationResponseEnricher applicationResponseEnricher;
 
     public QuickQuoteController(
+            MiddlewareCreateApplicationEventMapper createApplicationEventMapper,
             FilterApplicationService filterApplicationService,
             CreateApplicationService createApplicationService,
             ApplicationResponseEnricher applicationResponseEnricher
     ) {
+        this.createApplicationEventMapper = createApplicationEventMapper;
         this.filterApplicationService = filterApplicationService;
         this.createApplicationService = createApplicationService;
         this.applicationResponseEnricher = applicationResponseEnricher;
@@ -97,8 +99,10 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
     private QuickQuoteResponse filterQuickQuote(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        var filteredQuickQuoteDecisionResponse = filterApplicationService.filter(QuickQuoteApplicationRequestMapper.mapRequest(
-                quickQuoteApplicationRequest));
+        var filteredQuickQuoteDecisionResponse = filterApplicationService.filter(
+                createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest),
+                QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest));
+
         var quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
         applicationResponseEnricher.enrichQuickQuoteResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
         applicationResponseEnricher.enrichQuickQuoteResponseWithProductOffersApplyUrl(quickQuoteResponse);

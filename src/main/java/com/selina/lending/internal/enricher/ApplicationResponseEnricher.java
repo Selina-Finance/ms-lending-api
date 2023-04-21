@@ -15,6 +15,7 @@ public class ApplicationResponseEnricher {
     public ApplicationResponseEnricher(@Value(value = "${quickquote.web.url}") String quickQuoteBaseUrl) {
         this.quickQuoteBaseUrl = quickQuoteBaseUrl;
     }
+
     public void enrichQuickQuoteResponseWithExternalApplicationId(QuickQuoteResponse response, String externalApplicationId) {
         response.setExternalApplicationId(externalApplicationId);
     }

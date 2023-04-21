@@ -15,14 +15,22 @@
  *
  */
 
-package com.selina.lending.internal.service;
+package com.selina.lending.messaging.mapper.brokerrequest;
 
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
+import org.jetbrains.annotations.NotNull;
 
-public interface FilterApplicationService {
+import javax.servlet.http.HttpServletRequest;
 
-    FilteredQuickQuoteDecisionResponse filter(MiddlewareCreateApplicationEvent applicationEvent,
-                                              FilterQuickQuoteApplicationRequest request);
+public class IPHelper {
+
+    private IPHelper() {
+    }
+
+    public static String getRemoteAddr(@NotNull HttpServletRequest request) {
+        String ipFromHeader = request.getHeader("X-FORWARDED-FOR");
+        if (ipFromHeader != null && ipFromHeader.length() > 0) {
+            return ipFromHeader;
+        }
+        return request.getRemoteAddr();
+    }
 }

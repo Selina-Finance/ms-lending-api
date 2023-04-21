@@ -15,22 +15,19 @@
  *
  */
 
-package com.selina.lending.messaging.publisher.mapper;
+package com.selina.lending.messaging.mapper.middleware;
 
-import org.jetbrains.annotations.NotNull;
+import com.selina.lending.internal.dto.IncomeItemDto;
+import com.selina.lending.internal.service.application.domain.Income;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-import javax.servlet.http.HttpServletRequest;
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface IncomeItemMapper {
 
-public class IPHelper {
+    IncomeItemDto mapToIncomeItemDto(Income income);
+    Income mapToIncome(IncomeItemDto incomeItemDto);
 
-    private IPHelper() {
-    }
-
-    public static String getRemoteAddr(@NotNull HttpServletRequest request) {
-        String ipFromHeader = request.getHeader("X-FORWARDED-FOR");
-        if (ipFromHeader != null && ipFromHeader.length() > 0) {
-            return ipFromHeader;
-        }
-        return request.getRemoteAddr();
-    }
 }

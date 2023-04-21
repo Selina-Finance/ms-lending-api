@@ -47,6 +47,7 @@ resilience4j:
 
 authorization:
   enable: false
+
 kafka:
   enable: false
   bootstrapAddress: localhost:9092
@@ -55,3 +56,9 @@ kafka:
       name: private.ms-lending-api.broker-request.local
       partitions: 3
       replicationFactor: 3
+    middlewareCreateApplication:
+      name: private.ms-lending-api.aggregator-quote-request.dev
+
+spring:
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}

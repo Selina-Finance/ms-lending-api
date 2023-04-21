@@ -38,7 +38,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,12 +60,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DIPControllerValidationTest extends MapperBase {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private RetrieveApplicationService retrieveApplicationService;
+
     @MockBean
     private UpdateApplicationService updateApplicationService;
+
     @MockBean
     private CreateApplicationService createApplicationService;
 

@@ -15,14 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.service;
+package com.selina.lending.messaging.mapper.middleware;
 
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
+import com.selina.lending.internal.dto.IncomeDto;
+import com.selina.lending.internal.service.application.domain.Incomes;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-public interface FilterApplicationService {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {IncomeItemMapper.class})
+public interface IncomeMapper {
 
-    FilteredQuickQuoteDecisionResponse filter(MiddlewareCreateApplicationEvent applicationEvent,
-                                              FilterQuickQuoteApplicationRequest request);
+    IncomeDto mapToIcomeDto(Incomes incomes);
+    Incomes mapToIcomes(IncomeDto incomeDto);
 }

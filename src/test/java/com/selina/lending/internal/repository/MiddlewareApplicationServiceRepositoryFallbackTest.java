@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.repository;
 
+import com.selina.lending.IntegrationTest;
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
 import com.selina.lending.internal.service.monitoring.MetricService;
@@ -34,7 +35,7 @@ import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@SpringBootTest
+@IntegrationTest
 class MiddlewareApplicationServiceRepositoryFallbackTest {
 
     @MockBean

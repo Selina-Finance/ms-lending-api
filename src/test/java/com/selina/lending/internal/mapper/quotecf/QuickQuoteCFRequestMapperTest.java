@@ -50,8 +50,8 @@ public class QuickQuoteCFRequestMapperTest extends MapperBase {
         assertThat(propertyDetails.getPriorCharges(), notNullValue());
     }
 
-    private void assertLoanInformation(QuickQuoteCFRequest responseDto) {
-        var loanInformation = responseDto.getLoanInformation();
+    private void assertLoanInformation(QuickQuoteCFRequest application) {
+        var loanInformation = application.getLoanInformation();
         assertThat(loanInformation, notNullValue());
         assertThat(loanInformation.getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(loanInformation.getRequestedLoanAmount(), equalTo(LOAN_AMOUNT));
