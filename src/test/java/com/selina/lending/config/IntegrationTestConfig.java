@@ -1,7 +1,6 @@
 package com.selina.lending.config;
 
 import com.selina.lending.messaging.publisher.MiddlewareCreateApplicationEventPublisher;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

@@ -17,13 +17,11 @@
 
 package com.selina.lending.internal.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.factory.Mappers;
-
 import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.service.application.domain.Address;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface AddressMapper {

@@ -9,11 +9,8 @@ import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.Incomes;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
-import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
-import com.selina.lending.messaging.publisher.MiddlewareCreateApplicationEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
@@ -164,7 +161,6 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         assertThat(firstAddress.getCity(), equalTo(CITY));
         assertThat(firstAddress.getPostcode(), equalTo(POSTCODE));
         assertThat(firstAddress.getBuildingName(), equalTo(BUILDING_NAME));
-        assertThat(firstAddress.getBuildingNumber(), equalTo(BUILDING_NUMBER));
         assertThat(firstAddress.getBuildingNumber(), equalTo(BUILDING_NUMBER));
     }
 

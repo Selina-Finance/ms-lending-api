@@ -17,12 +17,10 @@
 
 package com.selina.lending.internal.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.factory.Mappers;
-
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.service.application.domain.Income;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface IncomeItemMapper {

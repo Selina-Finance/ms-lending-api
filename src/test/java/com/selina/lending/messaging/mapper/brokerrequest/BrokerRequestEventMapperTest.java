@@ -20,7 +20,6 @@ package com.selina.lending.messaging.mapper.brokerrequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.messaging.mapper.brokerrequest.BrokerRequestEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
