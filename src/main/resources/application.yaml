@@ -59,6 +59,7 @@ kafka:
 authorization:
   enable: true
 
+
 feign:
   client:
     config:
