@@ -27,7 +27,7 @@ public class MiddlewareCreateApplicationEventPublisher {
     public void publish(MiddlewareCreateApplicationEvent event) {
         try {
             log.debug("Send MiddlewareCreateApplicationEvent [event={}]", event);
-            kafkaTemplate.send(topic, event).get().getRecordMetadata();
+            kafkaTemplate.send(topic, event).get();
         } catch (Exception ex) {
             log.error(ERROR_SENDING_MIDDLEWARE_CREATE_APPLICATION_EVENT + " [event={}]", event, ex);
             throw new KafkaSendEventException(ERROR_SENDING_MIDDLEWARE_CREATE_APPLICATION_EVENT, ex);
