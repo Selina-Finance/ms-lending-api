@@ -701,7 +701,6 @@ public abstract class MapperBase {
                 .term(LOAN_TERM)
                 .ear(EAR)
                 .hasErc(true)
-                .eligibility(ELIGIBILITY)
                 .build();
     }
 
