@@ -34,6 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.inOrder;
@@ -73,7 +74,7 @@ class FilterApplicationServiceImplTest {
                 .build();
 
         when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest)).thenReturn(createApplicationEvent);
+        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest, anyList())).thenReturn(createApplicationEvent);
         doNothing().when(eventPublisher).publish(eq(createApplicationEvent));
 
         //When

@@ -35,7 +35,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
 
         //When
-        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest);
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest, null);  //TODO map list of products
 
         //Then
         assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));

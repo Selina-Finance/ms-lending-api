@@ -3,6 +3,7 @@ package com.selina.lending.messaging.publisher;
 import com.selina.lending.internal.exception.KafkaSendEventException;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
 import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -21,6 +22,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,7 +56,8 @@ public class MiddlewareCreateApplicationEventPublisherTest extends MapperBase {
     void shouldSendMiddlewareCreateApplicationEvent() {
         // Given
         var applicationRequest = getQuickQuoteApplicationRequestDto();
-        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest);
+        var products = List.of(Product.builder().build());
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest, products);
 
         var consumer = getKafkaConsumer();
         consumer.subscribe(Collections.singleton(topic));
@@ -72,7 +75,8 @@ public class MiddlewareCreateApplicationEventPublisherTest extends MapperBase {
     void whenGetErrorSendingKafkaEventThenThrowKafkaSendEventException() {
         // Given
         var applicationRequest = getQuickQuoteApplicationRequestDto();
-        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest);
+        var products = List.of(Product.builder().build());
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest, products);
         when(kafkaTemplate.send(topic, middlewareCreateApplicationEvent)).thenThrow(new RuntimeException("Unexpected exception"));
 
         // When

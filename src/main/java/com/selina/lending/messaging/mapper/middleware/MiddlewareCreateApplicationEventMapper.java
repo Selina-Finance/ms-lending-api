@@ -3,12 +3,15 @@ package com.selina.lending.messaging.mapper.middleware;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.Fees;
+import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -30,11 +33,14 @@ public abstract class MiddlewareCreateApplicationEventMapper {
     @Mapping(target = "applicationType", constant = APPLICATION_TYPE)
     @Mapping(target = "hasGivenConsentForMarketingCommunications", constant = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS)
     @Mapping(target = "fees", expression = "java(this.createDefaultFees())")
-    public abstract MiddlewareCreateApplicationEvent mapToMiddlewareCreateApplicationEvent(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
+    public abstract MiddlewareCreateApplicationEvent mapToMiddlewareCreateApplicationEvent(QuickQuoteApplicationRequest request,
+                                                                                           List<Product> products); //TODO map list of products
 
     Fees createDefaultFees() {
         return Fees.builder()
                 .isAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY)
                 .build();
     }
+
+
 }

@@ -50,7 +50,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
         if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
                 && decisionResponse.getProducts() != null) {
-            eventPublisher.publish(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(request));
+            eventPublisher.publish(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(request, decisionResponse.getProducts()));
         }
 
         return decisionResponse;
