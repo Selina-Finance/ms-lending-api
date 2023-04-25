@@ -54,5 +54,10 @@ public class SelectionServiceRepositoryImpl implements SelectionServiceRepositor
         var source = Source.builder().name(LendingConstants.REQUEST_SOURCE).account(
                 SourceAccount.builder().name(tokenService.retrieveSourceAccount()).build()).build();
         application.setSource(source);
+
+        var partnerAccountId = tokenService.retrievePartnerAccountId();
+        if (partnerAccountId != null) {
+            application.setPartnerAccountId(partnerAccountId);
+        }
     }
 }

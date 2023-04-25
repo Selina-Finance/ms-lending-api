@@ -76,4 +76,5 @@ public class Offer {
     Integer term;
     Double ear;
     Boolean hasErc;
+    Double eligibility;
 }

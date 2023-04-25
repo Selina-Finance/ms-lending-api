@@ -207,6 +207,8 @@ public abstract class MapperBase {
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     protected static final String BROKER_SUBMITTER_EMAIL = "broker_submitter@email.co.uk";
 
+    public static final Double ELIGIBILITY = 80.1;
+
     static {
         try {
             MODIFIED_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2023-01-22 11:00:00");
@@ -699,6 +701,7 @@ public abstract class MapperBase {
                 .term(LOAN_TERM)
                 .ear(EAR)
                 .hasErc(true)
+                .eligibility(ELIGIBILITY)
                 .build();
     }
 
@@ -772,6 +775,7 @@ public abstract class MapperBase {
                 .ercPeriodYears(2)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())
+                .eligibility(ELIGIBILITY)
                 .build();
     }
 

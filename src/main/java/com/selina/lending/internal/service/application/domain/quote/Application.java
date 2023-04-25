@@ -26,6 +26,7 @@ import lombok.Data;
 @Data
 public class Application {
     String externalApplicationId;
+    String partnerAccountId;
     Source source;
     List<Applicant> applicants;
     LoanInformation loanInformation;
