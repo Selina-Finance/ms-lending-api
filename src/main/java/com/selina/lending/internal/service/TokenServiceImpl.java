@@ -40,7 +40,7 @@ public class TokenServiceImpl implements TokenService {
     public String retrievePartnerAccountId() {
         try {
             return retrieveFromToken(LendingConstants.PARTNER_ACCOUNT_ID_JWT_CLAIM_NAME);
-        } catch (UnsupportedOperationException | NullPointerException | IllegalArgumentException exception) {
+        } catch (NullPointerException exception) {
             // request is not coming from a partner so can safely ignore
             return null;
         }
