@@ -13,7 +13,6 @@ import java.util.List;
 public class QuickQuoteCFRequest {
     String externalApplicationId;
     String sourceAccount;
-    String partnerAccountId;
     List<Applicant> applicants;
     LoanInformation loanInformation;
     PropertyDetails propertyDetails;

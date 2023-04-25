@@ -32,9 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SelectionServiceRepositoryTest {
@@ -84,7 +82,7 @@ class SelectionServiceRepositoryTest {
     }
 
     @Test
-    void filterShouldCallHttpClientNullPartnerAccountId() {
+    void whenPartnerAccountIdIsNullThenDoNotSpecifyInQuickQuoteApplicationRequest() {
         //Given
         var externalApplicationId = UUID.randomUUID().toString();
         var sourceAccount = "Broker";
@@ -99,6 +97,6 @@ class SelectionServiceRepositoryTest {
         selectionServiceRepository.filter(filterQuickQuoteApplicationRequest);
 
         //Then
-        verify(application, times(0)).setPartnerAccountId(any());
+        verify(application, never()).setPartnerAccountId(any());
     }
 }
