@@ -17,10 +17,12 @@
 
 package com.selina.lending.internal.service;
 
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
 import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
+import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
 import com.selina.lending.messaging.publisher.MiddlewareCreateApplicationEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +32,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.inOrder;
@@ -46,10 +49,13 @@ class FilterApplicationServiceImplTest {
     private MiddlewareCreateApplicationEventPublisher eventPublisher;
 
     @Mock
-    private MiddlewareCreateApplicationEvent middlewareCreateApplicationEvent;
+    private MiddlewareCreateApplicationEventMapper createApplicationEventMapper;
 
     @Mock
-    private FilterQuickQuoteApplicationRequest filterQuickQuoteApplicationRequest;
+    private MiddlewareCreateApplicationEvent createApplicationEvent;
+
+    @Mock
+    private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
 
     @Mock
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
@@ -60,16 +66,17 @@ class FilterApplicationServiceImplTest {
     @Test
     void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationEvent() {
         //Given
-        when(selectionServiceRepository.filter(filterQuickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
-        doNothing().when(eventPublisher).publish(eq(middlewareCreateApplicationEvent));
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest)).thenReturn(createApplicationEvent);
+        doNothing().when(eventPublisher).publish(eq(createApplicationEvent));
 
         //When
-        var response = filterApplicationService.filter(middlewareCreateApplicationEvent, filterQuickQuoteApplicationRequest);
+        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
 
         //Then
         InOrder inOrder = inOrder(selectionServiceRepository, eventPublisher);
-        inOrder.verify(selectionServiceRepository, times(1)).filter(filterQuickQuoteApplicationRequest);
-        inOrder.verify(eventPublisher, times(1)).publish(middlewareCreateApplicationEvent);
+        inOrder.verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        inOrder.verify(eventPublisher, times(1)).publish(createApplicationEvent);
         assertThat(response).isEqualTo(filteredQuickQuoteDecisionResponse);
     }
 }
