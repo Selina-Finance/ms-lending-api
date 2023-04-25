@@ -179,7 +179,10 @@ public abstract class MapperBase {
     public static final String OFFER_DECISION_DECLINE = "Decline";
     public static final String OFFER_VARIABLE_RATE_50_LTV = "Variable Rate - 50% LTV";
     public static final Double TOTAL_AMOUNT_REPAID = 60352.20;
+    public static final Double PROC_FEE = 123.45;
     public static final Double PRODUCT_FEE = 651.1;
+    public static final Double BROKER_FEES_INCLUDED = 10.50;
+    public static final Double BROKER_FEES_UPFRONT = 5.25;
     public static final Double INITIAL_RATE = 8.75;
     public static final Double INITIAL_PAYMENT = 411.08;
     public static final Integer INITIAL_TERM = 5;
@@ -203,7 +206,9 @@ public abstract class MapperBase {
     public static final Date MODIFIED_DATE;
     public static final String SOURCE_CLIENT_ID = "a-client-id";
     public static final String CATEGORY_STATUS_0 = "Status 0";
+    public static final Double LTI = 1.25;
     public static final Double LTV_CAP = 0.50;
+    public static final Double CLTV = 31.25;
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     protected static final String BROKER_SUBMITTER_EMAIL = "broker_submitter@email.co.uk";
 
@@ -755,24 +760,33 @@ public abstract class MapperBase {
         return ProductOffer.builder()
                 .id(OFFER_ID)
                 .totalAmountRepaid(TOTAL_AMOUNT_REPAID)
+                .procFee(PROC_FEE)
                 .aprc(APRC)
                 .isAprcHeadline(IS_APRC_HEADLINE)
                 .ear(EAR)
                 .svr(SVR)
                 .offerBalance(OFFER_BALANCE)
                 .initialPayment(INITIAL_PAYMENT)
+                .reversionPayment(REVERSION_PAYMENT)
                 .initialRate(INITIAL_RATE)
                 .initialTerm(LOAN_TERM)
                 .term(LOAN_TERM)
+                .lti(LTI)
                 .reversionTerm(REVERSION_TERM)
+                .brokerFeesIncluded(BROKER_FEES_INCLUDED)
                 .maximumLoanAmount(MAX_LOAN_AMOUNT)
                 .hasFee(true)
+                .canAddProductFee(true)
                 .productFee(FEE)
                 .requestedLoanAmount(REQUESTED_LOAN_AMOUNT)
                 .hasProductFeeAddedToLoan(true)
                 .ltvCap(LTV_CAP)
+                .cltv(CLTV)
                 .ercPeriodYears(2)
                 .maxErc(MAX_ERC)
+                .brokerFeesUpfront(BROKER_FEES_UPFRONT)
+                .affordabilityDeficit(AFFORDABILITY_DEFICIT)
+                .maximumBalanceEsis(MAX_BALANCE_ESIS)
                 .ercData(getErc())
                 .eligibility(ELIGIBILITY)
                 .build();
