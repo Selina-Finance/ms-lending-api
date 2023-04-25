@@ -31,12 +31,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,16 +61,18 @@ class FilterApplicationServiceImplTest {
     @Mock
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
 
-    @Mock
-    private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
-
     @InjectMocks
     private FilterApplicationServiceImpl filterApplicationService;
 
     @Test
     void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationEvent() {
         //Given
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(filteredQuickQuoteDecisionResponse);
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Accepted")
+                .products(emptyList())
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest)).thenReturn(createApplicationEvent);
         doNothing().when(eventPublisher).publish(eq(createApplicationEvent));
 
@@ -77,6 +83,46 @@ class FilterApplicationServiceImplTest {
         InOrder inOrder = inOrder(selectionServiceRepository, eventPublisher);
         inOrder.verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         inOrder.verify(eventPublisher, times(1)).publish(createApplicationEvent);
-        assertThat(response).isEqualTo(filteredQuickQuoteDecisionResponse);
+        assertThat(response).isEqualTo(decisionResponse);
+    }
+
+    @Test
+    void whenDecisionResponseIsDeclinedThenDoNotSendMiddlewareCreateApplicationEvent() {
+        //Given
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Declined")
+                .products(emptyList())
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+        //When
+        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        //Then
+        verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verifyNoInteractions(createApplicationEventMapper);
+        verify(eventPublisher, never()).publish(createApplicationEvent);
+        assertThat(response).isEqualTo(decisionResponse);
+    }
+
+    @Test
+    void whenDecisionResponseHasNullProductOffersThenDoNotSendMiddlewareCreateApplicationEvent() {
+        //Given
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Accepted")
+                .products(null)
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+        //When
+        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        //Then
+        verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verifyNoInteractions(createApplicationEventMapper);
+        verify(eventPublisher, never()).publish(createApplicationEvent);
+        assertThat(response).isEqualTo(decisionResponse);
     }
 }

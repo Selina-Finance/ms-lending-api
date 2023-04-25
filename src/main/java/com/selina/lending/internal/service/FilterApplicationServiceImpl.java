@@ -30,6 +30,8 @@ import com.selina.lending.internal.service.application.domain.quote.FilteredQuic
 @Service
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
+    private static final String ACCEPTED_DECISION = "Accepted";
+
     private final MiddlewareCreateApplicationEventMapper createApplicationEventMapper;
     private final MiddlewareCreateApplicationEventPublisher eventPublisher;
     private final SelectionServiceRepository selectionServiceRepository;
@@ -45,7 +47,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     @Override
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
         var decisionResponse = selectionServiceRepository.filter(QuickQuoteApplicationRequestMapper.mapRequest(request));
-        eventPublisher.publish(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(request));
+
+        if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
+                && decisionResponse.getProducts() != null) {
+            eventPublisher.publish(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(request));
+        }
+
         return decisionResponse;
     }
 }
