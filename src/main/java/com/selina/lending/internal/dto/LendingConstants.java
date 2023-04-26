@@ -23,6 +23,8 @@ public final class LendingConstants {
 
     public static final String CLIENT_ID_JWT_CLAIM_NAME = "clientId";
 
+    public static final String PARTNER_ACCOUNT_ID_JWT_CLAIM_NAME = "partnerAccountId";
+
     public static final String PRODUCT_CODE_ALL = "All";
 
     public static final String REQUEST_SOURCE = Source.LENDING_API.toString();

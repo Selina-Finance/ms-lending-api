@@ -49,5 +49,6 @@ public class ProductOffer {
     String decision;
     Double maxErc;
     Integer ercPeriodYears;
+    Double eligibility;
     List<Erc> ercData;
 }

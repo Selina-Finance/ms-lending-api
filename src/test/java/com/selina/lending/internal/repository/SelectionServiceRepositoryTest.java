@@ -35,6 +35,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class SelectionServiceRepositoryTest {
@@ -66,10 +67,13 @@ class SelectionServiceRepositoryTest {
         //Given
         var externalApplicationId = UUID.randomUUID().toString();
         var sourceAccount = "Broker";
+        var partnerAccountId = "Partner";
+
         when(filterQuickQuoteApplicationRequest.getApplication()).thenReturn(application);
         when(selectionServiceApi.filterQuickQuote(any())).thenReturn(filteredQuickQuoteDecisionResponse);
         when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
         when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
+        when(tokenService.retrievePartnerAccountId()).thenReturn(partnerAccountId);
 
         //When
         selectionServiceRepository.filter(filterQuickQuoteApplicationRequest);
@@ -77,5 +81,25 @@ class SelectionServiceRepositoryTest {
         //Then
         verify(selectionServiceApi, times(1)).filterQuickQuote(filterQuickQuoteApplicationRequest);
         verify(application, times(1)).setSource(any(Source.class));
+        verify(application, times(1)).setPartnerAccountId(any(String.class));
+    }
+
+    @Test
+    void whenPartnerAccountIdIsNullThenDoNotSpecifyInQuickQuoteApplicationRequest() {
+        //Given
+        var externalApplicationId = UUID.randomUUID().toString();
+        var sourceAccount = "Broker";
+
+        when(filterQuickQuoteApplicationRequest.getApplication()).thenReturn(application);
+        when(selectionServiceApi.filterQuickQuote(any())).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
+        when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
+        when(tokenService.retrievePartnerAccountId()).thenReturn(null);
+
+        //When
+        selectionServiceRepository.filter(filterQuickQuoteApplicationRequest);
+
+        //Then
+        verify(application, never()).setPartnerAccountId(any());
     }
 }

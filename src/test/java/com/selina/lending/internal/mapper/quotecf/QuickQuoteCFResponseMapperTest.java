@@ -56,7 +56,6 @@ public class QuickQuoteCFResponseMapperTest extends MapperBase {
         assertThat(productOfferDto.getEar(), equalTo(EAR));
         assertTrue(productOfferDto.getHasErc());
 
-
         assertErcData(productOfferDto);
 
     }

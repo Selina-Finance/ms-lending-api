@@ -20,4 +20,5 @@ package com.selina.lending.internal.service;
 public interface TokenService {
     String retrieveClientId();
     String retrieveSourceAccount();
+    String retrievePartnerAccountId();
 }

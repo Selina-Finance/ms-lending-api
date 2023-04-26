@@ -36,6 +36,16 @@ public class TokenServiceImpl implements TokenService {
         return retrieveFromToken(LendingConstants.SOURCE_ACCOUNT_JWT_CLAIM_NAME);
     }
 
+    @Override
+    public String retrievePartnerAccountId() {
+        try {
+            return retrieveFromToken(LendingConstants.PARTNER_ACCOUNT_ID_JWT_CLAIM_NAME);
+        } catch (NullPointerException exception) {
+            // request is not coming from a partner so can safely ignore
+            return null;
+        }
+    }
+
     private String retrieveFromToken(String property) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var jwt = (Jwt) authentication.getPrincipal();
