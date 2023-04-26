@@ -82,5 +82,6 @@ public abstract class MiddlewareCreateApplicationEventMapper {
     @Mapping(target = "maximumLoanAmount", source = "product.offer.maximumLoanAmount")
     @Mapping(target = "requestedLoanAmount", source = "product.offer.requestedLoanAmount")
     @Mapping(target = "hasErc", source = "product.hasErc")
+    @Mapping(target = "ercData", source = "product.offer.ercData")
     public abstract Offer mapToOffer(Product product);
 }

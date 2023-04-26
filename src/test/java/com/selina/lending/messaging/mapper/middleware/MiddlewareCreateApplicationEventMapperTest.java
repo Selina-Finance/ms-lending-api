@@ -6,6 +6,7 @@ import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.service.application.domain.Erc;
 import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.Incomes;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
@@ -22,6 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.when;
 
 @IntegrationTest
 public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
@@ -40,7 +42,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
     @Test
     void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
         //Given
-        Mockito.when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         var products = List.of(getProduct());
 
@@ -61,51 +63,6 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
         assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
         assertOffers(middlewareCreateApplicationEvent.getOffers());
-    }
-
-    private void assertOffers(List<Offer> offers) {
-        assertThat(offers, hasSize(1));
-
-        var offer = offers.get(0);
-        assertThat(offer.getId(), equalTo(OFFER_ID));
-        assertThat(offer.getProductFeeCanAdd(), equalTo(true));
-        assertThat(offer.getAprc(), equalTo(APRC));
-        assertThat(offer.getCltv(), equalTo(CLTV));
-        assertThat(offer.getOfferBalance(), equalTo(OFFER_BALANCE));
-        assertThat(offer.getInitialTerm(), equalTo(LOAN_TERM));
-        assertThat(offer.getInitialRate(), equalTo(INITIAL_RATE));
-        assertThat(offer.getBrokerFeesIncluded(), equalTo(BROKER_FEES_INCLUDED));
-        assertThat(offer.getReversionTerm(), equalTo(REVERSION_TERM.doubleValue()));
-        assertThat(offer.getSvr(), equalTo(SVR));
-        assertThat(offer.getProcFee(), equalTo(PROC_FEE));
-        assertThat(offer.getLti(), equalTo(LTI));
-        assertThat(offer.getLtvCap(), equalTo(LTV_CAP));
-        assertThat(offer.getTotalAmountRepaid(), equalTo(TOTAL_AMOUNT_REPAID));
-        assertThat(offer.getInitialPayment(), equalTo(INITIAL_PAYMENT));
-        assertThat(offer.getReversionPayment(), equalTo(REVERSION_PAYMENT));
-        assertThat(offer.getAffordabilityDeficit(), equalTo(AFFORDABILITY_DEFICIT));
-        assertThat(offer.getProductCode(), equalTo(CODE));
-        assertThat(offer.getProduct(), equalTo(OFFER_VARIABLE_RATE_50_LTV));
-        assertThat(offer.getDecision(), equalTo(OFFER_DECISION_ACCEPT));
-        assertThat(offer.getProductFee(), equalTo(FEE));
-        assertThat(offer.getProductFeeAddedToLoan(), equalTo(true));
-        assertThat(offer.getBrokerFeesUpfront(), equalTo(BROKER_FEES_UPFRONT));
-        assertThat(offer.getHasFee(), equalTo(true));
-        assertThat(offer.getIsVariable(), equalTo(true));
-        assertThat(offer.getCategory(), equalTo(CATEGORY_STATUS_0));
-        assertThat(offer.getFamily(), equalTo(HOMEOWNER_LOAN));
-        assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
-        assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
-        assertThat(offer.getErcProfile(), equalTo(ERC_PROFILE));
-        assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
-        assertThat(offer.getErcPeriodYears(), equalTo(ERC_PERIOD_YEARS));
-        assertThat(offer.getTerm(), equalTo(LOAN_TERM));
-        assertThat(offer.getEar(), equalTo(EAR));
-        assertThat(offer.getMaximumLoanAmount(), equalTo(MAX_LOAN_AMOUNT));
-        assertThat(offer.getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
-        assertThat(offer.getHasErc(), equalTo(true));
-
-        // TODO ERC_DATA
     }
 
     private void assertApplicants(List<Applicant> applicants) {
@@ -174,5 +131,59 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         assertThat(propertyDetails.getBuildingName(), equalTo(BUILDING_NAME));
         assertThat(propertyDetails.getNumberOfPriorCharges(), equalTo(1));
         assertThat(propertyDetails.getPriorCharges(), notNullValue());
+    }
+
+    private void assertOffers(List<Offer> offers) {
+        assertThat(offers, hasSize(1));
+
+        var offer = offers.get(0);
+        assertThat(offer.getId(), equalTo(OFFER_ID));
+        assertThat(offer.getProductFeeCanAdd(), equalTo(true));
+        assertThat(offer.getAprc(), equalTo(APRC));
+        assertThat(offer.getCltv(), equalTo(CLTV));
+        assertThat(offer.getOfferBalance(), equalTo(OFFER_BALANCE));
+        assertThat(offer.getInitialTerm(), equalTo(LOAN_TERM));
+        assertThat(offer.getInitialRate(), equalTo(INITIAL_RATE));
+        assertThat(offer.getBrokerFeesIncluded(), equalTo(BROKER_FEES_INCLUDED));
+        assertThat(offer.getReversionTerm(), equalTo(REVERSION_TERM.doubleValue()));
+        assertThat(offer.getSvr(), equalTo(SVR));
+        assertThat(offer.getProcFee(), equalTo(PROC_FEE));
+        assertThat(offer.getLti(), equalTo(LTI));
+        assertThat(offer.getLtvCap(), equalTo(LTV_CAP));
+        assertThat(offer.getTotalAmountRepaid(), equalTo(TOTAL_AMOUNT_REPAID));
+        assertThat(offer.getInitialPayment(), equalTo(INITIAL_PAYMENT));
+        assertThat(offer.getReversionPayment(), equalTo(REVERSION_PAYMENT));
+        assertThat(offer.getAffordabilityDeficit(), equalTo(AFFORDABILITY_DEFICIT));
+        assertThat(offer.getProductCode(), equalTo(CODE));
+        assertThat(offer.getProduct(), equalTo(OFFER_VARIABLE_RATE_50_LTV));
+        assertThat(offer.getDecision(), equalTo(OFFER_DECISION_ACCEPT));
+        assertThat(offer.getProductFee(), equalTo(FEE));
+        assertThat(offer.getProductFeeAddedToLoan(), equalTo(true));
+        assertThat(offer.getBrokerFeesUpfront(), equalTo(BROKER_FEES_UPFRONT));
+        assertThat(offer.getHasFee(), equalTo(true));
+        assertThat(offer.getIsVariable(), equalTo(true));
+        assertThat(offer.getCategory(), equalTo(CATEGORY_STATUS_0));
+        assertThat(offer.getFamily(), equalTo(HOMEOWNER_LOAN));
+        assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
+        assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
+        assertThat(offer.getErcProfile(), equalTo(ERC_PROFILE));
+        assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
+        assertThat(offer.getErcPeriodYears(), equalTo(ERC_PERIOD_YEARS));
+        assertThat(offer.getTerm(), equalTo(LOAN_TERM));
+        assertThat(offer.getEar(), equalTo(EAR));
+        assertThat(offer.getMaximumLoanAmount(), equalTo(MAX_LOAN_AMOUNT));
+        assertThat(offer.getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
+        assertThat(offer.getHasErc(), equalTo(true));
+        assertErcData(offer.getErcData());
+    }
+
+    private void assertErcData(List<Erc> ercData) {
+        assertThat(ercData, hasSize(2));
+
+        var erc = ercData.get(0);
+        assertThat(erc.getPeriod(), equalTo(1));
+        assertThat(erc.getErcFee(), equalTo(ERC_FEE));
+        assertThat(erc.getErcBalance(), equalTo(ERC_BALANCE));
+        assertThat(erc.getErcAmount(), equalTo(ERC_AMOUNT));
     }
 }

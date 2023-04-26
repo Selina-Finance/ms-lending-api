@@ -5,8 +5,10 @@ import com.selina.lending.internal.mapper.ErcMapper;
 import com.selina.lending.internal.service.application.domain.Offer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(uses = {ErcMapper.class})
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {ErcMapper.class})
 public interface OfferMapper {
 
     @Mapping(source = "offer.productCode", target = "code")
