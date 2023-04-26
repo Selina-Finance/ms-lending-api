@@ -55,9 +55,6 @@ class QuickQuoteControllerTest {
     private QuickQuoteController quickQuoteController;
 
     @Mock
-    private MiddlewareCreateApplicationEventMapper createApplicationEventMapper;
-
-    @Mock
     private MiddlewareCreateApplicationEvent createApplicationEvent;
 
     @Mock
@@ -83,9 +80,7 @@ class QuickQuoteControllerTest {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest)).thenReturn(createApplicationEvent);
-        when(filterApplicationService.filter(eq(createApplicationEvent), any(FilterQuickQuoteApplicationRequest.class)))
-                .thenReturn(filteredQuickQuoteDecisionResponse);
+        when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
 
         //When
         var response = quickQuoteController.createQuickQuoteApplication(quickQuoteApplicationRequest);
@@ -93,7 +88,7 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
-        verify(filterApplicationService, times(1)).filter(any(), any());
+        verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
     }
 
     @Test
@@ -117,9 +112,7 @@ class QuickQuoteControllerTest {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest)).thenReturn(createApplicationEvent);
-        when(filterApplicationService.filter(eq(createApplicationEvent), any(FilterQuickQuoteApplicationRequest.class)))
-                .thenReturn(filteredQuickQuoteDecisionResponse);
+        when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
 
         //When
         var response = quickQuoteController.updateQuickQuoteApplication(id, quickQuoteApplicationRequest);
@@ -127,7 +120,7 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
-        verify(filterApplicationService, times(1)).filter(any(), any());
+        verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
     }
 
     @Test

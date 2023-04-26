@@ -23,9 +23,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
-@Builder
 @Data
+@Builder
+@Jacksonized
 public class Offer {
     String id;
     Boolean active;
@@ -52,7 +54,7 @@ public class Offer {
     Double productFee;
     Boolean productFeeAddedToLoan;
     Boolean selected;
-    Integer brokerFeesUpfront;
+    Double brokerFeesUpfront;
     Integer externalSettlement;
     @JsonProperty("eSignUrl")
     String esignUrl;
@@ -69,6 +71,7 @@ public class Offer {
     Integer ercPeriodYears;
     Double maximumBalanceEsis;
     Double maxErc;
+    String ercProfile;
     List<Erc> ercData;
     List<RuleOutcome> ruleOutcomes;
     Double requestedLoanAmount;

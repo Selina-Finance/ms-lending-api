@@ -17,6 +17,7 @@
 
 package com.selina.lending.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,9 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.MAX_REQUEST_SIZE_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
 import static org.springframework.kafka.support.serializer.JsonSerializer.TYPE_MAPPINGS;
 
 @Configuration
@@ -45,22 +44,20 @@ public class KafkaProducerConfig {
     private String bootstrapServers;
 
     @Bean
-    public ProducerFactory<String, Object> multiTypeProducerFactory() {
+    public ProducerFactory<String, Object> multiTypeProducerFactory(ObjectMapper objectMapper) {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        configProps.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         configProps.put(MAX_REQUEST_SIZE_CONFIG, MAX_MESSAGE_SIZE);
         configProps.put(
                 TYPE_MAPPINGS,
                 "BrokerRequestKpiEvent:com.selina.lending.messaging.event.BrokerRequestKpiEvent"
         );
 
-        return new DefaultKafkaProducerFactory<>(configProps);
+        return new DefaultKafkaProducerFactory<>(configProps, new StringSerializer(), new JsonSerializer<>(objectMapper));
     }
 
     @Bean
-    public KafkaTemplate<String, Object> multiTypeKafkaTemplate() {
-        return new KafkaTemplate<>(multiTypeProducerFactory());
+    public KafkaTemplate<String, Object> multiTypeKafkaTemplate(ObjectMapper objectMapper) {
+        return new KafkaTemplate<>(multiTypeProducerFactory(objectMapper));
     }
 }

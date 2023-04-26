@@ -179,7 +179,10 @@ public abstract class MapperBase {
     public static final String OFFER_DECISION_DECLINE = "Decline";
     public static final String OFFER_VARIABLE_RATE_50_LTV = "Variable Rate - 50% LTV";
     public static final Double TOTAL_AMOUNT_REPAID = 60352.20;
+    public static final Double PROC_FEE = 123.45;
     public static final Double PRODUCT_FEE = 651.1;
+    public static final Double BROKER_FEES_INCLUDED = 10.50;
+    public static final Double BROKER_FEES_UPFRONT = 5.25;
     public static final Double INITIAL_RATE = 8.75;
     public static final Double INITIAL_PAYMENT = 411.08;
     public static final Integer INITIAL_TERM = 5;
@@ -192,6 +195,7 @@ public abstract class MapperBase {
     public static final Double BALANCE_CONSOLIDATED = 25000.0;
     public static final Double OTHER_DEBT_PAYMENTS = 5000.0;
     public static final Double MAX_BALANCE_ESIS = 100000.0;
+    public static final String ERC_PROFILE = "5%, 4%, 3%, 2%, 1%";
     public static final String ERC_SHORT_CODE = "ERC_01";
     public static final String CODE = "HOL00750";
     public static final Double EAR = 9.39;
@@ -203,9 +207,12 @@ public abstract class MapperBase {
     public static final Date MODIFIED_DATE;
     public static final String SOURCE_CLIENT_ID = "a-client-id";
     public static final String CATEGORY_STATUS_0 = "Status 0";
+    public static final Double LTI = 1.25;
     public static final Double LTV_CAP = 0.50;
+    public static final Double CLTV = 31.25;
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     protected static final String BROKER_SUBMITTER_EMAIL = "broker_submitter@email.co.uk";
+    public static final int ERC_PERIOD_YEARS = 2;
 
     public static final Double ELIGIBILITY = 80.1;
 
@@ -738,41 +745,56 @@ public abstract class MapperBase {
 
     protected FilteredQuickQuoteDecisionResponse getFilteredQuickQuoteDecisionResponse() {
         return FilteredQuickQuoteDecisionResponse.builder().decision(DECISION)
-                .products(List.of(Product.builder()
-                        .isVariable(true)
-                        .family(HOMEOWNER_LOAN)
-                        .category(CATEGORY_STATUS_0)
-                        .code(CODE)
-                        .hasErc(true)
-                        .ercShortCode(ERC_SHORT_CODE)
-                        .name(OFFER_VARIABLE_RATE_50_LTV)
-                        .offer(getProductOffer())
-                        .build()))
+                .products(List.of(getProduct()))
                 .build();
     }
 
-    private ProductOffer getProductOffer() {
+    protected Product getProduct() {
+        return Product.builder()
+                .isVariable(true)
+                .family(HOMEOWNER_LOAN)
+                .category(CATEGORY_STATUS_0)
+                .code(CODE)
+                .hasErc(true)
+                .ercProfile(ERC_PROFILE)
+                .ercShortCode(ERC_SHORT_CODE)
+                .name(OFFER_VARIABLE_RATE_50_LTV)
+                .offer(getProductOffer())
+                .build();
+    }
+
+    protected ProductOffer getProductOffer() {
         return ProductOffer.builder()
                 .id(OFFER_ID)
                 .totalAmountRepaid(TOTAL_AMOUNT_REPAID)
+                .procFee(PROC_FEE)
                 .aprc(APRC)
                 .isAprcHeadline(IS_APRC_HEADLINE)
                 .ear(EAR)
                 .svr(SVR)
                 .offerBalance(OFFER_BALANCE)
                 .initialPayment(INITIAL_PAYMENT)
+                .reversionPayment(REVERSION_PAYMENT)
                 .initialRate(INITIAL_RATE)
                 .initialTerm(LOAN_TERM)
                 .term(LOAN_TERM)
+                .lti(LTI)
                 .reversionTerm(REVERSION_TERM)
+                .brokerFeesIncluded(BROKER_FEES_INCLUDED)
                 .maximumLoanAmount(MAX_LOAN_AMOUNT)
                 .hasFee(true)
+                .decision(OFFER_DECISION_ACCEPT)
+                .canAddProductFee(true)
                 .productFee(FEE)
                 .requestedLoanAmount(REQUESTED_LOAN_AMOUNT)
                 .hasProductFeeAddedToLoan(true)
                 .ltvCap(LTV_CAP)
-                .ercPeriodYears(2)
+                .cltv(CLTV)
+                .ercPeriodYears(ERC_PERIOD_YEARS)
                 .maxErc(MAX_ERC)
+                .brokerFeesUpfront(BROKER_FEES_UPFRONT)
+                .affordabilityDeficit(AFFORDABILITY_DEFICIT)
+                .maximumBalanceEsis(MAX_BALANCE_ESIS)
                 .ercData(getErc())
                 .eligibility(ELIGIBILITY)
                 .build();

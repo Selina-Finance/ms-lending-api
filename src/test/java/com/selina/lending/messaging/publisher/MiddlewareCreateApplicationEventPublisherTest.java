@@ -21,6 +21,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,7 +55,8 @@ public class MiddlewareCreateApplicationEventPublisherTest extends MapperBase {
     void shouldSendMiddlewareCreateApplicationEvent() {
         // Given
         var applicationRequest = getQuickQuoteApplicationRequestDto();
-        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest);
+        var products = List.of(getProduct());
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest, products);
 
         var consumer = getKafkaConsumer();
         consumer.subscribe(Collections.singleton(topic));
@@ -72,7 +74,8 @@ public class MiddlewareCreateApplicationEventPublisherTest extends MapperBase {
     void whenGetErrorSendingKafkaEventThenThrowKafkaSendEventException() {
         // Given
         var applicationRequest = getQuickQuoteApplicationRequestDto();
-        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest);
+        var products = List.of(getProduct());
+        var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest, products);
         when(kafkaTemplate.send(topic, middlewareCreateApplicationEvent)).thenThrow(new RuntimeException("Unexpected exception"));
 
         // When
