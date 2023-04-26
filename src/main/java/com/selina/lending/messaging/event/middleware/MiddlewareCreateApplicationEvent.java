@@ -21,11 +21,11 @@ public class MiddlewareCreateApplicationEvent {
     private String source;
     private String applicationType;
     private String productCode;
+    private Boolean hasGivenConsentForMarketingCommunications;
     private List<Applicant> applicants;
     private Fees fees;
     private LeadDto lead;
     private LoanInformation loanInformation;
     private PropertyDetails propertyDetails;
-    private Boolean hasGivenConsentForMarketingCommunications;
     private List<Offer> offers;
 }

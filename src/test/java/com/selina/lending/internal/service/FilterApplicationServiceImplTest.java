@@ -18,6 +18,7 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
 import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
@@ -31,7 +32,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static java.util.Collections.emptyList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -45,7 +47,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FilterApplicationServiceImplTest {
+class FilterApplicationServiceImplTest extends MapperBase {
 
     @Mock
     private SelectionServiceRepository selectionServiceRepository;
@@ -70,11 +72,11 @@ class FilterApplicationServiceImplTest {
         //Given
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                 .decision("Accepted")
-                .products(emptyList())
+                .products(List.of(getProduct()))
                 .build();
 
         when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(quickQuoteApplicationRequest, anyList())).thenReturn(createApplicationEvent);
+        when(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(eq(quickQuoteApplicationRequest), anyList())).thenReturn(createApplicationEvent);
         doNothing().when(eventPublisher).publish(eq(createApplicationEvent));
 
         //When
@@ -92,7 +94,7 @@ class FilterApplicationServiceImplTest {
         //Given
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                 .decision("Declined")
-                .products(emptyList())
+                .products(List.of(getProduct()))
                 .build();
 
         when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);

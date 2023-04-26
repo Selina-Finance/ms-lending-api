@@ -56,7 +56,7 @@ public class MiddlewareCreateApplicationEventPublisherTest extends MapperBase {
     void shouldSendMiddlewareCreateApplicationEvent() {
         // Given
         var applicationRequest = getQuickQuoteApplicationRequestDto();
-        var products = List.of(Product.builder().build());
+        var products = List.of(getProduct());
         var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest, products);
 
         var consumer = getKafkaConsumer();
@@ -75,7 +75,7 @@ public class MiddlewareCreateApplicationEventPublisherTest extends MapperBase {
     void whenGetErrorSendingKafkaEventThenThrowKafkaSendEventException() {
         // Given
         var applicationRequest = getQuickQuoteApplicationRequestDto();
-        var products = List.of(Product.builder().build());
+        var products = List.of(getProduct());
         var middlewareCreateApplicationEvent = mapper.mapToMiddlewareCreateApplicationEvent(applicationRequest, products);
         when(kafkaTemplate.send(topic, middlewareCreateApplicationEvent)).thenThrow(new RuntimeException("Unexpected exception"));
 
