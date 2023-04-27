@@ -687,7 +687,7 @@ public abstract class MapperBase {
                 .ercPeriodYears(2)
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
                 .affordabilityDeficit(AFFORDABILITY_DEFICIT)
-                .ercShortCode(ERC_SHORT_CODE)
+                .ercShortcode(ERC_SHORT_CODE)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())
                 .productFeeAddedToLoan(true)

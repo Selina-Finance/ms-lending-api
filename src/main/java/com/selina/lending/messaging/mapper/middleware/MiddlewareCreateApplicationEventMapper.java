@@ -75,7 +75,7 @@ public abstract class MiddlewareCreateApplicationEventMapper {
     @Mapping(target = "maximumBalanceEsis", source = "product.offer.maximumBalanceEsis")
     @Mapping(target = "maxErc", source = "product.offer.maxErc")
     @Mapping(target = "ercProfile", source = "product.ercProfile")
-    @Mapping(target = "ercShortCode", source = "product.ercShortCode")
+    @Mapping(target = "ercShortcode", source = "product.ercShortCode")
     @Mapping(target = "ercPeriodYears", source = "product.offer.ercPeriodYears")
     @Mapping(target = "term", source = "product.offer.term")
     @Mapping(target = "ear", source = "product.offer.ear")

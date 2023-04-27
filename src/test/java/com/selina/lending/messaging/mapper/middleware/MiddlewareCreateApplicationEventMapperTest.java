@@ -166,7 +166,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
         assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
         assertThat(offer.getErcProfile(), equalTo(ERC_PROFILE));
-        assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
+        assertThat(offer.getErcShortcode(), equalTo(ERC_SHORT_CODE));
         assertThat(offer.getErcPeriodYears(), equalTo(ERC_PERIOD_YEARS));
         assertThat(offer.getTerm(), equalTo(LOAN_TERM));
         assertThat(offer.getEar(), equalTo(EAR));

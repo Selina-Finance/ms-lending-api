@@ -67,7 +67,7 @@ public class Offer {
     Boolean isVariable;
     String family;
     String category;
-    String ercShortCode;
+    String ercShortcode;
     Integer ercPeriodYears;
     Double maximumBalanceEsis;
     Double maxErc;
