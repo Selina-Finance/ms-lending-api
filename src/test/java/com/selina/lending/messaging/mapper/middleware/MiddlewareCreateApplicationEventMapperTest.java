@@ -173,6 +173,28 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         assertThat(offer.getMaximumLoanAmount(), equalTo(MAX_LOAN_AMOUNT));
         assertThat(offer.getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
         assertThat(offer.getHasErc(), equalTo(true));
+        assertThat(offer.getExpiryDate(), equalTo(EXPIRY_DATE));
+        assertThat(offer.getDtir(), equalTo(DTIR));
+        assertThat(offer.getBbr(), equalTo(BBR));
+        assertThat(offer.getInitialMargin(), equalTo(INITIAL_MARGIN));
+        assertThat(offer.getPoundPaidPerBorrowed(), equalTo(POUND_PAID_PER_BORROWED));
+        assertThat(offer.getMonthlyPaymentStressed(), equalTo(MONTHLY_PAYMENT_STRESSED));
+        assertThat(offer.getDecisionAml(), equalTo(DECISION_AML));
+        assertThat(offer.getDecisionFraud(), equalTo(DECISION_FRAUD));
+        assertThat(offer.getBaseRateStressed(), equalTo(BASE_RATE_STRESSED));
+        assertThat(offer.getAprcStressed(), equalTo(APRC_STRESSED));
+        assertThat(offer.getInitialRateMinimum(), equalTo(INITIAL_RATE_MINIMUM));
+        assertThat(offer.getReversionMargin(), equalTo(REVERSION_MARGIN));
+        assertThat(offer.getReversionRateMinimum(), equalTo(REVERSION_RATE_MINIMUM));
+        assertThat(offer.getDrawdownTerm(), equalTo(DRAWDOWN_TERM));
+        assertThat(offer.getEsisLtvCappedBalance(), equalTo(ESIS_LTV_CAPPED_BALANCE));
+        assertThat(offer.getIncomePrimaryApplicant(), equalTo(INCOME_PRIMARY_APPLICANT));
+        assertThat(offer.getIncomeJointApplicant(), equalTo(INCOME_JOINT_APPLICANT));
+        assertThat(offer.getDaysUntilInitialDrawdown(), equalTo(DAYS_UNTIL_INITIAL_DRAWDOWN));
+        assertThat(offer.getFixedTermYears(), equalTo(FIXED_TERM_YEARS));
+        assertThat(offer.getMinimumInitialDrawdown(), equalTo(MINIMUM_INITIAL_DRAWDOWN));
+        assertThat(offer.getOfferValidity(), equalTo(OFFER_VALIDITY));
+        assertThat(offer.getEsisLoanAmount(), equalTo(ESIS_LOAN_AMOUNT));
         assertErcData(offer.getErcData());
     }
 
