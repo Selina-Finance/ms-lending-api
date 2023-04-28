@@ -215,6 +215,29 @@ public abstract class MapperBase {
     public static final int ERC_PERIOD_YEARS = 2;
 
     public static final Double ELIGIBILITY = 80.1;
+    public static final String EXPIRY_DATE = "2022-11-08 18:41:10.805143";
+    public static final Double DTIR = 0.16635784011163915;
+    public static final Double BBR = 2.25;
+    public static final Double INITIAL_MARGIN = 6.5;
+    public static final Double POUND_PAID_PER_BORROWED = 2.49;
+    public static final Double MONTHLY_PAYMENT_STRESSED = 535.8718926064447;
+    public static final String DECISION_AML = "Accept";
+    public static final String DECISION_FRAUD = "Accept";
+    public static final Double BASE_RATE_STRESSED = 5.75;
+    public static final Double APRC_STRESSED = 13.29;
+    public static final Double PROPERTY_VALUATION = 160000.0;
+    public static final Double INITIAL_RATE_MINIMUM = 8.75;
+    public static final Double REVERSION_MARGIN = 6.55;
+    public static final Double REVERSION_RATE_MINIMUM = 8.72;
+    public static final Integer DRAWDOWN_TERM = 5;
+    public static final Double ESIS_LTV_CAPPED_BALANCE = 80000.0;
+    public static final Double INCOME_PRIMARY_APPLICANT = 40000.0;
+    public static final Double INCOME_JOINT_APPLICANT = 0.0;
+    public static final Integer DAYS_UNTIL_INITIAL_DRAWDOWN = 7;
+    public static final Integer FIXED_TERM_YEARS = 3;
+    public static final Double MINIMUM_INITIAL_DRAWDOWN = 1000.0;
+    public static final Double OFFER_VALIDITY = 30.0;
+    public static final Double ESIS_LOAN_AMOUNT = 50000.0;
 
     static {
         try {
@@ -687,7 +710,7 @@ public abstract class MapperBase {
                 .ercPeriodYears(2)
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
                 .affordabilityDeficit(AFFORDABILITY_DEFICIT)
-                .ercShortCode(ERC_SHORT_CODE)
+                .ercShortcode(ERC_SHORT_CODE)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())
                 .productFeeAddedToLoan(true)
@@ -797,6 +820,29 @@ public abstract class MapperBase {
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
                 .ercData(getErc())
                 .eligibility(ELIGIBILITY)
+                .expiryDate(EXPIRY_DATE)
+                .dtir(DTIR)
+                .bbr(BBR)
+                .initialMargin(INITIAL_MARGIN)
+                .poundPaidPerBorrowed(POUND_PAID_PER_BORROWED)
+                .monthlyPaymentStressed(MONTHLY_PAYMENT_STRESSED)
+                .decisionAml(DECISION_AML)
+                .decisionFraud(DECISION_FRAUD)
+                .baseRateStressed(BASE_RATE_STRESSED)
+                .aprcStressed(APRC_STRESSED)
+                .propertyValuation(PROPERTY_VALUATION)
+                .initialRateMinimum(INITIAL_RATE_MINIMUM)
+                .reversionMargin(REVERSION_MARGIN)
+                .reversionRateMinimum(REVERSION_RATE_MINIMUM)
+                .drawdownTerm(DRAWDOWN_TERM)
+                .esisLtvCappedBalance(ESIS_LTV_CAPPED_BALANCE)
+                .incomePrimaryApplicant(INCOME_PRIMARY_APPLICANT)
+                .incomeJointApplicant(INCOME_JOINT_APPLICANT)
+                .daysUntilInitialDrawdown(DAYS_UNTIL_INITIAL_DRAWDOWN)
+                .fixedTermYears(FIXED_TERM_YEARS)
+                .minimumInitialDrawdown(MINIMUM_INITIAL_DRAWDOWN)
+                .offerValidity(OFFER_VALIDITY)
+                .esisLoanAmount(ESIS_LOAN_AMOUNT)
                 .build();
     }
 

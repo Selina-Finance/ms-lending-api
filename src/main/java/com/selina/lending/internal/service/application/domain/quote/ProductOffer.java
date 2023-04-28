@@ -59,5 +59,27 @@ public class ProductOffer {
     Double maximumBalanceEsis;
     Integer ercPeriodYears;
     Double eligibility;
+    String expiryDate;
+    Double dtir;
+    Double bbr;
+    Double initialMargin;
+    Double poundPaidPerBorrowed;
+    Double monthlyPaymentStressed;
+    String decisionAml;
+    String decisionFraud;
+    Double baseRateStressed;
+    Double aprcStressed;
+    Double initialRateMinimum;
+    Double reversionMargin;
+    Double reversionRateMinimum;
+    Integer drawdownTerm;
+    Double esisLtvCappedBalance;
+    Double incomePrimaryApplicant;
+    Double incomeJointApplicant;
+    Integer daysUntilInitialDrawdown;
+    Integer fixedTermYears;
+    Double minimumInitialDrawdown;
+    Double offerValidity;
+    Double esisLoanAmount;
     List<Erc> ercData;
 }

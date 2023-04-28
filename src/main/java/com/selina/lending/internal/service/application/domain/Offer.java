@@ -67,7 +67,7 @@ public class Offer {
     Boolean isVariable;
     String family;
     String category;
-    String ercShortCode;
+    String ercShortcode;
     Integer ercPeriodYears;
     Double maximumBalanceEsis;
     Double maxErc;
@@ -79,4 +79,26 @@ public class Offer {
     Integer term;
     Double ear;
     Boolean hasErc;
+    String expiryDate;
+    Double dtir;
+    Double bbr;
+    Double initialMargin;
+    Double poundPaidPerBorrowed;
+    Double monthlyPaymentStressed;
+    String decisionAml;
+    String decisionFraud;
+    Double baseRateStressed;
+    Double aprcStressed;
+    Double initialRateMinimum;
+    Double reversionMargin;
+    Double reversionRateMinimum;
+    Integer drawdownTerm;
+    Double esisLtvCappedBalance;
+    Double incomePrimaryApplicant;
+    Double incomeJointApplicant;
+    Integer daysUntilInitialDrawdown;
+    Integer fixedTermYears;
+    Double minimumInitialDrawdown;
+    Double offerValidity;
+    Double esisLoanAmount;
 }

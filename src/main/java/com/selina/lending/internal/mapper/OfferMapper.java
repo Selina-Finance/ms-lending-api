@@ -18,6 +18,7 @@
 package com.selina.lending.internal.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -28,6 +29,9 @@ import com.selina.lending.internal.service.application.domain.Offer;
 public interface OfferMapper {
     OfferMapper INSTANCE = Mappers.getMapper(OfferMapper.class);
 
+    @Mapping(target = "ercShortCode", source = "ercShortcode")
     OfferDto mapToOfferDto(Offer offer);
+
+    @Mapping(target = "ercShortcode", source = "ercShortCode")
     Offer mapToOffer(OfferDto offerDto);
 }
