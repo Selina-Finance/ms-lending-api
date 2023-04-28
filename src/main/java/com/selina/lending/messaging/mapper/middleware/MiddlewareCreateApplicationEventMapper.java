@@ -93,6 +93,7 @@ public abstract class MiddlewareCreateApplicationEventMapper {
     @Mapping(target = "decisionFraud", source = "product.offer.decisionFraud")
     @Mapping(target = "baseRateStressed", source = "product.offer.baseRateStressed")
     @Mapping(target = "aprcStressed", source = "product.offer.aprcStressed")
+    @Mapping(target = "propertyValuation", source = "product.offer.propertyValuation")
     @Mapping(target = "initialRateMinimum", source = "product.offer.initialRateMinimum")
     @Mapping(target = "reversionMargin", source = "product.offer.reversionMargin")
     @Mapping(target = "reversionRateMinimum", source = "product.offer.reversionRateMinimum")
