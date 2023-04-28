@@ -183,6 +183,7 @@ public class MiddlewareCreateApplicationEventMapperTest extends MapperBase {
         assertThat(offer.getDecisionFraud(), equalTo(DECISION_FRAUD));
         assertThat(offer.getBaseRateStressed(), equalTo(BASE_RATE_STRESSED));
         assertThat(offer.getAprcStressed(), equalTo(APRC_STRESSED));
+        assertThat(offer.getPropertyValuation(), equalTo(PROPERTY_VALUATION));
         assertThat(offer.getInitialRateMinimum(), equalTo(INITIAL_RATE_MINIMUM));
         assertThat(offer.getReversionMargin(), equalTo(REVERSION_MARGIN));
         assertThat(offer.getReversionRateMinimum(), equalTo(REVERSION_RATE_MINIMUM));

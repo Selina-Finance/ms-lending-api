@@ -89,6 +89,7 @@ public class Offer {
     String decisionFraud;
     Double baseRateStressed;
     Double aprcStressed;
+    Double propertyValuation;
     Double initialRateMinimum;
     Double reversionMargin;
     Double reversionRateMinimum;
