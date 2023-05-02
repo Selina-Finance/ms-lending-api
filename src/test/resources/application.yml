@@ -56,8 +56,6 @@ kafka:
       name: private.ms-lending-api.broker-request.local
       partitions: 3
       replicationFactor: 3
-    middlewareCreateApplication:
-      name: private.ms-lending-api.aggregator-quote-request.dev
 
 spring:
   kafka:
