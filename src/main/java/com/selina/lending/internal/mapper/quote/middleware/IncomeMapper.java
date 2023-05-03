@@ -14,3 +14,4 @@ public interface IncomeMapper {
 
     Incomes mapToIcomes(IncomeDto incomeDto);
 }
+

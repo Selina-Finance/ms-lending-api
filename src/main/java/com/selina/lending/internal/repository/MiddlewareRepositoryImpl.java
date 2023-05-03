@@ -133,7 +133,6 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         middlewareApi.createQuickQuoteAggregator(applicationRequest);
     }
 
-
     private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
