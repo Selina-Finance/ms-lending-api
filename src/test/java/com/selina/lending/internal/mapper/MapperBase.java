@@ -92,7 +92,7 @@ import com.selina.lending.internal.service.application.domain.Underwriting;
 import com.selina.lending.internal.service.application.domain.User;
 import com.selina.lending.internal.service.application.domain.VotersRoll;
 import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;

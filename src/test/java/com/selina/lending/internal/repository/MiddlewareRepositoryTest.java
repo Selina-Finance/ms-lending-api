@@ -25,6 +25,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import com.selina.lending.internal.service.application.domain.quote.middleware.MiddlewareCreateApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import feign.FeignException;
@@ -55,6 +56,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {
@@ -77,6 +79,9 @@ class MiddlewareRepositoryTest {
 
     @Mock
     private QuickQuoteCFResponse quickQuoteCFResponse;
+
+    @Mock
+    private MiddlewareCreateApplicationRequest middlewareCreateApplicationRequest;
 
     private MiddlewareRepository middlewareRepository;
 
@@ -343,6 +348,35 @@ class MiddlewareRepositoryTest {
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
         verify(middlewareApi, times(1)).downloadEsisByAppId(id);
     }
+
+    @Test
+    void shouldCallHttpClientWhenCreateQuickQuoteApplicationInvoked() {
+        // Given
+
+        // When
+        middlewareRepository.createQuickQuoteAggregator(middlewareCreateApplicationRequest);
+
+        // Then
+        verify(middlewareApi, times(1)).createQuickQuoteAggregator(middlewareCreateApplicationRequest);
+    }
+
+    @Test
+    void shouldThrowFeignServerExceptionWhenCreateQuickQuoteThrowsInternalServerException() {
+        //Given
+        String errorMsg = "error";
+        var id = UUID.randomUUID().toString();
+
+        doThrow(new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
+                errorMsg.getBytes(), null)).when(middlewareApi).createQuickQuoteAggregator(middlewareCreateApplicationRequest);
+        //When
+        var exception = assertThrows(FeignException.FeignServerException.class,
+                () -> middlewareRepository.createQuickQuoteAggregator(middlewareCreateApplicationRequest));
+
+        //Then
+        assertThat(exception.getMessage()).isEqualTo(errorMsg);
+        verify(middlewareApi, times(1)).createQuickQuoteAggregator(middlewareCreateApplicationRequest);
+    }
+
 
     @Test
     void shouldOpenCircuitBreakerWhenFeignServerExceptionTriggersFallback() {

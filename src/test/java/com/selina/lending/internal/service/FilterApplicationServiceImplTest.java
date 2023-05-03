@@ -19,9 +19,12 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.mapper.quote.middleware.MiddlewareCreateApplicationRequestMapper;
+import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.middleware.MiddlewareCreateApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,14 +48,43 @@ class FilterApplicationServiceImplTest extends MapperBase {
     @Mock
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
 
+    @Mock
+    private MiddlewareCreateApplicationRequestMapper middlewareCreateApplicationRequestMapper;
+    @Mock
+    private MiddlewareCreateApplicationRequest createApplicationRequest;
+
+    @Mock
+    private MiddlewareRepository middlewareRepository;
+
     @InjectMocks
     private FilterApplicationServiceImpl filterApplicationService;
 
     @Test
-    void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationEvent() {
+    void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequest() {
         //Given
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                 .decision("Accepted")
+                .products(List.of(getProduct()))
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(middlewareCreateApplicationRequestMapper
+                .mapToMiddlewareCreateApplicationRequest(any(QuickQuoteApplicationRequest.class), any())).thenReturn(createApplicationRequest);
+
+        //When
+        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        //Then
+        verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(middlewareRepository, times(1)).createQuickQuoteAggregator(createApplicationRequest);
+        assertThat(response).isEqualTo(decisionResponse);
+    }
+
+    @Test
+    void whenFilteredQuickQuoteDecisionResponseDecisionIsNotAcceptedThenDontSendAMiddlewareRequest() {
+        //Given
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Declined")
                 .products(List.of(getProduct()))
                 .build();
 
@@ -63,6 +95,26 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         //Then
         verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(middlewareRepository, times(0)).createQuickQuoteAggregator(any(MiddlewareCreateApplicationRequest.class));
+        assertThat(response).isEqualTo(decisionResponse);
+    }
+
+    @Test
+    void whenFilteredQuickQuoteDecisionHaveNotOffersThenDontSendAMiddlewareRequest() {
+        //Given
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Declined")
+                .products(null)
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+        //When
+        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        //Then
+        verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(middlewareRepository, times(0)).createQuickQuoteAggregator(any(MiddlewareCreateApplicationRequest.class));
         assertThat(response).isEqualTo(decisionResponse);
     }
 }
