@@ -19,21 +19,39 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapper;
+import com.selina.lending.internal.mapper.quote.middleware.MiddlewareCreateApplicationRequestMapper;
+import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
-    private final SelectionServiceRepository selectionServiceRepository;
+    private static final String ACCEPTED_DECISION = "Accepted";
 
-    public FilterApplicationServiceImpl(SelectionServiceRepository selectionServiceRepository) {
+    private final MiddlewareCreateApplicationRequestMapper createApplicationRequestMapper;
+    private final SelectionServiceRepository selectionServiceRepository;
+    private final MiddlewareRepository middlewareRepository;
+
+    public FilterApplicationServiceImpl(MiddlewareCreateApplicationRequestMapper createApplicationRequestMapper,
+                                        SelectionServiceRepository selectionServiceRepository,
+                                        MiddlewareRepository middlewareRepository) {
+        this.createApplicationRequestMapper = createApplicationRequestMapper;
         this.selectionServiceRepository = selectionServiceRepository;
+        this.middlewareRepository = middlewareRepository;
     }
 
     @Override
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
-        return selectionServiceRepository.filter(QuickQuoteApplicationRequestMapper.mapRequest(request));
+        FilteredQuickQuoteDecisionResponse decisionResponse =
+                selectionServiceRepository.filter(QuickQuoteApplicationRequestMapper.mapRequest(request));
+
+        if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
+                && decisionResponse.getProducts() != null) {
+            middlewareRepository.createQuickQuoteAggregator(
+                    createApplicationRequestMapper.mapToMiddlewareCreateApplicationRequest(request, decisionResponse.getProducts()));
+        }
+        return decisionResponse;
     }
 }

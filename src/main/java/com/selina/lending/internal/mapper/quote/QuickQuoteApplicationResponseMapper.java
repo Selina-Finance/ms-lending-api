@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Product;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
