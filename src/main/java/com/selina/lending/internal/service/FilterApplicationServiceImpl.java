@@ -19,40 +19,21 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapper;
-import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
-import com.selina.lending.messaging.publisher.MiddlewareCreateApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-
 import com.selina.lending.internal.repository.SelectionServiceRepository;
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import org.springframework.stereotype.Service;
 
 @Service
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
-    private static final String ACCEPTED_DECISION = "Accepted";
-
-    private final MiddlewareCreateApplicationEventMapper createApplicationEventMapper;
-    private final MiddlewareCreateApplicationEventPublisher eventPublisher;
     private final SelectionServiceRepository selectionServiceRepository;
 
-    public FilterApplicationServiceImpl(MiddlewareCreateApplicationEventMapper createApplicationEventMapper,
-                                        MiddlewareCreateApplicationEventPublisher eventPublisher,
-                                        SelectionServiceRepository selectionServiceRepository) {
-        this.createApplicationEventMapper = createApplicationEventMapper;
-        this.eventPublisher = eventPublisher;
+    public FilterApplicationServiceImpl(SelectionServiceRepository selectionServiceRepository) {
         this.selectionServiceRepository = selectionServiceRepository;
     }
 
     @Override
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
-        var decisionResponse = selectionServiceRepository.filter(QuickQuoteApplicationRequestMapper.mapRequest(request));
-
-        if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
-                && decisionResponse.getProducts() != null) {
-            eventPublisher.publish(createApplicationEventMapper.mapToMiddlewareCreateApplicationEvent(request, decisionResponse.getProducts()));
-        }
-
-        return decisionResponse;
+        return selectionServiceRepository.filter(QuickQuoteApplicationRequestMapper.mapRequest(request));
     }
 }

@@ -18,13 +18,13 @@
 package com.selina.lending.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.IntegrationTest;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.MapperBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WithMockUser
 @AutoConfigureMockMvc
-@IntegrationTest
+@SpringBootTest
 class QuickQuoteControllerValidationTest extends MapperBase {
 
     private final ObjectMapper objectMapper = new ObjectMapper();

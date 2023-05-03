@@ -18,9 +18,10 @@
 package com.selina.lending;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 
-@IntegrationTest
+@SpringBootTest
 class LendingServiceApplicationTests {
 
 	@Test

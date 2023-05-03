@@ -19,7 +19,6 @@ package com.selina.lending.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import com.selina.lending.IntegrationTest;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 import com.selina.lending.internal.dto.EmploymentDto;
@@ -32,6 +31,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -56,7 +56,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WithMockUser
 @AutoConfigureMockMvc
-@IntegrationTest
+@SpringBootTest
 class DIPControllerValidationTest extends MapperBase {
 
     private final ObjectMapper objectMapper = new ObjectMapper();

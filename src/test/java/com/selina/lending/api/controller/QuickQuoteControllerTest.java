@@ -22,12 +22,9 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
-import com.selina.lending.messaging.event.middleware.MiddlewareCreateApplicationEvent;
-import com.selina.lending.messaging.mapper.middleware.MiddlewareCreateApplicationEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,7 +40,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -53,9 +49,6 @@ class QuickQuoteControllerTest {
 
     @InjectMocks
     private QuickQuoteController quickQuoteController;
-
-    @Mock
-    private MiddlewareCreateApplicationEvent createApplicationEvent;
 
     @Mock
     private FilterApplicationService filterApplicationService;
