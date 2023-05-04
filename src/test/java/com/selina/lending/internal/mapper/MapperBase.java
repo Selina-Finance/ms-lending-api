@@ -55,6 +55,8 @@ import com.selina.lending.internal.dto.creditcommitments.request.UserDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
+import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicantDto;
+import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.ApplicantCreditCommitments;
@@ -278,6 +280,33 @@ public abstract class MapperBase {
                 .loanInformation(getAdvancedLoanInformationDto())
                 .propertyDetails(getDIPCCPropertyDetailsDto())
                 .fees(getFeesDto())
+                .build();
+    }
+
+    protected QuickQuoteCFApplicationRequest getQuickQuoteCFApplicationRequestDto() {
+        return QuickQuoteCFApplicationRequest.builder()
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .expenditure(List.of(getExpenditureDto()))
+                .loanInformation(getLoanInformationDto())
+                .propertyDetails(getQuickQuotePropertyDetailsDto())
+                .applicants(List.of(getQuickQuoteCFApplicantDto()))
+                .lead(getLeadDto())
+                .build();
+    }
+
+    protected QuickQuoteCFApplicantDto getQuickQuoteCFApplicantDto() {
+        return QuickQuoteCFApplicantDto.builder()
+                .title(TITLE)
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .gender(GENDER)
+                .emailAddress(EMAIL_ADDRESS)
+                .mobileNumber(MOBILE_NUMBER)
+                .addresses(List.of(getAddressDto()))
+                .dateOfBirth(DOB)
+                .income(getIncomeDto())
+                .residentialStatus(RESIDENTIAL_STATUS_OWNER)
+                .employment(getEmploymentDto())
                 .build();
     }
 

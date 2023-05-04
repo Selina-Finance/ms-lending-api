@@ -1,6 +1,6 @@
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.mapper.quotecf;
 
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
+import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import org.junit.jupiter.api.Test;
 
@@ -8,16 +8,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class QuickQuoteApplicantMapperTest extends MapperBase  {
+public class QuickQuoteCFApplicantMapperTest extends MapperBase {
 
 
     @Test
-    void mapToApplicantFromQuickQuoteApplicantDto() {
+    void mapToApplicantFromQuickQuoteCFApplicantDto() {
         //Given
-        QuickQuoteApplicantDto applicantDto = getQuickQuoteApplicantDto();;
+        var applicantDto = getQuickQuoteCFApplicantDto();;
 
         //When
-        Applicant applicant = QuickQuoteApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
+        Applicant applicant = QuickQuoteCFApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
 
         //Then
         assertThat(applicant.getTitle(), equalTo(TITLE));
