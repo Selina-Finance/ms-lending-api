@@ -17,39 +17,30 @@
 
 package com.selina.lending.internal.dto.quotecf;
 
-import com.selina.lending.internal.dto.ApplicationRequest;
-import com.selina.lending.internal.dto.LeadDto;
-import com.selina.lending.internal.dto.LoanInformationDto;
+import com.selina.lending.api.controller.SwaggerConstants;
+import com.selina.lending.internal.dto.PriorChargesDto;
+import com.selina.lending.internal.dto.PropertyDetailsDto;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.List;
+import javax.validation.constraints.Pattern;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(callSuper = true)
-public class QuickQuoteCFApplicationRequest extends ApplicationRequest {
+public class QuickQuoteCFPropertyDetailsDto extends PropertyDetailsDto {
 
-    @NotNull
-    @Size(message = "applicants is required", min = 1, max = 2)
-    @Valid
-    private List<QuickQuoteCFApplicantDto> applicants;
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "when was this property last purchased")
+    private String whenLastPurchased;
 
-    @NotNull
-    @Valid
-    private LoanInformationDto loanInformation;
+    private Double purchaseValue;
 
-    @NotNull
-    @Valid
-    private QuickQuoteCFPropertyDetailsDto propertyDetails;
+    private Integer numberOfPriorCharges;
 
-    LeadDto lead;
+    private PriorChargesDto priorCharges;
 }

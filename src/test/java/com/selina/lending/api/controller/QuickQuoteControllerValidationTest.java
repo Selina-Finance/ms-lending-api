@@ -106,6 +106,24 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(content().contentType(APPLICATION_JSON));
 
         }
+
+        @Test
+        void whenCreateApplicationWithoutPropertyDetailsEstimatedValueThenReturnOkResponse() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getPropertyDetails().setEstimatedValue(null);
+
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(APPLICATION_JSON));
+
+        }
     }
 
     @Nested
@@ -130,6 +148,90 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
                     .andExpect(jsonPath("$.violations[0].message").value("must not be blank"));
+
+        }
+
+        @Test
+        void whenCreateApplicationWithoutPropertyDetailsEstimatedValueThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteCFApplicationRequestDto();
+            request.getPropertyDetails().setEstimatedValue(null);
+
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.estimatedValue"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+
+        }
+
+        @Test
+        void whenCreateApplicationWithoutPropertyDetailsBuildingNameAndBuildingNumberThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteCFApplicationRequestDto();
+            var propertyDetails = request.getPropertyDetails();
+            propertyDetails.setBuildingName("");
+            propertyDetails.setBuildingNumber(null);
+
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("propertyDetails"))
+                    .andExpect(jsonPath("$.violations[0].message").value("At least one of these fields must be specified: [buildingName, buildingNumber]"));
+
+        }
+
+        @Test
+        void shouldCreateApplicationWhenAtLeastPropertyDetailsBuildingNameIsSpecified() throws Exception {
+            //Given
+            var request = getQuickQuoteCFApplicationRequestDto();
+            var propertyDetails = request.getPropertyDetails();
+            propertyDetails.setBuildingNumber(null);
+
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        }
+
+        @Test
+        void shouldCreateApplicationWhenAtLeastPropertyDetailsBuildingNumberIsSpecified() throws Exception {
+            //Given
+            var request = getQuickQuoteCFApplicationRequestDto();
+            var propertyDetails = request.getPropertyDetails();
+            propertyDetails.setBuildingName(null);
+
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         }
     }

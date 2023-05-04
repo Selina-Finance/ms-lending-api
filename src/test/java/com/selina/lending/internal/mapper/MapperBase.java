@@ -57,6 +57,7 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicantDto;
 import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
+import com.selina.lending.internal.dto.quotecf.QuickQuoteCFPropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.Address;
 import com.selina.lending.internal.service.application.domain.Applicant;
 import com.selina.lending.internal.service.application.domain.ApplicantCreditCommitments;
@@ -288,9 +289,27 @@ public abstract class MapperBase {
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getLoanInformationDto())
-                .propertyDetails(getQuickQuotePropertyDetailsDto())
+                .propertyDetails(getQuickQuoteCFPropertyDetailsDto())
                 .applicants(List.of(getQuickQuoteCFApplicantDto()))
                 .lead(getLeadDto())
+                .build();
+    }
+
+    protected QuickQuoteCFPropertyDetailsDto getQuickQuoteCFPropertyDetailsDto() {
+        return QuickQuoteCFPropertyDetailsDto.builder()
+                .addressLine1(ADDRESS_LINE_1)
+                .addressLine2(ADDRESS_LINE_2)
+                .buildingName(BUILDING_NAME)
+                .buildingNumber(BUILDING_NUMBER)
+                .city(CITY)
+                .country(COUNTRY)
+                .county(COUNTY)
+                .postcode(POSTCODE)
+                .estimatedValue(ESTIMATED_VALUE)
+                .whenLastPurchased(WHEN_LAST_PURCHASED)
+                .purchaseValue(PURCHASE_VALUE)
+                .numberOfPriorCharges(1)
+                .priorCharges(getPriorChargesDto())
                 .build();
     }
 
@@ -489,10 +508,21 @@ public abstract class MapperBase {
     }
 
     protected QuickQuotePropertyDetailsDto getQuickQuotePropertyDetailsDto() {
-        return QuickQuotePropertyDetailsDto.builder().addressLine1(ADDRESS_LINE_1).addressLine2(ADDRESS_LINE_2).buildingName(
-                        BUILDING_NAME).buildingNumber(BUILDING_NUMBER).city(CITY).country(COUNTRY).county(COUNTY).postcode(
-                        POSTCODE).estimatedValue(ESTIMATED_VALUE).whenLastPurchased(WHEN_LAST_PURCHASED)
-                .purchaseValue(PURCHASE_VALUE).numberOfPriorCharges(1).priorCharges(getPriorChargesDto()).build();
+        return QuickQuotePropertyDetailsDto.builder()
+                .addressLine1(ADDRESS_LINE_1)
+                .addressLine2(ADDRESS_LINE_2)
+                .buildingName(BUILDING_NAME)
+                .buildingNumber(BUILDING_NUMBER)
+                .city(CITY)
+                .country(COUNTRY)
+                .county(COUNTY)
+                .postcode(POSTCODE)
+                .estimatedValue(ESTIMATED_VALUE)
+                .whenLastPurchased(WHEN_LAST_PURCHASED)
+                .purchaseValue(PURCHASE_VALUE)
+                .numberOfPriorCharges(1)
+                .priorCharges(getPriorChargesDto())
+                .build();
     }
 
     protected PropertyDetailsDto getPropertyDetailsDto() {

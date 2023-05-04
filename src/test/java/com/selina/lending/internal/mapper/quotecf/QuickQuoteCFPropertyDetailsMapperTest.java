@@ -1,20 +1,22 @@
-package com.selina.lending.internal.mapper;
+package com.selina.lending.internal.mapper.quotecf;
 
+import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFPropertyDetailsMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class QuickQuotePropertyDetailsMapperTest extends MapperBase{
+public class QuickQuoteCFPropertyDetailsMapperTest extends MapperBase {
 
 
     @Test
     void mapToPropertyDetailsFromPropertyDetailsDto() {
         //Given
-        var quickQuotePropertyDetailsDto = getQuickQuotePropertyDetailsDto();
+        var quickQuoteCFPropertyDetailsDto = getQuickQuoteCFPropertyDetailsDto();
 
         //When
-        var propertyDetails = QuickQuotePropertyDetailsMapper.INSTANCE.mapToPropertyDetails(quickQuotePropertyDetailsDto);
+        var propertyDetails = QuickQuoteCFPropertyDetailsMapper.INSTANCE.mapToPropertyDetails(quickQuoteCFPropertyDetailsDto);
 
         //Then
         assertThat(propertyDetails.getAddressLine1(), equalTo(ADDRESS_LINE_1));
