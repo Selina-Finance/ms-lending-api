@@ -22,6 +22,7 @@ import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXA
 
 import javax.validation.Valid;
 
+import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,7 +89,7 @@ public interface QuickQuoteOperations {
     })
     @PostMapping(value = "/quickquotecf")
     ResponseEntity<QuickQuoteResponse> createQuickQuoteCFApplication(@Valid @RequestBody
-                                                                   QuickQuoteApplicationRequest quickQuoteApplicationRequest);
+                                                                             QuickQuoteCFApplicationRequest quickQuoteCFApplicationRequest);
 
 
 

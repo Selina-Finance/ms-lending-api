@@ -15,27 +15,24 @@
  *
  */
 
-package com.selina.lending.internal.dto.quote;
+package com.selina.lending.internal.dto.quotecf;
 
 import com.selina.lending.api.controller.SwaggerConstants;
-import com.selina.lending.api.support.validator.AtLeastOneNotBlank;
 import com.selina.lending.internal.dto.PriorChargesDto;
+import com.selina.lending.internal.dto.PropertyDetailsDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @SuperBuilder
 @Data
-@EqualsAndHashCode
-@AtLeastOneNotBlank(fields = {"buildingName", "buildingNumber"})
-public class QuickQuotePropertyDetailsDto {
+@EqualsAndHashCode(callSuper = true)
+public class QuickQuoteCFPropertyDetailsDto extends PropertyDetailsDto {
 
     @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
     @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "when was this property last purchased")
@@ -46,34 +43,4 @@ public class QuickQuotePropertyDetailsDto {
     private Integer numberOfPriorCharges;
 
     private PriorChargesDto priorCharges;
-
-    @NotBlank
-    @Size(min = 3, max = 255)
-    private String addressLine1;
-    @Size(min = 3, max = 255)
-    private String addressLine2;
-
-    @NotBlank
-    @Size(min = 3, max = 255)
-    private String city;
-
-    @NotBlank
-    @Size(min = 3, max = 8)
-    private String postcode;
-    private String buildingName;
-    private String buildingNumber;
-    private String subBuildingName;
-    private String propertyName;
-    private Integer udprn;
-    private String poBox;
-
-    @Size(min = 2, max = 60)
-    private String county;
-
-    @Size(min = 2, max = 60)
-    private String country;
-
-    private Double estimatedValue;
-
-    private Integer propertyInternalFloorSpace;
 }

@@ -17,21 +17,89 @@
 
 package com.selina.lending.internal.dto.quote;
 
-import javax.validation.Valid;
-
-import com.selina.lending.internal.dto.ApplicantDto;
+import com.selina.lending.api.controller.SwaggerConstants;
+import com.selina.lending.api.support.converter.ToLowerCase;
+import com.selina.lending.api.support.validator.EnumValue;
+import com.selina.lending.internal.dto.AddressDto;
+import com.selina.lending.internal.dto.ApplicantGender;
+import com.selina.lending.internal.dto.ApplicantResidentialStatus;
+import com.selina.lending.internal.dto.ApplicantTitle;
 import com.selina.lending.internal.dto.EmploymentDto;
-
+import com.selina.lending.internal.dto.IncomeDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.List;
+
+import static com.selina.lending.api.controller.SwaggerConstants.EMAIL_PATTERN;
+
 @NoArgsConstructor
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class QuickQuoteApplicantDto extends ApplicantDto {
+@EqualsAndHashCode
+public class QuickQuoteApplicantDto {
+
     @Valid
     private EmploymentDto employment;
+
+    @NotBlank
+    @Schema(implementation = ApplicantTitle.class)
+    @EnumValue(enumClass = ApplicantTitle.class)
+    private String title;
+
+    @Email(message = "emailAddress is not valid", regexp = EMAIL_PATTERN)
+    @NotBlank
+    @ToLowerCase
+    private String emailAddress;
+
+    @Size(min = 10, max = 13)
+    private String mobileNumber;
+
+    @NotBlank
+    @Size(min = 2, max = 255)
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 2, max = 255)
+    private String lastName;
+    private String middleName;
+
+    @Schema(implementation = ApplicantGender.class)
+    @EnumValue(enumClass = ApplicantGender.class)
+    private String gender;
+
+    @NotNull
+    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
+    @Schema(example = SwaggerConstants.EXAMPLE_DATE)
+    private String dateOfBirth;
+    private Integer numberOfAdultDependants;
+
+    @Schema(description = "number of dependants under 16 years old")
+    private Integer numberOfChildDependants;
+
+    @Schema(implementation = ApplicantResidentialStatus.class, description = "If residential status value is not in the enum list, use best match e.g. Private Tenant map to 'Owner Occupier'")
+    @EnumValue(enumClass = ApplicantResidentialStatus.class)
+    private String residentialStatus;
+
+    private Boolean applicant2LivesWithApplicant1;
+    private Boolean applicant2LivesWithApplicant1For3Years;
+
+    @NotNull
+    @Valid
+    @NotEmpty
+    private List<AddressDto> addresses;
+
+    @NotNull
+    @Valid
+    private IncomeDto income;
 }
