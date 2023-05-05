@@ -162,6 +162,7 @@ public class MiddlewareCreateApplicationRequestMapperTest extends MapperBase {
         assertThat(offer.getIsVariable(), equalTo(true));
         assertThat(offer.getCategory(), equalTo(CATEGORY_STATUS_0));
         assertThat(offer.getFamily(), equalTo(HOMEOWNER_LOAN));
+        assertThat(offer.getVariant(), equalTo(OFFER_VARIANT));
         assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
         assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
         assertThat(offer.getErcProfile(), equalTo(ERC_PROFILE));
