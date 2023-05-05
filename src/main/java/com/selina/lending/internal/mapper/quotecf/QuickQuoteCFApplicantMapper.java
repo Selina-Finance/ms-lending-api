@@ -5,7 +5,6 @@ import com.selina.lending.internal.mapper.AddressMapper;
 import com.selina.lending.internal.mapper.EmploymentMapper;
 import com.selina.lending.internal.mapper.IncomeMapper;
 import com.selina.lending.internal.service.application.domain.Applicant;
-import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -15,7 +14,6 @@ public interface QuickQuoteCFApplicantMapper {
 
     QuickQuoteCFApplicantMapper INSTANCE = Mappers.getMapper(QuickQuoteCFApplicantMapper.class);
 
-    @InheritConfiguration(name = "mapApplicant")
-    @Mapping(target = "mobilePhoneNumber", source = "applicantDto.mobileNumber")
+    @Mapping(target = "mobilePhoneNumber", source = "mobileNumber")
     Applicant mapToApplicant(QuickQuoteCFApplicantDto applicantDto);
 }
