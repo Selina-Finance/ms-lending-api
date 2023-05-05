@@ -291,7 +291,6 @@ public abstract class MapperBase {
                 .loanInformation(getLoanInformationDto())
                 .propertyDetails(getQuickQuoteCFPropertyDetailsDto())
                 .applicants(List.of(getQuickQuoteCFApplicantDto()))
-                .lead(getLeadDto())
                 .build();
     }
 

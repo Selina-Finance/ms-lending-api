@@ -18,7 +18,6 @@
 package com.selina.lending.internal.dto.quotecf;
 
 import com.selina.lending.internal.dto.ApplicationRequest;
-import com.selina.lending.internal.dto.LeadDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -50,6 +49,4 @@ public class QuickQuoteCFApplicationRequest extends ApplicationRequest {
     @NotNull
     @Valid
     private QuickQuoteCFPropertyDetailsDto propertyDetails;
-
-    LeadDto lead;
 }

@@ -14,7 +14,7 @@ public class QuickQuoteCFApplicantMapperTest extends MapperBase {
     @Test
     void mapToApplicantFromQuickQuoteCFApplicantDto() {
         //Given
-        var applicantDto = getQuickQuoteCFApplicantDto();;
+        var applicantDto = getQuickQuoteCFApplicantDto();
 
         //When
         Applicant applicant = QuickQuoteCFApplicantMapper.INSTANCE.mapToApplicant(applicantDto);
