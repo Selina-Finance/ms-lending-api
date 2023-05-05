@@ -20,6 +20,7 @@ package com.selina.lending.api.controller;
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationResponseMapper;
 import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFRequestMapper;
@@ -66,9 +67,9 @@ public class QuickQuoteController implements QuickQuoteOperations {
     @Override
     @Permission(resource = QQ_CF, scope = Create)
     public ResponseEntity<QuickQuoteResponse> createQuickQuoteCFApplication(
-            QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        log.info("Create Quick Quote CF application with [externalApplicationId={}]", quickQuoteApplicationRequest.getExternalApplicationId());
-        return ResponseEntity.ok(filterQuickQuoteCF(quickQuoteApplicationRequest));
+            QuickQuoteCFApplicationRequest quickQuoteCFApplicationRequest) {
+        log.info("Create Quick Quote CF application with [externalApplicationId={}]", quickQuoteCFApplicationRequest.getExternalApplicationId());
+        return ResponseEntity.ok(filterQuickQuoteCF(quickQuoteCFApplicationRequest));
     }
 
     @Override
@@ -83,11 +84,11 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
 
-    private QuickQuoteResponse filterQuickQuoteCF(QuickQuoteApplicationRequest quickQuoteApplicationRequest){
+    private QuickQuoteResponse filterQuickQuoteCF(QuickQuoteCFApplicationRequest quickQuoteCFApplicationRequest){
         QuickQuoteCFResponse quickQuoteDecisionResponse = createApplicationService.createQuickQuoteCFApplication(QuickQuoteCFRequestMapper.INSTANCE
-                .mapToQuickQuoteCFRequest(quickQuoteApplicationRequest));
+                .mapToQuickQuoteCFRequest(quickQuoteCFApplicationRequest));
         QuickQuoteResponse quickQuoteResponse = QuickQuoteCFResponseMapper.INSTANCE.mapToQuickQuoteResponse(quickQuoteDecisionResponse);
-        applicationResponseEnricher.enrichQuickQuoteResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
+        applicationResponseEnricher.enrichQuickQuoteResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteCFApplicationRequest.getExternalApplicationId());
         return quickQuoteResponse;
     }
 

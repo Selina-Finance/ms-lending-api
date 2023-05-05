@@ -15,21 +15,22 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.dto.quotecf;
 
-import com.selina.lending.api.support.validator.EnumValue;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
+import com.selina.lending.internal.dto.ApplicantDto;
+import com.selina.lending.internal.dto.EmploymentDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+import javax.validation.Valid;
+
+@NoArgsConstructor
+@SuperBuilder
 @Data
-public class PreviousNameDto {
-    @Schema(implementation = ApplicantTitle.class)
-    @EnumValue(enumClass = ApplicantTitle.class)
-    private String title;
-    private String firstName;
-    private String middleName;
-    private String lastName;
+@EqualsAndHashCode(callSuper = true)
+public class QuickQuoteCFApplicantDto extends ApplicantDto {
+    @Valid
+    private EmploymentDto employment;
 }

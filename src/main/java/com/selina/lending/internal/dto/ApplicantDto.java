@@ -42,9 +42,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 public class ApplicantDto {
+
     @NotBlank
-    @Schema(implementation = Title.class)
-    @EnumValue(enumClass = Title.class)
+    @Schema(implementation = ApplicantTitle.class)
+    @EnumValue(enumClass = ApplicantTitle.class)
     private String title;
 
     @Email(message = "emailAddress is not valid", regexp = EMAIL_PATTERN)
@@ -65,8 +66,8 @@ public class ApplicantDto {
     private String lastName;
     private String middleName;
 
-    @Schema(implementation = Gender.class)
-    @EnumValue(enumClass = Gender.class)
+    @Schema(implementation = ApplicantGender.class)
+    @EnumValue(enumClass = ApplicantGender.class)
     private String gender;
 
     @NotNull
@@ -74,11 +75,12 @@ public class ApplicantDto {
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     private String dateOfBirth;
     private Integer numberOfAdultDependants;
+
     @Schema(description = "number of dependants under 16 years old")
     private Integer numberOfChildDependants;
 
-    @Schema(implementation = ResidentialStatus.class, description = "If residential status value is not in the enum list, use best match e.g. Private Tenant map to 'Owner Occupier'")
-    @EnumValue(enumClass = ResidentialStatus.class)
+    @Schema(implementation = ApplicantResidentialStatus.class, description = "If residential status value is not in the enum list, use best match e.g. Private Tenant map to 'Owner Occupier'")
+    @EnumValue(enumClass = ApplicantResidentialStatus.class)
     private String residentialStatus;
 
     private Boolean applicant2LivesWithApplicant1;
@@ -92,56 +94,4 @@ public class ApplicantDto {
     @NotNull
     @Valid
     private IncomeDto income;
-
-    enum Title {
-        MR("Mr."),
-        MRS("Mrs."),
-        MISS("Miss"),
-        MS("Ms."),
-        DR("Dr."),
-        OTHER("Other");
-
-        final String value;
-
-        Title(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
-
-    enum Gender {
-        MALE("Male"),
-        FEMALE("Female"),
-        OTHER("Other");
-
-        final String value;
-
-        Gender(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
-
-    enum ResidentialStatus {
-        OWNER("Owner"),
-        OWNER_OCCUPIER("Owner Occupier");
-        final String value;
-
-        ResidentialStatus(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
 }

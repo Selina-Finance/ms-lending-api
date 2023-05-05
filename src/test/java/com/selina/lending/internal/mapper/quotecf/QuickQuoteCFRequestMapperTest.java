@@ -15,10 +15,10 @@ public class QuickQuoteCFRequestMapperTest extends MapperBase {
     @Test
     void shouldMapToFilteredQuickQuoteApplicationRequest() {
         //Given
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        var quickQuoteCFApplicationRequest = getQuickQuoteCFApplicationRequestDto();
 
         //When
-        QuickQuoteCFRequest applicationRequest = QuickQuoteCFRequestMapper.INSTANCE.mapToQuickQuoteCFRequest(quickQuoteApplicationRequest);
+        QuickQuoteCFRequest applicationRequest = QuickQuoteCFRequestMapper.INSTANCE.mapToQuickQuoteCFRequest(quickQuoteCFApplicationRequest);
 
         //Then
         assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
