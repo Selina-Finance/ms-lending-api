@@ -5,7 +5,7 @@ import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.Offer;
 import com.selina.lending.internal.service.application.domain.quote.Product;
-import com.selina.lending.internal.service.application.domain.quote.middleware.MiddlewareCreateApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -17,7 +17,7 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {QuickQuoteApplicantMapper.class, LoanInformationMapper.class, TokenService.class})
-public abstract class MiddlewareCreateApplicationRequestMapper {
+public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
 
     @Autowired
     protected TokenService tokenService;
@@ -36,8 +36,8 @@ public abstract class MiddlewareCreateApplicationRequestMapper {
     @Mapping(target = "hasGivenConsentForMarketingCommunications", constant = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS)
     @Mapping(target = "fees", expression = "java(this.createDefaultFees())")
     @Mapping(target = "offers", source = "products")
-    public abstract MiddlewareCreateApplicationRequest mapToMiddlewareCreateApplicationRequest(QuickQuoteApplicationRequest request,
-                                                                                               List<Product> products);
+    public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
+                                                             List<Product> products);
 
     Fees createDefaultFees() {
         return Fees.builder()

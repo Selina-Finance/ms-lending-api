@@ -8,7 +8,7 @@ import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.*;
 import com.selina.lending.internal.service.application.domain.quote.Product;
-import com.selina.lending.internal.service.application.domain.quote.middleware.MiddlewareCreateApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class MiddlewareCreateApplicationRequestMapperTest extends MapperBase {
+public class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
 
     private static final String SOURCE_ACCOUNT = "Source account";
     private static final String LENDING_API_SOURCE = "LendingAPI";
@@ -34,7 +34,7 @@ public class MiddlewareCreateApplicationRequestMapperTest extends MapperBase {
     private TokenService tokenService;
 
     @Autowired
-    private MiddlewareCreateApplicationRequestMapper mapper;
+    private MiddlewareQuickQuoteApplicationRequestMapper mapper;
 
     @Test
     void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
@@ -44,8 +44,8 @@ public class MiddlewareCreateApplicationRequestMapperTest extends MapperBase {
         List<Product> products = List.of(getProduct());
 
         //When
-        MiddlewareCreateApplicationRequest middlewareCreateApplicationEvent =
-                mapper.mapToMiddlewareCreateApplicationRequest(quickQuoteApplicationRequest, products);
+        QuickQuoteRequest middlewareCreateApplicationEvent =
+                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products);
 
         //Then
         assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));

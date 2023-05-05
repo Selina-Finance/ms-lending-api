@@ -25,7 +25,7 @@ import com.selina.lending.internal.service.application.domain.ApplicationDecisio
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
-import com.selina.lending.internal.service.application.domain.quote.middleware.MiddlewareCreateApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import feign.FeignException;
@@ -81,7 +81,7 @@ class MiddlewareRepositoryTest {
     private QuickQuoteCFResponse quickQuoteCFResponse;
 
     @Mock
-    private MiddlewareCreateApplicationRequest middlewareCreateApplicationRequest;
+    private QuickQuoteRequest quickQuoteRequest;
 
     private MiddlewareRepository middlewareRepository;
 
@@ -354,10 +354,10 @@ class MiddlewareRepositoryTest {
         // Given
 
         // When
-        middlewareRepository.createQuickQuoteAggregator(middlewareCreateApplicationRequest);
+        middlewareRepository.createQuickQuoteApplication(quickQuoteRequest);
 
         // Then
-        verify(middlewareApi, times(1)).createQuickQuoteAggregator(middlewareCreateApplicationRequest);
+        verify(middlewareApi, times(1)).createQuickQuoteApplication(quickQuoteRequest);
     }
 
     @Test
@@ -367,14 +367,14 @@ class MiddlewareRepositoryTest {
         var id = UUID.randomUUID().toString();
 
         doThrow(new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
-                errorMsg.getBytes(), null)).when(middlewareApi).createQuickQuoteAggregator(middlewareCreateApplicationRequest);
+                errorMsg.getBytes(), null)).when(middlewareApi).createQuickQuoteApplication(quickQuoteRequest);
         //When
         var exception = assertThrows(FeignException.FeignServerException.class,
-                () -> middlewareRepository.createQuickQuoteAggregator(middlewareCreateApplicationRequest));
+                () -> middlewareRepository.createQuickQuoteApplication(quickQuoteRequest));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
-        verify(middlewareApi, times(1)).createQuickQuoteAggregator(middlewareCreateApplicationRequest);
+        verify(middlewareApi, times(1)).createQuickQuoteApplication(quickQuoteRequest);
     }
 
 

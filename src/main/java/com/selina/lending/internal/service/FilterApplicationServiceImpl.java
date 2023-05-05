@@ -19,7 +19,7 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapper;
-import com.selina.lending.internal.mapper.quote.middleware.MiddlewareCreateApplicationRequestMapper;
+import com.selina.lending.internal.mapper.quote.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
@@ -30,14 +30,14 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String ACCEPTED_DECISION = "Accepted";
 
-    private final MiddlewareCreateApplicationRequestMapper createApplicationRequestMapper;
+    private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionServiceRepository selectionServiceRepository;
     private final MiddlewareRepository middlewareRepository;
 
-    public FilterApplicationServiceImpl(MiddlewareCreateApplicationRequestMapper createApplicationRequestMapper,
+    public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionServiceRepository selectionServiceRepository,
                                         MiddlewareRepository middlewareRepository) {
-        this.createApplicationRequestMapper = createApplicationRequestMapper;
+        this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionServiceRepository = selectionServiceRepository;
         this.middlewareRepository = middlewareRepository;
     }
@@ -49,8 +49,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
         if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
                 && decisionResponse.getProducts() != null) {
-            middlewareRepository.createQuickQuoteAggregator(
-                    createApplicationRequestMapper.mapToMiddlewareCreateApplicationRequest(request, decisionResponse.getProducts()));
+            middlewareRepository.createQuickQuoteApplication(
+                    middlewareQuickQuoteApplicationRequestMapper.mapToQuickQuoteRequest(request, decisionResponse.getProducts()));
         }
         return decisionResponse;
     }

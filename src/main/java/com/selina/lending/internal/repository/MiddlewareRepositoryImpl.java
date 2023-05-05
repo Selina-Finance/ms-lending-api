@@ -19,7 +19,7 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
-import com.selina.lending.internal.service.application.domain.quote.middleware.MiddlewareCreateApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.springframework.core.io.Resource;
@@ -128,9 +128,9 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApi.downloadEsisByAppId(id);
     }
 
-    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiCreateQuickQuoteAggregatorFallback")
-    public void createQuickQuoteAggregator(MiddlewareCreateApplicationRequest applicationRequest){
-        middlewareApi.createQuickQuoteAggregator(applicationRequest);
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiCreateQuickQuoteFallback")
+    public void createQuickQuoteApplication(QuickQuoteRequest applicationRequest){
+        middlewareApi.createQuickQuoteApplication(applicationRequest);
     }
 
     private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR
@@ -156,7 +156,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         throw remoteResourceProblemException(e);
     }
 
-    private void middlewareApiCreateQuickQuoteAggregatorFallback(CallNotPermittedException e) { //NOSONAR
+    private void middlewareApiCreateQuickQuoteFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 

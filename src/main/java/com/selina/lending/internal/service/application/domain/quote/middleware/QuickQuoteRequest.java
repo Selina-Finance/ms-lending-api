@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class MiddlewareCreateApplicationRequest {
+public class QuickQuoteRequest {
 
     private String externalApplicationId;
     private String sourceAccount;

@@ -20,7 +20,7 @@ package com.selina.lending.internal.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
-import com.selina.lending.internal.service.application.domain.quote.middleware.MiddlewareCreateApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -69,5 +69,5 @@ public interface MiddlewareApi {
     ApplicationResponse checkAffordability(@PathVariable("id") String id);
 
     @PostMapping(path = "/quote_aggregator?async=true", consumes = APPLICATION_JSON_VALUE)
-    void createQuickQuoteAggregator(MiddlewareCreateApplicationRequest applicationRequest);
+    void createQuickQuoteApplication(QuickQuoteRequest applicationRequest);
 }
