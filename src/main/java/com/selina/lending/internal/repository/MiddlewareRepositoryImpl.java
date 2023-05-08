@@ -130,7 +130,7 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiCreateQuickQuoteFallback")
     public void createQuickQuoteApplication(QuickQuoteRequest applicationRequest){
-        log.debug("Create QQ application [externalApplicationId={}]", applicationRequest.getExternalApplicationId());
+        log.info("Create QQ application [externalApplicationId={}]", applicationRequest.getExternalApplicationId());
         middlewareApi.createQuickQuoteApplication(applicationRequest);
     }
 
