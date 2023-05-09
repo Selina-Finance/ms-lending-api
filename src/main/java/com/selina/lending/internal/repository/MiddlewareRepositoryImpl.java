@@ -19,6 +19,7 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
+import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.springframework.core.io.Resource;
@@ -127,6 +128,12 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApi.downloadEsisByAppId(id);
     }
 
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiCreateQuickQuoteFallback")
+    public void createQuickQuoteApplication(QuickQuoteRequest applicationRequest){
+        log.info("Create QQ application [externalApplicationId={}]", applicationRequest.getExternalApplicationId());
+        middlewareApi.createQuickQuoteApplication(applicationRequest);
+    }
+
     private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
@@ -147,6 +154,10 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         throw remoteResourceProblemException(e);
     }
     private Resource middlewareEsisApiFallback(CallNotPermittedException e) { //NOSONAR
+        throw remoteResourceProblemException(e);
+    }
+
+    private void middlewareApiCreateQuickQuoteFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 

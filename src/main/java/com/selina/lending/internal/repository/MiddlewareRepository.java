@@ -19,6 +19,7 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
+import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.springframework.core.io.Resource;
@@ -45,5 +46,7 @@ public interface MiddlewareRepository {
     void patchApplication(String id, ApplicationRequest applicationRequest);
 
     ApplicationResponse checkAffordability(String id);
+
+    void createQuickQuoteApplication(QuickQuoteRequest applicationRequest);
 }
 

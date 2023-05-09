@@ -23,7 +23,7 @@ import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 import org.junit.jupiter.api.Test;

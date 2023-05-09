@@ -15,16 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.quote;
+package com.selina.lending.internal.service.application.domain.quote.selection;
 
-import java.util.List;
-
+import com.selina.lending.internal.service.application.domain.quote.Application;
+import com.selina.lending.internal.service.application.domain.quote.Options;
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
-public class FilteredQuickQuoteDecisionResponse {
-    String decision;
-    List<Product> products;
+public class FilterQuickQuoteApplicationRequest {
+
+    private Application application;
+    private Options options;
 }

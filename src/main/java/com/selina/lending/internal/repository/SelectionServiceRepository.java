@@ -17,8 +17,8 @@
 
 package com.selina.lending.internal.repository;
 
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 
 public interface SelectionServiceRepository {
     FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request);

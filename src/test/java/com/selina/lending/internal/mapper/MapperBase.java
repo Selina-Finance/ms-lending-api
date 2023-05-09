@@ -95,7 +95,7 @@ import com.selina.lending.internal.service.application.domain.Underwriting;
 import com.selina.lending.internal.service.application.domain.User;
 import com.selina.lending.internal.service.application.domain.VotersRoll;
 import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
@@ -181,6 +181,7 @@ public abstract class MapperBase {
     public static final String OFFER_DECISION_ACCEPT = "Accept";
     public static final String OFFER_DECISION_DECLINE = "Decline";
     public static final String OFFER_VARIABLE_RATE_50_LTV = "Variable Rate - 50% LTV";
+    public static final String OFFER_VARIANT = "2 Year Fixed";
     public static final Double TOTAL_AMOUNT_REPAID = 60352.20;
     public static final Double PROC_FEE = 123.45;
     public static final Double PRODUCT_FEE = 651.1;
@@ -840,6 +841,7 @@ public abstract class MapperBase {
                 .ercProfile(ERC_PROFILE)
                 .ercShortCode(ERC_SHORT_CODE)
                 .name(OFFER_VARIABLE_RATE_50_LTV)
+                .variant(OFFER_VARIANT)
                 .offer(getProductOffer())
                 .build();
     }

@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 import com.selina.lending.internal.api.SelectionServiceApi;
 import com.selina.lending.internal.dto.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.quote.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Source;
 import com.selina.lending.internal.service.application.domain.quote.SourceAccount;
 
