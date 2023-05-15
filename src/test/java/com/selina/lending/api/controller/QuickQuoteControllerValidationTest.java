@@ -22,6 +22,7 @@ import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
+import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,9 @@ class QuickQuoteControllerValidationTest extends MapperBase {
 
     @MockBean
     private CreateApplicationService createApplicationService;
+
+    @MockBean
+    private TokenService tokenService;
 
     @Nested
     class QuickQuoteApplication {

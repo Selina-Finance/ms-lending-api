@@ -18,19 +18,21 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
+import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Objects;
@@ -38,6 +40,7 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,8 +50,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class QuickQuoteControllerTest {
-
-    @InjectMocks
     private QuickQuoteController quickQuoteController;
 
     @Mock
@@ -57,8 +58,10 @@ class QuickQuoteControllerTest {
     @Mock
     private CreateApplicationService createApplicationService;
 
-    @Spy
-    private ApplicationResponseEnricher applicationResponseEnricher = new ApplicationResponseEnricher("");
+    @Mock
+    private TokenService tokenService;
+
+    private ApplicationResponseEnricher applicationResponseEnricher;
 
     @Mock
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
@@ -71,6 +74,19 @@ class QuickQuoteControllerTest {
 
     @Mock
     private QuickQuoteCFResponse quickQuoteCFResponse;
+
+    private static final String QUICK_QUOTE_URL = "https://mf-quick-quote";
+
+    private static final String APPLY_URL_REGEX = String.format("^%s?externalApplicationId=\\.+&productCode=\\.+&source=\\.+",
+            QUICK_QUOTE_URL);
+
+    @BeforeEach
+    void setUp() {
+        applicationResponseEnricher = Mockito.spy(new ApplicationResponseEnricher("https://mf-quick-quote", tokenService));
+
+        quickQuoteController = new QuickQuoteController(filterApplicationService, createApplicationService,
+                applicationResponseEnricher);
+    }
 
     @Test
     void createQuickQuoteApplication() {
@@ -86,6 +102,10 @@ class QuickQuoteControllerTest {
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
         verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
+
+        for (ProductOfferDto offer : Objects.requireNonNull(response.getBody()).getOffers()) {
+            assertThat(offer.getApplyUrl(), matchesPattern(APPLY_URL_REGEX));
+        }
     }
 
     @Test
@@ -118,6 +138,10 @@ class QuickQuoteControllerTest {
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
         verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
+
+        for (ProductOfferDto offer : Objects.requireNonNull(response.getBody()).getOffers()) {
+            assertThat(offer.getApplyUrl(), matchesPattern(APPLY_URL_REGEX));
+        }
     }
 
     @Test
