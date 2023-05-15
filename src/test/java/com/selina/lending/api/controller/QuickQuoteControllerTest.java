@@ -25,9 +25,11 @@ import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
 import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
+import com.selina.lending.testHelper.ProductHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,12 +37,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -77,12 +84,9 @@ class QuickQuoteControllerTest {
 
     private static final String QUICK_QUOTE_URL = "https://mf-quick-quote";
 
-    private static final String APPLY_URL_REGEX = String.format("^%s?externalApplicationId=\\.+&productCode=\\.+&source=\\.+",
-            QUICK_QUOTE_URL);
-
     @BeforeEach
     void setUp() {
-        applicationResponseEnricher = Mockito.spy(new ApplicationResponseEnricher("https://mf-quick-quote", tokenService));
+        applicationResponseEnricher = Mockito.spy(new ApplicationResponseEnricher(QUICK_QUOTE_URL, tokenService));
 
         quickQuoteController = new QuickQuoteController(filterApplicationService, createApplicationService,
                 applicationResponseEnricher);
@@ -94,6 +98,8 @@ class QuickQuoteControllerTest {
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
         when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(productListDouble());
+        when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
         //When
         var response = quickQuoteController.createQuickQuoteApplication(quickQuoteApplicationRequest);
@@ -101,11 +107,9 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
+        assertThat(Objects.requireNonNull(response.getBody()).getOffers(), not(empty()));
+        assertOffersApplyUrlHasExpectedFormat(Objects.requireNonNull(response.getBody()).getOffers());
         verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
-
-        for (ProductOfferDto offer : Objects.requireNonNull(response.getBody()).getOffers()) {
-            assertThat(offer.getApplyUrl(), matchesPattern(APPLY_URL_REGEX));
-        }
     }
 
     @Test
@@ -130,6 +134,8 @@ class QuickQuoteControllerTest {
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
         when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(productListDouble());
+        when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
         //When
         var response = quickQuoteController.updateQuickQuoteApplication(id, quickQuoteApplicationRequest);
@@ -137,11 +143,9 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
+        assertThat(Objects.requireNonNull(response.getBody()).getOffers(), not(empty()));
+        assertOffersApplyUrlHasExpectedFormat(Objects.requireNonNull(response.getBody()).getOffers());
         verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
-
-        for (ProductOfferDto offer : Objects.requireNonNull(response.getBody()).getOffers()) {
-            assertThat(offer.getApplyUrl(), matchesPattern(APPLY_URL_REGEX));
-        }
     }
 
     @Test
@@ -156,5 +160,27 @@ class QuickQuoteControllerTest {
 
         //Then
         assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application anyId"));
+    }
+
+    private List<Product> productListDouble() {
+        List<Product> list = new ArrayList<>();
+
+        for (var i = 0; i < 15; i++) {
+            list.add(Product.builder()
+                    .code(ProductHelper.getRandomProductCode())
+                    .build()
+            );
+        }
+
+        return list;
+    }
+
+    private void assertOffersApplyUrlHasExpectedFormat(Collection<ProductOfferDto> productOffers) {
+        final String APPLY_URL_REGEX = String.format("^%s\\?externalApplicationId=.+&productCode=.+&source=.+$",
+                QUICK_QUOTE_URL);
+
+        for (ProductOfferDto offer : productOffers) {
+            assertThat(offer.getApplyUrl(), matchesPattern(APPLY_URL_REGEX));
+        }
     }
 }
