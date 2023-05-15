@@ -2,18 +2,25 @@ package com.selina.lending.internal.enricher;
 
 import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import com.selina.lending.internal.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class ApplicationResponseEnricher {
 
     private final String quickQuoteBaseUrl;
+    private final TokenService tokenService;
 
-    public ApplicationResponseEnricher(@Value(value = "${quickquote.web.url}") String quickQuoteBaseUrl) {
+    public ApplicationResponseEnricher(@Value(value = "${quickquote.web.url}") String quickQuoteBaseUrl,
+            TokenService tokenService) {
         this.quickQuoteBaseUrl = quickQuoteBaseUrl;
+        this.tokenService = tokenService;
     }
 
     public void enrichQuickQuoteResponseWithExternalApplicationId(QuickQuoteResponse response, String externalApplicationId) {
@@ -31,8 +38,15 @@ public class ApplicationResponseEnricher {
         }
     }
 
-    private String quickQuoteProductOffersApplyUrlBuilder(String externalApplicationId, String productCode){
-        return String.format("%s?externalApplicationId=%s&offerCode=%s", this.quickQuoteBaseUrl, externalApplicationId, productCode);
+    private String quickQuoteProductOffersApplyUrlBuilder(String externalApplicationId, String productCode) {
+        String clientId = tokenService.retrieveClientId();
+        return UriComponentsBuilder.fromHttpUrl(quickQuoteBaseUrl)
+                .queryParamIfPresent("externalApplicationId", Optional.ofNullable(externalApplicationId))
+                .queryParamIfPresent("productCode", Optional.ofNullable(productCode))
+                .queryParamIfPresent("source", Optional.ofNullable(clientId))
+                .encode()
+                .build()
+                .toString();
     }
 
 }

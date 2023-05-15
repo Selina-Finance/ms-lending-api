@@ -18,26 +18,37 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
+import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.internal.service.application.domain.quote.Product;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
+import com.selina.lending.testHelper.ProductHelper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.matchesPattern;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,8 +58,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class QuickQuoteControllerTest {
-
-    @InjectMocks
     private QuickQuoteController quickQuoteController;
 
     @Mock
@@ -57,8 +66,10 @@ class QuickQuoteControllerTest {
     @Mock
     private CreateApplicationService createApplicationService;
 
-    @Spy
-    private ApplicationResponseEnricher applicationResponseEnricher = new ApplicationResponseEnricher("");
+    @Mock
+    private TokenService tokenService;
+
+    private ApplicationResponseEnricher applicationResponseEnricher;
 
     @Mock
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
@@ -72,12 +83,24 @@ class QuickQuoteControllerTest {
     @Mock
     private QuickQuoteCFResponse quickQuoteCFResponse;
 
+    private static final String QUICK_QUOTE_URL = "https://mf-quick-quote";
+
+    @BeforeEach
+    void setUp() {
+        applicationResponseEnricher = Mockito.spy(new ApplicationResponseEnricher(QUICK_QUOTE_URL, tokenService));
+
+        quickQuoteController = new QuickQuoteController(filterApplicationService, createApplicationService,
+                applicationResponseEnricher);
+    }
+
     @Test
     void createQuickQuoteApplication() {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
         when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(buildProductList());
+        when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
         //When
         var response = quickQuoteController.createQuickQuoteApplication(quickQuoteApplicationRequest);
@@ -85,6 +108,8 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
+        assertThat(Objects.requireNonNull(response.getBody()).getOffers(), not(empty()));
+        assertOffersApplyUrlHasExpectedFormat(Objects.requireNonNull(response.getBody()).getOffers());
         verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
     }
 
@@ -110,6 +135,8 @@ class QuickQuoteControllerTest {
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
         when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(buildProductList());
+        when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
         //When
         var response = quickQuoteController.updateQuickQuoteApplication(id, quickQuoteApplicationRequest);
@@ -117,6 +144,8 @@ class QuickQuoteControllerTest {
         //Then
         assertNotNull(response);
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
+        assertThat(Objects.requireNonNull(response.getBody()).getOffers(), not(empty()));
+        assertOffersApplyUrlHasExpectedFormat(Objects.requireNonNull(response.getBody()).getOffers());
         verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
     }
 
@@ -132,5 +161,24 @@ class QuickQuoteControllerTest {
 
         //Then
         assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application anyId"));
+    }
+
+    private List<Product> buildProductList() {
+        List<Product> list = new ArrayList<>();
+        IntStream.range(0, 15).forEach(count -> list.add(Product.builder()
+                .code(ProductHelper.getRandomProductCode())
+                .build()
+        ));
+
+        return list;
+    }
+
+    private void assertOffersApplyUrlHasExpectedFormat(Collection<ProductOfferDto> productOffers) {
+        final String APPLY_URL_REGEX = String.format("^%s\\?externalApplicationId=.+&productCode=.+&source=.+$",
+                QUICK_QUOTE_URL);
+
+        for (ProductOfferDto offer : productOffers) {
+            assertThat(offer.getApplyUrl(), matchesPattern(APPLY_URL_REGEX));
+        }
     }
 }
