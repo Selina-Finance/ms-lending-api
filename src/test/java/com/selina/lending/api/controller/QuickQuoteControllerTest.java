@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -98,7 +99,7 @@ class QuickQuoteControllerTest {
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
         when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
-        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(productListDouble());
+        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(buildProductList());
         when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
         //When
@@ -134,7 +135,7 @@ class QuickQuoteControllerTest {
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
         when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
-        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(productListDouble());
+        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(buildProductList());
         when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
         //When
@@ -162,15 +163,12 @@ class QuickQuoteControllerTest {
         assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application anyId"));
     }
 
-    private List<Product> productListDouble() {
+    private List<Product> buildProductList() {
         List<Product> list = new ArrayList<>();
-
-        for (var i = 0; i < 15; i++) {
-            list.add(Product.builder()
-                    .code(ProductHelper.getRandomProductCode())
-                    .build()
-            );
-        }
+        IntStream.range(0, 15).forEach(count -> list.add(Product.builder()
+                .code(ProductHelper.getRandomProductCode())
+                .build()
+        ));
 
         return list;
     }
