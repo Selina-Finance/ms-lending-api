@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.service;
 
+import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapper;
 import com.selina.lending.internal.mapper.quote.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
@@ -24,6 +25,8 @@ import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class FilterApplicationServiceImpl implements FilterApplicationService {
@@ -49,9 +52,24 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
         if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
                 && decisionResponse.getProducts() != null) {
+            setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
             middlewareRepository.createQuickQuoteApplication(
                     middlewareQuickQuoteApplicationRequestMapper.mapToQuickQuoteRequest(request, decisionResponse.getProducts()));
         }
         return decisionResponse;
+    }
+
+    private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
+        if(haveNotPrimaryApplicant(request.getApplicants())){
+            request.getApplicants().stream().findFirst()
+                    .ifPresent(quickQuoteApplicant -> quickQuoteApplicant.setPrimaryApplicant(true));
+        }
+    }
+
+    private boolean haveNotPrimaryApplicant(List<QuickQuoteApplicantDto> quickQuoteApplicants){
+        return quickQuoteApplicants
+                .stream()
+                .noneMatch(quickQuoteApplicant -> quickQuoteApplicant.getPrimaryApplicant() != null
+                        && quickQuoteApplicant.getPrimaryApplicant());
     }
 }
