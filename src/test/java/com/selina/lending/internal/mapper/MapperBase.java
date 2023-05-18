@@ -103,8 +103,10 @@ import com.selina.lending.internal.service.application.domain.quotecf.QuickQuote
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public abstract class MapperBase {
     public static final String TITLE = "Mrs.";
@@ -328,16 +330,26 @@ public abstract class MapperBase {
                 .employment(getEmploymentDto())
                 .build();
     }
-
     protected QuickQuoteApplicationRequest getQuickQuoteApplicationRequestDto() {
+        return getQuickQuoteApplicationRequestDto(1);
+    }
+
+    protected QuickQuoteApplicationRequest getQuickQuoteApplicationRequestDto(int numberOfApplicants) {
         return QuickQuoteApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getLoanInformationDto())
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
-                .applicants(List.of(getQuickQuoteApplicantDto()))
+                .applicants(getListQuickQuoteApplicantDto(numberOfApplicants))
                 .lead(getLeadDto())
                 .build();
+    }
+
+    private List<QuickQuoteApplicantDto> getListQuickQuoteApplicantDto(int numberOfApplicants) {
+        List<QuickQuoteApplicantDto> list = new ArrayList<>();
+        IntStream.range(0, numberOfApplicants)
+                .forEach(count -> list.add(getQuickQuoteApplicantDto()));
+        return list;
     }
 
     protected UpdateCreditCommitmentsRequest getUpdateCreditCommitmentsRequest() {
