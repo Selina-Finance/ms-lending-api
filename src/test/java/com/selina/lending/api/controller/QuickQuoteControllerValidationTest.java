@@ -128,6 +128,243 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(content().contentType(APPLICATION_JSON));
 
         }
+
+        @Test
+        void whenCreateApplicationWithoutApplicantsThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.setApplicants(null);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+
+        }
+
+        @Test
+        void whenCreateApplicationWithApplicantsListEmptyThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().clear();
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("applicants is required, min = 1, max = 2"));
+        }
+
+
+        @Test
+        void whenCreateApplicationWithNullApplicantsThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(null);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[1]"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+        }
+
+        @Test
+        void whenCreateApplicationWithoutApplicantPrimaryApplicantThenReturnOkResponse() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().get(0).setPrimaryApplicant(null);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(APPLICATION_JSON));
+
+        }
+
+        @Test
+        void whenCreateApplicationWithOneApplicantPrimaryApplicantThenReturnOkResponse() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().get(0).setPrimaryApplicant(true);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(APPLICATION_JSON));
+
+        }
+        @Test
+        void whenCreateApplicationWithOneApplicantPrimaryApplicantFalseThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().get(0).setPrimaryApplicant(false);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must have one primary applicant"));
+
+        }
+
+        @Test
+        void whenCreateApplicationWithOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantFalseThenReturnOkResponse() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
+            request.getApplicants().get(0).setPrimaryApplicant(true);
+            request.getApplicants().get(1).setPrimaryApplicant(false);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(APPLICATION_JSON));
+        }
+
+        @Test
+        void whenCreateApplicationWithOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantNullThenReturnOkResponse() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
+            request.getApplicants().get(0).setPrimaryApplicant(true);
+            request.getApplicants().get(1).setPrimaryApplicant(null);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(APPLICATION_JSON));
+        }
+
+        @Test
+        void whenCreateApplicationWithTwoApplicantPrimaryApplicantNullThenReturnOkResponse() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
+            request.getApplicants().get(0).setPrimaryApplicant(null);
+            request.getApplicants().get(1).setPrimaryApplicant(null);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(APPLICATION_JSON));
+        }
+
+        @Test
+        void whenCreateApplicationWithTwoApplicantPrimaryApplicantTrueThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
+            request.getApplicants().get(0).setPrimaryApplicant(true);
+            request.getApplicants().get(1).setPrimaryApplicant(true);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must have one primary applicant"));
+        }
+
+        @Test
+        void whenCreateApplicationWithOneApplicantPrimaryApplicantNullAndOneApplicantPrimaryApplicantFalseThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
+            request.getApplicants().get(0).setPrimaryApplicant(false);
+            request.getApplicants().get(1).setPrimaryApplicant(null);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must have one primary applicant"));
+        }
+
+        @Test
+        void whenCreateApplicationWithTwoApplicantPrimaryApplicantFalseThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
+            request.getApplicants().get(0).setPrimaryApplicant(false);
+            request.getApplicants().get(1).setPrimaryApplicant(false);
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must have one primary applicant"));
+        }
+
     }
 
     @Nested

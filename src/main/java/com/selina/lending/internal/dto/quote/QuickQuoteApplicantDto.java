@@ -102,4 +102,6 @@ public class QuickQuoteApplicantDto {
     @NotNull
     @Valid
     private IncomeDto income;
+
+    Boolean primaryApplicant;
 }

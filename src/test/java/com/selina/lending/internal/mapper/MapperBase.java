@@ -103,6 +103,7 @@ import com.selina.lending.internal.service.application.domain.quotecf.QuickQuote
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -335,9 +336,15 @@ public abstract class MapperBase {
                 .expenditure(List.of(getExpenditureDto()))
                 .loanInformation(getLoanInformationDto())
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
-                .applicants(List.of(getQuickQuoteApplicantDto()))
+                .applicants(getQuickQuoteApplicantDtoList())
                 .lead(getLeadDto())
                 .build();
+    }
+
+    private List<QuickQuoteApplicantDto> getQuickQuoteApplicantDtoList() {
+        List<QuickQuoteApplicantDto> list = new ArrayList<>();
+        list.add(getQuickQuoteApplicantDto());
+        return list;
     }
 
     protected UpdateCreditCommitmentsRequest getUpdateCreditCommitmentsRequest() {
