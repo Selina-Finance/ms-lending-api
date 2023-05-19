@@ -69,7 +69,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private boolean hasPrimaryApplicant(List<QuickQuoteApplicantDto> quickQuoteApplicants) {
         return quickQuoteApplicants
                 .stream()
-                .allMatch(quickQuoteApplicant -> quickQuoteApplicant.getPrimaryApplicant() != null
+                .anyMatch(quickQuoteApplicant -> quickQuoteApplicant.getPrimaryApplicant() != null
                         && quickQuoteApplicant.getPrimaryApplicant());
     }
 }
