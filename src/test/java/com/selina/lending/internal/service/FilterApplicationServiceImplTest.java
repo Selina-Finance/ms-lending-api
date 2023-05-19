@@ -150,7 +150,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantNullThenSecondApplicantPrimaryApplicantIsTrue() {
+    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
