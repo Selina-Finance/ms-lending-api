@@ -60,16 +60,16 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
-        if(hasNotPrimaryApplicant(request.getApplicants())) {
+        if(!hasPrimaryApplicant(request.getApplicants())) {
             request.getApplicants().stream().findFirst()
                     .ifPresent(quickQuoteApplicant -> quickQuoteApplicant.setPrimaryApplicant(true));
         }
     }
 
-    private boolean hasNotPrimaryApplicant(List<QuickQuoteApplicantDto> quickQuoteApplicants) {
+    private boolean hasPrimaryApplicant(List<QuickQuoteApplicantDto> quickQuoteApplicants) {
         return quickQuoteApplicants
                 .stream()
-                .noneMatch(quickQuoteApplicant -> quickQuoteApplicant.getPrimaryApplicant() != null
+                .allMatch(quickQuoteApplicant -> quickQuoteApplicant.getPrimaryApplicant() != null
                         && quickQuoteApplicant.getPrimaryApplicant());
     }
 }
