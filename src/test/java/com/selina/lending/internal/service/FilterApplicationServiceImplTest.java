@@ -84,7 +84,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantWithPrimaryApplicantNullThenApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantWithPrimaryApplicantNullThenApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
@@ -105,7 +105,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantWithPrimaryApplicantTrueThenApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantWithPrimaryApplicantTrueThenApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
@@ -126,7 +126,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantFalseThenApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantFalseThenApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
@@ -150,7 +150,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantNullThenSecondApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantNullThenSecondApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
@@ -174,7 +174,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantPrimaryApplicantNullAndOneApplicantPrimaryApplicantTrueThenSecondApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantPrimaryApplicantNullAndOneApplicantPrimaryApplicantTrueThenSecondApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
@@ -198,7 +198,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantPrimaryApplicantFalseAndOneApplicantPrimaryApplicantTrueThenSecondApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantPrimaryApplicantFalseAndOneApplicantPrimaryApplicantTrueThenSecondApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
@@ -222,7 +222,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveTwoApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue(){
+    void whenHaveTwoApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
