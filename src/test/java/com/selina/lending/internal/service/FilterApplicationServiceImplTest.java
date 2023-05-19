@@ -128,7 +128,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
     @Test
     void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantFalseThenApplicantPrimaryApplicantIsTrue(){
         // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto(2);
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                 .decision("Accepted")
                 .products(List.of(getProduct()))
@@ -151,7 +152,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
     @Test
     void whenHaveTwoApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue(){
         // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto(2);
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                 .decision("Accepted")
                 .products(List.of(getProduct()))

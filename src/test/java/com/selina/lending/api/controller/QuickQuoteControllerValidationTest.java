@@ -153,7 +153,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithApplicantsListEmptyThenReturnBadRequest() throws Exception {
             //Given
-            var request = getQuickQuoteApplicationRequestDto(0);
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().clear();
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -172,7 +173,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithNullApplicantsThenReturnBadRequest() throws Exception {
             //Given
-            var request = getQuickQuoteApplicationRequestDto(1);
+            var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().add(null);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
@@ -246,7 +247,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantFalseThenReturnOkResponse() throws Exception {
             //Given
-            var request = getQuickQuoteApplicationRequestDto(2);
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(false);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
@@ -263,7 +265,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantNullThenReturnOkResponse() throws Exception {
             //Given
-            var request = getQuickQuoteApplicationRequestDto(2);
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(null);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
@@ -280,7 +283,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithTwoApplicantPrimaryApplicantNullThenReturnOkResponse() throws Exception {
             //Given
-            var request = getQuickQuoteApplicationRequestDto(2);
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(null);
             request.getApplicants().get(1).setPrimaryApplicant(null);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
@@ -297,7 +301,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithTwoApplicantPrimaryApplicantTrueThenReturnBadRequest() throws Exception {
             //Given
-            var request = getQuickQuoteApplicationRequestDto(2);
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(true);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
@@ -318,7 +323,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithOneApplicantPrimaryApplicantNullAndOneApplicantPrimaryApplicantFalseThenReturnBadRequest() throws Exception {
             //Given
-            var request = getQuickQuoteApplicationRequestDto(2);
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(false);
             request.getApplicants().get(1).setPrimaryApplicant(null);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
@@ -339,7 +345,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithTwoApplicantPrimaryApplicantFalseThenReturnBadRequest() throws Exception {
             //Given
-            var request = getQuickQuoteApplicationRequestDto(2);
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(false);
             request.getApplicants().get(1).setPrimaryApplicant(false);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
