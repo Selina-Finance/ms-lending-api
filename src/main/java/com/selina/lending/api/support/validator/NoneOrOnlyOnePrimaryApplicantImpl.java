@@ -10,10 +10,10 @@ public class NoneOrOnlyOnePrimaryApplicantImpl implements ConstraintValidator<No
 
     @Override
     public boolean isValid(List<QuickQuoteApplicantDto> list, ConstraintValidatorContext context) {
-        if (list == null){
+        if (list == null) {
             return false;
         }
-        if (list.size() == 1){
+        if (list.size() == 1) {
             return validateOneApplicant(list.get(0));
         }
         return validateApplicantList(list);
@@ -25,19 +25,19 @@ public class NoneOrOnlyOnePrimaryApplicantImpl implements ConstraintValidator<No
     }
 
     private boolean validateApplicantList(List<QuickQuoteApplicantDto> list) {
-        if (haveOnlyOnePrimaryApplicant(list)){
+        if (hasOnlyOnePrimaryApplicant(list)){
             return true;
         }
-        return isAllApplicantPrimaryApplicantNull(list);
+        return doesAllApplicantsHavePrimaryApplicantNull(list);
     }
 
-    private boolean haveOnlyOnePrimaryApplicant(List<QuickQuoteApplicantDto> list){
+    private boolean hasOnlyOnePrimaryApplicant(List<QuickQuoteApplicantDto> list){
         return list.stream().filter(quickQuoteApplicantDto -> quickQuoteApplicantDto != null
                         && quickQuoteApplicantDto.getPrimaryApplicant() != null && quickQuoteApplicantDto.getPrimaryApplicant())
                 .count() == 1;
     }
 
-    private boolean isAllApplicantPrimaryApplicantNull(List<QuickQuoteApplicantDto> list) {
+    private boolean doesAllApplicantsHavePrimaryApplicantNull(List<QuickQuoteApplicantDto> list) {
         return list.stream().allMatch(quickQuoteApplicantDto -> quickQuoteApplicantDto != null &&
                 quickQuoteApplicantDto.getPrimaryApplicant() == null);
     }
