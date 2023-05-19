@@ -11,11 +11,13 @@ public class MaximumOnePrimaryApplicantImpl implements ConstraintValidator<Maxim
     @Override
     public boolean isValid(List<QuickQuoteApplicantDto> list, ConstraintValidatorContext context) {
         if (list == null) {
-            return false;
+            return true;
         }
+
         if (list.size() == 1) {
             return validateOneApplicant(list.get(0));
         }
+
         return validateApplicantList(list);
     }
 
@@ -38,7 +40,7 @@ public class MaximumOnePrimaryApplicantImpl implements ConstraintValidator<Maxim
     }
 
     private boolean doesAllApplicantsHavePrimaryApplicantNull(List<QuickQuoteApplicantDto> list) {
-        return list.stream().allMatch(quickQuoteApplicantDto -> quickQuoteApplicantDto != null &&
+        return list.stream().allMatch(quickQuoteApplicantDto -> quickQuoteApplicantDto == null ||
                 quickQuoteApplicantDto.getPrimaryApplicant() == null);
     }
 
