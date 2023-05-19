@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
-public class NoneOrOnlyOnePrimaryApplicantImpl implements ConstraintValidator<NoneOrOnlyOnePrimaryApplicant, List<QuickQuoteApplicantDto>> {
+public class MaximumOnePrimaryApplicantImpl implements ConstraintValidator<MaximumOnePrimaryApplicant, List<QuickQuoteApplicantDto>> {
 
     @Override
     public boolean isValid(List<QuickQuoteApplicantDto> list, ConstraintValidatorContext context) {

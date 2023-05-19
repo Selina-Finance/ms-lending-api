@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.selina.lending.api.support.validator.NoneOrOnlyOnePrimaryApplicant;
+import com.selina.lending.api.support.validator.MaximumOnePrimaryApplicant;
 import com.selina.lending.internal.dto.ApplicationRequest;
 import com.selina.lending.internal.dto.LeadDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
@@ -44,7 +44,7 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
     @NotNull
     @Size(message = "applicants is required, min = 1, max = 2", min = 1, max = 2)
     @Valid
-    @NoneOrOnlyOnePrimaryApplicant
+    @MaximumOnePrimaryApplicant
     private List<@NotNull QuickQuoteApplicantDto> applicants;
 
     @NotNull

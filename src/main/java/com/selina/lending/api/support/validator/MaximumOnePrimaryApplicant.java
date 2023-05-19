@@ -7,9 +7,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Documented
-@Constraint(validatedBy = NoneOrOnlyOnePrimaryApplicantImpl.class)
+@Constraint(validatedBy = MaximumOnePrimaryApplicantImpl.class)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NoneOrOnlyOnePrimaryApplicant {
+public @interface MaximumOnePrimaryApplicant {
 
     String message() default "must have one primary applicant";
     Class<?>[] groups() default {};

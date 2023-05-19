@@ -13,7 +13,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class NoneOrOnlyOnePrimaryApplicantImplTest {
+public class MaximumOnePrimaryApplicantImplTest {
 
     private static Validator validator;
 
