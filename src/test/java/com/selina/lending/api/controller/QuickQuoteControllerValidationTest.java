@@ -144,9 +144,9 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(2)))
-                    .andExpect(jsonPath("$.violations[1].field").value("applicants"))
-                    .andExpect(jsonPath("$.violations[1].message").value("must not be null"));
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
 
         }
 
@@ -170,6 +170,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.violations[0].message").value("applicants is required, min = 1, max = 2"));
         }
 
+
         @Test
         void whenCreateApplicationWithNullApplicantsThenReturnBadRequest() throws Exception {
             //Given
@@ -185,9 +186,9 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(2)))
-                    .andExpect(jsonPath("$.violations[1].field").value("applicants[1]"))
-                    .andExpect(jsonPath("$.violations[1].message").value("must not be null"));
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[1]"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
         }
 
         @Test
