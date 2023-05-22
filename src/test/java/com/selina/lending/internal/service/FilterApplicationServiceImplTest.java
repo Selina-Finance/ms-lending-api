@@ -84,7 +84,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantWithPrimaryApplicantNullThenApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantWithPrimaryApplicantNullThenApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
@@ -105,7 +105,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantWithPrimaryApplicantTrueThenApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantWithPrimaryApplicantTrueThenApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
@@ -126,7 +126,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantFalseThenApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantFalseThenApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
@@ -150,7 +150,79 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
-    void whenHaveTwoApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue(){
+    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue() {
+        // Given
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
+        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(true);
+        quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(null);
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Accepted")
+                .products(List.of(getProduct()))
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(middlewareQuickQuoteApplicationRequestMapper
+                .mapToQuickQuoteRequest(any(), any())).thenReturn(quickQuoteRequest);
+
+        // When
+        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        // Then
+        assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
+        assertNull(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+    }
+
+    @Test
+    void whenHaveOneApplicantPrimaryApplicantNullAndOneApplicantPrimaryApplicantTrueThenSecondApplicantPrimaryApplicantIsTrue() {
+        // Given
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
+        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(null);
+        quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(true);
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Accepted")
+                .products(List.of(getProduct()))
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(middlewareQuickQuoteApplicationRequestMapper
+                .mapToQuickQuoteRequest(any(), any())).thenReturn(quickQuoteRequest);
+
+        // When
+        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        // Then
+        assertNull(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
+        assertTrue(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+    }
+
+    @Test
+    void whenHaveOneApplicantPrimaryApplicantFalseAndOneApplicantPrimaryApplicantTrueThenSecondApplicantPrimaryApplicantIsTrue() {
+        // Given
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
+        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(false);
+        quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(true);
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Accepted")
+                .products(List.of(getProduct()))
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(middlewareQuickQuoteApplicationRequestMapper
+                .mapToQuickQuoteRequest(any(), any())).thenReturn(quickQuoteRequest);
+
+        // When
+        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        // Then
+        assertFalse(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
+        assertTrue(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+    }
+
+    @Test
+    void whenHaveTwoApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue() {
         // Given
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
