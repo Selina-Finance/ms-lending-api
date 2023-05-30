@@ -42,10 +42,11 @@ public class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         List<Product> products = List.of(getProduct());
+        Fees fees = Fees.builder().arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA).addArrangementFeeSelina(true).build();
 
         //When
         QuickQuoteRequest middlewareCreateApplicationEvent =
-                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products);
+                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
 
         //Then
         assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
@@ -101,6 +102,8 @@ public class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase
     private void assertFees(Fees fees) {
         Fees expectedFees = Fees.builder()
                 .isAddProductFeesToFacility(false)
+                .addArrangementFeeSelina(true)
+                .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
                 .build();
 
         assertThat(fees, equalTo(expectedFees));
