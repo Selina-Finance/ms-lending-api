@@ -46,6 +46,21 @@ public class TokenServiceImpl implements TokenService {
         }
     }
 
+    @Override
+    public String retrieveSourceType() {
+        return retrieveFromToken(LendingConstants.SOURCE_TYPE_JWT_CLAIM_NAME);
+    }
+
+    @Override
+    public Double retrieveArrangementFeeDiscountSelina() {
+        try{
+            return Double.parseDouble(retrieveFromToken(LendingConstants.ARRANGEMENT_FEE_DISCOUNT_SELINA_JWT_CLAIM_NAME));
+        }catch (NullPointerException | NumberFormatException ex){
+            // Request is coming from not a broker or aggregator
+            return null;
+        }
+    }
+
     private String retrieveFromToken(String property) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var jwt = (Jwt) authentication.getPrincipal();

@@ -21,4 +21,6 @@ public interface TokenService {
     String retrieveClientId();
     String retrieveSourceAccount();
     String retrievePartnerAccountId();
+    String retrieveSourceType();
+    Double retrieveArrangementFeeDiscountSelina();
 }
