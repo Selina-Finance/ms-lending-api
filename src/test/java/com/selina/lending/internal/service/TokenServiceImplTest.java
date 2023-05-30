@@ -29,12 +29,15 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TokenServiceImplTest {
     private static final String CLIENT_ID_VALUE = "the client id";
     private static final String SOURCE_ACCOUNT_VALUE = "source account";
+    private static final String SOURCE_TYPE_VALUE = "source type";
+    private static final Double ARRANGEMENT_FEE_DISCOUNT_SELINA_VALUE = 1.0;
 
     private final TokenService tokenService = new TokenServiceImpl();
 
@@ -62,7 +65,55 @@ class TokenServiceImplTest {
         assertThat(value, equalTo(SOURCE_ACCOUNT_VALUE));
     }
 
-    private void mockSecurity(String claimName, String claimValue) {
+    @Test
+    void retrieveSourceTypeReturnsSourceTypeSuccessfully() {
+        //Given
+        mockSecurity(LendingConstants.SOURCE_TYPE_JWT_CLAIM_NAME, SOURCE_TYPE_VALUE);
+
+        //When
+        var value = tokenService.retrieveSourceType();
+
+        //Then
+        assertThat(value, equalTo(SOURCE_TYPE_VALUE));
+    }
+
+    @Test
+    void retrieveArrangementFeeDiscountSelinaReturnsArrangementFeeDiscountSelinaSuccessfully() {
+        //Given
+        mockSecurity(LendingConstants.ARRANGEMENT_FEE_DISCOUNT_SELINA_JWT_CLAIM_NAME, "1.0");
+
+        //When
+        var value = tokenService.retrieveArrangementFeeDiscountSelina();
+
+        //Then
+        assertThat(value, equalTo(ARRANGEMENT_FEE_DISCOUNT_SELINA_VALUE));
+    }
+
+    @Test
+    void whenTokenClaimArrangementFeeDiscountSelinaIsNullThenArrangementFeeDiscountSelinaIsNull() {
+        //Given
+        mockSecurity(LendingConstants.ARRANGEMENT_FEE_DISCOUNT_SELINA_JWT_CLAIM_NAME, null);
+
+        //When
+        var value = tokenService.retrieveArrangementFeeDiscountSelina();
+
+        //Then
+        assertNull(value);
+    }
+
+    @Test
+    void whenTokenClaimArrangementFeeDiscountSelinaIsNotNumberThenArrangementFeeDiscountSelinaIsNull() {
+        //Given
+        mockSecurity(LendingConstants.ARRANGEMENT_FEE_DISCOUNT_SELINA_JWT_CLAIM_NAME, "Not Number");
+
+        //When
+        var value = tokenService.retrieveArrangementFeeDiscountSelina();
+
+        //Then
+        assertNull(value);
+    }
+
+    private void mockSecurity(String claimName, Object claimValue) {
         var authentication = Mockito.mock(Authentication.class);
         var jwt = Jwt.withTokenValue("abc").header("", "").claim(claimName, claimValue).build();
         when(authentication.getPrincipal()).thenReturn(jwt);
