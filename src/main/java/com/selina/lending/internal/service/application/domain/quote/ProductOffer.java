@@ -81,5 +81,6 @@ public class ProductOffer {
     Double minimumInitialDrawdown;
     Double offerValidity;
     Double esisLoanAmount;
+    Double arrangementFeeSelina;
     List<Erc> ercData;
 }

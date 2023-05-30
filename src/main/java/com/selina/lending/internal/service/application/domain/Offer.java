@@ -103,4 +103,5 @@ public class Offer {
     Double minimumInitialDrawdown;
     Double offerValidity;
     Double esisLoanAmount;
+    Double arrangementFeeSelina;
 }
