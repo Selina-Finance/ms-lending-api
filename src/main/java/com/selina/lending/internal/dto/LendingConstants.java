@@ -38,6 +38,11 @@ public final class LendingConstants {
     public static final String DECLINE_DECISION = "Decline";
 
     public static final String DIP_APPLICATION_TYPE = "DIP";
+
+    public static final String SOURCE_TYPE_JWT_CLAIM_NAME = "sourceType";
+
+    public static final String ARRANGEMENT_FEE_DISCOUNT_SELINA_JWT_CLAIM_NAME = "arrangementFeeDiscountSelina";
+
     private LendingConstants() {
 
     }
