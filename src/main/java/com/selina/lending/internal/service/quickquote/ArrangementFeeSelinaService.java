@@ -19,8 +19,8 @@ public class ArrangementFeeSelinaService {
 
     public Fees getFeesFromToken() {
         var sourceType = tokenService.retrieveSourceType();
-        var addArrangementFeeDiscountSelina = tokenService.retrieveArrangementFeeDiscountSelina();
-        if (sourceType == null || addArrangementFeeDiscountSelina == null) {
+        var arrangementFeeDiscountSelina = tokenService.retrieveArrangementFeeDiscountSelina();
+        if (sourceType == null || arrangementFeeDiscountSelina == null) {
             return Fees.builder().build();
         }
         return Fees.builder()
