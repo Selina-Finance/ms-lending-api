@@ -9,6 +9,7 @@ import com.selina.lending.internal.service.application.domain.quote.middleware.Q
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,14 +35,17 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
     @Mapping(target = "applicants", source = "request.applicants")
     @Mapping(target = "hasGivenConsentForMarketingCommunications", constant = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS)
-    @Mapping(target = "fees", expression = "java(this.createDefaultFees())")
+    @Mapping(target = "fees", source = "fees", qualifiedByName = "setDefaultFeesValues")
     @Mapping(target = "offers", source = "products")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
-                                                             List<Product> products);
+                                                             List<Product> products, Fees fees);
 
-    Fees createDefaultFees() {
+    @Named("setDefaultFeesValues")
+    Fees setDefaultFeesValues(Fees fees) {
         return Fees.builder()
                 .isAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY)
+                .addArrangementFeeSelina(fees.getAddArrangementFeeSelina())
+                .arrangementFeeDiscountSelina(fees.getArrangementFeeDiscountSelina())
                 .build();
     }
 
