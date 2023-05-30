@@ -23,7 +23,9 @@ import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapp
 import com.selina.lending.internal.mapper.quote.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.service.quickquote.ArrangementFeeSelinaService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,27 +38,35 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionServiceRepository selectionServiceRepository;
     private final MiddlewareRepository middlewareRepository;
+    private final ArrangementFeeSelinaService arrangementFeeService;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionServiceRepository selectionServiceRepository,
-                                        MiddlewareRepository middlewareRepository) {
+                                        MiddlewareRepository middlewareRepository,
+                                        ArrangementFeeSelinaService arrangementFeeService) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionServiceRepository = selectionServiceRepository;
         this.middlewareRepository = middlewareRepository;
+        this.arrangementFeeService = arrangementFeeService;
     }
 
     @Override
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
-        FilteredQuickQuoteDecisionResponse decisionResponse =
-                selectionServiceRepository.filter(QuickQuoteApplicationRequestMapper.mapRequest(request));
+        FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
+        addArrangementFeeSelina(selectionRequest);
+        FilteredQuickQuoteDecisionResponse decisionResponse = selectionServiceRepository.filter(selectionRequest);
 
         if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
                 && decisionResponse.getProducts() != null) {
             setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
-            middlewareRepository.createQuickQuoteApplication(
-                    middlewareQuickQuoteApplicationRequestMapper.mapToQuickQuoteRequest(request, decisionResponse.getProducts()));
+            middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
+                    .mapToQuickQuoteRequest(request, decisionResponse.getProducts(), selectionRequest.getApplication().getFees()));
         }
         return decisionResponse;
+    }
+
+    private void addArrangementFeeSelina(FilterQuickQuoteApplicationRequest selectionRequest) {
+        selectionRequest.getApplication().setFees(arrangementFeeService.getFeesFromToken());
     }
 
     private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
