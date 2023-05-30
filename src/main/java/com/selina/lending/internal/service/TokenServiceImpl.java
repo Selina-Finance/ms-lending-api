@@ -55,8 +55,8 @@ public class TokenServiceImpl implements TokenService {
     public Double retrieveArrangementFeeDiscountSelina() {
         try{
             return Double.parseDouble(retrieveFromToken(LendingConstants.ARRANGEMENT_FEE_DISCOUNT_SELINA_JWT_CLAIM_NAME));
-        }catch (NullPointerException | NumberFormatException ex){
-            // Request is coming from not a broker or aggregator
+        } catch (NullPointerException | NumberFormatException ex) {
+            // Request is not coming from a broker or aggregator
             return null;
         }
     }

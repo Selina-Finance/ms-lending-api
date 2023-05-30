@@ -17,10 +17,10 @@ public class ArrangementFeeSelinaService {
         this.tokenService = tokenService;
     }
 
-    public Fees getFeesFromToken(){
+    public Fees getFeesFromToken() {
         var sourceType = tokenService.retrieveSourceType();
         var addArrangementFeeDiscountSelina = tokenService.retrieveArrangementFeeDiscountSelina();
-        if (sourceType == null || addArrangementFeeDiscountSelina == null){
+        if (sourceType == null || addArrangementFeeDiscountSelina == null) {
             return Fees.builder().build();
         }
         return Fees.builder()
@@ -28,7 +28,7 @@ public class ArrangementFeeSelinaService {
                 .arrangementFeeDiscountSelina(getArrangementFeeDiscountSelina()).build();
     }
 
-    private Double getArrangementFeeDiscountSelina(){
+    private Double getArrangementFeeDiscountSelina() {
         return Optional.ofNullable(tokenService.retrieveArrangementFeeDiscountSelina())
                 .orElse(1.0);
     }
