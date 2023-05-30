@@ -19,6 +19,7 @@ package com.selina.lending.internal.service.application.domain.quote;
 
 import java.util.List;
 
+import com.selina.lending.internal.service.application.domain.Fees;
 import lombok.Builder;
 import lombok.Data;
 
@@ -31,4 +32,5 @@ public class Application {
     List<Applicant> applicants;
     LoanInformation loanInformation;
     PropertyDetails propertyDetails;
+    Fees fees;
 }
