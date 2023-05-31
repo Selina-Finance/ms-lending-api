@@ -4,7 +4,6 @@ import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.Fees;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 import static com.selina.lending.internal.dto.SourceType.AGGREGATOR;
 
@@ -25,12 +24,7 @@ public class ArrangementFeeSelinaService {
         }
         return Fees.builder()
                 .addArrangementFeeSelina(shouldAddArrangementFeeSelina(sourceType))
-                .arrangementFeeDiscountSelina(getArrangementFeeDiscountSelina()).build();
-    }
-
-    private Double getArrangementFeeDiscountSelina() {
-        return Optional.ofNullable(tokenService.retrieveArrangementFeeDiscountSelina())
-                .orElse(1.0);
+                .arrangementFeeDiscountSelina(arrangementFeeDiscountSelina).build();
     }
 
     private boolean shouldAddArrangementFeeSelina(String sourceType) {
