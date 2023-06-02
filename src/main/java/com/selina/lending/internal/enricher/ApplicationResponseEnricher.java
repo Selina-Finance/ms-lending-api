@@ -41,6 +41,7 @@ public class ApplicationResponseEnricher {
     private String quickQuoteProductOffersApplyUrlBuilder(String externalApplicationId, String productCode) {
         String clientId = tokenService.retrieveClientId();
         return UriComponentsBuilder.fromHttpUrl(quickQuoteBaseUrl)
+                .path("/aggregator")
                 .queryParamIfPresent("externalApplicationId", Optional.ofNullable(externalApplicationId))
                 .queryParamIfPresent("productCode", Optional.ofNullable(productCode))
                 .queryParamIfPresent("source", Optional.ofNullable(clientId))
