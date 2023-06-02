@@ -66,8 +66,8 @@ class ApplicationResponseEnricherTest {
         enricher.enrichQuickQuoteResponseWithProductOffersApplyUrl(response);
 
         // then
-        var expected = String.format("%s?externalApplicationId=%s&productCode=%s&source=%s", QUICK_QUOTE_BASE_URL,
-                externalApplicationId, offerCode, source);
+        var expected = String.format("%s/aggregator?externalApplicationId=%s&productCode=%s&source=%s",
+                QUICK_QUOTE_BASE_URL, externalApplicationId, offerCode, source);
         assertThat(response.getOffers().get(0).getApplyUrl(), equalTo(expected));
     }
 
