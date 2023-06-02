@@ -174,7 +174,7 @@ class QuickQuoteControllerTest {
     }
 
     private void assertOffersApplyUrlHasExpectedFormat(Collection<ProductOfferDto> productOffers) {
-        final String APPLY_URL_REGEX = String.format("^%s\\?externalApplicationId=.+&productCode=.+&source=.+$",
+        final String APPLY_URL_REGEX = String.format("^%s/aggregator\\?externalApplicationId=.+&productCode=.+&source=.+$",
                 QUICK_QUOTE_URL);
 
         for (ProductOfferDto offer : productOffers) {
