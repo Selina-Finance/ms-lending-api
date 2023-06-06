@@ -57,5 +57,6 @@ public class ProductOfferDto {
     Integer ercPeriodYears;
     String applyUrl;
     Double eligibility;
+    Double arrangementFeeSelina;
     List<ErcDto> ercData;
 }
