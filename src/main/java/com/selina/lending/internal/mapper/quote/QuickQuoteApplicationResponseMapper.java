@@ -63,5 +63,6 @@ public interface QuickQuoteApplicationResponseMapper {
     @Mapping(source = "offer.ercPeriodYears", target = "ercPeriodYears")
     @Mapping(source = "offer.ercData", target = "ercData")
     @Mapping(source = "offer.eligibility", target = "eligibility")
+    @Mapping(source = "offer.arrangementFeeSelina", target = "arrangementFeeSelina")
     ProductOfferDto mapToProductOfferDto(Product product);
 }

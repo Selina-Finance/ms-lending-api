@@ -63,6 +63,7 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
         assertThat(offer.getLtvCap(), equalTo(LTV_CAP));
         assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
         assertThat(offer.getEligibility(), equalTo(ELIGIBILITY));
+        assertThat(offer.getArrangementFeeSelina(), equalTo(ARRANGEMENT_FEE_SELINA));
 
         assertErcData(offer);
     }
