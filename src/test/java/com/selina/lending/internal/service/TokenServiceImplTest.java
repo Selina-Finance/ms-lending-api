@@ -66,7 +66,7 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void retrieveSourceTypeReturnsSourceTypeSuccessfully() {
+    void shouldReturnSourceType() {
         //Given
         mockSecurity(LendingConstants.SOURCE_TYPE_JWT_CLAIM_NAME, SOURCE_TYPE_VALUE);
 
@@ -78,7 +78,7 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void retrieveArrangementFeeDiscountSelinaReturnsArrangementFeeDiscountSelinaSuccessfully() {
+    void shouldReturnArrangementFeeDiscountSelina() {
         //Given
         mockSecurity(LendingConstants.ARRANGEMENT_FEE_DISCOUNT_SELINA_JWT_CLAIM_NAME, "1.0");
 
