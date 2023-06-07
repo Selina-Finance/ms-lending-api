@@ -216,6 +216,8 @@ public abstract class MapperBase {
     public static final Double LTV_CAP = 0.50;
     public static final Double CLTV = 31.25;
     protected static final Double ARRANGEMENT_FEE = 1000.00;
+    protected static final Double ARRANGEMENT_FEE_SELINA = 1000.00;
+    protected static final Double ARRANGEMENT_FEE_DISCOUNT_SELINA = 1.0;
     protected static final String BROKER_SUBMITTER_EMAIL = "broker_submitter@email.co.uk";
     public static final int ERC_PERIOD_YEARS = 2;
 
@@ -910,6 +912,7 @@ public abstract class MapperBase {
                 .minimumInitialDrawdown(MINIMUM_INITIAL_DRAWDOWN)
                 .offerValidity(OFFER_VALIDITY)
                 .esisLoanAmount(ESIS_LOAN_AMOUNT)
+                .arrangementFeeSelina(ARRANGEMENT_FEE_SELINA)
                 .build();
     }
 

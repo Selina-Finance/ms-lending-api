@@ -20,11 +20,11 @@ package com.selina.lending.internal.service.application.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
 @Builder
-@Value
+@Data
 @Jacksonized
 public class Fees {
     @JsonProperty("addAdviceFeeToLoan")
@@ -47,4 +47,6 @@ public class Fees {
     Double intermediaryFeeAmount;
     @JsonProperty("addIntermediaryFeeToLoan")
     Boolean isAddIntermediaryFeeToLoan;
+    Boolean addArrangementFeeSelina;
+    Double arrangementFeeDiscountSelina;
 }

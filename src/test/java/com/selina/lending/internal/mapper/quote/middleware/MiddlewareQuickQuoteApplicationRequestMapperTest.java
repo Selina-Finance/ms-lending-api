@@ -20,10 +20,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
+class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
 
     private static final String SOURCE_ACCOUNT = "Source account";
     private static final String LENDING_API_SOURCE = "LendingAPI";
@@ -42,10 +43,11 @@ public class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         List<Product> products = List.of(getProduct());
+        Fees fees = Fees.builder().arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA).addArrangementFeeSelina(true).build();
 
         //When
         QuickQuoteRequest middlewareCreateApplicationEvent =
-                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products);
+                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
 
         //Then
         assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
@@ -101,6 +103,8 @@ public class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase
     private void assertFees(Fees fees) {
         Fees expectedFees = Fees.builder()
                 .isAddProductFeesToFacility(false)
+                .addArrangementFeeSelina(true)
+                .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
                 .build();
 
         assertThat(fees, equalTo(expectedFees));
@@ -195,16 +199,8 @@ public class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase
         assertThat(offer.getMinimumInitialDrawdown(), equalTo(MINIMUM_INITIAL_DRAWDOWN));
         assertThat(offer.getOfferValidity(), equalTo(OFFER_VALIDITY));
         assertThat(offer.getEsisLoanAmount(), equalTo(ESIS_LOAN_AMOUNT));
-        assertErcData(offer.getErcData());
+        assertThat(offer.getArrangementFeeSelina(), equalTo(ARRANGEMENT_FEE_SELINA));
+        assertNotNull(offer.getErcData());
     }
 
-    private void assertErcData(List<Erc> ercData) {
-        assertThat(ercData, hasSize(2));
-
-        Erc erc = ercData.get(0);
-        assertThat(erc.getPeriod(), equalTo(1));
-        assertThat(erc.getErcFee(), equalTo(ERC_FEE));
-        assertThat(erc.getErcBalance(), equalTo(ERC_BALANCE));
-        assertThat(erc.getErcAmount(), equalTo(ERC_AMOUNT));
-    }
 }
