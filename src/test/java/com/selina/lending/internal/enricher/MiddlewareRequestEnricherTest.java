@@ -70,7 +70,7 @@ class MiddlewareRequestEnricherTest {
         //Then
         assertThat(request.getSourceAccount(), equalTo(SOURCE_ACCOUNT));
         assertThat(request.getSource(), equalTo(LendingConstants.REQUEST_SOURCE));
-        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(0));
+        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(1));
         assertThat(request.getIncludeCreditCommitment(), equalTo(true));
         assertThat(request.getProductCode(), equalTo(LendingConstants.PRODUCT_CODE_ALL));
         assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(false));
@@ -94,8 +94,8 @@ class MiddlewareRequestEnricherTest {
         //Then
         assertThat(request.getSourceAccount(), equalTo(SOURCE_ACCOUNT));
         assertThat(request.getSource(), equalTo(LendingConstants.REQUEST_SOURCE));
-        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(0));
-        assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(1));
+        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(1));
+        assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(2));
         assertThat(request.getIncludeCreditCommitment(), equalTo(false));
         assertThat(request.getProductCode(), equalTo(LendingConstants.PRODUCT_CODE_ALL));
         assertThat(request.getStageOverwrite(), equalTo(LendingConstants.STAGE_OVERWRITE));
@@ -160,8 +160,8 @@ class MiddlewareRequestEnricherTest {
 
         //Then
         assertThat(request.getRunDecisioning(), equalTo(true));
-        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(0));
-        assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(1));
+        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(1));
+        assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(2));
         assertThat(request.getPropertyDetails().getIsApplicantResidence(), equalTo(true));
     }
 
@@ -184,8 +184,8 @@ class MiddlewareRequestEnricherTest {
         //Then
         assertThat(request.getSourceAccount(), equalTo(SOURCE_ACCOUNT));
         assertThat(request.getSource(), equalTo(LendingConstants.REQUEST_SOURCE));
-        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(0));
-        assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(1));
+        assertThat(request.getApplicants().get(0).getIdentifier(), equalTo(1));
+        assertThat(request.getApplicants().get(1).getIdentifier(), equalTo(2));
         assertThat(request.getIncludeCreditCommitment(), equalTo(false));
         assertThat(request.getProductCode(), equalTo(LendingConstants.PRODUCT_CODE_ALL));
         assertThat(request.getStageOverwrite(), equalTo(LendingConstants.STAGE_OVERWRITE));

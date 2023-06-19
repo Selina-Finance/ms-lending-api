@@ -105,6 +105,6 @@ public class MiddlewareRequestEnricher {
     }
 
     private void setIdentifier(Applicant applicant) {
-        applicant.setIdentifier(Boolean.TRUE.equals(applicant.getPrimaryApplicant()) ?  0 : 1);
+        applicant.setIdentifier(Boolean.TRUE.equals(applicant.getPrimaryApplicant()) ?  1 : 2);
     }
 }
