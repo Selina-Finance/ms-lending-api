@@ -479,7 +479,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithBelowMinimumEstimatedPropertyValueThenBadRequest() throws Exception {
             var request = getQuickQuoteApplicationRequestDto();
-            request.getPropertyDetails().setEstimatedValue(-1.0);
+            request.getPropertyDetails().setEstimatedValue(49_999.0);
 
             //When
             mockMvc.perform(post("/application/quickquote").with(csrf())
