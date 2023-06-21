@@ -138,6 +138,26 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
+    void shouldGiveValidationErrorWhenCreateDipCCApplicationWithApplicantMobileNumberIsInvalid() throws Exception {
+        //Given
+        var request = getDIPCCApplicationRequestDto();
+        request.getApplicants().get(0).setMobileNumber("012345AB90");
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf())
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON))
+                // Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
+                .andExpect(jsonPath("$.violations[0].message").value("must be a valid GB phone number"));
+    }
+
+
+    @Test
     void shouldGiveValidationErrorWhenUpdateDipCCApplicationWithMissingMandatoryLoanInformation() throws Exception {
         //Given
         var dipApplicationRequest = DIPCCApplicationRequest.builder()
@@ -296,6 +316,25 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations[0].field").value("applicants[0].emailAddress"))
                 .andExpect(jsonPath("$.violations[0].message").value("emailAddress is not valid"));
     }
+
+    @Test
+    void shouldGiveValidationErrorWhenCreateDipApplicationWithApplicantMobileNumberIsInvalid() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).setMobileNumber("+AS12LDS12314");
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
+                .andExpect(jsonPath("$.violations[0].message").value("must be a valid GB phone number"));
+    }
+
 
     @Test
     void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifiedApplicantAddressBuildingNameAndBuildingNumber() throws Exception {
