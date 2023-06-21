@@ -20,6 +20,7 @@ package com.selina.lending.internal.dto.quote;
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.converter.ToLowerCase;
 import com.selina.lending.api.support.validator.EnumValue;
+import com.selina.lending.api.support.validator.UkNationalPhoneNumber;
 import com.selina.lending.internal.dto.AddressDto;
 import com.selina.lending.internal.dto.ApplicantGender;
 import com.selina.lending.internal.dto.ApplicantResidentialStatus;
@@ -62,7 +63,7 @@ public class QuickQuoteApplicantDto {
     @ToLowerCase
     private String emailAddress;
 
-    @Size(min = 10, max = 13)
+    @UkNationalPhoneNumber
     private String mobileNumber;
 
     @NotBlank
