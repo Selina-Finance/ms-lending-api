@@ -74,7 +74,7 @@ public class QuickQuotePropertyDetailsDto {
     @Size(min = 2, max = 60)
     private String country;
 
-    @Range(min = 0, max = 99_999_999)
+    @Range(min = 50_000, max = 99_999_999)
     private Double estimatedValue;
 
     private Integer propertyInternalFloorSpace;

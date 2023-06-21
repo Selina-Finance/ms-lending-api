@@ -491,7 +491,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.estimatedValue"))
-                    .andExpect(jsonPath("$.violations[0].message").value("must be between 0 and 99999999"));
+                    .andExpect(jsonPath("$.violations[0].message").value("must be between 50000 and 99999999"));
         }
 
         @Test
@@ -509,7 +509,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.estimatedValue"))
-                    .andExpect(jsonPath("$.violations[0].message").value("must be between 0 and 99999999"));
+                    .andExpect(jsonPath("$.violations[0].message").value("must be between 50000 and 99999999"));
         }
     }
 }
