@@ -72,7 +72,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.setLoanInformation(LoanInformationDto.builder()
                     .numberOfApplicants(1)
-                    .requestedLoanAmount(1000)
+                    .requestedLoanAmount(1000.00)
                     .requestedLoanTerm(2)
                     .loanPurpose(LOAN_PURPOSE)
                     .build());
@@ -473,6 +473,50 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     //Then
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        }
+
+        @Test
+        void whenCreateApplicationWithLowerThanMinimumRequestedLoanAmountThenBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getLoanInformation().setRequestedLoanAmount(9999.00);
+
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.requestedLoanAmount"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must be between 10000 and 1000000"));
+
+        }
+
+        @Test
+        void whenCreateApplicationWithHigherThanMaximumRequestedLoanAmountThenBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getLoanInformation().setRequestedLoanAmount(1_000_001.00);
+
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.requestedLoanAmount"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must be between 10000 and 1000000"));
 
         }
     }

@@ -59,7 +59,7 @@ class EnumValueImplTest {
     void validateLoanInformation() {
         //Given
         var loanInformationDto = LoanInformationDto.builder()
-                .requestedLoanAmount(10000)
+                .requestedLoanAmount(10000.00)
                 .requestedLoanTerm(5)
                 .numberOfApplicants(1)
                 .loanPurpose(INVALID_VALUE)

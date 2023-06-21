@@ -29,7 +29,7 @@ public class QuickQuoteCFRequestMapperTest extends MapperBase {
         assertThat(applicationRequest.getApplicants().get(0).getLastName(), equalTo(LAST_NAME));
         assertThat(applicationRequest.getApplicants().get(0).getIncome(), notNullValue());
         assertThat(applicationRequest.getApplicants().get(0).getIncome().getIncome().size(), equalTo(1));
-        assertThat(applicationRequest.getLoanInformation().getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT.intValue()));
+        assertThat(applicationRequest.getLoanInformation().getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
         assertThat(applicationRequest.getLoanInformation().getRequestedLoanTerm(), equalTo(LOAN_TERM));
         assertNull(applicationRequest.getSourceAccount());
 

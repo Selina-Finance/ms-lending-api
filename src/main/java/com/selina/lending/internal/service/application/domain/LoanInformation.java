@@ -27,7 +27,7 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Jacksonized
 public class LoanInformation {
-    Integer requestedLoanAmount;
+    Double requestedLoanAmount;
     int requestedLoanTerm;
     int numberOfApplicants;
     String loanPurpose;

@@ -85,7 +85,7 @@ public class QuickQuoteApplicationRequestMapper {
     private static LoanInformation mapLoanInformation(LoanInformationDto loanInformationDto) {
         return loanInformationDto == null ? null : LoanInformation.builder().numberOfApplicants(
                 loanInformationDto.getNumberOfApplicants()).requestedLoanAmount(
-                Double.valueOf(loanInformationDto.getRequestedLoanAmount())).requestedLoanTerm(
+                loanInformationDto.getRequestedLoanAmount()).requestedLoanTerm(
                 loanInformationDto.getRequestedLoanTerm()).build();
     }
 

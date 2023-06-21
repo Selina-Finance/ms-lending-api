@@ -36,7 +36,7 @@ public class LoanInformationDto {
     @NotNull
     @Range(min = 10000, max = 1000000)
     @Schema(description = "the amount the applicant wishes to borrow (min 10000, max 1000000)")
-    private Integer requestedLoanAmount;
+    private Double requestedLoanAmount;
 
     @NotNull
     @Range(min = 5, max = 30)
