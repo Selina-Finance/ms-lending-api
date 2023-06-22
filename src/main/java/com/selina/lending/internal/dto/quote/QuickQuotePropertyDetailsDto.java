@@ -25,6 +25,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -73,6 +74,7 @@ public class QuickQuotePropertyDetailsDto {
     @Size(min = 2, max = 60)
     private String country;
 
+    @Range(min = 50_000, max = 99_999_999)
     private Double estimatedValue;
 
     private Integer propertyInternalFloorSpace;

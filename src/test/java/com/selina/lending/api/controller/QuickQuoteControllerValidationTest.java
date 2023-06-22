@@ -475,5 +475,41 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         }
+
+        @Test
+        void whenCreateApplicationWithBelowMinimumEstimatedPropertyValueThenBadRequest() throws Exception {
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getPropertyDetails().setEstimatedValue(49_999.0);
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.estimatedValue"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must be between 50000 and 99999999"));
+        }
+
+        @Test
+        void whenCreateApplicationWithAboveMaximumEstimatedPropertyValueThenBadRequest() throws Exception {
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getPropertyDetails().setEstimatedValue(100_000_000.01);
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.estimatedValue"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must be between 50000 and 99999999"));
+        }
     }
 }
