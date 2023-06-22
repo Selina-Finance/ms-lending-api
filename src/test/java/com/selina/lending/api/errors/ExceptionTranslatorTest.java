@@ -58,7 +58,7 @@ class ExceptionTranslatorTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.type").doesNotExist())
-                .andExpect(jsonPath("$.detail").value(containsString("JSON parse error")));
+                .andExpect(jsonPath("$.detail").value("JSON parse error: Unexpected character (',' (code 44)): was expecting double-quote to start field name"));
     }
 
     @Test
