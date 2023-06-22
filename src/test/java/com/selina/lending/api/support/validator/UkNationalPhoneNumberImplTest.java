@@ -27,7 +27,7 @@ class UkNationalPhoneNumberImplTest {
 
     @ParameterizedTest
     @NullSource
-    @ValueSource(strings = {"01234567890", "+441234567890", "+351910000000","+34608000000"})
+    @ValueSource(strings = {"01234567890", "07777777777","+441234567890", "+44 123 456 789 0"})
     void shouldBeValidPhoneNumber(String phoneNumber) {
 
         // Given
@@ -42,7 +42,10 @@ class UkNationalPhoneNumberImplTest {
 
     @ParameterizedTest
     @EmptySource
-    @ValueSource(strings = {"123", "123456", "0123456789", "12345678901", "012345AB90", "+4401111111111", "012 345 90", "012345678901"})
+    @ValueSource(strings = {
+            "+7(123)123123", "123", "123456", "0123456789", "12345678901", "012345AB90", "+4401111111111", "012 34554 90", "012345678901",
+            "07433w121789", "07433w121789", "+351910000000", "+7(123)123123"
+    })
     void shouldReturnInvalidWhenIsNotValidPhoneNumber(String phoneNumber) {
 
         // Given
