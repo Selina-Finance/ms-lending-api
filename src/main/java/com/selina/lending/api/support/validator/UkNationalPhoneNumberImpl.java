@@ -15,16 +15,16 @@ public class UkNationalPhoneNumberImpl implements ConstraintValidator<UkNational
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        PhoneNumber phoneNumber;
 
-        if (value == null){
+        if (value == null) {
             return true;
         }
 
-        if (!value.matches(REGEX)){
+        if (!value.matches(REGEX)) {
             return false;
         }
 
+        PhoneNumber phoneNumber;
         var phoneUtil = PhoneNumberUtil.getInstance();
 
         try {
