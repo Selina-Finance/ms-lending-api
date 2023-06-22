@@ -27,13 +27,13 @@ public class MatchNumberOfQuickQuoteApplicantsImpl implements ConstraintValidato
         return isValid;
     }
 
-    private int getApplicantsSize(QuickQuoteApplicationRequest application){
+    private int getApplicantsSize(QuickQuoteApplicationRequest application) {
         return Optional.ofNullable(application.getApplicants())
                 .map(List::size)
                 .orElse(0);
     }
 
-    private int getNumberOfApplicants(QuickQuoteApplicationRequest application, int applicantsSize){
+    private int getNumberOfApplicants(QuickQuoteApplicationRequest application, int applicantsSize) {
         return Optional.ofNullable(application.getLoanInformation())
                 .map(LoanInformationDto::getNumberOfApplicants)
                 .orElse(applicantsSize);
