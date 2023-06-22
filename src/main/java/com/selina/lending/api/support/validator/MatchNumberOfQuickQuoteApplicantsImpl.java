@@ -10,13 +10,6 @@ import java.util.Optional;
 
 public class MatchNumberOfQuickQuoteApplicantsImpl implements ConstraintValidator<MatchNumberOfQuickQuoteApplicants, QuickQuoteApplicationRequest> {
 
-    private String message;
-
-    @Override
-    public void initialize(MatchNumberOfQuickQuoteApplicants constraintAnnotation) {
-        this.message = constraintAnnotation.message();
-    }
-
     @Override
     public boolean isValid(QuickQuoteApplicationRequest value, ConstraintValidatorContext context) {
         if (value == null){
@@ -48,8 +41,9 @@ public class MatchNumberOfQuickQuoteApplicantsImpl implements ConstraintValidato
 
     private void createCustomMessage(ConstraintValidatorContext context) {
         context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate(message).addPropertyNode("loanInformation" +
-                ".numberOfApplicants").addConstraintViolation();
+        context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
+                .addPropertyNode("loanInformation.numberOfApplicants")
+                .addConstraintViolation();
     }
 
 }
