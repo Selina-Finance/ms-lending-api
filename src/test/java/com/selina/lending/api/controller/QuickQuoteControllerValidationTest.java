@@ -34,6 +34,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigInteger;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -134,6 +136,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.setApplicants(null);
+            request.getLoanInformation().setNumberOfApplicants(0);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -144,7 +147,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations", hasSize(2)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                     .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
 
@@ -155,6 +158,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().clear();
+            request.getLoanInformation().setNumberOfApplicants(0);
+
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -165,7 +170,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations", hasSize(2)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                     .andExpect(jsonPath("$.violations[0].message").value("applicants is required, min = 1, max = 2"));
         }
@@ -176,6 +181,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().add(null);
+            request.getLoanInformation().setNumberOfApplicants(2);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -252,6 +258,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(false);
+            request.getLoanInformation().setNumberOfApplicants(2);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -270,6 +277,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(null);
+            request.getLoanInformation().setNumberOfApplicants(2);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -288,6 +296,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(null);
             request.getApplicants().get(1).setPrimaryApplicant(null);
+            request.getLoanInformation().setNumberOfApplicants(2);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -306,6 +315,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(true);
+            request.getLoanInformation().setNumberOfApplicants(2);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -328,6 +338,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(false);
             request.getApplicants().get(1).setPrimaryApplicant(null);
+            request.getLoanInformation().setNumberOfApplicants(2);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -350,6 +361,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().add(getQuickQuoteApplicantDto());
             request.getApplicants().get(0).setPrimaryApplicant(false);
             request.getApplicants().get(1).setPrimaryApplicant(false);
+            request.getLoanInformation().setNumberOfApplicants(2);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -363,6 +375,63 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                     .andExpect(jsonPath("$.violations[0].message").value("must have one primary applicant"));
+        }
+
+        @Test
+        void whenCreateApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnSuccess() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void whenCreateApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsTwoThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getLoanInformation().setNumberOfApplicants(2);
+
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+        }
+
+        @Test
+        void whenCreateApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().add(getQuickQuoteApplicantDto());
+
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
         }
 
     }
@@ -513,3 +582,4 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
     }
 }
+
