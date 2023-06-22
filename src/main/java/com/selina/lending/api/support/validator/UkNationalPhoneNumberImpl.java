@@ -11,6 +11,7 @@ import javax.validation.ConstraintValidatorContext;
 public class UkNationalPhoneNumberImpl implements ConstraintValidator<UkNationalPhoneNumber, String> {
 
     private static final String REGION_GB = "GB";
+    private static final String REGEX = "^\\+?[\\d\\s]+$";
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -20,14 +21,18 @@ public class UkNationalPhoneNumberImpl implements ConstraintValidator<UkNational
             return true;
         }
 
+        if (!value.matches(REGEX)){
+            return false;
+        }
+
         var phoneUtil = PhoneNumberUtil.getInstance();
 
         try {
-           phoneNumber = phoneUtil.parse(value, REGION_GB);
+            phoneNumber = phoneUtil.parse(value, REGION_GB);
         } catch (NumberParseException e) {
             return false;
         }
 
-        return phoneUtil.isValidNumber(phoneNumber);
+        return phoneUtil.isValidNumberForRegion(phoneNumber, REGION_GB);
     }
 }
