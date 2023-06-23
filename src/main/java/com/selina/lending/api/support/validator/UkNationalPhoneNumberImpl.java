@@ -13,6 +13,13 @@ public class UkNationalPhoneNumberImpl implements ConstraintValidator<UkNational
     private static final String REGION_GB = "GB";
     private static final String REGEX = "^\\+?[\\d\\s]+$";
 
+    private final PhoneNumberUtil phoneNumberUtil;
+
+    public UkNationalPhoneNumberImpl() {
+        this.phoneNumberUtil = PhoneNumberUtil.getInstance();
+    }
+
+
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
@@ -25,14 +32,13 @@ public class UkNationalPhoneNumberImpl implements ConstraintValidator<UkNational
         }
 
         PhoneNumber phoneNumber;
-        var phoneUtil = PhoneNumberUtil.getInstance();
 
         try {
-            phoneNumber = phoneUtil.parse(value, REGION_GB);
+            phoneNumber = phoneNumberUtil.parse(value, REGION_GB);
         } catch (NumberParseException e) {
             return false;
         }
 
-        return phoneUtil.isValidNumberForRegion(phoneNumber, REGION_GB);
+        return phoneNumberUtil.isValidNumberForRegion(phoneNumber, REGION_GB);
     }
 }
