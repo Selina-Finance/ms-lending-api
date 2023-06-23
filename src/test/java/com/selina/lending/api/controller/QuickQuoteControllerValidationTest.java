@@ -35,6 +35,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -135,7 +137,6 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.setApplicants(null);
-            request.getLoanInformation().setNumberOfApplicants(1);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -169,7 +170,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations", hasSize(2)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                     .andExpect(jsonPath("$.violations[0].message").value("applicants is required, min = 1, max = 2"));
         }
@@ -229,6 +230,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(content().contentType(APPLICATION_JSON));
 
         }
+
         @Test
         void whenCreateApplicationWithOneApplicantPrimaryApplicantFalseThenReturnBadRequest() throws Exception {
             //Given
@@ -578,6 +580,72 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.estimatedValue"))
                     .andExpect(jsonPath("$.violations[0].message").value("must be between 50000 and 99999999"));
+        }
+
+        @Test
+        void whenCreateApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsOneThenSuccess() throws Exception {
+            var request = getQuickQuoteCFApplicationRequestDto();
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void whenCreateApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsTwoThenSuccess() throws Exception {
+            var request = getQuickQuoteCFApplicationRequestDto();
+            request.setApplicants(List.of(getQuickQuoteCFApplicantDto(), getQuickQuoteCFApplicantDto()));
+            request.getLoanInformation().setNumberOfApplicants(2);
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void whenCreateApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsTwoThenBadRequest() throws Exception {
+            var request = getQuickQuoteCFApplicationRequestDto();
+            request.getLoanInformation().setNumberOfApplicants(2);
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+        }
+
+        @Test
+        void whenCreateApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsOneThenBadRequest() throws Exception {
+            var request = getQuickQuoteCFApplicationRequestDto();
+            request.setApplicants(List.of(getQuickQuoteCFApplicantDto(), getQuickQuoteCFApplicantDto()));
+            when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
         }
     }
 }
