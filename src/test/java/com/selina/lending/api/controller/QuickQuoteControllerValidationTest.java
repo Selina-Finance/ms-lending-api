@@ -172,7 +172,9 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(2)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants"))
-                    .andExpect(jsonPath("$.violations[0].message").value("applicants is required, min = 1, max = 2"));
+                    .andExpect(jsonPath("$.violations[0].message").value("applicants is required, min = 1, max = 2"))
+                    .andExpect(jsonPath("$.violations[1].field").value("loanInformation.numberOfApplicants"))
+                    .andExpect(jsonPath("$.violations[1].message").value("should be equal to applicants size"));
         }
 
 
@@ -379,7 +381,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
 
         @Test
-        void whenCreateApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnSuccess() throws Exception {
+        void whenCreateQQApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnSuccess() throws Exception {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
 
@@ -394,7 +396,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
 
         @Test
-        void whenCreateApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsTwoThenReturnBadRequest() throws Exception {
+        void whenCreateQQApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsTwoThenReturnBadRequest() throws Exception {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.getLoanInformation().setNumberOfApplicants(2);
@@ -415,7 +417,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
 
         @Test
-        void whenCreateApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnBadRequest() throws Exception {
+        void whenCreateQQApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnBadRequest() throws Exception {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().add(getQuickQuoteApplicantDto());
@@ -583,7 +585,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
 
         @Test
-        void whenCreateApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsOneThenSuccess() throws Exception {
+        void whenCreateQQCFApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsOneThenSuccess() throws Exception {
             var request = getQuickQuoteCFApplicationRequestDto();
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
@@ -596,7 +598,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
 
         @Test
-        void whenCreateApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsTwoThenSuccess() throws Exception {
+        void whenCreateQQCFApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsTwoThenSuccess() throws Exception {
             var request = getQuickQuoteCFApplicationRequestDto();
             request.setApplicants(List.of(getQuickQuoteCFApplicantDto(), getQuickQuoteCFApplicantDto()));
             request.getLoanInformation().setNumberOfApplicants(2);
@@ -611,7 +613,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
 
         @Test
-        void whenCreateApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsTwoThenBadRequest() throws Exception {
+        void whenCreateQQCFApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsTwoThenBadRequest() throws Exception {
             var request = getQuickQuoteCFApplicationRequestDto();
             request.getLoanInformation().setNumberOfApplicants(2);
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
@@ -630,7 +632,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
 
         @Test
-        void whenCreateApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsOneThenBadRequest() throws Exception {
+        void whenCreateQQCFApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsOneThenBadRequest() throws Exception {
             var request = getQuickQuoteCFApplicationRequestDto();
             request.setApplicants(List.of(getQuickQuoteCFApplicantDto(), getQuickQuoteCFApplicantDto()));
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
