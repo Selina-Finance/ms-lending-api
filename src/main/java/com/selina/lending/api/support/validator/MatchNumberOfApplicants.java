@@ -7,13 +7,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Documented
-@Constraint(validatedBy = MatchNumberOfQuickQuoteApplicantsImpl.class)
+@Constraint(validatedBy = MatchNumberOfApplicantsImpl.class)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MatchNumberOfQuickQuoteApplicants {
+public @interface MatchNumberOfApplicants {
 
     String message() default "should be equal to applicants size";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    String propertyNode();
 }
