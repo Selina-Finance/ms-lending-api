@@ -17,5 +17,4 @@ public @interface MatchNumberOfApplicants {
 
     Class<? extends Payload>[] payload() default {};
 
-    String propertyNode();
 }
