@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-class MatchNumberOfQuickQuoteApplicantsImplTest {
+class MatchNumberOfApplicantsImplTest {
 
     private static Validator validator;
 

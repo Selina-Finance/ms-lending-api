@@ -34,7 +34,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigInteger;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -136,7 +135,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.setApplicants(null);
-            request.getLoanInformation().setNumberOfApplicants(0);
+            request.getLoanInformation().setNumberOfApplicants(1);
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
@@ -147,7 +146,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(2)))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                     .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
 
@@ -158,7 +157,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().clear();
-            request.getLoanInformation().setNumberOfApplicants(0);
+            request.getLoanInformation().setNumberOfApplicants(1);
 
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
@@ -170,7 +169,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(2)))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants"))
                     .andExpect(jsonPath("$.violations[0].message").value("applicants is required, min = 1, max = 2"));
         }
