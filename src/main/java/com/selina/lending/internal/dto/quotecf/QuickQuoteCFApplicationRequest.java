@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.dto.quotecf;
 
+import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
 import com.selina.lending.internal.dto.ApplicationRequest;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import lombok.EqualsAndHashCode;
@@ -35,6 +36,7 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+@MatchNumberOfApplicants
 public class QuickQuoteCFApplicationRequest extends ApplicationRequest {
 
     @NotNull

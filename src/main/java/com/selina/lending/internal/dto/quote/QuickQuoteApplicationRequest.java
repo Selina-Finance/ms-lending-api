@@ -40,7 +40,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-@MatchNumberOfApplicants(propertyNode = "loanInformation.numberOfApplicants")
+@MatchNumberOfApplicants
 public class QuickQuoteApplicationRequest extends ApplicationRequest {
 
     @NotNull
