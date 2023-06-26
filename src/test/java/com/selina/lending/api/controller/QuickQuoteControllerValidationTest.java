@@ -54,9 +54,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 class QuickQuoteControllerValidationTest extends MapperBase {
-
-    private static final String INVALID_REQUEST_CODE_TOP = "INVALID_REQUEST";
-
     @Value("classpath:__files/ms-lending-api/qq-application-request-bad-date-format.json")
     private Path getQQApplicationBadDateFormatRequest;
 
