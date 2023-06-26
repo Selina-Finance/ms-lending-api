@@ -626,7 +626,18 @@ class QuickQuoteControllerValidationTest extends MapperBase {
 
             //When
             mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+        }
 
+        @Test
         void whenCreateApplicationWithFromDateInAddressesInApplicantLaterThanTodayThenBadRequest() throws Exception {
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().get(0).getAddresses().get(0).setFromDate(LocalDate.parse("9999-12-25"));
@@ -682,8 +693,8 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
-                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
-                    .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].addresses[1].toDate"))
+                    .andExpect(jsonPath("$.violations[0].message").value("This field is required"));
         }
 
         @Test
@@ -694,8 +705,15 @@ class QuickQuoteControllerValidationTest extends MapperBase {
 
             //When
             mockMvc.perform(post("/application/quickquotecf").with(csrf())
-                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].addresses[1].toDate"))
-                    .andExpect(jsonPath("$.violations[0].message").value("This field is required"));
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                    .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
         }
 
         @Test
@@ -715,8 +733,6 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
-                    .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
-                    .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
                     .andExpect(jsonPath("$.violations[0].field").value("applicants[0].addresses[1].fromDate"))
                     .andExpect(jsonPath("$.violations[0].message").value("This field is required"));
         }
