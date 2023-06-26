@@ -19,6 +19,8 @@ package com.selina.lending.internal.mapper;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -67,6 +69,6 @@ class AddressMapperTest extends MapperBase {
         assertThat(addressDto.getUdprn(), equalTo(UDPRN));
         assertThat(addressDto.getPoBox(), equalTo(PO_BOX));
         assertThat(addressDto.getCounty(), equalTo(COUNTY));
-        assertThat(addressDto.getFromDate(), equalTo(FROM_DATE));
+        assertThat(addressDto.getFromDate(), equalTo(LocalDate.parse(FROM_DATE)));
     }
 }

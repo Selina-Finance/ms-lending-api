@@ -1,0 +1,58 @@
+{
+  "externalApplicationId": "your_UniqueAppID_QQ",
+  "applicants": [
+    {
+      "emailAddress": "sara.abunaama@hotmail.com",
+      "mobileNumber": "07433121789",
+      "title": "Mrs.",
+      "firstName": "SARA",
+      "lastName": "ABUNAAMA",
+      "dateOfBirth": "1970-01-01",
+      "livedInCurrentAddressFor3Years": true,
+      "residentialStatus": "Owner",
+      "addresses": [
+        {
+          "addressType": "current",
+          "addressLine1": "NEWMARKET ROAD",
+          "city": "BRIGHTON",
+          "postcode": "BN2 3QF",
+          "buildingNumber": "58A",
+          "county": "United Kingdom",
+          "country": "UK",
+          "fromDate": "20-04-2022"
+        }
+      ],
+      "employment": {
+        "employmentStatus": "Employed",
+        "employmentType": "Permanent (full-time)",
+        "industry": "Technology"
+      },
+      "income": {
+        "income": [
+          {
+            "type": "Gross annual income",
+            "amount": 120000
+          }
+        ]
+      }
+    }
+  ],
+  "loanInformation": {
+    "numberOfApplicants": 1,
+    "requestedLoanAmount": 50000,
+    "requestedLoanTerm": 5,
+    "loanPurpose": "Debt consolidation"
+  },
+  "propertyDetails": {
+    "addressLine1": "HEDDFAN NORTH",
+    "city": "CARDIFF",
+    "postcode": "CF23 7EB",
+    "buildingNumber": "59",
+    "estimatedValue": 200000,
+    "numberOfPriorCharges": 1,
+    "priorCharges": {
+      "balanceOutstanding": 100000.0,
+      "monthlyPayment": 450
+    }
+  }
+}

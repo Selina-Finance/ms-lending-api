@@ -18,6 +18,7 @@
 package com.selina.lending.messaging.mapper.brokerrequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.mapper.MapperBase;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ import static org.mockito.Mockito.when;
 class BrokerRequestEventMapperTest extends MapperBase {
     private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModules(new JavaTimeModule());
 
     @InjectMocks
     private BrokerRequestEventMapper mapper;
