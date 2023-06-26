@@ -103,6 +103,7 @@ import com.selina.lending.internal.service.application.domain.quotecf.QuickQuote
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -136,17 +137,23 @@ public abstract class MapperBase {
     public static final String APPLICATION_ID = "123456789";
     public static final Date CREATED_DATE = Date.from(Instant.now());
     public static final String ADDRESS_LINE_1 = "address line 1";
+    public static final String PREVIOUS_ADDRESS_LINE_1 = "Evergreen Terrace";
     public static final String ADDRESS_LINE_2 = "address line 2";
     public static final String ADDRESS_TYPE = "current";
+    public static final String PREVIOUS_ADDRESS_TYPE = "previous";
     public static final String COUNTRY = "England";
     public static final String BUILDING_NUMBER = "10";
+    public static final String PREVIOUS_BUILDING_NUMBER = "742";
     public static final String CITY = "a city";
+    public static final String PREVIOUS_CITY = "Springfield";
     public static final String POSTCODE = "postcode";
     public static final int UDPRN = 1235;
     public static final String PO_BOX = "poBox";
     public static final String BUILDING_NAME = "building name";
     public static final String COUNTY = "county";
     public static final String FROM_DATE = "2000-01-21";
+    public static final String PREVIOUS_FROM_DATE = "2000-01-01";
+    public static final String PREVIOUS_TO_DATE = "2020-01-01";
     public static final String OFFER_ID = "offer123";
     public static final String PRODUCT_CODE = "All";
     public static final String PRODUCT_NAME = "Homeowner loan, Status 0";
@@ -414,7 +421,19 @@ public abstract class MapperBase {
                 .udprn(UDPRN)
                 .poBox(PO_BOX)
                 .county(COUNTY)
-                .fromDate(FROM_DATE)
+                .fromDate(LocalDate.parse(FROM_DATE))
+                .build();
+    }
+
+    protected AddressDto getPreviousAddressDto() {
+        return AddressDto.builder()
+                .addressLine1(PREVIOUS_ADDRESS_LINE_1)
+                .addressType(PREVIOUS_ADDRESS_TYPE)
+                .buildingNumber(PREVIOUS_BUILDING_NUMBER)
+                .city(PREVIOUS_CITY)
+                .postcode(POSTCODE)
+                .fromDate(LocalDate.parse(PREVIOUS_FROM_DATE))
+                .toDate(LocalDate.parse(PREVIOUS_TO_DATE))
                 .build();
     }
 
