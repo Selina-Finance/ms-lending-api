@@ -17,6 +17,7 @@
 
 package com.selina.lending.config;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
 import org.zalando.problem.jackson.ProblemModule;
@@ -38,7 +39,8 @@ public class ObjectMapperConfiguration implements InitializingBean {
     public void afterPropertiesSet() {
         objectMapper.registerModules(
                 new ProblemModule(),
-                new ConstraintViolationProblemModule()
+                new ConstraintViolationProblemModule(),
+                new JavaTimeModule()
         );
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }

@@ -18,22 +18,29 @@
 package com.selina.lending.internal.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.validator.AtLeastOneNotBlank;
 import com.selina.lending.api.support.validator.Conditional;
 import com.selina.lending.api.support.validator.EnumValue;
+import com.selina.lending.api.support.validator.MoveOutAfterMoveInDate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @SuperBuilder
 @Data
 @Conditional(selected = "addressType", values = {"previous"}, required = {"fromDate", "toDate"})
 @AtLeastOneNotBlank(fields = {"buildingName", "buildingNumber"})
+@MoveOutAfterMoveInDate
 public class AddressDto {
     @Schema(implementation = AddressType.class)
     @EnumValue(enumClass = AddressType.class)
@@ -65,13 +72,15 @@ public class AddressDto {
     @Size(min = 2, max = 60)
     String country;
 
-    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
-    String fromDate;
+    @JsonFormat(pattern = SwaggerConstants.DATE_FORMAT)
+    @PastOrPresent
+    LocalDate fromDate;
 
-    @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
-    String toDate;
+    @JsonFormat(pattern = SwaggerConstants.DATE_FORMAT)
+    @PastOrPresent
+    LocalDate toDate;
 
     enum AddressType {
         CURRENT("current"),

@@ -27,6 +27,7 @@ import com.selina.lending.internal.service.application.domain.quotecf.QuickQuote
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,7 +35,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -52,7 +55,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class QuickQuoteControllerValidationTest extends MapperBase {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String INVALID_REQUEST_CODE_TOP = "INVALID_REQUEST";
+
+    @Value("classpath:__files/ms-lending-api/qq-application-request-bad-date-format.json")
+    private Path getQQApplicationBadDateFormatRequest;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -620,6 +629,55 @@ class QuickQuoteControllerValidationTest extends MapperBase {
 
             //When
             mockMvc.perform(post("/application/quickquotecf").with(csrf())
+
+        void whenCreateApplicationWithFromDateInAddressesInApplicantLaterThanTodayThenBadRequest() throws Exception {
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().get(0).getAddresses().get(0).setFromDate(LocalDate.parse("9999-12-25"));
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].addresses[0].fromDate"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must be a date in the past or in the present"));
+        }
+
+        @Test
+        void whenCreateApplicationWithPreviousAddressToDateBeforeFromDateThenBadRequest() throws Exception {
+            var request = getQuickQuoteApplicationRequestDto();
+            var previousAddress = getPreviousAddressDto();
+            previousAddress.setToDate(LocalDate.parse("1990-01-01"));
+
+            request.getApplicants().get(0).setAddresses(List.of(getAddressDto(), previousAddress));
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].addresses[1]"))
+                    .andExpect(jsonPath("$.violations[0].message").value("toDate must exceed fromDate"));
+        }
+
+        @Test
+        void whenCreateApplicationWithPreviousAddressDoesNotContainToDateThenBadRequest() throws Exception {
+            var request = getQuickQuoteApplicationRequestDto();
+            var previousAddress = getPreviousAddressDto();
+            previousAddress.setToDate(null);
+
+            request.getApplicants().get(0).setAddresses(List.of(getAddressDto(), previousAddress));
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -639,6 +697,20 @@ class QuickQuoteControllerValidationTest extends MapperBase {
 
             //When
             mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].addresses[1].toDate"))
+                    .andExpect(jsonPath("$.violations[0].message").value("This field is required"));
+        }
+
+        @Test
+        void whenCreateApplicationWithPreviousAddressDoesNotContainFromDateThenBadRequest() throws Exception {
+            var request = getQuickQuoteApplicationRequestDto();
+            var previousAddress = getPreviousAddressDto();
+            previousAddress.setFromDate(null);
+
+            request.getApplicants().get(0).setAddresses(List.of(getAddressDto(), previousAddress));
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -648,6 +720,23 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
                     .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].addresses[1].fromDate"))
+                    .andExpect(jsonPath("$.violations[0].message").value("This field is required"));
+        }
+
+        @Test
+        void whenCreateApplicationWithPreviousAddressFromDateNotCorrectFormatThenBadRequest() throws Exception {
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(Files.readString(getQQApplicationBadDateFormatRequest))
+                            .contentType(APPLICATION_JSON))
+                    //Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Bad Request"))
+                    .andExpect(jsonPath("$.status").value("400"))
+                    .andExpect(jsonPath("$.detail").value("JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String \"20-04-2022\": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '20-04-2022' could not be parsed at index 0"));
         }
     }
 }
