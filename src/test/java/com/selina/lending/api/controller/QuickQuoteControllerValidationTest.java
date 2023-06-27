@@ -438,7 +438,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
-                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid GB phone number"));
+                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid UK phone number"));
         }
 
         @Test
@@ -525,7 +525,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
-                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid GB phone number"));
+                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid UK phone number"));
         }
 
         @Test
@@ -544,7 +544,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
-                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid GB phone number"));
+                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid UK phone number"));
         }
 
         @Test

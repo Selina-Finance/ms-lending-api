@@ -56,7 +56,7 @@ class UkNationalPhoneNumberImplTest {
 
         // Then
         assertThat(violations.size(), equalTo(1));
-        assertThat(violations.iterator().next().getMessage(), equalTo("must be a valid GB phone number"));
+        assertThat(violations.iterator().next().getMessage(), equalTo("must be a valid UK phone number"));
     }
 
 
