@@ -42,6 +42,8 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -387,6 +389,23 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         }
 
         @Test
+        void whenCreateApplicationWithoutApplicantMobileNumberThenReturnSuccess() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().get(0).setMobileNumber(null);
+
+            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isOk());
+
+            verify(filterApplicationService, times(1)).filter(request);
+        }
+
         void whenCreateQQApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnSuccess() throws Exception {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
@@ -399,6 +418,27 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                             .contentType(APPLICATION_JSON))
                     // Then
                     .andExpect(status().isOk());
+
+            verify(filterApplicationService, times(1)).filter(request);
+        }
+
+        @Test
+        void whenCreateApplicationWithApplicantMobileNumberInvalidThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteApplicationRequestDto();
+            request.getApplicants().get(0).setMobileNumber("012345AB90");
+
+            //When
+            mockMvc.perform(post("/application/quickquote").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid UK phone number"));
         }
 
         @Test
@@ -466,8 +506,45 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
                     .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
-                    .andExpect(jsonPath("$.violations[0].message").value("must not be blank"));
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+        }
 
+        @Test
+        void whenCreateApplicationWithApplicantMobileNumberInvalidThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteCFApplicationRequestDto();
+            request.getApplicants().get(0).setMobileNumber("012345AB90");
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid UK phone number"));
+        }
+
+        @Test
+        void whenCreateApplicationWithEmptyApplicantMobileNumberThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getQuickQuoteCFApplicationRequestDto();
+            request.getApplicants().get(0).setMobileNumber("");
+
+            //When
+            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].mobileNumber"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must be a valid UK phone number"));
         }
 
         @Test

@@ -62,6 +62,7 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.1.Final'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.9.4'
+	implementation 'com.googlecode.libphonenumber:libphonenumber:8.13.14'
 
 	// test
 	testImplementation 'org.hamcrest:hamcrest:2.2'
