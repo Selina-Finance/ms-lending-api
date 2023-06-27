@@ -17,15 +17,14 @@
 
 package com.selina.lending.internal.mapper.quote;
 
+import com.selina.lending.internal.dto.quote.ProductOfferDto;
+import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import com.selina.lending.internal.service.application.domain.quote.Product;
+import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.internal.service.application.domain.quote.Product;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QuickQuoteApplicationResponseMapper {
@@ -49,6 +48,7 @@ public interface QuickQuoteApplicationResponseMapper {
     @Mapping(source = "offer.svr", target = "svr")
     @Mapping(source = "offer.initialRate", target = "initialRate")
     @Mapping(source = "offer.initialPayment", target = "initialPayment")
+    @Mapping(source = "offer.reversionPayment", target = "reversionPayment")
     @Mapping(source = "offer.initialTerm", target = "initialTerm")
     @Mapping(source = "offer.term", target = "term")
     @Mapping(source = "offer.reversionTerm", target = "reversionTerm")

@@ -17,12 +17,11 @@
 
 package com.selina.lending.internal.dto.quote;
 
-import java.util.List;
-
 import com.selina.lending.internal.dto.ErcDto;
-
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Builder
 @Data
@@ -43,6 +42,7 @@ public class ProductOfferDto {
     Integer initialTerm;
     Double initialRate;
     Double initialPayment;
+    Double reversionPayment;
     Double aprc;
     Boolean isAprcHeadline;
     Double ear;
