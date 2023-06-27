@@ -33,6 +33,7 @@ import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.converter.ToLowerCase;
 import com.selina.lending.api.support.validator.EnumValue;
 
+import com.selina.lending.api.support.validator.UkNationalPhoneNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,8 +54,8 @@ public class ApplicantDto {
     @ToLowerCase
     private String emailAddress;
 
-    @NotBlank
-    @Size(min = 10, max = 13)
+    @NotNull
+    @UkNationalPhoneNumber
     private String mobileNumber;
 
     @NotBlank
