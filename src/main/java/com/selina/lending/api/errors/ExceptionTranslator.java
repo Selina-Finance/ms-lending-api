@@ -39,6 +39,7 @@ import java.net.URI;
 import java.util.Optional;
 
 import static com.selina.lending.api.errors.ErrorConstants.DOWNSTREAM_EXCEPTION_DETAIL;
+import static com.selina.lending.api.errors.ErrorConstants.JSON_PARSE_ERROR;
 import static com.selina.lending.api.errors.ErrorConstants.NOT_FOUND_EXCEPTION_DETAIL;
 import static com.selina.lending.api.errors.ErrorConstants.UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL;
 import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EXCEPTION_DETAIL;
@@ -83,6 +84,9 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         }
 
         if (isHttpMessageConversionException(throwable)) {
+            if (isJsonParseErrorException(throwable)) {
+                return buildProblem(status, buildJsonParseErrorMessageDetail(throwable), throwable);
+            }
             return buildProblem(status, UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL, throwable);
         }
 
@@ -106,6 +110,16 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                 .withCause(
                         Optional.ofNullable(throwable.getCause()).filter(cause -> isCausalChainsEnabled()).map(this::toProblem).orElse(null)
                 );
+    }
+
+    private boolean isJsonParseErrorException(Throwable throwable) {
+        return throwable.getMessage().contains(JSON_PARSE_ERROR);
+    }
+
+    private String buildJsonParseErrorMessageDetail(Throwable throwable) {
+        var throwableMessage = throwable.getMessage();
+        var delimiterIndex = throwableMessage.indexOf(";");
+        return throwableMessage.substring(0, delimiterIndex);
     }
 
     private boolean isHttpMessageConversionException(Throwable throwable) {

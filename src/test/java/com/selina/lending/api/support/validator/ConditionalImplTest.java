@@ -26,8 +26,11 @@ import javax.validation.Path;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
+import static com.selina.lending.api.controller.SwaggerConstants.DATE_FORMAT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -80,8 +83,8 @@ class ConditionalImplTest {
                 .postcode(POSTCODE)
                 .buildingNumber(BUILDING_NUMBER)
                 .addressType(PREVIOUS_ADDRESS_TYPE)
-                .fromDate(FROM_DATE)
-                .toDate(TO_DATE)
+                .fromDate(LocalDate.parse(FROM_DATE, DateTimeFormatter.ofPattern(DATE_FORMAT)))
+                .toDate(LocalDate.parse(TO_DATE, DateTimeFormatter.ofPattern(DATE_FORMAT)))
                 .build();
 
         //When

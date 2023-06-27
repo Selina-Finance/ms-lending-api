@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
 import com.selina.lending.api.support.validator.MaximumOnePrimaryApplicant;
 import com.selina.lending.internal.dto.ApplicationRequest;
 import com.selina.lending.internal.dto.LeadDto;
@@ -39,6 +40,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+@MatchNumberOfApplicants
 public class QuickQuoteApplicationRequest extends ApplicationRequest {
 
     @NotNull
