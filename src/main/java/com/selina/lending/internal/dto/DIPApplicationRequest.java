@@ -27,6 +27,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.selina.lending.api.support.converter.ToLowerCase;
+import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
 import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
 import com.selina.lending.api.support.validator.SecondApplicantHasRequiredValues;
@@ -42,6 +43,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+@MatchNumberOfApplicants
 public class DIPApplicationRequest extends ApplicationRequest {
     @Schema(description = "the email address of the broker submitting the application. They should have an account on our Broker Portal")
     @Email(message = "brokerSubmitterEmail is not valid", regexp = EMAIL_PATTERN)

@@ -299,6 +299,80 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
+    void whenCreateDipApplicationWithApplicantsSizeIsOneAndLoanInformationNumberOfApplicantsIsTwoThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+    }
+
+    @Test
+    void whenCreateDipApplicationWithApplicantsSizeIsTwoAndLoanInformationNumberOfApplicantsIsOneThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(1);
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        secondApplicant.setApplicant2LivesWithApplicant1For3Years(true);
+        secondApplicant.setApplicant2LivesWithApplicant1(true);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+    }
+
+    @Test
+    void whenCreateDipApplicationWithApplicantsSizeIsTwoAndLoanInformationNumberOfApplicantsIsTwoThenReturnSuccess() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        secondApplicant.setApplicant2LivesWithApplicant1For3Years(true);
+        secondApplicant.setApplicant2LivesWithApplicant1(true);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenCreateDipApplicationWithApplicantsSizeIsOneAndLoanInformationNumberOfApplicantsIsOneThenReturnSuccess() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
     void shouldGiveValidationErrorWhenCreateDipCCApplicationWithoutSpecifiedApplicantAddressBuildingNameAndBuildingNumber() throws Exception {
         //Given
         var dipApplicationRequest = getDIPCCApplicationRequestDto();
@@ -404,6 +478,7 @@ class DIPControllerValidationTest extends MapperBase {
         secondApplicant.setApplicant2LivesWithApplicant1For3Years(false);
 
         dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
         mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -427,6 +502,7 @@ class DIPControllerValidationTest extends MapperBase {
         secondApplicant.setApplicant2LivesWithApplicant1(false);
 
         dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
         mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -503,6 +579,7 @@ class DIPControllerValidationTest extends MapperBase {
         secondApplicant.setPrimaryApplicant(false);
 
         dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
         mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -528,6 +605,7 @@ class DIPControllerValidationTest extends MapperBase {
         secondApplicant.setApplicant2LivesWithApplicant1For3Years(false);
 
         dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
         mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -551,6 +629,7 @@ class DIPControllerValidationTest extends MapperBase {
         secondApplicant.setApplicant2LivesWithApplicant1(false);
 
         dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
         mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -627,6 +706,7 @@ class DIPControllerValidationTest extends MapperBase {
         secondApplicant.setPrimaryApplicant(false);
 
         dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
         mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -759,4 +839,80 @@ class DIPControllerValidationTest extends MapperBase {
                 //Then
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void whenCreateDipCCApplicationWithApplicantsSizeIsOneAndLoanInformationNumberOfApplicantsIsOneThenReturnSuccess() throws Exception {
+        //Given
+        var dipCCApplicationRequest = getDIPCCApplicationRequestDto();
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipCCApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenCreateDipCCApplicationWithApplicantsSizeIsTwoAndLoanInformationNumberOfApplicantsIsTwoThenReturnSuccess() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+        secondApplicant.setApplicant2LivesWithApplicant1(true);
+        secondApplicant.setApplicant2LivesWithApplicant1For3Years(true);
+
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenCreateDipCCApplicationWithApplicantsSizeIsTwoAndLoanInformationNumberOfApplicantsIsOneThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+        var firstApplicant = getDIPApplicantDto();
+        var secondApplicant = getDIPApplicantDto();
+        secondApplicant.setPrimaryApplicant(false);
+        secondApplicant.setApplicant2LivesWithApplicant1(true);
+        secondApplicant.setApplicant2LivesWithApplicant1For3Years(true);
+
+        dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
+        dipApplicationRequest.getLoanInformation().setNumberOfApplicants(1);
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+    }
+
+    @Test
+    void whenCreateDipCCApplicationWithApplicantsSizeIsOneAndLoanInformationNumberOfApplicantsIsTwoThenReturnBadRequest() throws Exception {
+        //Given
+        var dipCCApplicationRequest = getDIPCCApplicationRequestDto();
+        dipCCApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
+
+        //When
+        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipCCApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("loanInformation.numberOfApplicants"))
+                .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
+    }
+
 }
