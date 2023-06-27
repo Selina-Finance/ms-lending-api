@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UkNationalPhoneNumber {
 
-    String message() default "must be a valid GB phone number";
+    String message() default "must be a valid UK phone number";
 
     Class<?>[] groups() default {};
 
