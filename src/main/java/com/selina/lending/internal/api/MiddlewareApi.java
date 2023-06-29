@@ -62,8 +62,11 @@ public interface MiddlewareApi {
     @GetMapping(value = "/application/{id}/esis-document", produces = APPLICATION_PDF_VALUE)
     Resource downloadEsisByAppId(@PathVariable String id);
 
+    @PatchMapping(value = "/application/light/{id}", consumes = APPLICATION_JSON_VALUE)
+    void patchDipApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
+
     @PatchMapping(value = "/application/{id}", consumes = APPLICATION_JSON_VALUE)
-    void patchApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
+    void patchDipCCApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
 
     @GetMapping(path = "/application/{id}/checkAffordability", produces = APPLICATION_JSON_VALUE)
     ApplicationResponse checkAffordability(@PathVariable("id") String id);

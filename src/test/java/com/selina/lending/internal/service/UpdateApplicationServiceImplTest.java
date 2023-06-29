@@ -78,14 +78,14 @@ class UpdateApplicationServiceImplTest {
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
             when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
             when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
-            doNothing().when(middlewareRepository).patchApplication(any(), any());
+            doNothing().when(middlewareRepository).patchDipCCApplication(any(), any());
 
             //When
             updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
 
             //Then
             verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
-            verify(middlewareRepository, times(1)).patchApplication(eq(APPLICATION_ID), any());
+            verify(middlewareRepository, times(1)).patchDipCCApplication(eq(APPLICATION_ID), any());
         }
 
         @Test
@@ -103,7 +103,7 @@ class UpdateApplicationServiceImplTest {
             assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
             verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
-            verify(middlewareRepository, times(0)).patchApplication(anyString(), any());
+            verify(middlewareRepository, times(0)).patchDipCCApplication(anyString(), any());
         }
 
         @Test
@@ -122,7 +122,7 @@ class UpdateApplicationServiceImplTest {
             assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
             verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
-            verify(middlewareRepository, times(0)).patchApplication(anyString(), any());
+            verify(middlewareRepository, times(0)).patchDipCCApplication(anyString(), any());
         }
     }
 
@@ -137,7 +137,7 @@ class UpdateApplicationServiceImplTest {
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
             when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
             when(applicationRequest.getExternalApplicationId()).thenReturn(EXTERNAL_APPLICATION_ID);
-            doNothing().when(middlewareRepository).patchApplication(eq(APPLICATION_ID), any());
+            doNothing().when(middlewareRepository).patchDipApplication(eq(APPLICATION_ID), any());
 
             //When
             updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
@@ -145,7 +145,7 @@ class UpdateApplicationServiceImplTest {
             //Then
             verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
-            verify(middlewareRepository, times(1)).patchApplication(eq(APPLICATION_ID), any());
+            verify(middlewareRepository, times(1)).patchDipApplication(eq(APPLICATION_ID), any());
         }
 
         @Test
@@ -163,7 +163,7 @@ class UpdateApplicationServiceImplTest {
             assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
             verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
-            verify(middlewareRepository, times(0)).patchApplication(eq(APPLICATION_ID), any());
+            verify(middlewareRepository, times(0)).patchDipApplication(eq(APPLICATION_ID), any());
         }
 
         @Test
@@ -182,7 +182,7 @@ class UpdateApplicationServiceImplTest {
             assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
             verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
-            verify(middlewareRepository, times(0)).patchApplication(anyString(), any());
+            verify(middlewareRepository, times(0)).patchDipApplication(anyString(), any());
         }
     }
 }

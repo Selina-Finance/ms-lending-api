@@ -156,17 +156,31 @@ class MiddlewareRepositoryTest {
     }
 
     @Test
-    void shouldCallHttpClientWhenPatchApplicationInvoked() {
+    void shouldCallHttpClientWhenPatchDipApplicationInvoked() {
         // Given
         var id = UUID.randomUUID().toString();
-        doNothing().when(middlewareApi).patchApplication(id, applicationRequest);
+        doNothing().when(middlewareApi).patchDipApplication(id, applicationRequest);
 
         // When
-        middlewareRepository.patchApplication(id, applicationRequest);
+        middlewareRepository.patchDipApplication(id, applicationRequest);
 
         // Then
         verify(middlewareRequestEnricher, times(1)).enrichPatchApplicationRequest(applicationRequest);
-        verify(middlewareApi, times(1)).patchApplication(id, applicationRequest);
+        verify(middlewareApi, times(1)).patchDipApplication(id, applicationRequest);
+    }
+
+    @Test
+    void shouldCallHttpClientWhenPatchDipCCApplicationInvoked() {
+        // Given
+        var id = UUID.randomUUID().toString();
+        doNothing().when(middlewareApi).patchDipCCApplication(id, applicationRequest);
+
+        // When
+        middlewareRepository.patchDipCCApplication(id, applicationRequest);
+
+        // Then
+        verify(middlewareRequestEnricher, times(1)).enrichPatchApplicationRequest(applicationRequest);
+        verify(middlewareApi, times(1)).patchDipCCApplication(id, applicationRequest);
     }
 
     @Test

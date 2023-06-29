@@ -17,14 +17,14 @@
 
 package com.selina.lending.internal.service;
 
-import org.springframework.stereotype.Service;
-
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.function.BiConsumer;
 
 @Service
 @Slf4j
@@ -42,21 +42,21 @@ public class UpdateApplicationServiceImpl implements UpdateApplicationService {
     }
 
     @Override
-    public void updateDipCCApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
-        patchApplication(externalApplicationId, applicationRequest);
+    public void updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
+        patchApplication(externalApplicationId, applicationRequest, middlewareRepository::patchDipApplication);
     }
 
     @Override
-    public void updateDipApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
-        patchApplication(externalApplicationId, applicationRequest);
+    public void updateDipCCApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
+        patchApplication(externalApplicationId, applicationRequest, middlewareRepository::patchDipCCApplication);
     }
 
-    private void patchApplication(String externalApplicationId, ApplicationRequest applicationRequest) {
+    private void patchApplication(String externalApplicationId, ApplicationRequest applicationRequest, BiConsumer<String, ApplicationRequest> patchApplication) {
         var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
         if (isAuthorisedToUpdateApplication(applicationIdentifier.getSourceAccount(), externalApplicationId,
                 applicationRequest)) {
             log.info("Patch application for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalApplicationId);
-            middlewareRepository.patchApplication(applicationIdentifier.getId(), applicationRequest);
+            patchApplication.accept(applicationIdentifier.getId(), applicationRequest);
         } else {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE + " " + externalApplicationId);
         }

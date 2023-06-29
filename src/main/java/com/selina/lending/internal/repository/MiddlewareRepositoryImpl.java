@@ -101,12 +101,20 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApi.selectProduct(id, productCode);
     }
 
-    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareUpdateAppFallback")
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareUpdateDipAppFallback")
     @Override
-    public void patchApplication(String id, ApplicationRequest applicationRequest) {
-        log.info("Update application for [applicationId={}]", id);
+    public void patchDipApplication(String id, ApplicationRequest applicationRequest) {
+        log.info("Update DIP application for [applicationId={}]", id);
         middlewareRequestEnricher.enrichPatchApplicationRequest(applicationRequest);
-        middlewareApi.patchApplication(id, applicationRequest);
+        middlewareApi.patchDipApplication(id, applicationRequest);
+    }
+
+    @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareUpdateDipCCAppFallback")
+    @Override
+    public void patchDipCCApplication(String id, ApplicationRequest applicationRequest) {
+        log.info("Update DIP CC application for [applicationId={}]", id);
+        middlewareRequestEnricher.enrichPatchApplicationRequest(applicationRequest);
+        middlewareApi.patchDipCCApplication(id, applicationRequest);
     }
 
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiFallback")
@@ -150,9 +158,14 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         throw remoteResourceProblemException(e);
     }
 
-    private void middlewareUpdateAppFallback(CallNotPermittedException e) { //NOSONAR
+    private void middlewareUpdateDipAppFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
+
+    private void middlewareUpdateDipCCAppFallback(CallNotPermittedException e) { //NOSONAR
+        throw remoteResourceProblemException(e);
+    }
+
     private Resource middlewareEsisApiFallback(CallNotPermittedException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
