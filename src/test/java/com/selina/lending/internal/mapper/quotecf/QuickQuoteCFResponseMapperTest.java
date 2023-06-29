@@ -49,6 +49,8 @@ public class QuickQuoteCFResponseMapperTest extends MapperBase {
         assertThat(productOfferDto.getProductFee(), equalTo(PRODUCT_FEE));
         assertThat(productOfferDto.getTotalAmountRepaid(), equalTo(TOTAL_AMOUNT_REPAID));
         assertThat(productOfferDto.getOfferBalance(), equalTo(OFFER_BALANCE));
+        assertThat(productOfferDto.getBrokerFeesIncluded(), equalTo(BROKER_FEES_INCLUDED));
+        assertThat(productOfferDto.getBrokerFeesUpfront(), equalTo(BROKER_FEES_UPFRONT));
         assertTrue(productOfferDto.getHasProductFeeAddedToLoan());
         assertThat(productOfferDto.getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
         assertThat(productOfferDto.getMaximumLoanAmount(), equalTo(MAX_LOAN_AMOUNT));

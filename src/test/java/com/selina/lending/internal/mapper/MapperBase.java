@@ -302,6 +302,7 @@ public abstract class MapperBase {
                 .loanInformation(getLoanInformationDto())
                 .propertyDetails(getQuickQuoteCFPropertyDetailsDto())
                 .applicants(List.of(getQuickQuoteCFApplicantDto()))
+                .fees(getFeesDto())
                 .build();
     }
 
@@ -802,6 +803,8 @@ public abstract class MapperBase {
                 .ercData(getErc())
                 .productFeeAddedToLoan(true)
                 .decision(decision)
+                .brokerFeesUpfront(BROKER_FEES_UPFRONT)
+                .brokerFeesIncluded(BROKER_FEES_INCLUDED)
                 .initialRate(INITIAL_RATE)
                 .initialTerm(INITIAL_TERM)
                 .initialPayment(INITIAL_PAYMENT)
