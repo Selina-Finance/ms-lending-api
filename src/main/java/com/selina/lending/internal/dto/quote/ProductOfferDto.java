@@ -60,7 +60,5 @@ public class ProductOfferDto {
     String applyUrl;
     Double eligibility;
     Double arrangementFeeSelina;
-    Double brokerFeesUpfront;
-    Double brokerFeesIncluded;
     List<ErcDto> ercData;
 }
