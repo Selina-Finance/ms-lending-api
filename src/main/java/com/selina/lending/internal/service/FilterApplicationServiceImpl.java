@@ -23,6 +23,7 @@ import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapp
 import com.selina.lending.internal.mapper.quote.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
+import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.quickquote.ArrangementFeeSelinaService;
@@ -66,7 +67,13 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     private void addArrangementFeeSelina(FilterQuickQuoteApplicationRequest selectionRequest) {
-        selectionRequest.getApplication().setFees(arrangementFeeService.getFeesFromToken());
+        var fees = arrangementFeeService.getFeesFromToken();
+        if (selectionRequest.getApplication().getFees() != null) {
+            selectionRequest.getApplication().getFees().setAddArrangementFeeSelina(fees.getAddArrangementFeeSelina());
+            selectionRequest.getApplication().getFees().setArrangementFeeDiscountSelina(fees.getArrangementFeeDiscountSelina());
+        } else {
+            selectionRequest.getApplication().setFees(fees);
+        }
     }
 
     private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {

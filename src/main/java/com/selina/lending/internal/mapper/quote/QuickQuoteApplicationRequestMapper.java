@@ -20,6 +20,7 @@ package com.selina.lending.internal.mapper.quote;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.selina.lending.internal.dto.FeesDto;
 import com.selina.lending.internal.dto.IncomeDto;
 import com.selina.lending.internal.dto.IncomeItemDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
@@ -27,6 +28,7 @@ import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
+import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.quote.Applicant;
 import com.selina.lending.internal.service.application.domain.quote.Application;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
@@ -74,6 +76,25 @@ public class QuickQuoteApplicationRequestMapper {
                 .applicants(mapApplicants(quickQuoteApplicationRequest.getApplicants()))
                 .loanInformation(mapLoanInformation(quickQuoteApplicationRequest.getLoanInformation()))
                 .propertyDetails(mapPropertyDetails(quickQuoteApplicationRequest.getPropertyDetails()))
+                .fees(mapFees(quickQuoteApplicationRequest.getFees()))
+                .build();
+    }
+
+    private static Fees mapFees(FeesDto feesDto) {
+        return feesDto == null ? null : Fees.builder()
+                .isAddAdviceFeeToLoan(feesDto.getIsAddAdviceFeeToLoan())
+                .isAddArrangementFeeToLoan(feesDto.getIsAddArrangementFeeToLoan())
+                .isAddCommissionFeeToLoan(feesDto.getIsAddCommissionFeeToLoan())
+                .isAddThirdPartyFeeToLoan(feesDto.getIsAddThirdPartyFeeToLoan())
+                .isAddValuationFeeToLoan(feesDto.getIsAddValuationFeeToLoan())
+                .adviceFee(feesDto.getAdviceFee())
+                .arrangementFee(feesDto.getArrangementFee())
+                .commissionFee(feesDto.getCommissionFee())
+                .thirdPartyFee(feesDto.getThirdPartyFee())
+                .valuationFee(feesDto.getValuationFee())
+                .isAddProductFeesToFacility(feesDto.getIsAddProductFeesToFacility())
+                .intermediaryFeeAmount(feesDto.getIntermediaryFeeAmount())
+                .isAddIntermediaryFeeToLoan(feesDto.getIsAddIntermediaryFeeToLoan())
                 .build();
     }
 
