@@ -1,6 +1,7 @@
 package com.selina.lending.internal.mapper.quotecf;
 
 import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
 import org.junit.jupiter.api.Test;
 
@@ -34,9 +35,8 @@ public class QuickQuoteCFRequestMapperTest extends MapperBase {
         assertNull(applicationRequest.getSourceAccount());
 
         assertPropertyDetails(applicationRequest);
-
         assertLoanInformation(applicationRequest);
-
+        assertFees(applicationRequest);
     }
 
     private void assertPropertyDetails(QuickQuoteCFRequest application) {
@@ -61,4 +61,15 @@ public class QuickQuoteCFRequestMapperTest extends MapperBase {
         assertNull(loanInformation.getFacilities());
     }
 
+    private void assertFees(QuickQuoteCFRequest applicationRequest) {
+        var fees = applicationRequest.getFees();
+        assertThat(fees, notNullValue());
+        assertThat(fees.getIsAddAdviceFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddArrangementFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddCommissionFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddValuationFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddThirdPartyFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddIntermediaryFeeToLoan(), equalTo(false));
+        assertThat(fees.getArrangementFee(), equalTo(ARRANGEMENT_FEE));
+    }
 }

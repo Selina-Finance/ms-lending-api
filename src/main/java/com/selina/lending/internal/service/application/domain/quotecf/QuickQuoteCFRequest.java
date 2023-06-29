@@ -1,6 +1,7 @@
 package com.selina.lending.internal.service.application.domain.quotecf;
 
 import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
 import lombok.Builder;
@@ -16,4 +17,5 @@ public class QuickQuoteCFRequest {
     List<Applicant> applicants;
     LoanInformation loanInformation;
     PropertyDetails propertyDetails;
+    private Fees fees;
 }

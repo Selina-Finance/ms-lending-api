@@ -32,6 +32,8 @@ public class ProductOfferDto {
     Double requestedLoanAmount;
     Double maximumLoanAmount;
     Double offerBalance;
+    Double brokerFeesIncluded;
+    Double brokerFeesUpfront;
     Double totalAmountRepaid;
     Boolean hasFee;
     Double productFee;
