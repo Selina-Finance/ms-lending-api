@@ -351,6 +351,7 @@ public abstract class MapperBase {
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
                 .applicants(getQuickQuoteApplicantDtoList())
                 .lead(getLeadDto())
+                .partner(getPartner())
                 .build();
     }
 
