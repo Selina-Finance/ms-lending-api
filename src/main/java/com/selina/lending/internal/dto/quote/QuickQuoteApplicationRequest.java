@@ -29,6 +29,7 @@ import com.selina.lending.internal.dto.ApplicationRequest;
 import com.selina.lending.internal.dto.LeadDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 
+import com.selina.lending.internal.service.application.domain.Partner;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,4 +59,6 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
     private QuickQuotePropertyDetailsDto propertyDetails;
 
     LeadDto lead;
+
+    Partner partner;
 }

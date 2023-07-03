@@ -36,6 +36,7 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "hasGivenConsentForMarketingCommunications", constant = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS)
     @Mapping(target = "fees", source = "fees", qualifiedByName = "setDefaultFeesValues")
     @Mapping(target = "offers", source = "products")
+    @Mapping(target = "partner", source = "request.partner")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
                                                              List<Product> products, Fees fees);
 

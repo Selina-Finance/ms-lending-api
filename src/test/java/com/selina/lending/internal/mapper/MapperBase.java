@@ -82,6 +82,7 @@ import com.selina.lending.internal.service.application.domain.Intermediary;
 import com.selina.lending.internal.service.application.domain.Lead;
 import com.selina.lending.internal.service.application.domain.LoanInformation;
 import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.internal.service.application.domain.Partner;
 import com.selina.lending.internal.service.application.domain.PreviousName;
 import com.selina.lending.internal.service.application.domain.PriorCharges;
 import com.selina.lending.internal.service.application.domain.PropertyDetails;
@@ -252,6 +253,8 @@ public abstract class MapperBase {
     public static final Double MINIMUM_INITIAL_DRAWDOWN = 1000.0;
     public static final Double OFFER_VALIDITY = 30.0;
     public static final Double ESIS_LOAN_AMOUNT = 50000.0;
+    public static final String SUB_UNIT_ID = "subUnitId";
+    public static final String COMPANY_ID = "companyId";
 
     static {
         try {
@@ -970,6 +973,13 @@ public abstract class MapperBase {
         return CreditCommitmentsDetail.builder()
                 .system(getSystem())
                 .user(getUser())
+                .build();
+    }
+
+    public Partner getPartner() {
+        return Partner.builder()
+                .subUnitId(SUB_UNIT_ID)
+                .companyId(COMPANY_ID)
                 .build();
     }
 
