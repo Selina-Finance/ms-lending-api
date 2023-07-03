@@ -96,24 +96,26 @@ class FilterApplicationServiceImplTest extends MapperBase {
     @Test
     void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequestWithPartnerAdded() {
         // Given
+        var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteRequest.setPartner(null);
+
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                 .decision("Accepted")
                 .products(List.of(getProduct()))
                 .build();
 
         when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(middlewareQuickQuoteApplicationRequestMapper
-                .mapToQuickQuoteRequest(any(QuickQuoteApplicationRequest.class), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
 
         //When
-        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+        var response = filterApplicationService.filter(quickQuoteRequest);
 
         //Then
         verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
-        verify(middlewareRepository, times(1)).createQuickQuoteApplication(quickQuoteRequest);
         verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
         verify(partnerService, times(1)).getPartnerFromToken();
+        assertThat(quickQuoteRequest.getPartner().getSubUnitId()).isEqualTo(SUB_UNIT_ID);
+        assertThat(quickQuoteRequest.getPartner().getCompanyId()).isEqualTo(COMPANY_ID);
         assertThat(response).isEqualTo(decisionResponse);
     }
 
