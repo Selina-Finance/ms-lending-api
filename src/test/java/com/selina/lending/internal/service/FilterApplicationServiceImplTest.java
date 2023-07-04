@@ -22,6 +22,7 @@ import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.mapper.quote.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.repository.SelectionServiceRepository;
+import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
@@ -325,4 +326,28 @@ class FilterApplicationServiceImplTest extends MapperBase {
         verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
         assertThat(response).isEqualTo(decisionResponse);
     }
+
+    @Test
+    void shouldCreateApplicationRequestWithFeesIfProvidedButNoArrangementFeeSelinaFields() {
+        // Given
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Accepted")
+                .products(List.of(getProduct()))
+                .build();
+
+        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+        when(middlewareQuickQuoteApplicationRequestMapper
+                .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);
+
+        // When
+        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        // Then
+        assertThat(quickQuoteApplicationRequest.getFees().getArrangementFee()).isEqualTo(1000.00);
+        assertThat(quickQuoteApplicationRequest.getFees().getAdviceFee()).isEqualTo(599.00);
+        assertTrue(quickQuoteApplicationRequest.getFees().getIsAddAdviceFeeToLoan());
+    }
+
 }

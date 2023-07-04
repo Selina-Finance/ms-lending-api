@@ -66,6 +66,39 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertPartner(middlewareCreateApplicationEvent.getPartner());
     }
 
+    @Test
+    void shouldMapQuickQuoteApplicationRequestWithFeesToMiddlewareCreateApplicationEvent() {
+        // Given
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+        List<Product> products = List.of(getProduct());
+        Fees fees = Fees.builder()
+                .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
+                .addArrangementFeeSelina(true)
+                .isAddAdviceFeeToLoan(true)
+                .isAddArrangementFeeToLoan(true)
+                .isAddCommissionFeeToLoan(true)
+                .isAddThirdPartyFeeToLoan(true)
+                .isAddValuationFeeToLoan(true)
+                .adviceFee(FEE)
+                .arrangementFee(ARRANGEMENT_FEE)
+                .commissionFee(FEE)
+                .thirdPartyFee(FEE)
+                .valuationFee(FEE)
+                .isAddProductFeesToFacility(false)
+                .intermediaryFeeAmount(FEE)
+                .isAddIntermediaryFeeToLoan(false)
+                .build();
+
+        //When
+        QuickQuoteRequest middlewareCreateApplicationEvent =
+                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+
+        //Then
+
+        assertFeesWithAllOtherFees(middlewareCreateApplicationEvent.getFees());
+    }
+
     private void assertApplicants(List<Applicant> applicants) {
         assertThat(applicants, hasSize(1));
 
@@ -106,6 +139,28 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
                 .isAddProductFeesToFacility(false)
                 .addArrangementFeeSelina(true)
                 .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
+                .build();
+
+        assertThat(fees, equalTo(expectedFees));
+    }
+
+    private void assertFeesWithAllOtherFees(Fees fees) {
+        Fees expectedFees = Fees.builder()
+                .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
+                .addArrangementFeeSelina(true)
+                .isAddAdviceFeeToLoan(true)
+                .isAddArrangementFeeToLoan(true)
+                .isAddCommissionFeeToLoan(true)
+                .isAddThirdPartyFeeToLoan(true)
+                .isAddValuationFeeToLoan(true)
+                .adviceFee(FEE)
+                .arrangementFee(ARRANGEMENT_FEE)
+                .commissionFee(FEE)
+                .thirdPartyFee(FEE)
+                .valuationFee(FEE)
+                .isAddProductFeesToFacility(false)
+                .intermediaryFeeAmount(FEE)
+                .isAddIntermediaryFeeToLoan(false)
                 .build();
 
         assertThat(fees, equalTo(expectedFees));
