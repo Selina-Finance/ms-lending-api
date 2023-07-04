@@ -203,8 +203,8 @@ public abstract class MapperBase {
 
     public static final Boolean IS_APRC_HEADLINE = false;
     public static final Double REQUESTED_LOAN_AMOUNT = 50000.0;
-    public static final Double OUTSTANDING_BALANCE = 20000.0;
-    public static final Double BALANCE_CONSOLIDATED = 25000.0;
+    public static final Double OUTSTANDING_BALANCE = 25000.0;
+    public static final Double BALANCE_CONSOLIDATED = 20000.0;
     public static final Double OTHER_DEBT_PAYMENTS = 5000.0;
     public static final Double MAX_BALANCE_ESIS = 100000.0;
     public static final String ERC_PROFILE = "5%, 4%, 3%, 2%, 1%";

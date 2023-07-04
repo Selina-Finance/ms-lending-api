@@ -60,7 +60,6 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
         middlewareRepository = new MiddlewareApplicationServiceRepositoryImpl(middlewareApplicationServiceApi);
     }
 
-
     @Test
     void shouldCallHttpClientWhenGetApplicationIdByExternalApplicationIdInvoked() {
         //Given

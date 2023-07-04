@@ -22,6 +22,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 import com.selina.lending.internal.dto.EmploymentDto;
+import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.RetrieveApplicationService;
@@ -388,6 +389,141 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.setApplicants(List.of(firstApplicant, secondApplicant));
         secondApplicant.setApplicant2LivesWithApplicant1For3Years(true);
         secondApplicant.setApplicant2LivesWithApplicant1(true);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenCreateDipApplicationWithNegativePriorChargesBalanceOutstandingThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getPropertyDetails().getPriorCharges().setBalanceOutstanding(-100.0);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(2)))
+                .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.priorCharges.balanceConsolidated"))
+                .andExpect(jsonPath("$.violations[0].message").value("The 'balanceConsolidated' must be less than or equal to the 'balanceOutstanding'"))
+                .andExpect(jsonPath("$.violations[1].field").value("propertyDetails.priorCharges.balanceOutstanding"))
+                .andExpect(jsonPath("$.violations[1].message").value("must be greater than or equal to 0"));
+    }
+
+    @Test
+    void whenCreateDipApplicationWithNegativePriorChargesBalanceConsolidatedThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getPropertyDetails().getPriorCharges().setBalanceConsolidated(-100.0);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.priorCharges.balanceConsolidated"))
+                .andExpect(jsonPath("$.violations[0].message").value("must be greater than or equal to 0"));
+    }
+
+    @Test
+    void whenCreateDipApplicationWithNegativePriorChargesMonthlyPaymentThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getPropertyDetails().getPriorCharges().setMonthlyPayment(-100.0);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.priorCharges.monthlyPayment"))
+                .andExpect(jsonPath("$.violations[0].message").value("must be greater than or equal to 0"));
+    }
+
+    @Test
+    void whenCreateDipApplicationWithNegativePriorChargesOtherDebtPaymentsThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getPropertyDetails().getPriorCharges().setOtherDebtPayments(-100.0);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.priorCharges.otherDebtPayments"))
+                .andExpect(jsonPath("$.violations[0].message").value("must be greater than or equal to 0"));
+    }
+
+    @Test
+    void whenCreateDipApplicationWithPriorChargesBalanceConsolidatedGreaterThanBalanceOutstandingThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        PriorChargesDto priorCharges = dipApplicationRequest.getPropertyDetails().getPriorCharges();
+        priorCharges.setBalanceOutstanding(1000.0);
+        priorCharges.setBalanceConsolidated(2000.0);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("propertyDetails.priorCharges.balanceConsolidated"))
+                .andExpect(jsonPath("$.violations[0].message").value("The 'balanceConsolidated' must be less than or equal to the 'balanceOutstanding'"));
+    }
+
+    @Test
+    void whenCreateDipApplicationWithPriorChargesBalanceConsolidatedEqualToBalanceOutstandingThenReturnOk() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        PriorChargesDto priorCharges = dipApplicationRequest.getPropertyDetails().getPriorCharges();
+        priorCharges.setBalanceOutstanding(1000.0);
+        priorCharges.setBalanceConsolidated(1000.0);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenCreateDipApplicationWithoutSpecifyingPriorChargesBalanceOutstandingThenReturnOk() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getPropertyDetails().getPriorCharges().setBalanceOutstanding(null);
+
+        //When
+        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenCreateDipApplicationWithoutSpecifyingPriorChargesBalanceConsolidatedThenReturnOk() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getPropertyDetails().getPriorCharges().setBalanceConsolidated(null);
 
         //When
         mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))

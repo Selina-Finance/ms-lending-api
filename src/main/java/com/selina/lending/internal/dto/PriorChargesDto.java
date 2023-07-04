@@ -17,22 +17,29 @@
 
 package com.selina.lending.internal.dto;
 
-import javax.validation.constraints.Pattern;
-
 import com.selina.lending.api.controller.SwaggerConstants;
-
+import com.selina.lending.api.support.validator.LessThanOrEqualTo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 
 @Builder
-@Value
+@Data
+@LessThanOrEqualTo(comparisonValueFieldName = "balanceConsolidated", valueToCompareToFieldName = "balanceOutstanding")
 public class PriorChargesDto {
+
+      @PositiveOrZero
       Double balanceConsolidated;
+      @PositiveOrZero
       Double balanceOutstanding;
+      @PositiveOrZero
       Double monthlyPayment;
       @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
       @Schema(example = SwaggerConstants.EXAMPLE_DATE)
       String priorChargesYoungestDate;
+      @PositiveOrZero
       Double otherDebtPayments;
 }
