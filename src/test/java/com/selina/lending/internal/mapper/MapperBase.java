@@ -351,6 +351,18 @@ public abstract class MapperBase {
                 .build();
     }
 
+    protected QuickQuoteApplicationRequest getQuickQuoteApplicationRequestWithFeesDto() {
+        return QuickQuoteApplicationRequest.builder()
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .expenditure(List.of(getExpenditureDto()))
+                .loanInformation(getLoanInformationDto())
+                .propertyDetails(getQuickQuotePropertyDetailsDto())
+                .applicants(getQuickQuoteApplicantDtoList())
+                .lead(getLeadDto())
+                .fees(getFeesDto())
+                .build();
+    }
+
     private List<QuickQuoteApplicantDto> getQuickQuoteApplicantDtoList() {
         List<QuickQuoteApplicantDto> list = new ArrayList<>();
         list.add(getQuickQuoteApplicantDto());

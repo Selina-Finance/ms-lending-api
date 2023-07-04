@@ -50,6 +50,7 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(application.getApplicants().get(0).getIncomes().size(), equalTo(1));
         assertThat(application.getLoanInformation().getRequestedLoanAmount(), equalTo(REQUESTED_LOAN_AMOUNT));
         assertThat(application.getLoanInformation().getRequestedLoanTerm(), equalTo(LOAN_TERM));
+        assertThat(applicationRequest.getApplication().getFees(), nullValue());
 
         assertPropertyDetails(application);
 
@@ -69,6 +70,20 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(applicationRequest.getApplication().getPropertyDetails(), notNullValue());
         assertPropertyDetails(applicationRequest.getApplication());
         assertThat(applicationRequest.getOptions().getPriorCharges(), nullValue());
+        assertThat(applicationRequest.getApplication().getFees(), nullValue());
+    }
+
+    @Test
+    void shouldMapToFilteredQuickQuoteApplicationRequestWithFees() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+
+        //When
+        var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+        // Then
+        assertFees(applicationRequest);
+
     }
 
     private void assertPropertyDetails(Application application) {
@@ -85,5 +100,21 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(priorCharges.getBalanceOutstanding(), equalTo(OUTSTANDING_BALANCE));
         assertThat(priorCharges.getBalanceConsolidated(), equalTo(BALANCE_CONSOLIDATED));
         assertThat(priorCharges.getOtherDebtPayments(), equalTo(OTHER_DEBT_PAYMENTS));
+    }
+
+    private void assertFees(FilterQuickQuoteApplicationRequest applicationRequest) {
+        var fees = applicationRequest.getApplication().getFees();
+        assertThat(fees.getCommissionFee(), equalTo(FEE));
+        assertThat(fees.getAdviceFee(), equalTo(FEE));
+        assertThat(fees.getThirdPartyFee(), equalTo(FEE));
+        assertThat(fees.getValuationFee(), equalTo(FEE));
+        assertThat(fees.getIsAddCommissionFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddAdviceFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddArrangementFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddValuationFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddThirdPartyFeeToLoan(), equalTo(true));
+        assertThat(fees.getIsAddProductFeesToFacility(), equalTo(true));
+        assertThat(fees.getIsAddIntermediaryFeeToLoan(), equalTo(false));
+        assertThat(fees.getArrangementFee(), equalTo(ARRANGEMENT_FEE));
     }
 }
