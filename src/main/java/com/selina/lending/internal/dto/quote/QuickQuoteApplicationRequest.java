@@ -65,4 +65,5 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
 
     @Valid
     FeesDto fees;
+
 }
