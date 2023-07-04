@@ -27,6 +27,7 @@ import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.quickquote.ArrangementFeeSelinaService;
+import com.selina.lending.internal.service.quickquote.PartnerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,15 +41,18 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final SelectionServiceRepository selectionServiceRepository;
     private final MiddlewareRepository middlewareRepository;
     private final ArrangementFeeSelinaService arrangementFeeService;
+    private final PartnerService partnerService;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionServiceRepository selectionServiceRepository,
                                         MiddlewareRepository middlewareRepository,
-                                        ArrangementFeeSelinaService arrangementFeeService) {
+                                        ArrangementFeeSelinaService arrangementFeeService,
+                                        PartnerService partnerService) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionServiceRepository = selectionServiceRepository;
         this.middlewareRepository = middlewareRepository;
         this.arrangementFeeService = arrangementFeeService;
+        this.partnerService = partnerService;
     }
 
     @Override
@@ -60,6 +64,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
                 && decisionResponse.getProducts() != null) {
             setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
+            addPartner(request);
             middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
                     .mapToQuickQuoteRequest(request, decisionResponse.getProducts(), selectionRequest.getApplication().getFees()));
         }
@@ -88,5 +93,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                 .stream()
                 .anyMatch(quickQuoteApplicant -> quickQuoteApplicant.getPrimaryApplicant() != null
                         && quickQuoteApplicant.getPrimaryApplicant());
+    }
+
+    private void addPartner(QuickQuoteApplicationRequest request) {
+        request.setPartner(partnerService.getPartnerFromToken());
     }
 }

@@ -63,6 +63,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
         assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
         assertOffers(middlewareCreateApplicationEvent.getOffers());
+        assertPartner(middlewareCreateApplicationEvent.getPartner());
     }
 
     @Test
@@ -256,6 +257,11 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(offer.getEsisLoanAmount(), equalTo(ESIS_LOAN_AMOUNT));
         assertThat(offer.getArrangementFeeSelina(), equalTo(ARRANGEMENT_FEE_SELINA));
         assertNotNull(offer.getErcData());
+    }
+
+    private void assertPartner(Partner partner) {
+        assertThat(partner.getSubUnitId(), equalTo(SUB_UNIT_ID));
+        assertThat(partner.getCompanyId(), equalTo(COMPANY_ID));
     }
 
 }
