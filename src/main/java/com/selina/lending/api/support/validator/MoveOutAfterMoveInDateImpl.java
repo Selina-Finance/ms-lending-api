@@ -8,9 +8,11 @@ import javax.validation.ConstraintValidatorContext;
 
 public class MoveOutAfterMoveInDateImpl implements ConstraintValidator<MoveOutAfterMoveInDate, AddressDto> {
 
+    private static final String ADDRESS_TYPE_PREVIOUS = "previous";
+
     @Override
     public boolean isValid(AddressDto value, ConstraintValidatorContext context) {
-        if (!value.getAddressType().equals("previous")) {
+        if (!ADDRESS_TYPE_PREVIOUS.equals(value.getAddressType())) {
             return true;
         }
 
@@ -19,7 +21,6 @@ public class MoveOutAfterMoveInDateImpl implements ConstraintValidator<MoveOutAf
         }
 
         return value.getToDate().isAfter(value.getFromDate());
-
     }
 
 }
