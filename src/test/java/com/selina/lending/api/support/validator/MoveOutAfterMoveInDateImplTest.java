@@ -1,19 +1,20 @@
 package com.selina.lending.api.support.validator;
 
 import com.selina.lending.internal.dto.AddressDto;
+import com.selina.lending.internal.mapper.MapperBase;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 
-public class MoveOutAfterMoveInDateImplTest {
+public class MoveOutAfterMoveInDateImplTest extends MapperBase {
 
     private static Validator validator;
 
@@ -22,6 +23,19 @@ public class MoveOutAfterMoveInDateImplTest {
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             validator = factory.getValidator();
         }
+    }
+
+    @Test
+    void whenAddressTypeIsNullThenReturnValid() {
+        // Given
+        var addressDto = getAddressDto();
+        addressDto.setAddressType(null);
+
+        // When
+        var violations = validator.validate(addressDto);
+
+        // Then
+        assertThat(violations, hasSize(0));
     }
 
     @Test
