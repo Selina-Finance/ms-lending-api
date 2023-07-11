@@ -15,9 +15,10 @@
  *
  */
 
-package com.selina.lending.messaging.mapper.brokerrequest;
+package com.selina.lending.messaging.mapper;
 
-import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
+import com.selina.lending.messaging.event.BrokerRequestEvent;
+import com.selina.lending.util.IPHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -28,21 +29,15 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.selina.lending.messaging.mapper.brokerrequest.IPHelper.getRemoteAddr;
-
 @Slf4j
 @Component
 public class BrokerRequestEventMapper {
 
-    public Optional<BrokerRequestKpiEvent> toEvent(
-            ContentCachingRequestWrapper request,
-            ContentCachingResponseWrapper response,
-            Instant started,
-            String source) {
+    public Optional<BrokerRequestEvent> toEvent(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response,
+                                                Instant started, String source) {
         try {
-
-            return Optional.of(BrokerRequestKpiEvent.builder()
-                    .ip(getRemoteAddr(request))
+            return Optional.of(BrokerRequestEvent.builder()
+                    .ip(IPHelper.getRemoteAddr(request))
                     .source(source)
                     .uriPath(request.getRequestURI())
                     .httpMethod(request.getMethod())
@@ -52,7 +47,6 @@ public class BrokerRequestEventMapper {
                     .started(started)
                     .finished(Instant.now())
                     .build());
-
         } catch (Exception e) {
             log.error("Can't map kpi event. Reason: {}", e.getMessage());
             return Optional.empty();

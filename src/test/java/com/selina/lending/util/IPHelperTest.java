@@ -15,12 +15,12 @@
  *
  */
 
-package com.selina.lending.messaging.mapper.brokerrequest;
+package com.selina.lending.util;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import static com.selina.lending.messaging.mapper.brokerrequest.IPHelper.getRemoteAddr;
+import static com.selina.lending.util.IPHelper.getRemoteAddr;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class IPHelperTest {

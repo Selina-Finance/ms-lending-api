@@ -27,7 +27,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.concurrent.SettableListenableFuture;
 
-import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
+import static com.selina.lending.testutil.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

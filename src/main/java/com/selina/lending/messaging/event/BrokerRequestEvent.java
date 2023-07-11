@@ -15,22 +15,26 @@
  *
  */
 
-package com.selina.lending.messaging.mapper.brokerrequest;
+package com.selina.lending.messaging.event;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.Builder;
 
-import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 
-public class IPHelper {
-
-    private IPHelper() {
-    }
-
-    public static String getRemoteAddr(@NotNull HttpServletRequest request) {
-        String ipFromHeader = request.getHeader("X-FORWARDED-FOR");
-        if (ipFromHeader != null && ipFromHeader.length() > 0) {
-            return ipFromHeader;
-        }
-        return request.getRemoteAddr();
+@Builder(toBuilder = true)
+public record BrokerRequestEvent(
+        String ip,
+        String source,
+        String uriPath,
+        String httpMethod,
+        String httpRequestBody,
+        String httpResponseBody,
+        Integer httpResponseCode,
+        Instant started,
+        Instant finished
+) implements KafkaEvent {
+    @Override
+    public String key() {
+        return source;
     }
 }

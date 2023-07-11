@@ -19,7 +19,7 @@ package com.selina.lending.api.interceptor;
 
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
-import com.selina.lending.messaging.mapper.brokerrequest.BrokerRequestEventMapper;
+import com.selina.lending.messaging.mapper.BrokerRequestEventMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +33,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.selina.lending.testHelper.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
+import static com.selina.lending.testutil.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

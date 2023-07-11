@@ -19,7 +19,7 @@ package com.selina.lending.api.interceptor;
 
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
-import com.selina.lending.messaging.mapper.brokerrequest.BrokerRequestEventMapper;
+import com.selina.lending.messaging.mapper.BrokerRequestEventMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;

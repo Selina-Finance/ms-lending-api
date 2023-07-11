@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.messaging.mapper.brokerrequest;
+package com.selina.lending.messaging.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

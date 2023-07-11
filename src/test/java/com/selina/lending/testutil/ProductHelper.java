@@ -1,4 +1,4 @@
-package com.selina.lending.testHelper;
+package com.selina.lending.testutil;
 
 import java.util.Random;
 

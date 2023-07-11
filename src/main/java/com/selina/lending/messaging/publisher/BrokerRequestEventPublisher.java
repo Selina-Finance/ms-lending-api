@@ -17,7 +17,7 @@
 
 package com.selina.lending.messaging.publisher;
 
-import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
+import com.selina.lending.messaging.event.BrokerRequestEvent;
 import com.selina.lending.messaging.event.KafkaEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class BrokerRequestEventPublisher {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(BrokerRequestKpiEvent event) {
+    public void publish(BrokerRequestEvent event) {
         log.debug("Request to publish BrokerRequestKpiEvent: {}", event);
         kafkaTemplate.send(brokerRequestKpiTopicName, event.key(), event).addCallback(
                 result -> successfulCallback(event, result),

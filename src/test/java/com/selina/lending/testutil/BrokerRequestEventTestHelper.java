@@ -15,19 +15,18 @@
  *
  */
 
-package com.selina.lending.testHelper;
+package com.selina.lending.testutil;
 
-import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
+import com.selina.lending.messaging.event.BrokerRequestEvent;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 public class BrokerRequestEventTestHelper {
     public static final String SOURCE = "the broker";
 
-    public static BrokerRequestKpiEvent buildBrokerRequestKpiEvent() {
-        return BrokerRequestKpiEvent.builder()
+    public static BrokerRequestEvent buildBrokerRequestKpiEvent() {
+        return BrokerRequestEvent.builder()
                 .source(SOURCE)
                 .uriPath("/test")
                 .httpMethod("GET")
