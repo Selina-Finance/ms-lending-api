@@ -19,9 +19,9 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.api.errors.custom.ConflictException;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.internal.service.application.domain.Application;
@@ -57,7 +57,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
     private MiddlewareRepository middlewareRepository;
 
     @Mock
-    private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private GetApplicationRepository getApplicationRepository;
 
     @Mock
     private QuickQuoteCFRequest quickQuoteCFRequest;
@@ -96,7 +96,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
             String notFoundMsg = "Not found";
             var id = UUID.randomUUID().toString();
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
+            when(getApplicationRepository.getAppIdByExternalId(id)).thenThrow(
                     new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
             when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
             when(applicationResponse.getApplication()).thenReturn(application);
@@ -118,7 +118,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
             //Given
             var id = UUID.randomUUID().toString();
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
+            when(getApplicationRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getId()).thenReturn("any");
 
             //When
@@ -135,7 +135,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
             //Given
             var id = UUID.randomUUID().toString();
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
+            when(getApplicationRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getId()).thenReturn(null);
             when(applicationResponse.getApplication()).thenReturn(application);
             when(middlewareRepository.createDipCCApplication(applicationRequest)).thenReturn(applicationResponse);
@@ -162,7 +162,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
             String notFoundMsg = "Not found";
             var id = UUID.randomUUID().toString();
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenThrow(
+            when(getApplicationRepository.getAppIdByExternalId(id)).thenThrow(
                     new FeignException.NotFound(notFoundMsg, request(), notFoundMsg.getBytes(), null));
             when(middlewareRepository.createDipApplication(applicationRequest)).thenReturn(applicationResponse);
             when(applicationResponse.getApplication()).thenReturn(application);
@@ -184,7 +184,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
             //Given
             var id = UUID.randomUUID().toString();
             when(applicationRequest.getExternalApplicationId()).thenReturn(id);
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
+            when(getApplicationRepository.getAppIdByExternalId(id)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getId()).thenReturn("any");
 
             //When

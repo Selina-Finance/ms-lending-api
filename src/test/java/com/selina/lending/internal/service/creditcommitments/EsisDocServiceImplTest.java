@@ -18,10 +18,10 @@
 package com.selina.lending.internal.service.creditcommitments;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,7 +46,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @ExtendWith(MockitoExtension.class)
 class EsisDocServiceImplTest {
     @Mock
-    private MiddlewareApplicationServiceRepository applicationRepository;
+    private GetApplicationRepository applicationRepository;
     @Mock
     private AccessManagementService accessManagementService;
     @Mock

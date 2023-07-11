@@ -18,10 +18,10 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.Offer;
 import com.selina.lending.internal.service.filter.RuleOutcomeFilter;
 
@@ -41,7 +41,6 @@ import static org.mockito.Mockito.when;
 
 import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
 import static com.selina.lending.internal.dto.LendingConstants.DIP_APPLICATION_TYPE;
-import static com.selina.lending.internal.dto.LendingConstants.DECLINE_DECISION;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +65,7 @@ class RetrieveApplicationServiceImplTest {
     private MiddlewareRepository middlewareRepository;
 
     @Mock
-    private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private GetApplicationRepository getApplicationRepository;
 
     @Mock
     private AccessManagementService accessManagementService;
@@ -81,7 +80,7 @@ class RetrieveApplicationServiceImplTest {
     @Test
     void shouldGetApplicationByExternalApplicationId() {
         //Given
-        when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(getApplicationRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
@@ -101,7 +100,7 @@ class RetrieveApplicationServiceImplTest {
     @Test
     void shouldGetApplicationByExternalApplicationIdForQuickQuote() {
         //Given
-        when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(getApplicationRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
@@ -121,7 +120,7 @@ class RetrieveApplicationServiceImplTest {
     @Test
     void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToGetApplication() {
         //Given
-        when(middlewareApplicationServiceRepository.getAppIdByExternalId(
+        when(getApplicationRepository.getAppIdByExternalId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         doThrow(new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE)).when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);

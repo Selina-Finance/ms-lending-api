@@ -18,9 +18,9 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -59,7 +59,7 @@ class UpdateApplicationServiceImplTest {
     private MiddlewareRepository middlewareRepository;
 
     @Mock
-    private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private GetApplicationRepository getApplicationRepository;
 
     @Mock
     private AccessManagementService accessManagementService;
@@ -72,7 +72,7 @@ class UpdateApplicationServiceImplTest {
         @Test
         void shouldUpdateDipCCApplication() {
             //Given
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(
+            when(getApplicationRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(
                     applicationIdentifier);
             when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
@@ -84,14 +84,14 @@ class UpdateApplicationServiceImplTest {
             updateApplicationService.updateDipCCApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
 
             //Then
-            verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
+            verify(getApplicationRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(1)).patchDipCCApplication(eq(APPLICATION_ID), any());
         }
 
         @Test
         void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateDipCCApplication() {
             // Given
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(
+            when(getApplicationRepository.getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
             when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(false);
@@ -101,7 +101,7 @@ class UpdateApplicationServiceImplTest {
 
             // Then
             assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-            verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
+            verify(getApplicationRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(0)).patchDipCCApplication(anyString(), any());
         }
@@ -109,7 +109,7 @@ class UpdateApplicationServiceImplTest {
         @Test
         void shouldThrowAccessDeniedExceptionWhenApplicationRequestExternalApplicationIdNotMatched() {
             // Given
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(
+            when(getApplicationRepository.getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
             when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
@@ -120,7 +120,7 @@ class UpdateApplicationServiceImplTest {
 
             // Then
             assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-            verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
+            verify(getApplicationRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(0)).patchDipCCApplication(anyString(), any());
         }
@@ -131,7 +131,7 @@ class UpdateApplicationServiceImplTest {
         @Test
         void shouldUpdateDipApplication() {
             //Given
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(
+            when(getApplicationRepository.getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
@@ -143,7 +143,7 @@ class UpdateApplicationServiceImplTest {
             updateApplicationService.updateDipApplication(EXTERNAL_APPLICATION_ID, applicationRequest);
 
             //Then
-            verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
+            verify(getApplicationRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(1)).patchDipApplication(eq(APPLICATION_ID), any());
         }
@@ -151,7 +151,7 @@ class UpdateApplicationServiceImplTest {
         @Test
         void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToUpdateDipApplication() {
             // Given
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(
+            when(getApplicationRepository.getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
             when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(false);
@@ -161,7 +161,7 @@ class UpdateApplicationServiceImplTest {
 
             // Then
             assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-            verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
+            verify(getApplicationRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(0)).patchDipApplication(eq(APPLICATION_ID), any());
         }
@@ -169,7 +169,7 @@ class UpdateApplicationServiceImplTest {
         @Test
         void shouldThrowAccessDeniedExceptionWhenApplicationRequestExternalApplicationIdNotMatched() {
             // Given
-            when(middlewareApplicationServiceRepository.getAppIdByExternalId(
+            when(getApplicationRepository.getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
             when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
             when(accessManagementService.isSourceAccountAccessAllowed(SOURCE_ACCOUNT)).thenReturn(true);
@@ -180,7 +180,7 @@ class UpdateApplicationServiceImplTest {
 
             // Then
             assertThat(exception.getMessage()).isEqualTo(ACCESS_DENIED_MSG);
-            verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(
+            verify(getApplicationRepository, times(1)).getAppIdByExternalId(
                     EXTERNAL_APPLICATION_ID);
             verify(middlewareRepository, times(0)).patchDipApplication(anyString(), any());
         }

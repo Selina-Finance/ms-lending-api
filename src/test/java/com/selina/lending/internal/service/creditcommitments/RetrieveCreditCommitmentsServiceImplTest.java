@@ -18,9 +18,9 @@
 package com.selina.lending.internal.service.creditcommitments;
 
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.service.AccessManagementService;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +51,7 @@ class RetrieveCreditCommitmentsServiceImplTest {
     private AccessManagementService accessManagementService;
 
     @Mock
-    private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private GetApplicationRepository getApplicationRepository;
 
     @InjectMocks
     private RetrieveCreditCommitmentsServiceImpl service;
@@ -59,7 +59,7 @@ class RetrieveCreditCommitmentsServiceImplTest {
     @Test
     void getCreditCommitments() {
         //Given
-        when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(getApplicationRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);

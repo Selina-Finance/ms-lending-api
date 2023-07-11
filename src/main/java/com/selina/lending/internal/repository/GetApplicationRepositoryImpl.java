@@ -20,26 +20,26 @@ package com.selina.lending.internal.repository;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
-import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.GetApplicationApi;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class MiddlewareApplicationServiceRepositoryImpl implements MiddlewareApplicationServiceRepository {
-    private final MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
+public class GetApplicationRepositoryImpl implements GetApplicationRepository {
+    private final GetApplicationApi getApplicationApi;
 
-    public MiddlewareApplicationServiceRepositoryImpl(MiddlewareApplicationServiceApi middlewareApplicationServiceApi) {
-        this.middlewareApplicationServiceApi = middlewareApplicationServiceApi;
+    public GetApplicationRepositoryImpl(GetApplicationApi getApplicationApi) {
+        this.getApplicationApi = getApplicationApi;
     }
 
     @CircuitBreaker(name = "middleware-application-service-cb", fallbackMethod = "middlewareGetByExternalIdApiFallback")
     @Override
     public ApplicationIdentifier getAppIdByExternalId(String externalAppId) {
         log.info("Request to get application Id by [externalApplicationId={}]", externalAppId);
-        return middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(externalAppId);
+        return getApplicationApi.getApplicationIdByExternalApplicationId(externalAppId);
     }
 
     private ApplicationIdentifier middlewareGetByExternalIdApiFallback(CallNotPermittedException e) { //NOSONAR

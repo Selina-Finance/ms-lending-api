@@ -18,7 +18,7 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
-import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
+import com.selina.lending.httpclient.getapplication.GetApplicationApi;
 import com.selina.lending.internal.service.monitoring.MetricService;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
@@ -35,10 +35,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @SpringBootTest
-class MiddlewareApplicationServiceRepositoryFallbackTest {
+class GetApplicationRepositoryFallbackTest {
 
     @MockBean
-    private MiddlewareApplicationServiceApi middlewareApi;
+    private GetApplicationApi middlewareApi;
 
     @Autowired
     private CircuitBreakerRegistry circuitBreakerRegistry;
@@ -49,7 +49,7 @@ class MiddlewareApplicationServiceRepositoryFallbackTest {
     private MetricService metricService;
 
     @Autowired
-    private MiddlewareApplicationServiceRepositoryImpl middlewareRepository;
+    private GetApplicationRepositoryImpl middlewareRepository;
 
     @BeforeEach
     void setUp() {

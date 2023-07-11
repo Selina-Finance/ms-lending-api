@@ -17,10 +17,10 @@
 
 package com.selina.lending.internal.repository;
 
-import com.selina.lending.internal.api.MiddlewareApplicationServiceApi;
+import com.selina.lending.httpclient.getapplication.GetApplicationApi;
 import com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
@@ -44,33 +44,33 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
+class GetApplicationRepositoryTest extends MapperBase {
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
 
     @Mock
     private ApplicationIdentifier applicationIdentifier;
 
     @Mock
-    private MiddlewareApplicationServiceApi middlewareApplicationServiceApi;
+    private GetApplicationApi getApplicationApi;
 
-    private MiddlewareApplicationServiceRepository middlewareRepository;
+    private GetApplicationRepository middlewareRepository;
 
     @BeforeEach
     void setUp() {
-        middlewareRepository = new MiddlewareApplicationServiceRepositoryImpl(middlewareApplicationServiceApi);
+        middlewareRepository = new GetApplicationRepositoryImpl(getApplicationApi);
     }
 
     @Test
     void shouldCallHttpClientWhenGetApplicationIdByExternalApplicationIdInvoked() {
         //Given
-        when(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(
+        when(getApplicationApi.getApplicationIdByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
 
         //When
         middlewareRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
 
         //Then
-        verify(middlewareApplicationServiceApi, times(1)).getApplicationIdByExternalApplicationId(
+        verify(getApplicationApi, times(1)).getApplicationIdByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID);
     }
 
@@ -80,7 +80,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
         String errorMsg = "error";
 
         //When
-        when(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(
+        when(getApplicationApi.getApplicationIdByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenThrow(
                 new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg,
                         createRequest(), errorMsg.getBytes(), null));
@@ -98,7 +98,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
         var circuitBreaker = getCircuitBreaker();
 
         //When
-        when(middlewareApplicationServiceApi.getApplicationIdByExternalApplicationId(
+        when(getApplicationApi.getApplicationIdByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID)).thenThrow(
                 new FeignException.NotFound("Not found", createRequest(), "not found".getBytes(), null));
 
@@ -117,7 +117,7 @@ class MiddlewareApplicationServiceRepositoryTest extends MapperBase {
         assertThat(metrics.getNumberOfFailedCalls()).isZero();
         assertThat(metrics.getNumberOfNotPermittedCalls()).isZero();
 
-        verify(middlewareApplicationServiceApi, times(10)).getApplicationIdByExternalApplicationId(
+        verify(getApplicationApi, times(10)).getApplicationIdByExternalApplicationId(
                 EXTERNAL_APPLICATION_ID);
     }
 

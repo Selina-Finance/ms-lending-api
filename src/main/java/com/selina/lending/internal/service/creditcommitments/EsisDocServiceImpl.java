@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import org.springframework.core.io.Resource;
@@ -29,11 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EsisDocServiceImpl implements EsisDocService {
 
-    private final MiddlewareApplicationServiceRepository applicationRepository;
+    private final GetApplicationRepository applicationRepository;
     private final AccessManagementService accessManagementService;
     private final MiddlewareRepository middlewareRepository;
 
-    public EsisDocServiceImpl(MiddlewareApplicationServiceRepository applicationRepository,
+    public EsisDocServiceImpl(GetApplicationRepository applicationRepository,
                               AccessManagementService accessManagementService,
                               MiddlewareRepository middlewareRepository) {
         this.applicationRepository = applicationRepository;

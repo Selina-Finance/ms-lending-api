@@ -19,10 +19,10 @@ package com.selina.lending.internal.service.creditcommitments;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
 import com.selina.lending.httpclient.creditcommitments.dto.response.PatchCreditCommitmentResponse;
 import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
@@ -51,7 +51,7 @@ class UpdateCreditCommitmentsServiceImplTest {
     @Mock
     private MiddlewareRepository middlewareRepository;
     @Mock
-    private MiddlewareApplicationServiceRepository applicationRepository;
+    private GetApplicationRepository applicationRepository;
     @Mock
     private CreditCommitmentsRepository commitmentsRepository;
     @Mock

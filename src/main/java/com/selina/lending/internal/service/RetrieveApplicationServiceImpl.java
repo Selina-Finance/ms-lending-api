@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
 import com.selina.lending.internal.service.filter.RuleOutcomeFilter;
@@ -31,14 +31,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class RetrieveApplicationServiceImpl implements RetrieveApplicationService {
-    private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private final GetApplicationRepository getApplicationRepository;
     private final MiddlewareRepository middlewareRepository;
     private final AccessManagementService accessManagementService;
     private final RuleOutcomeFilter ruleOutcomeFilter;
 
-    public RetrieveApplicationServiceImpl(MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository, MiddlewareRepository middlewareRepository,
-            AccessManagementService accessManagementService, RuleOutcomeFilter ruleOutcomeFilter) {
-        this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
+    public RetrieveApplicationServiceImpl(GetApplicationRepository getApplicationRepository, MiddlewareRepository middlewareRepository,
+                                          AccessManagementService accessManagementService, RuleOutcomeFilter ruleOutcomeFilter) {
+        this.getApplicationRepository = getApplicationRepository;
         this.middlewareRepository = middlewareRepository;
         this.accessManagementService = accessManagementService;
         this.ruleOutcomeFilter = ruleOutcomeFilter;
@@ -46,7 +46,7 @@ public class RetrieveApplicationServiceImpl implements RetrieveApplicationServic
 
     @Override
     public Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId) {
-        var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
+        var applicationIdentifier = getApplicationRepository.getAppIdByExternalId(externalApplicationId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
 
         log.info("Get application by Id for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalApplicationId);

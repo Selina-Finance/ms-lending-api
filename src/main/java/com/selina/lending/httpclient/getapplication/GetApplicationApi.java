@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.api;
+package com.selina.lending.httpclient.getapplication;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 
 @FeignClient(
         value = "middleware-application-service-api",
         url = "${middleware.application.service.url}")
-public interface MiddlewareApplicationServiceApi {
+public interface GetApplicationApi {
 
     @GetMapping(path = "/application/application-id/{externalApplicationId}", produces = APPLICATION_JSON_VALUE)
     ApplicationIdentifier getApplicationIdByExternalApplicationId(@PathVariable("externalApplicationId") String externalApplicationId);

@@ -20,7 +20,7 @@ package com.selina.lending.internal.service.creditcommitments;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.internal.repository.CreditCommitmentsRepository;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
@@ -31,14 +31,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UpdateCreditCommitmentsServiceImpl implements UpdateCreditCommitmentsService {
 
-    private final MiddlewareApplicationServiceRepository applicationRepository;
+    private final GetApplicationRepository applicationRepository;
     private final MiddlewareRepository middlewareRepository;
 
     private final CreditCommitmentsRepository commitmentsRepository;
     private final AccessManagementService accessManagementService;
 
     public UpdateCreditCommitmentsServiceImpl(CreditCommitmentsRepository commitmentsRepository,
-            AccessManagementService accessManagementService,  MiddlewareApplicationServiceRepository applicationRepository,
+            AccessManagementService accessManagementService,  GetApplicationRepository applicationRepository,
             MiddlewareRepository middlewareRepository) {
         this.commitmentsRepository = commitmentsRepository;
         this.accessManagementService = accessManagementService;

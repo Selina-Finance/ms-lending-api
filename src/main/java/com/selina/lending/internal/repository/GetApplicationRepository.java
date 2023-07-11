@@ -15,18 +15,11 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain;
+package com.selina.lending.internal.repository;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class ApplicationIdentifier {
-    private String id;
-    private String sourceAccount;
+public interface GetApplicationRepository {
+
+    ApplicationIdentifier getAppIdByExternalId(String externalAppId);
 }

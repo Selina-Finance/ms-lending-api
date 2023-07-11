@@ -18,9 +18,9 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
-import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +54,7 @@ class ProductServiceImplTest {
     private MiddlewareRepository middlewareRepository;
 
     @Mock
-    private MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private GetApplicationRepository getApplicationRepository;
 
     @Mock
     private AccessManagementService accessManagementService;
@@ -66,7 +66,7 @@ class ProductServiceImplTest {
     void shouldSuccessfullySelectProduct() {
         //Given
         var selectProductResponse = SelectProductResponse.builder().id("appId").message("success").build();
-        when(middlewareApplicationServiceRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
+        when(getApplicationRepository.getAppIdByExternalId(EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getId()).thenReturn(APPLICATION_ID);
         when(applicationIdentifier.getSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         doNothing().when(accessManagementService).checkSourceAccountAccessPermitted(SOURCE_ACCOUNT);
@@ -77,14 +77,14 @@ class ProductServiceImplTest {
 
         //Then
         assertThat(response).isEqualTo(selectProductResponse);
-        verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
+        verify(getApplicationRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
         verify(middlewareRepository, times(1)).selectProduct(APPLICATION_ID, PRODUCT_CODE);
     }
 
     @Test
     void shouldThrowAccessDeniedExceptionWhenNotAuthorisedToSelectProduct() {
         //Given
-        when(middlewareApplicationServiceRepository.getAppIdByExternalId(
+        when(getApplicationRepository.getAppIdByExternalId(
                 EXTERNAL_APPLICATION_ID)).thenReturn(applicationIdentifier);
         when(applicationIdentifier.getSourceAccount()).thenReturn("not permitted");
         doThrow(new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE)).when(accessManagementService).checkSourceAccountAccessPermitted("not permitted");
@@ -95,7 +95,7 @@ class ProductServiceImplTest {
 
         //Then
         assertThat(exception.getStatus().getReasonPhrase()).isEqualTo(HttpStatus.FORBIDDEN.getReasonPhrase());
-        verify(middlewareApplicationServiceRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
+        verify(getApplicationRepository, times(1)).getAppIdByExternalId(EXTERNAL_APPLICATION_ID);
         verify(middlewareRepository, times(0)).selectProduct(APPLICATION_ID, PRODUCT_CODE);
     }
 }

@@ -23,7 +23,7 @@ import com.selina.lending.internal.service.application.domain.quotecf.QuickQuote
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.selina.lending.api.errors.custom.ConflictException;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import com.selina.lending.internal.service.application.domain.ApplicationResponse;
@@ -40,14 +40,14 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
 
     private static final String OFFER_DECISION_DECLINE = "Decline";
     private static final String APPLICATION_ALREADY_EXISTS_ERROR = "Application already exists";
-    private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private final GetApplicationRepository getApplicationRepository;
     private final MiddlewareRepository middlewareRepository;
     private final RuleOutcomeFilter ruleOutcomeFilter;
 
     public CreateApplicationServiceImpl(MiddlewareRepository middlewareRepository,
-            MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository, RuleOutcomeFilter ruleOutcomeFilter) {
+                                        GetApplicationRepository getApplicationRepository, RuleOutcomeFilter ruleOutcomeFilter) {
         this.middlewareRepository = middlewareRepository;
-        this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
+        this.getApplicationRepository = getApplicationRepository;
         this.ruleOutcomeFilter = ruleOutcomeFilter;
     }
 
@@ -73,7 +73,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
 
     private void checkApplicationExists(ApplicationRequest applicationRequest) {
         try {
-            var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(applicationRequest.getExternalApplicationId());
+            var applicationIdentifier = getApplicationRepository.getAppIdByExternalId(applicationRequest.getExternalApplicationId());
             log.info("Check if application already exists [externalApplicationId={}], [sourceAccount={}]", applicationRequest.getExternalApplicationId(), applicationIdentifier.getSourceAccount());
             if (StringUtils.isNotEmpty(applicationIdentifier.getId())) {
                 throw new ConflictException(APPLICATION_ALREADY_EXISTS_ERROR + " " + applicationRequest.getExternalApplicationId());

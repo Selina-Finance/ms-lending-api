@@ -19,7 +19,7 @@ package com.selina.lending.internal.service;
 
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.SelectProductResponse;
 
@@ -29,20 +29,20 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private final GetApplicationRepository getApplicationRepository;
     private final MiddlewareRepository middlewareRepository;
 
     private final AccessManagementService accessManagementService;
 
-    public ProductServiceImpl(MiddlewareRepository middlewareRepository, MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository, AccessManagementService accessManagementService) {
+    public ProductServiceImpl(MiddlewareRepository middlewareRepository, GetApplicationRepository getApplicationRepository, AccessManagementService accessManagementService) {
         this.middlewareRepository = middlewareRepository;
-        this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
+        this.getApplicationRepository = getApplicationRepository;
         this.accessManagementService = accessManagementService;
     }
 
     @Override
     public SelectProductResponse selectProductOffer(String externalApplicationId, String productCode) {
-        var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
+        var applicationIdentifier = getApplicationRepository.getAppIdByExternalId(externalApplicationId);
         accessManagementService.checkSourceAccountAccessPermitted(applicationIdentifier.getSourceAccount());
 
         log.info("Select product for [externalApplicationId={}] [applicationId={}] [productCode={}] [sourceAccount={}]", externalApplicationId, applicationIdentifier.getId(), productCode, applicationIdentifier.getSourceAccount());

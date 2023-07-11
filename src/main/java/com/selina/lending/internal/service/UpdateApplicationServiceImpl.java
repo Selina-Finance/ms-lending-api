@@ -18,7 +18,7 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
+import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.application.domain.ApplicationRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +29,15 @@ import java.util.function.BiConsumer;
 @Service
 @Slf4j
 public class UpdateApplicationServiceImpl implements UpdateApplicationService {
-    private final MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository;
+    private final GetApplicationRepository getApplicationRepository;
     private final MiddlewareRepository middlewareRepository;
 
     private final AccessManagementService accessManagementService;
 
-    public UpdateApplicationServiceImpl(MiddlewareRepository middlewareRepository, MiddlewareApplicationServiceRepository middlewareApplicationServiceRepository,
+    public UpdateApplicationServiceImpl(MiddlewareRepository middlewareRepository, GetApplicationRepository getApplicationRepository,
             AccessManagementService accessManagementService) {
         this.middlewareRepository = middlewareRepository;
-        this.middlewareApplicationServiceRepository = middlewareApplicationServiceRepository;
+        this.getApplicationRepository = getApplicationRepository;
         this.accessManagementService = accessManagementService;
     }
 
@@ -52,7 +52,7 @@ public class UpdateApplicationServiceImpl implements UpdateApplicationService {
     }
 
     private void patchApplication(String externalApplicationId, ApplicationRequest applicationRequest, BiConsumer<String, ApplicationRequest> patchApplication) {
-        var applicationIdentifier = middlewareApplicationServiceRepository.getAppIdByExternalId(externalApplicationId);
+        var applicationIdentifier = getApplicationRepository.getAppIdByExternalId(externalApplicationId);
         if (isAuthorisedToUpdateApplication(applicationIdentifier.getSourceAccount(), externalApplicationId,
                 applicationRequest)) {
             log.info("Patch application for [sourceAccount={}], [externalApplicationId={}]", applicationIdentifier.getSourceAccount(), externalApplicationId);
