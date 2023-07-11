@@ -18,10 +18,10 @@
 package com.selina.lending.internal.repository.auth;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
-import com.selina.lending.internal.api.PermissionsApi;
-import com.selina.lending.internal.dto.auth.GetPermissionsRequest;
-import com.selina.lending.internal.service.application.domain.auth.authorization.PermissionsResponse;
-import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
+import com.selina.lending.httpclient.authorization.AuthorizationApi;
+import com.selina.lending.httpclient.authorization.dto.request.GetPermissionsRequest;
+import com.selina.lending.httpclient.authorization.dto.response.PermissionsResponse;
+import com.selina.lending.httpclient.authorization.dto.response.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,19 +38,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class PermissionsApiRepositoryTest {
+class AuthorizationApiRepositoryTest {
 
     @Mock
-    private PermissionsApi permissionsApi;
+    private AuthorizationApi authorizationApi;
 
     @InjectMocks
-    private PermissionsApiRepository repository;
+    private AuthorizationApiRepository repository;
 
     @Test
     void shouldCallPermissionsApiWhenGetTokenByCredentialsInvoked() {
         // Given
         String userToken = "token";
-        when(permissionsApi.getPermissions(any())).thenReturn(new PermissionsResponse(new ArrayList<>()));
+        when(authorizationApi.getPermissions(any())).thenReturn(new PermissionsResponse(new ArrayList<>()));
 
         var expectedPermissionsRequest = new GetPermissionsRequest(userToken);
 
@@ -58,7 +58,7 @@ class PermissionsApiRepositoryTest {
         var result = repository.getByUserToken(userToken);
 
         // Then
-        verify(permissionsApi, times(1)).getPermissions(expectedPermissionsRequest);
+        verify(authorizationApi, times(1)).getPermissions(expectedPermissionsRequest);
     }
 
     @Test
@@ -67,7 +67,7 @@ class PermissionsApiRepositoryTest {
         var userToken = "token";
         var permittedResources = List.of(new Resource("a", null), new Resource("b", null));
         var apiResponse = new PermissionsResponse(permittedResources);
-        when(permissionsApi.getPermissions(any())).thenReturn(apiResponse);
+        when(authorizationApi.getPermissions(any())).thenReturn(apiResponse);
 
         // When
         var result = repository.getByUserToken(userToken);
@@ -80,7 +80,7 @@ class PermissionsApiRepositoryTest {
     void shouldReturnEmptyListWhenExceptionOccurs() {
         // Given
         var userToken = "token";
-        when(permissionsApi.getPermissions(any())).thenThrow(new RemoteResourceProblemException());
+        when(authorizationApi.getPermissions(any())).thenThrow(new RemoteResourceProblemException());
 
         // When
         var result = repository.getByUserToken(userToken);
@@ -93,7 +93,7 @@ class PermissionsApiRepositoryTest {
     void shouldReturnEmptyListWhenResponseIsNull() {
         // Given
         var userToken = "token";
-        when(permissionsApi.getPermissions(any())).thenReturn(null);
+        when(authorizationApi.getPermissions(any())).thenReturn(null);
 
         // When
         var result = repository.getByUserToken(userToken);

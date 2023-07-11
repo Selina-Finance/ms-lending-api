@@ -15,10 +15,12 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.auth;
+package com.selina.lending.internal.repository.auth;
 
-public record AuthApiTokenResponse(
-        String access_token,
-        Integer expires_in
-) {
+import com.selina.lending.httpclient.authorization.dto.response.Resource;
+
+import java.util.List;
+
+public interface AuthorizationRepository {
+    List<Resource> getByUserToken(String userToken);
 }

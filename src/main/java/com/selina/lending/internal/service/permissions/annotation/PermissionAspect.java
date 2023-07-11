@@ -19,7 +19,7 @@ package com.selina.lending.internal.service.permissions.annotation;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.RequestedResource;
-import com.selina.lending.internal.repository.auth.PermissionsRepository;
+import com.selina.lending.internal.repository.auth.AuthorizationRepository;
 import com.selina.lending.internal.service.permissions.PermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -36,9 +36,9 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "authorization.enable", havingValue = "true", matchIfMissing = true)
 public class PermissionAspect {
     private final PermissionService service;
-    private final PermissionsRepository repository;
+    private final AuthorizationRepository repository;
 
-    public PermissionAspect(PermissionService service, PermissionsRepository repository) {
+    public PermissionAspect(PermissionService service, AuthorizationRepository repository) {
         this.service = service;
         this.repository = repository;
     }

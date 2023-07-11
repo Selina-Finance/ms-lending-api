@@ -15,9 +15,8 @@
  *
  */
 
-package com.selina.lending.internal.dto.auth;
+package com.selina.lending.httpclient.authorization.dto.request;
 
 public record GetPermissionsRequest(
         String userAccessToken
-) {
-}
+) {}

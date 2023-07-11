@@ -23,7 +23,7 @@ import com.selina.lending.api.errors.custom.BadRequestException;
 import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.dto.auth.TokenResponse;
-import com.selina.lending.internal.service.application.domain.auth.AuthApiTokenResponse;
+import com.selina.lending.httpclient.keycloak.dto.response.AuthApiTokenResponse;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;

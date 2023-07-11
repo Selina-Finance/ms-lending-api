@@ -18,7 +18,7 @@
 package com.selina.lending.httpclient.keycloak;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.selina.lending.internal.service.application.domain.auth.AuthApiTokenResponse;
+import com.selina.lending.httpclient.keycloak.dto.response.AuthApiTokenResponse;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.beans.factory.ObjectFactory;

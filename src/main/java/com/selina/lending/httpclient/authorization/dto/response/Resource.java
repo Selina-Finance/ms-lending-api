@@ -15,12 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.repository.auth;
+package com.selina.lending.httpclient.authorization.dto.response;
 
-import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
+import lombok.Builder;
 
-import java.util.List;
+import java.util.Set;
 
-public interface PermissionsRepository {
-    List<Resource> getByUserToken(String userToken);
+@Builder
+public record Resource(
+        String name,
+        Set<String> scopes
+) {
 }

@@ -15,15 +15,9 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.auth.authorization;
+package com.selina.lending.httpclient.keycloak.dto.response;
 
-import lombok.Builder;
-
-import java.util.Set;
-
-@Builder
-public record Resource(
-        String name,
-        Set<String> scopes
-) {
-}
+public record AuthApiTokenResponse(
+        String access_token,
+        Integer expires_in
+) {}

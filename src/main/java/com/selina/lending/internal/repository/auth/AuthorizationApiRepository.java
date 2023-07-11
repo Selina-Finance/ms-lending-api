@@ -17,10 +17,10 @@
 
 package com.selina.lending.internal.repository.auth;
 
-import com.selina.lending.internal.api.PermissionsApi;
-import com.selina.lending.internal.dto.auth.GetPermissionsRequest;
-import com.selina.lending.internal.service.application.domain.auth.authorization.PermissionsResponse;
-import com.selina.lending.internal.service.application.domain.auth.authorization.Resource;
+import com.selina.lending.httpclient.authorization.AuthorizationApi;
+import com.selina.lending.httpclient.authorization.dto.request.GetPermissionsRequest;
+import com.selina.lending.httpclient.authorization.dto.response.PermissionsResponse;
+import com.selina.lending.httpclient.authorization.dto.response.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -30,18 +30,18 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-public class PermissionsApiRepository implements PermissionsRepository {
+public class AuthorizationApiRepository implements AuthorizationRepository {
 
-    private final PermissionsApi permissionsApi;
+    private final AuthorizationApi authorizationApi;
 
-    public PermissionsApiRepository(PermissionsApi permissionsApi) {
-        this.permissionsApi = permissionsApi;
+    public AuthorizationApiRepository(AuthorizationApi authorizationApi) {
+        this.authorizationApi = authorizationApi;
     }
 
     @Override
     public List<Resource> getByUserToken(String userToken) {
         try {
-            var response = permissionsApi.getPermissions(new GetPermissionsRequest(userToken));
+            var response = authorizationApi.getPermissions(new GetPermissionsRequest(userToken));
             return Optional.ofNullable(response)
                     .map(PermissionsResponse::resources)
                     .orElse(Collections.emptyList());

@@ -15,11 +15,10 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.auth.authorization;
+package com.selina.lending.httpclient.authorization.dto.response;
 
 import java.util.List;
 
 public record PermissionsResponse(
         List<Resource> resources
-) {
-}
+) {}

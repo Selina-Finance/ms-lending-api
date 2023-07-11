@@ -15,11 +15,11 @@
  *
  */
 
-package com.selina.lending.internal.api;
+package com.selina.lending.httpclient.authorization;
 
 import com.selina.lending.config.security.clientOAuth2.MsAuthorizationOauth2Configuration;
-import com.selina.lending.internal.dto.auth.GetPermissionsRequest;
-import com.selina.lending.internal.service.application.domain.auth.authorization.PermissionsResponse;
+import com.selina.lending.httpclient.authorization.dto.request.GetPermissionsRequest;
+import com.selina.lending.httpclient.authorization.dto.response.PermissionsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -30,7 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         url = "${authorization.api.url}",
         configuration = MsAuthorizationOauth2Configuration.class
 )
-public interface PermissionsApi {
+public interface AuthorizationApi {
 
     @PostMapping(path = "/v1/authz/permissions", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     PermissionsResponse getPermissions(GetPermissionsRequest request);
