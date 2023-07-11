@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.UnderwritingDto;
-import com.selina.lending.internal.service.application.domain.Underwriting;
+import com.selina.lending.httpclient.middleware.dto.application.response.Underwriting;
 
 @Mapper
 public interface UnderwritingMapper {

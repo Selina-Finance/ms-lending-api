@@ -19,8 +19,7 @@ package com.selina.lending.httpclient.selection.dto.request;
 
 import java.util.List;
 
-import com.selina.lending.internal.service.application.domain.Fees;
-import com.selina.lending.internal.service.application.domain.quote.Source;
+import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import lombok.Builder;
 import lombok.Data;
 

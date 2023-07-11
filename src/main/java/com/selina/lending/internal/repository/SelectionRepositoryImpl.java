@@ -24,8 +24,8 @@ import com.selina.lending.internal.dto.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.internal.service.application.domain.quote.Source;
-import com.selina.lending.internal.service.application.domain.quote.SourceAccount;
+import com.selina.lending.httpclient.selection.dto.request.Source;
+import com.selina.lending.httpclient.selection.dto.request.SourceAccount;
 
 import lombok.extern.slf4j.Slf4j;
 

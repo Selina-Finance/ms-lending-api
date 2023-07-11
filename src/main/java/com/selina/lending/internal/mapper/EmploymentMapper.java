@@ -18,7 +18,7 @@
 package com.selina.lending.internal.mapper;
 
 import com.selina.lending.internal.dto.EmploymentDto;
-import com.selina.lending.internal.service.application.domain.Employment;
+import com.selina.lending.httpclient.middleware.dto.common.Employment;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

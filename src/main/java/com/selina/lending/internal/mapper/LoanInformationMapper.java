@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.internal.mapper.config.AdvancedLoanInformationMapperConfig;
-import com.selina.lending.internal.service.application.domain.LoanInformation;
+import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 
 @Mapper(config = AdvancedLoanInformationMapperConfig.class, uses = {FacilityMapper.class})
 public interface LoanInformationMapper {

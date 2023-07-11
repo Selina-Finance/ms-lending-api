@@ -27,7 +27,7 @@ import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
 import com.selina.lending.internal.dto.PropertyDetailValueDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import com.selina.lending.internal.mapper.config.DIPPropertyDetailsMapperConfig;
-import com.selina.lending.internal.service.application.domain.PropertyDetails;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 
 @Mapper (config = DIPPropertyDetailsMapperConfig.class, uses = {PriorChargesMapper.class})
 public interface PropertyDetailsMapper {

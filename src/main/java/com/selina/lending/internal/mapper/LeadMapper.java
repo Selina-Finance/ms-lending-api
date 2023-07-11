@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.LeadDto;
-import com.selina.lending.internal.service.application.domain.Lead;
+import com.selina.lending.httpclient.middleware.dto.application.response.Lead;
 
 @Mapper
 public interface LeadMapper {

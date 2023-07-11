@@ -25,5 +25,5 @@ import com.selina.lending.internal.dto.ApplicationRequest;
 @MapperConfig
 public interface ApplicationRequestMapperConfig {
     void mapApplicationRequest(ApplicationRequest applicationRequestDto,
-            @MappingTarget com.selina.lending.internal.service.application.domain.ApplicationRequest applicationRequest);
+            @MappingTarget com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest applicationRequest);
 }

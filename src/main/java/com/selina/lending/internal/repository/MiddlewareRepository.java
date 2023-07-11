@@ -19,15 +19,15 @@ package com.selina.lending.internal.repository;
 
 import java.util.Optional;
 
-import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
-import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
-import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
+import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import org.springframework.core.io.Resource;
 
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
-import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
+import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 
 public interface MiddlewareRepository {
 

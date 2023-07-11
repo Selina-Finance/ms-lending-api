@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.mapper;
 
-import com.selina.lending.internal.service.application.domain.Detail;
+import com.selina.lending.httpclient.creditcommitments.dto.common.Detail;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 

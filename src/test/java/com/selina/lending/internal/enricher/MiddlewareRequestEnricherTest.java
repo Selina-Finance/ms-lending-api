@@ -25,7 +25,7 @@ import static com.selina.lending.internal.enricher.MiddlewareRequestEnricher.ADD
 
 import java.util.List;
 
-import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,10 +36,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.selina.lending.internal.dto.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.Address;
-import com.selina.lending.internal.service.application.domain.Applicant;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.PropertyDetails;
+import com.selina.lending.httpclient.middleware.dto.common.Address;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRequestEnricherTest {

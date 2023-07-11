@@ -2,7 +2,7 @@ package com.selina.lending.internal.mapper.quote.middleware;
 
 
 import com.selina.lending.internal.dto.IncomeDto;
-import com.selina.lending.internal.service.application.domain.Incomes;
+import com.selina.lending.httpclient.middleware.dto.common.Incomes;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

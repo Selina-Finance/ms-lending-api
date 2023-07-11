@@ -4,7 +4,7 @@ import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicantDto;
 import com.selina.lending.internal.mapper.AddressMapper;
 import com.selina.lending.internal.mapper.EmploymentMapper;
 import com.selina.lending.internal.mapper.IncomeMapper;
-import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

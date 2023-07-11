@@ -21,7 +21,7 @@ import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 
 import com.selina.lending.internal.dto.LoanInformationDto;
-import com.selina.lending.internal.service.application.domain.LoanInformation;
+import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 
 @MapperConfig
 public interface LoanInformationMapperConfig {

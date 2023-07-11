@@ -17,6 +17,7 @@
 
 package com.selina.lending.internal.mapper;
 
+import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -29,5 +30,5 @@ public interface DIPApplicationResponseMapper {
 
     @Mapping(target= "requestType", source = "applicationResponse.applicationType")
     DIPApplicationResponse mapToApplicationResponseDto(
-            com.selina.lending.internal.service.application.domain.ApplicationResponse applicationResponse);
+            ApplicationResponse applicationResponse);
 }

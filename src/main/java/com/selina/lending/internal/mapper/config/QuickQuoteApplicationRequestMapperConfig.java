@@ -23,7 +23,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QuickQuoteApplicationRequestMapperConfig extends ApplicationRequestMapperConfig {

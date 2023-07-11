@@ -23,7 +23,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import com.selina.lending.internal.dto.DIPApplicationDto;
-import com.selina.lending.internal.service.application.domain.Application;
+import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DIPApplicationMapperConfig extends ApplicationMapperConfig {

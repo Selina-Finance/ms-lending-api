@@ -17,8 +17,6 @@
 
 package com.selina.lending.httpclient.creditcommitments.dto.response;
 
-import com.selina.lending.internal.service.application.domain.CreditCommitment;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

@@ -23,7 +23,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 import com.selina.lending.internal.mapper.config.DIPCCApplicationRequestMapperConfig;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 
 @Mapper(config = DIPCCApplicationRequestMapperConfig.class, uses = {DIPApplicantMapper.class, FeesMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class, ExpenditureMapper.class})
 public interface DIPCCApplicationRequestMapper {

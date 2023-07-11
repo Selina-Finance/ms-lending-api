@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.RequiredDto;
-import com.selina.lending.internal.service.application.domain.Required;
+import com.selina.lending.httpclient.middleware.dto.common.Required;
 
 @Mapper
 public interface RequiredMapper {

@@ -19,7 +19,7 @@ package com.selina.lending.httpclient.creditcommitments.dto.response;
 
 import java.util.List;
 
-import com.selina.lending.internal.service.application.domain.ApplicantCreditCommitments;
+import com.selina.lending.httpclient.creditcommitments.dto.common.ApplicantCreditCommitments;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

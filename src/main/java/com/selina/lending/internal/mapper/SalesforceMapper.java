@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.SalesforceDto;
-import com.selina.lending.internal.service.application.domain.Salesforce;
+import com.selina.lending.httpclient.middleware.dto.application.response.Salesforce;
 
 @Mapper
 public interface SalesforceMapper {

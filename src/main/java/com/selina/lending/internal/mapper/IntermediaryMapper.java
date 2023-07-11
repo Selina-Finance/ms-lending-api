@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.IntermediaryDto;
-import com.selina.lending.internal.service.application.domain.Intermediary;
+import com.selina.lending.httpclient.middleware.dto.application.response.Intermediary;
 
 @Mapper
 public interface IntermediaryMapper {

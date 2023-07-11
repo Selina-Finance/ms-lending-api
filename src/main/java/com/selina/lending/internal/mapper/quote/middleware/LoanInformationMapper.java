@@ -1,8 +1,8 @@
 package com.selina.lending.internal.mapper.quote.middleware;
 
 import com.selina.lending.internal.dto.LoanInformationDto;
-import com.selina.lending.internal.service.application.domain.Facility;
-import com.selina.lending.internal.service.application.domain.LoanInformation;
+import com.selina.lending.httpclient.middleware.dto.common.Facility;
+import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

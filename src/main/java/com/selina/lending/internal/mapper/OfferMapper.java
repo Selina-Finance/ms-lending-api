@@ -23,7 +23,7 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.OfferDto;
-import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ChecklistMapper.class, ErcMapper.class})
 public interface OfferMapper {

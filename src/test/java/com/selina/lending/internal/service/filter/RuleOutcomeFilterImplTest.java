@@ -34,8 +34,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.selina.lending.internal.service.application.domain.Offer;
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.RuleOutcome;
 
 @ExtendWith(MockitoExtension.class)
 class RuleOutcomeFilterImplTest {

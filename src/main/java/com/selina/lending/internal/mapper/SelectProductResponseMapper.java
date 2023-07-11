@@ -22,8 +22,8 @@ import com.selina.lending.internal.dto.SelectProductResponse;
 public class SelectProductResponseMapper {
     private SelectProductResponseMapper() {}
 
-    public static SelectProductResponse mapToSelectProductResponseDto(com.selina.lending.internal.service.application.domain.SelectProductResponse selectProductResponse,
-            String externalApplicationId, String productCode){
+    public static SelectProductResponse mapToSelectProductResponseDto(com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse selectProductResponse,
+                                                                      String externalApplicationId, String productCode){
         return SelectProductResponse.builder().externalApplicationId(externalApplicationId).productCode(productCode).message(
                 selectProductResponse.getMessage()).build();
     }

@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.ExpenditureDto;
-import com.selina.lending.internal.service.application.domain.Expenditure;
+import com.selina.lending.httpclient.middleware.dto.common.Expenditure;
 
 @Mapper
 public interface ExpenditureMapper {

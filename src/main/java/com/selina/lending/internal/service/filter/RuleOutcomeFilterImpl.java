@@ -25,8 +25,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.selina.lending.internal.service.application.domain.Offer;
-import com.selina.lending.internal.service.application.domain.RuleOutcome;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.RuleOutcome;
 
 @Component
 public class RuleOutcomeFilterImpl implements RuleOutcomeFilter {

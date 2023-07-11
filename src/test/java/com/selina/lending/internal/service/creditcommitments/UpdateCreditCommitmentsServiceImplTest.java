@@ -23,7 +23,7 @@ import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
 import com.selina.lending.httpclient.creditcommitments.dto.response.PatchCreditCommitmentResponse;
 import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
 import org.junit.jupiter.api.Test;

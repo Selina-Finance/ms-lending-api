@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 
 public interface UpdateApplicationService {
     void updateDipCCApplication(String externalApplicationId, ApplicationRequest applicationRequest);

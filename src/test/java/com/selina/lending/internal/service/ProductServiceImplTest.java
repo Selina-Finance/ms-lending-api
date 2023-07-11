@@ -21,7 +21,7 @@ import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
-import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

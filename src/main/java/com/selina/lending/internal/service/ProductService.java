@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.internal.service.application.domain.SelectProductResponse;
+import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 
 public interface ProductService {
 

@@ -1,6 +1,6 @@
 package com.selina.lending.internal.mapper.quote.middleware;
 
-import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import com.selina.lending.httpclient.selection.dto.response.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

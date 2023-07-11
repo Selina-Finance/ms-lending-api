@@ -2,7 +2,7 @@ package com.selina.lending.internal.mapper.quotecf;
 
 import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.mapper.ErcMapper;
-import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

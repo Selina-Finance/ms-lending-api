@@ -19,7 +19,7 @@ package com.selina.lending.internal.service.filter;
 
 import java.util.List;
 
-import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
 
 public interface RuleOutcomeFilter {
     void filterOfferRuleOutcomes(String decision, String applicationType, List<Offer> offers);

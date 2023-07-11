@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.DIPApplicantDto;
 import com.selina.lending.internal.mapper.config.DIPApplicantMapperConfig;
-import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 
 @Mapper(config = DIPApplicantMapperConfig.class, uses = {AddressMapper.class,
         ChecklistMapper.class, IncomeMapper.class, EmploymentMapper.class})

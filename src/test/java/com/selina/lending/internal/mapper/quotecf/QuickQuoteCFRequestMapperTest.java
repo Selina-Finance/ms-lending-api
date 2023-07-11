@@ -1,8 +1,7 @@
 package com.selina.lending.internal.mapper.quotecf;
 
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.ApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import org.junit.jupiter.api.Test;
 
 

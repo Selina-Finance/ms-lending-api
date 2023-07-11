@@ -27,7 +27,7 @@ import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFRequestMapper;
 import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFResponseMapper;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
-import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
+import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import com.selina.lending.internal.service.permissions.annotation.Permission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

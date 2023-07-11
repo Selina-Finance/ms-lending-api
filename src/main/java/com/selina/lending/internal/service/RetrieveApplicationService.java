@@ -19,7 +19,7 @@ package com.selina.lending.internal.service;
 
 import java.util.Optional;
 
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 
 public interface RetrieveApplicationService {
     Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId);

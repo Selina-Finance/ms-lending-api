@@ -20,9 +20,9 @@ package com.selina.lending.internal.service;
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.repository.GetApplicationRepository;
 import com.selina.lending.internal.repository.MiddlewareRepository;
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
+import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
-import com.selina.lending.internal.service.application.domain.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import com.selina.lending.internal.service.filter.RuleOutcomeFilter;
 
 import org.junit.jupiter.api.Test;

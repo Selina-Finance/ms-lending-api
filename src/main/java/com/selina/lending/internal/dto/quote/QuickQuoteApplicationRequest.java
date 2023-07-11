@@ -30,7 +30,7 @@ import com.selina.lending.internal.dto.FeesDto;
 import com.selina.lending.internal.dto.LeadDto;
 import com.selina.lending.internal.dto.LoanInformationDto;
 
-import com.selina.lending.internal.service.application.domain.Partner;
+import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,7 +61,7 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
 
     LeadDto lead;
 
-    Partner partner;
+    Partner partner; //TODO must not reuse httpclient DTO
 
     @Valid
     FeesDto fees;

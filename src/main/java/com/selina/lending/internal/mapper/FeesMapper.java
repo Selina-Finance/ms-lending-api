@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.FeesDto;
-import com.selina.lending.internal.service.application.domain.Fees;
+import com.selina.lending.httpclient.middleware.dto.common.Fees;
 
 @Mapper
 public interface FeesMapper {

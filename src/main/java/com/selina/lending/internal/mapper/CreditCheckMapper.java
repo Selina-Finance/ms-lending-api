@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.CreditCheckDto;
-import com.selina.lending.internal.service.application.domain.CreditCheck;
+import com.selina.lending.httpclient.middleware.dto.common.CreditCheck;
 
 @Mapper
 public interface CreditCheckMapper {

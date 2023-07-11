@@ -21,7 +21,7 @@ import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 
 import com.selina.lending.internal.dto.ApplicationDto;
-import com.selina.lending.internal.service.application.domain.Application;
+import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 
 @MapperConfig
 public interface ApplicationMapperConfig {

@@ -28,7 +28,7 @@ import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
-import com.selina.lending.internal.service.application.domain.Fees;
+import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.selection.dto.request.Applicant;
 import com.selina.lending.httpclient.selection.dto.request.Application;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;

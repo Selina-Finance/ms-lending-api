@@ -22,7 +22,7 @@ import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.httpclient.selection.dto.request.Application;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.internal.service.application.domain.quote.Source;
+import com.selina.lending.httpclient.selection.dto.request.Source;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

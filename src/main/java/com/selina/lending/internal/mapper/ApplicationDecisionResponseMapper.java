@@ -33,5 +33,5 @@ public interface ApplicationDecisionResponseMapper {
 
     @Mapping(target= "requestType", source = "applicationDecisionResponse.applicationType")
     ApplicationDecisionResponse mapToApplicationDecisionResponseDto(
-            com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse applicationDecisionResponse);
+            com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse applicationDecisionResponse);
 }

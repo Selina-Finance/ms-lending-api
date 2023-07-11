@@ -22,7 +22,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.ChecklistDto;
-import com.selina.lending.internal.service.application.domain.Checklist;
+import com.selina.lending.httpclient.middleware.dto.common.Checklist;
 
 @Mapper(uses = {RequiredMapper.class})
 public interface ChecklistMapper {

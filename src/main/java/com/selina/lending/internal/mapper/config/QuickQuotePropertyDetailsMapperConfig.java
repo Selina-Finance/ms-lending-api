@@ -22,7 +22,7 @@ import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
-import com.selina.lending.internal.service.application.domain.PropertyDetails;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 
 @MapperConfig
 public interface QuickQuotePropertyDetailsMapperConfig extends PropertyDetailsMapperConfig {

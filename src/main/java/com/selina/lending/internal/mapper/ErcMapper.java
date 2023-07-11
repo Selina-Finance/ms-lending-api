@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.selina.lending.internal.dto.ErcDto;
-import com.selina.lending.internal.service.application.domain.Erc;
+import com.selina.lending.httpclient.middleware.dto.common.Erc;
 
 @Mapper
 public interface ErcMapper {

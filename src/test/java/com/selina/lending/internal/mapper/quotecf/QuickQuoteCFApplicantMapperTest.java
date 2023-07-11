@@ -1,7 +1,7 @@
 package com.selina.lending.internal.mapper.quotecf;
 
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.Applicant;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

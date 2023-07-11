@@ -1,0 +1,49 @@
+/*
+ * Copyright 2022 Selina Finance
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package com.selina.lending.httpclient.middleware.dto.dip.response;
+
+import java.util.Date;
+import java.util.List;
+
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
+import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
+public class Application {
+    String decision;
+    String id;
+    String source;
+    String sourceClientId;
+    String sourceAccount;
+    String externalApplicationId;
+    String productCode;
+    String applicationType;
+    String status;
+    String applicationStage;
+    Date statusDate;
+    Date createdDate;
+    List<Applicant> applicants;
+    LoanInformation loanInformation;
+    PropertyDetails propertyDetails;
+    List<Offer> offers;
+}

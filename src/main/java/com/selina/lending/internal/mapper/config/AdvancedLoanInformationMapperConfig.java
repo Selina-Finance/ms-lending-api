@@ -23,7 +23,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.service.application.domain.LoanInformation;
+import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AdvancedLoanInformationMapperConfig extends LoanInformationMapperConfig {
