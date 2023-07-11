@@ -17,8 +17,8 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.internal.repository.GetApplicationRepository;
-import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.repository.GetApplicationRepository;
+import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;

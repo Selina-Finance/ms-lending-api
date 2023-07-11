@@ -15,19 +15,11 @@
  *
  */
 
-package com.selina.lending.internal.circuitbreaker;
+package com.selina.lending.repository;
 
-import java.util.function.Predicate;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+public interface GetApplicationRepository {
 
-import feign.FeignException;
-
-public class RecordExceptionPredicate implements Predicate<Throwable> {
-
-    @Override
-    public boolean test(Throwable ex) {
-        return ex instanceof RemoteResourceProblemException || ex instanceof FeignException.FeignServerException
-                        || ex instanceof feign.RetryableException;
-    }
+    ApplicationIdentifier getAppIdByExternalId(String externalAppId);
 }

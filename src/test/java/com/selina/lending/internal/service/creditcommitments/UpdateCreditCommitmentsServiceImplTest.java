@@ -18,9 +18,9 @@
 package com.selina.lending.internal.service.creditcommitments;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.CreditCommitmentsRepository;
-import com.selina.lending.internal.repository.GetApplicationRepository;
-import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.repository.CreditCommitmentsRepository;
+import com.selina.lending.repository.GetApplicationRepository;
+import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;

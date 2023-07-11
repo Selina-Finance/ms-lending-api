@@ -17,8 +17,8 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.internal.repository.CreditCommitmentsRepository;
-import com.selina.lending.internal.repository.GetApplicationRepository;
+import com.selina.lending.repository.CreditCommitmentsRepository;
+import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;

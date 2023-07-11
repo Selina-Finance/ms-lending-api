@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.repository;
 
 import com.selina.lending.httpclient.selection.SelectionApi;
 import com.selina.lending.internal.service.TokenService;
@@ -23,6 +23,8 @@ import com.selina.lending.httpclient.selection.dto.request.Application;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.httpclient.selection.dto.request.Source;
+import com.selina.lending.repository.SelectionRepository;
+import com.selina.lending.repository.SelectionRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

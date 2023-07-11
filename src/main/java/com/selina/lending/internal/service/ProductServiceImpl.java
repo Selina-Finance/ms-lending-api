@@ -19,8 +19,8 @@ package com.selina.lending.internal.service;
 
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.internal.repository.GetApplicationRepository;
-import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.repository.GetApplicationRepository;
+import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 
 import lombok.extern.slf4j.Slf4j;

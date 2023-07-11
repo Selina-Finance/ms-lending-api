@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.repository.auth;
+package com.selina.lending.repository.auth;
 
 import com.selina.lending.httpclient.authorization.AuthorizationApi;
 import com.selina.lending.httpclient.authorization.dto.request.GetPermissionsRequest;

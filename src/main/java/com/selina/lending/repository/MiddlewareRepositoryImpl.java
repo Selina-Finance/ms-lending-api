@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.repository;
 
 import java.util.Optional;
 

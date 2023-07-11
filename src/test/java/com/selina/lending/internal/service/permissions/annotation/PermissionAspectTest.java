@@ -18,7 +18,7 @@
 package com.selina.lending.internal.service.permissions.annotation;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.auth.AuthorizationRepository;
+import com.selina.lending.repository.auth.AuthorizationRepository;
 import com.selina.lending.internal.service.permissions.PermissionServiceImpl;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.Test;

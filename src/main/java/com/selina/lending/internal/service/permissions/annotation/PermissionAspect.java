@@ -19,7 +19,7 @@ package com.selina.lending.internal.service.permissions.annotation;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
 import com.selina.lending.internal.dto.RequestedResource;
-import com.selina.lending.internal.repository.auth.AuthorizationRepository;
+import com.selina.lending.repository.auth.AuthorizationRepository;
 import com.selina.lending.internal.service.permissions.PermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

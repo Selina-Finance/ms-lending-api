@@ -23,8 +23,8 @@ import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFRe
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.selina.lending.api.errors.custom.ConflictException;
-import com.selina.lending.internal.repository.GetApplicationRepository;
-import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.repository.GetApplicationRepository;
+import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
 import com.selina.lending.internal.service.filter.RuleOutcomeFilter;

@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.repository.auth;
+package com.selina.lending.repository.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +24,7 @@ import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.httpclient.keycloak.dto.response.AuthApiTokenResponse;
+import com.selina.lending.repository.auth.KeycloakRepositoryImpl;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;

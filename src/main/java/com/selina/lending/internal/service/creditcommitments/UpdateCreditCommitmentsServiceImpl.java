@@ -19,9 +19,9 @@ package com.selina.lending.internal.service.creditcommitments;
 
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.internal.repository.CreditCommitmentsRepository;
-import com.selina.lending.internal.repository.GetApplicationRepository;
-import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.repository.CreditCommitmentsRepository;
+import com.selina.lending.repository.GetApplicationRepository;
+import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
 

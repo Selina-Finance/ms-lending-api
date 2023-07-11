@@ -15,11 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.repository;
 
-import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
+import com.selina.lending.httpclient.creditcommitments.dto.response.PatchCreditCommitmentResponse;
+import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
+import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
 
-public interface GetApplicationRepository {
+public interface CreditCommitmentsRepository {
 
-    ApplicationIdentifier getAppIdByExternalId(String externalAppId);
+    PatchCreditCommitmentResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request);
+    CreditCommitmentResponse getCreditCommitments(String id);
 }
+

@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.repository.auth;
+package com.selina.lending.repository.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.errors.custom.BadRequestException;

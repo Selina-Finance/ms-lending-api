@@ -15,11 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.repository.circuitbreaker;
 
-import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import java.util.function.Predicate;
 
-public interface SelectionRepository {
-    FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request);
+import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+
+import feign.FeignException;
+
+public class RecordExceptionPredicate implements Predicate<Throwable> {
+
+    @Override
+    public boolean test(Throwable ex) {
+        return ex instanceof RemoteResourceProblemException || ex instanceof FeignException.FeignServerException
+                        || ex instanceof feign.RetryableException;
+    }
 }

@@ -15,13 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.repository.auth;
+package com.selina.lending.repository.auth;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.httpclient.authorization.AuthorizationApi;
 import com.selina.lending.httpclient.authorization.dto.request.GetPermissionsRequest;
 import com.selina.lending.httpclient.authorization.dto.response.PermissionsResponse;
 import com.selina.lending.httpclient.authorization.dto.response.Resource;
+import com.selina.lending.repository.auth.AuthorizationApiRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

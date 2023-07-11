@@ -15,15 +15,11 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.repository;
 
-import com.selina.lending.httpclient.creditcommitments.dto.response.PatchCreditCommitmentResponse;
-import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
-import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 
-public interface CreditCommitmentsRepository {
-
-    PatchCreditCommitmentResponse patchCreditCommitments(String id, UpdateCreditCommitmentsRequest request);
-    CreditCommitmentResponse getCreditCommitments(String id);
+public interface SelectionRepository {
+    FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request);
 }
-

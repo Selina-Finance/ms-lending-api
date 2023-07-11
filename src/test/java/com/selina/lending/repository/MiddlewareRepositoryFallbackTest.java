@@ -15,13 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.repository;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.httpclient.middleware.MiddlewareApi;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
+import com.selina.lending.repository.MiddlewareRepositoryImpl;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.BeforeEach;

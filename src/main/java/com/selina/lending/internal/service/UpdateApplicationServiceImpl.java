@@ -18,8 +18,8 @@
 package com.selina.lending.internal.service;
 
 import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.repository.GetApplicationRepository;
-import com.selina.lending.internal.repository.MiddlewareRepository;
+import com.selina.lending.repository.GetApplicationRepository;
+import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

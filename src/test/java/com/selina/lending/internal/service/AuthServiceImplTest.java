@@ -19,7 +19,7 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.dto.auth.TokenResponse;
-import com.selina.lending.internal.repository.auth.KeycloakRepository;
+import com.selina.lending.repository.auth.KeycloakRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
