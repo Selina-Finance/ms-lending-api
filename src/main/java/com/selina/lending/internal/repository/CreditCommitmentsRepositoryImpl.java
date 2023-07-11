@@ -18,10 +18,10 @@
 package com.selina.lending.internal.repository;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
-import com.selina.lending.internal.api.CreditCommitmentsApi;
-import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
-import com.selina.lending.internal.service.application.domain.creditcommitments.PatchCreditCommitmentResponse;
-import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.httpclient.creditcommitments.CreditCommitmentsApi;
+import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
+import com.selina.lending.httpclient.creditcommitments.dto.response.PatchCreditCommitmentResponse;
+import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
 
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;

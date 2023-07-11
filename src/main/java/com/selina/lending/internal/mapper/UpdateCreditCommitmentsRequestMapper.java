@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.service.application.domain.creditcommitments.UpdateCreditCommitmentsRequest;
+import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UpdateCreditCommitmentsRequestMapper {

@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
+import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
 
 public interface RetrieveCreditCommitmentsService {
     CreditCommitmentResponse getCreditCommitments(String externalAppId);

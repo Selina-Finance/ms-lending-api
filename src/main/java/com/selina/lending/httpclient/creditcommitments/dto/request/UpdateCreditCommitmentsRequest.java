@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.creditcommitments;
+package com.selina.lending.httpclient.creditcommitments.dto.request;
 
 import java.util.List;
 

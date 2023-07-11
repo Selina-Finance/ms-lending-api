@@ -21,7 +21,7 @@ import com.selina.lending.internal.repository.CreditCommitmentsRepository;
 import com.selina.lending.internal.repository.MiddlewareApplicationServiceRepository;
 import com.selina.lending.internal.service.AccessManagementService;
 import com.selina.lending.internal.service.application.domain.ApplicationIdentifier;
-import com.selina.lending.internal.service.application.domain.creditcommitments.CreditCommitmentResponse;
+import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
