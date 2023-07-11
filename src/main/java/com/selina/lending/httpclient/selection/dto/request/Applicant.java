@@ -15,11 +15,22 @@
  *
  */
 
-package com.selina.lending.internal.repository;
+package com.selina.lending.httpclient.selection.dto.request;
 
-import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
+import java.time.LocalDate;
+import java.util.List;
 
-public interface SelectionServiceRepository {
-    FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request);
+import lombok.Builder;
+import lombok.Value;
+
+@Builder
+@Value
+public class Applicant {
+    String firstName;
+    String lastName;
+    String middleName;
+    LocalDate dateOfBirth;
+    Integer numberOfAdultDependants;
+    Integer numberOfChildDependants;
+    List<Income> incomes;
 }

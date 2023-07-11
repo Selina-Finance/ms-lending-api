@@ -7,7 +7,7 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.internal.service.application.domain.*;
-import com.selina.lending.internal.service.application.domain.quote.Product;
+import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

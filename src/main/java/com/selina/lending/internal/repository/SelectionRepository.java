@@ -15,13 +15,11 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.quote;
+package com.selina.lending.internal.repository;
 
-import lombok.Builder;
-import lombok.Value;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 
-@Builder
-@Value
-public class Options {
-    PriorCharges priorCharges;
+public interface SelectionRepository {
+    FilteredQuickQuoteDecisionResponse filter(FilterQuickQuoteApplicationRequest request);
 }

@@ -18,8 +18,8 @@
 package com.selina.lending.internal.mapper.quote;
 
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.request.Application;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

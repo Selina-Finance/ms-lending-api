@@ -15,14 +15,13 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.quote;
+package com.selina.lending.httpclient.selection.dto.request;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class PropertyDetails {
-    Double estimatedValue;
-    String postcode;
+public class Options {
+    PriorCharges priorCharges;
 }

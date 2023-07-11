@@ -96,9 +96,9 @@ import com.selina.lending.internal.service.application.domain.Underwriting;
 import com.selina.lending.internal.service.application.domain.User;
 import com.selina.lending.internal.service.application.domain.VotersRoll;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.internal.service.application.domain.quote.Product;
-import com.selina.lending.internal.service.application.domain.quote.ProductOffer;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.httpclient.selection.dto.response.ProductOffer;
 import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
 
 import java.text.ParseException;

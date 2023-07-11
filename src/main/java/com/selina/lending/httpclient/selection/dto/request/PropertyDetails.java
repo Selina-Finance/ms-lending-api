@@ -15,17 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.quote.selection;
+package com.selina.lending.httpclient.selection.dto.request;
 
-import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.Options;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 @Builder
-@Data
-public class FilterQuickQuoteApplicationRequest {
-
-    private Application application;
-    private Options options;
+@Value
+public class PropertyDetails {
+    Double estimatedValue;
+    String postcode;
 }

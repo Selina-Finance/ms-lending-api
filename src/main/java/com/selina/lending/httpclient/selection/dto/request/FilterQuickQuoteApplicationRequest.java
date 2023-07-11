@@ -15,23 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.quote;
+package com.selina.lending.httpclient.selection.dto.request;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
-public class Product {
-    String name;
-    String code;
-    String family;
-    String category;
-    String variant;
-    Boolean isVariable;
-    Boolean hasFee;
-    Boolean hasErc;
-    String ercProfile;
-    String ercShortCode;
-    ProductOffer offer;
+@Data
+public class FilterQuickQuoteApplicationRequest {
+
+    private Application application;
+    private Options options;
 }

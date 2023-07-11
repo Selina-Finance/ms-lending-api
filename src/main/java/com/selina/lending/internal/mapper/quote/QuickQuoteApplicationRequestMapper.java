@@ -29,14 +29,14 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
 import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.service.application.domain.Fees;
-import com.selina.lending.internal.service.application.domain.quote.Applicant;
-import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.Income;
-import com.selina.lending.internal.service.application.domain.quote.LoanInformation;
-import com.selina.lending.internal.service.application.domain.quote.Options;
-import com.selina.lending.internal.service.application.domain.quote.PriorCharges;
-import com.selina.lending.internal.service.application.domain.quote.PropertyDetails;
+import com.selina.lending.httpclient.selection.dto.request.Applicant;
+import com.selina.lending.httpclient.selection.dto.request.Application;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.request.Income;
+import com.selina.lending.httpclient.selection.dto.request.LoanInformation;
+import com.selina.lending.httpclient.selection.dto.request.Options;
+import com.selina.lending.httpclient.selection.dto.request.PriorCharges;
+import com.selina.lending.httpclient.selection.dto.request.PropertyDetails;
 
 public class QuickQuoteApplicationRequestMapper {
 

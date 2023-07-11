@@ -22,10 +22,9 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationRequestMapper;
 import com.selina.lending.internal.mapper.quote.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
-import com.selina.lending.internal.repository.SelectionServiceRepository;
-import com.selina.lending.internal.service.application.domain.Fees;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.internal.repository.SelectionRepository;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.internal.service.quickquote.PartnerService;
 import org.springframework.stereotype.Service;
@@ -38,18 +37,18 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private static final String ACCEPTED_DECISION = "Accepted";
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
-    private final SelectionServiceRepository selectionServiceRepository;
+    private final SelectionRepository selectionRepository;
     private final MiddlewareRepository middlewareRepository;
     private final ArrangementFeeSelinaService arrangementFeeService;
     private final PartnerService partnerService;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
-                                        SelectionServiceRepository selectionServiceRepository,
+                                        SelectionRepository selectionRepository,
                                         MiddlewareRepository middlewareRepository,
                                         ArrangementFeeSelinaService arrangementFeeService,
                                         PartnerService partnerService) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
-        this.selectionServiceRepository = selectionServiceRepository;
+        this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
         this.arrangementFeeService = arrangementFeeService;
         this.partnerService = partnerService;
@@ -59,7 +58,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
         addArrangementFeeSelina(selectionRequest);
-        FilteredQuickQuoteDecisionResponse decisionResponse = selectionServiceRepository.filter(selectionRequest);
+        FilteredQuickQuoteDecisionResponse decisionResponse = selectionRepository.filter(selectionRequest);
 
         if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
                 && decisionResponse.getProducts() != null) {

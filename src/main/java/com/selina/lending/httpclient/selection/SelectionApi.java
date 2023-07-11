@@ -15,19 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.api;
+package com.selina.lending.httpclient.selection;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 
 @FeignClient(
         value = "selection-service-api",
         url = "${selection.service.url}")
-public interface SelectionServiceApi {
+public interface SelectionApi {
 
     @PostMapping(path = "/v1/applications/quickquote/filter?decision=Accept", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     FilteredQuickQuoteDecisionResponse filterQuickQuote(FilterQuickQuoteApplicationRequest applicationRequest);

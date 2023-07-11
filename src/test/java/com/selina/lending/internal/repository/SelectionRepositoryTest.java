@@ -17,11 +17,11 @@
 
 package com.selina.lending.internal.repository;
 
-import com.selina.lending.internal.api.SelectionServiceApi;
+import com.selina.lending.httpclient.selection.SelectionApi;
 import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.quote.Application;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.request.Application;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Source;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
-class SelectionServiceRepositoryTest {
+class SelectionRepositoryTest {
 
     @Mock
-    private SelectionServiceApi selectionServiceApi;
+    private SelectionApi selectionApi;
 
     @Mock
     private TokenService tokenService;
@@ -55,11 +55,11 @@ class SelectionServiceRepositoryTest {
     @Mock
     private Application application;
 
-    private SelectionServiceRepository selectionServiceRepository;
+    private SelectionRepository selectionRepository;
 
     @BeforeEach
     void setUp() {
-        selectionServiceRepository = new SelectionServiceRepositoryImpl(selectionServiceApi, tokenService);
+        selectionRepository = new SelectionRepositoryImpl(selectionApi, tokenService);
     }
 
     @Test
@@ -70,16 +70,16 @@ class SelectionServiceRepositoryTest {
         var partnerAccountId = "Partner";
 
         when(filterQuickQuoteApplicationRequest.getApplication()).thenReturn(application);
-        when(selectionServiceApi.filterQuickQuote(any())).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(selectionApi.filterQuickQuote(any())).thenReturn(filteredQuickQuoteDecisionResponse);
         when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
         when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
         when(tokenService.retrievePartnerAccountId()).thenReturn(partnerAccountId);
 
         //When
-        selectionServiceRepository.filter(filterQuickQuoteApplicationRequest);
+        selectionRepository.filter(filterQuickQuoteApplicationRequest);
 
         //Then
-        verify(selectionServiceApi, times(1)).filterQuickQuote(filterQuickQuoteApplicationRequest);
+        verify(selectionApi, times(1)).filterQuickQuote(filterQuickQuoteApplicationRequest);
         verify(application, times(1)).setSource(any(Source.class));
         verify(application, times(1)).setPartnerAccountId(any(String.class));
     }
@@ -91,13 +91,13 @@ class SelectionServiceRepositoryTest {
         var sourceAccount = "Broker";
 
         when(filterQuickQuoteApplicationRequest.getApplication()).thenReturn(application);
-        when(selectionServiceApi.filterQuickQuote(any())).thenReturn(filteredQuickQuoteDecisionResponse);
+        when(selectionApi.filterQuickQuote(any())).thenReturn(filteredQuickQuoteDecisionResponse);
         when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
         when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
         when(tokenService.retrievePartnerAccountId()).thenReturn(null);
 
         //When
-        selectionServiceRepository.filter(filterQuickQuoteApplicationRequest);
+        selectionRepository.filter(filterQuickQuoteApplicationRequest);
 
         //Then
         verify(application, never()).setPartnerAccountId(any());

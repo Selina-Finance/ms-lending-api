@@ -19,11 +19,11 @@ package com.selina.lending.internal.repository;
 
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.internal.api.SelectionServiceApi;
+import com.selina.lending.httpclient.selection.SelectionApi;
 import com.selina.lending.internal.dto.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.application.domain.quote.Source;
 import com.selina.lending.internal.service.application.domain.quote.SourceAccount;
 
@@ -31,13 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class SelectionServiceRepositoryImpl implements SelectionServiceRepository {
-    private final SelectionServiceApi selectionServiceApi;
+public class SelectionRepositoryImpl implements SelectionRepository {
+    private final SelectionApi selectionApi;
 
     private final TokenService tokenService;
 
-    public SelectionServiceRepositoryImpl(SelectionServiceApi selectionServiceApi, TokenService tokenService) {
-        this.selectionServiceApi = selectionServiceApi;
+    public SelectionRepositoryImpl(SelectionApi selectionApi, TokenService tokenService) {
+        this.selectionApi = selectionApi;
         this.tokenService = tokenService;
     }
 
@@ -46,7 +46,7 @@ public class SelectionServiceRepositoryImpl implements SelectionServiceRepositor
         log.info("Filter Quick Quote application [externalApplicationId={}]",
                 request.getApplication().getExternalApplicationId());
         enrichRequest(request);
-        return selectionServiceApi.filterQuickQuote(request);
+        return selectionApi.filterQuickQuote(request);
     }
 
     private void enrichRequest(FilterQuickQuoteApplicationRequest request) {

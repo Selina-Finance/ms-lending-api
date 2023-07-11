@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.quote;
+package com.selina.lending.httpclient.selection.dto.request;
 
 
 import lombok.Builder;

@@ -19,7 +19,7 @@ package com.selina.lending.internal.mapper.quote;
 
 import com.selina.lending.internal.dto.quote.ProductOfferDto;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

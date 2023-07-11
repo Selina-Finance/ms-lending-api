@@ -21,11 +21,11 @@ import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.mapper.quote.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.internal.repository.MiddlewareRepository;
-import com.selina.lending.internal.repository.SelectionServiceRepository;
+import com.selina.lending.internal.repository.SelectionRepository;
 import com.selina.lending.internal.service.application.domain.Fees;
 import com.selina.lending.internal.service.application.domain.quote.middleware.QuickQuoteRequest;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.internal.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.internal.service.quickquote.PartnerService;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ import static org.mockito.Mockito.when;
 class FilterApplicationServiceImplTest extends MapperBase {
 
     @Mock
-    private SelectionServiceRepository selectionServiceRepository;
+    private SelectionRepository selectionRepository;
 
     @Mock
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
@@ -79,7 +79,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .products(List.of(getProduct()))
                 .build();
 
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(QuickQuoteApplicationRequest.class), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
@@ -88,7 +88,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         var response = filterApplicationService.filter(quickQuoteApplicationRequest);
 
         //Then
-        verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         verify(middlewareRepository, times(1)).createQuickQuoteApplication(quickQuoteRequest);
         verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
         assertThat(response).isEqualTo(decisionResponse);
@@ -105,14 +105,14 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .products(List.of(getProduct()))
                 .build();
 
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
 
         //When
         var response = filterApplicationService.filter(quickQuoteRequest);
 
         //Then
-        verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
         verify(partnerService, times(1)).getPartnerFromToken();
         assertThat(quickQuoteRequest.getPartner().getSubUnitId()).isEqualTo(SUB_UNIT_ID);
@@ -130,7 +130,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .build();
 
         quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(null);
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
@@ -152,7 +152,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .build();
 
         quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(true);
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
@@ -176,7 +176,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(true);
         quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(false);
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
@@ -201,7 +201,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .products(List.of(getProduct()))
                 .build();
 
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
@@ -226,7 +226,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .products(List.of(getProduct()))
                 .build();
 
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
@@ -251,7 +251,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .products(List.of(getProduct()))
                 .build();
 
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
@@ -276,7 +276,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(null);
         quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(null);
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
@@ -297,13 +297,13 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .products(List.of(getProduct()))
                 .build();
 
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
         //When
         var response = filterApplicationService.filter(quickQuoteApplicationRequest);
 
         //Then
-        verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
         assertThat(response).isEqualTo(decisionResponse);
     }
@@ -316,13 +316,13 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .products(null)
                 .build();
 
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
         //When
         var response = filterApplicationService.filter(quickQuoteApplicationRequest);
 
         //Then
-        verify(selectionServiceRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
         assertThat(response).isEqualTo(decisionResponse);
     }
@@ -336,7 +336,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .products(List.of(getProduct()))
                 .build();
 
-        when(selectionServiceRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(any(), any(), any())).thenReturn(quickQuoteRequest);

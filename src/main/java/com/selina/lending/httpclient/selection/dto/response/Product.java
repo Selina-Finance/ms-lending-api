@@ -15,22 +15,23 @@
  *
  */
 
-package com.selina.lending.internal.service.application.domain.quote;
+package com.selina.lending.httpclient.selection.dto.response;
 
-import java.util.List;
-
-import com.selina.lending.internal.service.application.domain.Fees;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 @Builder
-@Data
-public class Application {
-    String externalApplicationId;
-    String partnerAccountId;
-    Source source;
-    List<Applicant> applicants;
-    LoanInformation loanInformation;
-    PropertyDetails propertyDetails;
-    Fees fees;
+@Value
+public class Product {
+    String name;
+    String code;
+    String family;
+    String category;
+    String variant;
+    Boolean isVariable;
+    Boolean hasFee;
+    Boolean hasErc;
+    String ercProfile;
+    String ercShortCode;
+    ProductOffer offer;
 }
