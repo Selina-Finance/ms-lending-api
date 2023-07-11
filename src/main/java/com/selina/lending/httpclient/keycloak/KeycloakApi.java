@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.api;
+package com.selina.lending.httpclient.keycloak;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.selina.lending.internal.service.application.domain.auth.AuthApiTokenResponse;
@@ -38,7 +38,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         value = "auth-api",
         url = "${spring.security.oauth2.resourceserver.jwt.issuer-uri}"
 )
-public interface AuthApi {
+public interface KeycloakApi {
 
     @PostMapping(
             path = "/protocol/openid-connect/token",
@@ -46,6 +46,7 @@ public interface AuthApi {
             produces = APPLICATION_JSON_VALUE)
     AuthApiTokenResponse login(@RequestBody Map<String, ?> params);
 
+    //TODO do we need this?
     class Configuration { // to execute Content-Type: application/x-www-form-urlencoded request
         @Bean
         Encoder feignFormEncoder(ObjectFactory<HttpMessageConverters> converters) {

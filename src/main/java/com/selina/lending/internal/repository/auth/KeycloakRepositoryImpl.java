@@ -19,7 +19,7 @@ package com.selina.lending.internal.repository.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.errors.custom.BadRequestException;
-import com.selina.lending.internal.api.AuthApi;
+import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.dto.auth.TokenResponse;
 import feign.FeignException;
@@ -31,20 +31,20 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class AuthRepositoryImpl implements AuthRepository {
+public class KeycloakRepositoryImpl implements KeycloakRepository {
 
-    private final AuthApi authApi;
+    private final KeycloakApi keycloakApi;
     private final ObjectMapper objectMapper;
 
-    public AuthRepositoryImpl(AuthApi authApi, ObjectMapper objectMapper) {
-        this.authApi = authApi;
+    public KeycloakRepositoryImpl(KeycloakApi keycloakApi, ObjectMapper objectMapper) {
+        this.keycloakApi = keycloakApi;
         this.objectMapper = objectMapper;
     }
 
     @Override
     public TokenResponse getTokenByCredentials(Credentials credentials) {
         try {
-            var apiResponse = authApi.login(Map.of(
+            var apiResponse = keycloakApi.login(Map.of(
                             "client_id", credentials.clientId(),
                             "client_secret", credentials.clientSecret(),
                             "grant_type", "client_credentials"
@@ -63,8 +63,8 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @SneakyThrows
-    private AuthApi.ErrorDetails getDetails(FeignException feignException) {
-        return objectMapper.readValue(feignException.contentUTF8(), AuthApi.ErrorDetails.class);
+    private KeycloakApi.ErrorDetails getDetails(FeignException feignException) {
+        return objectMapper.readValue(feignException.contentUTF8(), KeycloakApi.ErrorDetails.class);
     }
 
     private static boolean isBadRequest(FeignException feignException) {

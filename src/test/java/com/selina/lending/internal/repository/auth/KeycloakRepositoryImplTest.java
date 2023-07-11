@@ -20,7 +20,7 @@ package com.selina.lending.internal.repository.auth;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.errors.custom.BadRequestException;
-import com.selina.lending.internal.api.AuthApi;
+import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.internal.service.application.domain.auth.AuthApiTokenResponse;
@@ -45,22 +45,22 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AuthRepositoryImplTest {
+class KeycloakRepositoryImplTest {
 
     @Mock
-    private AuthApi authApi;
+    private KeycloakApi keycloakApi;
     @Mock
     private ObjectMapper objectMapper;
 
     @InjectMocks
-    private AuthRepositoryImpl authRepository;
+    private KeycloakRepositoryImpl authRepository;
 
     @Test
     void shouldMapApiResponseWhenGetTokenByCredentialsInvoked() {
         // Given
         var credentials = new Credentials("the-client-id", "client-super-secret");
         var apiResponse = new AuthApiTokenResponse("auth-token", 300);
-        when(authApi.login(any())).thenReturn(apiResponse);
+        when(keycloakApi.login(any())).thenReturn(apiResponse);
 
         // When
         var result = authRepository.getTokenByCredentials(credentials);
@@ -73,7 +73,7 @@ class AuthRepositoryImplTest {
     void shouldCallAuthApiWhenGetTokenByCredentialsInvoked() {
         // Given
         var credentials = new Credentials("the-client-id", "client-super-secret");
-        when(authApi.login(any())).thenReturn(new AuthApiTokenResponse("auth-token", 300));
+        when(keycloakApi.login(any())).thenReturn(new AuthApiTokenResponse("auth-token", 300));
 
         var expectedAuthApiRequestParams = Map.of(
                 "client_id", credentials.clientId(),
@@ -85,7 +85,7 @@ class AuthRepositoryImplTest {
         var result = authRepository.getTokenByCredentials(credentials);
 
         // Then
-        verify(authApi, times(1)).login(expectedAuthApiRequestParams);
+        verify(keycloakApi, times(1)).login(expectedAuthApiRequestParams);
     }
 
     @Test
@@ -95,10 +95,10 @@ class AuthRepositoryImplTest {
 
         var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
         var feignException = new FeignException.BadRequest("Bad Request", request, "".getBytes(), null);
-        when(authApi.login(any())).thenThrow(feignException);
+        when(keycloakApi.login(any())).thenThrow(feignException);
 
-        var errorDetails = new AuthApi.ErrorDetails("invalid_client", "Invalid client credentials");
-        when(objectMapper.readValue(feignException.contentUTF8(), AuthApi.ErrorDetails.class)).thenReturn(errorDetails);
+        var errorDetails = new KeycloakApi.ErrorDetails("invalid_client", "Invalid client credentials");
+        when(objectMapper.readValue(feignException.contentUTF8(), KeycloakApi.ErrorDetails.class)).thenReturn(errorDetails);
 
         // When
         var exception = assertThrows(BadRequestException.class, () -> authRepository.getTokenByCredentials(credentials));
@@ -115,7 +115,7 @@ class AuthRepositoryImplTest {
 
         var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
         var feignException = new FeignException.NotAcceptable("Not Acceptable", request, "".getBytes(), null);
-        when(authApi.login(any())).thenThrow(feignException);
+        when(keycloakApi.login(any())).thenThrow(feignException);
 
         // When
         var exception = assertThrows(feignException.getClass(), () -> authRepository.getTokenByCredentials(credentials));

@@ -19,14 +19,14 @@ package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.dto.auth.TokenResponse;
 import com.selina.lending.internal.dto.auth.Credentials;
-import com.selina.lending.internal.repository.auth.AuthRepository;
+import com.selina.lending.internal.repository.auth.KeycloakRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-    private final AuthRepository repository;
+    private final KeycloakRepository repository;
 
-    public AuthServiceImpl(AuthRepository repository) {
+    public AuthServiceImpl(KeycloakRepository repository) {
         this.repository = repository;
     }
 
