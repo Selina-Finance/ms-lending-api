@@ -20,13 +20,14 @@ package com.selina.lending.api;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-import com.selina.lending.LendingServiceApplication;
+import com.selina.lending.App;
 
+// TODO do we need it?
 public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(LendingServiceApplication.class);
+		return application.sources(App.class);
 	}
 
 }

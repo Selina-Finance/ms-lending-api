@@ -34,10 +34,10 @@ import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 
-import static com.selina.lending.api.controller.SwaggerConstants.CONFLICT_EXAMPLE;
-import static com.selina.lending.api.controller.SwaggerConstants.NOT_FOUND_EXAMPLE;
-import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
-import static com.selina.lending.api.controller.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.CONFLICT_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.NOT_FOUND_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.BAD_REQUEST_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;

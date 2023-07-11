@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.dto.creditcommitments.response;
 
-import static com.selina.lending.api.controller.SwaggerConstants.DATE_FORMAT;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.DATE_FORMAT;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

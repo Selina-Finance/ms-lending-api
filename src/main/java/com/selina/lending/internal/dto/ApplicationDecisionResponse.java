@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.dto;
 
-import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.DATE_TIME_FORMAT;
 
 import java.util.Date;
 import java.util.List;

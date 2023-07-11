@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.api.controller;
+package com.selina.lending.api.controller.swagger;
 
 public class SwaggerConstants {
     public static final String INVALID_CREDENTIALS_EXAMPLE = "{\n" +

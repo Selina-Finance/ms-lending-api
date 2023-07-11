@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.dto;
 
-import static com.selina.lending.api.controller.SwaggerConstants.EMAIL_PATTERN;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.EMAIL_PATTERN;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.selina.lending.api.controller.SwaggerConstants;
+import com.selina.lending.api.controller.swagger.SwaggerConstants;
 import com.selina.lending.api.support.converter.ToLowerCase;
 import com.selina.lending.api.support.validator.EnumValue;
 

@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 
-import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
-import static com.selina.lending.api.controller.SwaggerConstants.INVALID_CREDENTIALS_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.BAD_REQUEST_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.INVALID_CREDENTIALS_EXAMPLE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public interface AuthOperations {

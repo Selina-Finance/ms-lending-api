@@ -17,14 +17,16 @@
 
 package com.selina.lending;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@SpringBootApplication
+@EnableFeignClients
+public class App {
 
-@SpringBootTest
-class LendingServiceApplicationTests {
-
-	@Test
-	void contextLoads() { //NOSONAR
+	public static void main(String[] args) {
+		SpringApplication.run(App.class, args);
 	}
+
 }

@@ -30,7 +30,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
-import static com.selina.lending.api.controller.SwaggerConstants.DATE_FORMAT;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.DATE_FORMAT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;

@@ -38,16 +38,16 @@ import javax.annotation.Nullable;
 import java.net.URI;
 import java.util.Optional;
 
-import static com.selina.lending.api.errors.ErrorConstants.DOWNSTREAM_EXCEPTION_DETAIL;
-import static com.selina.lending.api.errors.ErrorConstants.JSON_PARSE_ERROR;
-import static com.selina.lending.api.errors.ErrorConstants.NOT_FOUND_EXCEPTION_DETAIL;
-import static com.selina.lending.api.errors.ErrorConstants.UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL;
-import static com.selina.lending.api.errors.ErrorConstants.UNEXPECTED_RUNTIME_EXCEPTION_DETAIL;
-import static com.selina.lending.api.errors.ErrorConstants.VIOLATIONS_KEY;
-
 @Slf4j
 @ControllerAdvice
 public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
+
+    private static final String VIOLATIONS_KEY = "violations";
+    private static final String UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL = "Unable to convert http message";
+    private static final String UNEXPECTED_RUNTIME_EXCEPTION_DETAIL = "Unexpected runtime exception";
+    private static final String DOWNSTREAM_EXCEPTION_DETAIL = "Sorry, unable to process your request";
+    private static final String NOT_FOUND_EXCEPTION_DETAIL = "The entity does not exist";
+    private static final String JSON_PARSE_ERROR = "JSON parse error";
 
     /**
      * Post-process the Problem payload to add/remove the message key for the front-end if needed.

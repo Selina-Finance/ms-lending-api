@@ -21,7 +21,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.selina.lending.api.controller.SwaggerConstants;
+import com.selina.lending.api.controller.swagger.SwaggerConstants;
 import com.selina.lending.api.support.validator.EnumValue;
 
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -20,9 +20,9 @@ package com.selina.lending.api.controller;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
-import static com.selina.lending.api.controller.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
-import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
-import static com.selina.lending.api.controller.SwaggerConstants.NOT_FOUND_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.BAD_REQUEST_EXAMPLE;
+import static com.selina.lending.api.controller.swagger.SwaggerConstants.NOT_FOUND_EXAMPLE;
 
 import java.io.IOException;
 

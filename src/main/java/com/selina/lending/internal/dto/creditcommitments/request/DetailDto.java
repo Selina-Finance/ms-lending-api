@@ -20,7 +20,7 @@ package com.selina.lending.internal.dto.creditcommitments.request;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.selina.lending.api.controller.SwaggerConstants;
+import com.selina.lending.api.controller.swagger.SwaggerConstants;
 import com.selina.lending.api.support.validator.Conditional;
 import com.selina.lending.api.support.validator.EnumValue;
 
