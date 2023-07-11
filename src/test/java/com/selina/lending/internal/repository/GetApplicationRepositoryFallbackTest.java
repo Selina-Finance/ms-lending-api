@@ -19,7 +19,6 @@ package com.selina.lending.internal.repository;
 
 import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
 import com.selina.lending.httpclient.getapplication.GetApplicationApi;
-import com.selina.lending.internal.service.monitoring.MetricService;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,9 +43,6 @@ class GetApplicationRepositoryFallbackTest {
     private CircuitBreakerRegistry circuitBreakerRegistry;
 
     private CircuitBreaker circuitBreaker;
-
-    @Autowired
-    private MetricService metricService;
 
     @Autowired
     private GetApplicationRepositoryImpl middlewareRepository;
