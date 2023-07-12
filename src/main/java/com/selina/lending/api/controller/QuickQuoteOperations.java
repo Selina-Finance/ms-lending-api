@@ -22,7 +22,7 @@ import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXA
 
 import javax.validation.Valid;
 
-import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
+import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -20,7 +20,7 @@ package com.selina.lending.api.controller;
 import com.selina.lending.exception.AccessDeniedException;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
-import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
+import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationResponseMapper;
 import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFRequestMapper;

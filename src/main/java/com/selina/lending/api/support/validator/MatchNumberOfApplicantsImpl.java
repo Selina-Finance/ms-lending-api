@@ -5,7 +5,7 @@ import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
 import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.internal.dto.LoanInformationDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
-import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
+import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

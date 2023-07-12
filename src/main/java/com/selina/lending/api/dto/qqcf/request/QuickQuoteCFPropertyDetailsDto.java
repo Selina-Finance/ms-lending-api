@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto.quotecf;
+package com.selina.lending.api.dto.qqcf.request;
 
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.internal.dto.PriorChargesDto;

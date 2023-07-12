@@ -1,7 +1,7 @@
 package com.selina.lending.internal.mapper.quotecf;
 
 
-import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
+import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.mapper.FeesMapper;
 import com.selina.lending.internal.mapper.LoanInformationMapper;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
