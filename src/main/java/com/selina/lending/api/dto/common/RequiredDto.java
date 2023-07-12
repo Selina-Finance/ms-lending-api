@@ -15,22 +15,16 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.common;
 
-public enum Tenure {
-    LEASEHOLD("Leasehold"),
-    FREEHOLD("Freehold"),
-    LEASEHOLD_WITH_SHARE_OF_FREEHOLD("Leasehold with Share of Freehold"),
-    COMMONHOLD("Commonhold");
+import java.util.List;
 
+import lombok.Builder;
+import lombok.Value;
 
-    final String value;
-    Tenure(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return this.value;
-    }
+@Builder
+@Value
+public class RequiredDto {
+    List<String> all;
+    List<List<String>> oneOf;
 }

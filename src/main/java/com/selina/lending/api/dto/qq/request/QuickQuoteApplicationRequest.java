@@ -26,9 +26,9 @@ import javax.validation.constraints.Size;
 import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
 import com.selina.lending.api.support.validator.MaximumOnePrimaryApplicant;
 import com.selina.lending.api.dto.dip.request.ApplicationRequest;
-import com.selina.lending.internal.dto.FeesDto;
-import com.selina.lending.internal.dto.LeadDto;
-import com.selina.lending.internal.dto.LoanInformationDto;
+import com.selina.lending.api.dto.common.FeesDto;
+import com.selina.lending.api.dto.common.LeadDto;
+import com.selina.lending.api.dto.common.LoanInformationDto;
 
 import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import lombok.EqualsAndHashCode;

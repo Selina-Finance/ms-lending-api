@@ -23,7 +23,7 @@ import java.util.Optional;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.internal.dto.LendingConstants;
+import com.selina.lending.internal.service.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.httpclient.middleware.dto.common.Address;
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;

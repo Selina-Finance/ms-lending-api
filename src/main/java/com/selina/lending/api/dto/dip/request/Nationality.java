@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.request;
 
 public enum Nationality {
     AFGHANISTAN("Afghanistan"),

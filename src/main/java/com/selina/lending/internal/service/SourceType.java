@@ -1,4 +1,4 @@
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.service;
 
 public enum SourceType {
 

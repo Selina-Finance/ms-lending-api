@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.mapper;
 
-import com.selina.lending.internal.dto.IncomeDto;
+import com.selina.lending.api.dto.common.IncomeDto;
 import com.selina.lending.httpclient.middleware.dto.common.Incomes;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

@@ -4,7 +4,7 @@ import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import org.springframework.stereotype.Service;
 
-import static com.selina.lending.internal.dto.SourceType.AGGREGATOR;
+import static com.selina.lending.internal.service.SourceType.AGGREGATOR;
 
 @Service
 public class ArrangementFeeSelinaService {

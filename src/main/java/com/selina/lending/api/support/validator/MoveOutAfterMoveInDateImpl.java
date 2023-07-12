@@ -1,7 +1,7 @@
 package com.selina.lending.api.support.validator;
 
 
-import com.selina.lending.internal.dto.AddressDto;
+import com.selina.lending.api.dto.common.AddressDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

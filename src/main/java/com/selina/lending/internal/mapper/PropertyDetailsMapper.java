@@ -25,7 +25,7 @@ import org.mapstruct.factory.Mappers;
 import com.selina.lending.api.dto.dipcc.request.DIPCCPropertyDetailsDto;
 import com.selina.lending.api.dto.dip.request.DIPPropertyDetailsDto;
 import com.selina.lending.api.dto.dip.response.PropertyDetailValueDto;
-import com.selina.lending.internal.dto.PropertyDetailsDto;
+import com.selina.lending.api.dto.common.PropertyDetailsDto;
 import com.selina.lending.internal.mapper.config.DIPPropertyDetailsMapperConfig;
 import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 

@@ -1,6 +1,6 @@
 package com.selina.lending.httpclient.middleware.dto.qq.request;
 
-import com.selina.lending.internal.dto.LeadDto;
+import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;

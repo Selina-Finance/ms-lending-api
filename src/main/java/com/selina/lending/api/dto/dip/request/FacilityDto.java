@@ -19,7 +19,7 @@ package com.selina.lending.api.dto.dip.request;
 
 import com.selina.lending.api.support.validator.EnumValue;
 
-import com.selina.lending.internal.dto.LoanPurpose;
+import com.selina.lending.api.dto.common.LoanPurpose;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;

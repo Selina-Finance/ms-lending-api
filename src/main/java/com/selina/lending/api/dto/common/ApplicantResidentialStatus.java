@@ -1,4 +1,4 @@
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.common;
 
 public enum ApplicantResidentialStatus {
     OWNER("Owner"),

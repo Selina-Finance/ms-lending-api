@@ -15,16 +15,23 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.internal.service;
 
-import java.util.List;
+public enum Source {
+    BROKER("Broker"),
+    INTERNAL("Internal"),
+    LENDING_API("LendingAPI"),
+    NIVO("Nivo"),
+    QUICK_QUOTE("Quick Quote Form");
 
-import lombok.Builder;
-import lombok.Value;
+    final String value;
 
-@Builder
-@Value
-public class RequiredDto {
-    List<String> all;
-    List<List<String>> oneOf;
+    Source(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
+    }
 }

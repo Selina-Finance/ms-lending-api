@@ -15,23 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.common;
 
-public enum Source {
-    BROKER("Broker"),
-    INTERNAL("Internal"),
-    LENDING_API("LendingAPI"),
-    NIVO("Nivo"),
-    QUICK_QUOTE("Quick Quote Form");
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
-    final String value;
-
-    Source(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return this.value;
-    }
+@Builder
+@Value
+@Jacksonized
+public class LeadDto {
+    String utmSource;
+    String utmCampaign;
+    String utmMedium;
 }

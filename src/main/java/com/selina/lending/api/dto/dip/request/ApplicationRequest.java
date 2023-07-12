@@ -22,7 +22,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.selina.lending.internal.dto.ExpenditureDto;
+import com.selina.lending.api.dto.common.ExpenditureDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

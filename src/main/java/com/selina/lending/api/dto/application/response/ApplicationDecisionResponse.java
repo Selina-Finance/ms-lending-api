@@ -24,12 +24,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import com.selina.lending.internal.dto.ExpenditureDto;
-import com.selina.lending.internal.dto.FeesDto;
-import com.selina.lending.internal.dto.LeadDto;
-import com.selina.lending.internal.dto.LoanInformationDto;
-import com.selina.lending.internal.dto.OfferDto;
-import com.selina.lending.internal.dto.PropertyDetailsDto;
+import com.selina.lending.api.dto.common.ExpenditureDto;
+import com.selina.lending.api.dto.common.FeesDto;
+import com.selina.lending.api.dto.common.LeadDto;
+import com.selina.lending.api.dto.common.LoanInformationDto;
+import com.selina.lending.api.dto.common.OfferDto;
+import com.selina.lending.api.dto.common.PropertyDetailsDto;
 import lombok.Builder;
 import lombok.Value;
 

@@ -19,7 +19,7 @@ package com.selina.lending.api.dto.qq.request;
 
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.validator.AtLeastOneNotBlank;
-import com.selina.lending.internal.dto.PriorChargesDto;
+import com.selina.lending.api.dto.common.PriorChargesDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

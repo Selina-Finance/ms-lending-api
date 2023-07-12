@@ -21,7 +21,7 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.ChecklistDto;
+import com.selina.lending.api.dto.common.ChecklistDto;
 import com.selina.lending.httpclient.middleware.dto.common.Checklist;
 
 @Mapper(uses = {RequiredMapper.class})

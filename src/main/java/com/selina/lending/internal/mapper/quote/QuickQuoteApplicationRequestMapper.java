@@ -20,11 +20,11 @@ package com.selina.lending.internal.mapper.quote;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.selina.lending.internal.dto.FeesDto;
-import com.selina.lending.internal.dto.IncomeDto;
-import com.selina.lending.internal.dto.IncomeItemDto;
-import com.selina.lending.internal.dto.LoanInformationDto;
-import com.selina.lending.internal.dto.PriorChargesDto;
+import com.selina.lending.api.dto.common.FeesDto;
+import com.selina.lending.api.dto.common.IncomeDto;
+import com.selina.lending.api.dto.common.IncomeItemDto;
+import com.selina.lending.api.dto.common.LoanInformationDto;
+import com.selina.lending.api.dto.common.PriorChargesDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;

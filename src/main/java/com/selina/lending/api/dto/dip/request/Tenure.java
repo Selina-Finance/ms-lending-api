@@ -15,14 +15,22 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.request;
 
-import lombok.Builder;
-import lombok.Value;
+public enum Tenure {
+    LEASEHOLD("Leasehold"),
+    FREEHOLD("Freehold"),
+    LEASEHOLD_WITH_SHARE_OF_FREEHOLD("Leasehold with Share of Freehold"),
+    COMMONHOLD("Commonhold");
 
-@Builder
-@Value
-public class ChecklistDto {
-    String notRequired;
-    RequiredDto required;
+
+    final String value;
+    Tenure(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
+    }
 }

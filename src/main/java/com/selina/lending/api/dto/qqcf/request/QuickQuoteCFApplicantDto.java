@@ -17,8 +17,8 @@
 
 package com.selina.lending.api.dto.qqcf.request;
 
-import com.selina.lending.internal.dto.ApplicantDto;
-import com.selina.lending.internal.dto.EmploymentDto;
+import com.selina.lending.api.dto.common.ApplicantDto;
+import com.selina.lending.api.dto.common.EmploymentDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.selina.lending.internal.dto.LendingConstants;
+import com.selina.lending.internal.service.LendingConstants;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.httpclient.middleware.dto.common.Address;
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;

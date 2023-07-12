@@ -15,22 +15,27 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.common;
 
-public enum PropertyType {
-    DETACHED_BUNGALOW("Detached bungalow"),
-    SEMI_DETACHED_BUNGALOW("Semi-detached bungalow"),
-    TERRACED_BUNGALOW("Terraced bungalow"),
-    DETACHED_HOUSE("Detached house"),
-    SEMI_DETACHED_HOUSE("Semi-detached house"),
-    TERRACED_HOUSE("Terraced house"),
-    FLAT_MAISONETTE_IN_CONVERTED_HOUSE("Flat or maisonette in converted house"),
-    PURPOSE_BUILD_FLAT_OR_MAISONETTE("Purpose-built flat or maisonette"),
+public enum LoanPurpose {
+    DEBT_CONSOLIDATION("Debt consolidation"),
+    HOME_IMPROVEMENTS("Home improvements"),
+    HOLIDAY("Holiday"),
+    MEDICAL_BILLS("Medical bills"),
+    PROPERTY_SECOND_HOME_PURCHASE("Property - Second home purchase"),
+    PROPERTY_BUY_TO_LET_PURCHASE("Property - Buy-to-let purchase"),
+    SCHOOL_FEES_FURTHER_EDUCATION("School fees / further education"),
+    TAX_BILLS("Tax bills"),
+    VEHICLE_PURCHASE("Vehicle purchase"),
+    WEDDING("Wedding"),
+    BUSINESS_PURPOSES("Business purposes"),
+    CONTINGENCY("Contingency"),
     OTHER("Other"),
-    STUDIO_FLAT("Studio flat");
+    NONE("None");
 
     final String value;
-    PropertyType(String value) {
+
+    LoanPurpose(String value) {
         this.value = value;
     }
 

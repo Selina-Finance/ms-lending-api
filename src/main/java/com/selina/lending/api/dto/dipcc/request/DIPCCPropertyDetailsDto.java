@@ -24,9 +24,9 @@ import javax.validation.constraints.Pattern;
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.validator.EnumValue;
 
-import com.selina.lending.internal.dto.PropertyDetailsDto;
-import com.selina.lending.internal.dto.PropertyType;
-import com.selina.lending.internal.dto.Tenure;
+import com.selina.lending.api.dto.common.PropertyDetailsDto;
+import com.selina.lending.api.dto.dip.request.PropertyType;
+import com.selina.lending.api.dto.dip.request.Tenure;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -20,7 +20,7 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.LeadDto;
+import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.httpclient.middleware.dto.application.response.Lead;
 
 @Mapper

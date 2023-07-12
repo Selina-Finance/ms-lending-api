@@ -39,8 +39,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import static com.selina.lending.internal.dto.LendingConstants.ACCEPT_DECISION;
-import static com.selina.lending.internal.dto.LendingConstants.DIP_APPLICATION_TYPE;
+import static com.selina.lending.internal.service.LendingConstants.ACCEPT_DECISION;
+import static com.selina.lending.internal.service.LendingConstants.DIP_APPLICATION_TYPE;
 
 import java.util.List;
 import java.util.Optional;

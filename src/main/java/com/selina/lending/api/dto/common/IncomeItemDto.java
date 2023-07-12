@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.common;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

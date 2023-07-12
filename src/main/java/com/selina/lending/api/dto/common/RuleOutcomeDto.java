@@ -15,13 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.common;
 
 import lombok.Builder;
+import lombok.Value;
 
 @Builder
-public record RequestedResource(
-        String name,
-        String scope
-) {
+@Value
+public class RuleOutcomeDto {
+    String name;
+    String description;
+    String message;
 }

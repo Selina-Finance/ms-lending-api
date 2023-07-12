@@ -25,5 +25,4 @@ import java.util.Set;
 public record Resource(
         String name,
         Set<String> scopes
-) {
-}
+) {}

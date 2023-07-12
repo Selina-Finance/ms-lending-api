@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.common;
 
 import static com.selina.lending.api.controller.SwaggerConstants.EMAIL_PATTERN;
 

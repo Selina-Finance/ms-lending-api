@@ -21,8 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.internal.dto.LendingConstants;
-
 @Service
 public class TokenServiceImpl implements TokenService {
 

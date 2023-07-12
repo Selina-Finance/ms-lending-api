@@ -15,17 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.common;
 
 import lombok.Builder;
 import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Value
-@Jacksonized
-public class LeadDto {
-    String utmSource;
-    String utmCampaign;
-    String utmMedium;
+public class ChecklistDto {
+    String notRequired;
+    RequiredDto required;
 }

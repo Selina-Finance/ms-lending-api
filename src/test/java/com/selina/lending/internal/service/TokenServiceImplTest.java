@@ -17,7 +17,6 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.internal.dto.LendingConstants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;

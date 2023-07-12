@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service.permissions;
 
-import com.selina.lending.internal.dto.RequestedResource;
+import com.selina.lending.model.resource.RequestedResource;
 import com.selina.lending.httpclient.authorization.dto.response.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

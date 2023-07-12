@@ -19,11 +19,11 @@ package com.selina.lending.api.dto.application.response;
 
 import java.util.List;
 
-import com.selina.lending.internal.dto.AddressDto;
-import com.selina.lending.internal.dto.ChecklistDto;
-import com.selina.lending.internal.dto.EmploymentDto;
-import com.selina.lending.internal.dto.IncomeDto;
-import com.selina.lending.internal.dto.PreviousNameDto;
+import com.selina.lending.api.dto.common.AddressDto;
+import com.selina.lending.api.dto.common.ChecklistDto;
+import com.selina.lending.api.dto.common.EmploymentDto;
+import com.selina.lending.api.dto.common.IncomeDto;
+import com.selina.lending.api.dto.common.PreviousNameDto;
 import lombok.Builder;
 import lombok.Value;
 

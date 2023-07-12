@@ -17,9 +17,9 @@
 
 package com.selina.lending.internal.service.filter;
 
-import static com.selina.lending.internal.dto.LendingConstants.DIP_APPLICATION_TYPE;
-import static com.selina.lending.internal.dto.LendingConstants.DECLINE_DECISION;
-import static com.selina.lending.internal.dto.LendingConstants.REFER_DECISION;
+import static com.selina.lending.internal.service.LendingConstants.DIP_APPLICATION_TYPE;
+import static com.selina.lending.internal.service.LendingConstants.DECLINE_DECISION;
+import static com.selina.lending.internal.service.LendingConstants.REFER_DECISION;
 
 import java.util.List;
 

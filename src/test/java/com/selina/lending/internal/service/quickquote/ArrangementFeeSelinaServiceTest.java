@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.selina.lending.internal.dto.SourceType.AGGREGATOR;
-import static com.selina.lending.internal.dto.SourceType.BROKER;
+import static com.selina.lending.internal.service.SourceType.AGGREGATOR;
+import static com.selina.lending.internal.service.SourceType.BROKER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertFalse;

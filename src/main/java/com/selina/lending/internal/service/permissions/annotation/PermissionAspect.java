@@ -18,7 +18,7 @@
 package com.selina.lending.internal.service.permissions.annotation;
 
 import com.selina.lending.exception.AccessDeniedException;
-import com.selina.lending.internal.dto.RequestedResource;
+import com.selina.lending.model.resource.RequestedResource;
 import com.selina.lending.repository.auth.AuthorizationRepository;
 import com.selina.lending.internal.service.permissions.PermissionService;
 import lombok.extern.slf4j.Slf4j;

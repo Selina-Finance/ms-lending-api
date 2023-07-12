@@ -25,10 +25,9 @@ import javax.validation.constraints.NotNull;
 
 import com.selina.lending.api.support.validator.EnumValue;
 
-import com.selina.lending.internal.dto.ApplicantDto;
-import com.selina.lending.internal.dto.EmploymentDto;
-import com.selina.lending.internal.dto.Nationality;
-import com.selina.lending.internal.dto.PreviousNameDto;
+import com.selina.lending.api.dto.common.ApplicantDto;
+import com.selina.lending.api.dto.common.EmploymentDto;
+import com.selina.lending.api.dto.common.PreviousNameDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
