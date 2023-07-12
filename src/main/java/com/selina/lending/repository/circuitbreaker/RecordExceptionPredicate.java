@@ -19,7 +19,7 @@ package com.selina.lending.repository.circuitbreaker;
 
 import java.util.function.Predicate;
 
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.exception.RemoteResourceProblemException;
 
 import feign.FeignException;
 

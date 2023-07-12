@@ -15,20 +15,15 @@
  *
  */
 
-package com.selina.lending.api.errors.custom;
-
-import static org.zalando.problem.Status.BAD_GATEWAY;
+package com.selina.lending.exception;
 
 import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
 
-public class RemoteResourceProblemException extends AbstractThrowableProblem {
+public class AccessDeniedException extends AbstractThrowableProblem { //NOSONAR
+    public static final String ACCESS_DENIED_MESSAGE = "Access denied for application";
 
-    public RemoteResourceProblemException() {
-        super(
-                null,
-                "Bad Gateway",
-                BAD_GATEWAY,
-                "Received an invalid response from the upstream server"
-        );
+    public AccessDeniedException(String details) {
+        super(null, "Error processing request", Status.FORBIDDEN, details);
     }
 }

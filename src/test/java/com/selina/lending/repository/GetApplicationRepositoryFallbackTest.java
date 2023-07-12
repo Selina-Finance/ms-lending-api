@@ -17,9 +17,8 @@
 
 package com.selina.lending.repository;
 
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.getapplication.GetApplicationApi;
-import com.selina.lending.repository.GetApplicationRepositoryImpl;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.BeforeEach;

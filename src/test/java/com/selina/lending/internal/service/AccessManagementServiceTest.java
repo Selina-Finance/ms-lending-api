@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.exception.AccessDeniedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

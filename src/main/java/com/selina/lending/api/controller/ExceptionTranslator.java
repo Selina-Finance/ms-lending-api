@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.api.errors;
+package com.selina.lending.api.controller;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;

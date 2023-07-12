@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.exception.AccessDeniedException;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.internal.service.AccessManagementService;
@@ -31,7 +31,7 @@ import org.springframework.core.io.ByteArrayResource;
 
 import java.util.UUID;
 
-import static com.selina.lending.api.errors.custom.AccessDeniedException.ACCESS_DENIED_MESSAGE;
+import static com.selina.lending.exception.AccessDeniedException.ACCESS_DENIED_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

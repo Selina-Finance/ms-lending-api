@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.exception.AccessDeniedException;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;

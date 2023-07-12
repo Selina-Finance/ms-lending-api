@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service.creditcommitments;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.exception.AccessDeniedException;
 import com.selina.lending.repository.CreditCommitmentsRepository;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;
@@ -34,7 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static com.selina.lending.api.errors.custom.AccessDeniedException.ACCESS_DENIED_MESSAGE;
+import static com.selina.lending.exception.AccessDeniedException.ACCESS_DENIED_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

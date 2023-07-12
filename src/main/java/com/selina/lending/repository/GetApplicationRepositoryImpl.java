@@ -19,7 +19,7 @@ package com.selina.lending.repository;
 
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.getapplication.GetApplicationApi;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;

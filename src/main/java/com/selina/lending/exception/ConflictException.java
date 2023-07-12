@@ -15,14 +15,14 @@
  *
  */
 
-package com.selina.lending.api.errors.custom;
+package com.selina.lending.exception;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
 
-public class BadRequestException extends AbstractThrowableProblem { //NOSONAR
+public class ConflictException extends AbstractThrowableProblem { //NOSONAR
 
-    public BadRequestException(String details) {
-        super(null, "Bad Request", Status.BAD_REQUEST, details);
+    public ConflictException(String details) {
+        super(null, "Error processing request", Status.CONFLICT, details);
     }
 }

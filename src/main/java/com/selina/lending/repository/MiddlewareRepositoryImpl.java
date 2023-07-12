@@ -25,7 +25,7 @@ import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFRe
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.middleware.MiddlewareApi;
 import com.selina.lending.internal.enricher.MiddlewareRequestEnricher;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;

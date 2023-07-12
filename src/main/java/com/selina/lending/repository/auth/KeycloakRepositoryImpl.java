@@ -18,7 +18,7 @@
 package com.selina.lending.repository.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.api.errors.custom.BadRequestException;
+import com.selina.lending.exception.BadRequestException;
 import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import com.selina.lending.internal.dto.auth.Credentials;
 import com.selina.lending.internal.dto.auth.TokenResponse;

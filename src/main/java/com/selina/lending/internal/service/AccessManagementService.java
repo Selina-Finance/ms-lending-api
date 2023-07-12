@@ -19,7 +19,7 @@ package com.selina.lending.internal.service;
 
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
+import com.selina.lending.exception.AccessDeniedException;
 
 @Service
 public class AccessManagementService {
@@ -35,6 +35,7 @@ public class AccessManagementService {
             throw new AccessDeniedException(AccessDeniedException.ACCESS_DENIED_MESSAGE);
         }
     }
+
     public boolean isSourceAccountAccessAllowed(String sourceAccount) {
         return sourceAccount.equals(tokenService.retrieveSourceAccount());
     }

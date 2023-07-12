@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.api.errors.custom.ConflictException;
+import com.selina.lending.exception.ConflictException;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;

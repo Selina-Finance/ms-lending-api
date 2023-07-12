@@ -17,7 +17,7 @@
 
 package com.selina.lending.repository;
 
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.creditcommitments.CreditCommitmentsApi;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
 import com.selina.lending.httpclient.creditcommitments.dto.response.PatchCreditCommitmentResponse;

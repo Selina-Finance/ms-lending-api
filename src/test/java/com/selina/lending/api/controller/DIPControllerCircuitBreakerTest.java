@@ -18,7 +18,7 @@
 package com.selina.lending.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.internal.mapper.DIPCCApplicationRequestMapper;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.CreateApplicationService;
