@@ -1,4 +1,4 @@
-package com.selina.lending.internal.enricher;
+package com.selina.lending.internal.service.enricher;
 
 import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;

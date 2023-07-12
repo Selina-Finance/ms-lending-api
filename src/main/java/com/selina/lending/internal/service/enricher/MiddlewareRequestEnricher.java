@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.enricher;
+package com.selina.lending.internal.service.enricher;
 
 import java.util.List;
 import java.util.Optional;

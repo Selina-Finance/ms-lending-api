@@ -15,17 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.enricher;
+package com.selina.lending.internal.service.enricher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 
-import static com.selina.lending.internal.enricher.MiddlewareRequestEnricher.ADDRESS_TYPE_CURRENT;
+import static com.selina.lending.internal.service.enricher.MiddlewareRequestEnricher.ADDRESS_TYPE_CURRENT;
 
 import java.util.List;
 
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
+import com.selina.lending.internal.service.enricher.MiddlewareRequestEnricher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

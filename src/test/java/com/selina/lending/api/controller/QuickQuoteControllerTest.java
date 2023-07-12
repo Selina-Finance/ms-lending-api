@@ -21,7 +21,7 @@ import com.selina.lending.exception.AccessDeniedException;
 import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
-import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
+import com.selina.lending.internal.service.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.FilterApplicationService;
 import com.selina.lending.internal.service.TokenService;
