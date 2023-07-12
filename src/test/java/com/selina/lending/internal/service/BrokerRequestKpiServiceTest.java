@@ -15,8 +15,9 @@
  *
  */
 
-package com.selina.lending.api.interceptor;
+package com.selina.lending.internal.service;
 
+import com.selina.lending.internal.service.BrokerRequestKpiService;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
 import com.selina.lending.messaging.mapper.BrokerRequestEventMapper;
@@ -41,7 +42,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BrokerRequestResolverTest {
+class BrokerRequestKpiServiceTest {
 
     @Mock
     private BrokerRequestEventPublisher publisher;
@@ -51,7 +52,7 @@ class BrokerRequestResolverTest {
     private TokenService tokenService;
 
     @InjectMocks
-    private BrokerRequestResolver resolver;
+    private BrokerRequestKpiService resolver;
 
     @Test
     void shouldDoNotPublishEventWheMapperReturnedEmpty() {

@@ -15,8 +15,9 @@
  *
  */
 
-package com.selina.lending.api.interceptor;
+package com.selina.lending.api.filter;
 
+import com.selina.lending.internal.service.BrokerRequestKpiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -41,9 +42,9 @@ import static com.selina.lending.config.security.SecurityConfig.SWAGGER_URL;
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestKpiFilter extends OncePerRequestFilter {
 
-    private final BrokerRequestResolver kpiResolver;
+    private final BrokerRequestKpiService kpiResolver;
 
-    public BrokerRequestKpiFilter(BrokerRequestResolver kpiResolver) {
+    public BrokerRequestKpiFilter(BrokerRequestKpiService kpiResolver) {
         this.kpiResolver = kpiResolver;
     }
 

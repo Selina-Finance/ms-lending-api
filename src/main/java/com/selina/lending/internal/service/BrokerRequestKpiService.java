@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.api.interceptor;
+package com.selina.lending.internal.service;
 
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
@@ -31,13 +31,13 @@ import java.time.Instant;
 @Slf4j
 @Component
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
-public class BrokerRequestResolver {
+public class BrokerRequestKpiService {
     
     private final BrokerRequestEventPublisher publisher;
     private final BrokerRequestEventMapper mapper;
     private final TokenService tokenService;
 
-    public BrokerRequestResolver(BrokerRequestEventPublisher publisher, BrokerRequestEventMapper mapper, TokenService tokenService) {
+    public BrokerRequestKpiService(BrokerRequestEventPublisher publisher, BrokerRequestEventMapper mapper, TokenService tokenService) {
         this.publisher = publisher;
         this.mapper = mapper;
         this.tokenService = tokenService;

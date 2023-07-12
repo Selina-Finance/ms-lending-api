@@ -15,8 +15,9 @@
  *
  */
 
-package com.selina.lending.api.interceptor;
+package com.selina.lending.api.filter;
 
+import com.selina.lending.internal.service.BrokerRequestKpiService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +38,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 class BrokerRequestKpiFilterTest {
 
     @Mock
-    private BrokerRequestResolver resolver;
+    private BrokerRequestKpiService resolver;
 
     @InjectMocks
     private BrokerRequestKpiFilter filter;
