@@ -15,13 +15,13 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.response;
 
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
+import com.selina.lending.internal.dto.ApplicantDto;
+import com.selina.lending.internal.dto.LoanInformationDto;
+import com.selina.lending.internal.dto.OfferDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -31,9 +31,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AdvancedLoanInformationDto extends LoanInformationDto {
-
-    @NotNull
-    @NotEmpty
-    private List<FacilityDto> facilities;
+public class DIPApplicationDto extends ApplicationDto {
+    private List<ApplicantDto> applicants;
+    private LoanInformationDto loanInformation;
+    private PropertyDetailValueDto propertyDetails;
+    private List<OfferDto> offers;
 }

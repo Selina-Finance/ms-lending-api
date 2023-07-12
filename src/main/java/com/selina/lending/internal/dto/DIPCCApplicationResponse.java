@@ -19,6 +19,8 @@ package com.selina.lending.internal.dto;
 
 import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentDto;
 
+import com.selina.lending.api.dto.dip.response.ApplicationDto;
+import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;

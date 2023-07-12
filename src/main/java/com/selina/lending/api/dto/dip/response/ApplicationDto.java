@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.response;
 
 import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
 

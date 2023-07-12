@@ -22,7 +22,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.DIPApplicationDto;
+import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
 import com.selina.lending.internal.mapper.config.DIPApplicationMapperConfig;
 import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 

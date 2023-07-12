@@ -22,7 +22,7 @@ import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import com.selina.lending.internal.dto.DIPPropertyDetailsDto;
+import com.selina.lending.api.dto.dip.request.DIPPropertyDetailsDto;
 import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)

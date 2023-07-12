@@ -26,6 +26,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.selina.lending.api.dto.dip.request.AdvancedLoanInformationDto;
+import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
 import com.selina.lending.api.support.converter.ToLowerCase;
 import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
 import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;

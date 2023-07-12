@@ -20,7 +20,7 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.FacilityDto;
+import com.selina.lending.api.dto.dip.request.FacilityDto;
 import com.selina.lending.httpclient.middleware.dto.common.Facility;
 
 @Mapper

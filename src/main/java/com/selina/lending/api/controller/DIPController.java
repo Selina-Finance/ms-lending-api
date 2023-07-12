@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationResponse;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.dto.DIPApplicationResponse;
+import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
+import com.selina.lending.api.dto.dip.response.DIPApplicationResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationRequest;
 import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
 import com.selina.lending.internal.mapper.DIPCCApplicationResponseMapper;

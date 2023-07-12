@@ -15,14 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
-@Builder
-@Data
-public class PropertyDetailValueDto {
-
-    private Double estimatedValue;
+@Builder(toBuilder = true)
+@Value
+public class DIPApplicationResponse {
+    String requestType;
+    String applicationId;
+    @Schema (oneOf = DIPApplicationDto.class)
+    ApplicationDto application;
 }

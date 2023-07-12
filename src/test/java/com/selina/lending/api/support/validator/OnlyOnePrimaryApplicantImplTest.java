@@ -17,9 +17,9 @@
 
 package com.selina.lending.api.support.validator;
 
-import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.DIPApplicantDto;
-import com.selina.lending.internal.dto.DIPApplicationRequest;
+import com.selina.lending.api.dto.dip.request.AdvancedLoanInformationDto;
+import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
+import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
 import com.selina.lending.api.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
 import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import org.junit.jupiter.api.BeforeAll;

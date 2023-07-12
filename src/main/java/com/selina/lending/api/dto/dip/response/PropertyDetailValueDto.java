@@ -15,19 +15,14 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.response;
 
-import com.selina.lending.api.support.validator.EnumValue;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
-public class FacilityDto {
-    Double allocationAmount;
-    @Schema(implementation = LoanPurpose.class)
-    @EnumValue(enumClass = LoanPurpose.class)
-    String allocationPurpose;
+@Data
+public class PropertyDetailValueDto {
+
+    private Double estimatedValue;
 }

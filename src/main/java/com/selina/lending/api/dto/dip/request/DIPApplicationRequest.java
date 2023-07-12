@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.request;
 
 import static com.selina.lending.api.controller.SwaggerConstants.EMAIL_PATTERN;
 
@@ -31,6 +31,8 @@ import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
 import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
 import com.selina.lending.api.support.validator.SecondApplicantHasRequiredValues;
+import com.selina.lending.internal.dto.ApplicationRequest;
+import com.selina.lending.internal.dto.FeesDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -15,17 +15,20 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.request;
 
+import com.selina.lending.api.support.validator.EnumValue;
+
+import com.selina.lending.internal.dto.LoanPurpose;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
-@Builder(toBuilder = true)
+@Builder
 @Value
-public class DIPApplicationResponse {
-    String requestType;
-    String applicationId;
-    @Schema (oneOf = DIPApplicationDto.class)
-    ApplicationDto application;
+public class FacilityDto {
+    Double allocationAmount;
+    @Schema(implementation = LoanPurpose.class)
+    @EnumValue(enumClass = LoanPurpose.class)
+    String allocationPurpose;
 }

@@ -17,7 +17,7 @@
 
 package com.selina.lending.api.support.validator;
 
-import com.selina.lending.internal.dto.DIPApplicantDto;
+import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
