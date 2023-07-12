@@ -17,16 +17,16 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.internal.dto.SelectProductResponse;
-import com.selina.lending.internal.mapper.SelectProductResponseMapper;
-import com.selina.lending.internal.service.ProductService;
-import com.selina.lending.internal.service.permissions.annotation.Permission;
+import com.selina.lending.api.dto.product.response.SelectProductResponse;
+import com.selina.lending.api.mapper.product.SelectProductResponseMapper;
+import com.selina.lending.service.ProductService;
+import com.selina.lending.service.permissions.annotation.Permission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.DIP_CC;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
+import static com.selina.lending.service.permissions.annotation.Permission.Resource.DIP_CC;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Update;
 
 @RestController
 @Slf4j

@@ -17,7 +17,9 @@
 
 package com.selina.lending.api.errors;
 
-import com.selina.lending.api.errors.custom.RemoteResourceProblemException;
+import com.selina.lending.exception.BadRequestException;
+import com.selina.lending.exception.ConflictException;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
@@ -75,12 +77,12 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/access-denied-exception")
     public void accessDeniedException() {
-        throw new com.selina.lending.api.errors.custom.AccessDeniedException("Some problem details that make sense");
+        throw new com.selina.lending.exception.AccessDeniedException("Some problem details that make sense");
     }
 
     @GetMapping("/bad-request-exception")
     public void badRequestException() {
-        throw new com.selina.lending.api.errors.custom.BadRequestException("bad request");
+        throw new BadRequestException("bad request");
     }
 
     @GetMapping("/custom-remote-resource-problem-exception")
@@ -104,7 +106,7 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/conflict-exception")
     public void conflictException() {
-        throw new com.selina.lending.api.errors.custom.ConflictException("conflict request");
+        throw new ConflictException("conflict request");
     }
 
     @GetMapping("/feign-not-found-exception")

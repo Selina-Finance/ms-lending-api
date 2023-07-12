@@ -17,19 +17,19 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
-import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
-import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
-import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.FilterApplicationService;
-import com.selina.lending.internal.service.TokenService;
-import com.selina.lending.internal.service.application.domain.quote.Product;
-import com.selina.lending.internal.service.application.domain.quote.selection.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFRequest;
-import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
-import com.selina.lending.testHelper.ProductHelper;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
+import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
+import com.selina.lending.exception.AccessDeniedException;
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.service.CreateApplicationService;
+import com.selina.lending.service.FilterApplicationService;
+import com.selina.lending.service.TokenService;
+import com.selina.lending.service.enricher.ApplicationResponseEnricher;
+import com.selina.lending.testutil.ProductHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

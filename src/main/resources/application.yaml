@@ -42,7 +42,7 @@ resilience4j:
         slow-call-duration-threshold: 60s
         slow-call-rate-threshold: 80
         failure-rate-threshold: 60
-        record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
+        record-failure-predicate: com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate
       middleware-application-service-cb:
         wait-duration-in-open-state: 30s
         permitted-number-of-calls-in-half-open-state: 10
@@ -52,7 +52,7 @@ resilience4j:
         slow-call-duration-threshold: 30s
         slow-call-rate-threshold: 80
         failure-rate-threshold: 60
-        record-failure-predicate: com.selina.lending.internal.circuitbreaker.RecordExceptionPredicate
+        record-failure-predicate: com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate
 
 kafka:
   enable: true

@@ -17,11 +17,11 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.creditcommitments.EsisDocService;
-import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
-import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
+import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.service.creditcommitments.EsisDocService;
+import com.selina.lending.service.creditcommitments.RetrieveCreditCommitmentsService;
+import com.selina.lending.service.creditcommitments.UpdateCreditCommitmentsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -17,13 +17,13 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.internal.dto.DIPApplicationRequest;
-import com.selina.lending.internal.dto.DIPCCApplicationRequest;
-import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.RetrieveApplicationService;
-import com.selina.lending.internal.service.UpdateApplicationService;
-import com.selina.lending.internal.service.application.domain.ApplicationDecisionResponse;
-import com.selina.lending.internal.service.application.domain.ApplicationResponse;
+import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
+import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
+import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
+import com.selina.lending.service.CreateApplicationService;
+import com.selina.lending.service.RetrieveApplicationService;
+import com.selina.lending.service.UpdateApplicationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

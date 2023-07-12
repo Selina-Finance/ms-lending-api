@@ -18,9 +18,10 @@
 package com.selina.lending.api.controller.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.internal.dto.auth.Credentials;
-import com.selina.lending.internal.dto.auth.TokenResponse;
-import com.selina.lending.internal.service.AuthService;
+import com.selina.lending.api.controller.AuthController;
+import com.selina.lending.api.dto.auth.request.Credentials;
+import com.selina.lending.api.dto.auth.response.TokenResponse;
+import com.selina.lending.service.AuthService;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;

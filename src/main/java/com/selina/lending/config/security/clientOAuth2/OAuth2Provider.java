@@ -17,14 +17,14 @@
 
 package com.selina.lending.config.security.clientOAuth2;
 
-import java.util.Objects;
-
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class OAuth2Provider {

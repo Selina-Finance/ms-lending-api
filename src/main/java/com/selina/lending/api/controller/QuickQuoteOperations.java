@@ -17,12 +17,16 @@
 
 package com.selina.lending.api.controller;
 
-import static com.selina.lending.api.controller.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
-import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
-
-import javax.validation.Valid;
-
-import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
+import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,16 +35,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import javax.validation.Valid;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import static com.selina.lending.api.controller.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
+import static com.selina.lending.api.controller.SwaggerConstants.BAD_REQUEST_EXAMPLE;
 
 @RequestMapping("/application")
 public interface QuickQuoteOperations {

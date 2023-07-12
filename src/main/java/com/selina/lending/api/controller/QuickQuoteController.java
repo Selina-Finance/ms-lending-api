@@ -17,26 +17,26 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.api.errors.custom.AccessDeniedException;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
-import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
-import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
-import com.selina.lending.internal.mapper.quote.QuickQuoteApplicationResponseMapper;
-import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFRequestMapper;
-import com.selina.lending.internal.mapper.quotecf.QuickQuoteCFResponseMapper;
-import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.FilterApplicationService;
-import com.selina.lending.internal.service.application.domain.quotecf.QuickQuoteCFResponse;
-import com.selina.lending.internal.service.permissions.annotation.Permission;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
+import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
+import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationResponseMapper;
+import com.selina.lending.api.mapper.qqcf.QuickQuoteCFRequestMapper;
+import com.selina.lending.api.mapper.qqcf.QuickQuoteCFResponseMapper;
+import com.selina.lending.exception.AccessDeniedException;
+import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
+import com.selina.lending.service.CreateApplicationService;
+import com.selina.lending.service.FilterApplicationService;
+import com.selina.lending.service.enricher.ApplicationResponseEnricher;
+import com.selina.lending.service.permissions.annotation.Permission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.QQ;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.QQ_CF;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Create;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
+import static com.selina.lending.service.permissions.annotation.Permission.Resource.QQ;
+import static com.selina.lending.service.permissions.annotation.Permission.Resource.QQ_CF;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Create;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Update;
 
 @RestController
 @Slf4j
