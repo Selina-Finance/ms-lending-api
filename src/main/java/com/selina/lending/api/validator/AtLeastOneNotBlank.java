@@ -15,20 +15,17 @@
  *
  */
 
-package com.selina.lending.api.dto.dip.request;
+package com.selina.lending.api.validator;
 
-import com.selina.lending.api.validator.EnumValue;
+import javax.validation.Payload;
 
-import com.selina.lending.api.dto.common.LoanPurpose;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
+@java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE})
+@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+@javax.validation.Constraint(validatedBy = {AtLeastOneNotBlankImpl.class})
+public @interface AtLeastOneNotBlank {
 
-@Builder
-@Value
-public class FacilityDto {
-    Double allocationAmount;
-    @Schema(implementation = LoanPurpose.class)
-    @EnumValue(enumClass = LoanPurpose.class)
-    String allocationPurpose;
+    String message() default "At least one field must be specified";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+    String[] fields();
 }

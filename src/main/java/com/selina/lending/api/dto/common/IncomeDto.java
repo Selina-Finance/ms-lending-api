@@ -22,8 +22,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.selina.lending.api.support.validator.Conditional;
-import com.selina.lending.api.support.validator.EnumValue;
+import com.selina.lending.api.validator.Conditional;
+import com.selina.lending.api.validator.EnumValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

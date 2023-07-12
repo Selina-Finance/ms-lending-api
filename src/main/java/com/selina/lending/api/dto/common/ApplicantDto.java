@@ -30,10 +30,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.selina.lending.api.controller.SwaggerConstants;
-import com.selina.lending.api.support.converter.ToLowerCase;
-import com.selina.lending.api.support.validator.EnumValue;
+import com.selina.lending.api.converter.ToLowerCase;
+import com.selina.lending.api.validator.EnumValue;
 
-import com.selina.lending.api.support.validator.UkNationalPhoneNumber;
+import com.selina.lending.api.validator.UkNationalPhoneNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

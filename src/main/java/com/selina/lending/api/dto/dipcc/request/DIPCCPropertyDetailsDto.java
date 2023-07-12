@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.selina.lending.api.controller.SwaggerConstants;
-import com.selina.lending.api.support.validator.EnumValue;
+import com.selina.lending.api.validator.EnumValue;
 
 import com.selina.lending.api.dto.common.PropertyDetailsDto;
 import com.selina.lending.api.dto.dip.request.PropertyType;

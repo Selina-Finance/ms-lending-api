@@ -15,20 +15,16 @@
  *
  */
 
-package com.selina.lending.api.dto.dip.request;
+package com.selina.lending.api.converter;
 
-import com.selina.lending.api.validator.EnumValue;
+import com.fasterxml.jackson.databind.util.StdConverter;
 
-import com.selina.lending.api.dto.common.LoanPurpose;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
-
-@Builder
-@Value
-public class FacilityDto {
-    Double allocationAmount;
-    @Schema(implementation = LoanPurpose.class)
-    @EnumValue(enumClass = LoanPurpose.class)
-    String allocationPurpose;
+public class ToLowerCaseConverter extends StdConverter<String, String> {
+    @Override
+    public String convert(String value) {
+        if (value == null){
+            return null;
+        }
+        return value.toLowerCase();
+    }
 }

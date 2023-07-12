@@ -15,20 +15,15 @@
  *
  */
 
-package com.selina.lending.api.dto.dip.request;
+package com.selina.lending.api.validator;
 
-import com.selina.lending.api.validator.EnumValue;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import com.selina.lending.api.dto.common.LoanPurpose;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
-
-@Builder
-@Value
-public class FacilityDto {
-    Double allocationAmount;
-    @Schema(implementation = LoanPurpose.class)
-    @EnumValue(enumClass = LoanPurpose.class)
-    String allocationPurpose;
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+public @interface Conditionals {
+    Conditional[] value();
 }

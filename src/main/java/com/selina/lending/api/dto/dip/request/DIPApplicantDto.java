@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.selina.lending.api.support.validator.EnumValue;
+import com.selina.lending.api.validator.EnumValue;
 
 import com.selina.lending.api.dto.common.ApplicantDto;
 import com.selina.lending.api.dto.common.EmploymentDto;

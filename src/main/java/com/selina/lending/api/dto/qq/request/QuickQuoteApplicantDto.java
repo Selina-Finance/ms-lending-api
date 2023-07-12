@@ -18,9 +18,9 @@
 package com.selina.lending.api.dto.qq.request;
 
 import com.selina.lending.api.controller.SwaggerConstants;
-import com.selina.lending.api.support.converter.ToLowerCase;
-import com.selina.lending.api.support.validator.EnumValue;
-import com.selina.lending.api.support.validator.UkNationalPhoneNumber;
+import com.selina.lending.api.converter.ToLowerCase;
+import com.selina.lending.api.validator.EnumValue;
+import com.selina.lending.api.validator.UkNationalPhoneNumber;
 import com.selina.lending.api.dto.common.AddressDto;
 import com.selina.lending.api.dto.common.ApplicantGender;
 import com.selina.lending.api.dto.common.ApplicantResidentialStatus;

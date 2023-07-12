@@ -15,20 +15,20 @@
  *
  */
 
-package com.selina.lending.api.dto.dip.request;
+package com.selina.lending.api.validator;
 
-import com.selina.lending.api.validator.EnumValue;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import com.selina.lending.api.dto.common.LoanPurpose;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
+import javax.validation.Constraint;
+import javax.validation.Payload;
 
-@Builder
-@Value
-public class FacilityDto {
-    Double allocationAmount;
-    @Schema(implementation = LoanPurpose.class)
-    @EnumValue(enumClass = LoanPurpose.class)
-    String allocationPurpose;
+@Documented
+@Constraint(validatedBy = OnlyOnePrimaryApplicantImpl.class)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface OnlyOnePrimaryApplicant {
+    String message() default "must have one primary applicant";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }

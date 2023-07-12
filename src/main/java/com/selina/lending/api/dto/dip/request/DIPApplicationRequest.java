@@ -26,11 +26,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.selina.lending.api.support.converter.ToLowerCase;
-import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
-import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
+import com.selina.lending.api.converter.ToLowerCase;
+import com.selina.lending.api.validator.MatchNumberOfApplicants;
+import com.selina.lending.api.validator.OnlyOnePrimaryApplicant;
 
-import com.selina.lending.api.support.validator.SecondApplicantHasRequiredValues;
+import com.selina.lending.api.validator.SecondApplicantHasRequiredValues;
 import com.selina.lending.api.dto.common.FeesDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;

@@ -17,7 +17,7 @@
 
 package com.selina.lending.api.dto.qqcf.request;
 
-import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
+import com.selina.lending.api.validator.MatchNumberOfApplicants;
 import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 import com.selina.lending.api.dto.common.FeesDto;
 import com.selina.lending.api.dto.common.LoanInformationDto;
