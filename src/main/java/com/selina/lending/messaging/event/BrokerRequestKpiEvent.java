@@ -22,7 +22,7 @@ import lombok.Builder;
 import java.time.Instant;
 
 @Builder(toBuilder = true)
-public record BrokerRequestEvent(
+public record BrokerRequestKpiEvent(
         String ip,
         String source,
         String uriPath,

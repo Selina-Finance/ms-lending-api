@@ -17,8 +17,8 @@
 
 package com.selina.lending.service;
 
-import com.selina.lending.messaging.mapper.BrokerRequestEventMapper;
-import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
+import com.selina.lending.messaging.mapper.BrokerRequestKpiEventMapper;
+import com.selina.lending.messaging.publisher.BrokerRequestKpiEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,7 +32,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.selina.lending.testutil.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
+import static com.selina.lending.testutil.BrokerRequestKpiEventTestHelper.buildBrokerRequestKpiEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,9 +43,9 @@ import static org.mockito.Mockito.when;
 class BrokerRequestKpiServiceTest {
 
     @Mock
-    private BrokerRequestEventPublisher publisher;
+    private BrokerRequestKpiEventPublisher publisher;
     @Mock
-    private BrokerRequestEventMapper mapper;
+    private BrokerRequestKpiEventMapper mapper;
     @Mock
     private TokenService tokenService;
 

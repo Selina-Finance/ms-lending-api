@@ -38,13 +38,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BrokerRequestEventMapperTest extends MapperBase {
+class BrokerRequestKpiEventMapperTest extends MapperBase {
     private static final String REQUEST_ID_HEADER_NAME = "x-selina-request-id";
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModules(new JavaTimeModule());
 
     @InjectMocks
-    private BrokerRequestEventMapper mapper;
+    private BrokerRequestKpiEventMapper mapper;
 
     @Test
     void shouldMapToBrokerRequestKpiEvent() throws IOException {

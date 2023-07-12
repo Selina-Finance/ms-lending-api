@@ -17,8 +17,8 @@
 
 package com.selina.lending.service;
 
-import com.selina.lending.messaging.mapper.BrokerRequestEventMapper;
-import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
+import com.selina.lending.messaging.mapper.BrokerRequestKpiEventMapper;
+import com.selina.lending.messaging.publisher.BrokerRequestKpiEventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -32,11 +32,11 @@ import java.time.Instant;
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestKpiService {
     
-    private final BrokerRequestEventPublisher publisher;
-    private final BrokerRequestEventMapper mapper;
+    private final BrokerRequestKpiEventPublisher publisher;
+    private final BrokerRequestKpiEventMapper mapper;
     private final TokenService tokenService;
 
-    public BrokerRequestKpiService(BrokerRequestEventPublisher publisher, BrokerRequestEventMapper mapper, TokenService tokenService) {
+    public BrokerRequestKpiService(BrokerRequestKpiEventPublisher publisher, BrokerRequestKpiEventMapper mapper, TokenService tokenService) {
         this.publisher = publisher;
         this.mapper = mapper;
         this.tokenService = tokenService;

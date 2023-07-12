@@ -17,7 +17,7 @@
 
 package com.selina.lending.messaging.mapper;
 
-import com.selina.lending.messaging.event.BrokerRequestEvent;
+import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
 import com.selina.lending.util.IPHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,12 +31,12 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-public class BrokerRequestEventMapper {
+public class BrokerRequestKpiEventMapper {
 
-    public Optional<BrokerRequestEvent> toEvent(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response,
-                                                Instant started, String source) {
+    public Optional<BrokerRequestKpiEvent> toEvent(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response,
+                                                   Instant started, String source) {
         try {
-            return Optional.of(BrokerRequestEvent.builder()
+            return Optional.of(BrokerRequestKpiEvent.builder()
                     .ip(IPHelper.getRemoteAddr(request))
                     .source(source)
                     .uriPath(request.getRequestURI())

@@ -27,20 +27,20 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.concurrent.SettableListenableFuture;
 
-import static com.selina.lending.testutil.BrokerRequestEventTestHelper.buildBrokerRequestKpiEvent;
+import static com.selina.lending.testutil.BrokerRequestKpiEventTestHelper.buildBrokerRequestKpiEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BrokerRequestEventPublisherTest {
+class BrokerRequestKpiEventPublisherTest {
 
     @Mock
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     @InjectMocks
-    private BrokerRequestEventPublisher publisher;
+    private BrokerRequestKpiEventPublisher publisher;
 
     @Test
     void shouldInvokeKafkaTemplateWithCorrectArgumentsWhenPublishStartedEvent() {

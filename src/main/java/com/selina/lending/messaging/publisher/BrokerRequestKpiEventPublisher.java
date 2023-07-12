@@ -17,7 +17,7 @@
 
 package com.selina.lending.messaging.publisher;
 
-import com.selina.lending.messaging.event.BrokerRequestEvent;
+import com.selina.lending.messaging.event.BrokerRequestKpiEvent;
 import com.selina.lending.messaging.event.KafkaEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -30,18 +30,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
-public class BrokerRequestEventPublisher {
+public class BrokerRequestKpiEventPublisher {
 
     @Value(value = "${kafka.topics.brokerRequestKpi.name}")
     private String brokerRequestKpiTopicName;
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public BrokerRequestEventPublisher(KafkaTemplate<String, Object> kafkaTemplate) {
+    public BrokerRequestKpiEventPublisher(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(BrokerRequestEvent event) {
+    public void publish(BrokerRequestKpiEvent event) {
         log.debug("Request to publish BrokerRequestKpiEvent: {}", event);
         kafkaTemplate.send(brokerRequestKpiTopicName, event.key(), event).addCallback(
                 result -> successfulCallback(event, result),
