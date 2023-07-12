@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.mapper.quote;
 
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import org.junit.jupiter.api.Test;

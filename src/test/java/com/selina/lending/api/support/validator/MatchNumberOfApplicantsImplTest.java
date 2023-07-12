@@ -1,8 +1,8 @@
 package com.selina.lending.api.support.validator;
 
 import com.selina.lending.internal.dto.LoanInformationDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -52,9 +52,9 @@ import com.selina.lending.api.dto.creditcommitments.request.PublicInformationDto
 import com.selina.lending.api.dto.creditcommitments.request.SystemDto;
 import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.api.dto.creditcommitments.request.UserDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
-import com.selina.lending.internal.dto.quote.QuickQuotePropertyDetailsDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
 import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicantDto;
 import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.dto.quotecf.QuickQuoteCFPropertyDetailsDto;

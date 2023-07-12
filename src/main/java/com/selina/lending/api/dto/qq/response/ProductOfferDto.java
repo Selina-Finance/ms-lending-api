@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto.quote;
+package com.selina.lending.api.dto.qq.response;
 
 import com.selina.lending.internal.dto.ErcDto;
 import lombok.Builder;

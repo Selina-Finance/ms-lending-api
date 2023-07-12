@@ -17,8 +17,8 @@
 
 package com.selina.lending.internal.mapper.quote;
 
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import org.mapstruct.Mapper;

@@ -12,7 +12,7 @@ import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import com.selina.lending.internal.dto.LeadDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.httpclient.selection.dto.response.Product;

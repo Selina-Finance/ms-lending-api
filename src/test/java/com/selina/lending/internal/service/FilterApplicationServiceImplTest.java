@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.service;
 
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.internal.mapper.quote.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.repository.MiddlewareRepository;

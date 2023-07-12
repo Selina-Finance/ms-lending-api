@@ -1,6 +1,6 @@
 package com.selina.lending.internal.mapper.quote.middleware;
 
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.service.TokenService;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.selection.dto.response.Product;

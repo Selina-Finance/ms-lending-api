@@ -1,7 +1,7 @@
 package com.selina.lending.internal.mapper.quote.middleware;
 
 
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

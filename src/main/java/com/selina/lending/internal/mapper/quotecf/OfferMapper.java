@@ -1,6 +1,6 @@
 package com.selina.lending.internal.mapper.quotecf;
 
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.internal.mapper.ErcMapper;
 import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import org.mapstruct.Mapper;

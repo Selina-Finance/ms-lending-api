@@ -18,8 +18,8 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.exception.AccessDeniedException;
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.dto.quotecf.QuickQuoteCFApplicationRequest;
 import com.selina.lending.internal.enricher.ApplicationResponseEnricher;
 import com.selina.lending.internal.service.CreateApplicationService;

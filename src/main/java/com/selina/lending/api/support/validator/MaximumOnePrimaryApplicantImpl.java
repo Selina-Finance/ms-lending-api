@@ -1,6 +1,6 @@
 package com.selina.lending.api.support.validator;
 
-import com.selina.lending.internal.dto.quote.QuickQuoteApplicantDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

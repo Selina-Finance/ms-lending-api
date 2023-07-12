@@ -1,7 +1,7 @@
 package com.selina.lending.internal.enricher;
 
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
-import com.selina.lending.internal.dto.quote.QuickQuoteResponse;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.internal.service.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.selina.lending.internal.mapper.quotecf;
 
-import com.selina.lending.internal.dto.quote.ProductOfferDto;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.internal.mapper.MapperBase;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import org.junit.jupiter.api.Test;

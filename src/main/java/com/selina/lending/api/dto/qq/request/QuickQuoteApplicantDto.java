@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto.quote;
+package com.selina.lending.api.dto.qq.request;
 
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.converter.ToLowerCase;
