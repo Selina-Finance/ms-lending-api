@@ -27,25 +27,25 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class Fees {
     @JsonProperty("addAdviceFeeToLoan")
-    Boolean isAddAdviceFeeToLoan;
+    private Boolean isAddAdviceFeeToLoan;
     @JsonProperty("addArrangementFeeToLoan")
-    Boolean isAddArrangementFeeToLoan;
+    private Boolean isAddArrangementFeeToLoan;
     @JsonProperty("addCommissionFeeToLoan")
-    Boolean isAddCommissionFeeToLoan;
+    private Boolean isAddCommissionFeeToLoan;
     @JsonProperty("addThirdPartyFeeToLoan")
-    Boolean isAddThirdPartyFeeToLoan;
+    private Boolean isAddThirdPartyFeeToLoan;
     @JsonProperty("addValuationFeeToLoan")
-    Boolean isAddValuationFeeToLoan;
-    Double adviceFee;
-    Double arrangementFee;
-    Double commissionFee;
-    Double thirdPartyFee;
-    Double valuationFee;
+    private Boolean isAddValuationFeeToLoan;
+    private Double adviceFee;
+    private Double arrangementFee;
+    private Double commissionFee;
+    private Double thirdPartyFee;
+    private Double valuationFee;
     @JsonProperty("addProductFeesToFacility")
-    Boolean isAddProductFeesToFacility;
-    Double intermediaryFeeAmount;
+    private Boolean isAddProductFeesToFacility;
+    private Double intermediaryFeeAmount;
     @JsonProperty("addIntermediaryFeeToLoan")
-    Boolean isAddIntermediaryFeeToLoan;
-    Boolean addArrangementFeeSelina;
-    Double arrangementFeeDiscountSelina;
+    private Boolean isAddIntermediaryFeeToLoan;
+    private Boolean addArrangementFeeSelina;
+    private Double arrangementFeeDiscountSelina;
 }

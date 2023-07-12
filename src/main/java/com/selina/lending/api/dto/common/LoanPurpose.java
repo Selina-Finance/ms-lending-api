@@ -33,7 +33,7 @@ public enum LoanPurpose {
     OTHER("Other"),
     NONE("None");
 
-    final String value;
+    private final String value;
 
     LoanPurpose(String value) {
         this.value = value;

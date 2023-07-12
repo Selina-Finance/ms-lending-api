@@ -31,6 +31,6 @@ import java.util.List;
 public class UpdateCreditCommitmentsRequest {
     @Valid
     @OnlyOnePrimaryApplicant
-    List<ApplicantCreditCommitmentsDto> applicants;
+    private List<ApplicantCreditCommitmentsDto> applicants;
 }
 

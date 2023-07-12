@@ -25,5 +25,5 @@ import java.util.List;
 @Builder
 @Value
 public class CreditPolicy {
-    List<Detail> detail;
+    private List<Detail> detail;
 }

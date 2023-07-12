@@ -30,20 +30,20 @@ import java.util.List;
 @Builder
 @Data
 public class Application {
-    String decision;
-    String id;
-    String source;
-    String sourceClientId;
-    String sourceAccount;
-    String externalApplicationId;
-    String productCode;
-    String applicationType;
-    String status;
-    String applicationStage;
-    Date statusDate;
-    Date createdDate;
-    List<Applicant> applicants;
-    LoanInformation loanInformation;
-    PropertyDetails propertyDetails;
-    List<Offer> offers;
+    private String decision;
+    private String id;
+    private String source;
+    private String sourceClientId;
+    private String sourceAccount;
+    private String externalApplicationId;
+    private String productCode;
+    private String applicationType;
+    private String status;
+    private String applicationStage;
+    private Date statusDate;
+    private Date createdDate;
+    private List<Applicant> applicants;
+    private LoanInformation loanInformation;
+    private PropertyDetails propertyDetails;
+    private List<Offer> offers;
 }

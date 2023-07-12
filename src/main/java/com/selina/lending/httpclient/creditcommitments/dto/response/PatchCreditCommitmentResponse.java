@@ -28,6 +28,6 @@ import java.util.List;
 @SuperBuilder
 @Getter
 public class PatchCreditCommitmentResponse {
-    String id;
-    List<ApplicantCreditCommitments> applicants;
+    private String id;
+    private List<ApplicantCreditCommitments> applicants;
 }

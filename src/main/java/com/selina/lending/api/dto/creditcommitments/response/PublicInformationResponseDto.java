@@ -23,6 +23,6 @@ import lombok.Data;
 @Builder
 @Data
 public class PublicInformationResponseDto {
-    SystemResponseDto system;
-    UserResponseDto user;
+    private SystemResponseDto system;
+    private UserResponseDto user;
 }

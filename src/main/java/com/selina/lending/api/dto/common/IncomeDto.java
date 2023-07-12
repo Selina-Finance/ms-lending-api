@@ -33,14 +33,14 @@ import java.util.List;
 public class IncomeDto {
     @Valid
     @NotNull
-    List<IncomeItemDto> income;
-    Boolean doesNotHaveAnyIncome;
-    Boolean expectsFutureIncomeDecrease;
+    private List<IncomeItemDto> income;
+    private Boolean doesNotHaveAnyIncome;
+    private Boolean expectsFutureIncomeDecrease;
     @Schema(implementation = ExpectsFutureIncomeDecreaseReasons.class, description = "the reason if expectsFutureIncomeDecrease is true")
     @EnumValue(enumClass = ExpectsFutureIncomeDecreaseReasons.class)
-    String expectsFutureIncomeDecreaseReason;
-    Double contractDayRateVerified;
-    Integer contractDaysWorkedWeeklyVerified;
+    private String expectsFutureIncomeDecreaseReason;
+    private Double contractDayRateVerified;
+    private Integer contractDaysWorkedWeeklyVerified;
 
     public enum ExpectsFutureIncomeDecreaseReasons {
         REDUNDANCY("Redundancy"),
@@ -50,7 +50,7 @@ public class IncomeDto {
         ECONOMIC_CONDITIONS("Economic conditions"),
         OTHER("Other");
 
-        final String value;
+        private final String value;
 
         ExpectsFutureIncomeDecreaseReasons(String value) {
             this.value = value;

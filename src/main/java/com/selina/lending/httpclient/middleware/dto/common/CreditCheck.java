@@ -25,17 +25,17 @@ import lombok.extern.jackson.Jacksonized;
 @Data
 @Jacksonized
 public class CreditCheck {
-    String serviceUsed;
-    String requestId;
-    String requestTimeStamp;
-    String responseId;
-    String responseTimeStamp;
-    String responseStatus;
-    Integer creditScore;
-    String creditCheckReference;
-    String errorCode;
-    String message;
-    String status;
-    Boolean hardCheckCompleted;
-    String hardCheckCompletedDate;
+    private String serviceUsed;
+    private String requestId;
+    private String requestTimeStamp;
+    private String responseId;
+    private String responseTimeStamp;
+    private String responseStatus;
+    private Integer creditScore;
+    private String creditCheckReference;
+    private String errorCode;
+    private String message;
+    private String status;
+    private Boolean hardCheckCompleted;
+    private String hardCheckCompletedDate;
 }

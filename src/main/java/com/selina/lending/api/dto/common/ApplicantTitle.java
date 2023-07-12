@@ -8,7 +8,7 @@ public enum ApplicantTitle {
     DR("Dr."),
     OTHER("Other");
 
-    final String value;
+    private final String value;
 
     ApplicantTitle(String value) {
         this.value = value;

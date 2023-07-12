@@ -8,6 +8,6 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Jacksonized
 public class Partner {
-    String companyId;
-    String subUnitId;
+    private String companyId;
+    private String subUnitId;
 }

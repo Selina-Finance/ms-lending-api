@@ -25,6 +25,6 @@ import java.util.List;
 @Builder
 @Data
 public class FilteredQuickQuoteDecisionResponse {
-    String decision;
-    List<Product> products;
+    private String decision;
+    private List<Product> products;
 }

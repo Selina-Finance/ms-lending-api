@@ -43,43 +43,43 @@ import java.time.LocalDate;
 public class AddressDto {
     @Schema(implementation = AddressType.class)
     @EnumValue(enumClass = AddressType.class)
-    String addressType;
+    private String addressType;
     @NotBlank
     @Size(min = 3, max = 255)
-    String addressLine1;
+    private String addressLine1;
     @Size(min = 3, max = 255)
-    String addressLine2;
+    private String addressLine2;
 
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z &\\-.']*$")
     @Schema(example = "London")
     @Size(min = 3, max = 255)
-    String city;
+    private String city;
 
     @NotBlank
     @Size(min = 3, max = 8)
-    String postcode;
-    String buildingName;
-    String buildingNumber;
-    String subBuildingName;
-    Integer udprn;
-    String poBox;
+    private String postcode;
+    private String buildingName;
+    private String buildingNumber;
+    private String subBuildingName;
+    private Integer udprn;
+    private String poBox;
 
     @Size(min = 2, max = 60)
-    String county;
+    private String county;
 
     @Size(min = 2, max = 60)
-    String country;
+    private String country;
 
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     @JsonFormat(pattern = SwaggerConstants.DATE_FORMAT)
     @PastOrPresent
-    LocalDate fromDate;
+    private LocalDate fromDate;
 
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     @JsonFormat(pattern = SwaggerConstants.DATE_FORMAT)
     @PastOrPresent
-    LocalDate toDate;
+    private LocalDate toDate;
 
     enum AddressType {
         CURRENT("current"),
@@ -88,7 +88,7 @@ public class AddressDto {
         EMPLOYER_PREVIOUS("employerPrevious"),
         WORK("work");
 
-        final String value;
+        private final String value;
         AddressType(String value) {
             this.value = value;
         }

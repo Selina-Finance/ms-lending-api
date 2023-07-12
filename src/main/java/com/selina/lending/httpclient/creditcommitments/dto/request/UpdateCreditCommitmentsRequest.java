@@ -26,5 +26,5 @@ import java.util.List;
 @Builder
 @Data
 public class UpdateCreditCommitmentsRequest {
-    List<ApplicantCreditCommitments> applicants;
+    private List<ApplicantCreditCommitments> applicants;
 }

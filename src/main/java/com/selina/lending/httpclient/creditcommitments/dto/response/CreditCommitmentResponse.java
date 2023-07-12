@@ -25,5 +25,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class CreditCommitmentResponse {
-    CreditCommitment creditCommitment;
+    private CreditCommitment creditCommitment;
 }

@@ -23,6 +23,6 @@ import lombok.Data;
 @Builder
 @Data
 public class CreditCommitmentsDetail {
-    System system;
-    User user;
+    private System system;
+    private User user;
 }

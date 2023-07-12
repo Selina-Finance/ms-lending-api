@@ -29,6 +29,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class System {
-    List<Detail> detail;
-    Summary summary;
+    private List<Detail> detail;
+    private Summary summary;
 }

@@ -30,5 +30,5 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class CreditCommitment {
-    List<ApplicantCreditCommitments> applicants;
+    private List<ApplicantCreditCommitments> applicants;
 }

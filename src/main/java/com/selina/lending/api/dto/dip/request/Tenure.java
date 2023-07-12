@@ -24,7 +24,7 @@ public enum Tenure {
     COMMONHOLD("Commonhold");
 
 
-    final String value;
+    private final String value;
     Tenure(String value) {
         this.value = value;
     }

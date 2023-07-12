@@ -57,11 +57,10 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
     @Valid
     private QuickQuotePropertyDetailsDto propertyDetails;
 
-    LeadDto lead;
+    private LeadDto lead;
 
-    Partner partner; //TODO must not reuse httpclient DTO
+    private Partner partner; //TODO must not reuse httpclient DTO
 
     @Valid
-    FeesDto fees;
-
+    private FeesDto fees;
 }

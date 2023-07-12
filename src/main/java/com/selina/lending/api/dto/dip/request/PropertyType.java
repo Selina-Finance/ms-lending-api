@@ -29,7 +29,7 @@ public enum PropertyType {
     OTHER("Other"),
     STUDIO_FLAT("Studio flat");
 
-    final String value;
+    private final String value;
     PropertyType(String value) {
         this.value = value;
     }

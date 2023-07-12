@@ -23,14 +23,14 @@ import lombok.Data;
 @Builder
 @Data
 public class ApplicantCreditCommitments {
-    Long id;
-    Boolean primaryApplicant;
-    String experianId;
-    String searchId;
-    Integer creditScore;
-    String message;
-    CreditCommitmentsDetail creditCommitments;
-    PublicInformation publicInformation;
-    VotersRoll votersRoll;
-    CreditPolicy creditPolicy;
+    private Long id;
+    private Boolean primaryApplicant;
+    private String experianId;
+    private String searchId;
+    private Integer creditScore;
+    private String message;
+    private CreditCommitmentsDetail creditCommitments;
+    private PublicInformation publicInformation;
+    private VotersRoll votersRoll;
+    private CreditPolicy creditPolicy;
 }

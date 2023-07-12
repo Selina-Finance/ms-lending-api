@@ -26,11 +26,11 @@ import java.util.List;
 @Builder
 @Data
 public class Application {
-    String externalApplicationId;
-    String partnerAccountId;
-    Source source;
-    List<Applicant> applicants;
-    LoanInformation loanInformation;
-    PropertyDetails propertyDetails;
-    Fees fees;
+    private String externalApplicationId;
+    private String partnerAccountId;
+    private Source source;
+    private List<Applicant> applicants;
+    private LoanInformation loanInformation;
+    private PropertyDetails propertyDetails;
+    private Fees fees;
 }

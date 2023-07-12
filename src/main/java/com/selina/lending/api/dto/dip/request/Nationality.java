@@ -259,7 +259,8 @@ public enum Nationality {
     ZIMBABWE("Zimbabwe"),
     UNKNOWN("Unknown");
 
-    final String value;
+    private final String value;
+
     Nationality(String value) {
         this.value = value;
     }

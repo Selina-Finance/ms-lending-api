@@ -27,6 +27,6 @@ import java.util.List;
 @SuperBuilder
 @Data
 public class SystemResponseDto {
-    List<DetailResponseDto> detail;
-    SummaryResponseDto summary;
+    private List<DetailResponseDto> detail;
+    private SummaryResponseDto summary;
 }

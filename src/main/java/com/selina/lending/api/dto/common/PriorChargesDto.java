@@ -32,14 +32,14 @@ import javax.validation.constraints.PositiveOrZero;
 public class PriorChargesDto {
 
       @PositiveOrZero
-      Double balanceConsolidated;
+      private Double balanceConsolidated;
       @PositiveOrZero
-      Double balanceOutstanding;
+      private Double balanceOutstanding;
       @PositiveOrZero
-      Double monthlyPayment;
+      private Double monthlyPayment;
       @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
       @Schema(example = SwaggerConstants.EXAMPLE_DATE)
-      String priorChargesYoungestDate;
+      private String priorChargesYoungestDate;
       @PositiveOrZero
-      Double otherDebtPayments;
+      private Double otherDebtPayments;
 }

@@ -12,10 +12,10 @@ import java.util.List;
 @Builder
 @Data
 public class QuickQuoteCFRequest {
-    String externalApplicationId;
-    String sourceAccount;
-    List<Applicant> applicants;
-    LoanInformation loanInformation;
-    PropertyDetails propertyDetails;
+    private String externalApplicationId;
+    private String sourceAccount;
+    private List<Applicant> applicants;
+    private LoanInformation loanInformation;
+    private PropertyDetails propertyDetails;
     private Fees fees;
 }

@@ -29,5 +29,5 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class VotersRoll {
-    List<Detail> detail;
+    private List<Detail> detail;
 }

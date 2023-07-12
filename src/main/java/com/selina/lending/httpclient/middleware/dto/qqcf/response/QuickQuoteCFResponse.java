@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 @Data
 public class QuickQuoteCFResponse {
-    String externalApplicationId;
-    String status;
-    List<Offer> offers;
+    private String externalApplicationId;
+    private String status;
+    private List<Offer> offers;
 }

@@ -72,7 +72,7 @@ public class DIPApplicantDto extends ApplicantDto {
         DIVORCED("Divorced"),
         SEPARATED("Separated");
 
-        final String value;
+        private final String value;
 
         MaritalStatus(String value) {
             this.value = value;

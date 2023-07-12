@@ -29,5 +29,5 @@ import java.util.List;
 @Data
 public class UserDto {
     @Valid
-    List<DetailDto> detail;
+    private List<DetailDto> detail;
 }

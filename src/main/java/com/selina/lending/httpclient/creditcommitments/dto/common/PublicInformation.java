@@ -27,6 +27,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class PublicInformation {
-    System system;
-    User user;
+    private System system;
+    private User user;
 }

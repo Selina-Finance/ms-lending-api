@@ -30,25 +30,25 @@ import javax.validation.constraints.Pattern;
 @Data
 public class IncomeItemDto {
     @NotNull
-    Double amount;
+    private Double amount;
     @NotNull
     @Schema(implementation = IncomeType.class)
     @EnumValue(enumClass = IncomeType.class)
-    String type;
-    String status;
-    String noIncomeSource;
-    String docRequirements;
-    Double amountVerified;
+    private String type;
+    private String status;
+    private String noIncomeSource;
+    private String docRequirements;
+    private Double amountVerified;
 
     @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
-    String incomeDate;
-    String relatedYear;
+    private String incomeDate;
+    private String relatedYear;
     @Schema(implementation = frequency.class)
     @EnumValue(enumClass = frequency.class)
-    String frequency;
-    Double contractDaysWorkedWeeklyReported;
-    Double contractDayRateReported;
+    private String frequency;
+    private Double contractDaysWorkedWeeklyReported;
+    private Double contractDayRateReported;
 
     enum IncomeType {
         ARMED_FORCES_PENSION("Armed forces pension"),
@@ -84,7 +84,7 @@ public class IncomeItemDto {
         HOUSEHOLD_GROSS_INCOME("Household Gross Income"),
         GROSS_ANNUAL_INCOME("Gross annual income");
 
-        final String value;
+        private final String value;
 
         IncomeType(String value) {
             this.value = value;
@@ -101,7 +101,7 @@ public class IncomeItemDto {
         ANNUALLY("Annually");
 
 
-        final String value;
+        private final String value;
 
         frequency(String value) {
             this.value = value;
