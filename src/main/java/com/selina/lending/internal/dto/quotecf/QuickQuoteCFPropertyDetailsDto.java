@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.dto.quotecf;
 
-import com.selina.lending.api.controller.swagger.SwaggerConstants;
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.dto.PropertyDetailsDto;
 import io.swagger.v3.oas.annotations.media.Schema;

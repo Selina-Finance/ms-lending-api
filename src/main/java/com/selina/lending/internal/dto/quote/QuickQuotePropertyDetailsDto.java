@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.dto.quote;
 
-import com.selina.lending.api.controller.swagger.SwaggerConstants;
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.validator.AtLeastOneNotBlank;
 import com.selina.lending.internal.dto.PriorChargesDto;
 import io.swagger.v3.oas.annotations.media.Schema;

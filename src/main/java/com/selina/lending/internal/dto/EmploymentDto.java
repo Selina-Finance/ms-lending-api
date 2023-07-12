@@ -20,7 +20,7 @@ package com.selina.lending.internal.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-import com.selina.lending.api.controller.swagger.SwaggerConstants;
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.validator.EnumValue;
 
 import io.swagger.v3.oas.annotations.media.Schema;

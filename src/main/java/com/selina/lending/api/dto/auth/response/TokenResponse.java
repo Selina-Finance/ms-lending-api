@@ -15,10 +15,9 @@
  *
  */
 
-package com.selina.lending.internal.dto.auth;
+package com.selina.lending.api.dto.auth.response;
 
 public record TokenResponse(
         String accessToken,
         Integer expiresIn
-) {
-}
+) {}

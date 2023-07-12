@@ -23,7 +23,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.selina.lending.api.controller.swagger.SwaggerConstants;
+import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.validator.AtLeastOneNotBlank;
 import com.selina.lending.api.support.validator.Conditional;
 import com.selina.lending.api.support.validator.EnumValue;

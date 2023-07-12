@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.dto;
 
-import static com.selina.lending.api.controller.swagger.SwaggerConstants.EMAIL_PATTERN;
+import static com.selina.lending.api.controller.SwaggerConstants.EMAIL_PATTERN;
 
 import java.util.List;
 

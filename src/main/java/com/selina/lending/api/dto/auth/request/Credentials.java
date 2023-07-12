@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto.auth;
+package com.selina.lending.api.dto.auth.request;
 
 import javax.validation.constraints.NotBlank;
 

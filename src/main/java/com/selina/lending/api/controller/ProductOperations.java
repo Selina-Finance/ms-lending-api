@@ -17,9 +17,9 @@
 
 package com.selina.lending.api.controller;
 
-import static com.selina.lending.api.controller.swagger.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
-import static com.selina.lending.api.controller.swagger.SwaggerConstants.NOT_FOUND_EXAMPLE;
-import static com.selina.lending.api.controller.swagger.SwaggerConstants.OFFER_SELECTED_EXAMPLE;
+import static com.selina.lending.api.controller.SwaggerConstants.ACCESS_DENIED_EXAMPLE;
+import static com.selina.lending.api.controller.SwaggerConstants.NOT_FOUND_EXAMPLE;
+import static com.selina.lending.api.controller.SwaggerConstants.OFFER_SELECTED_EXAMPLE;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
