@@ -15,30 +15,17 @@
  *
  */
 
-package com.selina.lending.internal.dto;
-
-import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+package com.selina.lending.api.dto.application.response;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class CreditCheckDto {
-    String serviceUsed;
-    String requestId;
-    String requestTimeStamp;
-    String responseId;
-    @JsonFormat(pattern = DATE_TIME_FORMAT)
-    String responseTimeStamp;
-    String responseStatus;
-    Integer creditScore;
-    String creditCheckReference;
-    String errorCode;
-    String message;
-    String status;
-    Boolean hardCheckCompleted;
-    String hardCheckCompletedDate;
+public class UnderwritingDto {
+    String stageName;
+    String subStage;
+    String disbursementType;
+    Boolean adviceFromBrokerSubmitter;
+    String initialDisbursalsAmount;
 }

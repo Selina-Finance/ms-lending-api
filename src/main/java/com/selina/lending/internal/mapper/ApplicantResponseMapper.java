@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.ApplicantResponseDto;
+import com.selina.lending.api.dto.application.response.ApplicantResponseDto;
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 
 @Mapper(uses = {AddressMapper.class, ChecklistMapper.class, IncomeMapper.class,

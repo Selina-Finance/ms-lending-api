@@ -15,10 +15,15 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.application.response;
 
 import java.util.List;
 
+import com.selina.lending.internal.dto.AddressDto;
+import com.selina.lending.internal.dto.ChecklistDto;
+import com.selina.lending.internal.dto.EmploymentDto;
+import com.selina.lending.internal.dto.IncomeDto;
+import com.selina.lending.internal.dto.PreviousNameDto;
 import lombok.Builder;
 import lombok.Value;
 

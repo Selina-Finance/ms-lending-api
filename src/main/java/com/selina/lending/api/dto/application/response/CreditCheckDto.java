@@ -15,19 +15,30 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.application.response;
+
+import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class SalesforceDto {
-    String contactName;
-    String opportunityId;
-    String brokerAccountId;
-    String accountId;
-    String opportunityName;
-    String ownerId;
-    String reference;
+public class CreditCheckDto {
+    String serviceUsed;
+    String requestId;
+    String requestTimeStamp;
+    String responseId;
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
+    String responseTimeStamp;
+    String responseStatus;
+    Integer creditScore;
+    String creditCheckReference;
+    String errorCode;
+    String message;
+    String status;
+    Boolean hardCheckCompleted;
+    String hardCheckCompletedDate;
 }

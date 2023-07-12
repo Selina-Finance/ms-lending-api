@@ -18,8 +18,8 @@
 package com.selina.lending.internal.mapper;
 
 import com.selina.lending.internal.dto.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.ApplicantResponseDto;
-import com.selina.lending.internal.dto.ApplicationDecisionResponse;
+import com.selina.lending.api.dto.application.response.ApplicantResponseDto;
+import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

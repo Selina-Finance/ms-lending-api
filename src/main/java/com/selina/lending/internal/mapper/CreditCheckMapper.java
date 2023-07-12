@@ -20,7 +20,7 @@ package com.selina.lending.internal.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.CreditCheckDto;
+import com.selina.lending.api.dto.application.response.CreditCheckDto;
 import com.selina.lending.httpclient.middleware.dto.common.CreditCheck;
 
 @Mapper

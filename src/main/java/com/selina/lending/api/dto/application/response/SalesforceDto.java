@@ -15,17 +15,19 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.application.response;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-public class UnderwritingDto {
-    String stageName;
-    String subStage;
-    String disbursementType;
-    Boolean adviceFromBrokerSubmitter;
-    String initialDisbursalsAmount;
+public class SalesforceDto {
+    String contactName;
+    String opportunityId;
+    String brokerAccountId;
+    String accountId;
+    String opportunityName;
+    String ownerId;
+    String reference;
 }

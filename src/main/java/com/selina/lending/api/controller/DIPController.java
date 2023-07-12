@@ -29,7 +29,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.selina.lending.internal.dto.ApplicationDecisionResponse;
+import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.internal.dto.DIPCCApplicationResponse;
 import com.selina.lending.internal.dto.DIPApplicationRequest;
 import com.selina.lending.internal.dto.DIPApplicationResponse;
