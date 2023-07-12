@@ -18,7 +18,7 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
-import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.internal.service.CreateApplicationService;
 import com.selina.lending.internal.service.RetrieveApplicationService;
 import com.selina.lending.internal.service.UpdateApplicationService;

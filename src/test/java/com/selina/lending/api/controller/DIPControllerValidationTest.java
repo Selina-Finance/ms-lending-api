@@ -20,7 +20,7 @@ package com.selina.lending.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.selina.lending.api.dto.dip.request.AdvancedLoanInformationDto;
-import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.dto.PriorChargesDto;
 import com.selina.lending.internal.mapper.MapperBase;

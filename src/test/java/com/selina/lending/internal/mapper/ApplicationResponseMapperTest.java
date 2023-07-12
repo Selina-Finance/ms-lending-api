@@ -18,7 +18,7 @@
 package com.selina.lending.internal.mapper;
 
 import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
-import com.selina.lending.internal.dto.DIPCCApplicationResponse;
+import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
 import com.selina.lending.api.dto.creditcommitments.response.DetailResponseDto;
 import org.junit.jupiter.api.Test;
 

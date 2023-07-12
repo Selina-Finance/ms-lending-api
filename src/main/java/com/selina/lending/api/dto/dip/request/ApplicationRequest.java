@@ -15,22 +15,30 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dip.request;
 
-import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentDto;
+import java.util.List;
 
-import com.selina.lending.api.dto.dip.response.ApplicationDto;
-import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import com.selina.lending.internal.dto.ExpenditureDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Builder(toBuilder = true)
-@Value
-public class DIPCCApplicationResponse {
-    String requestType;
-    String applicationId;
-    @Schema (oneOf = DIPApplicationDto.class)
-    ApplicationDto application;
-    CreditCommitmentDto creditCommitment;
+@NoArgsConstructor
+@SuperBuilder
+@Data
+public class ApplicationRequest {
+
+    private String reference;
+
+    @NotBlank
+    @Size(min = 4, max = 100)
+    @Schema(description = "a unique identifier you provide for the application")
+    private String externalApplicationId;
+    private List<ExpenditureDto> expenditure;
+
 }

@@ -17,7 +17,7 @@
 
 package com.selina.lending.api.support.validator;
 
-import com.selina.lending.internal.dto.ApplicationRequest;
+import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
 import com.selina.lending.internal.dto.EmploymentDto;
 import com.selina.lending.internal.dto.ExpenditureDto;

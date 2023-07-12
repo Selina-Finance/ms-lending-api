@@ -20,7 +20,7 @@ package com.selina.lending.internal.mapper.config;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 
-import com.selina.lending.internal.dto.ApplicationRequest;
+import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 
 @MapperConfig
 public interface ApplicationRequestMapperConfig {

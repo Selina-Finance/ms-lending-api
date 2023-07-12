@@ -31,7 +31,6 @@ import com.selina.lending.api.support.validator.MatchNumberOfApplicants;
 import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
 
 import com.selina.lending.api.support.validator.SecondApplicantHasRequiredValues;
-import com.selina.lending.internal.dto.ApplicationRequest;
 import com.selina.lending.internal.dto.FeesDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;

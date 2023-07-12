@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
-import com.selina.lending.internal.dto.DIPCCApplicationResponse;
+import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
 import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
 import com.selina.lending.api.dto.dip.response.DIPApplicationResponse;
-import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 
 import static com.selina.lending.api.controller.SwaggerConstants.CONFLICT_EXAMPLE;
 import static com.selina.lending.api.controller.SwaggerConstants.NOT_FOUND_EXAMPLE;

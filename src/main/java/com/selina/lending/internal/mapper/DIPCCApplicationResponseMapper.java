@@ -22,7 +22,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.DIPCCApplicationResponse;
+import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
 
 @Mapper(uses = {ApplicationMapper.class, SalesforceMapper.class, CreditCommitmentMapper.class})
 public interface DIPCCApplicationResponseMapper {

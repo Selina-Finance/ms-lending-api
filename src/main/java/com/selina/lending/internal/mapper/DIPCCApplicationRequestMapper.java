@@ -21,7 +21,7 @@ import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.internal.mapper.config.DIPCCApplicationRequestMapperConfig;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 

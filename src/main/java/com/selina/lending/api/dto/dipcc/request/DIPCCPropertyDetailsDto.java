@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.dipcc.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,6 +24,9 @@ import javax.validation.constraints.Pattern;
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.support.validator.EnumValue;
 
+import com.selina.lending.internal.dto.PropertyDetailsDto;
+import com.selina.lending.internal.dto.PropertyType;
+import com.selina.lending.internal.dto.Tenure;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,7 +40,7 @@ import lombok.experimental.SuperBuilder;
 public class DIPCCPropertyDetailsDto extends PropertyDetailsDto {
 
     @NotBlank
-    @Schema(implementation = PropertyType.class, description = "the type of property")
+    @Schema(implementation = PropertyType.class, description = "the property type")
     @EnumValue(enumClass = PropertyType.class)
     private String propertyType;
 

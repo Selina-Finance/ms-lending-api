@@ -33,5 +33,5 @@ public interface DIPApplicationRequestMapper {
     ApplicationRequest mapToApplicationRequest(DIPApplicationRequest dipApplicationRequest);
 
     @InheritConfiguration(name = "mapApplicationRequest")
-    ApplicationRequest mapToApplicationRequest(com.selina.lending.internal.dto.ApplicationRequest applicationRequest);
+    ApplicationRequest mapToApplicationRequest(com.selina.lending.api.dto.dip.request.ApplicationRequest applicationRequest);
 }

@@ -30,10 +30,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
-import com.selina.lending.internal.dto.DIPCCApplicationResponse;
+import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
 import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
 import com.selina.lending.api.dto.dip.response.DIPApplicationResponse;
-import com.selina.lending.internal.dto.DIPCCApplicationRequest;
+import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.internal.mapper.ApplicationDecisionResponseMapper;
 import com.selina.lending.internal.mapper.DIPCCApplicationResponseMapper;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
