@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments.request;
+package com.selina.lending.api.dto.creditcommitments.request;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

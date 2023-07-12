@@ -15,24 +15,18 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments.request;
+package com.selina.lending.api.dto.creditcommitments.response;
 
 import java.util.List;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import com.selina.lending.api.dto.creditcommitments.response.DetailResponseDto;
+import com.selina.lending.api.dto.creditcommitments.response.SummaryResponseDto;
+import lombok.Builder;
+import lombok.Value;
 
-import javax.validation.Valid;
-
-import com.selina.lending.api.support.validator.OnlyOnePrimaryApplicant;
-
-@NoArgsConstructor
-@SuperBuilder
-@Getter
-public class UpdateCreditCommitmentsRequest {
-    @Valid
-    @OnlyOnePrimaryApplicant
-    List<ApplicantCreditCommitmentsDto> applicants;
+@Builder
+@Value
+public class UserResponseDto {
+    List<DetailResponseDto> detail;
+    SummaryResponseDto summary;
 }
-

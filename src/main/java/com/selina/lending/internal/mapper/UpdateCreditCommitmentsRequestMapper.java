@@ -28,5 +28,5 @@ public interface UpdateCreditCommitmentsRequestMapper {
     UpdateCreditCommitmentsRequestMapper INSTANCE = Mappers.getMapper(UpdateCreditCommitmentsRequestMapper.class);
 
     UpdateCreditCommitmentsRequest mapToUpdateCreditCommitmentsRequest(
-            com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest request);
+            com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest request);
 }

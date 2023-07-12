@@ -15,18 +15,13 @@
  *
  */
 
-package com.selina.lending.internal.dto.creditcommitments.request;
+package com.selina.lending.api.dto.creditcommitments.response;
 
-import javax.validation.Valid;
+import lombok.Builder;
+import lombok.Value;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
-@NoArgsConstructor
-@SuperBuilder
-@Data
-public class PublicInformationDto {
-    @Valid
-    private UserDto user;
+@Builder
+@Value
+public class CreditCommitmentResponse {
+    CreditCommitmentDto creditCommitment;
 }

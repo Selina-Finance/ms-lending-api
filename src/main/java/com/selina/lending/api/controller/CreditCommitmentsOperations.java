@@ -36,8 +36,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.dto.creditcommitments.response.CreditCommitmentResponse;
+import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

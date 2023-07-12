@@ -17,11 +17,11 @@
 
 package com.selina.lending.api.support.validator;
 
-import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
-import com.selina.lending.internal.dto.creditcommitments.request.CreditCommitmentsDetailDto;
-import com.selina.lending.internal.dto.creditcommitments.request.DetailDto;
-import com.selina.lending.internal.dto.creditcommitments.request.SystemDto;
-import com.selina.lending.internal.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
+import com.selina.lending.api.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
+import com.selina.lending.api.dto.creditcommitments.request.CreditCommitmentsDetailDto;
+import com.selina.lending.api.dto.creditcommitments.request.DetailDto;
+import com.selina.lending.api.dto.creditcommitments.request.SystemDto;
+import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

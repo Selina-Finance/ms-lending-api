@@ -23,7 +23,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import com.selina.lending.internal.dto.DIPApplicantDto;
-import com.selina.lending.internal.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
+import com.selina.lending.api.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
 
 public class OnlyOnePrimaryApplicantImpl implements ConstraintValidator<OnlyOnePrimaryApplicant, List<?>> {
 
