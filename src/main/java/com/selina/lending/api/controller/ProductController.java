@@ -17,7 +17,7 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.internal.dto.SelectProductResponse;
+import com.selina.lending.api.dto.product.response.SelectProductResponse;
 import com.selina.lending.internal.mapper.SelectProductResponseMapper;
 import com.selina.lending.internal.service.ProductService;
 import com.selina.lending.internal.service.permissions.annotation.Permission;

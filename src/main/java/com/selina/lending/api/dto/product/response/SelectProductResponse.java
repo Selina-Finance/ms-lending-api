@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.internal.dto;
+package com.selina.lending.api.dto.product.response;
 
 import lombok.Builder;
 import lombok.Data;

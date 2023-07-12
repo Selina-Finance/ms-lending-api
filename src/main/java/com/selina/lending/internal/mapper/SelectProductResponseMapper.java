@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.mapper;
 
-import com.selina.lending.internal.dto.SelectProductResponse;
+import com.selina.lending.api.dto.product.response.SelectProductResponse;
 
 public class SelectProductResponseMapper {
     private SelectProductResponseMapper() {}
