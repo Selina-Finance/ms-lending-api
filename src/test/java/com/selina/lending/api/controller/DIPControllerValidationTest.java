@@ -23,7 +23,7 @@ import com.selina.lending.api.dto.dip.request.AdvancedLoanInformationDto;
 import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.api.dto.common.EmploymentDto;
 import com.selina.lending.api.dto.common.PriorChargesDto;
-import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.service.CreateApplicationService;
 import com.selina.lending.service.RetrieveApplicationService;
 import com.selina.lending.service.UpdateApplicationService;

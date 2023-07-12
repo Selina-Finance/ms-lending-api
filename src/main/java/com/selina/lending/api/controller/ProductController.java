@@ -18,7 +18,7 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.api.dto.product.response.SelectProductResponse;
-import com.selina.lending.internal.mapper.SelectProductResponseMapper;
+import com.selina.lending.api.mapper.product.SelectProductResponseMapper;
 import com.selina.lending.service.ProductService;
 import com.selina.lending.service.permissions.annotation.Permission;
 import lombok.extern.slf4j.Slf4j;

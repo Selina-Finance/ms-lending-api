@@ -20,7 +20,7 @@ package com.selina.lending.messaging.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.selina.lending.api.dto.dip.response.DIPApplicationResponse;
-import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.api.mapper.MapperBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

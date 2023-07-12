@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentResponse;
-import com.selina.lending.internal.mapper.CreditCommitmentResponseMapper;
-import com.selina.lending.internal.mapper.UpdateCreditCommitmentsRequestMapper;
+import com.selina.lending.api.mapper.creditcommitments.CreditCommitmentResponseMapper;
+import com.selina.lending.api.mapper.creditcommitments.UpdateCreditCommitmentsRequestMapper;
 import com.selina.lending.service.creditcommitments.EsisDocService;
 import com.selina.lending.service.creditcommitments.RetrieveCreditCommitmentsService;
 import com.selina.lending.service.creditcommitments.UpdateCreditCommitmentsService;

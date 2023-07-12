@@ -19,7 +19,7 @@ package com.selina.lending.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.dto.common.LoanInformationDto;
-import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.service.CreateApplicationService;
 import com.selina.lending.service.FilterApplicationService;
 import com.selina.lending.service.TokenService;

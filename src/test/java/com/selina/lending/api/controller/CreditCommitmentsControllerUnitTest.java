@@ -18,7 +18,7 @@
 package com.selina.lending.api.controller;
 
 import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
-import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.service.creditcommitments.EsisDocService;
 import com.selina.lending.service.creditcommitments.RetrieveCreditCommitmentsService;
 import com.selina.lending.service.creditcommitments.UpdateCreditCommitmentsService;

@@ -19,7 +19,7 @@ package com.selina.lending.repository;
 
 import com.selina.lending.httpclient.getapplication.GetApplicationApi;
 import com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate;
-import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import feign.FeignException;
 import feign.Request;

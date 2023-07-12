@@ -1,7 +1,7 @@
 package com.selina.lending.api.validator;
 
 import com.selina.lending.api.dto.common.AddressDto;
-import com.selina.lending.internal.mapper.MapperBase;
+import com.selina.lending.api.mapper.MapperBase;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
