@@ -17,7 +17,7 @@
 
 package com.selina.lending.api.filter;
 
-import com.selina.lending.internal.service.BrokerRequestKpiService;
+import com.selina.lending.service.BrokerRequestKpiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;

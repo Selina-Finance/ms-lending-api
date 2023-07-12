@@ -17,7 +17,7 @@
 
 package com.selina.lending.api.filter;
 
-import com.selina.lending.internal.service.BrokerRequestKpiService;
+import com.selina.lending.service.BrokerRequestKpiService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

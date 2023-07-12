@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.middleware.MiddlewareApi;
-import com.selina.lending.internal.service.enricher.MiddlewareRequestEnricher;
+import com.selina.lending.service.enricher.MiddlewareRequestEnricher;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;

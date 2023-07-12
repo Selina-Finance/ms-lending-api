@@ -20,8 +20,8 @@ package com.selina.lending.repository;
 import org.springframework.stereotype.Service;
 
 import com.selina.lending.httpclient.selection.SelectionApi;
-import com.selina.lending.internal.service.LendingConstants;
-import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.service.LendingConstants;
+import com.selina.lending.service.TokenService;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.httpclient.selection.dto.request.Source;

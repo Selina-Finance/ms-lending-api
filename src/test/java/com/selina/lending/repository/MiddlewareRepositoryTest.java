@@ -19,7 +19,7 @@ package com.selina.lending.repository;
 
 import com.selina.lending.httpclient.middleware.MiddlewareApi;
 import com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate;
-import com.selina.lending.internal.service.enricher.MiddlewareRequestEnricher;
+import com.selina.lending.service.enricher.MiddlewareRequestEnricher;
 import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;

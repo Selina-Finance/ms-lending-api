@@ -17,7 +17,7 @@
 
 package com.selina.lending.internal.mapper;
 
-import static com.selina.lending.internal.service.LendingConstants.ACCEPT_DECISION;
+import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
 
 import com.selina.lending.api.dto.common.AddressDto;
 import com.selina.lending.api.dto.dip.request.AdvancedLoanInformationDto;

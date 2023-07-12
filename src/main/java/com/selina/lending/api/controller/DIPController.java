@@ -17,12 +17,12 @@
 
 package com.selina.lending.api.controller;
 
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.APPLICATION;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.DIP;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.DIP_CC;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Create;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Read;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
+import static com.selina.lending.service.permissions.annotation.Permission.Resource.APPLICATION;
+import static com.selina.lending.service.permissions.annotation.Permission.Resource.DIP;
+import static com.selina.lending.service.permissions.annotation.Permission.Resource.DIP_CC;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Create;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Read;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Update;
 
 import javax.validation.Valid;
 
@@ -39,10 +39,10 @@ import com.selina.lending.internal.mapper.DIPCCApplicationResponseMapper;
 import com.selina.lending.internal.mapper.DIPApplicationRequestMapper;
 import com.selina.lending.internal.mapper.DIPApplicationResponseMapper;
 import com.selina.lending.internal.mapper.DIPCCApplicationRequestMapper;
-import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.RetrieveApplicationService;
-import com.selina.lending.internal.service.UpdateApplicationService;
-import com.selina.lending.internal.service.permissions.annotation.Permission;
+import com.selina.lending.service.CreateApplicationService;
+import com.selina.lending.service.RetrieveApplicationService;
+import com.selina.lending.service.UpdateApplicationService;
+import com.selina.lending.service.permissions.annotation.Permission;
 
 import lombok.extern.slf4j.Slf4j;
 

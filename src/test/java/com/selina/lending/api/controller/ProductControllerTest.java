@@ -17,7 +17,7 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.internal.service.ProductService;
+import com.selina.lending.service.ProductService;
 import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -14,7 +14,7 @@ import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.internal.mapper.MapperBase;
-import com.selina.lending.internal.service.TokenService;
+import com.selina.lending.service.TokenService;
 import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
 import org.junit.jupiter.api.Test;

@@ -26,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-import static com.selina.lending.internal.service.LendingConstants.ACCEPT_DECISION;
+import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
 
 class ApplicationResponseMapperTest extends MapperBase {
 

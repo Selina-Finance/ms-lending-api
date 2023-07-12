@@ -17,9 +17,9 @@
 
 package com.selina.lending.api.controller;
 
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Resource.CC;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Read;
-import static com.selina.lending.internal.service.permissions.annotation.Permission.Scope.Update;
+import static com.selina.lending.service.permissions.annotation.Permission.Resource.CC;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Read;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Update;
 
 import java.io.IOException;
 
@@ -32,10 +32,10 @@ import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitme
 import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentResponse;
 import com.selina.lending.internal.mapper.CreditCommitmentResponseMapper;
 import com.selina.lending.internal.mapper.UpdateCreditCommitmentsRequestMapper;
-import com.selina.lending.internal.service.creditcommitments.EsisDocService;
-import com.selina.lending.internal.service.creditcommitments.RetrieveCreditCommitmentsService;
-import com.selina.lending.internal.service.creditcommitments.UpdateCreditCommitmentsService;
-import com.selina.lending.internal.service.permissions.annotation.Permission;
+import com.selina.lending.service.creditcommitments.EsisDocService;
+import com.selina.lending.service.creditcommitments.RetrieveCreditCommitmentsService;
+import com.selina.lending.service.creditcommitments.UpdateCreditCommitmentsService;
+import com.selina.lending.service.permissions.annotation.Permission;
 
 import lombok.extern.slf4j.Slf4j;
 

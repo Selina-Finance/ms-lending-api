@@ -19,9 +19,9 @@ package com.selina.lending.api.controller;
 
 import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
 import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
-import com.selina.lending.internal.service.CreateApplicationService;
-import com.selina.lending.internal.service.RetrieveApplicationService;
-import com.selina.lending.internal.service.UpdateApplicationService;
+import com.selina.lending.service.CreateApplicationService;
+import com.selina.lending.service.RetrieveApplicationService;
+import com.selina.lending.service.UpdateApplicationService;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
 import org.junit.jupiter.api.Test;

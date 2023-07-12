@@ -19,7 +19,7 @@ package com.selina.lending.api.controller;
 
 import com.selina.lending.api.dto.auth.response.TokenResponse;
 import com.selina.lending.api.dto.auth.request.Credentials;
-import com.selina.lending.internal.service.AuthService;
+import com.selina.lending.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
