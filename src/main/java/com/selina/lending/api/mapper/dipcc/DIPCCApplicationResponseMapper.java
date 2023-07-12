@@ -17,15 +17,14 @@
 
 package com.selina.lending.api.mapper.dipcc;
 
+import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
 import com.selina.lending.api.mapper.applicant.SalesforceMapper;
+import com.selina.lending.api.mapper.common.CreditCommitmentMapper;
 import com.selina.lending.api.mapper.dip.ApplicationMapper;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
-import com.selina.lending.api.mapper.common.CreditCommitmentMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
 
 @Mapper(uses = {ApplicationMapper.class, SalesforceMapper.class, CreditCommitmentMapper.class})
 public interface DIPCCApplicationResponseMapper {

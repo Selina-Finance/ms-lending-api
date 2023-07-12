@@ -17,15 +17,14 @@
 
 package com.selina.lending.api.dto.dip.response;
 
-import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
-
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Date;
+
+import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
 
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)

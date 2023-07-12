@@ -17,9 +17,9 @@
 
 package com.selina.lending.api.errors;
 
-import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.exception.BadRequestException;
 import com.selina.lending.exception.ConflictException;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;

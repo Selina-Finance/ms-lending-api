@@ -17,14 +17,13 @@
 
 package com.selina.lending.api.mapper.common;
 
+import com.selina.lending.api.dto.common.ApplicantDto;
+import com.selina.lending.api.mapper.config.ApplicantMapperConfig;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.api.dto.common.ApplicantDto;
-import com.selina.lending.api.mapper.config.ApplicantMapperConfig;
-import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 
 @Mapper(config = ApplicantMapperConfig.class, uses = {AddressMapper.class, IncomeMapper.class})
 public interface ApplicantMapper {

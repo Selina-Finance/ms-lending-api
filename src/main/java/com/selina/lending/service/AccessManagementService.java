@@ -17,9 +17,8 @@
 
 package com.selina.lending.service;
 
-import org.springframework.stereotype.Service;
-
 import com.selina.lending.exception.AccessDeniedException;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AccessManagementService {

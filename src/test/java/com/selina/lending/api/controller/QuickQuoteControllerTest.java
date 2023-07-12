@@ -17,18 +17,18 @@
 
 package com.selina.lending.api.controller;
 
-import com.selina.lending.exception.AccessDeniedException;
-import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
-import com.selina.lending.service.enricher.ApplicationResponseEnricher;
+import com.selina.lending.exception.AccessDeniedException;
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.service.CreateApplicationService;
 import com.selina.lending.service.FilterApplicationService;
 import com.selina.lending.service.TokenService;
-import com.selina.lending.httpclient.selection.dto.response.Product;
-import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
-import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
+import com.selina.lending.service.enricher.ApplicationResponseEnricher;
 import com.selina.lending.testutil.ProductHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

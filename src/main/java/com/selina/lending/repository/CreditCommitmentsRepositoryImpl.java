@@ -19,10 +19,9 @@ package com.selina.lending.repository;
 
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.creditcommitments.CreditCommitmentsApi;
+import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
 import com.selina.lending.httpclient.creditcommitments.dto.response.PatchCreditCommitmentResponse;
-import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
-
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;

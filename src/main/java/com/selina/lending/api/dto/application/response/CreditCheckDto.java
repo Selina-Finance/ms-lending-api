@@ -17,12 +17,11 @@
 
 package com.selina.lending.api.dto.application.response;
 
-import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Builder;
 import lombok.Value;
+
+import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
 
 @Builder
 @Value

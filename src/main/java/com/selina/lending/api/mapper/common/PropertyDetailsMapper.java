@@ -17,17 +17,16 @@
 
 package com.selina.lending.api.mapper.common;
 
+import com.selina.lending.api.dto.common.PropertyDetailsDto;
+import com.selina.lending.api.dto.dip.request.DIPPropertyDetailsDto;
+import com.selina.lending.api.dto.dip.response.PropertyDetailValueDto;
+import com.selina.lending.api.dto.dipcc.request.DIPCCPropertyDetailsDto;
+import com.selina.lending.api.mapper.config.DIPPropertyDetailsMapperConfig;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.api.dto.dipcc.request.DIPCCPropertyDetailsDto;
-import com.selina.lending.api.dto.dip.request.DIPPropertyDetailsDto;
-import com.selina.lending.api.dto.dip.response.PropertyDetailValueDto;
-import com.selina.lending.api.dto.common.PropertyDetailsDto;
-import com.selina.lending.api.mapper.config.DIPPropertyDetailsMapperConfig;
-import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 
 @Mapper (config = DIPPropertyDetailsMapperConfig.class, uses = {PriorChargesMapper.class})
 public interface PropertyDetailsMapper {

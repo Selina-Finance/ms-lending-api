@@ -17,13 +17,12 @@
 
 package com.selina.lending.api.mapper.common;
 
+import com.selina.lending.api.dto.common.OfferDto;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.api.dto.common.OfferDto;
-import com.selina.lending.httpclient.middleware.dto.common.Offer;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ChecklistMapper.class, ErcMapper.class})
 public interface OfferMapper {

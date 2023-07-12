@@ -17,11 +17,10 @@
 
 package com.selina.lending.api.mapper.common;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-
 import com.selina.lending.api.dto.application.response.DocumentDto;
 import com.selina.lending.httpclient.middleware.dto.common.Document;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface DocumentMapper {

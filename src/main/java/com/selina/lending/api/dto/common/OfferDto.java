@@ -17,11 +17,11 @@
 
 package com.selina.lending.api.dto.common;
 
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
+
+import java.util.List;
 
 @Builder
 @Value

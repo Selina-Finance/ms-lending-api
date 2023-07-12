@@ -17,11 +17,10 @@
 
 package com.selina.lending.repository.circuitbreaker;
 
-import java.util.function.Predicate;
-
 import com.selina.lending.exception.RemoteResourceProblemException;
-
 import feign.FeignException;
+
+import java.util.function.Predicate;
 
 public class RecordExceptionPredicate implements Predicate<Throwable> {
 

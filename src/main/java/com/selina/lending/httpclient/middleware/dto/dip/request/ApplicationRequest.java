@@ -17,8 +17,6 @@
 
 package com.selina.lending.httpclient.middleware.dto.dip.request;
 
-import java.util.List;
-
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import com.selina.lending.httpclient.middleware.dto.common.Expenditure;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
@@ -26,6 +24,8 @@ import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Builder
 @Data

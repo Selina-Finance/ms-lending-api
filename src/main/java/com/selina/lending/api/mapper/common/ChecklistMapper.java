@@ -18,11 +18,10 @@
 
 package com.selina.lending.api.mapper.common;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-
 import com.selina.lending.api.dto.common.ChecklistDto;
 import com.selina.lending.httpclient.middleware.dto.common.Checklist;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {RequiredMapper.class})
 public interface ChecklistMapper {

@@ -17,11 +17,11 @@
 
 package com.selina.lending.api.dto.creditcommitments.response;
 
-import java.util.List;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder

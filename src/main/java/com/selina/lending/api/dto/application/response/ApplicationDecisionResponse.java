@@ -17,13 +17,7 @@
 
 package com.selina.lending.api.dto.application.response;
 
-import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
-
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.selina.lending.api.dto.common.ExpenditureDto;
 import com.selina.lending.api.dto.common.FeesDto;
 import com.selina.lending.api.dto.common.LeadDto;
@@ -32,6 +26,11 @@ import com.selina.lending.api.dto.common.OfferDto;
 import com.selina.lending.api.dto.common.PropertyDetailsDto;
 import lombok.Builder;
 import lombok.Value;
+
+import java.util.Date;
+import java.util.List;
+
+import static com.selina.lending.api.controller.SwaggerConstants.DATE_TIME_FORMAT;
 
 @Builder
 @Value

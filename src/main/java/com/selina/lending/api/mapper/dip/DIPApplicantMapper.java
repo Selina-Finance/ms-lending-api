@@ -17,18 +17,17 @@
 
 package com.selina.lending.api.mapper.dip;
 
+import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
 import com.selina.lending.api.mapper.common.AddressMapper;
 import com.selina.lending.api.mapper.common.ChecklistMapper;
 import com.selina.lending.api.mapper.common.EmploymentMapper;
 import com.selina.lending.api.mapper.common.IncomeMapper;
+import com.selina.lending.api.mapper.config.DIPApplicantMapperConfig;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
-import com.selina.lending.api.mapper.config.DIPApplicantMapperConfig;
-import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 
 @Mapper(config = DIPApplicantMapperConfig.class, uses = {AddressMapper.class,
         ChecklistMapper.class, IncomeMapper.class, EmploymentMapper.class})

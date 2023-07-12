@@ -17,11 +17,11 @@
 
 package com.selina.lending.httpclient.selection.dto.request;
 
-import java.util.List;
-
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Builder
 @Data

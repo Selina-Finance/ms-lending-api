@@ -17,13 +17,12 @@
 
 package com.selina.lending.api.validator;
 
-import java.util.List;
+import com.selina.lending.api.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
+import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
-import com.selina.lending.api.dto.creditcommitments.request.ApplicantCreditCommitmentsDto;
+import java.util.List;
 
 public class OnlyOnePrimaryApplicantImpl implements ConstraintValidator<OnlyOnePrimaryApplicant, List<?>> {
 

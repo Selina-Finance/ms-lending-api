@@ -18,10 +18,10 @@
 package com.selina.lending.repository.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.exception.BadRequestException;
-import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import com.selina.lending.api.dto.auth.request.Credentials;
 import com.selina.lending.api.dto.auth.response.TokenResponse;
+import com.selina.lending.exception.BadRequestException;
+import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import feign.FeignException;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;

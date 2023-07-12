@@ -17,18 +17,17 @@
 
 package com.selina.lending.api.mapper.dip;
 
+import com.selina.lending.api.dto.creditcommitments.response.DetailResponseDto;
 import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
 import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
-import com.selina.lending.api.dto.creditcommitments.response.DetailResponseDto;
-import com.selina.lending.api.mapper.dipcc.DIPCCApplicationResponseMapper;
 import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.api.mapper.dipcc.DIPCCApplicationResponseMapper;
 import org.junit.jupiter.api.Test;
 
+import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-
-import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
 
 class ApplicationResponseMapperTest extends MapperBase {
 

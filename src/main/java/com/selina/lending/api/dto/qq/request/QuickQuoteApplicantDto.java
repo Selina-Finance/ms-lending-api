@@ -19,14 +19,14 @@ package com.selina.lending.api.dto.qq.request;
 
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.converter.ToLowerCase;
-import com.selina.lending.api.validator.EnumValue;
-import com.selina.lending.api.validator.UkNationalPhoneNumber;
 import com.selina.lending.api.dto.common.AddressDto;
 import com.selina.lending.api.dto.common.ApplicantGender;
 import com.selina.lending.api.dto.common.ApplicantResidentialStatus;
 import com.selina.lending.api.dto.common.ApplicantTitle;
 import com.selina.lending.api.dto.common.EmploymentDto;
 import com.selina.lending.api.dto.common.IncomeDto;
+import com.selina.lending.api.validator.EnumValue;
+import com.selina.lending.api.validator.UkNationalPhoneNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

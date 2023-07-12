@@ -17,10 +17,9 @@
 
 package com.selina.lending.api.mapper.creditcommitments;
 
+import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentResponse;
 
 @Mapper
 public interface CreditCommitmentResponseMapper {

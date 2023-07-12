@@ -17,17 +17,6 @@
 
 package com.selina.lending.api.controller;
 
-import static com.selina.lending.service.permissions.annotation.Permission.Resource.CC;
-import static com.selina.lending.service.permissions.annotation.Permission.Scope.Read;
-import static com.selina.lending.service.permissions.annotation.Permission.Scope.Update;
-
-import java.io.IOException;
-
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.selina.lending.api.dto.creditcommitments.request.UpdateCreditCommitmentsRequest;
 import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentResponse;
 import com.selina.lending.api.mapper.creditcommitments.CreditCommitmentResponseMapper;
@@ -36,8 +25,17 @@ import com.selina.lending.service.creditcommitments.EsisDocService;
 import com.selina.lending.service.creditcommitments.RetrieveCreditCommitmentsService;
 import com.selina.lending.service.creditcommitments.UpdateCreditCommitmentsService;
 import com.selina.lending.service.permissions.annotation.Permission;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+
+import static com.selina.lending.service.permissions.annotation.Permission.Resource.CC;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Read;
+import static com.selina.lending.service.permissions.annotation.Permission.Scope.Update;
 
 @Slf4j
 @RestController

@@ -17,12 +17,11 @@
 
 package com.selina.lending.api.mapper.config;
 
+import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
-
-import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
-import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 
 @MapperConfig
 public interface QuickQuotePropertyDetailsMapperConfig extends PropertyDetailsMapperConfig {

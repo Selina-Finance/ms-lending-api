@@ -17,13 +17,12 @@
 
 package com.selina.lending.service.filter;
 
-import java.util.List;
-
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.RuleOutcome;
 import com.selina.lending.service.LendingConstants;
 import org.springframework.stereotype.Component;
 
-import com.selina.lending.httpclient.middleware.dto.common.Offer;
-import com.selina.lending.httpclient.middleware.dto.common.RuleOutcome;
+import java.util.List;
 
 @Component
 public class RuleOutcomeFilterImpl implements RuleOutcomeFilter {

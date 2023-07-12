@@ -19,12 +19,12 @@ package com.selina.lending.service;
 
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
-import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMapper;
 import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
-import com.selina.lending.repository.MiddlewareRepository;
-import com.selina.lending.repository.SelectionRepository;
+import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMapper;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.repository.MiddlewareRepository;
+import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
 import org.springframework.stereotype.Service;

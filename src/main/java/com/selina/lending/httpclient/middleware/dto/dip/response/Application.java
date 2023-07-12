@@ -17,15 +17,15 @@
 
 package com.selina.lending.httpclient.middleware.dto.dip.response;
 
-import java.util.Date;
-import java.util.List;
-
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
-import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import com.selina.lending.httpclient.middleware.dto.common.Offer;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 @Builder
 @Data

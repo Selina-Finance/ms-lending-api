@@ -17,8 +17,8 @@
 
 package com.selina.lending.service;
 
-import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
 import com.selina.lending.messaging.mapper.BrokerRequestEventMapper;
+import com.selina.lending.messaging.publisher.BrokerRequestEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

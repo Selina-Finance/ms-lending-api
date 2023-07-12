@@ -17,8 +17,8 @@
 
 package com.selina.lending.api.mapper.dip;
 
-import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

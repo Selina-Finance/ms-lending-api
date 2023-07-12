@@ -17,18 +17,16 @@
 
 package com.selina.lending.api.validator;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
-import org.apache.commons.beanutils.BeanUtils;
-
-import lombok.extern.slf4j.Slf4j;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
 public class ConditionalImpl implements ConstraintValidator<Conditional, Object> {

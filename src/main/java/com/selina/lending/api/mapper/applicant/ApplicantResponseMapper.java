@@ -17,17 +17,16 @@
 
 package com.selina.lending.api.mapper.applicant;
 
+import com.selina.lending.api.dto.application.response.ApplicantResponseDto;
 import com.selina.lending.api.mapper.common.AddressMapper;
 import com.selina.lending.api.mapper.common.ChecklistMapper;
 import com.selina.lending.api.mapper.common.DocumentMapper;
 import com.selina.lending.api.mapper.common.EmploymentMapper;
 import com.selina.lending.api.mapper.common.IncomeMapper;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.api.dto.application.response.ApplicantResponseDto;
-import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 
 @Mapper(uses = {AddressMapper.class, ChecklistMapper.class, IncomeMapper.class,
         EmploymentMapper.class, CreditCheckMapper.class, DocumentMapper.class})

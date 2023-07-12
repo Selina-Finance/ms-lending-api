@@ -17,9 +17,11 @@
 
 package com.selina.lending.httpclient.middleware;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
-
+import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
+import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
+import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
@@ -31,11 +33,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
-import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
-import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
-import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
-import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
 @FeignClient(
         value = "middleware-api",

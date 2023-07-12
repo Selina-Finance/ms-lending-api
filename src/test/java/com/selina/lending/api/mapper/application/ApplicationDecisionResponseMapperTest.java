@@ -17,11 +17,11 @@
 
 package com.selina.lending.api.mapper.application;
 
-import com.selina.lending.api.dto.dip.request.AdvancedLoanInformationDto;
 import com.selina.lending.api.dto.application.response.ApplicantResponseDto;
 import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
-import com.selina.lending.api.mapper.applicant.ApplicationDecisionResponseMapper;
+import com.selina.lending.api.dto.dip.request.AdvancedLoanInformationDto;
 import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.api.mapper.applicant.ApplicationDecisionResponseMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

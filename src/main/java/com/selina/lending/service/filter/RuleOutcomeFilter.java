@@ -17,9 +17,9 @@
 
 package com.selina.lending.service.filter;
 
-import java.util.List;
-
 import com.selina.lending.httpclient.middleware.dto.common.Offer;
+
+import java.util.List;
 
 public interface RuleOutcomeFilter {
     void filterOfferRuleOutcomes(String decision, String applicationType, List<Offer> offers);

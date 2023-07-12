@@ -17,8 +17,8 @@
 
 package com.selina.lending.service.permissions;
 
-import com.selina.lending.model.resource.RequestedResource;
 import com.selina.lending.httpclient.authorization.dto.response.Resource;
+import com.selina.lending.model.resource.RequestedResource;
 
 import java.util.List;
 

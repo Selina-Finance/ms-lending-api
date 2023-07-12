@@ -20,10 +20,9 @@ package com.selina.lending.service.creditcommitments;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.service.AccessManagementService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j

@@ -1,7 +1,9 @@
 package com.selina.lending.api.mapper.qq.middleware;
 
 
-
+import com.selina.lending.api.dto.common.LeadDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.middleware.dto.common.Address;
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
@@ -11,12 +13,9 @@ import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
-import com.selina.lending.api.dto.common.LeadDto;
-import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
-import com.selina.lending.api.mapper.MapperBase;
-import com.selina.lending.service.TokenService;
-import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
+import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.service.TokenService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

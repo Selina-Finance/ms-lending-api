@@ -17,22 +17,20 @@
 
 package com.selina.lending.api.dto.dip.request;
 
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-import com.selina.lending.api.validator.EnumValue;
-
 import com.selina.lending.api.dto.common.ApplicantDto;
 import com.selina.lending.api.dto.common.EmploymentDto;
 import com.selina.lending.api.dto.common.PreviousNameDto;
+import com.selina.lending.api.validator.EnumValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder

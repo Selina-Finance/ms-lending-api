@@ -17,11 +17,10 @@
 
 package com.selina.lending.api.validator;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class EnumValueImpl implements ConstraintValidator<EnumValue, String> {
     private List<String> acceptedValues;

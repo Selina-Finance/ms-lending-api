@@ -17,10 +17,9 @@
 
 package com.selina.lending.api.mapper.config;
 
+import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
-
-import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 
 @MapperConfig
 public interface ApplicationRequestMapperConfig {

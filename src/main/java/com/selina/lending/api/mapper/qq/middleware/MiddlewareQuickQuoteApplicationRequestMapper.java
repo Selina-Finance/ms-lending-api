@@ -1,10 +1,10 @@
 package com.selina.lending.api.mapper.qq.middleware;
 
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
-import com.selina.lending.service.TokenService;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
-import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
+import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.service.TokenService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

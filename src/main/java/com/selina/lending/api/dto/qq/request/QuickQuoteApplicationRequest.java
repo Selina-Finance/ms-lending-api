@@ -17,25 +17,23 @@
 
 package com.selina.lending.api.dto.qq.request;
 
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import com.selina.lending.api.validator.MatchNumberOfApplicants;
-import com.selina.lending.api.validator.MaximumOnePrimaryApplicant;
-import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 import com.selina.lending.api.dto.common.FeesDto;
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.common.LoanInformationDto;
-
+import com.selina.lending.api.dto.dip.request.ApplicationRequest;
+import com.selina.lending.api.validator.MatchNumberOfApplicants;
+import com.selina.lending.api.validator.MaximumOnePrimaryApplicant;
 import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder

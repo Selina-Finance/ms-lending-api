@@ -17,20 +17,19 @@
 
 package com.selina.lending.service;
 
-import com.selina.lending.httpclient.middleware.dto.common.Offer;
-import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
-import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
-import com.selina.lending.service.filter.RuleOutcomeFilter;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 import com.selina.lending.exception.ConflictException;
-import com.selina.lending.repository.GetApplicationRepository;
-import com.selina.lending.repository.MiddlewareRepository;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
-
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
+import com.selina.lending.repository.GetApplicationRepository;
+import com.selina.lending.repository.MiddlewareRepository;
+import com.selina.lending.service.filter.RuleOutcomeFilter;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -17,8 +17,6 @@
 
 package com.selina.lending.api.dto.dip.response;
 
-import java.util.List;
-
 import com.selina.lending.api.dto.common.ApplicantDto;
 import com.selina.lending.api.dto.common.LoanInformationDto;
 import com.selina.lending.api.dto.common.OfferDto;
@@ -26,6 +24,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder

@@ -17,13 +17,13 @@
 
 package com.selina.lending.api.validator;
 
-import com.selina.lending.api.dto.dip.request.ApplicationRequest;
-import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
 import com.selina.lending.api.dto.common.EmploymentDto;
 import com.selina.lending.api.dto.common.ExpenditureDto;
 import com.selina.lending.api.dto.common.IncomeDto;
 import com.selina.lending.api.dto.common.IncomeItemDto;
 import com.selina.lending.api.dto.common.LoanInformationDto;
+import com.selina.lending.api.dto.dip.request.ApplicationRequest;
+import com.selina.lending.api.dto.dip.request.DIPApplicantDto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

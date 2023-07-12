@@ -1,7 +1,7 @@
 package com.selina.lending.service.quickquote;
 
-import com.selina.lending.service.TokenService;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
+import com.selina.lending.service.TokenService;
 import org.springframework.stereotype.Service;
 
 import static com.selina.lending.service.SourceType.AGGREGATOR;

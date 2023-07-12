@@ -17,13 +17,12 @@
 
 package com.selina.lending.api.dto.common;
 
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 @Builder
 @Data

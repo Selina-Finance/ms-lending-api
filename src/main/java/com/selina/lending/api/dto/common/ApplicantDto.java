@@ -17,9 +17,14 @@
 
 package com.selina.lending.api.dto.common;
 
-import static com.selina.lending.api.controller.SwaggerConstants.EMAIL_PATTERN;
-
-import java.util.List;
+import com.selina.lending.api.controller.SwaggerConstants;
+import com.selina.lending.api.converter.ToLowerCase;
+import com.selina.lending.api.validator.EnumValue;
+import com.selina.lending.api.validator.UkNationalPhoneNumber;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -28,16 +33,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
-import com.selina.lending.api.controller.SwaggerConstants;
-import com.selina.lending.api.converter.ToLowerCase;
-import com.selina.lending.api.validator.EnumValue;
-
-import com.selina.lending.api.validator.UkNationalPhoneNumber;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import static com.selina.lending.api.controller.SwaggerConstants.EMAIL_PATTERN;
 
 @NoArgsConstructor
 @SuperBuilder

@@ -17,12 +17,11 @@
 
 package com.selina.lending.api.mapper.config;
 
+import com.selina.lending.api.dto.common.ApplicantDto;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
-
-import com.selina.lending.api.dto.common.ApplicantDto;
-import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ApplicantMapperConfig {

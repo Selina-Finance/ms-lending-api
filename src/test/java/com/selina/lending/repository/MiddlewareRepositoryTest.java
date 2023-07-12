@@ -18,16 +18,16 @@
 package com.selina.lending.repository;
 
 import com.selina.lending.httpclient.middleware.MiddlewareApi;
-import com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate;
-import com.selina.lending.service.enricher.MiddlewareRequestEnricher;
-import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
 import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
+import com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate;
+import com.selina.lending.service.enricher.MiddlewareRequestEnricher;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
@@ -53,10 +53,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {

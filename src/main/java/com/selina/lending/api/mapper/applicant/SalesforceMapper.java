@@ -17,11 +17,10 @@
 
 package com.selina.lending.api.mapper.applicant;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-
 import com.selina.lending.api.dto.application.response.SalesforceDto;
 import com.selina.lending.httpclient.middleware.dto.application.response.Salesforce;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface SalesforceMapper {

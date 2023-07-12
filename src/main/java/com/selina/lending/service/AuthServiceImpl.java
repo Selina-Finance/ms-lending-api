@@ -17,8 +17,8 @@
 
 package com.selina.lending.service;
 
-import com.selina.lending.api.dto.auth.response.TokenResponse;
 import com.selina.lending.api.dto.auth.request.Credentials;
+import com.selina.lending.api.dto.auth.response.TokenResponse;
 import com.selina.lending.repository.auth.KeycloakRepository;
 import org.springframework.stereotype.Service;
 

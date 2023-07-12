@@ -17,12 +17,11 @@
 
 package com.selina.lending.httpclient.selection.dto.response;
 
-import java.util.List;
-
 import com.selina.lending.httpclient.middleware.dto.common.Erc;
-
 import lombok.Builder;
 import lombok.Value;
+
+import java.util.List;
 
 @Builder
 @Value

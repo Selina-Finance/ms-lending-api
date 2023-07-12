@@ -17,17 +17,16 @@
 
 package com.selina.lending.repository;
 
-import java.util.Optional;
-
+import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
+import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import org.springframework.core.io.Resource;
 
-import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
-import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
-import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
-import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
+import java.util.Optional;
 
 public interface MiddlewareRepository {
 

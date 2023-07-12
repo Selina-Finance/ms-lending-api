@@ -17,9 +17,9 @@
 
 package com.selina.lending.service;
 
-import java.util.Optional;
-
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
+
+import java.util.Optional;
 
 public interface RetrieveApplicationService {
     Optional<ApplicationDecisionResponse> getApplicationByExternalApplicationId(String externalApplicationId);

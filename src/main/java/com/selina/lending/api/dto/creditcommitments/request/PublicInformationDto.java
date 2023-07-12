@@ -17,12 +17,11 @@
 
 package com.selina.lending.api.dto.creditcommitments.request;
 
-import javax.validation.Valid;
-
-import com.selina.lending.api.dto.creditcommitments.request.UserDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import javax.validation.Valid;
 
 @NoArgsConstructor
 @SuperBuilder

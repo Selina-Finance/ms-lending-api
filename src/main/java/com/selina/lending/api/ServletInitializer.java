@@ -17,10 +17,9 @@
 
 package com.selina.lending.api;
 
+import com.selina.lending.App;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-
-import com.selina.lending.App;
 
 // TODO do we need it?
 public class ServletInitializer extends SpringBootServletInitializer {

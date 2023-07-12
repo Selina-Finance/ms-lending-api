@@ -18,7 +18,6 @@
 package com.selina.lending.api.dto.dipcc.response;
 
 import com.selina.lending.api.dto.creditcommitments.response.CreditCommitmentDto;
-
 import com.selina.lending.api.dto.dip.response.ApplicationDto;
 import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
 import io.swagger.v3.oas.annotations.media.Schema;

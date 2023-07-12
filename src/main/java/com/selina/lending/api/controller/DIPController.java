@@ -17,34 +17,32 @@
 
 package com.selina.lending.api.controller;
 
+import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
+import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
+import com.selina.lending.api.dto.dip.response.DIPApplicationResponse;
+import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
+import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
+import com.selina.lending.api.mapper.applicant.ApplicationDecisionResponseMapper;
+import com.selina.lending.api.mapper.dip.DIPApplicationRequestMapper;
+import com.selina.lending.api.mapper.dip.DIPApplicationResponseMapper;
+import com.selina.lending.api.mapper.dipcc.DIPCCApplicationRequestMapper;
+import com.selina.lending.api.mapper.dipcc.DIPCCApplicationResponseMapper;
+import com.selina.lending.service.CreateApplicationService;
+import com.selina.lending.service.RetrieveApplicationService;
+import com.selina.lending.service.UpdateApplicationService;
+import com.selina.lending.service.permissions.annotation.Permission;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
 import static com.selina.lending.service.permissions.annotation.Permission.Resource.APPLICATION;
 import static com.selina.lending.service.permissions.annotation.Permission.Resource.DIP;
 import static com.selina.lending.service.permissions.annotation.Permission.Resource.DIP_CC;
 import static com.selina.lending.service.permissions.annotation.Permission.Scope.Create;
 import static com.selina.lending.service.permissions.annotation.Permission.Scope.Read;
 import static com.selina.lending.service.permissions.annotation.Permission.Scope.Update;
-
-import javax.validation.Valid;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
-import com.selina.lending.api.dto.dipcc.response.DIPCCApplicationResponse;
-import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
-import com.selina.lending.api.dto.dip.response.DIPApplicationResponse;
-import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
-import com.selina.lending.api.mapper.applicant.ApplicationDecisionResponseMapper;
-import com.selina.lending.api.mapper.dipcc.DIPCCApplicationResponseMapper;
-import com.selina.lending.api.mapper.dip.DIPApplicationRequestMapper;
-import com.selina.lending.api.mapper.dip.DIPApplicationResponseMapper;
-import com.selina.lending.api.mapper.dipcc.DIPCCApplicationRequestMapper;
-import com.selina.lending.service.CreateApplicationService;
-import com.selina.lending.service.RetrieveApplicationService;
-import com.selina.lending.service.UpdateApplicationService;
-import com.selina.lending.service.permissions.annotation.Permission;
-
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j

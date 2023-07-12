@@ -17,10 +17,10 @@
 
 package com.selina.lending.repository;
 
-import com.selina.lending.httpclient.getapplication.GetApplicationApi;
-import com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate;
 import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.httpclient.getapplication.GetApplicationApi;
 import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
+import com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;

@@ -17,11 +17,10 @@
 
 package com.selina.lending.api.mapper.creditcommitments;
 
+import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.httpclient.creditcommitments.dto.request.UpdateCreditCommitmentsRequest;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UpdateCreditCommitmentsRequestMapper {

@@ -17,11 +17,10 @@
 
 package com.selina.lending.httpclient.creditcommitments.dto.common;
 
-import java.util.List;
-
-import com.selina.lending.httpclient.creditcommitments.dto.common.Detail;
 import lombok.Builder;
 import lombok.Value;
+
+import java.util.List;
 
 @Builder
 @Value

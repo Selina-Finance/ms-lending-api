@@ -1,9 +1,9 @@
 package com.selina.lending.api.validator;
 
+import com.selina.lending.api.dto.common.LoanInformationDto;
 import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
 import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
-import com.selina.lending.api.dto.common.LoanInformationDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 

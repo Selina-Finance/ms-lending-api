@@ -17,25 +17,23 @@
 
 package com.selina.lending.repository;
 
-import java.util.Optional;
-
-import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
-import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
-import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
-
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.middleware.MiddlewareApi;
-import com.selina.lending.service.enricher.MiddlewareRequestEnricher;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
 import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
-
+import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
+import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
+import com.selina.lending.service.enricher.MiddlewareRequestEnricher;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service

@@ -17,17 +17,15 @@
 
 package com.selina.lending.repository;
 
-import org.springframework.stereotype.Service;
-
 import com.selina.lending.httpclient.selection.SelectionApi;
-import com.selina.lending.service.LendingConstants;
-import com.selina.lending.service.TokenService;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.httpclient.selection.dto.request.Source;
 import com.selina.lending.httpclient.selection.dto.request.SourceAccount;
-
+import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.service.LendingConstants;
+import com.selina.lending.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service

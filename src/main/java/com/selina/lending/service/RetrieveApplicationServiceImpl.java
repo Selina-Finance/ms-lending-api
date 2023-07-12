@@ -17,16 +17,14 @@
 
 package com.selina.lending.service;
 
-import java.util.Optional;
-
-import com.selina.lending.service.filter.RuleOutcomeFilter;
-import org.springframework.stereotype.Service;
-
+import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;
-import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
-
+import com.selina.lending.service.filter.RuleOutcomeFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j

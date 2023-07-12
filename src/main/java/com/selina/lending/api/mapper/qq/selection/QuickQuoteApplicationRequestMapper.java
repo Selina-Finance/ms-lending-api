@@ -17,9 +17,6 @@
 
 package com.selina.lending.api.mapper.qq.selection;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import com.selina.lending.api.dto.common.FeesDto;
 import com.selina.lending.api.dto.common.IncomeDto;
 import com.selina.lending.api.dto.common.IncomeItemDto;
@@ -37,6 +34,9 @@ import com.selina.lending.httpclient.selection.dto.request.LoanInformation;
 import com.selina.lending.httpclient.selection.dto.request.Options;
 import com.selina.lending.httpclient.selection.dto.request.PriorCharges;
 import com.selina.lending.httpclient.selection.dto.request.PropertyDetails;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public class QuickQuoteApplicationRequestMapper {
 

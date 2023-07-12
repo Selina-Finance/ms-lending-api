@@ -18,10 +18,10 @@
 package com.selina.lending.service.creditcommitments;
 
 import com.selina.lending.exception.AccessDeniedException;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.service.AccessManagementService;
-import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

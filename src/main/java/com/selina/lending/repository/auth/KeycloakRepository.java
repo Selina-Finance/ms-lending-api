@@ -17,8 +17,8 @@
 
 package com.selina.lending.repository.auth;
 
-import com.selina.lending.api.dto.auth.response.TokenResponse;
 import com.selina.lending.api.dto.auth.request.Credentials;
+import com.selina.lending.api.dto.auth.response.TokenResponse;
 
 public interface KeycloakRepository {
     TokenResponse getTokenByCredentials(Credentials credentials);

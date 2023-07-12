@@ -18,11 +18,11 @@
 package com.selina.lending.api.dto.creditcommitments.request;
 
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import lombok.Builder;
 import lombok.Value;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 
 @Value

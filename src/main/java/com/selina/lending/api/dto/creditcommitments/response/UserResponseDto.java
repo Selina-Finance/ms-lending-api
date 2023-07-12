@@ -17,12 +17,10 @@
 
 package com.selina.lending.api.dto.creditcommitments.response;
 
-import java.util.List;
-
-import com.selina.lending.api.dto.creditcommitments.response.DetailResponseDto;
-import com.selina.lending.api.dto.creditcommitments.response.SummaryResponseDto;
 import lombok.Builder;
 import lombok.Value;
+
+import java.util.List;
 
 @Builder
 @Value

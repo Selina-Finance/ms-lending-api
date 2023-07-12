@@ -17,15 +17,13 @@
 
 package com.selina.lending.api.dto.creditcommitments.request;
 
-import java.util.List;
-
+import com.selina.lending.api.validator.OnlyOnePrimaryApplicant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.Valid;
-
-import com.selina.lending.api.validator.OnlyOnePrimaryApplicant;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder

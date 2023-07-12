@@ -17,13 +17,12 @@
 
 package com.selina.lending.api.mapper.config;
 
+import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
+import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
-
-import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
-import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DIPApplicationMapperConfig extends ApplicationMapperConfig {

@@ -17,10 +17,10 @@
 
 package com.selina.lending.api.dto.common;
 
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Value;
+
+import java.util.List;
 
 @Builder
 @Value

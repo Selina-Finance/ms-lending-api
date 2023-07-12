@@ -17,11 +17,10 @@
 
 package com.selina.lending.api.mapper.config;
 
-import org.mapstruct.MapperConfig;
-import org.mapstruct.MappingTarget;
-
 import com.selina.lending.api.dto.common.PropertyDetailsDto;
 import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
+import org.mapstruct.MapperConfig;
+import org.mapstruct.MappingTarget;
 
 @MapperConfig
 public interface PropertyDetailsMapperConfig {

@@ -17,15 +17,12 @@
 
 package com.selina.lending.service.creditcommitments;
 
-import com.selina.lending.service.AccessManagementService;
-import org.springframework.stereotype.Service;
-
+import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
 import com.selina.lending.repository.CreditCommitmentsRepository;
 import com.selina.lending.repository.GetApplicationRepository;
-
-import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
-
+import com.selina.lending.service.AccessManagementService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j

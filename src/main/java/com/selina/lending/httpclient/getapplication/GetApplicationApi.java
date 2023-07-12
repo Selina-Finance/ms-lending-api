@@ -17,15 +17,14 @@
 
 package com.selina.lending.httpclient.getapplication;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @FeignClient(
         value = "middleware-application-service-api",

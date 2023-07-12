@@ -17,16 +17,13 @@
 
 package com.selina.lending.service.enricher;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.when;
-
-import static com.selina.lending.service.enricher.MiddlewareRequestEnricher.ADDRESS_TYPE_CURRENT;
-
-import java.util.List;
-
+import com.selina.lending.httpclient.middleware.dto.common.Address;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.service.LendingConstants;
+import com.selina.lending.service.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,11 +32,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.selina.lending.service.TokenService;
-import com.selina.lending.httpclient.middleware.dto.common.Address;
-import com.selina.lending.httpclient.middleware.dto.common.Applicant;
-import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
-import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
+import java.util.List;
+
+import static com.selina.lending.service.enricher.MiddlewareRequestEnricher.ADDRESS_TYPE_CURRENT;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRequestEnricherTest {

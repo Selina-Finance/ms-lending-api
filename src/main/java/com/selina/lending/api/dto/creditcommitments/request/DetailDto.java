@@ -17,16 +17,15 @@
 
 package com.selina.lending.api.dto.creditcommitments.request;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.validator.Conditional;
 import com.selina.lending.api.validator.EnumValue;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Builder
 @Value

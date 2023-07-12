@@ -17,14 +17,13 @@
 
 package com.selina.lending.api.mapper.config;
 
+import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
+import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
-
-import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
-import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
-import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DIPApplicationRequestMapperConfig extends ApplicationRequestMapperConfig {

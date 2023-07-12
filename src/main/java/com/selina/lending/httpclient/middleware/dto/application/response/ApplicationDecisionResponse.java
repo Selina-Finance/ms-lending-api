@@ -17,9 +17,6 @@
 
 package com.selina.lending.httpclient.middleware.dto.application.response;
 
-import java.util.Date;
-import java.util.List;
-
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
 import com.selina.lending.httpclient.middleware.dto.common.Expenditure;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
@@ -28,6 +25,9 @@ import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Once an application is saved, the retrieval of the application is returned in

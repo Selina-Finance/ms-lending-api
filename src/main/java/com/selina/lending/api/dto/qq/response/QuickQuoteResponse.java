@@ -17,10 +17,10 @@
 
 package com.selina.lending.api.dto.qq.response;
 
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Builder(toBuilder = true)
 @Data

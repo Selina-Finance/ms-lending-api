@@ -17,8 +17,6 @@
 
 package com.selina.lending.httpclient.creditcommitments.dto.common;
 
-import com.selina.lending.httpclient.creditcommitments.dto.common.System;
-import com.selina.lending.httpclient.creditcommitments.dto.common.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

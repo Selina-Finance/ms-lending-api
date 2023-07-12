@@ -17,16 +17,15 @@
 
 package com.selina.lending.api.dto.dip.request;
 
-import java.util.List;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 import com.selina.lending.api.dto.common.ExpenditureDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder

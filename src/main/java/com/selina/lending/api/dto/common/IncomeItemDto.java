@@ -17,15 +17,14 @@
 
 package com.selina.lending.api.dto.common;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.validator.EnumValue;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Builder
 @Data

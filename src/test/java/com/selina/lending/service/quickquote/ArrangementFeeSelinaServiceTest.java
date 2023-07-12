@@ -1,7 +1,7 @@
 package com.selina.lending.service.quickquote;
 
-import com.selina.lending.service.TokenService;
 import com.selina.lending.service.SourceType;
+import com.selina.lending.service.TokenService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

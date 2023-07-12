@@ -17,13 +17,11 @@
 
 package com.selina.lending.service;
 
-import org.springframework.stereotype.Service;
-
+import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;
-import com.selina.lending.httpclient.middleware.dto.product.response.SelectProductResponse;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service

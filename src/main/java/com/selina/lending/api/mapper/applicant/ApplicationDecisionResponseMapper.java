@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.mapper.applicant;
 
+import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.api.mapper.common.ExpenditureMapper;
 import com.selina.lending.api.mapper.common.FeesMapper;
 import com.selina.lending.api.mapper.common.LoanInformationMapper;
@@ -26,8 +27,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-
-import com.selina.lending.api.dto.application.response.ApplicationDecisionResponse;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {ApplicantResponseMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class, FeesMapper.class,
         ExpenditureMapper.class, OfferMapper.class, SalesforceMapper.class,

@@ -17,20 +17,18 @@
 
 package com.selina.lending.service.enricher;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.selina.lending.httpclient.middleware.dto.common.Address;
+import com.selina.lending.httpclient.middleware.dto.common.Applicant;
+import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.service.LendingConstants;
 import com.selina.lending.service.TokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import com.selina.lending.httpclient.middleware.dto.common.Address;
-import com.selina.lending.httpclient.middleware.dto.common.Applicant;
-import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
-import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j

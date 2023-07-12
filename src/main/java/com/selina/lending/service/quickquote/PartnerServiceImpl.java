@@ -1,7 +1,7 @@
 package com.selina.lending.service.quickquote;
 
-import com.selina.lending.service.TokenService;
 import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
+import com.selina.lending.service.TokenService;
 import org.springframework.stereotype.Service;
 
 @Service

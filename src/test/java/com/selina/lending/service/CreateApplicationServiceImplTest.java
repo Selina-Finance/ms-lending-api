@@ -17,18 +17,17 @@
 
 package com.selina.lending.service;
 
-import com.selina.lending.exception.ConflictException;
 import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.exception.ConflictException;
+import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
+import com.selina.lending.httpclient.middleware.dto.common.Offer;
+import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
+import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.repository.GetApplicationRepository;
 import com.selina.lending.repository.MiddlewareRepository;
-import com.selina.lending.httpclient.getapplication.dto.response.ApplicationIdentifier;
-import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
-import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
-import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
-import com.selina.lending.httpclient.middleware.dto.common.Offer;
-import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.service.filter.RuleOutcomeFilter;
-
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;

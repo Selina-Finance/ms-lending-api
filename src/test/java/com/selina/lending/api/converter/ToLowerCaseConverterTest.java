@@ -17,7 +17,6 @@
 
 package com.selina.lending.api.converter;
 
-import com.selina.lending.api.converter.ToLowerCaseConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
