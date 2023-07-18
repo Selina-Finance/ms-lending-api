@@ -47,5 +47,7 @@ public class Fees {
     @JsonProperty("addIntermediaryFeeToLoan")
     private Boolean isAddIntermediaryFeeToLoan;
     private Boolean addArrangementFeeSelina;
+    @JsonProperty("addArrangementFeeSelinaToLoan")
+    private Boolean isAddArrangementFeeSelinaToLoan;
     private Double arrangementFeeDiscountSelina;
 }

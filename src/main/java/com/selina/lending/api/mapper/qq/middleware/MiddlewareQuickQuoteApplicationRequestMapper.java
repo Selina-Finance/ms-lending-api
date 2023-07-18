@@ -8,7 +8,6 @@ import com.selina.lending.service.TokenService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
-import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,7 +25,6 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     private static final String SOURCE = "LendingAPI";
     private static final String APPLICATION_TYPE = "QuickQuote";
     private static final String HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS = "false";
-    private static final boolean ADD_PRODUCT_FEES_TO_FACILITY = false;
 
     @Mapping(target = "sourceAccount", expression = "java(tokenService.retrieveSourceAccount())")
     @Mapping(target = "source", constant = SOURCE)
@@ -34,31 +32,9 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
     @Mapping(target = "applicants", source = "request.applicants")
     @Mapping(target = "hasGivenConsentForMarketingCommunications", constant = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS)
-    @Mapping(target = "fees", source = "fees", qualifiedByName = "setDefaultFeesValues")
+    @Mapping(target = "fees", source = "fees")
     @Mapping(target = "offers", source = "products")
     @Mapping(target = "partner", source = "request.partner")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
                                                              List<Product> products, Fees fees);
-
-    @Named("setDefaultFeesValues")
-    Fees setDefaultFeesValues(Fees fees) {
-        return Fees.builder()
-                .isAddAdviceFeeToLoan(fees.getIsAddAdviceFeeToLoan())
-                .isAddArrangementFeeToLoan(fees.getIsAddArrangementFeeToLoan())
-                .isAddCommissionFeeToLoan(fees.getIsAddCommissionFeeToLoan())
-                .isAddThirdPartyFeeToLoan(fees.getIsAddThirdPartyFeeToLoan())
-                .isAddValuationFeeToLoan(fees.getIsAddValuationFeeToLoan())
-                .adviceFee(fees.getAdviceFee())
-                .arrangementFee(fees.getArrangementFee())
-                .commissionFee(fees.getCommissionFee())
-                .thirdPartyFee(fees.getThirdPartyFee())
-                .valuationFee(fees.getValuationFee())
-                .isAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY)
-                .intermediaryFeeAmount(fees.getIntermediaryFeeAmount())
-                .isAddIntermediaryFeeToLoan(fees.getIsAddIntermediaryFeeToLoan())
-                .addArrangementFeeSelina(fees.getAddArrangementFeeSelina())
-                .arrangementFeeDiscountSelina(fees.getArrangementFeeDiscountSelina())
-                .build();
-    }
-
 }

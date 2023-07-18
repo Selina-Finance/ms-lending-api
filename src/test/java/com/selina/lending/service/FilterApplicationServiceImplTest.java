@@ -28,8 +28,10 @@ import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -71,9 +73,16 @@ class FilterApplicationServiceImplTest extends MapperBase {
     @InjectMocks
     private FilterApplicationServiceImpl filterApplicationService;
 
+    @BeforeEach
+    void setUp() {
+        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+    }
+
     @Test
-    void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequest() {
+    void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequestWithCorrectDefaultValues() {
         // Given
+        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                 .decision("Accepted")
                 .products(List.of(getProduct()))
@@ -88,10 +97,15 @@ class FilterApplicationServiceImplTest extends MapperBase {
         var response = filterApplicationService.filter(quickQuoteApplicationRequest);
 
         //Then
-        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(selectionRepository, times(1)).filter(selectionRequestCaptor.capture());
         verify(middlewareRepository, times(1)).createQuickQuoteApplication(quickQuoteRequest);
         verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
+
         assertThat(response).isEqualTo(decisionResponse);
+
+        var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
+        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
+        assertThat(requestFees.getIsAddProductFeesToFacility()).isTrue();
     }
 
     @Test
