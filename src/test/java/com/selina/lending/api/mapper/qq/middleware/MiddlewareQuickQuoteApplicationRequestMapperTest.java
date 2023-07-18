@@ -37,6 +37,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
     private static final String LENDING_API_SOURCE = "LendingAPI";
     private static final String QUICK_QUOTE_APPLICATION_TYPE = "QuickQuote";
     private static final String QQ01_PRODUCT_CODE = "QQ01";
+    private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN = true;
 
     @MockBean
     private TokenService tokenService;
@@ -50,7 +51,11 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         List<Product> products = List.of(getProduct());
-        Fees fees = Fees.builder().arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA).addArrangementFeeSelina(true).build();
+        Fees fees = Fees.builder()
+                .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
+                .addArrangementFeeSelina(true)
+                .isAddArrangementFeeSelinaToLoan(ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN)
+                .build();
 
         //When
         QuickQuoteRequest middlewareCreateApplicationEvent =
@@ -65,7 +70,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(false));
 
         assertApplicants(middlewareCreateApplicationEvent.getApplicants());
-        assertFees(middlewareCreateApplicationEvent.getFees());
+        assertFees(fees, middlewareCreateApplicationEvent.getFees());
         assertLead(middlewareCreateApplicationEvent.getLead());
         assertLoanInformation(middlewareCreateApplicationEvent.getLoanInformation());
         assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
@@ -141,14 +146,23 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(income.getAmount(), equalTo(INCOME_AMOUNT));
     }
 
-    private void assertFees(Fees fees) {
-        Fees expectedFees = Fees.builder()
-                .isAddProductFeesToFacility(false)
-                .addArrangementFeeSelina(true)
-                .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
-                .build();
-
-        assertThat(fees, equalTo(expectedFees));
+    private void assertFees(Fees originalFees, Fees actualFees) {
+        assertThat(actualFees.getIsAddAdviceFeeToLoan(), equalTo(originalFees.getIsAddAdviceFeeToLoan()));
+        assertThat(actualFees.getIsAddArrangementFeeToLoan(), equalTo(originalFees.getIsAddArrangementFeeToLoan()));
+        assertThat(actualFees.getIsAddCommissionFeeToLoan(), equalTo(originalFees.getIsAddCommissionFeeToLoan()));
+        assertThat(actualFees.getIsAddThirdPartyFeeToLoan(), equalTo(originalFees.getIsAddThirdPartyFeeToLoan()));
+        assertThat(actualFees.getIsAddValuationFeeToLoan(), equalTo(originalFees.getIsAddValuationFeeToLoan()));
+        assertThat(actualFees.getAdviceFee(), equalTo(originalFees.getAdviceFee()));
+        assertThat(actualFees.getArrangementFee(), equalTo(originalFees.getArrangementFee()));
+        assertThat(actualFees.getCommissionFee(), equalTo(originalFees.getCommissionFee()));
+        assertThat(actualFees.getThirdPartyFee(), equalTo(originalFees.getThirdPartyFee()));
+        assertThat(actualFees.getValuationFee(), equalTo(originalFees.getValuationFee()));
+        assertThat(actualFees.getIsAddProductFeesToFacility(), equalTo(originalFees.getIsAddProductFeesToFacility()));
+        assertThat(actualFees.getIntermediaryFeeAmount(), equalTo(originalFees.getIntermediaryFeeAmount()));
+        assertThat(actualFees.getIsAddIntermediaryFeeToLoan(), equalTo(originalFees.getIsAddIntermediaryFeeToLoan()));
+        assertThat(actualFees.getAddArrangementFeeSelina(), equalTo(originalFees.getAddArrangementFeeSelina()));
+        assertThat(actualFees.getIsAddArrangementFeeSelinaToLoan(), equalTo(originalFees.getIsAddArrangementFeeSelinaToLoan()));
+        assertThat(actualFees.getArrangementFeeDiscountSelina(), equalTo(originalFees.getArrangementFeeDiscountSelina()));
     }
 
     private void assertFeesWithAllOtherFees(Fees fees) {
