@@ -35,29 +35,31 @@ import java.util.List;
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String ACCEPTED_DECISION = "Accepted";
+    private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT = true;
+    private static final Boolean ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT = true;
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionRepository selectionRepository;
     private final MiddlewareRepository middlewareRepository;
-    private final ArrangementFeeSelinaService arrangementFeeService;
+    private final ArrangementFeeSelinaService arrangementFeeSelinaService;
     private final PartnerService partnerService;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionRepository selectionRepository,
                                         MiddlewareRepository middlewareRepository,
-                                        ArrangementFeeSelinaService arrangementFeeService,
+                                        ArrangementFeeSelinaService arrangementFeeSelinaService,
                                         PartnerService partnerService) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
-        this.arrangementFeeService = arrangementFeeService;
+        this.arrangementFeeSelinaService = arrangementFeeSelinaService;
         this.partnerService = partnerService;
     }
 
     @Override
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
-        addArrangementFeeSelina(selectionRequest);
+        enrichSelectionRequestWithFees(selectionRequest);
         FilteredQuickQuoteDecisionResponse decisionResponse = selectionRepository.filter(selectionRequest);
 
         if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
@@ -70,14 +72,20 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         return decisionResponse;
     }
 
-    private void addArrangementFeeSelina(FilterQuickQuoteApplicationRequest selectionRequest) {
-        var fees = arrangementFeeService.getFeesFromToken();
-        if (selectionRequest.getApplication().getFees() != null) {
-            selectionRequest.getApplication().getFees().setAddArrangementFeeSelina(fees.getAddArrangementFeeSelina());
-            selectionRequest.getApplication().getFees().setArrangementFeeDiscountSelina(fees.getArrangementFeeDiscountSelina());
-        } else {
-            selectionRequest.getApplication().setFees(fees);
+    private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest) {
+        var tokenFees = arrangementFeeSelinaService.getFeesFromToken();
+
+        if (selectionRequest.getApplication().getFees() == null) {
+            selectionRequest.getApplication().setFees(tokenFees);
         }
+
+        var requestFees = selectionRequest.getApplication().getFees();
+
+        requestFees.setAddArrangementFeeSelina(tokenFees.getAddArrangementFeeSelina());
+        requestFees.setArrangementFeeDiscountSelina(tokenFees.getArrangementFeeDiscountSelina());
+
+        requestFees.setIsAddArrangementFeeSelinaToLoan(ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT);
+        requestFees.setIsAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT);
     }
 
     private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
