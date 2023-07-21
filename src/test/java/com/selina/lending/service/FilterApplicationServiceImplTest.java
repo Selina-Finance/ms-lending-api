@@ -104,8 +104,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         assertThat(response).isEqualTo(decisionResponse);
 
         var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
-        assertThat(requestFees.getIsAddProductFeesToFacility()).isTrue();
+        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
+        assertThat(requestFees.getIsAddProductFeesToFacility()).isFalse();
     }
 
     @Test
