@@ -111,6 +111,7 @@ class QuickQuoteControllerTest {
         assertThat(Objects.requireNonNull(response.getBody()).getOffers(), not(empty()));
         assertOffersApplyUrlHasExpectedFormat(Objects.requireNonNull(response.getBody()).getOffers());
         verify(filterApplicationService, times(1)).filter(quickQuoteApplicationRequest);
+        verify(applicationResponseEnricher, times(1)).turnIsAprcHeadlineToTrueForEachOfferForClearScoreClientOnly(response.getBody());
     }
 
     @Test

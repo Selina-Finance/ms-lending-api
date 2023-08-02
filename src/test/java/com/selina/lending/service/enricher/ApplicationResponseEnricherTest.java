@@ -15,6 +15,9 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.Every.everyItem;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +46,38 @@ class ApplicationResponseEnricherTest {
 
         // then
         assertThat(response.getExternalApplicationId(), equalTo(id));
+    }
+
+    @Test
+    void whenClientIdIsClearScoreThenSetIsAprcHeadlineToTrueForEachOffer() {
+        var response = QuickQuoteResponse.builder()
+                .offers(List.of(
+                        ProductOfferDto.builder().isAprcHeadline(false).build(),
+                        ProductOfferDto.builder().isAprcHeadline(false).build()
+                ))
+                .build();
+
+        when(tokenService.retrieveClientId()).thenReturn("clearscore");
+
+        enricher.turnIsAprcHeadlineToTrueForEachOfferForClearScoreClientOnly(response);
+
+        assertThat(response.getOffers(), everyItem(hasProperty("isAprcHeadline", is(true))));
+    }
+
+    @Test
+    void whenClientIdIsClearScoreAndOffersIsNullThenDoNotSetIsAprcHeadlineToTrueForEachOffer() {
+        var response = QuickQuoteResponse.builder()
+                .offers(List.of(
+                        ProductOfferDto.builder().isAprcHeadline(false).build(),
+                        ProductOfferDto.builder().isAprcHeadline(false).build()
+                ))
+                .build();
+
+        when(tokenService.retrieveClientId()).thenReturn("monevo");
+
+        enricher.turnIsAprcHeadlineToTrueForEachOfferForClearScoreClientOnly(response);
+
+        assertThat(response.getOffers(), everyItem(hasProperty("isAprcHeadline", is(false))));
     }
 
     @Test
