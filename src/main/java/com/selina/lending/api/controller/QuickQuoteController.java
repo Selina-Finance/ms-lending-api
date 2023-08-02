@@ -97,6 +97,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
         var quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
         applicationResponseEnricher.enrichQuickQuoteResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
         applicationResponseEnricher.enrichQuickQuoteResponseWithProductOffersApplyUrl(quickQuoteResponse);
+        applicationResponseEnricher.turnIsAprcHeadlineToTrueForEachOfferForClearScoreClientOnly(quickQuoteResponse);
         return quickQuoteResponse;
     }
 }

@@ -14,6 +14,7 @@ import java.util.Optional;
 @Slf4j
 public class ApplicationResponseEnricher {
 
+    private static final String CLEARSCORE_CLIENT_ID = "clearscore";
     private final String quickQuoteBaseUrl;
     private final TokenService tokenService;
 
@@ -25,6 +26,16 @@ public class ApplicationResponseEnricher {
 
     public void enrichQuickQuoteResponseWithExternalApplicationId(QuickQuoteResponse response, String externalApplicationId) {
         response.setExternalApplicationId(externalApplicationId);
+    }
+
+    public void turnIsAprcHeadlineToTrueForEachOfferForClearScoreClientOnly(QuickQuoteResponse response) {
+        String clientId = tokenService.retrieveClientId();
+        if (CLEARSCORE_CLIENT_ID.equalsIgnoreCase(clientId)) {
+            var offers = response.getOffers();
+            if (offers != null) {
+                offers.forEach(offer -> offer.setIsAprcHeadline(true));
+            }
+        }
     }
 
     public void enrichQuickQuoteResponseWithProductOffersApplyUrl(QuickQuoteResponse response) {
@@ -49,5 +60,4 @@ public class ApplicationResponseEnricher {
                 .build()
                 .toString();
     }
-
 }
