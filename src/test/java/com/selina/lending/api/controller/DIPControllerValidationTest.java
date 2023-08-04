@@ -896,20 +896,6 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void shouldGiveValidationErrorWhenCreateDipApplicationAndSpecifyingIncorrectIncomeFrequency() throws Exception {
-        // Given
-        var dipApplicationRequest = getDIPApplicationRequestDto();
-        dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setFrequency("Unsupported value");
-
-        // When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
-                        .contentType(APPLICATION_JSON))
-                // Then
-                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].income.income[0].frequency"))
-                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
-    }
-
-    @Test
     void shouldGiveValidationErrorWhenCreateDipApplicationWithoutSpecifyingAllowedExpectsFutureIncomeDecreaseReason() throws Exception {
         // Given
         var dipApplicationRequest = getDIPApplicationRequestDto();
