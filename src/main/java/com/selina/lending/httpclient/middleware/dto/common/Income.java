@@ -33,7 +33,6 @@ public class Income {
     Double amountVerified;
     String incomeDate;
     String relatedYear;
-    String frequency;
     Double contractDaysWorkedWeeklyReported;
     Double contractDayRateReported;
 }

@@ -29,8 +29,11 @@ import javax.validation.constraints.Pattern;
 @Builder
 @Data
 public class IncomeItemDto {
+
+    @Schema(description = "Amount of annual income")
     @NotNull
     private Double amount;
+
     @NotNull
     @Schema(implementation = IncomeType.class)
     @EnumValue(enumClass = IncomeType.class)
@@ -43,10 +46,9 @@ public class IncomeItemDto {
     @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     private String incomeDate;
+
     private String relatedYear;
-    @Schema(implementation = Frequency.class)
-    @EnumValue(enumClass = Frequency.class)
-    private String frequency;
+
     private Double contractDaysWorkedWeeklyReported;
     private Double contractDayRateReported;
 
@@ -94,23 +96,5 @@ public class IncomeItemDto {
         public String toString() {
             return this.value;
         }
-    }
-
-    enum Frequency {
-        WEEKLY("Weekly"),
-        MONTHLY("Monthly"),
-        ANNUALLY("Annually");
-
-        private final String value;
-
-        Frequency(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
     }
 }
