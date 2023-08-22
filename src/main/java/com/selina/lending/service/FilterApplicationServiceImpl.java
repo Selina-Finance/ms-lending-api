@@ -35,8 +35,8 @@ import java.util.List;
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String ACCEPTED_DECISION = "Accepted";
-    private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT = false;
-    private static final Boolean ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT = false;
+    private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT = true;
+    private static final Boolean ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT = true;
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionRepository selectionRepository;
