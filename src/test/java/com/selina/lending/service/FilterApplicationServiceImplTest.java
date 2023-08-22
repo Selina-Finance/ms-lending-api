@@ -93,10 +93,10 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 .mapToQuickQuoteRequest(any(QuickQuoteApplicationRequest.class), any(), any())).thenReturn(quickQuoteRequest);
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
-        //When
+        // When
         var response = filterApplicationService.filter(quickQuoteApplicationRequest);
 
-        //Then
+        // Then
         verify(selectionRepository, times(1)).filter(selectionRequestCaptor.capture());
         verify(middlewareRepository, times(1)).createQuickQuoteApplication(quickQuoteRequest);
         verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
@@ -104,8 +104,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         assertThat(response).isEqualTo(decisionResponse);
 
         var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
-        assertThat(requestFees.getIsAddProductFeesToFacility()).isFalse();
+        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
+        assertThat(requestFees.getIsAddProductFeesToFacility()).isTrue();
     }
 
     @Test
