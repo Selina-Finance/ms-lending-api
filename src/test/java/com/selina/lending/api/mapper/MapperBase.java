@@ -437,6 +437,7 @@ public abstract class MapperBase {
                 .arrangementFee(ARRANGEMENT_FEE)
                 .isAddProductFeesToFacility(true)
                 .isAddIntermediaryFeeToLoan(false)
+                .isAddArrangementFeeSelinaToLoan(true)
                 .build();
     }
 
