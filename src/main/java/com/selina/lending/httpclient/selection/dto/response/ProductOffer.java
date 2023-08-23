@@ -52,6 +52,7 @@ public class ProductOffer {
     Double cltv;
     Boolean hasProductFeeAddedToLoan;
     String decision;
+    Double netLoanAmount;
     Double maxErc;
     Double brokerFeesUpfront;
     Double affordabilityDeficit;

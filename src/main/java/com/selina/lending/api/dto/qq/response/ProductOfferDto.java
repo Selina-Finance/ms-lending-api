@@ -54,6 +54,7 @@ public class ProductOfferDto {
     private Double ltvCap;
     private String decision;
     private Boolean hasErc;
+    private Double netLoanAmount;
     private Double maxErc;
     private String ercShortCode;
     private Integer ercPeriodYears;
