@@ -72,4 +72,7 @@ public class FeesDto {
 
     @JsonProperty("addIntermediaryFeeToLoan")
     private Boolean isAddIntermediaryFeeToLoan;
+
+    @JsonProperty("addArrangementFeeSelinaToLoan")
+    private Boolean isAddArrangementFeeSelinaToLoan;
 }
