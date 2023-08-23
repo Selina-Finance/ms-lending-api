@@ -54,6 +54,7 @@ public interface QuickQuoteApplicationResponseMapper {
     @Mapping(source = "offer.reversionTerm", target = "reversionTerm")
     @Mapping(source = "offer.totalAmountRepaid", target = "totalAmountRepaid")
     @Mapping(source = "offer.maximumLoanAmount", target = "maximumLoanAmount")
+    @Mapping(source = "offer.netLoanAmount", target = "netLoanAmount")
     @Mapping(source = "offer.maxErc", target = "maxErc")
     @Mapping(source = "offer.offerBalance", target = "offerBalance")
     @Mapping(source = "offer.requestedLoanAmount", target = "requestedLoanAmount")

@@ -70,6 +70,7 @@ public class Offer {
     private String ercShortcode;
     private Integer ercPeriodYears;
     private Double maximumBalanceEsis;
+    private Double netLoanAmount;
     private Double maxErc;
     private String ercProfile;
     private List<Erc> ercData;
