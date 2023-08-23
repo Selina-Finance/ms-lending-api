@@ -80,21 +80,22 @@ public class QuickQuoteApplicationRequestMapper {
                 .build();
     }
 
-    private static Fees mapFees(QuickQuoteFeesDto feesDto) {
-        return feesDto == null ? null : Fees.builder()
-                .isAddAdviceFeeToLoan(feesDto.getIsAddAdviceFeeToLoan())
-                .isAddArrangementFeeToLoan(feesDto.getIsAddArrangementFeeToLoan())
-                .isAddCommissionFeeToLoan(feesDto.getIsAddCommissionFeeToLoan())
-                .isAddThirdPartyFeeToLoan(feesDto.getIsAddThirdPartyFeeToLoan())
-                .isAddValuationFeeToLoan(feesDto.getIsAddValuationFeeToLoan())
-                .adviceFee(feesDto.getAdviceFee())
-                .arrangementFee(feesDto.getArrangementFee())
-                .commissionFee(feesDto.getCommissionFee())
-                .thirdPartyFee(feesDto.getThirdPartyFee())
-                .valuationFee(feesDto.getValuationFee())
-                .isAddProductFeesToFacility(feesDto.getIsAddProductFeesToFacility())
-                .intermediaryFeeAmount(feesDto.getIntermediaryFeeAmount())
-                .isAddIntermediaryFeeToLoan(feesDto.getIsAddIntermediaryFeeToLoan())
+    private static Fees mapFees(QuickQuoteFeesDto quickQuoteFeesDto) {
+        return quickQuoteFeesDto == null ? null : Fees.builder()
+                .isAddAdviceFeeToLoan(quickQuoteFeesDto.getIsAddAdviceFeeToLoan())
+                .isAddArrangementFeeToLoan(quickQuoteFeesDto.getIsAddArrangementFeeToLoan())
+                .isAddCommissionFeeToLoan(quickQuoteFeesDto.getIsAddCommissionFeeToLoan())
+                .isAddThirdPartyFeeToLoan(quickQuoteFeesDto.getIsAddThirdPartyFeeToLoan())
+                .isAddValuationFeeToLoan(quickQuoteFeesDto.getIsAddValuationFeeToLoan())
+                .adviceFee(quickQuoteFeesDto.getAdviceFee())
+                .arrangementFee(quickQuoteFeesDto.getArrangementFee())
+                .commissionFee(quickQuoteFeesDto.getCommissionFee())
+                .thirdPartyFee(quickQuoteFeesDto.getThirdPartyFee())
+                .valuationFee(quickQuoteFeesDto.getValuationFee())
+                .isAddProductFeesToFacility(quickQuoteFeesDto.getIsAddProductFeesToFacility())
+                .intermediaryFeeAmount(quickQuoteFeesDto.getIntermediaryFeeAmount())
+                .isAddIntermediaryFeeToLoan(quickQuoteFeesDto.getIsAddIntermediaryFeeToLoan())
+                .isAddArrangementFeeSelinaToLoan(quickQuoteFeesDto.getIsAddArrangementFeeSelinaToLoan())
                 .build();
     }
 
