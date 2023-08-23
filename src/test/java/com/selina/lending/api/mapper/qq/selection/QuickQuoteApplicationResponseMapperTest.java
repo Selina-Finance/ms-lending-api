@@ -67,6 +67,7 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
         assertThat(offer.getArrangementFeeSelina(), equalTo(ARRANGEMENT_FEE_SELINA));
         assertThat(offer.getBrokerFeesIncluded(), equalTo(BROKER_FEES_INCLUDED));
         assertThat(offer.getBrokerFeesUpfront(), equalTo(BROKER_FEES_UPFRONT));
+        assertThat(offer.getNetLoanAmount(), equalTo(ESIS_LOAN_AMOUNT));
 
         assertErcData(offer);
     }

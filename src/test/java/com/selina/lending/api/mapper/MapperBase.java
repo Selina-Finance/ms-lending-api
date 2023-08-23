@@ -253,6 +253,7 @@ public abstract class MapperBase {
     public static final Double MINIMUM_INITIAL_DRAWDOWN = 1000.0;
     public static final Double OFFER_VALIDITY = 30.0;
     public static final Double ESIS_LOAN_AMOUNT = 50000.0;
+    public static final Double NET_LOAN_AMOUNT = 50000.0;
     public static final String SUB_UNIT_ID = "subUnitId";
     public static final String COMPANY_ID = "companyId";
 
@@ -951,6 +952,7 @@ public abstract class MapperBase {
                 .offerValidity(OFFER_VALIDITY)
                 .esisLoanAmount(ESIS_LOAN_AMOUNT)
                 .arrangementFeeSelina(ARRANGEMENT_FEE_SELINA)
+                .netLoanAmount(NET_LOAN_AMOUNT)
                 .build();
     }
 
