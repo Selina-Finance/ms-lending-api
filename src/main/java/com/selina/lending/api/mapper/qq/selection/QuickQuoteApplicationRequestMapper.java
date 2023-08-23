@@ -17,13 +17,13 @@
 
 package com.selina.lending.api.mapper.qq.selection;
 
-import com.selina.lending.api.dto.common.FeesDto;
 import com.selina.lending.api.dto.common.IncomeDto;
 import com.selina.lending.api.dto.common.IncomeItemDto;
 import com.selina.lending.api.dto.common.LoanInformationDto;
 import com.selina.lending.api.dto.common.PriorChargesDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
 import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.selection.dto.request.Applicant;
@@ -80,7 +80,7 @@ public class QuickQuoteApplicationRequestMapper {
                 .build();
     }
 
-    private static Fees mapFees(FeesDto feesDto) {
+    private static Fees mapFees(QuickQuoteFeesDto feesDto) {
         return feesDto == null ? null : Fees.builder()
                 .isAddAdviceFeeToLoan(feesDto.getIsAddAdviceFeeToLoan())
                 .isAddArrangementFeeToLoan(feesDto.getIsAddArrangementFeeToLoan())
