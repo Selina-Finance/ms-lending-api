@@ -52,6 +52,7 @@ import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.api.dto.dipcc.request.DIPCCPropertyDetailsDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
 import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicantDto;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
@@ -364,7 +365,7 @@ public abstract class MapperBase {
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
                 .applicants(getQuickQuoteApplicantDtoList())
                 .lead(getLeadDto())
-                .fees(getFeesDto())
+                .fees(getQuickQuoteFeesDto())
                 .build();
     }
 
@@ -419,6 +420,24 @@ public abstract class MapperBase {
                 .arrangementFee(ARRANGEMENT_FEE)
                 .isAddProductFeesToFacility(true)
                 .isAddIntermediaryFeeToLoan(false)
+                .build();
+    }
+
+    protected QuickQuoteFeesDto getQuickQuoteFeesDto() {
+        return QuickQuoteFeesDto.builder()
+                .adviceFee(FEE)
+                .thirdPartyFee(FEE)
+                .commissionFee(FEE)
+                .valuationFee(FEE)
+                .isAddAdviceFeeToLoan(true)
+                .isAddArrangementFeeToLoan(true)
+                .isAddCommissionFeeToLoan(true)
+                .isAddValuationFeeToLoan(true)
+                .isAddThirdPartyFeeToLoan(true)
+                .arrangementFee(ARRANGEMENT_FEE)
+                .isAddProductFeesToFacility(true)
+                .isAddIntermediaryFeeToLoan(false)
+                .isAddArrangementFeeSelinaToLoan(true)
                 .build();
     }
 

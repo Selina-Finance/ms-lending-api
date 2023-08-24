@@ -17,7 +17,6 @@
 
 package com.selina.lending.api.dto.qq.request;
 
-import com.selina.lending.api.dto.common.FeesDto;
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.common.LoanInformationDto;
 import com.selina.lending.api.dto.dip.request.ApplicationRequest;
@@ -62,5 +61,5 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
     private Partner partner; //TODO must not reuse httpclient DTO
 
     @Valid
-    private FeesDto fees;
+    private QuickQuoteFeesDto fees;
 }

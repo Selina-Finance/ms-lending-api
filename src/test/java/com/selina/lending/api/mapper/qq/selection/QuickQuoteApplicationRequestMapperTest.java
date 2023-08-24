@@ -115,6 +115,7 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(fees.getIsAddThirdPartyFeeToLoan(), equalTo(true));
         assertThat(fees.getIsAddProductFeesToFacility(), equalTo(true));
         assertThat(fees.getIsAddIntermediaryFeeToLoan(), equalTo(false));
+        assertThat(fees.getIsAddArrangementFeeSelinaToLoan(), equalTo(true));
         assertThat(fees.getArrangementFee(), equalTo(ARRANGEMENT_FEE));
     }
 }
