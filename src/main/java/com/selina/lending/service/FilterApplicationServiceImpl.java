@@ -84,8 +84,13 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         requestFees.setAddArrangementFeeSelina(tokenFees.getAddArrangementFeeSelina());
         requestFees.setArrangementFeeDiscountSelina(tokenFees.getArrangementFeeDiscountSelina());
 
-        requestFees.setIsAddArrangementFeeSelinaToLoan(ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT);
-        requestFees.setIsAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT);
+        if (requestFees.getIsAddArrangementFeeSelinaToLoan() == null) {
+            requestFees.setIsAddArrangementFeeSelinaToLoan(ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT);
+        }
+
+        if (requestFees.getIsAddProductFeesToFacility() == null) {
+            requestFees.setIsAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT);
+        }
     }
 
     private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
