@@ -73,5 +73,6 @@ public interface OfferMapper {
     @Mapping(target = "esisLoanAmount", source = "product.offer.esisLoanAmount")
     @Mapping(target = "propertyValuation", source = "product.offer.propertyValuation")
     @Mapping(target = "arrangementFeeSelina", source = "product.offer.arrangementFeeSelina")
+    @Mapping(target = "netLoanAmount", source = "product.offer.netLoanAmount")
     Offer mapToOffer(Product product);
 }

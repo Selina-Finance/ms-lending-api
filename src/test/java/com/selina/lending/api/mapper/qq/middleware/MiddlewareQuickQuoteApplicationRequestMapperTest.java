@@ -277,6 +277,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(offer.getOfferValidity(), equalTo(OFFER_VALIDITY));
         assertThat(offer.getEsisLoanAmount(), equalTo(ESIS_LOAN_AMOUNT));
         assertThat(offer.getArrangementFeeSelina(), equalTo(ARRANGEMENT_FEE_SELINA));
+        assertThat(offer.getNetLoanAmount(), equalTo(NET_LOAN_AMOUNT));
         assertNotNull(offer.getErcData());
     }
 
