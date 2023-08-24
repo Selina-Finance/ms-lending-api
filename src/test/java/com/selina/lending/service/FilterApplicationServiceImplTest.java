@@ -18,6 +18,7 @@
 package com.selina.lending.service;
 
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
@@ -106,6 +107,46 @@ class FilterApplicationServiceImplTest extends MapperBase {
         var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
         assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
         assertThat(requestFees.getIsAddProductFeesToFacility()).isFalse();
+    }
+
+    @Test
+    void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequestWithoutDefaultValuesIfValuesPresent() {
+        // Given
+        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Accepted")
+                .products(List.of(getProduct()))
+                .build();
+
+        var qqFees = QuickQuoteFeesDto.builder()
+                .isAddArrangementFeeSelinaToLoan(true)
+                .isAddProductFeesToFacility(true)
+                .build();
+
+        var qqApplicationRequest = QuickQuoteApplicationRequest.builder()
+                .applicants(List.of())
+                .fees(qqFees)
+                .build();
+
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(middlewareQuickQuoteApplicationRequestMapper
+                .mapToQuickQuoteRequest(any(QuickQuoteApplicationRequest.class), any(), any())).thenReturn(quickQuoteRequest);
+        when(partnerService.getPartnerFromToken()).thenReturn(null);
+
+        //When
+        var response = filterApplicationService.filter(qqApplicationRequest);
+
+        //Then
+        verify(selectionRepository, times(1)).filter(selectionRequestCaptor.capture());
+        verify(middlewareRepository, times(1)).createQuickQuoteApplication(quickQuoteRequest);
+        verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
+
+        assertThat(response).isEqualTo(decisionResponse);
+
+        var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
+        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isEqualTo(qqFees.getIsAddArrangementFeeSelinaToLoan());
+        assertThat(requestFees.getIsAddProductFeesToFacility()).isEqualTo(qqFees.getIsAddProductFeesToFacility());
     }
 
     @Test
