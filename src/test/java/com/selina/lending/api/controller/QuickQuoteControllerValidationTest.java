@@ -46,7 +46,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -89,7 +88,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .build());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -113,7 +112,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -131,7 +130,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -148,7 +147,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -171,7 +170,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -185,7 +184,6 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.violations[1].message").value("should be equal to applicants size"));
         }
 
-
         @Test
         void whenCreateApplicationWithNullApplicantsThenReturnBadRequest() throws Exception {
             //Given
@@ -195,7 +193,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -215,7 +213,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -232,7 +230,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -249,7 +247,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -273,7 +271,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -292,7 +290,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -311,7 +309,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -330,7 +328,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -353,7 +351,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -376,7 +374,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -397,7 +395,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -406,6 +404,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             verify(filterApplicationService, times(1)).filter(request);
         }
 
+        @Test
         void whenCreateQQApplicationWithOneApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnSuccess() throws Exception {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
@@ -413,7 +412,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -429,7 +428,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setMobileNumber("012345AB90");
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -450,7 +449,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -471,7 +470,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -497,7 +496,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -516,7 +515,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setMobileNumber("012345AB90");
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -535,7 +534,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setMobileNumber("");
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     // Then
@@ -556,7 +555,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -580,7 +579,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -603,7 +602,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -622,7 +621,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -637,7 +636,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getPropertyDetails().setEstimatedValue(49_999.0);
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -655,7 +654,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getPropertyDetails().setEstimatedValue(100_000_000.01);
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -673,7 +672,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -688,7 +687,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -702,7 +701,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -720,7 +719,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).getAddresses().get(0).setFromDate(LocalDate.parse("9999-12-25"));
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -741,7 +740,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setAddresses(List.of(getAddressDto(), previousAddress));
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -762,7 +761,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setAddresses(List.of(getAddressDto(), previousAddress));
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -781,7 +780,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             when(createApplicationService.createQuickQuoteCFApplication(any(QuickQuoteCFRequest.class))).thenReturn(getQuickQuoteCFResponse());
 
             //When
-            mockMvc.perform(post("/application/quickquotecf").with(csrf())
+            mockMvc.perform(post("/application/quickquotecf")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -802,7 +801,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setAddresses(List.of(getAddressDto(), previousAddress));
 
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(objectMapper.writeValueAsString(request))
                             .contentType(APPLICATION_JSON))
                     //Then
@@ -817,7 +816,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateApplicationWithPreviousAddressFromDateNotCorrectFormatThenBadRequest() throws Exception {
             //When
-            mockMvc.perform(post("/application/quickquote").with(csrf())
+            mockMvc.perform(post("/application/quickquote")
                             .content(Files.readString(getQQApplicationBadDateFormatRequest))
                             .contentType(APPLICATION_JSON))
                     //Then

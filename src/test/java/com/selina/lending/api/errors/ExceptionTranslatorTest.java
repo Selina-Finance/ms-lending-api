@@ -26,7 +26,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -47,12 +46,9 @@ class ExceptionTranslatorTest {
         var invalidInputJson = "{,,][[";
 
         // When
-        mockMvc.perform(
-                        post("/api/exception-translator-test/method-argument")
-                                .with(csrf())
-                                .content(invalidInputJson)
-                                .contentType(APPLICATION_JSON)
-                )
+        mockMvc.perform(post("/api/exception-translator-test/method-argument")
+                        .content(invalidInputJson)
+                        .contentType(APPLICATION_JSON))
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -66,13 +62,9 @@ class ExceptionTranslatorTest {
         String emptyContent = "{}";
 
         // When
-        mockMvc.perform(
-                        post("/api/exception-translator-test/method-argument")
-                                .with(csrf())
-                                .content(emptyContent)
-                                .contentType(APPLICATION_JSON)
-                )
-
+        mockMvc.perform(post("/api/exception-translator-test/method-argument")
+                        .content(emptyContent)
+                        .contentType(APPLICATION_JSON))
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -90,7 +82,6 @@ class ExceptionTranslatorTest {
 
         // When
         mockMvc.perform(get("/api/exception-translator-test/access-denied-exception"))
-
                 // Then
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.type").doesNotExist())
@@ -107,7 +98,6 @@ class ExceptionTranslatorTest {
 
         // When
         mockMvc.perform(get("/api/exception-translator-test/custom-remote-resource-problem-exception"))
-
                 // Then
                 .andExpect(status().isBadGateway())
                 .andExpect(jsonPath("$.type").doesNotExist())
@@ -124,7 +114,6 @@ class ExceptionTranslatorTest {
 
         // When
         mockMvc.perform(get("/api/exception-translator-test/bad-request-exception"))
-
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.type").doesNotExist())
@@ -140,7 +129,6 @@ class ExceptionTranslatorTest {
 
         // When
         mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-part"))
-
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -155,7 +143,6 @@ class ExceptionTranslatorTest {
 
         // When
         mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-parameter"))
-
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -169,11 +156,7 @@ class ExceptionTranslatorTest {
         String expectedDetail = "Request method 'POST' not supported";
 
         // When
-        mockMvc.perform(
-                        post("/api/exception-translator-test/missing-servlet-request-parameter")
-                                .with(csrf())
-                )
-
+        mockMvc.perform(post("/api/exception-translator-test/missing-servlet-request-parameter"))
                 // Then
                 .andExpect(status().isMethodNotAllowed())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -188,8 +171,7 @@ class ExceptionTranslatorTest {
         String expectedValue = "test access denied!";
 
         // When
-        mockMvc
-                .perform(get("/api/exception-translator-test/access-denied"))
+        mockMvc.perform(get("/api/exception-translator-test/access-denied"))
                 // Then
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -203,8 +185,7 @@ class ExceptionTranslatorTest {
         String expectedMsg = "test authentication failed!";
 
         // When
-        mockMvc
-                .perform(get("/api/exception-translator-test/unauthorized"))
+        mockMvc.perform(get("/api/exception-translator-test/unauthorized"))
                 // Then
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -219,7 +200,6 @@ class ExceptionTranslatorTest {
 
         // When
         mockMvc.perform(get("/api/exception-translator-test/response-status"))
-
                 // Then
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -234,7 +214,6 @@ class ExceptionTranslatorTest {
 
         // When
         mockMvc.perform(get("/api/exception-translator-test/internal-server-error"))
-
                 // Then
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -250,7 +229,6 @@ class ExceptionTranslatorTest {
 
         //When
         mockMvc.perform(get("/api/exception-translator-test/conflict-exception"))
-
                 //Then
                 .andExpect(status().isConflict())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -266,7 +244,6 @@ class ExceptionTranslatorTest {
 
         //When
         mockMvc.perform(get("/api/exception-translator-test/feign-bad-request-exception"))
-
                 //Then
                 .andExpect(status().isBadGateway())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -282,7 +259,6 @@ class ExceptionTranslatorTest {
 
         //When
         mockMvc.perform(get("/api/exception-translator-test/feign-internal-server-error-exception"))
-
                 //Then
                 .andExpect(status().isBadGateway())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -299,7 +275,6 @@ class ExceptionTranslatorTest {
 
         //When
         mockMvc.perform(get("/api/exception-translator-test/feign-not-found-exception"))
-
                 //Then
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))

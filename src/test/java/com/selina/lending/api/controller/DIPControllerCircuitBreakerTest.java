@@ -29,7 +29,8 @@ import feign.Request;
 import feign.RequestTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,14 +41,14 @@ import java.util.UUID;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithMockUser
-@WebMvcTest(value = DIPController.class)
+@AutoConfigureMockMvc
+@SpringBootTest
 class DIPControllerCircuitBreakerTest extends MapperBase {
 
     @Autowired
@@ -85,7 +86,7 @@ class DIPControllerCircuitBreakerTest extends MapperBase {
                 new RemoteResourceProblemException());
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf())
+        mockMvc.perform(post("/application/dipcc")
                         .content(objectMapper.writeValueAsString(requestDto))
                         .contentType(APPLICATION_JSON))
                 //Then
@@ -103,7 +104,7 @@ class DIPControllerCircuitBreakerTest extends MapperBase {
                 DIPCCApplicationRequestMapper.INSTANCE.mapToApplicationRequest(requestDto));
 
         //When
-        mockMvc.perform(put("/application/" + dipId + "/dipcc").with(csrf())
+        mockMvc.perform(put("/application/" + dipId + "/dipcc")
                         .content(jsonRequestDto)
                         .contentType(APPLICATION_JSON))
                 //Then

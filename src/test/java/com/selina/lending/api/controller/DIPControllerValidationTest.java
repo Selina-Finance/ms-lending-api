@@ -35,6 +35,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -47,7 +48,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -76,12 +76,28 @@ class DIPControllerValidationTest extends MapperBase {
     private CreateApplicationService createApplicationService;
 
     @Test
+    void whenRequestIsNotAuthorizedThenReturnUnauthorized() throws Exception {
+        // Given
+        SecurityContextHolder.getContext().setAuthentication(null);
+        var dipApplicationRequest = getDIPCCApplicationRequestDto();
+
+        // When
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Unauthorized"))
+                .andExpect(jsonPath("$.detail").value("Full authentication is required to access this resource"));
+    }
+
+    @Test
     void shouldCreateDipCCApplicationSuccessfully() throws Exception {
         //Given
         var dipApplicationRequest = getDIPCCApplicationRequestDto();
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -93,7 +109,7 @@ class DIPControllerValidationTest extends MapperBase {
         var dipApplicationRequest = DIPCCApplicationRequest.builder().build();
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -126,7 +142,7 @@ class DIPControllerValidationTest extends MapperBase {
                 .build();
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -146,7 +162,7 @@ class DIPControllerValidationTest extends MapperBase {
         request.getApplicants().get(0).setMobileNumber("012345AB90");
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf())
+        mockMvc.perform(post("/application/dipcc")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON))
                 // Then
@@ -172,7 +188,7 @@ class DIPControllerValidationTest extends MapperBase {
                 .build();
 
         //When
-        mockMvc.perform(put("/application/123/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(put("/application/123/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -195,7 +211,7 @@ class DIPControllerValidationTest extends MapperBase {
         var dipApplicationRequest = getDIPCCApplicationRequestDto();
 
         //When
-        mockMvc.perform(put("/application/123/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(put("/application/123/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isNoContent());
@@ -226,7 +242,7 @@ class DIPControllerValidationTest extends MapperBase {
                 .build();
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -251,7 +267,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getPreviousNames().get(0).setTitle("invalid title");
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -272,7 +288,7 @@ class DIPControllerValidationTest extends MapperBase {
         when(retrieveApplicationService.getApplicationByExternalApplicationId("1")).thenReturn(Optional.of(response));
 
         //When
-        MvcResult result = mockMvc.perform(get("/application/{externalApplicationId}", "1").with(csrf())
+        MvcResult result = mockMvc.perform(get("/application/{externalApplicationId}", "1")
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk())
@@ -294,7 +310,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).setEmailAddress(email);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -308,7 +324,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).setEmailAddress(email);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -325,7 +341,7 @@ class DIPControllerValidationTest extends MapperBase {
         var dipApplicationRequest = getDIPApplicationRequestDto();
         dipApplicationRequest.getApplicants().get(0).setMobileNumber("+AS12LDS12314");
 
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -343,7 +359,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -367,7 +383,7 @@ class DIPControllerValidationTest extends MapperBase {
         secondApplicant.setApplicant2LivesWithApplicant1(true);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -391,7 +407,7 @@ class DIPControllerValidationTest extends MapperBase {
         secondApplicant.setApplicant2LivesWithApplicant1(true);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -404,7 +420,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getPropertyDetails().getPriorCharges().setBalanceOutstanding(-100.0);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -424,7 +440,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getPropertyDetails().getPriorCharges().setBalanceConsolidated(-100.0);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -442,7 +458,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getPropertyDetails().getPriorCharges().setMonthlyPayment(-100.0);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -460,7 +476,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getPropertyDetails().getPriorCharges().setOtherDebtPayments(-100.0);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -480,7 +496,7 @@ class DIPControllerValidationTest extends MapperBase {
         priorCharges.setBalanceConsolidated(2000.0);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -500,7 +516,7 @@ class DIPControllerValidationTest extends MapperBase {
         priorCharges.setBalanceConsolidated(1000.0);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -513,7 +529,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getPropertyDetails().getPriorCharges().setBalanceOutstanding(null);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -526,7 +542,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getPropertyDetails().getPriorCharges().setBalanceConsolidated(null);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -538,7 +554,7 @@ class DIPControllerValidationTest extends MapperBase {
         var dipApplicationRequest = getDIPApplicationRequestDto();
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -554,7 +570,7 @@ class DIPControllerValidationTest extends MapperBase {
         addressDto.setBuildingNumber(null);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -573,7 +589,7 @@ class DIPControllerValidationTest extends MapperBase {
         addressDto.setBuildingNumber(null);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -587,7 +603,7 @@ class DIPControllerValidationTest extends MapperBase {
         addressDto.setBuildingName(null);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -602,7 +618,7 @@ class DIPControllerValidationTest extends MapperBase {
         propertyDetails.setBuildingNumber(null);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -621,7 +637,7 @@ class DIPControllerValidationTest extends MapperBase {
         propertyDetails.setBuildingNumber(null);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -635,7 +651,7 @@ class DIPControllerValidationTest extends MapperBase {
         propertyDetails.setBuildingName(null);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -654,7 +670,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -678,7 +694,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -696,7 +712,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setAmount(null);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -714,7 +730,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setType(null);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -732,7 +748,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setType("Unsupported value");
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -755,7 +771,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -781,7 +797,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -805,7 +821,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -823,7 +839,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setAmount(null);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -841,7 +857,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setType(null);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -859,7 +875,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().getIncome().get(0).setType("Unsupported value");
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -882,7 +898,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -903,7 +919,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecreaseReason("Unsupported value");
 
         // When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -922,7 +938,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecreaseReason(null);
 
         // When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -941,7 +957,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getApplicants().get(0).getIncome().setExpectsFutureIncomeDecreaseReason("Redundancy");
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -955,7 +971,7 @@ class DIPControllerValidationTest extends MapperBase {
         applicant.setIncome(null);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -974,7 +990,7 @@ class DIPControllerValidationTest extends MapperBase {
         applicant.getIncome().setIncome(null);
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -993,7 +1009,7 @@ class DIPControllerValidationTest extends MapperBase {
         applicant.getIncome().setIncome(emptyList());
 
         //When
-        mockMvc.perform(post("/application/dip").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -1005,7 +1021,7 @@ class DIPControllerValidationTest extends MapperBase {
         var dipCCApplicationRequest = getDIPCCApplicationRequestDto();
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipCCApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipCCApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -1025,7 +1041,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk());
@@ -1045,7 +1061,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipApplicationRequest.getLoanInformation().setNumberOfApplicants(1);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
@@ -1063,7 +1079,7 @@ class DIPControllerValidationTest extends MapperBase {
         dipCCApplicationRequest.getLoanInformation().setNumberOfApplicants(2);
 
         //When
-        mockMvc.perform(post("/application/dipcc").with(csrf()).content(objectMapper.writeValueAsString(dipCCApplicationRequest))
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipCCApplicationRequest))
                         .contentType(APPLICATION_JSON))
                 //Then
                 .andExpect(status().isBadRequest())
