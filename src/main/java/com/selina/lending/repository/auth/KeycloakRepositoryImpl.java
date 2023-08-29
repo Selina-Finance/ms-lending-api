@@ -21,11 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.dto.auth.request.Credentials;
 import com.selina.lending.api.dto.auth.response.TokenResponse;
 import com.selina.lending.exception.BadRequestException;
+import com.selina.lending.exception.UnauthorizedException;
 import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import feign.FeignException;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -52,22 +51,21 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
             );
             return new TokenResponse(apiResponse.access_token(), apiResponse.expires_in());
         } catch (FeignException feignException) {
-            throw (isBadRequest(feignException)) ? toCustomBadRequest(feignException) : feignException;
+            throw prepareException(feignException);
         }
     }
 
-    @NotNull
-    private BadRequestException toCustomBadRequest(FeignException feignException) {
+    private RuntimeException prepareException(FeignException feignException) {
         var details = getDetails(feignException);
-        return new BadRequestException(details.description());
+        throw switch (feignException.status()) {
+            case 400 -> new BadRequestException(details.description());
+            case 401 -> new UnauthorizedException(details.description());
+            default -> feignException;
+        };
     }
 
     @SneakyThrows
     private KeycloakApi.ErrorDetails getDetails(FeignException feignException) {
         return objectMapper.readValue(feignException.contentUTF8(), KeycloakApi.ErrorDetails.class);
-    }
-
-    private static boolean isBadRequest(FeignException feignException) {
-        return feignException.status() == HttpStatus.BAD_REQUEST.value();
     }
 }
