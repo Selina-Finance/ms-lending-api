@@ -43,9 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
-                .ignoringAntMatchers(ACTUATOR_URL + "/**")
-                .ignoringAntMatchers(LOGIN_URL)
-                .and()
+                .disable()
                 .cors()
                 .and()
                 .exceptionHandling()
