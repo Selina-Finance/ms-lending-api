@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selina.lending.api.dto.auth.request.Credentials;
 import com.selina.lending.api.dto.auth.response.TokenResponse;
 import com.selina.lending.exception.BadRequestException;
+import com.selina.lending.exception.UnauthorizedException;
 import com.selina.lending.httpclient.keycloak.KeycloakApi;
 import com.selina.lending.httpclient.keycloak.dto.response.AuthApiTokenResponse;
 import feign.FeignException;
@@ -53,7 +54,7 @@ class KeycloakRepositoryImplTest {
     private ObjectMapper objectMapper;
 
     @InjectMocks
-    private KeycloakRepositoryImpl authRepository;
+    private KeycloakRepositoryImpl keycloakRepository;
 
     @Test
     void shouldMapApiResponseWhenGetTokenByCredentialsInvoked() {
@@ -63,7 +64,7 @@ class KeycloakRepositoryImplTest {
         when(keycloakApi.login(any())).thenReturn(apiResponse);
 
         // When
-        var result = authRepository.getTokenByCredentials(credentials);
+        var result = keycloakRepository.getTokenByCredentials(credentials);
 
         // Then
         assertThat(result).isEqualTo(new TokenResponse(apiResponse.access_token(), apiResponse.expires_in()));
@@ -82,7 +83,7 @@ class KeycloakRepositoryImplTest {
         );
 
         // When
-        var result = authRepository.getTokenByCredentials(credentials);
+        var result = keycloakRepository.getTokenByCredentials(credentials);
 
         // Then
         verify(keycloakApi, times(1)).login(expectedAuthApiRequestParams);
@@ -101,11 +102,31 @@ class KeycloakRepositoryImplTest {
         when(objectMapper.readValue(feignException.contentUTF8(), KeycloakApi.ErrorDetails.class)).thenReturn(errorDetails);
 
         // When
-        var exception = assertThrows(BadRequestException.class, () -> authRepository.getTokenByCredentials(credentials));
+        var exception = assertThrows(BadRequestException.class, () -> keycloakRepository.getTokenByCredentials(credentials));
 
         // Then
         assertThat(exception.getTitle()).isEqualTo("Bad Request");
         assertThat(exception.getDetail()).isEqualTo("Invalid client credentials");
+    }
+
+    @Test
+    void whenGetFeignUnauthorizedResponseThenThrowUnauthorizedException() throws JsonProcessingException {
+        // Given
+        var credentials = new Credentials("", "");
+
+        var request = Request.create(GET, "/url", new HashMap<>(), null, new RequestTemplate());
+        var feignException = new FeignException.Unauthorized("Unauthorized", request, "".getBytes(), null);
+        when(keycloakApi.login(any())).thenThrow(feignException);
+
+        var errorDetails = new KeycloakApi.ErrorDetails("unauthorized_client", "Invalid client secret");
+        when(objectMapper.readValue(feignException.contentUTF8(), KeycloakApi.ErrorDetails.class)).thenReturn(errorDetails);
+
+        // When
+        var exception = assertThrows(UnauthorizedException.class, () -> keycloakRepository.getTokenByCredentials(credentials));
+
+        // Then
+        assertThat(exception.getTitle()).isEqualTo("Unauthorized");
+        assertThat(exception.getDetail()).isEqualTo("Invalid client secret");
     }
 
     @Test
@@ -118,7 +139,7 @@ class KeycloakRepositoryImplTest {
         when(keycloakApi.login(any())).thenThrow(feignException);
 
         // When
-        var exception = assertThrows(feignException.getClass(), () -> authRepository.getTokenByCredentials(credentials));
+        var exception = assertThrows(feignException.getClass(), () -> keycloakRepository.getTokenByCredentials(credentials));
 
         // Then
         assertThat(exception).isEqualTo(feignException);

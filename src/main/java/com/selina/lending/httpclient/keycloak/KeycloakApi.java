@@ -19,13 +19,7 @@ package com.selina.lending.httpclient.keycloak;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.selina.lending.httpclient.keycloak.dto.response.AuthApiTokenResponse;
-import feign.codec.Encoder;
-import feign.form.spring.SpringFormEncoder;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.cloud.openfeign.support.SpringEncoder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -40,22 +34,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 )
 public interface KeycloakApi {
 
-    @PostMapping(
-            path = "/protocol/openid-connect/token",
+    @PostMapping(path = "/protocol/openid-connect/token",
             consumes = APPLICATION_FORM_URLENCODED_VALUE,
             produces = APPLICATION_JSON_VALUE)
     AuthApiTokenResponse login(@RequestBody Map<String, ?> params);
 
-    //TODO do we need this?
-    class Configuration { // to execute Content-Type: application/x-www-form-urlencoded request
-        @Bean
-        Encoder feignFormEncoder(ObjectFactory<HttpMessageConverters> converters) {
-            return new SpringFormEncoder(new SpringEncoder(converters));
-        }
-    }
-
-    record ErrorDetails(
-            @JsonProperty("error") String error,
-            @JsonProperty("error_description") String description
-    ){}
+    record ErrorDetails(@JsonProperty("error") String error, @JsonProperty("error_description") String description){}
 }
