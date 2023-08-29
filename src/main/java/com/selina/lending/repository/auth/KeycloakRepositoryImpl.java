@@ -32,6 +32,9 @@ import java.util.Map;
 @Component
 public class KeycloakRepositoryImpl implements KeycloakRepository {
 
+    private static final int BAD_REQUEST_CODE = 400;
+    private static final int UNAUTHORIZED_CODE = 401;
+
     private final KeycloakApi keycloakApi;
     private final ObjectMapper objectMapper;
 
@@ -58,8 +61,8 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
     private RuntimeException prepareException(FeignException feignException) {
         var details = getDetails(feignException);
         throw switch (feignException.status()) {
-            case 400 -> new BadRequestException(details.description());
-            case 401 -> new UnauthorizedException(details.description());
+            case BAD_REQUEST_CODE -> new BadRequestException(details.description());
+            case UNAUTHORIZED_CODE -> new UnauthorizedException(details.description());
             default -> feignException;
         };
     }
