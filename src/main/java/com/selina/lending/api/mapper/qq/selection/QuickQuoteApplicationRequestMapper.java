@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.mapper.qq.selection;
 
+import com.selina.lending.api.dto.common.ExpenditureDto;
 import com.selina.lending.api.dto.common.IncomeDto;
 import com.selina.lending.api.dto.common.IncomeItemDto;
 import com.selina.lending.api.dto.common.PriorChargesDto;
@@ -28,6 +29,7 @@ import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.selection.dto.request.Applicant;
 import com.selina.lending.httpclient.selection.dto.request.Application;
+import com.selina.lending.httpclient.selection.dto.request.Expenditure;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.request.Income;
 import com.selina.lending.httpclient.selection.dto.request.LoanInformation;
@@ -77,6 +79,7 @@ public class QuickQuoteApplicationRequestMapper {
                 .loanInformation(mapLoanInformation(quickQuoteApplicationRequest.getLoanInformation()))
                 .propertyDetails(mapPropertyDetails(quickQuoteApplicationRequest.getPropertyDetails()))
                 .fees(mapFees(quickQuoteApplicationRequest.getFees()))
+                .expenditures(mapExpenditures(quickQuoteApplicationRequest.getExpenditure()))
                 .build();
     }
 
@@ -96,6 +99,20 @@ public class QuickQuoteApplicationRequestMapper {
                 .intermediaryFeeAmount(quickQuoteFeesDto.getIntermediaryFeeAmount())
                 .isAddIntermediaryFeeToLoan(quickQuoteFeesDto.getIsAddIntermediaryFeeToLoan())
                 .isAddArrangementFeeSelinaToLoan(quickQuoteFeesDto.getIsAddArrangementFeeSelinaToLoan())
+                .build();
+    }
+
+    private static List<Expenditure> mapExpenditures(List<ExpenditureDto> quickQuoteExpenditures) {
+        return quickQuoteExpenditures == null ? null : quickQuoteExpenditures.stream()
+                .map(QuickQuoteApplicationRequestMapper::mapExpenditure)
+                .toList();
+    }
+
+    private static Expenditure mapExpenditure(ExpenditureDto quickQuoteExpenditureDto) {
+        return quickQuoteExpenditureDto == null ? null : Expenditure.builder()
+                .amountDeclared(quickQuoteExpenditureDto.getAmountDeclared())
+                .expenditureType(quickQuoteExpenditureDto.getExpenditureType())
+                .frequency(quickQuoteExpenditureDto.getFrequency())
                 .build();
     }
 
