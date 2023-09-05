@@ -15,8 +15,7 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {QuickQuoteApplicantMapper.class, LoanInformationMapper.class, TokenService.class, OfferMapper.class,
-                ExpenditureMapper.class})
+        uses = {QuickQuoteApplicantMapper.class, LoanInformationMapper.class, TokenService.class, OfferMapper.class})
 public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
 
     @Autowired
@@ -36,7 +35,6 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "fees", source = "fees")
     @Mapping(target = "offers", source = "products")
     @Mapping(target = "partner", source = "request.partner")
-    @Mapping(target = "expenditure", source = "request.expenditure")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
                                                              List<Product> products, Fees fees);
 }
