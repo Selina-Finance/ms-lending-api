@@ -18,6 +18,7 @@
 package com.selina.lending.service;
 
 import com.selina.lending.exception.ConflictException;
+import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
@@ -42,12 +43,15 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     private final GetApplicationRepository getApplicationRepository;
     private final MiddlewareRepository middlewareRepository;
     private final RuleOutcomeFilter ruleOutcomeFilter;
+    private final TokenService tokenService;
 
     public CreateApplicationServiceImpl(MiddlewareRepository middlewareRepository,
-                                        GetApplicationRepository getApplicationRepository, RuleOutcomeFilter ruleOutcomeFilter) {
+                                        GetApplicationRepository getApplicationRepository,
+                                        RuleOutcomeFilter ruleOutcomeFilter, TokenService tokenService) {
         this.middlewareRepository = middlewareRepository;
         this.getApplicationRepository = getApplicationRepository;
         this.ruleOutcomeFilter = ruleOutcomeFilter;
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -84,9 +88,24 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
 
     @Override
     public QuickQuoteCFResponse createQuickQuoteCFApplication(QuickQuoteCFRequest applicationRequest) {
+        enrichCreateQuickQuoteCFRequestWithMissingValues(applicationRequest);
         var quickQuoteCFResponse = middlewareRepository.createQuickQuoteCFApplication(applicationRequest);
         quickQuoteCFResponse.setOffers(filterOutDeclinedOffers(quickQuoteCFResponse.getOffers()));
         return quickQuoteCFResponse;
+    }
+
+    private void enrichCreateQuickQuoteCFRequestWithMissingValues(QuickQuoteCFRequest quickQuoteCFRequest) {
+        quickQuoteCFRequest.setSourceType(tokenService.retrieveSourceType());
+        enrichCreateQuickQuoteCFRequestWithFees(quickQuoteCFRequest);
+    }
+
+    private void enrichCreateQuickQuoteCFRequestWithFees(QuickQuoteCFRequest quickQuoteCFRequest) {
+        if (quickQuoteCFRequest.getFees() == null) {
+            quickQuoteCFRequest.setFees(Fees.builder().build());
+        }
+
+        quickQuoteCFRequest.getFees().setArrangementFeeDiscountSelina(tokenService
+                .retrieveArrangementFeeDiscountSelina());
     }
 
     private List<Offer> filterOutDeclinedOffers(List<Offer> offers) {
