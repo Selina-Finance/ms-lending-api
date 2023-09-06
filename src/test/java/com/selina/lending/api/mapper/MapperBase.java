@@ -95,6 +95,7 @@ import com.selina.lending.httpclient.middleware.dto.common.RuleOutcome;
 import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
 import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
+import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.httpclient.selection.dto.response.Product;
@@ -862,6 +863,16 @@ public abstract class MapperBase {
 
     protected ApplicationResponse getApplicationResponse() {
         return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE) .applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
+    }
+
+    protected QuickQuoteCFRequest getQuickQuoteCFRequest() {
+        return QuickQuoteCFRequest.builder()
+                .externalApplicationId(EXTERNAL_APPLICATION_ID)
+                .loanInformation(getLoanInformation())
+                .propertyDetails(getPropertyDetails())
+                .applicants(List.of(getApplicant()))
+                .fees(getFees())
+                .build();
     }
 
     protected QuickQuoteCFResponse getQuickQuoteCFResponse() {
