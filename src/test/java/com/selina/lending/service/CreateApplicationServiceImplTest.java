@@ -34,6 +34,7 @@ import feign.RequestTemplate;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,6 +42,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,9 +57,6 @@ class CreateApplicationServiceImplTest extends MapperBase {
 
     @Mock
     private GetApplicationRepository getApplicationRepository;
-
-    @Mock
-    private QuickQuoteCFRequest quickQuoteCFRequest;
 
     @Mock
     private ApplicationRequest applicationRequest;
@@ -76,6 +75,9 @@ class CreateApplicationServiceImplTest extends MapperBase {
 
     @Mock
     private RuleOutcomeFilter ruleOutcomeFilter;
+
+    @Mock
+    private TokenService tokenService;
 
     @InjectMocks
     private CreateApplicationServiceImpl createApplicationService;
@@ -199,6 +201,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
         @Test
         void shouldCreateQuickQuoteCFApplication() {
             //Given
+            var quickQuoteCFRequest = getQuickQuoteCFRequest();
             var expectedQuickQuoteCFResponse = getQuickQuoteCFResponse();
 
             when(middlewareRepository.createQuickQuoteCFApplication(quickQuoteCFRequest)).thenReturn(expectedQuickQuoteCFResponse);
@@ -213,6 +216,7 @@ class CreateApplicationServiceImplTest extends MapperBase {
         @Test
         void whenCreateQuickQuoteCFApplicationThenFilterOutDeclinedOffers() {
             //Given
+            var quickQuoteCFRequest = getQuickQuoteCFRequest();
             var quickQuoteCFResponse = getQuickQuoteCFResponse();
             var acceptedOffer = getOffer(OFFER_DECISION_ACCEPT);
             var declinedOffer = getOffer(OFFER_DECISION_DECLINE);
@@ -226,6 +230,60 @@ class CreateApplicationServiceImplTest extends MapperBase {
 
             //Then
             assertThat(filteredQuickQuoteCFResponse.getOffers()).containsExactly(acceptedOffer);
+        }
+
+        @Test
+        void whenCreateQuickQuoteCFApplicationThenMakeSureRequestToMiddlewareIsEnrichedProperly() {
+            // Given
+            final var sourceType = "The Source";
+            final var arrangementFeeDiscountSelina = ThreadLocalRandom.current().nextDouble(0, 1);
+
+            final var quickQuoteCFRequest = getQuickQuoteCFRequest();
+            final var expectedQuickQuoteCFResponse = getQuickQuoteCFResponse();
+
+            final var middlewareRequestCaptor = ArgumentCaptor.forClass(QuickQuoteCFRequest.class);
+
+            when(middlewareRepository.createQuickQuoteCFApplication(quickQuoteCFRequest)).thenReturn(expectedQuickQuoteCFResponse);
+            when(tokenService.retrieveSourceType()).thenReturn(sourceType);
+            when(tokenService.retrieveArrangementFeeDiscountSelina()).thenReturn(arrangementFeeDiscountSelina);
+
+            // When
+            createApplicationService.createQuickQuoteCFApplication(quickQuoteCFRequest);
+
+            // Then
+            verify(middlewareRepository).createQuickQuoteCFApplication(middlewareRequestCaptor.capture());
+            var enrichedQuickQuoteCFRequest = middlewareRequestCaptor.getValue();
+
+            assertThat(enrichedQuickQuoteCFRequest.getSourceType()).isEqualTo(sourceType);
+            assertThat(enrichedQuickQuoteCFRequest.getFees().getArrangementFeeDiscountSelina()).isEqualTo(
+                    arrangementFeeDiscountSelina);
+        }
+
+        @Test
+        void whenCreateQuickQuoteCFApplicationThenMakeSureRequestToMiddlewareIsEnrichedProperlyIfFeesIsNull() {
+            // Given
+            final var arrangementFeeDiscountSelina = ThreadLocalRandom.current().nextDouble(0, 1);
+
+            final var quickQuoteCFRequest = getQuickQuoteCFRequest();
+            quickQuoteCFRequest.setFees(null);
+
+            final var expectedQuickQuoteCFResponse = getQuickQuoteCFResponse();
+
+            final var middlewareRequestCaptor = ArgumentCaptor.forClass(QuickQuoteCFRequest.class);
+
+            when(middlewareRepository.createQuickQuoteCFApplication(quickQuoteCFRequest)).thenReturn(expectedQuickQuoteCFResponse);
+            when(tokenService.retrieveArrangementFeeDiscountSelina()).thenReturn(arrangementFeeDiscountSelina);
+
+            // When
+            createApplicationService.createQuickQuoteCFApplication(quickQuoteCFRequest);
+
+            // Then
+            verify(middlewareRepository).createQuickQuoteCFApplication(middlewareRequestCaptor.capture());
+            var enrichedQuickQuoteCFRequest = middlewareRequestCaptor.getValue();
+
+            assertThat(enrichedQuickQuoteCFRequest.getFees()).isNotNull();
+            assertThat(enrichedQuickQuoteCFRequest.getFees().getArrangementFeeDiscountSelina()).isEqualTo(
+                    arrangementFeeDiscountSelina);
         }
     }
 }
