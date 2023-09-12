@@ -26,7 +26,7 @@ public class MatchNumberOfApplicantsImpl implements ConstraintValidator<MatchNum
         if (value instanceof QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
             applicants = quickQuoteApplicationRequest.getApplicants();
             numberOfApplicants = Optional.ofNullable(quickQuoteApplicationRequest.getLoanInformation())
-                    .map(LoanInformationDto::getNumberOfApplicants);
+                    .map(com.selina.lending.api.dto.qq.request.LoanInformationDto::getNumberOfApplicants);
         } else if (value instanceof QuickQuoteCFApplicationRequest quickQuoteCFApplicationRequest) {
             applicants = quickQuoteCFApplicationRequest.getApplicants();
             numberOfApplicants = Optional.ofNullable(quickQuoteCFApplicationRequest.getLoanInformation())

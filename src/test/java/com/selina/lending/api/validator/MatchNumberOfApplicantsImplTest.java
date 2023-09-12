@@ -1,6 +1,6 @@
 package com.selina.lending.api.validator;
 
-import com.selina.lending.api.dto.common.LoanInformationDto;
+import com.selina.lending.api.dto.qq.request.LoanInformationDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import org.junit.jupiter.api.BeforeAll;

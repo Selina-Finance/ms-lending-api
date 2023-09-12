@@ -17,12 +17,11 @@
 
 package com.selina.lending.httpclient.selection.dto.request;
 
-
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class LoanInformation {
     Double requestedLoanAmount;
     Integer requestedLoanTerm;

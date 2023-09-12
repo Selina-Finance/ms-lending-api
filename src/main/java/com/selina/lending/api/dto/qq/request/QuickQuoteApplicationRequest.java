@@ -18,7 +18,6 @@
 package com.selina.lending.api.dto.qq.request;
 
 import com.selina.lending.api.dto.common.LeadDto;
-import com.selina.lending.api.dto.common.LoanInformationDto;
 import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 import com.selina.lending.api.validator.MatchNumberOfApplicants;
 import com.selina.lending.api.validator.MaximumOnePrimaryApplicant;

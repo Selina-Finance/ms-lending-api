@@ -18,7 +18,7 @@
 package com.selina.lending.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selina.lending.api.dto.common.LoanInformationDto;
+import com.selina.lending.api.dto.qq.request.LoanInformationDto;
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.service.CreateApplicationService;
@@ -83,7 +83,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.setLoanInformation(LoanInformationDto.builder()
                     .numberOfApplicants(1)
                     .requestedLoanAmount(1000)
-                    .requestedLoanTerm(2)
+                    .requestedLoanTerm(0)
                     .loanPurpose(LOAN_PURPOSE)
                     .build());
 
@@ -99,7 +99,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.violations[0].field").value("loanInformation.requestedLoanAmount"))
                     .andExpect(jsonPath("$.violations[0].message").value("must be between 10000 and 1000000"))
                     .andExpect(jsonPath("$.violations[1].field").value("loanInformation.requestedLoanTerm"))
-                    .andExpect(jsonPath("$.violations[1].message").value("must be between 5 and 30"));
+                    .andExpect(jsonPath("$.violations[1].message").value("must be between 1 and 30"));
 
         }
 
