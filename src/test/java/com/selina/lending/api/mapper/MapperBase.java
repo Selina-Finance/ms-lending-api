@@ -350,7 +350,7 @@ public abstract class MapperBase {
         return QuickQuoteApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
-                .loanInformation(getLoanInformationDto())
+                .loanInformation(getQQLoanInformationDto())
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
                 .applicants(getQuickQuoteApplicantDtoList())
                 .lead(getLeadDto())
@@ -362,11 +362,21 @@ public abstract class MapperBase {
         return QuickQuoteApplicationRequest.builder()
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .expenditure(List.of(getExpenditureDto()))
-                .loanInformation(getLoanInformationDto())
+                .loanInformation(getQQLoanInformationDto())
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
                 .applicants(getQuickQuoteApplicantDtoList())
                 .lead(getLeadDto())
                 .fees(getQuickQuoteFeesDto())
+                .build();
+    }
+
+    protected com.selina.lending.api.dto.qq.request.LoanInformationDto getQQLoanInformationDto() {
+        return com.selina.lending.api.dto.qq.request.LoanInformationDto.builder()
+                .loanPurpose(LOAN_PURPOSE)
+                .requestedLoanAmount(LOAN_AMOUNT)
+                .numberOfApplicants(1)
+                .requestedLoanTerm(LOAN_TERM)
+                .desiredTimeLine(DESIRED_TIME_LINE)
                 .build();
     }
 

@@ -27,14 +27,22 @@ import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
+    private static final String CLEAR_SCORE_CLIENT_ID = "clearscore";
+    private static final String MONEVO_CLIENT_ID = "monevo";
+    private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
+    private static final int MIN_ALLOWED_CLEAR_SCORE_ALTERNATIVE_OFFER_LOAN_TERM = 3;
+
     private static final String ACCEPTED_DECISION = "Accepted";
+    private static final String DECLINED_DECISION = "Declined";
     private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT = false;
     private static final Boolean ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT = false;
 
@@ -43,33 +51,90 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final MiddlewareRepository middlewareRepository;
     private final ArrangementFeeSelinaService arrangementFeeSelinaService;
     private final PartnerService partnerService;
+    private final TokenService tokenService;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionRepository selectionRepository,
                                         MiddlewareRepository middlewareRepository,
                                         ArrangementFeeSelinaService arrangementFeeSelinaService,
-                                        PartnerService partnerService) {
+                                        PartnerService partnerService,
+                                        TokenService tokenService) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
         this.arrangementFeeSelinaService = arrangementFeeSelinaService;
         this.partnerService = partnerService;
+        this.tokenService = tokenService;
     }
 
     @Override
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
+        var clientId = tokenService.retrieveClientId();
+        var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
+
+        if (isAlternativeOfferRequest(requestedLoanTerm)) {
+            if (isAllowedAlternativeOfferRequest(clientId, requestedLoanTerm)) {
+                adjustToAlternativeOffer(request);
+            } else {
+                return getDeclinedResponse();
+            }
+        }
+
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
         enrichSelectionRequestWithFees(selectionRequest);
         FilteredQuickQuoteDecisionResponse decisionResponse = selectionRepository.filter(selectionRequest);
 
-        if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision())
-                && decisionResponse.getProducts() != null) {
+        if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision()) && decisionResponse.getProducts() != null) {
             setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
             addPartner(request);
             middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
                     .mapToQuickQuoteRequest(request, decisionResponse.getProducts(), selectionRequest.getApplication().getFees()));
         }
         return decisionResponse;
+    }
+
+    private static FilteredQuickQuoteDecisionResponse getDeclinedResponse() {
+        return FilteredQuickQuoteDecisionResponse.builder()
+                .decision(DECLINED_DECISION)
+                .build();
+    }
+
+    private static boolean isAllowedAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
+        return isAlternativeOfferRequest(requestedLoanTerm)
+                && (isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm) || isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm));
+    }
+
+    private static boolean isAlternativeOfferRequest(Integer requestedLoanTerm) {
+        return requestedLoanTerm < MIN_ALLOWED_SELINA_LOAN_TERM;
+    }
+
+    private static boolean isClearScoreAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
+        return CLEAR_SCORE_CLIENT_ID.equalsIgnoreCase(clientId)
+                && requestedLoanTerm >= MIN_ALLOWED_CLEAR_SCORE_ALTERNATIVE_OFFER_LOAN_TERM
+                && requestedLoanTerm < MIN_ALLOWED_SELINA_LOAN_TERM;
+    }
+
+    private static boolean isMonevoAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
+        return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId) && requestedLoanTerm < MIN_ALLOWED_SELINA_LOAN_TERM;
+    }
+
+    private void adjustToAlternativeOffer(QuickQuoteApplicationRequest request) {
+        try {
+            var clientId = tokenService.retrieveClientId();
+            var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
+
+            if (isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm)) {
+                request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
+                log.info("Adjust Monevo QQ application to alternative offer [externalApplicationId={}]", request.getExternalApplicationId());
+            }
+
+            if (isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm)) {
+                request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
+                log.info("Adjust ClearScore QQ application to alternative offer [externalApplicationId={}]", request.getExternalApplicationId());
+            }
+        } catch (Exception ex) {
+            log.error("An error occurred while adjusting to alternative offer [externalApplicationId={}]", request.getExternalApplicationId(), ex);
+        }
     }
 
     private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest) {

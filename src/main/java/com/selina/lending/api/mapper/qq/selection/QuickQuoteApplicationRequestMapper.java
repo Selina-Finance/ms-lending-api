@@ -19,8 +19,8 @@ package com.selina.lending.api.mapper.qq.selection;
 
 import com.selina.lending.api.dto.common.IncomeDto;
 import com.selina.lending.api.dto.common.IncomeItemDto;
-import com.selina.lending.api.dto.common.LoanInformationDto;
 import com.selina.lending.api.dto.common.PriorChargesDto;
+import com.selina.lending.api.dto.qq.request.LoanInformationDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
