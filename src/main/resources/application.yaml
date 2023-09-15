@@ -54,11 +54,14 @@ resilience4j:
         failure-rate-threshold: 60
         record-failure-predicate: com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate
 
+sentry:
+  dsn: https://9337eb592bbe4bf592ad884470f4b4cd@sentry-everton.selinadev.co.uk/38
+  traces-sample-rate: 1.0
+
 kafka:
   enable: true
 authorization:
   enable: true
-
 
 feign:
   client:
