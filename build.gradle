@@ -49,6 +49,7 @@ dependencies {
 	implementation 'de.codecentric:spring-boot-admin-starter-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
 	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'io.sentry:sentry-spring-boot-starter:6.6.0'
 
 	// other
 	annotationProcessor "org.projectlombok:lombok:1.18.24"
@@ -57,6 +58,7 @@ dependencies {
 	implementation 'ch.qos.logback:logback-core:1.2.11'
 	implementation 'ch.qos.logback:logback-classic:1.2.11'
 	implementation 'org.slf4j:slf4j-api:1.7.36'
+	implementation 'io.sentry:sentry-logback:6.6.0'
 	implementation 'org.zalando:problem-spring-web:0.27.0'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 	implementation 'org.mapstruct:mapstruct:1.5.1.Final'
