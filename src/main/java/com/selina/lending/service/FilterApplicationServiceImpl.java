@@ -123,14 +123,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             var clientId = tokenService.retrieveClientId();
             var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
 
-            if (isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm)) {
+            if (isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm) || isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm)) {
                 request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
-                log.info("Adjust Monevo QQ application to alternative offer [externalApplicationId={}]", request.getExternalApplicationId());
-            }
-
-            if (isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm)) {
-                request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
-                log.info("Adjust ClearScore QQ application to alternative offer [externalApplicationId={}]", request.getExternalApplicationId());
+                log.info("Adjust QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
+                        clientId, request.getExternalApplicationId(), requestedLoanTerm);
             }
         } catch (Exception ex) {
             log.error("An error occurred while adjusting to alternative offer [externalApplicationId={}]", request.getExternalApplicationId(), ex);
