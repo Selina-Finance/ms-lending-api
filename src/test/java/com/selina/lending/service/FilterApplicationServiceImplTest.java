@@ -29,7 +29,6 @@ import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -416,6 +415,108 @@ class FilterApplicationServiceImplTest extends MapperBase {
         assertThat(quickQuoteApplicationRequest.getFees().getArrangementFee()).isEqualTo(1000.00);
         assertThat(quickQuoteApplicationRequest.getFees().getAdviceFee()).isEqualTo(599.00);
         assertTrue(quickQuoteApplicationRequest.getFees().getIsAddAdviceFeeToLoan());
+    }
+
+    @Test
+    void whenFeesAreNotSpecifiedThenDoNotIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+        // Given
+        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Declined")
+                .products(null)
+                .build();
+
+        when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
+        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+        // When
+        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        // Then
+        verify(selectionRepository).filter(selectionRequestCaptor.capture());
+        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isFalse();
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
+    }
+
+    @Test
+    void shouldUseSpecifiedFeesForIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+        // Given
+        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Declined")
+                .products(null)
+                .build();
+
+        when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
+        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+        quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
+        quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(true);
+
+        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+        // When
+        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        // Then
+        verify(selectionRepository).filter(selectionRequestCaptor.capture());
+        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isTrue();
+    }
+
+    @Test
+    void whenClientIsMonevoAndFeesAreNotSpecifiedThenIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+        // Given
+        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Declined")
+                .products(null)
+                .build();
+
+        when(tokenService.retrieveClientId()).thenReturn("monevo");
+        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+        // When
+        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        // Then
+        verify(selectionRepository).filter(selectionRequestCaptor.capture());
+        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isTrue();
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
+    }
+
+    @Test
+    void whenClientIsMonevoAndFeesAreSpecifiedThenOverwriteThemToIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+        // Given
+        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision("Declined")
+                .products(null)
+                .build();
+
+        when(tokenService.retrieveClientId()).thenReturn("monevo");
+        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+        quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
+        quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(false);
+
+        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+        // When
+        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+        // Then
+        verify(selectionRepository).filter(selectionRequestCaptor.capture());
+        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isTrue();
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
     }
 
     @Nested
