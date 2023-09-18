@@ -81,7 +81,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         }
 
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
-        enrichSelectionRequestWithFees(selectionRequest);
+        enrichSelectionRequestWithFees(selectionRequest, clientId);
         FilteredQuickQuoteDecisionResponse decisionResponse = selectionRepository.filter(selectionRequest);
 
         if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision()) && decisionResponse.getProducts() != null) {
@@ -90,6 +90,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
                     .mapToQuickQuoteRequest(request, decisionResponse.getProducts(), selectionRequest.getApplication().getFees()));
         }
+
         return decisionResponse;
     }
 
@@ -123,21 +124,17 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             var clientId = tokenService.retrieveClientId();
             var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
 
-            if (isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm)) {
+            if (isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm) || isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm)) {
                 request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
-                log.info("Adjust Monevo QQ application to alternative offer [externalApplicationId={}]", request.getExternalApplicationId());
-            }
-
-            if (isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm)) {
-                request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
-                log.info("Adjust ClearScore QQ application to alternative offer [externalApplicationId={}]", request.getExternalApplicationId());
+                log.info("Adjust QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
+                        clientId, request.getExternalApplicationId(), requestedLoanTerm);
             }
         } catch (Exception ex) {
             log.error("An error occurred while adjusting to alternative offer [externalApplicationId={}]", request.getExternalApplicationId(), ex);
         }
     }
 
-    private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest) {
+    private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest, String clientId) {
         var tokenFees = arrangementFeeSelinaService.getFeesFromToken();
 
         if (selectionRequest.getApplication().getFees() == null) {
@@ -155,6 +152,11 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
         if (requestFees.getIsAddProductFeesToFacility() == null) {
             requestFees.setIsAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT);
+        }
+
+        if (MONEVO_CLIENT_ID.equalsIgnoreCase(clientId)) {
+            requestFees.setIsAddArrangementFeeSelinaToLoan(true);
+            requestFees.setIsAddProductFeesToFacility(true);
         }
     }
 
