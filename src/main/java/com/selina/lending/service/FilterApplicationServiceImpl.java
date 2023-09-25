@@ -19,18 +19,29 @@ package com.selina.lending.service;
 
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
 import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMapper;
+import com.selina.lending.exception.RemoteResourceProblemException;
+import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.repository.EligibilityRepository;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -51,22 +62,28 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionRepository selectionRepository;
     private final MiddlewareRepository middlewareRepository;
+    private final EligibilityRepository eligibilityRepository;
     private final ArrangementFeeSelinaService arrangementFeeSelinaService;
     private final PartnerService partnerService;
     private final TokenService tokenService;
+    private final long eligibilityReadTimeout;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionRepository selectionRepository,
                                         MiddlewareRepository middlewareRepository,
+                                        EligibilityRepository eligibilityRepository,
                                         ArrangementFeeSelinaService arrangementFeeSelinaService,
                                         PartnerService partnerService,
-                                        TokenService tokenService) {
+                                        TokenService tokenService,
+                                        @Value("${service.ms-eligibility.readTimeout}") long eligibilityReadTimeout) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
+        this.eligibilityRepository = eligibilityRepository;
         this.arrangementFeeSelinaService = arrangementFeeSelinaService;
         this.partnerService = partnerService;
         this.tokenService = tokenService;
+        this.eligibilityReadTimeout = eligibilityReadTimeout;
     }
 
     @Override
@@ -84,22 +101,79 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
         enrichSelectionRequestWithFees(selectionRequest, clientId);
-        FilteredQuickQuoteDecisionResponse decisionResponse = selectionRepository.filter(selectionRequest);
+        var decisionResponse = getOffers(selectionRequest, request.getPropertyDetails());
 
-        if (ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision()) && decisionResponse.getProducts() != null) {
-            setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
-            addPartner(request);
-            middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
-                    .mapToQuickQuoteRequest(request, decisionResponse.getProducts(), selectionRequest.getApplication().getFees()));
+        if (isDecisionAccepted(decisionResponse)) {
+            storeOffersInMiddleware(request, selectionRequest, decisionResponse);
         }
 
         return decisionResponse;
     }
 
-    private static FilteredQuickQuoteDecisionResponse getDeclinedResponse() {
-        return FilteredQuickQuoteDecisionResponse.builder()
-                .decision(DECLINED_DECISION)
-                .build();
+    private static boolean isDecisionAccepted(FilteredQuickQuoteDecisionResponse decisionResponse) {
+        return ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision()) && decisionResponse.getProducts() != null;
+    }
+
+    @SneakyThrows
+    private FilteredQuickQuoteDecisionResponse getOffers(FilterQuickQuoteApplicationRequest selectionRequest, QuickQuotePropertyDetailsDto propertyDetails) {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var decisionResponseFuture = getDecisionResponseAsync(selectionRequest, authentication);
+        var eligibilityResponseFuture = getEligibilityAsync(propertyDetails, authentication);
+        var allOf = CompletableFuture.allOf(decisionResponseFuture, eligibilityResponseFuture);
+
+        try {
+            allOf.get();
+            var decisionResponse = decisionResponseFuture.get();
+
+            if (isDecisionAccepted(decisionResponse)) {
+                enrichOffersWithEligibility(eligibilityResponseFuture.get(), decisionResponse);
+            }
+
+            return decisionResponse;
+        } catch (InterruptedException | ExecutionException ex) {
+            log.error("An error occurred while getting offers", ex);
+
+            if (!decisionResponseFuture.isCompletedExceptionally()) {
+                log.warn("Return offers with default eligibility");
+                return decisionResponseFuture.get();
+            }
+
+            throw new RemoteResourceProblemException();
+        }
+    }
+
+    private CompletableFuture<FilteredQuickQuoteDecisionResponse> getDecisionResponseAsync(FilterQuickQuoteApplicationRequest selectionRequest, Authentication authentication) {
+        return CompletableFuture.supplyAsync(() -> {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return selectionRepository.filter(selectionRequest);
+        })
+                .whenComplete((result, ex) -> {
+                    if (ex != null) {
+                        log.error("Error getting decision", ex);
+                    } else {
+                        log.info("Successfully got [decision={}]", result.getDecision());
+                    }
+                });
+    }
+
+    private CompletableFuture<EligibilityResponse> getEligibilityAsync(QuickQuotePropertyDetailsDto propertyDetails, Authentication authentication) {
+        return CompletableFuture.supplyAsync(() -> {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return eligibilityRepository.getEligibility(propertyDetails);
+        })
+                .orTimeout(eligibilityReadTimeout, TimeUnit.MILLISECONDS)
+                .whenComplete((result, ex) -> {
+                    if (ex != null) {
+                        log.error("Error getting eligibility", ex);
+                    } else {
+                        log.info("Successfully got [eligibility={}]", result.getEligibility());
+                    }
+                });
+    }
+
+    private static void enrichOffersWithEligibility(EligibilityResponse eligibilityResponse, FilteredQuickQuoteDecisionResponse decisionResponse) throws InterruptedException, ExecutionException {
+        var eligibility = eligibilityResponse.getEligibility();
+        decisionResponse.getProducts().forEach(product -> product.getOffer().setEligibility(eligibility));
     }
 
     private static boolean isAlternativeOfferRequest(Integer requestedLoanTerm) {
@@ -137,6 +211,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         }
     }
 
+    private static FilteredQuickQuoteDecisionResponse getDeclinedResponse() {
+        return FilteredQuickQuoteDecisionResponse.builder()
+                .decision(DECLINED_DECISION)
+                .build();
+    }
+
     private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest, String clientId) {
         var tokenFees = arrangementFeeSelinaService.getFeesFromToken();
 
@@ -161,6 +241,13 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             requestFees.setIsAddArrangementFeeSelinaToLoan(true);
             requestFees.setIsAddProductFeesToFacility(true);
         }
+    }
+
+    private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, FilterQuickQuoteApplicationRequest selectionRequest, FilteredQuickQuoteDecisionResponse decisionResponse) {
+        setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
+        addPartner(request);
+        middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
+                .mapToQuickQuoteRequest(request, decisionResponse.getProducts(), selectionRequest.getApplication().getFees()));
     }
 
     private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
