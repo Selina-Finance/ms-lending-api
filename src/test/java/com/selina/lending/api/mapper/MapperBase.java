@@ -68,6 +68,7 @@ import com.selina.lending.httpclient.creditcommitments.dto.common.User;
 import com.selina.lending.httpclient.creditcommitments.dto.common.VotersRoll;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitment;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
+import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.application.response.Intermediary;
 import com.selina.lending.httpclient.middleware.dto.application.response.Lead;
@@ -1030,17 +1031,23 @@ public abstract class MapperBase {
                 .creditCommitments(getCreditCommitments()).primaryApplicant(true).creditScore(CREDIT_SCORE).build();
     }
 
-    public CreditCommitmentsDetail getCreditCommitments() {
+    protected CreditCommitmentsDetail getCreditCommitments() {
         return CreditCommitmentsDetail.builder()
                 .system(getSystem())
                 .user(getUser())
                 .build();
     }
 
-    public Partner getPartner() {
+    protected Partner getPartner() {
         return Partner.builder()
                 .subUnitId(SUB_UNIT_ID)
                 .companyId(COMPANY_ID)
+                .build();
+    }
+
+    protected EligibilityResponse getEligibilityResponse() {
+        return EligibilityResponse.builder()
+                .eligibility(ELIGIBILITY)
                 .build();
     }
 
