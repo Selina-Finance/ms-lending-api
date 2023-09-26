@@ -38,6 +38,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String CLEAR_SCORE_CLIENT_ID = "clearscore";
     private static final String MONEVO_CLIENT_ID = "monevo";
+    private static final String EXPERIAN_CLIENT_ID = "experian";
+
     private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
     private static final int MIN_ALLOWED_CLEAR_SCORE_ALTERNATIVE_OFFER_LOAN_TERM = 3;
 
@@ -74,7 +76,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
         if (isAlternativeOfferRequest(requestedLoanTerm)) {
             if (isAllowedAlternativeOfferRequest(clientId, requestedLoanTerm)) {
-                adjustToAlternativeOffer(request);
+                adjustToAlternativeOffer(clientId, request);
             } else {
                 return getDeclinedResponse();
             }
@@ -100,35 +102,36 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                 .build();
     }
 
-    private static boolean isAllowedAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return isAlternativeOfferRequest(requestedLoanTerm)
-                && (isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm) || isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm));
-    }
-
     private static boolean isAlternativeOfferRequest(Integer requestedLoanTerm) {
         return requestedLoanTerm < MIN_ALLOWED_SELINA_LOAN_TERM;
+    }
+
+    private static boolean isAllowedAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
+        return isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm)
+                || isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm)
+                || isExperianAlternativeOfferRequest(clientId, requestedLoanTerm);
     }
 
     private static boolean isClearScoreAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
         return CLEAR_SCORE_CLIENT_ID.equalsIgnoreCase(clientId)
                 && requestedLoanTerm >= MIN_ALLOWED_CLEAR_SCORE_ALTERNATIVE_OFFER_LOAN_TERM
-                && requestedLoanTerm < MIN_ALLOWED_SELINA_LOAN_TERM;
+                && isAlternativeOfferRequest(requestedLoanTerm);
     }
 
     private static boolean isMonevoAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId) && requestedLoanTerm < MIN_ALLOWED_SELINA_LOAN_TERM;
+        return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId) && isAlternativeOfferRequest(requestedLoanTerm);
     }
 
-    private void adjustToAlternativeOffer(QuickQuoteApplicationRequest request) {
-        try {
-            var clientId = tokenService.retrieveClientId();
-            var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
+    private static boolean isExperianAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
+        return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId) && isAlternativeOfferRequest(requestedLoanTerm);
+    }
 
-            if (isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm) || isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm)) {
-                request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
-                log.info("Adjust QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
-                        clientId, request.getExternalApplicationId(), requestedLoanTerm);
-            }
+    private void adjustToAlternativeOffer(String clientId, QuickQuoteApplicationRequest request) {
+        try {
+            var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
+            request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
+            log.info("Adjust QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
+                    clientId, request.getExternalApplicationId(), requestedLoanTerm);
         } catch (Exception ex) {
             log.error("An error occurred while adjusting to alternative offer [externalApplicationId={}]", request.getExternalApplicationId(), ex);
         }

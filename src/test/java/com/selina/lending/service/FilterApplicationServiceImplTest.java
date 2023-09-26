@@ -546,6 +546,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         @Nested
         class Monevo {
+
             @Test
             void whenClientIsMonevoAndRequestedLoanTermIsLessThan5YearsThenAdjustItTo5() {
                 // Given
@@ -600,7 +601,64 @@ class FilterApplicationServiceImplTest extends MapperBase {
         }
 
         @Nested
+        class Experian {
+
+            @Test
+            void whenClientIsExperianAndRequestedLoanTermIsLessThan5YearsThenAdjustItTo5() {
+                // Given
+                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                        .decision("Declined")
+                        .products(null)
+                        .build();
+
+                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(1);
+
+                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+                when(tokenService.retrieveClientId()).thenReturn("experian");
+
+                // When
+                filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                // Then
+                verify(selectionRepository).filter(selectionRequestCaptor.capture());
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
+            }
+
+            @Test
+            void whenClientIsExperianAndRequestedLoanTermIsGreaterThanOrEqualTo5YearsThenLeaveOriginalValue() {
+                // Given
+                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                        .decision("Declined")
+                        .products(null)
+                        .build();
+
+                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(7);
+
+                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+                when(tokenService.retrieveClientId()).thenReturn("experian");
+
+                // When
+                filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                // Then
+                verify(selectionRepository).filter(selectionRequestCaptor.capture());
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(7);
+            }
+        }
+
+        @Nested
         class ClearScore {
+
             @Test
             void whenClientIsClearScoreAndRequestedLoanTermIs4ThenAdjustItTo5() {
                 // Given
