@@ -1,6 +1,5 @@
 package com.selina.lending.api.mapper.qq.middleware;
 
-
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.mapper.MapperBase;
@@ -288,10 +287,12 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(partner.getCompanyId(), equalTo(COMPANY_ID));
     }
 
-    private void assertExpenditure(List<Expenditure> expenditure) {
-        assertThat(expenditure, hasSize(1));
+    private void assertExpenditure(List<Expenditure> expenditures) {
+        assertThat(expenditures, hasSize(1));
 
-        var theExpenditure = expenditure.get(0);
-        assertThat(theExpenditure.getExpenditureType(), equalTo(EXPENDITURE_TYPE));
+        var expenditure = expenditures.get(0);
+        assertThat(expenditure.getExpenditureType(), equalTo(EXPENDITURE_TYPE));
+        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        assertThat(expenditure.getFrequency(), equalTo(EXPENDITURE_FREQUENCY));
     }
 }

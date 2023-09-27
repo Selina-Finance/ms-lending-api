@@ -36,11 +36,16 @@ import com.selina.lending.httpclient.selection.dto.request.LoanInformation;
 import com.selina.lending.httpclient.selection.dto.request.Options;
 import com.selina.lending.httpclient.selection.dto.request.PriorCharges;
 import com.selina.lending.httpclient.selection.dto.request.PropertyDetails;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 public class QuickQuoteApplicationRequestMapper {
+
+    private static final String DEFAULT_EXPENDITURE_FREQUENCY = "monthly";
 
     private QuickQuoteApplicationRequestMapper() {}
 
@@ -112,8 +117,19 @@ public class QuickQuoteApplicationRequestMapper {
         return quickQuoteExpenditureDto == null ? null : Expenditure.builder()
                 .amountDeclared(quickQuoteExpenditureDto.getAmountDeclared())
                 .expenditureType(quickQuoteExpenditureDto.getExpenditureType())
-                .frequency(quickQuoteExpenditureDto.getFrequency())
+                .frequency(mapExpenditureFrequency(quickQuoteExpenditureDto.getFrequency()))
                 .build();
+    }
+
+    private static String mapExpenditureFrequency(String frequency) {
+        String mappedFrequency = frequency;
+
+        if (!StringUtils.hasText(mappedFrequency)) {
+            mappedFrequency = DEFAULT_EXPENDITURE_FREQUENCY;
+            log.warn("Expenditure frequency is not specified. Defaulting to 'monthly'.");
+        }
+
+        return mappedFrequency;
     }
 
     private static PropertyDetails mapPropertyDetails(QuickQuotePropertyDetailsDto propertyDetailsDto) {

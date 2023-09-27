@@ -86,7 +86,20 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
 
         // Then
         assertFees(applicationRequest);
+    }
 
+    @Test
+    void whenExpenditureFrequencyIsNotSpecifiedThenMapItToMonthly() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency(null);
+
+        //When
+        var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+        //Then
+        Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+        assertThat(expenditure.getFrequency(), equalTo("monthly"));
     }
 
     private void assertPropertyDetails(Application application) {
@@ -127,5 +140,7 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
 
         var expenditure = expenditures.get(0);
         assertThat(expenditure.getExpenditureType(), equalTo(EXPENDITURE_TYPE));
+        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        assertThat(expenditure.getFrequency(), equalTo(EXPENDITURE_FREQUENCY));
     }
 }

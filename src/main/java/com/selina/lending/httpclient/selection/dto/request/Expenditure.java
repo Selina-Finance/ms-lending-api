@@ -8,8 +8,6 @@ import lombok.Data;
 public class Expenditure {
 
     String expenditureType;
-
     Double amountDeclared;
-
     String frequency;
 }
