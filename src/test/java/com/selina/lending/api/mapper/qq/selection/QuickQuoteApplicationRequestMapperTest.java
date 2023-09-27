@@ -19,13 +19,16 @@ package com.selina.lending.api.mapper.qq.selection;
 
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.selection.dto.request.Application;
+import com.selina.lending.httpclient.selection.dto.request.Expenditure;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -53,8 +56,8 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(applicationRequest.getApplication().getFees(), nullValue());
 
         assertPropertyDetails(application);
-
         assertPriorCharges(applicationRequest);
+        assertExpenditures(application.getExpenditures());
     }
 
     @Test
@@ -83,7 +86,20 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
 
         // Then
         assertFees(applicationRequest);
+    }
 
+    @Test
+    void whenExpenditureFrequencyIsNotSpecifiedThenMapItToMonthly() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency(null);
+
+        //When
+        var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+        //Then
+        Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+        assertThat(expenditure.getFrequency(), equalTo("monthly"));
     }
 
     private void assertPropertyDetails(Application application) {
@@ -117,5 +133,14 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(fees.getIsAddIntermediaryFeeToLoan(), equalTo(false));
         assertThat(fees.getIsAddArrangementFeeSelinaToLoan(), equalTo(true));
         assertThat(fees.getArrangementFee(), equalTo(ARRANGEMENT_FEE));
+    }
+
+    private void assertExpenditures(List<Expenditure> expenditures) {
+        assertThat(expenditures, hasSize(1));
+
+        var expenditure = expenditures.get(0);
+        assertThat(expenditure.getExpenditureType(), equalTo(EXPENDITURE_TYPE));
+        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        assertThat(expenditure.getFrequency(), equalTo(EXPENDITURE_FREQUENCY));
     }
 }

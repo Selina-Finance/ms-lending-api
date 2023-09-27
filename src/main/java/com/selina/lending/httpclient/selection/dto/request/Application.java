@@ -33,4 +33,5 @@ public class Application {
     private LoanInformation loanInformation;
     private PropertyDetails propertyDetails;
     private Fees fees;
+    private List<Expenditure> expenditures;
 }

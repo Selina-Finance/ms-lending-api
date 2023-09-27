@@ -1,11 +1,11 @@
 package com.selina.lending.api.mapper.qq.middleware;
 
-
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.middleware.dto.common.Address;
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
+import com.selina.lending.httpclient.middleware.dto.common.Expenditure;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.common.Income;
 import com.selina.lending.httpclient.middleware.dto.common.Incomes;
@@ -76,6 +76,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertPropertyDetails(middlewareCreateApplicationEvent.getPropertyDetails());
         assertOffers(middlewareCreateApplicationEvent.getOffers());
         assertPartner(middlewareCreateApplicationEvent.getPartner());
+        assertExpenditure(middlewareCreateApplicationEvent.getExpenditure());
     }
 
     @Test
@@ -286,4 +287,12 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(partner.getCompanyId(), equalTo(COMPANY_ID));
     }
 
+    private void assertExpenditure(List<Expenditure> expenditures) {
+        assertThat(expenditures, hasSize(1));
+
+        var expenditure = expenditures.get(0);
+        assertThat(expenditure.getExpenditureType(), equalTo(EXPENDITURE_TYPE));
+        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        assertThat(expenditure.getFrequency(), equalTo(EXPENDITURE_FREQUENCY));
+    }
 }

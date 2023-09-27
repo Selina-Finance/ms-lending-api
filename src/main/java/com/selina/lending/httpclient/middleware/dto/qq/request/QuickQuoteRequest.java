@@ -2,6 +2,7 @@ package com.selina.lending.httpclient.middleware.dto.qq.request;
 
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.httpclient.middleware.dto.common.Applicant;
+import com.selina.lending.httpclient.middleware.dto.common.Expenditure;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 import com.selina.lending.httpclient.middleware.dto.common.Offer;
@@ -27,4 +28,5 @@ public class QuickQuoteRequest {
     private PropertyDetails propertyDetails;
     private List<Offer> offers;
     private Partner partner;
+    private List<Expenditure> expenditure;
 }
