@@ -15,15 +15,17 @@
  *
  */
 
-package com.selina.lending.exception;
+package com.selina.lending.httpclient.eligibility.dto.response;
 
-import org.zalando.problem.AbstractThrowableProblem;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
-import static org.zalando.problem.Status.BAD_GATEWAY;
+@Value
+@Builder
+@Jacksonized
+public class EligibilityResponse {
 
-public class RemoteResourceProblemException extends AbstractThrowableProblem {
-
-    public RemoteResourceProblemException() {
-        super(null, "Bad Gateway", BAD_GATEWAY, "Received an invalid response from the downstream service");
-    }
+    Double eligibility;
 }
+

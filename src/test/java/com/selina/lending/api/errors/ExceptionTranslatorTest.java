@@ -94,7 +94,7 @@ class ExceptionTranslatorTest {
     void handleRemoteResourceProblemException() throws Exception {
         // Given
         var expectedTitle = "Bad Gateway";
-        var expectedDetail = "Received an invalid response from the upstream server";
+        var expectedDetail = "Received an invalid response from the downstream service";
 
         // When
         mockMvc.perform(get("/api/exception-translator-test/custom-remote-resource-problem-exception"))
