@@ -4,11 +4,6 @@ selection.service.url: http://selection-service
 authorization.api.url: https://ms-authorization
 quickquote.web.url: http://mf-quick-quote
 
-service:
-  ms-eligibility:
-    url: http://ms-eligibility
-    readTimeout: 500
-
 spring.security:
   oauth2:
     resourceserver: # authenticating foreign requests to lending-API

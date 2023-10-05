@@ -70,7 +70,3 @@ feign:
         connectTimeout: 90000
         readTimeout: 180000
         loggerLevel: full
-
-service:
-  ms-eligibility:
-    readTimeout: 5000
