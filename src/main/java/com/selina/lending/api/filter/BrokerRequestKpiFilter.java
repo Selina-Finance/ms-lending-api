@@ -19,6 +19,7 @@ package com.selina.lending.api.filter;
 
 import com.selina.lending.service.BrokerRequestKpiService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -43,9 +44,14 @@ import static com.selina.lending.config.security.SecurityConfig.SWAGGER_URL;
 public class BrokerRequestKpiFilter extends OncePerRequestFilter {
 
     private final BrokerRequestKpiService kpiResolver;
+    private final long MAX_REQUEST_TIME;
 
-    public BrokerRequestKpiFilter(BrokerRequestKpiService kpiResolver) {
+    private static final String QUICK_QUOTE_ENDPOINT = "/application/quickquote";
+
+    public BrokerRequestKpiFilter(BrokerRequestKpiService kpiResolver,
+                                  @Value("${kpi.max-request-time}") long maxRequestTime) {
         this.kpiResolver = kpiResolver;
+        this.MAX_REQUEST_TIME = maxRequestTime;
     }
 
     @Override
@@ -55,10 +61,18 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
             ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
             ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
             var started = Instant.now();
+            var startedAt = System.currentTimeMillis();
 
             filterChain.doFilter(requestWrapper, responseWrapper); // the request will process here. it's time-consuming
 
             kpiResolver.handle(requestWrapper, responseWrapper, started);
+
+            var spentTime = System.currentTimeMillis() - startedAt;
+
+            if (spentTime > MAX_REQUEST_TIME) {
+                log.warn("Request has taken too long to process [endpoint={}] [time={}]", request.getRequestURI(), spentTime);
+            }
+
             responseWrapper.copyBodyToResponse();
         } else {
             filterChain.doFilter(request, response);
@@ -70,6 +84,10 @@ public class BrokerRequestKpiFilter extends OncePerRequestFilter {
                 && isNotUnderUrl(request.getRequestURI(), ACTUATOR_URL)
                 && isNotUnderUrl(request.getRequestURI(), SWAGGER_URL)
                 && isNotUnderUrl(request.getRequestURI(), API_DOCS_URL);
+    }
+
+    private static boolean isQuickQuoteEndpoint(HttpServletRequest request) {
+        return request.getRequestURI().contains(QUICK_QUOTE_ENDPOINT);
     }
 
     private static boolean isNotUnderUrl(String requestUri, String url) {
