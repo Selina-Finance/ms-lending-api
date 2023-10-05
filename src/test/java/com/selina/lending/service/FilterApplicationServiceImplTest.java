@@ -31,11 +31,12 @@ import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
@@ -49,31 +50,31 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class FilterApplicationServiceImplTest extends MapperBase {
 
-    @Mock
+    @MockBean
     private SelectionRepository selectionRepository;
 
-    @Mock
+    @MockBean
     private MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
 
-    @Mock
+    @MockBean
     private QuickQuoteRequest quickQuoteRequest;
 
-    @Mock
+    @MockBean
     private MiddlewareRepository middlewareRepository;
 
-    @Mock
+    @MockBean
     private ArrangementFeeSelinaService arrangementFeeSelinaService;
 
-    @Mock
+    @MockBean
     private PartnerService partnerService;
 
-    @Mock
+    @MockBean
     private TokenService tokenService;
 
-    @InjectMocks
+    @Autowired
     private FilterApplicationServiceImpl filterApplicationService;
 
     @Test
@@ -522,8 +523,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
     @Nested
     class AlternativeOffer {
 
-        @Test
-        void whenRequestedLoanTermIsLessThan5ThenReturnDeclinedResponse() {
+        @ParameterizedTest
+        @ValueSource(ints = {1, 2, 3, 4})
+        void whenRequestedLoanTermIsLessThan5ThenReturnDeclinedResponse(int requestedLoanTerm) {
             // Given
             var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                     .decision("Declined")
@@ -531,7 +533,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                     .build();
 
             var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-            quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(2);
+            quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
             when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
 
@@ -547,8 +549,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
         @Nested
         class Monevo {
 
-            @Test
-            void whenClientIsMonevoAndRequestedLoanTermIsLessThan5YearsThenAdjustItTo5() {
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2, 3, 4, 5})
+            void whenClientIsMonevoAndRequestedLoanTermIsBetween1and5ThenAdjustItTo5(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -559,7 +562,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(1);
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
 
@@ -573,8 +576,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
             }
 
-            @Test
-            void whenClientIsMonevoAndRequestedLoanTermIsGreaterThanOrEqualTo5YearsThenLeaveOriginalValue() {
+            @ParameterizedTest
+            @ValueSource(ints = {6, 7, 8, 9, 10})
+            void whenClientIsMonevoAndRequestedLoanTermIsBetween6and10ThenAdjustItTo10(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -585,7 +589,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(7);
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
 
@@ -596,15 +600,43 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(7);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(10);
+            }
+
+            @ParameterizedTest
+            @ValueSource(ints = {11, 15, 30})
+            void whenClientIsMonevoAndRequestedLoanTermIsGreaterThan10ThenLeaveOriginalValue(int requestedLoanTerm) {
+                // Given
+                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                        .decision("Declined")
+                        .products(null)
+                        .build();
+
+                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+
+                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+                when(tokenService.retrieveClientId()).thenReturn("monevo");
+
+                // When
+                filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                // Then
+                verify(selectionRepository).filter(selectionRequestCaptor.capture());
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
             }
         }
 
         @Nested
         class Experian {
 
-            @Test
-            void whenClientIsExperianAndRequestedLoanTermIsLessThan5YearsThenAdjustItTo5() {
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2, 3, 4, 5})
+            void whenClientIsExperianAndRequestedLoanTermIsBetween1And5ThenAdjustItTo5(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -615,7 +647,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(1);
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
 
@@ -629,8 +661,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
             }
 
-            @Test
-            void whenClientIsExperianAndRequestedLoanTermIsGreaterThanOrEqualTo5YearsThenLeaveOriginalValue() {
+            @ParameterizedTest
+            @ValueSource(ints = {6, 10, 30})
+            void whenClientIsExperianAndRequestedLoanTermIsGreaterThan5ThenLeaveOriginalValue(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -641,7 +674,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(7);
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
 
@@ -652,67 +685,16 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(7);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
             }
         }
 
         @Nested
         class ClearScore {
 
-            @Test
-            void whenClientIsClearScoreAndRequestedLoanTermIs4ThenAdjustItTo5() {
-                // Given
-                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                        .decision("Declined")
-                        .products(null)
-                        .build();
-
-                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-
-                var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(4);
-
-                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-                when(tokenService.retrieveClientId()).thenReturn("clearscore");
-
-                // When
-                filterApplicationService.filter(quickQuoteApplicationRequest);
-
-                // Then
-                verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
-            }
-
-            @Test
-            void whenClientIsClearScoreAndRequestedLoanTermIs3ThenAdjustItTo5() {
-                // Given
-                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                        .decision("Declined")
-                        .products(null)
-                        .build();
-
-                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-
-                var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(3);
-
-                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-                when(tokenService.retrieveClientId()).thenReturn("clearscore");
-
-                // When
-                filterApplicationService.filter(quickQuoteApplicationRequest);
-
-                // Then
-                verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
-            }
-
-            @Test
-            void whenClientIsClearScoreAndRequestedLoanTermIsLessThan3ThenReturnDeclinedResponse() {
+            @ParameterizedTest
+            @ValueSource(ints = {1, 2})
+            void whenClientIsClearScoreAndRequestedLoanTermIsLessThan3ThenReturnDeclinedResponse(int requestedLoanTerm) {
                 // Given
                 var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -720,7 +702,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                         .build();
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(2);
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
@@ -733,8 +715,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
             }
 
-            @Test
-            void whenClientIsClearScoreAndRequestedLoanTermIsGreaterThanOrEqualTo5YearsThenLeaveOriginalValue() {
+            @ParameterizedTest
+            @ValueSource(ints = {3, 4, 5})
+            void whenClientIsClearScoreAndRequestedLoanTermIsBetween3And5ThenAdjustItTo5(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -745,7 +728,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(7);
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
 
@@ -756,7 +739,34 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(7);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
+            }
+
+            @ParameterizedTest
+            @ValueSource(ints = {6, 10, 30})
+            void whenClientIsClearScoreAndRequestedLoanTermIsGreaterThan5ThenLeaveOriginalValue(int requestedLoanTerm) {
+                // Given
+                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                        .decision("Declined")
+                        .products(null)
+                        .build();
+
+                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+
+                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+                when(tokenService.retrieveClientId()).thenReturn("clearscore");
+
+                // When
+                filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                // Then
+                verify(selectionRepository).filter(selectionRequestCaptor.capture());
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
             }
         }
     }
