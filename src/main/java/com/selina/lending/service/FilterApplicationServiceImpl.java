@@ -113,17 +113,17 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     private static boolean isClearScoreAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return CLEAR_SCORE_CLIENT_ID.equalsIgnoreCase(clientId)
+        return isClearScoreClient(clientId)
                 && requestedLoanTerm >= MIN_ALLOWED_CLEAR_SCORE_ALTERNATIVE_OFFER_LOAN_TERM
                 && isAlternativeOfferRequest(requestedLoanTerm);
     }
 
     private static boolean isMonevoAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId) && isAlternativeOfferRequest(requestedLoanTerm);
+        return isMonevoClient(clientId) && isAlternativeOfferRequest(requestedLoanTerm);
     }
 
     private static boolean isExperianAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId) && isAlternativeOfferRequest(requestedLoanTerm);
+        return isExperianClient(clientId) && isAlternativeOfferRequest(requestedLoanTerm);
     }
 
     private void adjustToAlternativeOffer(String clientId, QuickQuoteApplicationRequest request) {
@@ -157,10 +157,22 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             requestFees.setIsAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT);
         }
 
-        if (MONEVO_CLIENT_ID.equalsIgnoreCase(clientId)) {
+        if (isMonevoClient(clientId) || isClearScoreClient(clientId)) {
             requestFees.setIsAddArrangementFeeSelinaToLoan(true);
             requestFees.setIsAddProductFeesToFacility(true);
         }
+    }
+
+    private static boolean isClearScoreClient(String clientId) {
+        return CLEAR_SCORE_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
+    private static boolean isMonevoClient(String clientId) {
+        return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
+    private static boolean isExperianClient(String clientId) {
+        return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId);
     }
 
     private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
