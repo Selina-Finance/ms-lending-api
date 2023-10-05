@@ -19,12 +19,12 @@ package com.selina.lending.httpclient.selection.dto.response;
 
 import com.selina.lending.httpclient.middleware.dto.common.Erc;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 import java.util.List;
 
 @Builder
-@Data
+@Value
 public class ProductOffer {
     String id;
     Double propertyValuation;

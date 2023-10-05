@@ -24,6 +24,11 @@ import static org.zalando.problem.Status.BAD_GATEWAY;
 public class RemoteResourceProblemException extends AbstractThrowableProblem {
 
     public RemoteResourceProblemException() {
-        super(null, "Bad Gateway", BAD_GATEWAY, "Received an invalid response from the downstream service");
+        super(
+                null,
+                "Bad Gateway",
+                BAD_GATEWAY,
+                "Received an invalid response from the upstream server"
+        );
     }
 }
