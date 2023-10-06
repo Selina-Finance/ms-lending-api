@@ -550,8 +550,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         class Monevo {
 
             @ParameterizedTest
-            @ValueSource(ints = {1, 2, 3, 4, 5})
-            void whenClientIsMonevoAndRequestedLoanTermIsBetween1and5ThenAdjustItTo5(int requestedLoanTerm) {
+            @ValueSource(ints = {1, 2, 3, 4})
+            void whenClientIsMonevoAndRequestedLoanTermIsBetween1and4ThenAdjustItTo5(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -577,8 +577,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
             }
 
             @ParameterizedTest
-            @ValueSource(ints = {6, 7, 8, 9, 10})
-            void whenClientIsMonevoAndRequestedLoanTermIsBetween6and10ThenAdjustItTo10(int requestedLoanTerm) {
+            @ValueSource(ints = {5, 6, 7, 8, 9, 10})
+            void whenClientIsMonevoAndRequestedLoanTermIsBetween5and10ThenAdjustItTo10(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")

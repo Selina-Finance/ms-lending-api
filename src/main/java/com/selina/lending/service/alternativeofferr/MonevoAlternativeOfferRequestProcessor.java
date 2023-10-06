@@ -21,7 +21,7 @@ public class MonevoAlternativeOfferRequestProcessor extends AlternativeOfferRequ
 
     @Override
     int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm) {
-        if (requestedLoanTerm <= ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS) {
+        if (requestedLoanTerm < ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS) {
             return ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS;
         }
 
