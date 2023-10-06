@@ -25,23 +25,20 @@ import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteAppli
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
+import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProcessor;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Slf4j
 @Service
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
-    private static final String CLEAR_SCORE_CLIENT_ID = "clearscore";
     private static final String MONEVO_CLIENT_ID = "monevo";
-    private static final String EXPERIAN_CLIENT_ID = "experian";
 
     private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
-    private static final int MIN_ALLOWED_CLEAR_SCORE_ALTERNATIVE_OFFER_LOAN_TERM = 3;
 
     private static final String ACCEPTED_DECISION = "Accepted";
     private static final String DECLINED_DECISION = "Declined";
@@ -54,32 +51,32 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final ArrangementFeeSelinaService arrangementFeeSelinaService;
     private final PartnerService partnerService;
     private final TokenService tokenService;
+    private final List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionRepository selectionRepository,
                                         MiddlewareRepository middlewareRepository,
                                         ArrangementFeeSelinaService arrangementFeeSelinaService,
                                         PartnerService partnerService,
-                                        TokenService tokenService) {
+                                        TokenService tokenService,
+                                        List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
         this.arrangementFeeSelinaService = arrangementFeeSelinaService;
         this.partnerService = partnerService;
         this.tokenService = tokenService;
+        this.alternativeOfferRequestProcessors = alternativeOfferRequestProcessors;
     }
 
     @Override
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
         var clientId = tokenService.retrieveClientId();
-        var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
 
-        if (isAlternativeOfferRequest(requestedLoanTerm)) {
-            if (isAllowedAlternativeOfferRequest(clientId, requestedLoanTerm)) {
-                adjustToAlternativeOffer(clientId, request);
-            } else {
-                return getDeclinedResponse();
-            }
+        alternativeOfferRequestProcessors.forEach(processor -> processor.adjustAlternativeOfferRequest(clientId, request));
+
+        if (hasRequestedLoanTermLessThanAllowed(request)) {
+            return getDeclinedResponse();
         }
 
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
@@ -102,39 +99,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                 .build();
     }
 
-    private static boolean isAlternativeOfferRequest(Integer requestedLoanTerm) {
-        return requestedLoanTerm < MIN_ALLOWED_SELINA_LOAN_TERM;
-    }
-
-    private static boolean isAllowedAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return isClearScoreAlternativeOfferRequest(clientId, requestedLoanTerm)
-                || isMonevoAlternativeOfferRequest(clientId, requestedLoanTerm)
-                || isExperianAlternativeOfferRequest(clientId, requestedLoanTerm);
-    }
-
-    private static boolean isClearScoreAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return CLEAR_SCORE_CLIENT_ID.equalsIgnoreCase(clientId)
-                && requestedLoanTerm >= MIN_ALLOWED_CLEAR_SCORE_ALTERNATIVE_OFFER_LOAN_TERM
-                && isAlternativeOfferRequest(requestedLoanTerm);
-    }
-
-    private static boolean isMonevoAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId) && isAlternativeOfferRequest(requestedLoanTerm);
-    }
-
-    private static boolean isExperianAlternativeOfferRequest(String clientId, Integer requestedLoanTerm) {
-        return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId) && isAlternativeOfferRequest(requestedLoanTerm);
-    }
-
-    private void adjustToAlternativeOffer(String clientId, QuickQuoteApplicationRequest request) {
-        try {
-            var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
-            request.getLoanInformation().setRequestedLoanTerm(MIN_ALLOWED_SELINA_LOAN_TERM);
-            log.info("Adjust QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
-                    clientId, request.getExternalApplicationId(), requestedLoanTerm);
-        } catch (Exception ex) {
-            log.error("An error occurred while adjusting to alternative offer [externalApplicationId={}]", request.getExternalApplicationId(), ex);
-        }
+    private static boolean hasRequestedLoanTermLessThanAllowed(QuickQuoteApplicationRequest request) {
+        return request.getLoanInformation().getRequestedLoanTerm() < MIN_ALLOWED_SELINA_LOAN_TERM;
     }
 
     private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest, String clientId) {
