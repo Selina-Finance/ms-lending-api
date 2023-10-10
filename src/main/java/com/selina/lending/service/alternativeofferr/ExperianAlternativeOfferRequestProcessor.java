@@ -1,5 +1,6 @@
 package com.selina.lending.service.alternativeofferr;
 
+import com.selina.lending.api.dto.common.LeadDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,6 +12,11 @@ public class ExperianAlternativeOfferRequestProcessor extends AlternativeOfferRe
     @Override
     String getClientId() {
         return CLIENT_ID;
+    }
+
+    @Override
+    boolean isSupportedPartner(LeadDto lead) {
+        return true;
     }
 
     @Override
