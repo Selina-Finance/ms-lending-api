@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AlternativeOfferRequestProcessor {
 
-    public void adjustAlternativeOfferRequest(String s, QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        if (isAlternativeOfferRequest(s, quickQuoteApplicationRequest)) {
+    public void adjustAlternativeOfferRequest(String clientId, QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        if (isAlternativeOfferRequest(clientId, quickQuoteApplicationRequest)) {
             adjustAlternativeOfferRequest(quickQuoteApplicationRequest);
         }
     }

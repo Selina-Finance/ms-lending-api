@@ -550,15 +550,42 @@ class FilterApplicationServiceImplTest extends MapperBase {
         @Nested
         class Monevo {
 
-            private static final LeadDto CONFUSED_COM_PARTNER_UTM = LeadDto.builder()
+            private static final LeadDto CREDIT_KARMA_PARTNER_UTM = LeadDto.builder()
                     .utmSource("aggregator")
                     .utmMedium("cpc")
-                    .utmCampaign("_consumer_referral___confused.com_main_")
+                    .utmCampaign("_consumer_referral___creditkarma_main_")
                     .build();
 
             @ParameterizedTest
+            @ValueSource(ints = {1, 2, 3, 4})
+            void whenClientIsMonevoAndPartnerIsCreditKarmaAndRequestedLoanTermIsLessThan5ThenReturnDeclinedResponse(int requestedLoanTerm) {
+                // Given
+                var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                        .decision("Declined")
+                        .products(null)
+                        .build();
+
+                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+
+                var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+                quickQuoteApplicationRequest.setLead(CREDIT_KARMA_PARTNER_UTM);
+
+                when(tokenService.retrieveClientId()).thenReturn("monevo");
+
+                // When
+                var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                // Then
+                assertThat(decisionResponse).isEqualTo(declinedDecisionResponse);
+                verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+            }
+
+            @ParameterizedTest
             @ValueSource(ints = {5, 7, 9, 11, 15, 30})
-            void whenClientIsMonevoAndPartnerIsNotConfusedThenKeepOriginalRequestedLoanTermValue(int requestedLoanTerm) {
+            void whenClientIsMonevoAndPartnerIsCreditKarmaThenKeepOriginalRequestedLoanTermValue(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -570,6 +597,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+                quickQuoteApplicationRequest.setLead(CREDIT_KARMA_PARTNER_UTM);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
 
@@ -585,7 +613,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             @ParameterizedTest
             @ValueSource(ints = {1, 2, 3, 4})
-            void whenClientIsMonevoAndPartnerIsConfusedAndRequestedLoanTermIsBetween1and4ThenAdjustItTo5(int requestedLoanTerm) {
+            void whenClientIsMonevoAndRequestedLoanTermIsBetween1and4ThenAdjustItTo5(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -596,7 +624,6 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.setLead(CONFUSED_COM_PARTNER_UTM);
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
@@ -613,7 +640,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             @ParameterizedTest
             @ValueSource(ints = {5, 6, 7, 8, 9, 10})
-            void whenClientIsMonevoAndPartnerIsConfusedAndRequestedLoanTermIsBetween5and10ThenAdjustItTo10(int requestedLoanTerm) {
+            void whenClientIsMonevoAndRequestedLoanTermIsBetween5and10ThenAdjustItTo10(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -624,7 +651,6 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.setLead(CONFUSED_COM_PARTNER_UTM);
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
@@ -641,7 +667,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             @ParameterizedTest
             @ValueSource(ints = {11, 15, 30})
-            void whenClientIsMonevoAndPartnerIsConfusedAndRequestedLoanTermIsGreaterThan10ThenLeaveOriginalValue(int requestedLoanTerm) {
+            void whenClientIsMonevoAndRequestedLoanTermIsGreaterThan10ThenLeaveOriginalValue(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -652,7 +678,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.setLead(CONFUSED_COM_PARTNER_UTM);
+                quickQuoteApplicationRequest.setLead(CREDIT_KARMA_PARTNER_UTM);
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
                 var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);

@@ -10,10 +10,10 @@ public class MonevoAlternativeOfferRequestProcessor extends AlternativeOfferRequ
     private static final int ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS = 5;
     private static final int ALTERNATIVE_OFFER_LOAN_TERM_10_YEARS = 10;
 
-    private static final LeadDto CONFUSED_COM_PARTNER_UTM = LeadDto.builder()
+    private static final LeadDto CREDIT_KARMA_PARTNER_UTM = LeadDto.builder()
             .utmSource("aggregator")
             .utmMedium("cpc")
-            .utmCampaign("_consumer_referral___confused.com_main_")
+            .utmCampaign("_consumer_referral___creditkarma_main_")
             .build();
 
     @Override
@@ -23,7 +23,7 @@ public class MonevoAlternativeOfferRequestProcessor extends AlternativeOfferRequ
 
     @Override
     boolean isSupportedPartner(LeadDto lead) {
-        return CONFUSED_COM_PARTNER_UTM.equals(lead);
+        return !CREDIT_KARMA_PARTNER_UTM.equals(lead);
     }
 
     @Override
