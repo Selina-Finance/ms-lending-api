@@ -1,5 +1,6 @@
 package com.selina.lending.service.alternativeofferr;
 
+import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,10 +15,13 @@ public abstract class AlternativeOfferRequestProcessor {
 
     private boolean isAlternativeOfferRequest(String clientId, QuickQuoteApplicationRequest request) {
         return getClientId().equalsIgnoreCase(clientId)
+                && isSupportedPartner(request.getLead())
                 && isAlternativeRequestedLoanTerm(request.getLoanInformation().getRequestedLoanTerm());
     }
 
     abstract String getClientId();
+
+    abstract boolean isSupportedPartner(LeadDto lead);
 
     abstract boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm);
 
