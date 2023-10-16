@@ -15,16 +15,17 @@
  *
  */
 
-package com.selina.lending;
+package com.selina.lending.httpclient.eligibility.dto.response;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
+@Value
+@Builder
+@Jacksonized
+public class EligibilityResponse {
 
-@SpringBootTest
-class AppTests {
-
-	@Test
-	void contextLoads() { //NOSONAR
-	}
+    Double eligibility;
 }
+
