@@ -49,7 +49,7 @@ public class EligibilityRepositoryTest extends MapperBase {
         when(tokenService.retrievePartnerAccountId()).thenReturn("partnerAccountId");
         when(eligibilityApi.getEligibility(any())).thenReturn(getEligibilityResponse());
 
-        var eligibility = eligibilityRepository.getEligibility(getQuickQuotePropertyDetailsDto());
+        var eligibility = eligibilityRepository.getEligibility(getQuickQuoteApplicationRequestDto());
 
         assertThat(eligibility, equalTo(getEligibilityResponse()));
     }
@@ -59,6 +59,6 @@ public class EligibilityRepositoryTest extends MapperBase {
         when(tokenService.retrievePartnerAccountId()).thenReturn("partnerAccountId");
         when(eligibilityApi.getEligibility(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(RemoteResourceProblemException.class, () -> eligibilityRepository.getEligibility(getQuickQuotePropertyDetailsDto()));
+        assertThrows(RemoteResourceProblemException.class, () -> eligibilityRepository.getEligibility(getQuickQuoteApplicationRequestDto()));
     }
 }

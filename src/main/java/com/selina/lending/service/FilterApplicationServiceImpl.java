@@ -96,9 +96,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             return getDeclinedResponse();
         }
 
+        setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
         enrichSelectionRequestWithFees(selectionRequest, clientId);
-        var decisionResponse = getOffers(selectionRequest, request.getPropertyDetails());
+        var decisionResponse = getOffers(selectionRequest, request);
 
         if (isDecisionAccepted(decisionResponse)) {
             storeOffersInMiddleware(request, selectionRequest, decisionResponse);
@@ -107,15 +108,39 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         return decisionResponse;
     }
 
+    private static boolean hasRequestedLoanTermLessThanAllowed(QuickQuoteApplicationRequest request) {
+        return request.getLoanInformation().getRequestedLoanTerm() < MIN_ALLOWED_SELINA_LOAN_TERM;
+    }
+
+    private static FilteredQuickQuoteDecisionResponse getDeclinedResponse() {
+        return FilteredQuickQuoteDecisionResponse.builder()
+                .decision(DECLINED_DECISION)
+                .build();
+    }
+
+    private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
+        if(!hasPrimaryApplicant(request.getApplicants())) {
+            request.getApplicants().stream().findFirst()
+                    .ifPresent(quickQuoteApplicant -> quickQuoteApplicant.setPrimaryApplicant(true));
+        }
+    }
+
+    private boolean hasPrimaryApplicant(List<QuickQuoteApplicantDto> quickQuoteApplicants) {
+        return quickQuoteApplicants
+                .stream()
+                .anyMatch(quickQuoteApplicant -> quickQuoteApplicant.getPrimaryApplicant() != null
+                        && quickQuoteApplicant.getPrimaryApplicant());
+    }
+
     private static boolean isDecisionAccepted(FilteredQuickQuoteDecisionResponse decisionResponse) {
         return ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision()) && decisionResponse.getProducts() != null;
     }
 
     @SneakyThrows
-    private FilteredQuickQuoteDecisionResponse getOffers(FilterQuickQuoteApplicationRequest selectionRequest, QuickQuotePropertyDetailsDto propertyDetails) {
+    private FilteredQuickQuoteDecisionResponse getOffers(FilterQuickQuoteApplicationRequest selectionRequest, QuickQuoteApplicationRequest request) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var decisionResponseFuture = getDecisionResponseAsync(selectionRequest, authentication);
-        var eligibilityResponseFuture = getEligibilityAsync(propertyDetails, authentication);
+        var eligibilityResponseFuture = getEligibilityAsync(request, authentication);
 
         try {
             var decisionResponse = decisionResponseFuture.get();
@@ -150,10 +175,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         });
     }
 
-    private CompletableFuture<EligibilityResponse> getEligibilityAsync(QuickQuotePropertyDetailsDto propertyDetails, Authentication authentication) {
+    private CompletableFuture<EligibilityResponse> getEligibilityAsync(QuickQuoteApplicationRequest request, Authentication authentication) {
         return CompletableFuture.supplyAsync(() -> {
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return eligibilityRepository.getEligibility(propertyDetails);
+            return eligibilityRepository.getEligibility(request);
         }).orTimeout(eligibilityReadTimeout, TimeUnit.MILLISECONDS)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
@@ -167,16 +192,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private static void enrichOffersWithEligibility(EligibilityResponse eligibilityResponse, FilteredQuickQuoteDecisionResponse decisionResponse) throws InterruptedException, ExecutionException {
         var eligibility = eligibilityResponse.getEligibility();
         decisionResponse.getProducts().forEach(product -> product.getOffer().setEligibility(eligibility));
-    }
-
-    private static boolean hasRequestedLoanTermLessThanAllowed(QuickQuoteApplicationRequest request) {
-        return request.getLoanInformation().getRequestedLoanTerm() < MIN_ALLOWED_SELINA_LOAN_TERM;
-    }
-
-    private static FilteredQuickQuoteDecisionResponse getDeclinedResponse() {
-        return FilteredQuickQuoteDecisionResponse.builder()
-                .decision(DECLINED_DECISION)
-                .build();
     }
 
     private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest, String clientId) {
@@ -206,24 +221,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, FilterQuickQuoteApplicationRequest selectionRequest, FilteredQuickQuoteDecisionResponse decisionResponse) {
-        setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
         addPartner(request);
         middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
                 .mapToQuickQuoteRequest(request, decisionResponse.getProducts(), selectionRequest.getApplication().getFees()));
-    }
-
-    private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
-        if(!hasPrimaryApplicant(request.getApplicants())) {
-            request.getApplicants().stream().findFirst()
-                    .ifPresent(quickQuoteApplicant -> quickQuoteApplicant.setPrimaryApplicant(true));
-        }
-    }
-
-    private boolean hasPrimaryApplicant(List<QuickQuoteApplicantDto> quickQuoteApplicants) {
-        return quickQuoteApplicants
-                .stream()
-                .anyMatch(quickQuoteApplicant -> quickQuoteApplicant.getPrimaryApplicant() != null
-                        && quickQuoteApplicant.getPrimaryApplicant());
     }
 
     private void addPartner(QuickQuoteApplicationRequest request) {

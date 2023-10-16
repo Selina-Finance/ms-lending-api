@@ -508,6 +508,7 @@ public abstract class MapperBase {
 
     protected QuickQuoteApplicantDto getQuickQuoteApplicantDto() {
         return QuickQuoteApplicantDto.builder()
+                .primaryApplicant(true)
                 .title(TITLE)
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)

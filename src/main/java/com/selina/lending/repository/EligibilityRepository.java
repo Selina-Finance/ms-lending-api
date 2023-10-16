@@ -17,7 +17,7 @@
 
 package com.selina.lending.repository;
 
-import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.mapper.eligibility.EligibilityRequestMapper;
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.eligibility.EligibilityApi;
@@ -40,12 +40,13 @@ public class EligibilityRepository {
         this.eligibilityRequestMapper = eligibilityRequestMapper;
     }
 
-    public EligibilityResponse getEligibility(QuickQuotePropertyDetailsDto propertyDetails) {
+    public EligibilityResponse getEligibility(QuickQuoteApplicationRequest request) {
         try {
             var partnerAccountId = tokenService.retrievePartnerAccountId();
+            var propertyDetails = request.getPropertyDetails();
             log.info("Retrieving eligibility for property details [partnerAccountId={}] [postcode={}] [address={}] [buildingNumber={}] [buildingName={}]",
                     partnerAccountId, propertyDetails.getPostcode(), propertyDetails.getAddressLine1(), propertyDetails.getBuildingNumber(), propertyDetails.getBuildingName());
-            return eligibilityApi.getEligibility(eligibilityRequestMapper.mapToPropertyDetails(partnerAccountId, propertyDetails));
+            return eligibilityApi.getEligibility(eligibilityRequestMapper.mapToPropertyDetails(partnerAccountId, request));
         } catch (Exception ex) {
             log.error("Error retrieving eligibility for property details", ex);
             throw new RemoteResourceProblemException();

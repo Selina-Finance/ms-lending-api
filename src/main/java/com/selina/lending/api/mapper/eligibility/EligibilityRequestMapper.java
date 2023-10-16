@@ -17,18 +17,53 @@
 
 package com.selina.lending.api.mapper.eligibility;
 
-import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
+import com.selina.lending.api.dto.common.IncomeDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
+import com.selina.lending.httpclient.eligibility.dto.request.Income;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class EligibilityRequestMapper {
 
     @Mapping(target = "partnerAccountId", source = "partnerAccountId")
-    @Mapping(target = "propertyDetails", source = "propertyDetails")
-    public abstract EligibilityRequest mapToPropertyDetails(String partnerAccountId, QuickQuotePropertyDetailsDto propertyDetails);
+    @Mapping(target = "propertyDetails", source = "request.propertyDetails")
+    @Mapping(target = "applicant", source = "request.applicants", qualifiedByName = "mapPrimaryApplicant")
+    public abstract EligibilityRequest mapToPropertyDetails(String partnerAccountId, QuickQuoteApplicationRequest request);
+
+    @Named("mapPrimaryApplicant")
+    Applicant mapPrimaryApplicant(List<QuickQuoteApplicantDto> applicants) {
+        return applicants.stream()
+                .filter(applicant -> applicant.getPrimaryApplicant() != null && applicant.getPrimaryApplicant())
+                .findFirst()
+                .map(primaryApplicant -> Applicant.builder()
+                        .incomes(mapIncomes(primaryApplicant.getIncome()))
+                        .build())
+                .orElse(null);
+    }
+
+    private List<Income> mapIncomes(IncomeDto incomeDto) {
+        var incomes = new ArrayList<Income>();
+
+        if (incomeDto != null && incomeDto.getIncome() != null) {
+            incomeDto.getIncome().forEach(income -> {
+                incomes.add(Income.builder()
+                        .amount(income.getAmount())
+                        .type(income.getType())
+                        .build());
+            });
+        }
+
+        return incomes;
+    }
 }

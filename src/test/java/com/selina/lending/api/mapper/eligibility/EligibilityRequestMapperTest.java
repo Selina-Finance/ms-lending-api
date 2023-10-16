@@ -18,17 +18,21 @@
 package com.selina.lending.api.mapper.eligibility;
 
 import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
+import com.selina.lending.httpclient.eligibility.dto.request.Income;
 import com.selina.lending.httpclient.eligibility.dto.request.PropertyDetails;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @SpringBootTest
-public class EligibilityMapperTest extends MapperBase {
+public class EligibilityRequestMapperTest extends MapperBase {
 
     private static final String PARTNER_ACCOUNT_ID = "somePartnerAccountId";
 
@@ -37,9 +41,7 @@ public class EligibilityMapperTest extends MapperBase {
 
     @Test
     void shouldMapEligibilityRequest() {
-        var propertyDetails = getQuickQuotePropertyDetailsDto();
-
-        var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, propertyDetails);
+        var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, getQuickQuoteApplicationRequestDto());
 
         assertThat(eligibilityRequest, equalTo(EligibilityRequest.builder()
                 .partnerAccountId(PARTNER_ACCOUNT_ID)
@@ -48,6 +50,12 @@ public class EligibilityMapperTest extends MapperBase {
                         .postcode(POSTCODE)
                         .buildingNumber(BUILDING_NUMBER)
                         .buildingName(BUILDING_NAME)
+                        .build())
+                .applicant(Applicant.builder()
+                        .incomes(List.of(Income.builder()
+                                        .amount(INCOME_AMOUNT)
+                                        .type(INCOME_TYPE)
+                                        .build()))
                         .build())
                 .build()));
     }

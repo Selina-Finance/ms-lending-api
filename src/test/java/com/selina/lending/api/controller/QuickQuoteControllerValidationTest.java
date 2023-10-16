@@ -464,8 +464,11 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         @Test
         void whenCreateQQApplicationWithTwoApplicantAndLoanInformationNumberOfApplicantsIsOneThenReturnBadRequest() throws Exception {
             //Given
+            var secondaryApplicant = getQuickQuoteApplicantDto();
+            secondaryApplicant.setPrimaryApplicant(false);
+
             var request = getQuickQuoteApplicationRequestDto();
-            request.getApplicants().add(getQuickQuoteApplicantDto());
+            request.getApplicants().add(secondaryApplicant);
 
             when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
