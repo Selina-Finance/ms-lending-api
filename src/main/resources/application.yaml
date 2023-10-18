@@ -74,3 +74,10 @@ feign:
 service:
   ms-eligibility:
     readTimeout: 5000
+
+sla:
+  requests:
+    - name: create Quick Quote application
+      httpMethod: POST
+      urlPattern: /application/quickquote
+      timeout: 8000
