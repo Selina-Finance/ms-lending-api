@@ -20,6 +20,7 @@ package com.selina.lending.api.filter;
 import com.selina.lending.service.BrokerRequestKpiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -39,6 +40,7 @@ import static com.selina.lending.config.security.SecurityConfig.SWAGGER_URL;
 
 @Slf4j
 @Component
+@Order(2)
 @ConditionalOnProperty(value = "kafka.enable", havingValue = "true", matchIfMissing = true)
 public class BrokerRequestKpiFilter extends OncePerRequestFilter {
 
