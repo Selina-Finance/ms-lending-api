@@ -24,6 +24,7 @@ public class SlaRequestFilter extends OncePerRequestFilter {
 
     public SlaRequestFilter(SlaProperties slaProperties) {
         this.slaProperties = slaProperties;
+        log.info("SLA properties: {}", slaProperties);
     }
 
     @Override
@@ -33,16 +34,21 @@ public class SlaRequestFilter extends OncePerRequestFilter {
         var elapsed = (System.nanoTime() - started) / NANO_SECONDS_IN_A_MILLI_SECOND;
         var requestSlaInfo = getRequestSlaInfo(request);
 
+        log.info("Finished request {}", request.getRequestURI());
         if (requestSlaInfo.isPresent()) {
             var slaInfo = requestSlaInfo.get();
+            log.warn("Response info detected [name={}] [slaTimout={}] [elapsedTime={}]", slaInfo.getName(), slaInfo.getTimeout(), elapsed);
             if (elapsed > slaInfo.getTimeout()) {
                 log.warn("Lending API service slow HTTP response detected [name={}] [slaTimout={}] [elapsedTime={}]", slaInfo.getName(), slaInfo.getTimeout(), elapsed);
             }
+        } else {
+            log.info("Response is not slow [elapsedTime={}]", elapsed);
         }
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+        log.info("Matching request {} {}", request.getRequestURI(), request.getMethod());
         return !hasSlaProperties() || !isTracked(request);
     }
 
