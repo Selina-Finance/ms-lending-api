@@ -80,4 +80,4 @@ sla:
     - name: create Quick Quote application
       httpMethod: POST
       urlPattern: /application/quickquote
-      timeout: 8000
+      timeout: 100
