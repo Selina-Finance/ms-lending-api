@@ -24,32 +24,35 @@ public class SlaRequestFilter extends OncePerRequestFilter {
 
     public SlaRequestFilter(SlaProperties slaProperties) {
         this.slaProperties = slaProperties;
-        log.info("SLA properties: {}", slaProperties);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var started = System.nanoTime();
-        filterChain.doFilter(request, response);
-        var elapsed = (System.nanoTime() - started) / NANO_SECONDS_IN_A_MILLI_SECOND;
-        var requestSlaInfo = getRequestSlaInfo(request);
+        try {
+            var started = System.nanoTime();
+            filterChain.doFilter(request, response);
+            var elapsed = (System.nanoTime() - started) / NANO_SECONDS_IN_A_MILLI_SECOND;
+            var requestSlaInfo = getRequestSlaInfo(request);
 
-        log.info("Finished request {}", request.getRequestURI());
-        if (requestSlaInfo.isPresent()) {
-            var slaInfo = requestSlaInfo.get();
-            log.warn("Response info detected [name={}] [slaTimout={}] [elapsedTime={}]", slaInfo.getName(), slaInfo.getTimeout(), elapsed);
-            if (elapsed > slaInfo.getTimeout()) {
-                log.warn("Lending API service slow HTTP response detected [name={}] [slaTimout={}] [elapsedTime={}]", slaInfo.getName(), slaInfo.getTimeout(), elapsed);
+            if (requestSlaInfo.isPresent()) {
+                var slaInfo = requestSlaInfo.get();
+                if (elapsed > slaInfo.getTimeout()) {
+                    log.warn("Lending API service slow HTTP response detected [name={}] [slaTimout={}] [elapsedTime={}]", slaInfo.getName(), slaInfo.getTimeout(), elapsed);
+                }
             }
-        } else {
-            log.info("Response is not slow [elapsedTime={}]", elapsed);
+        } catch (Exception ex) {
+            log.error("Error while measuring the request's SLA", ex);
         }
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        log.info("Matching request {} {}", request.getRequestURI(), request.getMethod());
-        return !hasSlaProperties() || !isTracked(request);
+        try {
+            return !hasSlaProperties() || !isTracked(request);
+        } catch (Exception ex) {
+            log.error("Error while checking if the request's SLA should be measured", ex);
+            return true;
+        }
     }
 
     private boolean hasSlaProperties() {
@@ -67,7 +70,8 @@ public class SlaRequestFilter extends OncePerRequestFilter {
                 .findFirst();
     }
 
-    private static boolean matchesRequest(HttpServletRequest request, SlaProperties.Request r) {
-        return r.getHttpMethod().equalsIgnoreCase(request.getMethod()) && request.getRequestURI().matches(r.getUrlPattern());
+    private static boolean matchesRequest(HttpServletRequest request, SlaProperties.Request slaRequestInfo) {
+        return slaRequestInfo.getHttpMethod().equalsIgnoreCase(request.getMethod())
+                && request.getRequestURI().matches(slaRequestInfo.getUrlPattern());
     }
 }
