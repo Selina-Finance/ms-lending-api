@@ -25,6 +25,22 @@ spring.security:
           token-uri: https://MW-AUTH_SERVER/oauth2/token
 
 resilience4j:
+  retry:
+    retry-aspect-order: 100
+    instances:
+      middleware-application-service-retry:
+        max-attempts: 3
+        wait-duration: 3s
+        ignoreExceptions:
+          - feign.FeignException.FeignClientException
+        retryExceptions:
+          - feign.FeignException.FeignServerException
+          - feign.RetryableException
+      middleware-qq-api-retry:
+        max-attempts: 3
+        wait-duration: 200ms
+        retryExceptions:
+          - feign.RetryableException
   circuitbreaker:
     circuit-breaker-aspect-order: 1
     instances:
@@ -48,7 +64,6 @@ resilience4j:
         slow-call-rate-threshold: 60
         failure-rate-threshold: 60
         record-failure-predicate: com.selina.lending.repository.circuitbreaker.RecordExceptionPredicate
-
 
 authorization:
   enable: false

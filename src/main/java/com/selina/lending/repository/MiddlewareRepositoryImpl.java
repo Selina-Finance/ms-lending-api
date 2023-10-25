@@ -19,6 +19,7 @@ package com.selina.lending.repository;
 
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.middleware.MiddlewareApi;
+import com.selina.lending.httpclient.middleware.MiddlewareQQApi;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
@@ -27,8 +28,10 @@ import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import com.selina.lending.service.enricher.MiddlewareRequestEnricher;
+import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -40,12 +43,14 @@ import java.util.Optional;
 public class MiddlewareRepositoryImpl implements MiddlewareRepository {
 
     private final MiddlewareApi middlewareApi;
-
+    private final MiddlewareQQApi middlewareQQApi;
     private final MiddlewareRequestEnricher middlewareRequestEnricher;
 
-
-    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi, MiddlewareRequestEnricher middlewareRequestEnricher) {
+    public MiddlewareRepositoryImpl(MiddlewareApi middlewareApi,
+                                    MiddlewareQQApi middlewareQQApi,
+                                    MiddlewareRequestEnricher middlewareRequestEnricher) {
         this.middlewareApi = middlewareApi;
+        this.middlewareQQApi = middlewareQQApi;
         this.middlewareRequestEnricher = middlewareRequestEnricher;
     }
 
@@ -134,10 +139,11 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
         return middlewareApi.downloadEsisByAppId(id);
     }
 
+    @Retry(name = "middleware-qq-api-retry", fallbackMethod = "middlewareApiCreateQuickQuoteFallback")
     @CircuitBreaker(name = "middleware-api-cb", fallbackMethod = "middlewareApiCreateQuickQuoteFallback")
     public void createQuickQuoteApplication(QuickQuoteRequest applicationRequest){
         log.info("Create QQ application [externalApplicationId={}]", applicationRequest.getExternalApplicationId());
-        middlewareApi.createQuickQuoteApplication(applicationRequest);
+        middlewareQQApi.createQuickQuoteApplication(applicationRequest);
     }
 
     private SelectProductResponse middlewareApiSelectProductFallback(CallNotPermittedException e) { //NOSONAR
@@ -165,6 +171,10 @@ public class MiddlewareRepositoryImpl implements MiddlewareRepository {
     }
 
     private Resource middlewareEsisApiFallback(CallNotPermittedException e) { //NOSONAR
+        throw remoteResourceProblemException(e);
+    }
+
+    private void middlewareApiCreateQuickQuoteFallback(RetryableException e) { //NOSONAR
         throw remoteResourceProblemException(e);
     }
 

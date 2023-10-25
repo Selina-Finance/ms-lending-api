@@ -58,9 +58,6 @@ public interface MiddlewareApi {
     @PatchMapping(value = "/application/{id}", consumes = APPLICATION_JSON_VALUE)
     void patchDipCCApplication(@PathVariable("id") String id, ApplicationRequest applicationRequest);
 
-    @PostMapping(path = "/quote_aggregator?async=true", consumes = APPLICATION_JSON_VALUE)
-    void createQuickQuoteApplication(QuickQuoteRequest applicationRequest);
-
     @PostMapping(path = "/quote_broker", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     QuickQuoteCFResponse createQuickQuoteCFApplication(QuickQuoteCFRequest applicationRequest);
 

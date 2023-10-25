@@ -30,6 +30,11 @@ resilience4j:
         retryExceptions:
           - feign.FeignException.FeignServerException
           - feign.RetryableException
+      middleware-qq-api-retry:
+        max-attempts: 3
+        wait-duration: 100ms
+        retryExceptions:
+          - feign.RetryableException
   circuitbreaker:
     circuit-breaker-aspect-order: 1
     instances:
@@ -69,6 +74,10 @@ feign:
       default:
         connectTimeout: 90000
         readTimeout: 180000
+        loggerLevel: full
+      middleware-qq-api:
+        connectTimeout: 1000
+        readTimeout: 2000
         loggerLevel: full
 
 service:
