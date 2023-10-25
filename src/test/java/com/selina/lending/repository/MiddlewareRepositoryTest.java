@@ -18,6 +18,7 @@
 package com.selina.lending.repository;
 
 import com.selina.lending.httpclient.middleware.MiddlewareApi;
+import com.selina.lending.httpclient.middleware.MiddlewareQQApi;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.dip.response.Application;
@@ -31,6 +32,7 @@ import com.selina.lending.service.enricher.MiddlewareRequestEnricher;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
+import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
@@ -60,10 +62,14 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MiddlewareRepositoryTest {
+
     private static final String EXTERNAL_APPLICATION_ID = "externalCaseId";
 
     @Mock
     private MiddlewareApi middlewareApi;
+
+    @Mock
+    private MiddlewareQQApi middlewareQQApi;
 
     @Mock
     private ApplicationRequest applicationRequest;
@@ -90,7 +96,7 @@ class MiddlewareRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, middlewareRequestEnricher);
+        middlewareRepository = new MiddlewareRepositoryImpl(middlewareApi, middlewareQQApi, middlewareRequestEnricher);
     }
 
     @Test
@@ -371,26 +377,24 @@ class MiddlewareRepositoryTest {
         middlewareRepository.createQuickQuoteApplication(quickQuoteRequest);
 
         // Then
-        verify(middlewareApi, times(1)).createQuickQuoteApplication(quickQuoteRequest);
+        verify(middlewareQQApi, times(1)).createQuickQuoteApplication(quickQuoteRequest);
     }
 
     @Test
     void shouldThrowFeignServerExceptionWhenCreateQuickQuoteThrowsInternalServerException() {
         //Given
         String errorMsg = "error";
-        var id = UUID.randomUUID().toString();
 
         doThrow(new FeignException.FeignServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMsg, createRequest(),
-                errorMsg.getBytes(), null)).when(middlewareApi).createQuickQuoteApplication(quickQuoteRequest);
+                errorMsg.getBytes(), null)).when(middlewareQQApi).createQuickQuoteApplication(quickQuoteRequest);
         //When
         var exception = assertThrows(FeignException.FeignServerException.class,
                 () -> middlewareRepository.createQuickQuoteApplication(quickQuoteRequest));
 
         //Then
         assertThat(exception.getMessage()).isEqualTo(errorMsg);
-        verify(middlewareApi, times(1)).createQuickQuoteApplication(quickQuoteRequest);
+        verify(middlewareQQApi, times(1)).createQuickQuoteApplication(quickQuoteRequest);
     }
-
 
     @Test
     void shouldOpenCircuitBreakerWhenFeignServerExceptionTriggersFallback() {
