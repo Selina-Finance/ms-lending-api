@@ -8,11 +8,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Service
 @Slf4j
 public class ApplicationResponseEnricher {
+
+    private static final String EXPERIAN_CLIENT_ID = "experian";
+    private static final String EQUALS_SIGN = "=";
+    private static final String AMPERSAND_SIGN = "&";
 
     private final String quickQuoteBaseUrl;
     private final TokenService tokenService;
@@ -40,7 +46,7 @@ public class ApplicationResponseEnricher {
 
     private String quickQuoteProductOffersApplyUrlBuilder(String externalApplicationId, String productCode) {
         String clientId = tokenService.retrieveClientId();
-        return UriComponentsBuilder.fromHttpUrl(quickQuoteBaseUrl)
+        var applyUrl = UriComponentsBuilder.fromHttpUrl(quickQuoteBaseUrl)
                 .path("/aggregator")
                 .queryParamIfPresent("externalApplicationId", Optional.ofNullable(externalApplicationId))
                 .queryParamIfPresent("productCode", Optional.ofNullable(productCode))
@@ -48,6 +54,17 @@ public class ApplicationResponseEnricher {
                 .encode()
                 .build()
                 .toString();
+
+        return isExperianClient(clientId) ? encodeRequestParamsUrlPart(applyUrl) : applyUrl;
+    }
+
+    private boolean isExperianClient(String clientId) {
+        return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
+    private String encodeRequestParamsUrlPart(String applyUrl) {
+        return applyUrl.replaceAll(EQUALS_SIGN, URLEncoder.encode(EQUALS_SIGN, StandardCharsets.UTF_8))
+                .replaceAll(AMPERSAND_SIGN, URLEncoder.encode(AMPERSAND_SIGN, StandardCharsets.UTF_8));
     }
 
 }

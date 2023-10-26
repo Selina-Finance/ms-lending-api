@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -69,6 +71,38 @@ class ApplicationResponseEnricherTest {
         var expected = String.format("%s/aggregator?externalApplicationId=%s&productCode=%s&source=%s",
                 QUICK_QUOTE_BASE_URL, externalApplicationId, offerCode, source);
         assertThat(response.getOffers().get(0).getApplyUrl(), equalTo(expected));
+    }
+
+    @Test
+    void whenClientIsExperianThenEncodeRequestParamsApplyUrlPart() {
+        // given
+        var externalApplicationId = "2256349";
+        var offerCode = "HO00600";
+        var source = "experian";
+        var encodedEqualsSign = URLEncoder.encode("=", StandardCharsets.UTF_8);
+        var encodedAmpersandSign = URLEncoder.encode("&", StandardCharsets.UTF_8);
+
+        when(tokenService.retrieveClientId()).thenReturn(source);
+
+        List<ProductOfferDto> productOffersList = new ArrayList<>();
+        productOffersList.add(ProductOfferDto.builder().code(offerCode).build());
+        var response = QuickQuoteResponse
+                .builder()
+                .externalApplicationId(externalApplicationId)
+                .offers(productOffersList)
+                .build();
+
+        // when
+        enricher.enrichQuickQuoteResponseWithProductOffersApplyUrl(response);
+
+        // then
+        var expected = String.format("%s/aggregator?externalApplicationId=%s&productCode=%s&source=%s",
+                QUICK_QUOTE_BASE_URL, externalApplicationId, offerCode, source)
+                .replaceAll("=", encodedEqualsSign)
+                .replaceAll("&", encodedAmpersandSign);
+
+        assertThat(response.getOffers().get(0).getApplyUrl(), equalTo(expected));
+        System.out.println(expected);
     }
 
     @Test
