@@ -1090,4 +1090,39 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
     }
 
+    @Test
+    void whenCreateDipApplicationWithLoanInformationFacilitiesAllocationPurposeThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getLoanInformation().getFacilities().get(0).setAllocationPurpose("Incorrect value");
+
+        //When
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("loanInformation.facilities[0].allocationPurpose"))
+                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
+
+    @Test
+    void whenCreateDipCCApplicationWithLoanInformationFacilitiesAllocationPurposeThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getLoanInformation().getFacilities().get(0).setAllocationPurpose("Incorrect value");
+
+        //When
+        mockMvc.perform(post("/application/dipcc").content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("loanInformation.facilities[0].allocationPurpose"))
+                .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
 }

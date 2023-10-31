@@ -23,6 +23,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -35,5 +36,6 @@ public class AdvancedLoanInformationDto extends LoanInformationDto {
 
     @NotNull
     @NotEmpty
+    @Valid
     private List<FacilityDto> facilities;
 }
