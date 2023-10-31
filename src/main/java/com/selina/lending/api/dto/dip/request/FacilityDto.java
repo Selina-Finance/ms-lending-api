@@ -21,10 +21,11 @@ import com.selina.lending.api.dto.common.LoanPurpose;
 import com.selina.lending.api.validator.EnumValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 
 @Builder
-@Value
+@Data
 public class FacilityDto {
     Double allocationAmount;
     @Schema(implementation = LoanPurpose.class)

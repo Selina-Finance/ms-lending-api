@@ -39,5 +39,4 @@ public class ApplicationRequest {
     @Schema(description = "a unique identifier you provide for the application")
     private String externalApplicationId;
     private List<ExpenditureDto> expenditure;
-
 }
