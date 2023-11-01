@@ -27,5 +27,6 @@ import lombok.extern.jackson.Jacksonized;
 public class EligibilityResponse {
 
     Double eligibility;
+    PropertyInfo propertyInfo;
 }
 

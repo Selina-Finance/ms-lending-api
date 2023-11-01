@@ -69,6 +69,7 @@ import com.selina.lending.httpclient.creditcommitments.dto.common.VotersRoll;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitment;
 import com.selina.lending.httpclient.creditcommitments.dto.response.CreditCommitmentResponse;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
+import com.selina.lending.httpclient.eligibility.dto.response.PropertyInfo;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.application.response.Intermediary;
 import com.selina.lending.httpclient.middleware.dto.application.response.Lead;
@@ -133,6 +134,7 @@ public abstract class MapperBase {
     public static final String ALLOCATION_PURPOSE = "Home improvements";
     public static final String DESIRED_TIME_LINE = "By 3 months";
     public static final Double ESTIMATED_VALUE = 590000.00;
+    public static final Double ELIGIBILITY_ESTIMATED_VALUE = 400000.00;
     public static final String WHEN_LAST_PURCHASED = "1990-01-05";
     public static final Double PURCHASE_VALUE = 390000.00;
     public static final String PROPERTY_TYPE = "Detached house";
@@ -1049,6 +1051,13 @@ public abstract class MapperBase {
     protected EligibilityResponse getEligibilityResponse() {
         return EligibilityResponse.builder()
                 .eligibility(ELIGIBILITY)
+                .propertyInfo(getPropertyInfo())
+                .build();
+    }
+
+    private PropertyInfo getPropertyInfo() {
+        return PropertyInfo.builder()
+                .estimatedValue(ELIGIBILITY_ESTIMATED_VALUE)
                 .build();
     }
 

@@ -24,6 +24,7 @@ import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicati
 import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMapper;
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
+import com.selina.lending.httpclient.eligibility.dto.response.PropertyInfo;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.repository.EligibilityRepository;
@@ -146,7 +147,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             var decisionResponse = decisionResponseFuture.get();
 
             if (isDecisionAccepted(decisionResponse)) {
-                enrichOffersWithEligibility(eligibilityResponseFuture.get(), decisionResponse);
+                var eligibilityResponse = eligibilityResponseFuture.get();
+                updatePropertyEstimatedValue(request.getPropertyDetails(), eligibilityResponse.getPropertyInfo());
+                enrichOffersWithEligibility(eligibilityResponse, decisionResponse);
             }
 
             return decisionResponse;
@@ -159,6 +162,14 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             }
 
             throw new RemoteResourceProblemException();
+        }
+    }
+
+    private void updatePropertyEstimatedValue(QuickQuotePropertyDetailsDto propertyDetails, PropertyInfo propertyInfo) {
+        if (propertyDetails.getEstimatedValue() == null) {
+            Double eligibilityEstimatedValue = propertyInfo != null ? propertyInfo.getEstimatedValue() : null;
+            propertyDetails.setEstimatedValue(eligibilityEstimatedValue);
+            log.info("Property estimated value is not specified. Use the value from eligibility response [estimatedValue={}]", eligibilityEstimatedValue);
         }
     }
 
@@ -189,7 +200,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                 });
     }
 
-    private static void enrichOffersWithEligibility(EligibilityResponse eligibilityResponse, FilteredQuickQuoteDecisionResponse decisionResponse) throws InterruptedException, ExecutionException {
+    private static void enrichOffersWithEligibility(EligibilityResponse eligibilityResponse, FilteredQuickQuoteDecisionResponse decisionResponse) {
         var eligibility = eligibilityResponse.getEligibility();
         decisionResponse.getProducts().forEach(product -> product.getOffer().setEligibility(eligibility));
     }
