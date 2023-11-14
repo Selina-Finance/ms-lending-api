@@ -44,7 +44,9 @@ public class ProductOfferDto {
     private Integer initialTerm;
     private Double initialRate;
     private Double initialPayment;
+    private Double initialMargin;
     private Double reversionPayment;
+    private Double reversionMargin;
     private Double aprc;
     private Boolean isAprcHeadline;
     private Double ear;

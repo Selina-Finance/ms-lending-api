@@ -83,7 +83,6 @@ public class QuickQuoteController implements QuickQuoteOperations {
         return ResponseEntity.ok(filterQuickQuote(quickQuoteApplicationRequest));
     }
 
-
     private QuickQuoteResponse filterQuickQuoteCF(QuickQuoteCFApplicationRequest quickQuoteCFApplicationRequest){
         QuickQuoteCFResponse quickQuoteDecisionResponse = createApplicationService.createQuickQuoteCFApplication(QuickQuoteCFRequestMapper.INSTANCE
                 .mapToQuickQuoteCFRequest(quickQuoteCFApplicationRequest));
