@@ -42,7 +42,9 @@ public class OfferDto {
     Double ltvCap;
     Double totalAmountRepaid;
     Double initialPayment;
+    Double initialMargin;
     Double reversionPayment;
+    Double reversionMargin;
     Double affordabilityDeficit;
     String productCode;
     String product;

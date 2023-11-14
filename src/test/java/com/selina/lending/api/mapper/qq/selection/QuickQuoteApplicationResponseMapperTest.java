@@ -50,7 +50,9 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
         assertThat(offer.getOfferBalance(), equalTo(OFFER_BALANCE));
         assertThat(offer.getHasFee(), equalTo(true));
         assertThat(offer.getInitialPayment(), equalTo(INITIAL_PAYMENT));
+        assertThat(offer.getInitialMargin(), equalTo(INITIAL_MARGIN));
         assertThat(offer.getReversionPayment(), equalTo(REVERSION_PAYMENT));
+        assertThat(offer.getReversionMargin(), equalTo(REVERSION_MARGIN));
         assertThat(offer.getInitialRate(), equalTo(INITIAL_RATE));
         assertThat(offer.getInitialTerm(), equalTo(LOAN_TERM));
         assertThat(offer.getReversionTerm(), equalTo(REVERSION_TERM));

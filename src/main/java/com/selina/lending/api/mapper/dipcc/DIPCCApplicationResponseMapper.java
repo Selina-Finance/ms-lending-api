@@ -31,6 +31,5 @@ public interface DIPCCApplicationResponseMapper {
     DIPCCApplicationResponseMapper INSTANCE = Mappers.getMapper(DIPCCApplicationResponseMapper.class);
 
     @Mapping(target= "requestType", source = "applicationResponse.applicationType")
-    DIPCCApplicationResponse mapToApplicationResponseDto(
-            ApplicationResponse applicationResponse);
+    DIPCCApplicationResponse mapToApplicationResponseDto(ApplicationResponse applicationResponse);
 }

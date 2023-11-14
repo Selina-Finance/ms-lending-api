@@ -117,6 +117,8 @@ class ApplicationResponseMapperTest extends MapperBase {
         assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
         assertThat(offer.getErcPeriodYears(), equalTo(2));
         assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
+        assertThat(offer.getInitialMargin(), equalTo(INITIAL_MARGIN));
+        assertThat(offer.getReversionMargin(), equalTo(REVERSION_MARGIN));
 
         var ercData = offer.getErcData();
         assertThat(ercData.get(0).getPeriod(), equalTo(1));

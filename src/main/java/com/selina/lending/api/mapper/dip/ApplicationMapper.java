@@ -36,6 +36,7 @@ public interface ApplicationMapper {
     @Mapping(target = "requestType", source = "application.applicationType")
     DIPApplicationDto mapToDIPApplicationDto(Application application);
 
+    // TODO unused mapping
     @InheritConfiguration(name = "mapDIPApplication")
     @Mapping(target = "applicationType", source = "dipApplicationDto.requestType")
     Application mapToApplication(DIPApplicationDto dipApplicationDto);
