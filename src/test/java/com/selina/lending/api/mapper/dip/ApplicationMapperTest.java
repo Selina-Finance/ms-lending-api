@@ -50,8 +50,11 @@ class ApplicationMapperTest extends MapperBase {
         assertThat(applicationDto.getOffers().get(0).getId(), equalTo(OFFER_ID));
         assertThat(applicationDto.getOffers().get(0).getProductCode(), equalTo(PRODUCT_CODE));
         assertThat(applicationDto.getOffers().get(0).getAffordabilityDeficit(), equalTo(AFFORDABILITY_DEFICIT));
+        assertThat(applicationDto.getOffers().get(0).getInitialMargin(), equalTo(INITIAL_MARGIN));
+        assertThat(applicationDto.getOffers().get(0).getReversionMargin(), equalTo(REVERSION_MARGIN));
     }
 
+    // TODO unused mapping
     @Test
     void mapToApplication() {
         //Given
