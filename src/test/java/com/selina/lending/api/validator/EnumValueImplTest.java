@@ -80,7 +80,11 @@ class EnumValueImplTest {
     @Test
     void validateExpenditure() {
         //Given
-        var expenditure = ExpenditureDto.builder().expenditureType(INVALID_VALUE).frequency(INVALID_VALUE).build();
+        var expenditure = ExpenditureDto.builder()
+                .amountDeclared(1000.0)
+                .expenditureType(INVALID_VALUE)
+                .frequency(INVALID_VALUE)
+                .build();
 
         //When
         var violations = validator.validate(expenditure);

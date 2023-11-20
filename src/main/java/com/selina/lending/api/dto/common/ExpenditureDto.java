@@ -22,6 +22,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Builder
 @Data
 public class ExpenditureDto {
@@ -29,9 +32,14 @@ public class ExpenditureDto {
     @EnumValue(enumClass = Frequency.class)
     String frequency;
     Integer balanceDeclared;
+
+    @NotNull
     Double amountDeclared;
+
     Double paymentVerified;
     Double amountVerified;
+
+    @NotBlank
     @Schema(implementation = ExpenditureType.class)
     @EnumValue(enumClass = ExpenditureType.class)
     String expenditureType;

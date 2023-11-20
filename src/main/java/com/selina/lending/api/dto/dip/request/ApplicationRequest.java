@@ -23,6 +23,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -38,5 +39,7 @@ public class ApplicationRequest {
     @Size(min = 4, max = 100)
     @Schema(description = "a unique identifier you provide for the application")
     private String externalApplicationId;
+
+    @Valid
     private List<ExpenditureDto> expenditure;
 }
