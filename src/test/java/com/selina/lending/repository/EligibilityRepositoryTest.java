@@ -26,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,7 +51,7 @@ public class EligibilityRepositoryTest extends MapperBase {
         when(tokenService.retrievePartnerAccountId()).thenReturn("partnerAccountId");
         when(eligibilityApi.getEligibility(any())).thenReturn(getEligibilityResponse());
 
-        var eligibility = eligibilityRepository.getEligibility(getQuickQuoteApplicationRequestDto());
+        var eligibility = eligibilityRepository.getEligibility(getQuickQuoteApplicationRequestDto(), List.of(getProduct()));
 
         assertThat(eligibility, equalTo(getEligibilityResponse()));
     }
@@ -59,6 +61,6 @@ public class EligibilityRepositoryTest extends MapperBase {
         when(tokenService.retrievePartnerAccountId()).thenReturn("partnerAccountId");
         when(eligibilityApi.getEligibility(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(RemoteResourceProblemException.class, () -> eligibilityRepository.getEligibility(getQuickQuoteApplicationRequestDto()));
+        assertThrows(RemoteResourceProblemException.class, () -> eligibilityRepository.getEligibility(getQuickQuoteApplicationRequestDto(), List.of(getProduct())));
     }
 }

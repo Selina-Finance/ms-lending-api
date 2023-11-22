@@ -19,6 +19,7 @@ package com.selina.lending.api.mapper.eligibility;
 
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
+import com.selina.lending.httpclient.eligibility.dto.request.CreditRisk;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Income;
 import com.selina.lending.httpclient.eligibility.dto.request.PropertyDetails;
@@ -41,7 +42,8 @@ public class EligibilityRequestMapperTest extends MapperBase {
 
     @Test
     void shouldMapEligibilityRequest() {
-        var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, getQuickQuoteApplicationRequestDto());
+        var products = List.of(getProduct());
+        var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, getQuickQuoteApplicationRequestDto(), products);
 
         assertThat(eligibilityRequest, equalTo(EligibilityRequest.builder()
                 .partnerAccountId(PARTNER_ACCOUNT_ID)
@@ -52,6 +54,11 @@ public class EligibilityRequestMapperTest extends MapperBase {
                         .buildingName(BUILDING_NAME)
                         .build())
                 .applicant(Applicant.builder()
+                        .creditRisk(CreditRisk.builder()
+                                .ltv(NET_LTV)
+                                .lti(LTI)
+                                .dti(DTIR)
+                                .build())
                         .incomes(List.of(Income.builder()
                                         .amount(INCOME_AMOUNT)
                                         .type(INCOME_TYPE)

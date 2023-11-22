@@ -79,10 +79,10 @@ feign:
         connectTimeout: 1000
         readTimeout: 2000
         loggerLevel: full
-
-service:
-  ms-eligibility:
-    readTimeout: 5000
+      eligibility-api:
+        connectTimeout: 1000
+        readTimeout: 5000
+        loggerLevel: full
 
 sla:
   requests:

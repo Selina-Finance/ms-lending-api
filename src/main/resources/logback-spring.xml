@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-<include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-<springProperty scope="context" name="appName" source="spring.application.name"/>
-<property name="PROD_LOG_PATTERN" value="[timestamp=%clr(%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}){faint}] [level=%clr(%5p)] [traceId=%X{traceId:-}] [spanId=%X{spanId:-}] [version=${IMAGE}] [source=%clr(%-40.40logger{39}){cyan}:%L] [thread=%clr([%15.15t]){faint}] %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <property name="PROD_LOG_PATTERN" value="[timestamp=%clr(%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}){faint}] [level=%clr(%5p)] [traceId=%X{traceId:-}] [spanId=%X{spanId:-}] [version=${IMAGE}] [source=%clr(%-40.40logger{39}){cyan}:%L] [thread=%clr([%15.15t]){faint}] %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
-<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-        <pattern>${PROD_LOG_PATTERN}</pattern>
-    </encoder>
-</appender>
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PROD_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
 
-<root level="info">
-    <appender-ref ref="Console"/>
-</root>
+    <root level="info">
+        <appender-ref ref="Console"/>
+    </root>
 
 </configuration>
 

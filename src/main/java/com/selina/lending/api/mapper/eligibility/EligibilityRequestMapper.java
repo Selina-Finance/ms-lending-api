@@ -21,8 +21,11 @@ import com.selina.lending.api.dto.common.IncomeDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
+import com.selina.lending.httpclient.eligibility.dto.request.CreditRisk;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Income;
+import com.selina.lending.httpclient.selection.dto.response.Product;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -38,10 +41,16 @@ public abstract class EligibilityRequestMapper {
 
     @Mapping(target = "partnerAccountId", source = "partnerAccountId")
     @Mapping(target = "propertyDetails", source = "request.propertyDetails")
-    @Mapping(target = "applicant", source = "request.applicants", qualifiedByName = "mapPrimaryApplicant")
-    public abstract EligibilityRequest mapToPropertyDetails(String partnerAccountId, QuickQuoteApplicationRequest request);
+    @Mapping(target = "applicant", source = "request.applicants", qualifiedByName = "mapApplicant")
+    public abstract EligibilityRequest mapToPropertyDetails(String partnerAccountId, QuickQuoteApplicationRequest request, @Context List<Product> products);
 
-    @Named("mapPrimaryApplicant")
+    @Named("mapApplicant")
+    Applicant mapApplicant(List<QuickQuoteApplicantDto> applicants, @Context List<Product> products) {
+        var primaryApplicant = mapPrimaryApplicant(applicants);
+        primaryApplicant.setCreditRisk(mapCreditRisk(products));
+        return primaryApplicant;
+    }
+
     Applicant mapPrimaryApplicant(List<QuickQuoteApplicantDto> applicants) {
         return applicants.stream()
                 .filter(applicant -> applicant.getPrimaryApplicant() != null && applicant.getPrimaryApplicant())
@@ -65,5 +74,34 @@ public abstract class EligibilityRequestMapper {
         }
 
         return incomes;
+    }
+
+    private CreditRisk mapCreditRisk(List<Product> products) {
+        return CreditRisk.builder()
+                .ltv(mapLtv(products))
+                .lti(mapLti(products))
+                .dti(mapDti(products))
+                .build();
+    }
+
+    private Double mapLtv(List<Product> products) {
+        return products.stream()
+                .findFirst()
+                .map(product -> product.getOffer().getNetLtv())
+                .orElse(null);
+    }
+
+    private Double mapLti(List<Product> products) {
+        return products.stream()
+                .map(product -> product.getOffer().getLti())
+                .max(Double::compareTo)
+                .orElse(null);
+    }
+
+    private Double mapDti(List<Product> products) {
+        return products.stream()
+                .map(product -> product.getOffer().getDtir())
+                .max(Double::compareTo)
+                .orElse(null);
     }
 }
