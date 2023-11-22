@@ -21,6 +21,7 @@ import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.mapper.eligibility.EligibilityRequestMapper;
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.eligibility.EligibilityApi;
+import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
 import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.service.TokenService;
@@ -47,9 +48,12 @@ public class EligibilityRepository {
         try {
             var partnerAccountId = tokenService.retrievePartnerAccountId();
             var propertyDetails = request.getPropertyDetails();
-            log.info("Retrieving eligibility for property details [partnerAccountId={}] [postcode={}] [address={}] [buildingNumber={}] [buildingName={}]",
-                    partnerAccountId, propertyDetails.getPostcode(), propertyDetails.getAddressLine1(), propertyDetails.getBuildingNumber(), propertyDetails.getBuildingName());
-            return eligibilityApi.getEligibility(eligibilityRequestMapper.mapToPropertyDetails(partnerAccountId, request, products));
+            var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(partnerAccountId, request, products);
+            log.info("Retrieving eligibility for property details [partnerAccountId={}] [postcode={}] [address={}] [buildingNumber={}] [buildingName={}]" +
+                            "and applicant [incomes={}] [creditRisk={}]",
+                    partnerAccountId, propertyDetails.getPostcode(), propertyDetails.getAddressLine1(), propertyDetails.getBuildingNumber(), propertyDetails.getBuildingName(),
+                    eligibilityRequest.getApplicant().getIncomes(), eligibilityRequest.getApplicant().getCreditRisk());
+            return eligibilityApi.getEligibility(eligibilityRequest);
         } catch (Exception ex) {
             log.error("Error retrieving eligibility for property details", ex);
             throw new RemoteResourceProblemException();
