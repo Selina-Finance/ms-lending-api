@@ -25,6 +25,7 @@ import com.selina.lending.httpclient.eligibility.dto.request.CreditRisk;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Income;
 import com.selina.lending.httpclient.selection.dto.response.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -35,6 +36,7 @@ import org.mapstruct.ReportingPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class EligibilityRequestMapper {
