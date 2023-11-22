@@ -230,6 +230,7 @@ public abstract class MapperBase {
     public static final Double LTI = 1.25;
     public static final Double LTV_CAP = 0.50;
     public static final Double CLTV = 31.25;
+    public static final Double NET_LTV = 0.3125;
     protected static final Double ARRANGEMENT_FEE = 1000.00;
     protected static final Double ARRANGEMENT_FEE_SELINA = 1000.00;
     protected static final Double ARRANGEMENT_FEE_DISCOUNT_SELINA = 1.0;
@@ -1004,6 +1005,7 @@ public abstract class MapperBase {
                 .offerValidity(OFFER_VALIDITY)
                 .esisLoanAmount(ESIS_LOAN_AMOUNT)
                 .arrangementFeeSelina(ARRANGEMENT_FEE_SELINA)
+                .netLtv(NET_LTV)
                 .netLoanAmount(NET_LOAN_AMOUNT)
                 .build();
     }

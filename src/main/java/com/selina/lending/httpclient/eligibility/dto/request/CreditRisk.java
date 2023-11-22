@@ -1,16 +1,15 @@
 package com.selina.lending.httpclient.eligibility.dto.request;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import java.util.List;
-
-@Data
+@Value
 @Builder
 @Jacksonized
-public class Applicant {
+public class CreditRisk {
 
-    CreditRisk creditRisk;
-    List<Income> incomes;
+    Double ltv;
+    Double lti;
+    Double dti;
 }

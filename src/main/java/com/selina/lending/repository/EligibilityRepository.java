@@ -22,9 +22,12 @@ import com.selina.lending.api.mapper.eligibility.EligibilityRequestMapper;
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.eligibility.EligibilityApi;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
+import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -40,13 +43,13 @@ public class EligibilityRepository {
         this.eligibilityRequestMapper = eligibilityRequestMapper;
     }
 
-    public EligibilityResponse getEligibility(QuickQuoteApplicationRequest request) {
+    public EligibilityResponse getEligibility(QuickQuoteApplicationRequest request, List<Product> products) {
         try {
             var partnerAccountId = tokenService.retrievePartnerAccountId();
             var propertyDetails = request.getPropertyDetails();
             log.info("Retrieving eligibility for property details [partnerAccountId={}] [postcode={}] [address={}] [buildingNumber={}] [buildingName={}]",
                     partnerAccountId, propertyDetails.getPostcode(), propertyDetails.getAddressLine1(), propertyDetails.getBuildingNumber(), propertyDetails.getBuildingName());
-            return eligibilityApi.getEligibility(eligibilityRequestMapper.mapToPropertyDetails(partnerAccountId, request));
+            return eligibilityApi.getEligibility(eligibilityRequestMapper.mapToPropertyDetails(partnerAccountId, request, products));
         } catch (Exception ex) {
             log.error("Error retrieving eligibility for property details", ex);
             throw new RemoteResourceProblemException();

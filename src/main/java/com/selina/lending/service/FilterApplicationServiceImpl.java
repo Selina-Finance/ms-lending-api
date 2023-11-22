@@ -27,6 +27,7 @@ import com.selina.lending.httpclient.eligibility.dto.response.EligibilityRespons
 import com.selina.lending.httpclient.eligibility.dto.response.PropertyInfo;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.repository.EligibilityRepository;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
@@ -65,7 +66,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final PartnerService partnerService;
     private final TokenService tokenService;
     private final List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors;
-    private final long eligibilityReadTimeout;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionRepository selectionRepository,
@@ -74,8 +74,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                                         ArrangementFeeSelinaService arrangementFeeSelinaService,
                                         PartnerService partnerService,
                                         TokenService tokenService,
-                                        List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors,
-                                        @Value("${service.ms-eligibility.readTimeout}") long eligibilityReadTimeout) {
+                                        List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
@@ -84,7 +83,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.partnerService = partnerService;
         this.tokenService = tokenService;
         this.alternativeOfferRequestProcessors = alternativeOfferRequestProcessors;
-        this.eligibilityReadTimeout = eligibilityReadTimeout;
     }
 
     @Override
@@ -100,13 +98,27 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
         enrichSelectionRequestWithFees(selectionRequest, clientId);
-        var decisionResponse = getOffers(selectionRequest, request);
+
+        var decisionResponse = selectionRepository.filter(selectionRequest);
 
         if (isDecisionAccepted(decisionResponse)) {
+            enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, decisionResponse, decisionResponse.getProducts());
             storeOffersInMiddleware(request, selectionRequest, decisionResponse);
         }
 
         return decisionResponse;
+    }
+
+    private void enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(QuickQuoteApplicationRequest request,
+                                                                                 FilteredQuickQuoteDecisionResponse decisionResponse,
+                                                                                 List<Product> products) {
+        try {
+            var eligibilityResponse = eligibilityRepository.getEligibility(request, products);
+            updatePropertyEstimatedValue(request.getPropertyDetails(), eligibilityResponse.getPropertyInfo());
+            enrichOffersWithEligibility(eligibilityResponse, decisionResponse);
+        } catch (Exception ex) {
+            log.error("Error retrieving eligibility. The default value from the decision service will be used.", ex);
+        }
     }
 
     private static boolean hasRequestedLoanTermLessThanAllowed(QuickQuoteApplicationRequest request) {
@@ -137,67 +149,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         return ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision()) && decisionResponse.getProducts() != null;
     }
 
-    @SneakyThrows
-    private FilteredQuickQuoteDecisionResponse getOffers(FilterQuickQuoteApplicationRequest selectionRequest, QuickQuoteApplicationRequest request) {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        var decisionResponseFuture = getDecisionResponseAsync(selectionRequest, authentication);
-        var eligibilityResponseFuture = getEligibilityAsync(request, authentication);
-
-        try {
-            var decisionResponse = decisionResponseFuture.get();
-
-            if (isDecisionAccepted(decisionResponse)) {
-                var eligibilityResponse = eligibilityResponseFuture.get();
-                updatePropertyEstimatedValue(request.getPropertyDetails(), eligibilityResponse.getPropertyInfo());
-                enrichOffersWithEligibility(eligibilityResponse, decisionResponse);
-            }
-
-            return decisionResponse;
-        } catch (InterruptedException | ExecutionException ex) {
-            log.error("An error occurred while getting offers", ex);
-
-            if (!decisionResponseFuture.isCompletedExceptionally()) {
-                log.warn("Return offers with default eligibility");
-                return decisionResponseFuture.get();
-            }
-
-            throw new RemoteResourceProblemException();
-        }
-    }
-
     private void updatePropertyEstimatedValue(QuickQuotePropertyDetailsDto propertyDetails, PropertyInfo propertyInfo) {
         if (propertyDetails.getEstimatedValue() == null) {
             Double eligibilityEstimatedValue = propertyInfo != null ? propertyInfo.getEstimatedValue() : null;
             propertyDetails.setEstimatedValue(eligibilityEstimatedValue);
             log.info("Property estimated value is not specified. Use the value from eligibility response [estimatedValue={}]", eligibilityEstimatedValue);
         }
-    }
-
-    private CompletableFuture<FilteredQuickQuoteDecisionResponse> getDecisionResponseAsync(FilterQuickQuoteApplicationRequest selectionRequest, Authentication authentication) {
-        return CompletableFuture.supplyAsync(() -> {
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return selectionRepository.filter(selectionRequest);
-        }).whenComplete((result, ex) -> {
-            if (ex != null) {
-                log.error("Error getting decision", ex);
-            } else {
-                log.info("Successfully got [decision={}]", result.getDecision());
-            }
-        });
-    }
-
-    private CompletableFuture<EligibilityResponse> getEligibilityAsync(QuickQuoteApplicationRequest request, Authentication authentication) {
-        return CompletableFuture.supplyAsync(() -> {
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return eligibilityRepository.getEligibility(request);
-        }).orTimeout(eligibilityReadTimeout, TimeUnit.MILLISECONDS)
-                .whenComplete((result, ex) -> {
-                    if (ex != null) {
-                        log.error("Error getting eligibility", ex);
-                    } else {
-                        log.info("Successfully got [eligibility={}]", result.getEligibility());
-                    }
-                });
     }
 
     private static void enrichOffersWithEligibility(EligibilityResponse eligibilityResponse, FilteredQuickQuoteDecisionResponse decisionResponse) {
