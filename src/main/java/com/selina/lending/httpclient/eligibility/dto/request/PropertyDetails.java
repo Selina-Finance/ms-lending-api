@@ -28,4 +28,5 @@ public class PropertyDetails {
     String addressLine1;
     String buildingNumber;
     String buildingName;
+    Double estimatedValue;
 }

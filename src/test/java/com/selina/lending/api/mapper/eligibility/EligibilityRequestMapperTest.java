@@ -52,6 +52,7 @@ public class EligibilityRequestMapperTest extends MapperBase {
                         .postcode(POSTCODE)
                         .buildingNumber(BUILDING_NUMBER)
                         .buildingName(BUILDING_NAME)
+                        .estimatedValue(ESTIMATED_VALUE)
                         .build())
                 .applicant(Applicant.builder()
                         .creditRisk(CreditRisk.builder()
