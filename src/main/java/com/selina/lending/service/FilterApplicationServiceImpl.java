@@ -50,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String MONEVO_CLIENT_ID = "monevo";
+    private static final String CLEARSCORE_CLIENT_ID = "clearscore";
 
     private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
 
@@ -182,10 +183,18 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             requestFees.setIsAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT);
         }
 
-        if (MONEVO_CLIENT_ID.equalsIgnoreCase(clientId)) {
+        if (isMonevoClient(clientId) || isClearScoreClient(clientId)) {
             requestFees.setIsAddArrangementFeeSelinaToLoan(true);
             requestFees.setIsAddProductFeesToFacility(true);
         }
+    }
+
+    private static boolean isClearScoreClient(String clientId) {
+        return CLEARSCORE_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
+    private static boolean isMonevoClient(String clientId) {
+        return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId);
     }
 
     private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, FilterQuickQuoteApplicationRequest selectionRequest, FilteredQuickQuoteDecisionResponse decisionResponse) {
