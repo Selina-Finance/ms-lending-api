@@ -21,6 +21,7 @@ public class QuickQuoteRequest {
     private String applicationType;
     private String productCode;
     private Boolean hasGivenConsentForMarketingCommunications;
+    private Boolean isNotContactable;
     private List<Applicant> applicants;
     private Fees fees;
     private LeadDto lead; //TODO must not reuse controller DTO

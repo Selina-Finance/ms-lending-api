@@ -35,6 +35,7 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
     @Mapping(target = "applicants", source = "request.applicants")
     @Mapping(target = "hasGivenConsentForMarketingCommunications", constant = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS)
+    @Mapping(target = "isNotContactable", expression = "java(!isContactable())")
     @Mapping(target = "fees", source = "fees")
     @Mapping(target = "offers", source = "products")
     @Mapping(target = "partner", source = "request.partner")
@@ -43,7 +44,14 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
                                                              List<Product> products, Fees fees);
 
     String calculateSource() {
-        return MS_QUICK_QUOTE_CLIENT_ID.equalsIgnoreCase(tokenService.retrieveClientId()) ? QUICK_QUOTE_FORM_SOURCE : LENDING_API_SOURCE;
+        return isMsQuickQuoteClient() ? QUICK_QUOTE_FORM_SOURCE : LENDING_API_SOURCE;
     }
 
+    Boolean isContactable() {
+        return isMsQuickQuoteClient();
+    }
+
+    boolean isMsQuickQuoteClient() {
+        return MS_QUICK_QUOTE_CLIENT_ID.equalsIgnoreCase(tokenService.retrieveClientId());
+    }
 }
