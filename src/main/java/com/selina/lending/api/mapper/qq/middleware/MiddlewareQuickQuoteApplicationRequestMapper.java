@@ -19,16 +19,18 @@ import java.util.List;
                 ExpenditureMapper.class})
 public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
 
-    @Autowired
-    protected TokenService tokenService;
-
+    private static final String MS_QUICK_QUOTE_CLIENT_ID = "ms-quick-quote";
     private static final String PRODUCT_CODE = "QQ01";
-    private static final String SOURCE = "LendingAPI";
+    private static final String LENDING_API_SOURCE = "LendingAPI";
+    private static final String QUICK_QUOTE_FORM_SOURCE = "Quick Quote Form";
     private static final String APPLICATION_TYPE = "QuickQuote";
     private static final String HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS = "false";
 
+    @Autowired
+    protected TokenService tokenService;
+
     @Mapping(target = "sourceAccount", expression = "java(tokenService.retrieveSourceAccount())")
-    @Mapping(target = "source", constant = SOURCE)
+    @Mapping(target = "source", expression = "java(calculateSource())")
     @Mapping(target = "applicationType", constant = APPLICATION_TYPE)
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
     @Mapping(target = "applicants", source = "request.applicants")
@@ -39,4 +41,9 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "expenditure", source = "request.expenditure")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
                                                              List<Product> products, Fees fees);
+
+    String calculateSource() {
+        return MS_QUICK_QUOTE_CLIENT_ID.equalsIgnoreCase(tokenService.retrieveClientId()) ? QUICK_QUOTE_FORM_SOURCE : LENDING_API_SOURCE;
+    }
+
 }

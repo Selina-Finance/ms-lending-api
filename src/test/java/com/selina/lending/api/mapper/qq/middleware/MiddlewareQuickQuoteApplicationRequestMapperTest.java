@@ -16,6 +16,7 @@ import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
 import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.service.TokenService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,8 +34,10 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
 
+    private static final String MS_QUICK_QUOTE_CLIENT_ID = "ms-quick-quote";
     private static final String SOURCE_ACCOUNT = "Source account";
     private static final String LENDING_API_SOURCE = "LendingAPI";
+    private static final String QUICK_QUOTE_FORM_SOURCE = "Quick Quote Form";
     private static final String QUICK_QUOTE_APPLICATION_TYPE = "QuickQuote";
     private static final String QQ01_PRODUCT_CODE = "QQ01";
     private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN = true;
@@ -44,6 +47,11 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
 
     @Autowired
     private MiddlewareQuickQuoteApplicationRequestMapper mapper;
+
+    @BeforeEach
+    void setUp() {
+        when(tokenService.retrieveClientId()).thenReturn("the-aggregator");
+    }
 
     @Test
     void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
@@ -110,6 +118,28 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         //Then
 
         assertFeesWithAllOtherFees(middlewareCreateApplicationEvent.getFees());
+    }
+
+    @Test
+    void whenQQApplicationCreatedByMsQuickQuoteServiceThenChangeSourceToQuickQuoteForm() {
+        //Given
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(tokenService.retrieveClientId()).thenReturn(MS_QUICK_QUOTE_CLIENT_ID);
+
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        List<Product> products = List.of(getProduct());
+        Fees fees = Fees.builder()
+                .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
+                .addArrangementFeeSelina(true)
+                .isAddArrangementFeeSelinaToLoan(ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN)
+                .build();
+
+        //When
+        QuickQuoteRequest middlewareCreateApplicationEvent =
+                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getSource(), equalTo(QUICK_QUOTE_FORM_SOURCE));
     }
 
     private void assertApplicants(List<Applicant> applicants) {
