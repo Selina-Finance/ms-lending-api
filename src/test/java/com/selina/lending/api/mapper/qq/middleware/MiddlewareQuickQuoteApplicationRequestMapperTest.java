@@ -76,6 +76,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(middlewareCreateApplicationEvent.getApplicationType(), equalTo(QUICK_QUOTE_APPLICATION_TYPE));
         assertThat(middlewareCreateApplicationEvent.getProductCode(), equalTo(QQ01_PRODUCT_CODE));
         assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(false));
+        assertThat(middlewareCreateApplicationEvent.getIsNotContactable(), equalTo(true));
 
         assertApplicants(middlewareCreateApplicationEvent.getApplicants());
         assertFees(fees, middlewareCreateApplicationEvent.getFees());
@@ -140,6 +141,28 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
 
         //Then
         assertThat(middlewareCreateApplicationEvent.getSource(), equalTo(QUICK_QUOTE_FORM_SOURCE));
+    }
+
+    @Test
+    void whenQQApplicationCreatedByMsQuickQuoteServiceThenChangeIsNotContactableToFalse() {
+        //Given
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        when(tokenService.retrieveClientId()).thenReturn(MS_QUICK_QUOTE_CLIENT_ID);
+
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        List<Product> products = List.of(getProduct());
+        Fees fees = Fees.builder()
+                .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
+                .addArrangementFeeSelina(true)
+                .isAddArrangementFeeSelinaToLoan(ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN)
+                .build();
+
+        //When
+        QuickQuoteRequest middlewareCreateApplicationEvent =
+                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getIsNotContactable(), equalTo(false));
     }
 
     private void assertApplicants(List<Applicant> applicants) {
