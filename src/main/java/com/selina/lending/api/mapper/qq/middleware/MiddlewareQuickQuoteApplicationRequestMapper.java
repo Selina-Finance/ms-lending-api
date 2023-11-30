@@ -8,10 +8,12 @@ import com.selina.lending.service.TokenService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -40,6 +42,7 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "offers", source = "products")
     @Mapping(target = "partner", source = "request.partner")
     @Mapping(target = "expenditure", source = "request.expenditure")
+    @Mapping(target = "eligibility", source = "products", qualifiedByName = "mapEligibility")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
                                                              List<Product> products, Fees fees);
 
@@ -53,5 +56,14 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
 
     boolean isMsQuickQuoteClient() {
         return MS_QUICK_QUOTE_CLIENT_ID.equalsIgnoreCase(tokenService.retrieveClientId());
+    }
+
+    @Named("mapEligibility")
+    Double mapEligibility(List<Product> products) {
+        return products.stream()
+                .map(product -> product.getOffer().getEligibility())
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 }

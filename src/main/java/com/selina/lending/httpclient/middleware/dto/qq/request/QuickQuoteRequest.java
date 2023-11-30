@@ -30,4 +30,5 @@ public class QuickQuoteRequest {
     private List<Offer> offers;
     private Partner partner;
     private List<Expenditure> expenditure;
+    private Double eligibility;
 }

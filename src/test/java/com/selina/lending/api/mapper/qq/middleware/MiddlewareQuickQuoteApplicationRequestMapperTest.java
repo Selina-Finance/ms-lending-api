@@ -27,7 +27,9 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
@@ -66,8 +68,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
                 .build();
 
         //When
-        QuickQuoteRequest middlewareCreateApplicationEvent =
-                mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+        QuickQuoteRequest middlewareCreateApplicationEvent = mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
 
         //Then
         assertThat(middlewareCreateApplicationEvent.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
@@ -77,6 +78,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(middlewareCreateApplicationEvent.getProductCode(), equalTo(QQ01_PRODUCT_CODE));
         assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(false));
         assertThat(middlewareCreateApplicationEvent.getIsNotContactable(), equalTo(true));
+        assertThat(middlewareCreateApplicationEvent.getEligibility(), equalTo(ELIGIBILITY));
 
         assertApplicants(middlewareCreateApplicationEvent.getApplicants());
         assertFees(fees, middlewareCreateApplicationEvent.getFees());
@@ -86,6 +88,22 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertOffers(middlewareCreateApplicationEvent.getOffers());
         assertPartner(middlewareCreateApplicationEvent.getPartner());
         assertExpenditure(middlewareCreateApplicationEvent.getExpenditure());
+    }
+
+    @Test
+    void whenEligibilityIsNotFoundThenMapNullToMiddlewareCreateApplicationEvent() {
+        //Given
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        List<Product> products = List.of(getProduct());
+        products.get(0).getOffer().setEligibility(null);
+
+        //When
+        QuickQuoteRequest middlewareCreateApplicationEvent = mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, Fees.builder().build());
+
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getEligibility(), is(nullValue()));
     }
 
     @Test
