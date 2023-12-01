@@ -39,7 +39,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
     private static final String MS_QUICK_QUOTE_CLIENT_ID = "ms-quick-quote";
     private static final String SOURCE_ACCOUNT = "Source account";
     private static final String LENDING_API_SOURCE = "LendingAPI";
-    private static final String QUICK_QUOTE_FORM_SOURCE = "Quick Quote Form";
+    private static final String QUICK_QUOTE_FORM_SOURCE = "QuickQuoteForm";
     private static final String QUICK_QUOTE_APPLICATION_TYPE = "QuickQuote";
     private static final String QQ01_PRODUCT_CODE = "QQ01";
     private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN = true;
