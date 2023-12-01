@@ -24,7 +24,7 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     private static final String MS_QUICK_QUOTE_CLIENT_ID = "ms-quick-quote";
     private static final String PRODUCT_CODE = "QQ01";
     private static final String LENDING_API_SOURCE = "LendingAPI";
-    private static final String QUICK_QUOTE_FORM_SOURCE = "Quick Quote Form";
+    private static final String QUICK_QUOTE_FORM_SOURCE = "QuickQuoteForm";
     private static final String APPLICATION_TYPE = "QuickQuote";
     private static final String HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS = "false";
 
