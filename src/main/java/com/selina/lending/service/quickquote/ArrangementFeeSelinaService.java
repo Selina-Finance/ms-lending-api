@@ -5,6 +5,7 @@ import com.selina.lending.service.TokenService;
 import org.springframework.stereotype.Service;
 
 import static com.selina.lending.service.SourceType.AGGREGATOR;
+import static com.selina.lending.service.SourceType.DIRECT;
 
 @Service
 public class ArrangementFeeSelinaService {
@@ -30,7 +31,7 @@ public class ArrangementFeeSelinaService {
     }
 
     private boolean shouldAddArrangementFeeSelina(String sourceType) {
-        return AGGREGATOR.toString().equals(sourceType);
+        return AGGREGATOR.toString().equals(sourceType) || DIRECT.toString().equals(sourceType);
     }
 
 }

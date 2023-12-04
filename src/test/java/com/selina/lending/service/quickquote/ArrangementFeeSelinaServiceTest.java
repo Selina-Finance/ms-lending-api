@@ -40,6 +40,20 @@ class ArrangementFeeSelinaServiceTest {
     }
 
     @Test
+    void whenTokenClaimSourceTypeIsDirectThenAddArrangementFeeSelinaIsTrue(){
+        // Given
+        when(tokenService.retrieveSourceType()).thenReturn(SourceType.DIRECT.toString());
+        when(tokenService.retrieveArrangementFeeDiscountSelina()).thenReturn(0.0);
+
+        // When
+        var result = arrangementFeeSelinaService.getFeesFromToken();
+
+        // Then
+        assertTrue(result.getAddArrangementFeeSelina());
+        assertThat(result.getArrangementFeeDiscountSelina(), equalTo(0.0));
+    }
+
+    @Test
     void whenTokenClaimSourceTypeIsBrokerThenAddArrangementFeeSelinaIsFalse(){
         // Given
         when(tokenService.retrieveSourceType()).thenReturn(SourceType.BROKER.toString());
