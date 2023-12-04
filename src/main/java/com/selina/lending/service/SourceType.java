@@ -3,7 +3,8 @@ package com.selina.lending.service;
 public enum SourceType {
 
     BROKER("Broker"),
-    AGGREGATOR("Aggregator");
+    AGGREGATOR("Aggregator"),
+    DIRECT("Direct");
 
     final String value;
 
