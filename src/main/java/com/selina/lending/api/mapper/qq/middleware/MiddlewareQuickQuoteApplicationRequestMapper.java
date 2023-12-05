@@ -1,7 +1,10 @@
 package com.selina.lending.api.mapper.qq.middleware;
 
+import com.selina.lending.api.dto.qq.request.LoanInformationDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.middleware.dto.common.Facility;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
+import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
 import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.service.TokenService;
@@ -43,6 +46,7 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "offers", source = "products")
     @Mapping(target = "partner", source = "request.partner")
     @Mapping(target = "expenditure", source = "request.expenditure")
+    @Mapping(target = "loanInformation", source = "request.loanInformation", qualifiedByName = "mapLoanInformation")
     @Mapping(target = "eligibility", source = "products", qualifiedByName = "mapEligibility")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
                                                              List<Product> products, Fees fees);
@@ -66,5 +70,35 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Named("mapLoanInformation")
+    LoanInformation mapLoanInformation(LoanInformationDto loanInformationDto) {
+        if (loanInformationDto == null) {
+            return null;
+        }
+
+        LoanInformation.LoanInformationBuilder loanInformation = LoanInformation.builder();
+        loanInformation.requestedLoanAmount(loanInformationDto.getRequestedLoanAmount());
+        loanInformation.loanPurpose(loanInformationDto.getLoanPurpose());
+        loanInformation.desiredTimeLine(loanInformationDto.getDesiredTimeLine());
+
+        if (loanInformationDto.getRequestedLoanTerm() != null) {
+            loanInformation.requestedLoanTerm(loanInformationDto.getRequestedLoanTerm());
+        }
+
+        if (loanInformationDto.getNumberOfApplicants() != null) {
+            loanInformation.numberOfApplicants(loanInformationDto.getNumberOfApplicants());
+        }
+
+        loanInformation.facilities(mapFacilities(loanInformationDto.getRequestedLoanAmount(), loanInformationDto.getLoanPurpose()));
+        return loanInformation.build();
+    }
+
+    private List<Facility> mapFacilities(Integer requestedLoanAmount, String loanPurpose) {
+        return List.of(Facility.builder()
+                .allocationAmount(requestedLoanAmount.doubleValue())
+                .allocationPurpose(loanPurpose)
+                .build());
     }
 }
