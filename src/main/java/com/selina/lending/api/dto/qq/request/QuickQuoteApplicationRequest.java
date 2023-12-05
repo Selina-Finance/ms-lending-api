@@ -61,4 +61,6 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
 
     @Valid
     private QuickQuoteFeesDto fees;
+
+    private Boolean hasGivenConsentForMarketingCommunications;
 }
