@@ -26,7 +26,7 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     private static final String LENDING_API_SOURCE = "LendingAPI";
     private static final String QUICK_QUOTE_FORM_SOURCE = "QuickQuoteForm";
     private static final String APPLICATION_TYPE = "QuickQuote";
-    private static final String HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS = "false";
+    private static final String HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS_DEFAULT = "false";
 
     @Autowired
     protected TokenService tokenService;
@@ -36,7 +36,8 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "applicationType", constant = APPLICATION_TYPE)
     @Mapping(target = "productCode", constant = PRODUCT_CODE)
     @Mapping(target = "applicants", source = "request.applicants")
-    @Mapping(target = "hasGivenConsentForMarketingCommunications", constant = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS)
+    @Mapping(target = "hasGivenConsentForMarketingCommunications", source = "request.hasGivenConsentForMarketingCommunications",
+            defaultValue = HAS_GIVEN_CONSENT_FOR_MARKETING_COMMUNICATIONS_DEFAULT)
     @Mapping(target = "isNotContactable", expression = "java(!isContactable())")
     @Mapping(target = "fees", source = "fees")
     @Mapping(target = "offers", source = "products")

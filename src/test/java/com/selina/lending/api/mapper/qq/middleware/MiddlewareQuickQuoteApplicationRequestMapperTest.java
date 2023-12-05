@@ -91,6 +91,22 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
     }
 
     @Test
+    void whenHasGivenConsentForMarketingCommunicationsIsSpecifiedThenUseSpecifiedValue() {
+        //Given
+        when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.setHasGivenConsentForMarketingCommunications(true);
+        List<Product> products = List.of(getProduct());
+        Fees fees = Fees.builder().build();
+
+        //When
+        QuickQuoteRequest middlewareCreateApplicationEvent = mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(true));
+    }
+
+    @Test
     void whenEligibilityIsNotFoundThenMapNullToMiddlewareCreateApplicationEvent() {
         //Given
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
