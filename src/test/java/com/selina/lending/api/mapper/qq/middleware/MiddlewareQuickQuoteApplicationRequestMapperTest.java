@@ -287,6 +287,11 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(loanInformation.getNumberOfApplicants(), equalTo(1));
         assertThat(loanInformation.getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(loanInformation.getDesiredTimeLine(), equalTo(DESIRED_TIME_LINE));
+
+        var facilities = loanInformation.getFacilities();
+        assertThat(facilities, hasSize(1));
+        assertThat(facilities.get(0).getAllocationAmount(), equalTo(LOAN_AMOUNT.doubleValue()));
+        assertThat(facilities.get(0).getAllocationPurpose(), equalTo(LOAN_PURPOSE));
     }
 
     private void assertPropertyDetails(PropertyDetails propertyDetails) {
