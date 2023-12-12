@@ -56,6 +56,7 @@ public class EligibilityRequestMapperTest extends MapperBase {
                         .build())
                 .applicant(Applicant.builder()
                         .creditRisk(CreditRisk.builder()
+                                .conductStatus(CONDUCT_STATUS_PRE_APPROVED)
                                 .ltv(NET_LTV)
                                 .lti(LTI)
                                 .dti(DTIR)

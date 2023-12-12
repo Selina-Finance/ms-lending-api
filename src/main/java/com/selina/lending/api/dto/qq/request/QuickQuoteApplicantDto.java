@@ -105,4 +105,6 @@ public class QuickQuoteApplicantDto {
     private IncomeDto income;
 
     private Boolean primaryApplicant;
+
+    private CreditRisk creditRisk;
 }
