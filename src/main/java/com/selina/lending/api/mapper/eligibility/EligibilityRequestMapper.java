@@ -83,16 +83,11 @@ public abstract class EligibilityRequestMapper {
 
     private CreditRisk mapCreditRisk(QuickQuoteApplicantDto applicant, List<Product> products) {
         return CreditRisk.builder()
-                .conductStatus(mapConductStatus(applicant))
+                .filterPassed(applicant.getFilterPassed())
                 .ltv(mapLtv(products))
                 .lti(mapLti(products))
                 .dti(mapDti(products))
                 .build();
-    }
-
-    private static String mapConductStatus(QuickQuoteApplicantDto applicant) {
-        var creditRisk = applicant.getCreditRisk();
-        return creditRisk != null ? creditRisk.getConductStatus() : null;
     }
 
     private Double mapLtv(List<Product> products) {

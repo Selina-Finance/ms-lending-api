@@ -106,6 +106,23 @@ public class QuickQuoteApplicantDto {
 
     private Boolean primaryApplicant;
 
-    @Valid
-    private CreditRisk creditRisk;
+    @Schema(implementation = FilterPassed.class, description = "The strictest passed filter on an aggregator's side")
+    @EnumValue(enumClass = FilterPassed.class)
+    String filterPassed;
+
+    enum FilterPassed {
+        PRE_APPROVAL("Pre-approval"),
+        STATUS_0("Status 0"),
+        STATUS_1("Status 1");
+
+        final String value;
+        FilterPassed(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

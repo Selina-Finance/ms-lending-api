@@ -9,7 +9,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class CreditRisk {
 
-    String conductStatus;
+    String filterPassed;
     Double ltv;
     Double lti;
     Double dti;

@@ -50,7 +50,6 @@ import com.selina.lending.api.dto.dip.response.DIPApplicationDto;
 import com.selina.lending.api.dto.dip.response.PropertyDetailValueDto;
 import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.api.dto.dipcc.request.DIPCCPropertyDetailsDto;
-import com.selina.lending.api.dto.qq.request.CreditRisk;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
@@ -228,7 +227,7 @@ public abstract class MapperBase {
     public static final Date MODIFIED_DATE;
     public static final String SOURCE_CLIENT_ID = "a-client-id";
     public static final String CATEGORY_STATUS_0 = "Status 0";
-    public static final String CONDUCT_STATUS_PRE_APPROVED = "Pre-approved";
+    public static final String FILTER_PASSED_PRE_APPROVAL = "Pre-approval";
     public static final Double LTI = 1.25;
     public static final Double LTV_CAP = 0.50;
     public static final Double CLTV = 31.25;
@@ -525,13 +524,7 @@ public abstract class MapperBase {
                 .income(getIncomeDto())
                 .residentialStatus(RESIDENTIAL_STATUS_OWNER)
                 .employment(getEmploymentDto())
-                .creditRisk(getCreditRisk())
-                .build();
-    }
-
-    private CreditRisk getCreditRisk() {
-        return CreditRisk.builder()
-                .conductStatus(CONDUCT_STATUS_PRE_APPROVED)
+                .filterPassed(FILTER_PASSED_PRE_APPROVAL)
                 .build();
     }
 
