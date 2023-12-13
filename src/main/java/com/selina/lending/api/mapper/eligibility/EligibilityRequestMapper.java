@@ -48,18 +48,21 @@ public abstract class EligibilityRequestMapper {
 
     @Named("mapApplicant")
     Applicant mapApplicant(List<QuickQuoteApplicantDto> applicants, @Context List<Product> products) {
-        var primaryApplicant = mapPrimaryApplicant(applicants);
-        primaryApplicant.setCreditRisk(mapCreditRisk(products));
-        return primaryApplicant;
+        var primaryApplicant = findPrimaryApplicant(applicants);
+        if (primaryApplicant == null) {
+            return null;
+        }
+
+        return Applicant.builder()
+                .incomes(mapIncomes(primaryApplicant.getIncome()))
+                .creditRisk(mapCreditRisk(primaryApplicant, products))
+                .build();
     }
 
-    Applicant mapPrimaryApplicant(List<QuickQuoteApplicantDto> applicants) {
+    private QuickQuoteApplicantDto findPrimaryApplicant(List<QuickQuoteApplicantDto> applicants) {
         return applicants.stream()
                 .filter(applicant -> applicant.getPrimaryApplicant() != null && applicant.getPrimaryApplicant())
                 .findFirst()
-                .map(primaryApplicant -> Applicant.builder()
-                        .incomes(mapIncomes(primaryApplicant.getIncome()))
-                        .build())
                 .orElse(null);
     }
 
@@ -78,12 +81,18 @@ public abstract class EligibilityRequestMapper {
         return incomes;
     }
 
-    private CreditRisk mapCreditRisk(List<Product> products) {
+    private CreditRisk mapCreditRisk(QuickQuoteApplicantDto applicant, List<Product> products) {
         return CreditRisk.builder()
+                .conductStatus(mapConductStatus(applicant))
                 .ltv(mapLtv(products))
                 .lti(mapLti(products))
                 .dti(mapDti(products))
                 .build();
+    }
+
+    private static String mapConductStatus(QuickQuoteApplicantDto applicant) {
+        var creditRisk = applicant.getCreditRisk();
+        return creditRisk != null ? creditRisk.getConductStatus() : null;
     }
 
     private Double mapLtv(List<Product> products) {
