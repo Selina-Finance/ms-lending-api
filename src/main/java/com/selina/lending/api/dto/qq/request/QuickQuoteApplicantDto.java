@@ -106,5 +106,6 @@ public class QuickQuoteApplicantDto {
 
     private Boolean primaryApplicant;
 
+    @Valid
     private CreditRisk creditRisk;
 }
