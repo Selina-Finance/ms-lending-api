@@ -143,7 +143,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
         void whenCreateApplicationWithoutInvalidApplicantConductStatusThenReturnBadRequest() throws Exception {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
-            request.getApplicants().get(0).getCreditRisk().setConductStatus("some invalid conduct status");
+            request.getApplicants().get(0).setFilterPassed("some invalid conduct status");
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -154,7 +154,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                     .andExpect(jsonPath("$.title").value("Constraint Violation"))
                     .andExpect(jsonPath("$.violations", hasSize(1)))
-                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].creditRisk.conductStatus"))
+                    .andExpect(jsonPath("$.violations[0].field").value("applicants[0].filterPassed"))
                     .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
         }
 
