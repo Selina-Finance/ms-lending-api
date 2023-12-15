@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.controller;
 
+import com.selina.lending.httpclient.middleware.exception.MiddlewareContactIdIsNoneException;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +46,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     private static final String VIOLATIONS_KEY = "violations";
     private static final String UNABLE_TO_CONVERT_HTTP_MESSAGE_DETAIL = "Unable to convert http message";
     private static final String UNEXPECTED_RUNTIME_EXCEPTION_DETAIL = "Unexpected runtime exception";
+    private static final String MIDDLEWARE_CONTACT_ID_IS_NONE_EXCEPTION_DETAIL = "Specified brokerSubmitterEmail is not registered in the Broker Portal";
     private static final String DOWNSTREAM_EXCEPTION_DETAIL = "Sorry, unable to process your request";
     private static final String NOT_FOUND_EXCEPTION_DETAIL = "The entity does not exist";
     private static final String JSON_PARSE_ERROR = "JSON parse error";
@@ -81,6 +83,10 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                 return buildProblem(Status.NOT_FOUND, NOT_FOUND_EXCEPTION_DETAIL, throwable);
             }
             return buildProblem(Status.BAD_GATEWAY, DOWNSTREAM_EXCEPTION_DETAIL, throwable);
+        }
+
+        if (throwable instanceof MiddlewareContactIdIsNoneException middlewareContactIdIsNoneException) {
+            return buildProblem(Status.BAD_REQUEST, MIDDLEWARE_CONTACT_ID_IS_NONE_EXCEPTION_DETAIL, throwable);
         }
 
         if (isHttpMessageConversionException(throwable)) {

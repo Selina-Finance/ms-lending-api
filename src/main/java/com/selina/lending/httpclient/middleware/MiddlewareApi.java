@@ -18,6 +18,7 @@
 package com.selina.lending.httpclient.middleware;
 
 import com.selina.lending.config.security.clientOAuth2.MiddlewareOAuth2Configuration;
+import com.selina.lending.httpclient.middleware.config.MiddlewareApiErrorDecoder;
 import com.selina.lending.httpclient.middleware.dto.application.response.ApplicationDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
 import com.selina.lending.httpclient.middleware.dto.dip.response.ApplicationResponse;
@@ -39,7 +40,7 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 @FeignClient(
         value = "middleware-api",
         url = "${middleware.api.url}",
-        configuration = MiddlewareOAuth2Configuration.class
+        configuration = {MiddlewareOAuth2Configuration.class, MiddlewareApiErrorDecoder.class}
 )
 public interface MiddlewareApi {
 
