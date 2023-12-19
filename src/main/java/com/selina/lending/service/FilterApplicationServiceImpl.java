@@ -22,6 +22,7 @@ import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
 import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMapper;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
 import com.selina.lending.httpclient.eligibility.dto.response.PropertyInfo;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
@@ -33,11 +34,16 @@ import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProcessor;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -97,21 +103,11 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         var decisionResponse = selectionRepository.filter(selectionRequest);
 
         if (isDecisionAccepted(decisionResponse)) {
-            filterResponseOffers(clientId, decisionResponse);
             enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, decisionResponse, decisionResponse.getProducts());
             storeOffersInMiddleware(request, selectionRequest, decisionResponse);
         }
 
         return decisionResponse;
-    }
-
-    private void filterResponseOffers(String clientId, FilteredQuickQuoteDecisionResponse decisionResponse) {
-        if (isClearScoreClient(clientId)) {
-            decisionResponse.setProducts(decisionResponse.getProducts().stream()
-                    .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()))
-                    .stream()
-                    .toList());
-        }
     }
 
     private void enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(QuickQuoteApplicationRequest request,
