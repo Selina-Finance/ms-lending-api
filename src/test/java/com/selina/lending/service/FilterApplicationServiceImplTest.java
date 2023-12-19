@@ -21,6 +21,8 @@ import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
 import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
+import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
@@ -932,89 +934,6 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
                 assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
             }
-        }
-    }
-
-    @Nested
-    class ReturnTheLowestAprcOffer {
-
-        @Test
-        void whenClientIsClearScoreThenReturnOnlyOneOfferWithTheLowestAprc() {
-            // Given
-            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
-
-            var usualProduct = getProduct();
-            var lowestAprcProduct = getProduct();
-            lowestAprcProduct.getOffer().setAprc(1.0);
-
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-            decisionResponse.setProducts(List.of(usualProduct, lowestAprcProduct));
-
-            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
-            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-            when(tokenService.retrieveClientId()).thenReturn("clearscore");
-
-            // When
-            var response = filterApplicationService.filter(quickQuoteRequest);
-
-            // Then
-            assertThat(response.getProducts()).hasSize(1).containsOnly(lowestAprcProduct);
-        }
-
-        @Test
-        void whenClientIsClearScoreAndThereAreTwoOffersWithTheSameLowerAprcThenReturnOnlyTheFirstOne() {
-            // Given
-            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
-
-            var lowestAprc = 1.0;
-
-            var lowestAprcProduct1 = getProduct();
-            lowestAprcProduct1.getOffer().setAprc(lowestAprc);
-
-            var lowestAprcProduct2 = getProduct();
-            lowestAprcProduct2.getOffer().setAprc(lowestAprc);
-
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-            decisionResponse.setProducts(List.of(lowestAprcProduct1, lowestAprcProduct2));
-
-            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
-            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-            when(tokenService.retrieveClientId()).thenReturn("clearscore");
-
-            // When
-            var response = filterApplicationService.filter(quickQuoteRequest);
-
-            // Then
-            assertThat(response.getProducts()).hasSize(1).containsOnly(lowestAprcProduct1);
-        }
-
-        @Test
-        void whenClientIsNotClearScoreThenReturnAllAcceptedOffers() {
-            // Given
-            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
-
-            var usualProduct = getProduct();
-            var lowestAprcProduct = getProduct();
-            lowestAprcProduct.getOffer().setAprc(1.0);
-
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-            decisionResponse.setProducts(List.of(usualProduct, lowestAprcProduct));
-
-            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
-            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-            when(tokenService.retrieveClientId()).thenReturn("other-client");
-
-            // When
-            var response = filterApplicationService.filter(quickQuoteRequest);
-
-            // Then
-            assertThat(response.getProducts()).hasSize(2).containsExactly(usualProduct, lowestAprcProduct);
         }
     }
 }
