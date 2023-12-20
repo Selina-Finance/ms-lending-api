@@ -25,9 +25,9 @@ sonarqube {
 		property "sonar.projectKey", "Selina-Finance_ms-lending-api"
 		property "sonar.organization", "selina-finance"
 		property "sonar.host.url", "https://sonarcloud.io"
-		property "sonar.exclusions", "**/*ServiceApplication.java, **/com/selina/lending/internal/dto/**, **/com/selina/lending/internal/service/application/domain/**, **/com/selina/lending/config/**, **/com/selina/lending/messaging/event/**"
+		property "sonar.exclusions", "**/com/selina/lending/api/dto/**, **/com/selina/lending/httpclient/**/dto/**, **/com/selina/lending/config/**, **/com/selina/lending/messaging/event/**"
 		property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-		property "sonar.coverage.exclusions", "**/com/selina/lending/internal/dto/**, **/com/selina/lending/internal/service/application/domain/**, **/com/selina/lending/LendingServiceApplication**, **/com/selina/lending/api/ServletInitializer**, **/com/selina/lending/internal/api/AuthApi**, **/com/selina/lending/messaging/publisher/BrokerRequestEventPublisher**"
+		property "sonar.coverage.exclusions", "**/com/selina/lending/api/dto/**, **/com/selina/lending/httpclient/**/dto/**, **/com/selina/lending/config/**, **/com/selina/lending/messaging/event/**"
 	}
 }
 
@@ -93,13 +93,12 @@ jacocoTestReport {
 	afterEvaluate {
 		classDirectories.from = (files(classDirectories.files.collect {
 			fileTree(dir: it, excludes: [
-					'com/selina/lending/internal/service/application/domain/**',
-					'com/selina/lending/internal/dto/**',
-					'com/selina/lending/api/ServletInitializer**',
-					'com/selina/lending/internal/api/AuthApi**',
-					'com/selina/lending/config/**',
-					'com/selina/lending/messaging/event/**',
-					'com/selina/lending/messaging/publisher/BrokerRequestEventPublisher**'
+					"**/com/selina/lending/api/dto/**",
+					"**/com/selina/lending/httpclient/**/dto/**",
+					"**/com/selina/lending/httpclient/**/exception/**",
+					"**/com/selina/lending/config/**",
+					"**/com/selina/lending/config/**",
+					"**/com/selina/lending/messaging/event/**"
 			])
 		}))
 	}
