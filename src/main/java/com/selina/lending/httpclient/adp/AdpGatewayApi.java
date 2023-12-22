@@ -15,19 +15,20 @@
  *
  */
 
-package com.selina.lending.httpclient.selection;
+package com.selina.lending.httpclient.adp;
 
-import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
+import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
+
 @FeignClient(
-        value = "selection-service-api",
-        url = "${selection.service.url}")
-public interface SelectionApi {
+        value = "adp-gateway-api",
+        url = "${adp.gateway.service.url}")
+public interface AdpGatewayApi {
 
     @PostMapping(path = "/api/quickquote_eligibility", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    FilteredQuickQuoteDecisionResponse filterQuickQuote(FilterQuickQuoteApplicationRequest applicationRequest);
+    QuickQuoteEligibilityDecisionResponse quickQuoteEligibility(QuickQuoteEligibilityApplicationRequest applicationRequest);
 }

@@ -15,18 +15,23 @@
  *
  */
 
-package com.selina.lending.httpclient.selection.dto.response;
+package com.selina.lending.httpclient.adp.dto.request;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
-import com.selina.lending.httpclient.quickquote.Product;
-
 @Builder
 @Data
-public class FilteredQuickQuoteDecisionResponse {
-    private String decision;
-    private List<Product> products;
+public class Applicant {
+    private String firstName;
+    private String lastName;
+    private String middleName;
+    private LocalDate dateOfBirth;
+    private Integer numberOfAdultDependants;
+    private Integer numberOfChildDependants;
+    private List<Income> incomes;
+    private Boolean primaryApplicant;
 }

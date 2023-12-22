@@ -15,18 +15,12 @@
  *
  */
 
-package com.selina.lending.httpclient.selection.dto.response;
+package com.selina.lending.service;
 
-import lombok.Builder;
-import lombok.Data;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 
-import java.util.List;
+public interface QuickQuoteEligibilityService {
 
-import com.selina.lending.httpclient.quickquote.Product;
-
-@Builder
-@Data
-public class FilteredQuickQuoteDecisionResponse {
-    private String decision;
-    private List<Product> products;
+    QuickQuoteEligibilityDecisionResponse quickQuoteEligibility(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 }

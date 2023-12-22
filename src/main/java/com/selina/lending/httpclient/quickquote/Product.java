@@ -15,18 +15,25 @@
  *
  */
 
-package com.selina.lending.httpclient.selection.dto.response;
+package com.selina.lending.httpclient.quickquote;
+
+import com.selina.lending.httpclient.selection.dto.response.ProductOffer;
 
 import lombok.Builder;
-import lombok.Data;
-
-import java.util.List;
-
-import com.selina.lending.httpclient.quickquote.Product;
+import lombok.Value;
 
 @Builder
-@Data
-public class FilteredQuickQuoteDecisionResponse {
-    private String decision;
-    private List<Product> products;
+@Value
+public class Product {
+    String name;
+    String code;
+    String family;
+    String category;
+    String variant;
+    Boolean isVariable;
+    Boolean hasFee;
+    Boolean hasErc;
+    String ercProfile;
+    String ercShortCode;
+    ProductOffer offer;
 }
