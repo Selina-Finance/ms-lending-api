@@ -3,6 +3,7 @@ middleware.application.service.url: http://TBC
 selection.service.url: http://selection-service
 authorization.api.url: https://ms-authorization
 quickquote.web.url: http://mf-quick-quote
+adp.gateway.service.url: http://ms-adp-gateway
 
 service:
   ms-eligibility:

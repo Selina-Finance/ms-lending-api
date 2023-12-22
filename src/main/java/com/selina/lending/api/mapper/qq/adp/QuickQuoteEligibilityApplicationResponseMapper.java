@@ -15,24 +15,26 @@
  *
  */
 
-package com.selina.lending.api.mapper.qq.selection;
+package com.selina.lending.api.mapper.qq.adp;
 
-import com.selina.lending.api.dto.qq.response.ProductOfferDto;
-import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
-import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.httpclient.quickquote.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
+import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
+import com.selina.lending.httpclient.quickquote.Product;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface QuickQuoteApplicationResponseMapper {
-    QuickQuoteApplicationResponseMapper INSTANCE = Mappers.getMapper(QuickQuoteApplicationResponseMapper.class);
+public interface QuickQuoteEligibilityApplicationResponseMapper {
+    QuickQuoteEligibilityApplicationResponseMapper INSTANCE = Mappers.getMapper(
+            QuickQuoteEligibilityApplicationResponseMapper.class);
 
     @Mapping(source = "products", target = "offers")
     @Mapping(source = "decision", target = "status")
-    QuickQuoteResponse mapToQuickQuoteResponse(FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse);
+    QuickQuoteResponse mapToQuickQuoteResponse(QuickQuoteEligibilityDecisionResponse quickQuoteDecisionResponse);
 
     @Mapping(source = "product.name", target = "name")
     @Mapping(source = "product.code", target = "code")

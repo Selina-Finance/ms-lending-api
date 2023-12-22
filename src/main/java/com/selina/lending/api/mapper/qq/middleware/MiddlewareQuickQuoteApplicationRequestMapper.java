@@ -6,7 +6,7 @@ import com.selina.lending.httpclient.middleware.dto.common.Facility;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
-import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.httpclient.quickquote.Product;
 import com.selina.lending.service.TokenService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

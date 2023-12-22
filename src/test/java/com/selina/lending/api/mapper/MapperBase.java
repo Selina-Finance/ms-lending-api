@@ -57,6 +57,7 @@ import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicantDto;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFPropertyDetailsDto;
+import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 import com.selina.lending.httpclient.creditcommitments.dto.common.ApplicantCreditCommitments;
 import com.selina.lending.httpclient.creditcommitments.dto.common.CreditCommitmentsDetail;
 import com.selina.lending.httpclient.creditcommitments.dto.common.CreditPolicy;
@@ -100,7 +101,7 @@ import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.httpclient.quickquote.Product;
 import com.selina.lending.httpclient.selection.dto.response.ProductOffer;
 
 import java.text.ParseException;
@@ -926,6 +927,12 @@ public abstract class MapperBase {
                 .lead(getLead())
                 .intermediary(getIntermediary())
                 .salesforce(getSalesforce())
+                .build();
+    }
+
+    protected QuickQuoteEligibilityDecisionResponse getQuickQuoteEligibilityDecisionResponse() {
+        return QuickQuoteEligibilityDecisionResponse.builder().decision(DECISION)
+                .products(List.of(getProduct()))
                 .build();
     }
 

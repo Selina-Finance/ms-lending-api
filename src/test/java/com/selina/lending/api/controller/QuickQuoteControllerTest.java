@@ -21,12 +21,14 @@ import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 import com.selina.lending.exception.AccessDeniedException;
+import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.httpclient.quickquote.Product;
 import com.selina.lending.service.CreateApplicationService;
 import com.selina.lending.service.FilterApplicationService;
+import com.selina.lending.service.QuickQuoteEligibilityService;
 import com.selina.lending.service.TokenService;
 import com.selina.lending.service.enricher.ApplicationResponseEnricher;
 import com.selina.lending.testutil.ProductHelper;
@@ -67,12 +69,18 @@ class QuickQuoteControllerTest {
     private CreateApplicationService createApplicationService;
 
     @Mock
+    private QuickQuoteEligibilityService quickQuoteEligibilityService;
+
+    @Mock
     private TokenService tokenService;
 
     private ApplicationResponseEnricher applicationResponseEnricher;
 
     @Mock
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
+
+    @Mock
+    private QuickQuoteEligibilityDecisionResponse quickQuoteEligibilityDecisionResponse;
 
     @Mock
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
@@ -90,7 +98,7 @@ class QuickQuoteControllerTest {
         applicationResponseEnricher = Mockito.spy(new ApplicationResponseEnricher(QUICK_QUOTE_URL, tokenService));
 
         quickQuoteController = new QuickQuoteController(filterApplicationService, createApplicationService,
-                applicationResponseEnricher);
+                applicationResponseEnricher, quickQuoteEligibilityService);
     }
 
     @Test
@@ -128,6 +136,27 @@ class QuickQuoteControllerTest {
         assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
         verify(createApplicationService, times(1)).createQuickQuoteCFApplication(any());
     }
+
+    @Test
+    void createQuickQuoteEligibilityApplication() {
+        //Given
+        var id = UUID.randomUUID().toString();
+        when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
+        when(quickQuoteEligibilityService.quickQuoteEligibility(quickQuoteApplicationRequest)).thenReturn(quickQuoteEligibilityDecisionResponse);
+        when(quickQuoteEligibilityDecisionResponse.getProducts()).thenReturn(buildProductList());
+        when(tokenService.retrieveClientId()).thenReturn("clearscore");
+
+        //When
+        var response = quickQuoteController.createQuickQuoteEligibilityApplication(quickQuoteApplicationRequest);
+
+        //Then
+        assertNotNull(response);
+        assertThat(Objects.requireNonNull(response.getBody()).getExternalApplicationId(), equalTo(id));
+        assertThat(Objects.requireNonNull(response.getBody()).getOffers(), not(empty()));
+        assertOffersApplyUrlHasExpectedFormat(Objects.requireNonNull(response.getBody()).getOffers());
+        verify(quickQuoteEligibilityService, times(1)).quickQuoteEligibility(quickQuoteApplicationRequest);
+    }
+
 
     @Test
     void updateQuickQuoteApplication() {
