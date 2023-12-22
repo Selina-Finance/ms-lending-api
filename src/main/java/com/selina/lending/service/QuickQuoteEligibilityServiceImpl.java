@@ -45,7 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 public class QuickQuoteEligibilityServiceImpl implements QuickQuoteEligibilityService {
     private static final String MONEVO_CLIENT_ID = "monevo";
     private static final String CLEARSCORE_CLIENT_ID = "clearscore";
-    private static final double DEFAULT_ESTIMATED_VALUE = 99_999_999;
 
     private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
 
@@ -91,7 +90,6 @@ public class QuickQuoteEligibilityServiceImpl implements QuickQuoteEligibilitySe
             return getDeclinedResponse();
         }
 
-        setPropertyEstimatedValueIfDoesNotExist(request);
         setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
         QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(
                 request);
@@ -107,20 +105,6 @@ public class QuickQuoteEligibilityServiceImpl implements QuickQuoteEligibilitySe
         }
 
         return decisionResponse;
-    }
-
-    private void setPropertyEstimatedValueIfDoesNotExist(QuickQuoteApplicationRequest request) {
-        if (isPropertyDetailsEstimatedValueNotSpecified(request)) {
-            setDefaultPropertyDetailsEstimatedValue(request);
-        }
-    }
-
-    private boolean isPropertyDetailsEstimatedValueNotSpecified(QuickQuoteApplicationRequest request) {
-        return request.getPropertyDetails().getEstimatedValue() == null;
-    }
-
-    private void setDefaultPropertyDetailsEstimatedValue(QuickQuoteApplicationRequest request) {
-        request.getPropertyDetails().setEstimatedValue(DEFAULT_ESTIMATED_VALUE);
     }
 
     private void setOffersIsAprcHeadlineToTrue(QuickQuoteEligibilityDecisionResponse response) {

@@ -34,6 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.selina.lending.httpclient.adp.AdpGatewayApi;
 import com.selina.lending.httpclient.adp.dto.request.Application;
+import com.selina.lending.httpclient.adp.dto.request.PropertyDetails;
 import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
 import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 import com.selina.lending.httpclient.adp.dto.request.Source;
@@ -50,6 +51,10 @@ class AdpGatewayRepositoryImplTest {
 
     @Mock
     private Application application;
+
+    @Mock
+    private PropertyDetails propertyDetails;
+
     @Mock
     private QuickQuoteEligibilityDecisionResponse response;
 
@@ -71,6 +76,7 @@ class AdpGatewayRepositoryImplTest {
         var partnerAccountId = "Partner";
 
         when(request.getApplication()).thenReturn(application);
+        when(application.getPropertyDetails()).thenReturn(propertyDetails);
         when(api.quickQuoteEligibility(any())).thenReturn(response);
         when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
         when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
@@ -93,6 +99,7 @@ class AdpGatewayRepositoryImplTest {
         var sourceAccount = "Broker";
 
         when(request.getApplication()).thenReturn(application);
+        when(application.getPropertyDetails()).thenReturn(propertyDetails);
         when(api.quickQuoteEligibility(any())).thenReturn(response);
         when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
         when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
