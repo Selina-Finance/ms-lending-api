@@ -18,12 +18,12 @@
 package com.selina.lending.httpclient.adp.dto.request;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class PropertyDetails {
-    Double estimatedValue;
-    String postcode;
-    PriorCharges priorCharges;
+    private Double estimatedValue;
+    private String postcode;
+    private PriorCharges priorCharges;
 }

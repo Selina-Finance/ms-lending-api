@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class AdpGatewayRepositoryImpl implements AdpGatewayRepository {
 
+    private static final double DEFAULT_ESTIMATED_VALUE = 99_999_999;
     private final AdpGatewayApi api;
     private final TokenService tokenService;
 
@@ -49,15 +50,33 @@ public class AdpGatewayRepositoryImpl implements AdpGatewayRepository {
         return api.quickQuoteEligibility(request);
     }
 
+
     private void enrichRequest(QuickQuoteEligibilityApplicationRequest request) {
         var application = request.getApplication();
         var source = Source.builder().name(LendingConstants.REQUEST_SOURCE).account(
                 SourceAccount.builder().name(tokenService.retrieveSourceAccount()).build()).build();
         application.setSource(source);
 
+        setPropertyEstimatedValueIfDoesNotExist(request);
+
         var partnerAccountId = tokenService.retrievePartnerAccountId();
         if (partnerAccountId != null) {
             application.setPartnerAccountId(partnerAccountId);
         }
+    }
+
+    private void setPropertyEstimatedValueIfDoesNotExist(QuickQuoteEligibilityApplicationRequest request) {
+        if (isPropertyDetailsEstimatedValueNotSpecified(request)) {
+            setDefaultPropertyDetailsEstimatedValue(request);
+        }
+    }
+
+    private void setDefaultPropertyDetailsEstimatedValue(QuickQuoteEligibilityApplicationRequest request) {
+        request.getApplication().getPropertyDetails().setEstimatedValue(DEFAULT_ESTIMATED_VALUE);
+    }
+
+
+    private boolean isPropertyDetailsEstimatedValueNotSpecified(QuickQuoteEligibilityApplicationRequest request) {
+        return request.getApplication().getPropertyDetails() != null && request.getApplication().getPropertyDetails().getEstimatedValue() == null;
     }
 }
