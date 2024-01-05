@@ -21,7 +21,6 @@ import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -91,31 +90,6 @@ public interface QuickQuoteOperations {
     ResponseEntity<QuickQuoteResponse> createQuickQuoteCFApplication(@Valid @RequestBody
                                                                              QuickQuoteCFApplicationRequest quickQuoteCFApplicationRequest);
 
-
-
-
-    @Hidden
-    @Operation(description = "Create a new Quick Quote application")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Quick Quote created",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = QuickQuoteResponse.class))
-                    }),
-            @ApiResponse(responseCode = "400", description = "Application details invalid",
-                    content = @Content (examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)})
-            ),
-            @ApiResponse(responseCode = "401", content = @Content),
-            @ApiResponse(responseCode = "403",
-                    content = @Content (examples = {@ExampleObject(value = ACCESS_DENIED_EXAMPLE)})
-            )
-    })
-    @PostMapping(value = "/quickquote_eligibility")
-    ResponseEntity<QuickQuoteResponse> createQuickQuoteEligibilityApplication(@Valid @RequestBody
-    QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 
     @Operation(description = "Update the Quick Quote application for the given external application id")
     @ApiResponses(value = {

@@ -109,7 +109,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().get(0).setMobileNumber(null);
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -127,7 +127,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getPropertyDetails().setEstimatedValue(null);
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -184,7 +184,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().clear();
             request.getLoanInformation().setNumberOfApplicants(1);
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -207,7 +207,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().add(null);
             request.getLoanInformation().setNumberOfApplicants(2);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -227,7 +227,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().get(0).setPrimaryApplicant(null);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -244,7 +244,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().get(0).setPrimaryApplicant(true);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -261,7 +261,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().get(0).setPrimaryApplicant(false);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -285,7 +285,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(false);
             request.getLoanInformation().setNumberOfApplicants(2);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -304,7 +304,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(null);
             request.getLoanInformation().setNumberOfApplicants(2);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -323,7 +323,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setPrimaryApplicant(null);
             request.getApplicants().get(1).setPrimaryApplicant(null);
             request.getLoanInformation().setNumberOfApplicants(2);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -342,7 +342,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setPrimaryApplicant(true);
             request.getApplicants().get(1).setPrimaryApplicant(true);
             request.getLoanInformation().setNumberOfApplicants(2);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -365,7 +365,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setPrimaryApplicant(false);
             request.getApplicants().get(1).setPrimaryApplicant(null);
             request.getLoanInformation().setNumberOfApplicants(2);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -388,7 +388,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             request.getApplicants().get(0).setPrimaryApplicant(false);
             request.getApplicants().get(1).setPrimaryApplicant(false);
             request.getLoanInformation().setNumberOfApplicants(2);
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -409,7 +409,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().get(0).setMobileNumber(null);
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -426,7 +426,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             //Given
             var request = getQuickQuoteApplicationRequestDto();
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -463,7 +463,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getLoanInformation().setNumberOfApplicants(2);
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -487,7 +487,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getApplicants().add(secondaryApplicant);
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -508,7 +508,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getExpenditure().get(0).setAmountDeclared(null);
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -529,7 +529,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getExpenditure().get(0).setExpenditureType(null);
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")
@@ -550,7 +550,7 @@ class QuickQuoteControllerValidationTest extends MapperBase {
             var request = getQuickQuoteApplicationRequestDto();
             request.getExpenditure().get(0).setExpenditureType("some unsupported value");
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            when(filterApplicationService.filter(request)).thenReturn(getQuickQuoteResponse());
 
             //When
             mockMvc.perform(post("/application/quickquote")

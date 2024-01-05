@@ -28,6 +28,6 @@ import org.springframework.web.bind.annotation.PostMapping;
         url = "${selection.service.url}")
 public interface SelectionApi {
 
-    @PostMapping(path = "/api/quickquote_eligibility", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/v1/applications/quickquote/filter?decision=Accept", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     FilteredQuickQuoteDecisionResponse filterQuickQuote(FilterQuickQuoteApplicationRequest applicationRequest);
 }

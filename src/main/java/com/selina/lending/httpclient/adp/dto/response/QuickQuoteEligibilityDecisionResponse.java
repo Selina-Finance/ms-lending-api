@@ -19,8 +19,6 @@ package com.selina.lending.httpclient.adp.dto.response;
 
 import java.util.List;
 
-import com.selina.lending.httpclient.quickquote.Product;
-
 import lombok.Builder;
 import lombok.Data;
 

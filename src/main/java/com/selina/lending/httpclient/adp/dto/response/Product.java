@@ -15,7 +15,7 @@
  *
  */
 
-package com.selina.lending.httpclient.quickquote;
+package com.selina.lending.httpclient.adp.dto.response;
 
 import com.selina.lending.httpclient.selection.dto.response.ProductOffer;
 

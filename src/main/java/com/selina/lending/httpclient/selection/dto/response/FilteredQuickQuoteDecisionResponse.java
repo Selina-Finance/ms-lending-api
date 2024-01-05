@@ -22,7 +22,7 @@ import lombok.Data;
 
 import java.util.List;
 
-import com.selina.lending.httpclient.quickquote.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 
 @Builder
 @Data

@@ -18,9 +18,9 @@
 package com.selina.lending.service;
 
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
-import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 
 public interface FilterApplicationService {
 
-    FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
+    QuickQuoteResponse filter(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 }

@@ -21,17 +21,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 @Builder
-@Data
+@Value
 public class Applicant {
-    private String firstName;
-    private String lastName;
-    private String middleName;
-    private LocalDate dateOfBirth;
-    private Integer numberOfAdultDependants;
-    private Integer numberOfChildDependants;
-    private List<Income> incomes;
-    private Boolean primaryApplicant;
+    String firstName;
+    String lastName;
+    String middleName;
+    LocalDate dateOfBirth;
+    Integer numberOfAdultDependants;
+    Integer numberOfChildDependants;
+    List<Income> incomes;
+    Boolean primaryApplicant;
 }
