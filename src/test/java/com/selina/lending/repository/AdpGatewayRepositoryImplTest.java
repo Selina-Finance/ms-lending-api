@@ -18,12 +18,13 @@
 package com.selina.lending.repository;
 
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.any;;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -36,8 +37,10 @@ import com.selina.lending.httpclient.adp.AdpGatewayApi;
 import com.selina.lending.httpclient.adp.dto.request.Application;
 import com.selina.lending.httpclient.adp.dto.request.PropertyDetails;
 import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 import com.selina.lending.httpclient.adp.dto.request.Source;
+import com.selina.lending.httpclient.selection.dto.response.ProductOffer;
 import com.selina.lending.service.TokenService;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +59,12 @@ class AdpGatewayRepositoryImplTest {
     private PropertyDetails propertyDetails;
 
     @Mock
+    private Product product;
+
+    @Mock
+    private ProductOffer productOffer;
+
+    @Mock
     private QuickQuoteEligibilityDecisionResponse response;
 
     @Mock
@@ -69,7 +78,7 @@ class AdpGatewayRepositoryImplTest {
     }
 
     @Test
-    void quickQuoteEligibility() {
+    void whenPropertyEstimatedValueNotPassedSetDefaultEstimateInRequest() {
         //Given
         var externalApplicationId = UUID.randomUUID().toString();
         var sourceAccount = "Broker";
@@ -77,6 +86,35 @@ class AdpGatewayRepositoryImplTest {
 
         when(request.getApplication()).thenReturn(application);
         when(application.getPropertyDetails()).thenReturn(propertyDetails);
+        when(propertyDetails.getEstimatedValue()).thenReturn(null);
+        when(api.quickQuoteEligibility(any())).thenReturn(response);
+        when(response.getProducts()).thenReturn(List.of(product));
+        when(product.getOffer()).thenReturn(productOffer);
+        when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
+        when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
+        when(tokenService.retrievePartnerAccountId()).thenReturn(partnerAccountId);
+
+        //When
+        adpGatewayRepository.quickQuoteEligibility(request);
+
+        //Then
+        verify(api, times(1)).quickQuoteEligibility(request);
+        verify(application, times(1)).setSource(any(Source.class));
+        verify(application, times(1)).setPartnerAccountId(any(String.class));
+        verify(propertyDetails, times(1)).setEstimatedValue(any(Double.class));
+        verify(productOffer, times(1)).setIsAprcHeadline(any(Boolean.class));
+    }
+
+    @Test
+    void whenPropertyEstimatedValuePassedDoNotSetDefaultEstimateInRequest() {
+        //Given
+        var externalApplicationId = UUID.randomUUID().toString();
+        var sourceAccount = "Broker";
+        var partnerAccountId = "Partner";
+
+        when(request.getApplication()).thenReturn(application);
+        when(application.getPropertyDetails()).thenReturn(propertyDetails);
+        when(propertyDetails.getEstimatedValue()).thenReturn(50000.0);
         when(api.quickQuoteEligibility(any())).thenReturn(response);
         when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
         when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
@@ -89,9 +127,11 @@ class AdpGatewayRepositoryImplTest {
         verify(api, times(1)).quickQuoteEligibility(request);
         verify(application, times(1)).setSource(any(Source.class));
         verify(application, times(1)).setPartnerAccountId(any(String.class));
+        verify(propertyDetails, never()).setEstimatedValue(any(Double.class));
+        verify(productOffer,never()).setIsAprcHeadline(any(Boolean.class));
+
 
     }
-
     @Test
     void whenPartnerAccountIdIsNullThenDoNotSpecifyInQuickQuoteApplicationRequest() {
         //Given

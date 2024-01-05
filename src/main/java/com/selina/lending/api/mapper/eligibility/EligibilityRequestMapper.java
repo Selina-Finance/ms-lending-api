@@ -24,7 +24,7 @@ import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
 import com.selina.lending.httpclient.eligibility.dto.request.CreditRisk;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Income;
-import com.selina.lending.httpclient.quickquote.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;

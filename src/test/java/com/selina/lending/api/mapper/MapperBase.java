@@ -54,6 +54,7 @@ import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
 import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicantDto;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFPropertyDetailsDto;
@@ -101,7 +102,7 @@ import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.httpclient.quickquote.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import com.selina.lending.httpclient.selection.dto.response.ProductOffer;
 
 import java.text.ParseException;
@@ -939,6 +940,10 @@ public abstract class MapperBase {
         return FilteredQuickQuoteDecisionResponse.builder().decision(DECISION)
                 .products(List.of(getProduct()))
                 .build();
+    }
+
+    protected QuickQuoteResponse getQuickQuoteResponse() {
+        return QuickQuoteResponse.builder().build();
     }
 
     protected Product getProduct() {

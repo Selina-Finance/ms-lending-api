@@ -22,7 +22,7 @@ import com.selina.lending.api.mapper.eligibility.EligibilityRequestMapper;
 import com.selina.lending.exception.RemoteResourceProblemException;
 import com.selina.lending.httpclient.eligibility.EligibilityApi;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
-import com.selina.lending.httpclient.quickquote.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import com.selina.lending.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

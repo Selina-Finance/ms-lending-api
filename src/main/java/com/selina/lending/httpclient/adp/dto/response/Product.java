@@ -15,15 +15,15 @@
  *
  */
 
-package com.selina.lending.httpclient.quickquote;
+package com.selina.lending.httpclient.adp.dto.response;
 
 import com.selina.lending.httpclient.selection.dto.response.ProductOffer;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @Builder
-@Value
+@Data
 public class Product {
     String name;
     String code;

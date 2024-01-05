@@ -14,7 +14,7 @@ import com.selina.lending.httpclient.middleware.dto.common.Offer;
 import com.selina.lending.httpclient.middleware.dto.common.PropertyDetails;
 import com.selina.lending.httpclient.middleware.dto.qq.request.Partner;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
-import com.selina.lending.httpclient.quickquote.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import com.selina.lending.service.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

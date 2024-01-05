@@ -44,10 +44,16 @@ public class AdpGatewayRepositoryImpl implements AdpGatewayRepository {
 
     @Override
     public QuickQuoteEligibilityDecisionResponse quickQuoteEligibility(QuickQuoteEligibilityApplicationRequest request) {
-        log.info("Filter Quick Quote application [externalApplicationId={}]",
+        log.info("Quick Quote Eligibility application [externalApplicationId={}]",
                 request.getApplication().getExternalApplicationId());
         enrichRequest(request);
-        return api.quickQuoteEligibility(request);
+        if (isPropertyDetailsEstimatedValueSpecified(request)) {
+            return api.quickQuoteEligibility(request);
+        }
+        setDefaultPropertyDetailsEstimatedValue(request);
+        var response = api.quickQuoteEligibility(request);
+        setOffersIsAprcHeadlineToTrue(response);
+        return response;
     }
 
 
@@ -57,17 +63,15 @@ public class AdpGatewayRepositoryImpl implements AdpGatewayRepository {
                 SourceAccount.builder().name(tokenService.retrieveSourceAccount()).build()).build();
         application.setSource(source);
 
-        setPropertyEstimatedValueIfDoesNotExist(request);
-
         var partnerAccountId = tokenService.retrievePartnerAccountId();
         if (partnerAccountId != null) {
             application.setPartnerAccountId(partnerAccountId);
         }
     }
 
-    private void setPropertyEstimatedValueIfDoesNotExist(QuickQuoteEligibilityApplicationRequest request) {
-        if (isPropertyDetailsEstimatedValueNotSpecified(request)) {
-            setDefaultPropertyDetailsEstimatedValue(request);
+    private void setOffersIsAprcHeadlineToTrue(QuickQuoteEligibilityDecisionResponse response) {
+        if (response.getProducts() != null) {
+            response.getProducts().forEach(product -> product.getOffer().setIsAprcHeadline(true));
         }
     }
 
@@ -75,8 +79,7 @@ public class AdpGatewayRepositoryImpl implements AdpGatewayRepository {
         request.getApplication().getPropertyDetails().setEstimatedValue(DEFAULT_ESTIMATED_VALUE);
     }
 
-
-    private boolean isPropertyDetailsEstimatedValueNotSpecified(QuickQuoteEligibilityApplicationRequest request) {
-        return request.getApplication().getPropertyDetails() != null && request.getApplication().getPropertyDetails().getEstimatedValue() == null;
+    private boolean isPropertyDetailsEstimatedValueSpecified(QuickQuoteEligibilityApplicationRequest request) {
+        return request.getApplication().getPropertyDetails() != null && request.getApplication().getPropertyDetails().getEstimatedValue() != null;
     }
 }

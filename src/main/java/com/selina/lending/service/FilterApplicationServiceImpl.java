@@ -20,13 +20,20 @@ package com.selina.lending.service;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
+import com.selina.lending.api.mapper.qq.adp.QuickQuoteEligibilityApplicationRequestMapper;
+import com.selina.lending.api.mapper.qq.adp.QuickQuoteEligibilityApplicationResponseMapper;
 import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
 import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMapper;
+import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationResponseMapper;
+import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
 import com.selina.lending.httpclient.eligibility.dto.response.PropertyInfo;
+import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.httpclient.quickquote.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
+import com.selina.lending.repository.AdpGatewayRepository;
 import com.selina.lending.repository.EligibilityRepository;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
@@ -43,6 +50,7 @@ import java.util.List;
 @Service
 public class FilterApplicationServiceImpl implements FilterApplicationService {
 
+    protected static final String ADP_CLIENT_ID = "the-aggregator-adp";
     private static final String MONEVO_CLIENT_ID = "monevo";
     private static final String CLEARSCORE_CLIENT_ID = "clearscore";
 
@@ -57,6 +65,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final SelectionRepository selectionRepository;
     private final MiddlewareRepository middlewareRepository;
     private final EligibilityRepository eligibilityRepository;
+
+    private final AdpGatewayRepository adpGatewayRepository;
+
     private final ArrangementFeeSelinaService arrangementFeeSelinaService;
     private final PartnerService partnerService;
     private final TokenService tokenService;
@@ -66,6 +77,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                                         SelectionRepository selectionRepository,
                                         MiddlewareRepository middlewareRepository,
                                         EligibilityRepository eligibilityRepository,
+                                        AdpGatewayRepository adpGatewayRepository,
                                         ArrangementFeeSelinaService arrangementFeeSelinaService,
                                         PartnerService partnerService,
                                         TokenService tokenService,
@@ -74,6 +86,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
         this.eligibilityRepository = eligibilityRepository;
+        this.adpGatewayRepository = adpGatewayRepository;
         this.arrangementFeeSelinaService = arrangementFeeSelinaService;
         this.partnerService = partnerService;
         this.tokenService = tokenService;
@@ -81,7 +94,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     @Override
-    public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
+    public QuickQuoteResponse filter(QuickQuoteApplicationRequest request) {
+        QuickQuoteResponse quickQuoteResponse;
         var clientId = tokenService.retrieveClientId();
 
         alternativeOfferRequestProcessors.forEach(processor -> processor.adjustAlternativeOfferRequest(clientId, request));
@@ -91,26 +105,53 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         }
 
         setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
-        FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
-        enrichSelectionRequestWithFees(selectionRequest, clientId);
 
-        var decisionResponse = selectionRepository.filter(selectionRequest);
+        quickQuoteResponse = getQuickQuoteResponse(request, clientId);
 
-        if (isDecisionAccepted(decisionResponse)) {
-            enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, decisionResponse, decisionResponse.getProducts());
-            storeOffersInMiddleware(request, selectionRequest, decisionResponse);
+        return quickQuoteResponse;
+    }
+
+    private QuickQuoteResponse getQuickQuoteResponse(QuickQuoteApplicationRequest request, String clientId) {
+        QuickQuoteResponse quickQuoteResponse;
+        List<Product> products;
+        Fees fees;
+        if (isAdpClient(clientId)) {
+            log.info("Use ADP decisioning engine");
+            QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(
+                    request);
+            enrichAdpRequestWithFees(adpRequest, clientId);
+            var adpResponse  = adpGatewayRepository.quickQuoteEligibility(adpRequest);
+            products = adpResponse.getProducts();
+            fees = adpRequest.getApplication().getFees();
+
+            if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
+                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, products);
+                storeOffersInMiddleware(request, fees, products);
+            }
+            quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(adpResponse);
+        } else {
+            FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
+            enrichSelectionRequestWithFees(selectionRequest, clientId);
+            FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse = selectionRepository.filter(selectionRequest);
+            products = filteredQuickQuoteDecisionResponse.getProducts();
+            fees = selectionRequest.getApplication().getFees();
+
+            if (isDecisionAccepted(filteredQuickQuoteDecisionResponse.getDecision(), filteredQuickQuoteDecisionResponse.getProducts())) {
+                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, products);
+                storeOffersInMiddleware(request, fees, products);
+            }
+            quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
         }
 
-        return decisionResponse;
+        return quickQuoteResponse;
     }
 
     private void enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(QuickQuoteApplicationRequest request,
-                                                                                 FilteredQuickQuoteDecisionResponse decisionResponse,
                                                                                  List<Product> products) {
         try {
             var eligibilityResponse = eligibilityRepository.getEligibility(request, products);
             updatePropertyEstimatedValue(request.getPropertyDetails(), eligibilityResponse.getPropertyInfo());
-            enrichOffersWithEligibility(eligibilityResponse, decisionResponse);
+            enrichOffersWithEligibility(eligibilityResponse, products);
         } catch (Exception ex) {
             log.error("Error retrieving eligibility. The default value from the decision service will be used.", ex);
         }
@@ -120,14 +161,14 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         return request.getLoanInformation().getRequestedLoanTerm() < MIN_ALLOWED_SELINA_LOAN_TERM;
     }
 
-    private static FilteredQuickQuoteDecisionResponse getDeclinedResponse() {
-        return FilteredQuickQuoteDecisionResponse.builder()
-                .decision(DECLINED_DECISION)
+    private static QuickQuoteResponse getDeclinedResponse() {
+        return QuickQuoteResponse.builder()
+                .status(DECLINED_DECISION)
                 .build();
     }
 
     private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
-        if(!hasPrimaryApplicant(request.getApplicants())) {
+        if (!hasPrimaryApplicant(request.getApplicants())) {
             request.getApplicants().stream().findFirst()
                     .ifPresent(quickQuoteApplicant -> quickQuoteApplicant.setPrimaryApplicant(true));
         }
@@ -140,8 +181,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                         && quickQuoteApplicant.getPrimaryApplicant());
     }
 
-    private static boolean isDecisionAccepted(FilteredQuickQuoteDecisionResponse decisionResponse) {
-        return ACCEPTED_DECISION.equalsIgnoreCase(decisionResponse.getDecision()) && decisionResponse.getProducts() != null;
+    private static boolean isDecisionAccepted(String decision, List<Product> products) {
+        return ACCEPTED_DECISION.equalsIgnoreCase(decision) && products != null;
     }
 
     private void updatePropertyEstimatedValue(QuickQuotePropertyDetailsDto propertyDetails, PropertyInfo propertyInfo) {
@@ -152,9 +193,18 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         }
     }
 
-    private static void enrichOffersWithEligibility(EligibilityResponse eligibilityResponse, FilteredQuickQuoteDecisionResponse decisionResponse) {
+    private static void enrichOffersWithEligibility(EligibilityResponse eligibilityResponse, List<Product>products) {
         var eligibility = eligibilityResponse.getEligibility();
-        decisionResponse.getProducts().forEach(product -> product.getOffer().setEligibility(eligibility));
+        products.forEach(product -> product.getOffer().setEligibility(eligibility));
+    }
+
+    private void enrichAdpRequestWithFees(QuickQuoteEligibilityApplicationRequest adpRequest, String clientId) {
+        var tokenFees = arrangementFeeSelinaService.getFeesFromToken();
+
+        if (adpRequest.getApplication().getFees() == null) {
+            adpRequest.getApplication().setFees(tokenFees);
+        }
+        enrichRequestWithFees(adpRequest.getApplication().getFees(), clientId, tokenFees);
     }
 
     private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest, String clientId) {
@@ -163,9 +213,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         if (selectionRequest.getApplication().getFees() == null) {
             selectionRequest.getApplication().setFees(tokenFees);
         }
+        enrichRequestWithFees(selectionRequest.getApplication().getFees(), clientId, tokenFees);
+    }
 
-        var requestFees = selectionRequest.getApplication().getFees();
-
+    private void enrichRequestWithFees(Fees requestFees, String clientId, Fees tokenFees) {
         requestFees.setAddArrangementFeeSelina(tokenFees.getAddArrangementFeeSelina());
         requestFees.setArrangementFeeDiscountSelina(tokenFees.getArrangementFeeDiscountSelina());
 
@@ -183,6 +234,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         }
     }
 
+    private static boolean isAdpClient(String clientId) {
+        return ADP_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
     private static boolean isClearScoreClient(String clientId) {
         return CLEARSCORE_CLIENT_ID.equalsIgnoreCase(clientId);
     }
@@ -191,10 +246,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId);
     }
 
-    private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, FilterQuickQuoteApplicationRequest selectionRequest, FilteredQuickQuoteDecisionResponse decisionResponse) {
+    private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, Fees fees, List<Product> products) {
         addPartner(request);
         middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
-                .mapToQuickQuoteRequest(request, decisionResponse.getProducts(), selectionRequest.getApplication().getFees()));
+                .mapToQuickQuoteRequest(request, products, fees));
     }
 
     private void addPartner(QuickQuoteApplicationRequest request) {

@@ -25,7 +25,7 @@ import org.mapstruct.factory.Mappers;
 import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
-import com.selina.lending.httpclient.quickquote.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QuickQuoteEligibilityApplicationResponseMapper {
