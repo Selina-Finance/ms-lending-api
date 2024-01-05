@@ -23,7 +23,7 @@ import lombok.Data;
 @Builder
 @Data
 public class LoanInformation {
-    Double requestedLoanAmount;
-    Integer requestedLoanTerm;
-    Integer numberOfApplicants;
+    private Double requestedLoanAmount;
+    private Integer requestedLoanTerm;
+    private Integer numberOfApplicants;
 }
