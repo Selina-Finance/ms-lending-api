@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 public class MiddlewareApiErrorDecoder implements ErrorDecoder {
 
     private static final String UNEXPECTED_ERROR = "Unexpected error";
-    private static final String MIDDLEWARE_RESPONSE_DESERIALIZATION_ERROR = "Error deserializing the Middleware response [response={}]";
+    private static final String ERROR_DESERIALIZING_MIDDLEWARE_ERROR_RESPONSE_RESPONSE = "Error deserializing the Middleware error";
     private static final String MIDDLEWARE_CONTACT_ID_IS_NONE_ERROR = "ContactIdIsNoneError";
 
     private final ErrorDecoder defaultErrorDecoder = new Default();
@@ -38,9 +38,11 @@ public class MiddlewareApiErrorDecoder implements ErrorDecoder {
 
     private MiddlewareError getMiddlewareError(Response response) {
         try {
-            return objectMapper.readValue(IOUtils.toString(response.body().asInputStream()), MiddlewareError.class);
+            var middlewareErrorResponseBody = IOUtils.toString(response.body().asInputStream());
+            log.warn("Middleware error response [response={}]", middlewareErrorResponseBody);
+            return objectMapper.readValue(middlewareErrorResponseBody, MiddlewareError.class);
         } catch (Exception ex) {
-            log.error(MIDDLEWARE_RESPONSE_DESERIALIZATION_ERROR, response.body());
+            log.error(ERROR_DESERIALIZING_MIDDLEWARE_ERROR_RESPONSE_RESPONSE, ex);
             return MiddlewareError.builder()
                     .error(UNEXPECTED_ERROR)
                     .build();
