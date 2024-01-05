@@ -6,8 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Expenditure {
-
-    String expenditureType;
-    Double amountDeclared;
-    String frequency;
+    private String expenditureType;
+    private Double amountDeclared;
+    private String frequency;
 }

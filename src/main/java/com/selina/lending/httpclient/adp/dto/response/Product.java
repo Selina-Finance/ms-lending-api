@@ -25,15 +25,15 @@ import lombok.Data;
 @Builder
 @Data
 public class Product {
-    String name;
-    String code;
-    String family;
-    String category;
-    String variant;
-    Boolean isVariable;
-    Boolean hasFee;
-    Boolean hasErc;
-    String ercProfile;
-    String ercShortCode;
-    ProductOffer offer;
+    private String name;
+    private String code;
+    private String family;
+    private String category;
+    private String variant;
+    private Boolean isVariable;
+    private Boolean hasFee;
+    private Boolean hasErc;
+    private String ercProfile;
+    private String ercShortCode;
+    private ProductOffer offer;
 }

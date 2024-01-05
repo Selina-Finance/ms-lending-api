@@ -56,7 +56,6 @@ public class SecurityConfig {
                 .antMatchers(SWAGGER_URL + "/**").permitAll()
                 .antMatchers(SWAGGER_URL + ".html").permitAll()
                 .antMatchers(API_DOCS_URL + "/**").permitAll()
-
                 .antMatchers(LOGIN_URL).permitAll()
 
                 .and()
