@@ -21,13 +21,14 @@ import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.validator.EnumValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Builder
-@Value
+@Data
 public class EmploymentDto {
 
     @NotBlank
@@ -52,6 +53,8 @@ public class EmploymentDto {
     @Schema(example = SwaggerConstants.EXAMPLE_DATE, description = "when did the employment end")
     String contractEndDate;
     Boolean firstTimeContractor;
+
+    @Size(min = 3, max = 100)
     String employerName;
     String jobTitle;
     String occupationType;
