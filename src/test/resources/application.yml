@@ -80,3 +80,7 @@ kafka:
 spring:
   kafka:
     bootstrap-servers: ${spring.embedded.kafka.brokers}
+
+features:
+  filterResponseOffers:
+    enabled: true

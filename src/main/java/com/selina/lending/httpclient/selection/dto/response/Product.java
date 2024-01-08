@@ -17,11 +17,14 @@
 
 package com.selina.lending.httpclient.selection.dto.response;
 
+import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 @Builder
-@Value
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Product {
     String name;
     String code;
