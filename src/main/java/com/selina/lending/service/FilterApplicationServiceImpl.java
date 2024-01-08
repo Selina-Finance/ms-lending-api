@@ -43,8 +43,13 @@ import com.selina.lending.service.quickquote.PartnerService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -58,8 +63,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String ACCEPTED_DECISION = "Accepted";
     private static final String DECLINED_DECISION = "Declined";
+
     private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT = false;
     private static final Boolean ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT = false;
+
+    private static final String HELOC_PRODUCT_FAMILY = "HELOC";
+    private static final String HOMEOWNER_LOAN_PRODUCT_FAMILY = "Homeowner Loan";
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionRepository selectionRepository;
@@ -72,16 +81,19 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final PartnerService partnerService;
     private final TokenService tokenService;
     private final List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors;
+    private final boolean isFilterResponseOffersFeatureEnabled;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
-                                        SelectionRepository selectionRepository,
-                                        MiddlewareRepository middlewareRepository,
-                                        EligibilityRepository eligibilityRepository,
-                                        AdpGatewayRepository adpGatewayRepository,
-                                        ArrangementFeeSelinaService arrangementFeeSelinaService,
-                                        PartnerService partnerService,
-                                        TokenService tokenService,
-                                        List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors) {
+            SelectionRepository selectionRepository,
+            MiddlewareRepository middlewareRepository,
+            EligibilityRepository eligibilityRepository,
+            AdpGatewayRepository adpGatewayRepository,
+            ArrangementFeeSelinaService arrangementFeeSelinaService,
+            PartnerService partnerService,
+            TokenService tokenService,
+            List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors,
+            @Value("${features.filterResponseOffers.enabled}")
+            boolean isFilterResponseOffersFeatureEnabled) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
@@ -91,6 +103,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.partnerService = partnerService;
         this.tokenService = tokenService;
         this.alternativeOfferRequestProcessors = alternativeOfferRequestProcessors;
+        this.isFilterResponseOffersFeatureEnabled = isFilterResponseOffersFeatureEnabled;
     }
 
     @Override
@@ -113,32 +126,28 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private QuickQuoteResponse getQuickQuoteResponse(QuickQuoteApplicationRequest request, String clientId) {
         QuickQuoteResponse quickQuoteResponse;
-        List<Product> products;
-        Fees fees;
         if (isAdpClient(clientId)) {
             log.info("Use ADP decisioning engine");
             QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(
                     request);
             enrichAdpRequestWithFees(adpRequest, clientId);
             var adpResponse  = adpGatewayRepository.quickQuoteEligibility(adpRequest);
-            products = adpResponse.getProducts();
-            fees = adpRequest.getApplication().getFees();
 
             if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
-                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, products);
-                storeOffersInMiddleware(request, fees, products);
+                adpResponse.setProducts(getFilteredResponseOffers(clientId, adpResponse.getProducts()));
+                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts());
+                storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
             }
             quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(adpResponse);
         } else {
             FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
             enrichSelectionRequestWithFees(selectionRequest, clientId);
             FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse = selectionRepository.filter(selectionRequest);
-            products = filteredQuickQuoteDecisionResponse.getProducts();
-            fees = selectionRequest.getApplication().getFees();
 
             if (isDecisionAccepted(filteredQuickQuoteDecisionResponse.getDecision(), filteredQuickQuoteDecisionResponse.getProducts())) {
-                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, products);
-                storeOffersInMiddleware(request, fees, products);
+                filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, filteredQuickQuoteDecisionResponse.getProducts()));
+                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, filteredQuickQuoteDecisionResponse.getProducts());
+                storeOffersInMiddleware(request, selectionRequest.getApplication().getFees(), filteredQuickQuoteDecisionResponse.getProducts());
             }
             quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
         }
@@ -146,8 +155,26 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         return quickQuoteResponse;
     }
 
+    private List<Product> getFilteredResponseOffers(String clientId, List<Product> productList) {
+        if (isFilterResponseOffersFeatureEnabled && isClearScoreClient(clientId)) {
+                var filteredProducts = new ArrayList<Product>(2);
+                findTheLowestAprcProduct(productList, HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+                findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+
+                return filteredProducts;
+
+        }
+        return productList;
+    }
+
+    private Optional<Product> findTheLowestAprcProduct(List<Product> products, String family) {
+        return products.stream()
+                .filter(product -> family.equalsIgnoreCase(product.getFamily()))
+                .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()));
+    }
+
     private void enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(QuickQuoteApplicationRequest request,
-                                                                                 List<Product> products) {
+            List<Product> products) {
         try {
             var eligibilityResponse = eligibilityRepository.getEligibility(request, products);
             updatePropertyEstimatedValue(request.getPropertyDetails(), eligibilityResponse.getPropertyInfo());

@@ -54,6 +54,7 @@ import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
 import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicantDto;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
@@ -947,6 +948,17 @@ public abstract class MapperBase {
         return QuickQuoteResponse.builder().build();
     }
 
+    protected ProductOfferDto getProductOfferDto() {
+        return ProductOfferDto.builder()
+                .isVariable(true)
+                .family(HOMEOWNER_LOAN)
+                .category(CATEGORY_STATUS_0)
+                .code(CODE)
+                .hasErc(true)
+                .ercShortCode(ERC_SHORT_CODE)
+                .name(OFFER_VARIABLE_RATE_50_LTV)
+                .build();
+    }
     protected Product getProduct() {
         return Product.builder()
                 .isVariable(true)

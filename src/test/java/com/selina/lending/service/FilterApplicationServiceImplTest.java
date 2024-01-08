@@ -44,10 +44,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
+import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
 import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
@@ -1265,6 +1267,89 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
                 assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
             }
+        }
+    }
+
+    @Nested
+    class FilterResponseOffers extends MapperBase {
+
+        @Test
+        void whenClientIsClearScoreThenReturnLowestAprcHelocAndHomeownerLoanOffersOnly() {
+            // Given
+            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+
+            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            decisionResponse.setProducts(List.of(getProduct(HELOC, 10.0), getProduct(HELOC, 9.0),  getProduct(HOMEOWNER_LOAN, 8.0),  getProduct(HOMEOWNER_LOAN, 7.0)));
+
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+            when(tokenService.retrieveClientId()).thenReturn("clearscore");
+
+            // When
+            var response = filterApplicationService.filter(quickQuoteRequest);
+
+            // Then
+            assertThat(response.getOffers())
+                    .hasSize(2);
+        }
+
+        @Test
+        void whenClientIsClearScoreAndThereAreTwoHelocAndHomeownerLoanOffersWithTheSameLowestAprcThenReturnOnlyTheFirstEachOne() {
+            // Given
+            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+
+            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            decisionResponse.setProducts(List.of(getProduct(HELOC, 10.0), getProduct(HELOC, 10.0), getProduct(HOMEOWNER_LOAN, 8.0), getProduct(HOMEOWNER_LOAN, 8.0)));
+
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+            when(tokenService.retrieveClientId()).thenReturn("clearscore");
+
+            // When
+            var response = filterApplicationService.filter(quickQuoteRequest);
+
+            // Then
+            assertThat(response.getOffers())
+                    .hasSize(2);
+        }
+
+        @Test
+        void whenClientIsNotClearScoreThenReturnAllAcceptedOffers() {
+            // Given
+            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+
+            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            decisionResponse.setProducts(List.of(getProduct(HELOC, 10.0), getProduct(HELOC, 9.0), getProduct(HOMEOWNER_LOAN, 8.0), getProduct(HOMEOWNER_LOAN, 7.0)));
+
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+            when(tokenService.retrieveClientId()).thenReturn("other-client");
+
+            // When
+            var response = filterApplicationService.filter(quickQuoteRequest);
+
+            // Then
+            assertThat(response.getOffers())
+                    .hasSize(4);
+        }
+
+        private Product getProduct(String family, double aprc) {
+            var product = getProduct();
+            product.setFamily(family);
+            product.getOffer().setAprc(aprc);
+            return product;
+        }
+        private ProductOfferDto getProductOfferDto(String family, double aprc) {
+            var product = getProductOfferDto();
+            product.setFamily(family);
+            product.setAprc(aprc);
+            return product;
         }
     }
 }
