@@ -26,6 +26,7 @@ import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
+import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.repository.EligibilityRepository;
 import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
@@ -936,19 +937,20 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Nested
-    class ReturnTheLowestAprcOffer {
+    class FilterResponseOffers extends MapperBase {
 
         @Test
-        void whenClientIsClearScoreThenReturnOnlyOneOfferWithTheLowestAprc() {
+        void whenClientIsClearScoreThenReturnLowestAprcHelocAndHomeownerLoanOffersOnly() {
             // Given
             var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
 
-            var usualProduct = getProduct();
-            var lowestAprcProduct = getProduct();
-            lowestAprcProduct.getOffer().setAprc(1.0);
+            var helocProduct = getProduct(HELOC, 10.0);
+            var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
+            var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
+            var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
 
             var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-            decisionResponse.setProducts(List.of(usualProduct, lowestAprcProduct));
+            decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
@@ -960,24 +962,23 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var response = filterApplicationService.filter(quickQuoteRequest);
 
             // Then
-            assertThat(response.getProducts()).hasSize(1).containsOnly(lowestAprcProduct);
+            assertThat(response.getProducts())
+                    .hasSize(2)
+                    .containsOnly(lowestAprcHelocProduct, lowestAprcHomeownerLoanProduct);
         }
 
         @Test
-        void whenClientIsClearScoreAndThereAreTwoOffersWithTheSameLowerAprcThenReturnOnlyTheFirstOne() {
+        void whenClientIsClearScoreAndThereAreTwoHelocAndHomeownerLoanOffersWithTheSameLowestAprcThenReturnOnlyTheFirstEachOne() {
             // Given
             var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
 
-            var lowestAprc = 1.0;
-
-            var lowestAprcProduct1 = getProduct();
-            lowestAprcProduct1.getOffer().setAprc(lowestAprc);
-
-            var lowestAprcProduct2 = getProduct();
-            lowestAprcProduct2.getOffer().setAprc(lowestAprc);
+            var helocProduct1 = getProduct(HELOC, 10.0);
+            var helocProduct2 = getProduct(HELOC, 10.0);
+            var homeownerLoanProduct1 = getProduct(HOMEOWNER_LOAN, 8.0);
+            var homeownerLoanProduct2 = getProduct(HOMEOWNER_LOAN, 8.0);
 
             var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-            decisionResponse.setProducts(List.of(lowestAprcProduct1, lowestAprcProduct2));
+            decisionResponse.setProducts(List.of(helocProduct1, helocProduct2, homeownerLoanProduct1, homeownerLoanProduct2));
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
@@ -989,7 +990,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var response = filterApplicationService.filter(quickQuoteRequest);
 
             // Then
-            assertThat(response.getProducts()).hasSize(1).containsOnly(lowestAprcProduct1);
+            assertThat(response.getProducts())
+                    .hasSize(2)
+                    .containsOnly(helocProduct1, homeownerLoanProduct1);
         }
 
         @Test
@@ -997,12 +1000,13 @@ class FilterApplicationServiceImplTest extends MapperBase {
             // Given
             var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
 
-            var usualProduct = getProduct();
-            var lowestAprcProduct = getProduct();
-            lowestAprcProduct.getOffer().setAprc(1.0);
+            var helocProduct = getProduct(HELOC, 10.0);
+            var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
+            var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
+            var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
 
             var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-            decisionResponse.setProducts(List.of(usualProduct, lowestAprcProduct));
+            decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
@@ -1014,7 +1018,16 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var response = filterApplicationService.filter(quickQuoteRequest);
 
             // Then
-            assertThat(response.getProducts()).hasSize(2).containsExactly(usualProduct, lowestAprcProduct);
+            assertThat(response.getProducts())
+                    .hasSize(4)
+                    .containsExactly(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct);
+        }
+
+        private Product getProduct(String family, double aprc) {
+            var product = getProduct();
+            product.setFamily(family);
+            product.getOffer().setAprc(aprc);
+            return product;
         }
     }
 }

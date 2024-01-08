@@ -34,10 +34,13 @@ import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProce
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -50,8 +53,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String ACCEPTED_DECISION = "Accepted";
     private static final String DECLINED_DECISION = "Declined";
+
     private static final Boolean ADD_ARRANGEMENT_FEE_SELINA_TO_LOAN_DEFAULT = false;
     private static final Boolean ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT = false;
+
+    private static final String HELOC_PRODUCT_FAMILY = "HELOC";
+    private static final String HOMEOWNER_LOAN_PRODUCT_FAMILY = "Homeowner Loan";
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionRepository selectionRepository;
@@ -61,6 +68,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final PartnerService partnerService;
     private final TokenService tokenService;
     private final List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors;
+    private final boolean isFilterResponseOffersFeatureEnabled;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionRepository selectionRepository,
@@ -69,7 +77,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                                         ArrangementFeeSelinaService arrangementFeeSelinaService,
                                         PartnerService partnerService,
                                         TokenService tokenService,
-                                        List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors) {
+                                        List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors,
+                                        @Value("${features.filterResponseOffers.enabled}")
+                                        boolean isFilterResponseOffersFeatureEnabled) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
@@ -78,6 +88,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.partnerService = partnerService;
         this.tokenService = tokenService;
         this.alternativeOfferRequestProcessors = alternativeOfferRequestProcessors;
+        this.isFilterResponseOffersFeatureEnabled = isFilterResponseOffersFeatureEnabled;
     }
 
     @Override
@@ -106,12 +117,22 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     private void filterResponseOffers(String clientId, FilteredQuickQuoteDecisionResponse decisionResponse) {
-        if (isClearScoreClient(clientId)) {
-            decisionResponse.setProducts(decisionResponse.getProducts().stream()
-                    .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()))
-                    .stream()
-                    .toList());
+        if (!isFilterResponseOffersFeatureEnabled) {
+            return;
         }
+
+        if (isClearScoreClient(clientId)) {
+            var filteredProducts = new ArrayList<Product>(2);
+            findTheLowestAprcProduct(decisionResponse.getProducts(), HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+            findTheLowestAprcProduct(decisionResponse.getProducts(), HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+            decisionResponse.setProducts(filteredProducts);
+        }
+    }
+
+    private Optional<Product> findTheLowestAprcProduct(List<Product> products, String family) {
+        return products.stream()
+                .filter(product -> family.equalsIgnoreCase(product.getFamily()))
+                .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()));
     }
 
     private void enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(QuickQuoteApplicationRequest request,

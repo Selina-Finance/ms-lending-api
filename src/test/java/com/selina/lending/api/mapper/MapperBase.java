@@ -192,7 +192,8 @@ public abstract class MapperBase {
     public static final Double ERC_BALANCE = 50000.0;
     public static final Double ERC_AMOUNT = 250.0;
     public static final Double ERC_FEE = 0.02;
-    public static final String HOMEOWNER_LOAN = "Homeowner";
+    public static final String HOMEOWNER_LOAN = "Homeowner Loan";
+    public static final String HELOC = "HELOC";
     public static final String DECISION = "Accepted";
     public static final String OFFER_DECISION_ACCEPT = "Accept";
     public static final String OFFER_DECISION_DECLINE = "Decline";
