@@ -1,7 +1,10 @@
 package com.selina.lending.service.alternativeofferr;
 
 import com.selina.lending.api.dto.common.LeadDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class MonevoAlternativeOfferRequestProcessor extends AlternativeOfferRequestProcessor {
@@ -27,12 +30,12 @@ public class MonevoAlternativeOfferRequestProcessor extends AlternativeOfferRequ
     }
 
     @Override
-    boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm) {
+    boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
         return requestedLoanTerm < ALTERNATIVE_OFFER_LOAN_TERM_10_YEARS;
     }
 
     @Override
-    int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm) {
+    int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
         if (requestedLoanTerm < ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS) {
             return ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS;
         }

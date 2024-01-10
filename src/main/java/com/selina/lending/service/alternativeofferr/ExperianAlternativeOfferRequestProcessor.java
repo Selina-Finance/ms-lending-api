@@ -1,7 +1,10 @@
 package com.selina.lending.service.alternativeofferr;
 
 import com.selina.lending.api.dto.common.LeadDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ExperianAlternativeOfferRequestProcessor extends AlternativeOfferRequestProcessor {
@@ -20,12 +23,12 @@ public class ExperianAlternativeOfferRequestProcessor extends AlternativeOfferRe
     }
 
     @Override
-    boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm) {
+    boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
         return requestedLoanTerm < MAX_ALTERNATIVE_OFFER_LOAN_TERM;
     }
 
     @Override
-    int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm) {
+    int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
         return MAX_ALTERNATIVE_OFFER_LOAN_TERM;
     }
 
