@@ -95,13 +95,13 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
         var clientId = tokenService.retrieveClientId();
 
+        setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
         alternativeOfferRequestProcessors.forEach(processor -> processor.adjustAlternativeOfferRequest(clientId, request));
 
         if (hasRequestedLoanTermLessThanAllowed(request)) {
             return getDeclinedResponse();
         }
 
-        setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
         FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
         enrichSelectionRequestWithFees(selectionRequest, clientId);
 
