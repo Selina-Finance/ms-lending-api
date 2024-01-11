@@ -1,8 +1,11 @@
 package com.selina.lending.service.alternativeofferr;
 
 import com.selina.lending.api.dto.common.LeadDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @Slf4j
 public abstract class AlternativeOfferRequestProcessor {
@@ -14,16 +17,20 @@ public abstract class AlternativeOfferRequestProcessor {
     }
 
     private boolean isAlternativeOfferRequest(String clientId, QuickQuoteApplicationRequest request) {
-        return getClientId().equalsIgnoreCase(clientId)
+        return isSupportedClient(clientId)
                 && isSupportedPartner(request.getLead())
-                && isAlternativeRequestedLoanTerm(request.getLoanInformation().getRequestedLoanTerm());
+                && isAlternativeRequestedLoanTerm(request.getLoanInformation().getRequestedLoanTerm(), request.getApplicants());
     }
 
     abstract String getClientId();
 
+    private boolean isSupportedClient(String clientId) {
+        return getClientId().equalsIgnoreCase(clientId);
+    }
+
     abstract boolean isSupportedPartner(LeadDto lead);
 
-    abstract boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm);
+    abstract boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants);
 
     private void adjustAlternativeOfferRequest(QuickQuoteApplicationRequest request) {
         var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
@@ -31,12 +38,12 @@ public abstract class AlternativeOfferRequestProcessor {
         try {
             log.info("Adjust QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
                     getClientId(), request.getExternalApplicationId(), requestedLoanTerm);
-            request.getLoanInformation().setRequestedLoanTerm(calculateAlternativeRequestedLoanTerm(requestedLoanTerm));
+            request.getLoanInformation().setRequestedLoanTerm(calculateAlternativeRequestedLoanTerm(requestedLoanTerm, request.getApplicants()));
         } catch (Exception ex) {
             log.error("Error adjusting QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
                     getClientId(), request.getExternalApplicationId(), requestedLoanTerm);
         }
     }
 
-    abstract int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm);
+    abstract int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants);
 }

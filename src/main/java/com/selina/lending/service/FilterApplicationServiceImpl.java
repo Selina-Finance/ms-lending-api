@@ -111,13 +111,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         QuickQuoteResponse quickQuoteResponse;
         var clientId = tokenService.retrieveClientId();
 
+        setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
         alternativeOfferRequestProcessors.forEach(processor -> processor.adjustAlternativeOfferRequest(clientId, request));
 
         if (hasRequestedLoanTermLessThanAllowed(request)) {
             return getDeclinedResponse();
         }
-
-        setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
 
         quickQuoteResponse = getQuickQuoteResponse(request, clientId);
 

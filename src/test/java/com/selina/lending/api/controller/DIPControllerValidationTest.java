@@ -434,6 +434,34 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
+    void whenCreateDipApplicationWithEmployerNameLengthLessThan3ThenReturnBadRequest() throws Exception {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getEmployment().setEmployerName("ab");
+
+        //When
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                //Then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field").value("applicants[0].employment.employerName"))
+                .andExpect(jsonPath("$.violations[0].message").value("size must be between 3 and 100"));
+    }
+
+    @Test
+    void whenCreateDipApplicationWithNotSpecifiedEmployerNameThenReturnOk() throws Exception {
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        dipApplicationRequest.getApplicants().get(0).getEmployment().setEmployerName(null);
+
+        mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void whenCreateDipApplicationWithNegativePriorChargesBalanceConsolidatedThenReturnBadRequest() throws Exception {
         //Given
         var dipApplicationRequest = getDIPApplicationRequestDto();
