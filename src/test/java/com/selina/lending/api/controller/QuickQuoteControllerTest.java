@@ -19,12 +19,12 @@ package com.selina.lending.api.controller;
 
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.response.ProductOfferDto;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
 import com.selina.lending.exception.AccessDeniedException;
 import com.selina.lending.httpclient.middleware.dto.qqcf.request.QuickQuoteCFRequest;
 import com.selina.lending.httpclient.middleware.dto.qqcf.response.QuickQuoteCFResponse;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.service.CreateApplicationService;
 import com.selina.lending.service.FilterApplicationService;
 import com.selina.lending.service.TokenService;
@@ -75,6 +75,9 @@ class QuickQuoteControllerTest {
     private FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse;
 
     @Mock
+    private QuickQuoteResponse quickQuoteResponse;
+
+    @Mock
     private QuickQuoteApplicationRequest quickQuoteApplicationRequest;
 
     @Mock
@@ -98,8 +101,9 @@ class QuickQuoteControllerTest {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
-        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(buildProductList());
+        when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(quickQuoteResponse);
+        when(quickQuoteResponse.getExternalApplicationId()).thenReturn(id);
+        when(quickQuoteResponse.getOffers()).thenReturn(buildProductList());
         when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
         //When
@@ -129,13 +133,15 @@ class QuickQuoteControllerTest {
         verify(createApplicationService, times(1)).createQuickQuoteCFApplication(any());
     }
 
+
     @Test
     void updateQuickQuoteApplication() {
         //Given
         var id = UUID.randomUUID().toString();
         when(quickQuoteApplicationRequest.getExternalApplicationId()).thenReturn(id);
-        when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(filteredQuickQuoteDecisionResponse);
-        when(filteredQuickQuoteDecisionResponse.getProducts()).thenReturn(buildProductList());
+        when(filterApplicationService.filter(quickQuoteApplicationRequest)).thenReturn(quickQuoteResponse);
+        when(quickQuoteResponse.getExternalApplicationId()).thenReturn(id);
+        when(quickQuoteResponse.getOffers()).thenReturn(buildProductList());
         when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
         //When
@@ -163,9 +169,9 @@ class QuickQuoteControllerTest {
         assertThat(exception.getMessage(), equalTo("Error processing request: Access denied for application anyId"));
     }
 
-    private List<Product> buildProductList() {
-        List<Product> list = new ArrayList<>();
-        IntStream.range(0, 15).forEach(count -> list.add(Product.builder()
+    private List<ProductOfferDto> buildProductList() {
+        List<ProductOfferDto> list = new ArrayList<>();
+        IntStream.range(0, 15).forEach(count -> list.add(ProductOfferDto.builder()
                 .code(ProductHelper.getRandomProductCode())
                 .build()
         ));

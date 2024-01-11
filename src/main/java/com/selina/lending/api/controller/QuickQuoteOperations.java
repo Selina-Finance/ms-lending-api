@@ -20,6 +20,7 @@ package com.selina.lending.api.controller;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -88,8 +89,6 @@ public interface QuickQuoteOperations {
     @PostMapping(value = "/quickquotecf")
     ResponseEntity<QuickQuoteResponse> createQuickQuoteCFApplication(@Valid @RequestBody
                                                                              QuickQuoteCFApplicationRequest quickQuoteCFApplicationRequest);
-
-
 
 
     @Operation(description = "Update the Quick Quote application for the given external application id")

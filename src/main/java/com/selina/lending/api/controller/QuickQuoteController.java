@@ -20,7 +20,6 @@ package com.selina.lending.api.controller;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.dto.qqcf.request.QuickQuoteCFApplicationRequest;
-import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationResponseMapper;
 import com.selina.lending.api.mapper.qqcf.QuickQuoteCFRequestMapper;
 import com.selina.lending.api.mapper.qqcf.QuickQuoteCFResponseMapper;
 import com.selina.lending.exception.AccessDeniedException;
@@ -29,7 +28,9 @@ import com.selina.lending.service.CreateApplicationService;
 import com.selina.lending.service.FilterApplicationService;
 import com.selina.lending.service.enricher.ApplicationResponseEnricher;
 import com.selina.lending.service.permissions.annotation.Permission;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,8 +50,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
     public QuickQuoteController(
             FilterApplicationService filterApplicationService,
             CreateApplicationService createApplicationService,
-            ApplicationResponseEnricher applicationResponseEnricher
-    ) {
+            ApplicationResponseEnricher applicationResponseEnricher) {
         this.filterApplicationService = filterApplicationService;
         this.createApplicationService = createApplicationService;
         this.applicationResponseEnricher = applicationResponseEnricher;
@@ -92,8 +92,7 @@ public class QuickQuoteController implements QuickQuoteOperations {
     }
 
     private QuickQuoteResponse filterQuickQuote(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        var filteredQuickQuoteDecisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
-        var quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
+        var quickQuoteResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
         applicationResponseEnricher.enrichQuickQuoteResponseWithExternalApplicationId(quickQuoteResponse, quickQuoteApplicationRequest.getExternalApplicationId());
         applicationResponseEnricher.enrichQuickQuoteResponseWithProductOffersApplyUrl(quickQuoteResponse);
         return quickQuoteResponse;

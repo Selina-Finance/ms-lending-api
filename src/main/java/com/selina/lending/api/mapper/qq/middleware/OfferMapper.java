@@ -1,7 +1,7 @@
 package com.selina.lending.api.mapper.qq.middleware;
 
 import com.selina.lending.httpclient.middleware.dto.common.Offer;
-import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

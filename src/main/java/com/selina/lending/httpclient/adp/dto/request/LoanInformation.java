@@ -15,26 +15,15 @@
  *
  */
 
-package com.selina.lending.httpclient.selection.dto.response;
+package com.selina.lending.httpclient.adp.dto.request;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
 @Builder
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Product {
-    String name;
-    String code;
-    String family;
-    String category;
-    String variant;
-    Boolean isVariable;
-    Boolean hasFee;
-    Boolean hasErc;
-    String ercProfile;
-    String ercShortCode;
-    ProductOffer offer;
+public class LoanInformation {
+    private Double requestedLoanAmount;
+    private Integer requestedLoanTerm;
+    private Integer numberOfApplicants;
 }

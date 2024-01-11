@@ -24,7 +24,7 @@ import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
 import com.selina.lending.httpclient.eligibility.dto.request.CreditRisk;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Income;
-import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
@@ -70,12 +70,10 @@ public abstract class EligibilityRequestMapper {
         var incomes = new ArrayList<Income>();
 
         if (incomeDto != null && incomeDto.getIncome() != null) {
-            incomeDto.getIncome().forEach(income -> {
-                incomes.add(Income.builder()
-                        .amount(income.getAmount())
-                        .type(income.getType())
-                        .build());
-            });
+            incomeDto.getIncome().forEach(income -> incomes.add(Income.builder()
+                    .amount(income.getAmount())
+                    .type(income.getType())
+                    .build()));
         }
 
         return incomes;

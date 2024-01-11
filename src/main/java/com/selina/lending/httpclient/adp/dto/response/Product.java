@@ -15,18 +15,28 @@
  *
  */
 
-package com.selina.lending.httpclient.selection.dto.response;
+package com.selina.lending.httpclient.adp.dto.response;
 
+import com.selina.lending.httpclient.selection.dto.response.ProductOffer;
+
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
-
-import com.selina.lending.httpclient.adp.dto.response.Product;
+import lombok.experimental.FieldDefaults;
 
 @Builder
 @Data
-public class FilteredQuickQuoteDecisionResponse {
-    private String decision;
-    private List<Product> products;
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Product {
+    private String name;
+    private String code;
+    private String family;
+    private String category;
+    private String variant;
+    private Boolean isVariable;
+    private Boolean hasFee;
+    private Boolean hasErc;
+    private String ercProfile;
+    private String ercShortCode;
+    private ProductOffer offer;
 }

@@ -3,7 +3,7 @@ package com.selina.lending.api.mapper.qq.middleware;
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.middleware.dto.common.Erc;
 import com.selina.lending.httpclient.middleware.dto.common.Offer;
-import com.selina.lending.httpclient.selection.dto.response.Product;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
