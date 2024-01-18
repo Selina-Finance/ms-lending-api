@@ -26,6 +26,6 @@ public class PriorCharges {
     Double balanceConsolidated;
     Double balanceOutstanding;
     Double monthlyPayment;
-    Integer numberPriorCharges;
+    Integer numberOfPriorCharges;
     Double otherDebtPayments;
 }

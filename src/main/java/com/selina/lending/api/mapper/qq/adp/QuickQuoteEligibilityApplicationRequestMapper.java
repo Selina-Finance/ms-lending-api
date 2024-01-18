@@ -61,7 +61,7 @@ public class QuickQuoteEligibilityApplicationRequestMapper {
         if (propertyDetailsDto != null && propertyDetailsDto.getPriorCharges() != null) {
             PriorChargesDto priorChargesDto = propertyDetailsDto.getPriorCharges();
             priorCharges = PriorCharges.builder()
-                    .numberPriorCharges(propertyDetailsDto.getNumberOfPriorCharges())
+                    .numberOfPriorCharges(propertyDetailsDto.getNumberOfPriorCharges())
                     .monthlyPayment(priorChargesDto.getMonthlyPayment())
                     .balanceOutstanding(priorChargesDto.getBalanceOutstanding())
                     .balanceConsolidated(priorChargesDto.getBalanceConsolidated())

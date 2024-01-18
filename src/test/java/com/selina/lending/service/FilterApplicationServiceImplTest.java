@@ -825,7 +825,6 @@ class FilterApplicationServiceImplTest extends MapperBase {
             verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
             verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
             assertThat(response.getStatus()).isEqualTo("Declined");
-            assertThat(response.getOffers()).hasSize(decisionResponse.getProducts().size());
         }
 
         @Test
@@ -906,7 +905,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             //When
-            var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
+            filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
 
             //Then
             verify(middlewareRepository, times(1)).createQuickQuoteApplication(qqMiddlewareRequestCaptor.capture());
