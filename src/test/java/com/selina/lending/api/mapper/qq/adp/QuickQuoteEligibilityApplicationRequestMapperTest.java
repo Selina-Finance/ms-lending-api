@@ -112,7 +112,7 @@ class QuickQuoteEligibilityApplicationRequestMapperTest extends MapperBase {
 
     private void assertPriorCharges(QuickQuoteEligibilityApplicationRequest applicationRequest) {
         var priorCharges = applicationRequest.getApplication().getPropertyDetails().getPriorCharges();
-        assertThat(priorCharges.getNumberPriorCharges(), equalTo(1));
+        assertThat(priorCharges.getNumberOfPriorCharges(), equalTo(1));
         assertThat(priorCharges.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
         assertThat(priorCharges.getBalanceOutstanding(), equalTo(OUTSTANDING_BALANCE));
         assertThat(priorCharges.getBalanceConsolidated(), equalTo(BALANCE_CONSOLIDATED));
