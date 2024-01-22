@@ -58,6 +58,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     protected static final String ADP_CLIENT_ID = "the-aggregator-adp";
     private static final String MONEVO_CLIENT_ID = "monevo";
     private static final String CLEARSCORE_CLIENT_ID = "clearscore";
+    private static final String EXPERIAN_CLIENT_ID = "experian";
 
     private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
 
@@ -81,7 +82,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final PartnerService partnerService;
     private final TokenService tokenService;
     private final List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors;
-    private final boolean isFilterResponseOffersFeatureEnabled;
+
+    private final boolean isFilterClearScoreResponseOffersFeatureEnabled;
+    private final boolean isFilterExperianResponseOffersFeatureEnabled;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
             SelectionRepository selectionRepository,
@@ -92,8 +95,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             PartnerService partnerService,
             TokenService tokenService,
             List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors,
-            @Value("${features.filterResponseOffers.enabled}")
-            boolean isFilterResponseOffersFeatureEnabled) {
+            @Value("${features.filterResponseOffers.clearscore.enabled}")
+            boolean isFilterClearScoreResponseOffersFeatureEnabled,
+            @Value("${features.filterResponseOffers.experian.enabled}")
+            boolean isFilterExperianResponseOffersFeatureEnabled) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
@@ -103,7 +108,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.partnerService = partnerService;
         this.tokenService = tokenService;
         this.alternativeOfferRequestProcessors = alternativeOfferRequestProcessors;
-        this.isFilterResponseOffersFeatureEnabled = isFilterResponseOffersFeatureEnabled;
+        this.isFilterClearScoreResponseOffersFeatureEnabled = isFilterClearScoreResponseOffersFeatureEnabled;
+        this.isFilterExperianResponseOffersFeatureEnabled = isFilterExperianResponseOffersFeatureEnabled;
     }
 
     @Override
@@ -157,14 +163,19 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     private List<Product> getFilteredResponseOffers(String clientId, List<Product> productList) {
-        if (isFilterResponseOffersFeatureEnabled && isClearScoreClient(clientId)) {
+        if (isFilterClearScoreResponseOffersFeatureEnabled && isClearScoreClient(clientId)) {
                 var filteredProducts = new ArrayList<Product>(2);
                 findTheLowestAprcProduct(productList, HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
                 findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
-
                 return filteredProducts;
-
         }
+
+        if (isFilterExperianResponseOffersFeatureEnabled && isExperianClient(clientId)) {
+            var filteredProducts = new ArrayList<Product>(2);
+            findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+            return filteredProducts;
+        }
+
         return productList;
     }
 
@@ -272,6 +283,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static boolean isMonevoClient(String clientId) {
         return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
+    private static boolean isExperianClient(String clientId) {
+        return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId);
     }
 
     private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, Fees fees, List<Product> products) {
