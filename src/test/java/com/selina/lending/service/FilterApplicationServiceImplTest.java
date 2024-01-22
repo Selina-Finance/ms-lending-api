@@ -17,39 +17,14 @@
 
 package com.selina.lending.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import static com.selina.lending.service.FilterApplicationServiceImpl.ADP_CLIENT_ID;
-
-import java.util.List;
-
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentCaptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
-import com.selina.lending.api.dto.qq.response.ProductOfferDto;
 import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
-import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 import com.selina.lending.httpclient.adp.dto.response.Product;
+import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
@@ -61,6 +36,32 @@ import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.List;
+
+import static com.selina.lending.service.FilterApplicationServiceImpl.ADP_CLIENT_ID;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class FilterApplicationServiceImplTest extends MapperBase {
@@ -107,11 +108,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
         verify(middlewareRepository, times(1)).createQuickQuoteApplication(any());
         verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
 
-        assertThat(response.getStatus()).isEqualTo(decisionResponse.getDecision());
+        assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
 
         var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
-        assertThat(requestFees.getIsAddProductFeesToFacility()).isFalse();
+        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
+        assertThat(requestFees.getIsAddProductFeesToFacility(), is(false));
     }
 
     @Test
@@ -145,11 +146,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
         verify(middlewareRepository, times(1)).createQuickQuoteApplication(any());
         verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
 
-        assertThat(response.getStatus()).isEqualTo(decisionResponse.getDecision());
+        assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
 
         var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isEqualTo(qqFees.getIsAddArrangementFeeSelinaToLoan());
-        assertThat(requestFees.getIsAddProductFeesToFacility()).isEqualTo(qqFees.getIsAddProductFeesToFacility());
+        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan(), equalTo(qqFees.getIsAddArrangementFeeSelinaToLoan()));
+        assertThat(requestFees.getIsAddProductFeesToFacility(), equalTo(qqFees.getIsAddProductFeesToFacility()));
     }
 
     @Test
@@ -172,9 +173,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
         verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
         verify(partnerService, times(1)).getPartnerFromToken();
-        assertThat(quickQuoteRequest.getPartner().getSubUnitId()).isEqualTo(SUB_UNIT_ID);
-        assertThat(quickQuoteRequest.getPartner().getCompanyId()).isEqualTo(COMPANY_ID);
-        assertThat(response.getStatus()).isEqualTo(decisionResponse.getDecision());
+        assertThat(quickQuoteRequest.getPartner().getSubUnitId(), equalTo(SUB_UNIT_ID));
+        assertThat(quickQuoteRequest.getPartner().getCompanyId(), equalTo(COMPANY_ID));
+        assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
     }
 
     @Test
@@ -193,7 +194,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         filterApplicationService.filter(quickQuoteApplicationRequest);
 
         // Then
-        assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
     }
 
     @Test
@@ -212,7 +213,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         filterApplicationService.filter(quickQuoteApplicationRequest);
 
         // Then
-        assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
     }
 
     @Test
@@ -233,8 +234,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         filterApplicationService.filter(quickQuoteApplicationRequest);
 
         // Then
-        assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-        assertFalse(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(false));
     }
 
     @Test
@@ -255,8 +256,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         filterApplicationService.filter(quickQuoteApplicationRequest);
 
         // Then
-        assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-        assertNull(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(nullValue()));
     }
 
     @Test
@@ -278,8 +279,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         filterApplicationService.filter(quickQuoteApplicationRequest);
 
         // Then
-        assertNull(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-        assertTrue(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(nullValue()));
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(true));
     }
 
     @Test
@@ -301,8 +302,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         filterApplicationService.filter(quickQuoteApplicationRequest);
 
         // Then
-        assertFalse(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-        assertTrue(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(false));
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(true));
     }
 
     @Test
@@ -325,8 +326,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         filterApplicationService.filter(quickQuoteApplicationRequest);
 
         // Then
-        assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-        assertNull(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
+        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(nullValue()));
     }
 
     @Test
@@ -347,8 +348,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         //Then
         verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-        assertThat(response.getStatus()).isEqualTo("Declined");
-        assertThat(response.getOffers()).hasSize(decisionResponse.getProducts().size());
+        assertThat(response.getStatus(), equalTo("Declined"));
+        assertThat(response.getOffers(), hasSize(decisionResponse.getProducts().size()));
     }
 
     @Test
@@ -369,7 +370,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         //Then
         verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-        assertThat(response.getStatus()).isEqualTo("Declined");
+        assertThat(response.getStatus(), equalTo("Declined"));
     }
 
     @Test
@@ -386,9 +387,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
         filterApplicationService.filter(quickQuoteApplicationRequest);
 
         // Then
-        assertThat(quickQuoteApplicationRequest.getFees().getArrangementFee()).isEqualTo(1000.00);
-        assertThat(quickQuoteApplicationRequest.getFees().getAdviceFee()).isEqualTo(599.00);
-        assertTrue(quickQuoteApplicationRequest.getFees().getIsAddAdviceFeeToLoan());
+        assertThat(quickQuoteApplicationRequest.getFees().getArrangementFee(), equalTo(1000.00));
+        assertThat(quickQuoteApplicationRequest.getFees().getAdviceFee(), equalTo(599.00));
+        assertThat(quickQuoteApplicationRequest.getFees().getIsAddAdviceFeeToLoan(), is(true));
     }
 
     @Test
@@ -412,8 +413,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         // Then
         verify(selectionRepository).filter(selectionRequestCaptor.capture());
         var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isFalse();
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(false));
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
     }
 
     @Test
@@ -440,8 +441,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         // Then
         verify(selectionRepository).filter(selectionRequestCaptor.capture());
         var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isTrue();
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
     }
 
     @Test
@@ -465,8 +466,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         // Then
         verify(selectionRepository).filter(selectionRequestCaptor.capture());
         var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isTrue();
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
     }
 
     @Test
@@ -493,8 +494,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         // Then
         verify(selectionRepository).filter(selectionRequestCaptor.capture());
         var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isTrue();
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
     }
 
     @Test
@@ -517,8 +518,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         // Then
         verify(selectionRepository).filter(selectionRequestCaptor.capture());
         var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isTrue();
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
     }
 
     @Test
@@ -544,8 +545,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         // Then
         verify(selectionRepository).filter(selectionRequestCaptor.capture());
         var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility()).isTrue();
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan()).isTrue();
+        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
+        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
     }
 
     @Nested
@@ -571,11 +572,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
             verify(middlewareRepository, times(1)).createQuickQuoteApplication(any());
             verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
 
-            assertThat(response.getStatus()).isEqualTo(decisionResponse.getDecision());
+            assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
 
             var requestFees = argumentCaptor.getValue().getApplication().getFees();
-            assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isFalse();
-            assertThat(requestFees.getIsAddProductFeesToFacility()).isFalse();
+            assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
+            assertThat(requestFees.getIsAddProductFeesToFacility(), is(false));
         }
 
         @Test
@@ -610,11 +611,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
             verify(middlewareRepository, times(1)).createQuickQuoteApplication(any());
             verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
 
-            assertThat(response.getStatus()).isEqualTo(decisionResponse.getDecision());
+            assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
 
             var requestFees = argumentCaptor.getValue().getApplication().getFees();
-            assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan()).isEqualTo(qqFees.getIsAddArrangementFeeSelinaToLoan());
-            assertThat(requestFees.getIsAddProductFeesToFacility()).isEqualTo(qqFees.getIsAddProductFeesToFacility());
+            assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan(), equalTo(qqFees.getIsAddArrangementFeeSelinaToLoan()));
+            assertThat(requestFees.getIsAddProductFeesToFacility(), equalTo(qqFees.getIsAddProductFeesToFacility()));
         }
 
         @Test
@@ -638,9 +639,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
             verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
             verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
             verify(partnerService, times(1)).getPartnerFromToken();
-            assertThat(quickQuoteRequest.getPartner().getSubUnitId()).isEqualTo(SUB_UNIT_ID);
-            assertThat(quickQuoteRequest.getPartner().getCompanyId()).isEqualTo(COMPANY_ID);
-            assertThat(response.getStatus()).isEqualTo(decisionResponse.getDecision());
+            assertThat(quickQuoteRequest.getPartner().getSubUnitId(), equalTo(SUB_UNIT_ID));
+            assertThat(quickQuoteRequest.getPartner().getCompanyId(), equalTo(COMPANY_ID));
+            assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
         }
 
         @Test
@@ -661,7 +662,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
         }
 
         @Test
@@ -682,7 +683,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
         }
 
         @Test
@@ -705,8 +706,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
             filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-            assertFalse(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(false));
         }
 
         @Test
@@ -728,8 +729,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
             filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-            assertNull(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(nullValue()));
         }
 
         @Test
@@ -752,8 +753,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
             filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertNull(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-            assertTrue(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(nullValue()));
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(true));
         }
 
         @Test
@@ -776,8 +777,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
             filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertFalse(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-            assertTrue(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(false));
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(true));
         }
 
         @Test
@@ -801,8 +802,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
             filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertTrue(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant());
-            assertNull(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant());
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
+            assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(nullValue()));
         }
 
         @Test
@@ -824,7 +825,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             //Then
             verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
             verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-            assertThat(response.getStatus()).isEqualTo("Declined");
+            assertThat(response.getStatus(), equalTo("Declined"));
         }
 
         @Test
@@ -846,7 +847,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             //Then
             verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
             verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-            assertThat(response.getStatus()).isEqualTo("Declined");
+            assertThat(response.getStatus(), equalTo("Declined"));
         }
         @Test
         void shouldCreateApplicationRequestWithFeesIfProvidedButNoArrangementFeeSelinaFields() {
@@ -863,9 +864,9 @@ class FilterApplicationServiceImplTest extends MapperBase {
             filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertThat(quickQuoteApplicationRequest.getFees().getArrangementFee()).isEqualTo(1000.00);
-            assertThat(quickQuoteApplicationRequest.getFees().getAdviceFee()).isEqualTo(599.00);
-            assertTrue(quickQuoteApplicationRequest.getFees().getIsAddAdviceFeeToLoan());
+            assertThat(quickQuoteApplicationRequest.getFees().getArrangementFee(), equalTo(1000.00));
+            assertThat(quickQuoteApplicationRequest.getFees().getAdviceFee(), equalTo(599.00));
+            assertThat(quickQuoteApplicationRequest.getFees().getIsAddAdviceFeeToLoan(), is(true));
         }
     }
 
@@ -890,7 +891,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var quickQuoteResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertThat(quickQuoteResponse.getOffers().get(0).getEligibility()).isEqualTo(eligibilityValue);
+            assertThat(quickQuoteResponse.getOffers().get(0).getEligibility(), equalTo(eligibilityValue));
         }
 
         @Test
@@ -910,7 +911,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             //Then
             verify(middlewareRepository, times(1)).createQuickQuoteApplication(qqMiddlewareRequestCaptor.capture());
 
-            assertThat(qqMiddlewareRequestCaptor.getValue().getPropertyDetails().getEstimatedValue()).isEqualTo(ESTIMATED_VALUE);
+            assertThat(qqMiddlewareRequestCaptor.getValue().getPropertyDetails().getEstimatedValue(), equalTo(ESTIMATED_VALUE));
         }
 
         @Test
@@ -933,7 +934,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             //Then
             verify(middlewareRepository, times(1)).createQuickQuoteApplication(qqMiddlewareRequestCaptor.capture());
 
-            assertThat(qqMiddlewareRequestCaptor.getValue().getPropertyDetails().getEstimatedValue()).isEqualTo(ELIGIBILITY_ESTIMATED_VALUE);
+            assertThat(qqMiddlewareRequestCaptor.getValue().getPropertyDetails().getEstimatedValue(), equalTo(ELIGIBILITY_ESTIMATED_VALUE));
         }
 
         @Test
@@ -950,7 +951,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var quickQuoteResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertThat(quickQuoteResponse.getOffers().get(0).getEligibility()).isEqualTo(ELIGIBILITY);
+            assertThat(quickQuoteResponse.getOffers().get(0).getEligibility(), equalTo(ELIGIBILITY));
         }
     }
 
@@ -975,7 +976,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
 
             // Then
-            assertThat(decisionResponse).isEqualTo(declinedDecisionResponse);
+            assertThat(decisionResponse, equalTo(declinedDecisionResponse));
             verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
             verify(eligibilityRepository, never()).getEligibility(any(QuickQuoteApplicationRequest.class), anyList());
             verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
@@ -1013,7 +1014,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
 
                 // Then
-                assertThat(decisionResponse).isEqualTo(declinedDecisionResponse);
+                assertThat(decisionResponse, equalTo(declinedDecisionResponse));
                 verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
                 verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
             }
@@ -1043,7 +1044,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
+                        equalTo(requestedLoanTerm));
             }
 
             @ParameterizedTest
@@ -1070,7 +1072,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(5));
             }
 
             @ParameterizedTest
@@ -1097,7 +1099,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(10);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
+                        equalTo(10));
             }
 
             @ParameterizedTest
@@ -1125,7 +1128,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
+                        equalTo(requestedLoanTerm));
             }
         }
 
@@ -1156,7 +1160,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(5));
             }
 
             @ParameterizedTest
@@ -1183,7 +1187,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
             }
         }
 
@@ -1208,7 +1212,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
 
                 // Then
-                assertThat(decisionResponse).isEqualTo(declinedDecisionResponse);
+                assertThat(decisionResponse, equalTo(declinedDecisionResponse));
                 verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
                 verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
             }
@@ -1237,7 +1241,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(5));
             }
 
             @ParameterizedTest
@@ -1264,7 +1268,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(requestedLoanTerm);
+                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
             }
         }
     }
@@ -1298,8 +1302,17 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var response = filterApplicationService.filter(quickQuoteRequest);
 
                 // Then
-                assertThat(response.getOffers())
-                        .hasSize(2);
+                assertThat(response.getOffers(), hasSize(2));
+                assertThat(response.getOffers(), contains(
+                        allOf(
+                                hasProperty("family", equalTo(HELOC)),
+                                hasProperty("aprc", equalTo(9.0))
+                        ),
+                        allOf(
+                                hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                hasProperty("aprc", equalTo(7.0))
+                        )
+                ));
             }
 
             @Test
@@ -1325,8 +1338,17 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var response = filterApplicationService.filter(quickQuoteRequest);
 
                 // Then
-                assertThat(response.getOffers())
-                        .hasSize(2);
+                assertThat(response.getOffers(), hasSize(2));
+                assertThat(response.getOffers(), contains(
+                        allOf(
+                                hasProperty("family", equalTo(HELOC)),
+                                hasProperty("aprc", equalTo(10.0))
+                        ),
+                        allOf(
+                                hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                hasProperty("aprc", equalTo(8.0))
+                        )
+                ));
             }
         }
 
@@ -1356,8 +1378,13 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var response = filterApplicationService.filter(quickQuoteRequest);
 
                 // Then
-                assertThat(response.getOffers())
-                        .hasSize(1);
+                assertThat(response.getOffers(), hasSize(1));
+                assertThat(response.getOffers(), contains(
+                        allOf(
+                                hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                hasProperty("aprc", equalTo(7.0))
+                        )
+                ));
             }
 
             @Test
@@ -1383,8 +1410,13 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var response = filterApplicationService.filter(quickQuoteRequest);
 
                 // Then
-                assertThat(response.getOffers())
-                        .hasSize(1);
+                assertThat(response.getOffers(), hasSize(1));
+                assertThat(response.getOffers(), contains(
+                        allOf(
+                                hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                hasProperty("aprc", equalTo(8.0))
+                        )
+                ));
             }
         }
 
@@ -1411,8 +1443,25 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var response = filterApplicationService.filter(quickQuoteRequest);
 
             // Then
-            assertThat(response.getOffers())
-                    .hasSize(4);
+            assertThat(response.getOffers(), hasSize(4));
+            assertThat(response.getOffers(), contains(
+                    allOf(
+                            hasProperty("family", equalTo(HELOC)),
+                            hasProperty("aprc", equalTo(10.0))
+                    ),
+                    allOf(
+                            hasProperty("family", equalTo(HELOC)),
+                            hasProperty("aprc", equalTo(9.0))
+                    ),
+                    allOf(
+                            hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                            hasProperty("aprc", equalTo(8.0))
+                    ),
+                    allOf(
+                            hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                            hasProperty("aprc", equalTo(7.0))
+                    )
+            ));
         }
 
         private Product getProduct(String family, double aprc) {

@@ -133,8 +133,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         QuickQuoteResponse quickQuoteResponse;
         if (isAdpClient(clientId)) {
             log.info("Use ADP decisioning engine");
-            QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(
-                    request);
+            QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(request);
             enrichAdpRequestWithFees(adpRequest, clientId);
             var adpResponse  = adpGatewayRepository.quickQuoteEligibility(adpRequest);
 
