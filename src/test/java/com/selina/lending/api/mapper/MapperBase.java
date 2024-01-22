@@ -167,7 +167,10 @@ public abstract class MapperBase {
     public static final String PRODUCT_CODE = "All";
     public static final String PRODUCT_NAME = "Homeowner loan, Status 0";
     public static final String EXPENDITURE_TYPE = "Utilities";
+    public static final Double EXPENDITURE_BALANCE_DECLARED = 111.0;
     public static final Double EXPENDITURE_AMOUNT_DECLARED = 250.0;
+    public static final Double EXPENDITURE_PAYMENT_VERIFIED = 122.0;
+    public static final Double EXPENDITURE_AMOUNT_VERIFIED = 133.0;
     public static final String EXPENDITURE_FREQUENCY = "monthly";
     public static final String EXTERNAL_APPLICATION_ID = "uniqueCaseID";
     public static final String RULE_OUTCOME = "Granted";
@@ -464,10 +467,17 @@ public abstract class MapperBase {
     }
 
     protected ExpenditureDto getExpenditureDto() {
+        return getExpenditureDto(EXPENDITURE_TYPE);
+    }
+
+    protected ExpenditureDto getExpenditureDto(String expenditureType) {
         return ExpenditureDto.builder()
                 .frequency(EXPENDITURE_FREQUENCY)
+                .balanceDeclared(EXPENDITURE_BALANCE_DECLARED)
                 .amountDeclared(EXPENDITURE_AMOUNT_DECLARED)
-                .expenditureType(EXPENDITURE_TYPE)
+                .paymentVerified(EXPENDITURE_PAYMENT_VERIFIED)
+                .amountVerified(EXPENDITURE_AMOUNT_VERIFIED)
+                .expenditureType(expenditureType)
                 .build();
     }
 

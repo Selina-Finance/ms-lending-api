@@ -18,11 +18,20 @@
 package com.selina.lending.api.mapper.dip;
 
 import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.httpclient.middleware.dto.common.Expenditure;
 import com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 
 class DIPApplicationRequestMapperTest extends MapperBase {
@@ -54,8 +63,6 @@ class DIPApplicationRequestMapperTest extends MapperBase {
         assertThat(applicationRequest.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
         assertThat(applicationRequest.getBrokerSubmitterEmail(), equalTo(BROKER_SUBMITTER_EMAIL));
         assertThat(applicationRequest.getExpenditure(), notNullValue());
-        assertThat(applicationRequest.getExpenditure().size(), equalTo(1));
-        assertThat(applicationRequest.getExpenditure().get(0).getExpenditureType(), equalTo(EXPENDITURE_TYPE));
         assertThat(applicationRequest.getApplicants().size(), equalTo(1));
         assertThat(applicationRequest.getApplicants().get(0).getIncome(), notNullValue());
         assertThat(applicationRequest.getApplicants().get(0).getIncome().getIncome().size(), equalTo(1));
@@ -67,10 +74,9 @@ class DIPApplicationRequestMapperTest extends MapperBase {
         assertThat(applicationRequest.getPropertyDetails(), notNullValue());
         assertThat(applicationRequest.getPropertyDetails().getAddressLine1(), equalTo(ADDRESS_LINE_1));
         assertThat(applicationRequest.getPropertyDetails().getAddressLine2(), equalTo(ADDRESS_LINE_2));
-
         assertPriorCharges(applicationRequest);
-
         assertFees(applicationRequest);
+        assertExpenditures(applicationRequest.getExpenditure());
     }
 
     private void assertFees(ApplicationRequest applicationRequest) {
@@ -91,5 +97,139 @@ class DIPApplicationRequestMapperTest extends MapperBase {
         assertThat(priorCharges.getMonthlyPayment(), equalTo(MONTHLY_PAYMENT));
         assertThat(priorCharges.getBalanceConsolidated(), equalTo(BALANCE_CONSOLIDATED));
         assertThat(priorCharges.getOtherDebtPayments(), equalTo(OTHER_DEBT_PAYMENTS));
+    }
+
+    private void assertExpenditures(List<Expenditure> expenditures) {
+        assertThat(expenditures, hasSize(1));
+
+        var expenditure = expenditures.get(0);
+        assertThat(expenditure.getExpenditureType(), equalTo(EXPENDITURE_TYPE));
+        assertThat(expenditure.getFrequency(), equalTo(EXPENDITURE_FREQUENCY));
+        assertThat(expenditure.getBalanceDeclared(), equalTo(EXPENDITURE_BALANCE_DECLARED));
+        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        assertThat(expenditure.getPaymentVerified(), equalTo(EXPENDITURE_PAYMENT_VERIFIED));
+        assertThat(expenditure.getAmountVerified(), equalTo(EXPENDITURE_AMOUNT_VERIFIED));
+    }
+
+    @Test
+    void whenExpenditureTypeIsNotSpecifiedThenMapItToMonthlyValue() {
+        //Given
+        var dipApplicationRequest = getDIPApplicationRequestDto();
+        var expenditure = getExpenditureDto();
+        expenditure.setFrequency(null);
+
+        dipApplicationRequest.setExpenditure(List.of(expenditure));
+
+        //When
+        var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
+
+        //Then
+        assertThat(applicationRequest.getExpenditure(), hasSize(1));
+        assertThat(applicationRequest.getExpenditure(), contains(
+                allOf(
+                        hasProperty("expenditureType", equalTo("Utilities")),
+                        hasProperty("frequency", equalTo("monthly"))
+                )
+        ));
+    }
+
+    @Nested
+    class MergeExpendituresOfTheSameType {
+
+        @Test
+        void whenHaveTwoExpendituresOfTheSameTypeThenMergeThemIntoOne() {
+            //Given
+            var dipApplicationRequest = getDIPApplicationRequestDto();
+            var utilitiesExpenditure1 = getExpenditureDto("Utilities");
+            var utilitiesExpenditure2 = getExpenditureDto("Utilities");
+            var otherExpenditure = getExpenditureDto("Other");
+
+            dipApplicationRequest.setExpenditure(List.of(utilitiesExpenditure1, utilitiesExpenditure2, otherExpenditure));
+
+            //When
+            var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
+
+            //Then
+            assertThat(applicationRequest.getExpenditure(), hasSize(2));
+            assertThat(applicationRequest.getExpenditure(), containsInAnyOrder(
+                    allOf(
+                            hasProperty("expenditureType", equalTo("Utilities")),
+                            hasProperty("frequency", equalTo(EXPENDITURE_FREQUENCY)),
+                            hasProperty("balanceDeclared", equalTo(EXPENDITURE_BALANCE_DECLARED * 2)),
+                            hasProperty("amountDeclared", equalTo(EXPENDITURE_AMOUNT_DECLARED * 2)),
+                            hasProperty("paymentVerified", equalTo(EXPENDITURE_PAYMENT_VERIFIED * 2)),
+                            hasProperty("amountVerified", equalTo(EXPENDITURE_AMOUNT_VERIFIED * 2))
+                    ),
+                    allOf(
+                            hasProperty("expenditureType", equalTo("Other")),
+                            hasProperty("frequency", equalTo(EXPENDITURE_FREQUENCY)),
+                            hasProperty("balanceDeclared", equalTo(EXPENDITURE_BALANCE_DECLARED)),
+                            hasProperty("amountDeclared", equalTo(EXPENDITURE_AMOUNT_DECLARED)),
+                            hasProperty("paymentVerified", equalTo(EXPENDITURE_PAYMENT_VERIFIED)),
+                            hasProperty("amountVerified", equalTo(EXPENDITURE_AMOUNT_VERIFIED))
+                    )
+            ));
+        }
+
+        @Test
+        void whenFirstExpenditureDoesNotHaveValuesThenUseValuesOfTheSecondExpenditure() {
+            //Given
+            var dipApplicationRequest = getDIPApplicationRequestDto();
+            var utilitiesExpenditure1 = getExpenditureDto("Utilities");
+            utilitiesExpenditure1.setBalanceDeclared(null);
+            utilitiesExpenditure1.setAmountDeclared(null);
+            utilitiesExpenditure1.setPaymentVerified(null);
+            utilitiesExpenditure1.setAmountVerified(null);
+
+            var utilitiesExpenditure2 = getExpenditureDto("Utilities");
+
+            dipApplicationRequest.setExpenditure(List.of(utilitiesExpenditure1, utilitiesExpenditure2));
+
+            //When
+            var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
+
+            //Then
+            assertThat(applicationRequest.getExpenditure(), hasSize(1));
+            assertThat(applicationRequest.getExpenditure(), contains(
+                    allOf(
+                            hasProperty("expenditureType", equalTo("Utilities")),
+                            hasProperty("frequency", equalTo(EXPENDITURE_FREQUENCY)),
+                            hasProperty("balanceDeclared", equalTo(EXPENDITURE_BALANCE_DECLARED)),
+                            hasProperty("amountDeclared", equalTo(EXPENDITURE_AMOUNT_DECLARED)),
+                            hasProperty("paymentVerified", equalTo(EXPENDITURE_PAYMENT_VERIFIED)),
+                            hasProperty("amountVerified", equalTo(EXPENDITURE_AMOUNT_VERIFIED))
+                    )
+            ));
+        }
+
+        @Test
+        void whenSecondExpenditureDoesNotHaveValuesThenUseValuesOfTheFirstExpenditure() {
+            //Given
+            var dipApplicationRequest = getDIPApplicationRequestDto();
+            var utilitiesExpenditure1 = getExpenditureDto("Utilities");
+            var utilitiesExpenditure2 = getExpenditureDto("Utilities");
+            utilitiesExpenditure2.setBalanceDeclared(null);
+            utilitiesExpenditure2.setAmountDeclared(null);
+            utilitiesExpenditure2.setPaymentVerified(null);
+            utilitiesExpenditure2.setAmountVerified(null);
+
+            dipApplicationRequest.setExpenditure(List.of(utilitiesExpenditure1, utilitiesExpenditure2));
+
+            //When
+            var applicationRequest = DIPApplicationRequestMapper.INSTANCE.mapToApplicationRequest(dipApplicationRequest);
+
+            //Then
+            assertThat(applicationRequest.getExpenditure(), hasSize(1));
+            assertThat(applicationRequest.getExpenditure(), contains(
+                    allOf(
+                            hasProperty("expenditureType", equalTo("Utilities")),
+                            hasProperty("frequency", equalTo(EXPENDITURE_FREQUENCY)),
+                            hasProperty("balanceDeclared", equalTo(EXPENDITURE_BALANCE_DECLARED)),
+                            hasProperty("amountDeclared", equalTo(EXPENDITURE_AMOUNT_DECLARED)),
+                            hasProperty("paymentVerified", equalTo(EXPENDITURE_PAYMENT_VERIFIED)),
+                            hasProperty("amountVerified", equalTo(EXPENDITURE_AMOUNT_VERIFIED))
+                    )
+            ));
+        }
     }
 }

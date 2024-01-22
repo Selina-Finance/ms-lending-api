@@ -19,10 +19,13 @@ package com.selina.lending.api.mapper.config;
 
 import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 import org.mapstruct.MapperConfig;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @MapperConfig
 public interface ApplicationRequestMapperConfig {
+
+    @Mapping(target = "expenditure", source = "expenditure", qualifiedByName = "mapExpenditures")
     void mapApplicationRequest(ApplicationRequest applicationRequestDto,
             @MappingTarget com.selina.lending.httpclient.middleware.dto.dip.request.ApplicationRequest applicationRequest);
 }
