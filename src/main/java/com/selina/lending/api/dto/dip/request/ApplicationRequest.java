@@ -18,6 +18,7 @@
 package com.selina.lending.api.dto.dip.request;
 
 import com.selina.lending.api.dto.common.ExpenditureDto;
+import com.selina.lending.api.validator.NoControversialExpenditures;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,5 +42,6 @@ public class ApplicationRequest {
     private String externalApplicationId;
 
     @Valid
+    @NoControversialExpenditures
     private List<ExpenditureDto> expenditure;
 }

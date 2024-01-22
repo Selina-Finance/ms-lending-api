@@ -502,67 +502,148 @@ class QuickQuoteControllerValidationTest extends MapperBase {
                     .andExpect(jsonPath("$.violations[0].message").value("should be equal to applicants size"));
         }
 
-        @Test
-        void whenCreateQQApplicationWithoutSpecifiedExpenditureAmountDeclaredThenReturnBadRequest() throws Exception {
-            //Given
-            var request = getQuickQuoteApplicationRequestDto();
-            request.getExpenditure().get(0).setAmountDeclared(null);
+        @Nested
+        class ExpendituresValidation {
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            @Test
+            void whenExpenditureAmountDeclaredIsNotSpecifiedThenReturnBadRequest() throws Exception {
+                //Given
+                var request = getQuickQuoteApplicationRequestDto();
+                request.getExpenditure().get(0).setAmountDeclared(null);
 
-            //When
-            mockMvc.perform(post("/application/quickquote")
-                            .content(objectMapper.writeValueAsString(request))
-                            .contentType(APPLICATION_JSON))
-                    // Then
-                    .andExpect(status().isBadRequest())
-                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(1)))
-                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].amountDeclared"))
-                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
-        }
+                when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
-        @Test
-        void whenCreateQQApplicationWithoutSpecifiedExpenditureTypeThenReturnBadRequest() throws Exception {
-            //Given
-            var request = getQuickQuoteApplicationRequestDto();
-            request.getExpenditure().get(0).setExpenditureType(null);
+                //When
+                mockMvc.perform(post("/application/quickquote")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON))
+                        // Then
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                        .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                        .andExpect(jsonPath("$.violations", hasSize(1)))
+                        .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].amountDeclared"))
+                        .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+            }
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            @Test
+            void whenExpenditureTypeIsNotSpecifiedThenReturnBadRequest() throws Exception {
+                //Given
+                var request = getQuickQuoteApplicationRequestDto();
+                request.getExpenditure().get(0).setExpenditureType(null);
 
-            //When
-            mockMvc.perform(post("/application/quickquote")
-                            .content(objectMapper.writeValueAsString(request))
-                            .contentType(APPLICATION_JSON))
-                    // Then
-                    .andExpect(status().isBadRequest())
-                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(1)))
-                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].expenditureType"))
-                    .andExpect(jsonPath("$.violations[0].message").value("must not be blank"));
-        }
+                when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
 
-        @Test
-        void whenCreateQQApplicationWithIncorrectExpenditureTypeValueThenReturnBadRequest() throws Exception {
-            //Given
-            var request = getQuickQuoteApplicationRequestDto();
-            request.getExpenditure().get(0).setExpenditureType("some unsupported value");
+                //When
+                mockMvc.perform(post("/application/quickquote")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON))
+                        // Then
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                        .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                        .andExpect(jsonPath("$.violations", hasSize(1)))
+                        .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].expenditureType"))
+                        .andExpect(jsonPath("$.violations[0].message").value("must not be blank"));
+            }
 
-            when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+            @Test
+            void whenExpenditureTypeHasInvalidValueThenReturnBadRequest() throws Exception {
+                //Given
+                var request = getQuickQuoteApplicationRequestDto();
+                request.getExpenditure().get(0).setExpenditureType("some unsupported value");
 
-            //When
-            mockMvc.perform(post("/application/quickquote")
-                            .content(objectMapper.writeValueAsString(request))
-                            .contentType(APPLICATION_JSON))
-                    // Then
-                    .andExpect(status().isBadRequest())
-                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                    .andExpect(jsonPath("$.violations", hasSize(1)))
-                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].expenditureType"))
-                    .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+                when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+                //When
+                mockMvc.perform(post("/application/quickquote")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON))
+                        // Then
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                        .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                        .andExpect(jsonPath("$.violations", hasSize(1)))
+                        .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].expenditureType"))
+                        .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+            }
+
+            @Test
+            void whenHaveTwoExpendituresOfTheSameTypeButWithDifferentFrequencyThenReturnBadRequest() throws Exception {
+                //Given
+                var request = getQuickQuoteApplicationRequestDto();
+                var expenditure1 = getExpenditureDto();
+                expenditure1.setFrequency("monthly");
+
+                var expenditure2 = getExpenditureDto();
+                expenditure2.setFrequency("daily");
+
+                request.setExpenditure(List.of(expenditure1, expenditure2));
+
+                when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+                //When
+                mockMvc.perform(post("/application/quickquote")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON))
+                        // Then
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                        .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                        .andExpect(jsonPath("$.violations", hasSize(1)))
+                        .andExpect(jsonPath("$.violations[0].field").value("expenditure"))
+                        .andExpect(jsonPath("$.violations[0].message").value("All expenditures of the same type must have the same frequency value"));
+            }
+
+            @Test
+            void whenHaveTwoExpendituresOfTheSameTypeButOneOfThemHasNotSpecifiedFrequencyThenReturnBadRequest() throws Exception {
+                //Given
+                var request = getQuickQuoteApplicationRequestDto();
+                var expenditure1 = getExpenditureDto();
+                expenditure1.setFrequency("monthly");
+
+                var expenditure2 = getExpenditureDto();
+                expenditure2.setFrequency(null);
+
+                request.setExpenditure(List.of(expenditure1, expenditure2));
+
+                when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+                //When
+                mockMvc.perform(post("/application/quickquote")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON))
+                        // Then
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                        .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                        .andExpect(jsonPath("$.violations", hasSize(1)))
+                        .andExpect(jsonPath("$.violations[0].field").value("expenditure"))
+                        .andExpect(jsonPath("$.violations[0].message").value("All expenditures of the same type must have the same frequency value"));
+            }
+
+            @Test
+            void whenHaveTwoExpendituresOfTheDifferentTypeAndDifferentFrequencyThenReturnOk() throws Exception {
+                //Given
+                var request = getQuickQuoteApplicationRequestDto();
+                var expenditure1 = getExpenditureDto("Utilities");
+                expenditure1.setFrequency("monthly");
+
+                var expenditure2 = getExpenditureDto("Other");
+                expenditure2.setFrequency("daily");
+
+                request.setExpenditure(List.of(expenditure1, expenditure2));
+
+                when(filterApplicationService.filter(request)).thenReturn(getFilteredQuickQuoteDecisionResponse());
+
+                //When
+                mockMvc.perform(post("/application/quickquote")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON))
+                        // Then
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+            }
         }
     }
 
