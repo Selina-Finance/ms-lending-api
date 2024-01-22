@@ -96,30 +96,45 @@ public class ClearScoreExtendedAlternativeOfferRequestProcessorTest extends Mapp
             assertThat(quickQuoteApplicationRequest.getLoanInformation().getRequestedLoanTerm()).isEqualTo(originalRequestedLoanTerm);
         }
 
+        @ParameterizedTest
+        @ValueSource(ints = {3, 4})
+        void whenRequestedLoanTermIsBetween3And4ThenAdjustItTo5(int originalRequestedLoanTerm) {
+            quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(originalRequestedLoanTerm);
+            alternativeOfferRequestProcessor.adjustAlternativeOfferRequest(CLEARSCORE_CLIENT_ID, quickQuoteApplicationRequest);
+            assertThat(quickQuoteApplicationRequest.getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
+        }
+
         @Test
-        void whenRequestedLoanTermIs5ThenAdjustItTo7() {
+        void whenRequestedLoanTermIs5ThenAdjustItTo6() {
             quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(5);
+            alternativeOfferRequestProcessor.adjustAlternativeOfferRequest(CLEARSCORE_CLIENT_ID, quickQuoteApplicationRequest);
+            assertThat(quickQuoteApplicationRequest.getLoanInformation().getRequestedLoanTerm()).isEqualTo(6);
+        }
+
+        @Test
+        void whenRequestedLoanTermIs6ThenAdjustItTo7() {
+            quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(6);
             alternativeOfferRequestProcessor.adjustAlternativeOfferRequest(CLEARSCORE_CLIENT_ID, quickQuoteApplicationRequest);
             assertThat(quickQuoteApplicationRequest.getLoanInformation().getRequestedLoanTerm()).isEqualTo(7);
         }
 
         @Test
-        void whenRequestedLoanTermIs6ThenAdjustItTo8() {
-            quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(6);
+        void whenRequestedLoanTermIs7ThenAdjustItTo8() {
+            quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(7);
             alternativeOfferRequestProcessor.adjustAlternativeOfferRequest(CLEARSCORE_CLIENT_ID, quickQuoteApplicationRequest);
             assertThat(quickQuoteApplicationRequest.getLoanInformation().getRequestedLoanTerm()).isEqualTo(8);
         }
 
         @Test
-        void whenRequestedLoanTermIs7ThenAdjustItTo9() {
-            quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(7);
+        void whenRequestedLoanTermIs8ThenAdjustItTo9() {
+            quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(8);
             alternativeOfferRequestProcessor.adjustAlternativeOfferRequest(CLEARSCORE_CLIENT_ID, quickQuoteApplicationRequest);
             assertThat(quickQuoteApplicationRequest.getLoanInformation().getRequestedLoanTerm()).isEqualTo(9);
         }
 
         @ParameterizedTest
-        @ValueSource(ints = {8, 9, 10})
-        void whenRequestedLoanTermIsBetween8And10ThenAdjustItTo10(int originalRequestedLoanTerm) {
+        @ValueSource(ints = {9, 10})
+        void whenRequestedLoanTermIsBetween9And10ThenAdjustItTo10(int originalRequestedLoanTerm) {
             quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(originalRequestedLoanTerm);
             alternativeOfferRequestProcessor.adjustAlternativeOfferRequest(CLEARSCORE_CLIENT_ID, quickQuoteApplicationRequest);
             assertThat(quickQuoteApplicationRequest.getLoanInformation().getRequestedLoanTerm()).isEqualTo(10);
