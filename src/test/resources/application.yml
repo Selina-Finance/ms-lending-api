@@ -80,7 +80,10 @@ kafka:
 
 features:
   filterResponseOffers:
-    enabled: true
+    clearscore:
+      enabled: true
+    experian:
+      enabled: true
 
 spring:
   kafka:
