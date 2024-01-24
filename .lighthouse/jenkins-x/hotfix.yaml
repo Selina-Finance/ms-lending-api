@@ -11,7 +11,7 @@ spec:
       taskSpec:
         metadata: {}
         stepTemplate:
-          image: uses:Selina-Finance/pipeline-catalog/tasks/gradle/hotfix.yaml@d15be724f8ba9b528801e6d2e6f939b0c4f3b9f6
+          image: uses:Selina-Finance/pipeline-catalog/tasks/gradle/release.yaml@versionStream
           name: ""
           resources:
             # override limits for all containers here
