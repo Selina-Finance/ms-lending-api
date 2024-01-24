@@ -12,7 +12,7 @@ deploymentLabels:
   framework: spring
 image:
   repository: 677894610806.dkr.ecr.eu-west-2.amazonaws.com/selina-finance/ms-lending-api
-  tag: 0.13.22
+  tag: main-hotfix-20240124-025824
   pullPolicy: IfNotPresent
 # Optional Toleration and affinity
 eks:
