@@ -30,7 +30,7 @@ spec:
             source .jx/variables.sh
             export VERSION=$(echo ${BRANCH_NAME} | cut -d '-' -f2)-hotfix-$(date '+%Y%m%d-%H%M%S') 
             echo $VERSION > VERSION
-            echo "export VERSION=$VERSION" >> .jx/variables.sh
+            sed -i "s/VERSION=.*/VERSION=\'${VERSION}\'/" .jx/variables.sh
           resources:
             # override requests for the pod here
             requests:
