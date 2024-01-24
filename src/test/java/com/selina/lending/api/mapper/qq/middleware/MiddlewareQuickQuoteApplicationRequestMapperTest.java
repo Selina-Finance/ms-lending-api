@@ -17,6 +17,7 @@ import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest
 import com.selina.lending.httpclient.selection.dto.response.Product;
 import com.selina.lending.service.TokenService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +26,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -53,6 +58,140 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
     @BeforeEach
     void setUp() {
         when(tokenService.retrieveClientId()).thenReturn("the-aggregator");
+    }
+
+    @Nested
+    class MergeExpendituresOfTheSameType {
+
+        @Test
+        void whenHaveTwoExpendituresOfTheSameTypeThenMergeThemIntoOne() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            var utilitiesExpenditure1 = getExpenditureDto("Utilities");
+            var utilitiesExpenditure2 = getExpenditureDto("Utilities");
+            var otherExpenditure = getExpenditureDto("Other");
+
+            quickQuoteApplicationRequest.setExpenditure(List.of(utilitiesExpenditure1, utilitiesExpenditure2, otherExpenditure));
+
+            var products = List.of(getProduct());
+            var fees = Fees.builder().build();
+
+            //When
+            QuickQuoteRequest middlewareCreateApplicationEvent = mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getExpenditure(), hasSize(2));
+            assertThat(middlewareCreateApplicationEvent.getExpenditure(), containsInAnyOrder(
+                    allOf(
+                            hasProperty("expenditureType", equalTo("Utilities")),
+                            hasProperty("frequency", equalTo(EXPENDITURE_FREQUENCY)),
+                            hasProperty("balanceDeclared", equalTo(EXPENDITURE_BALANCE_DECLARED * 2)),
+                            hasProperty("amountDeclared", equalTo(EXPENDITURE_AMOUNT_DECLARED * 2)),
+                            hasProperty("paymentVerified", equalTo(EXPENDITURE_PAYMENT_VERIFIED * 2)),
+                            hasProperty("amountVerified", equalTo(EXPENDITURE_AMOUNT_VERIFIED * 2))
+                    ),
+                    allOf(
+                            hasProperty("expenditureType", equalTo("Other")),
+                            hasProperty("frequency", equalTo(EXPENDITURE_FREQUENCY)),
+                            hasProperty("balanceDeclared", equalTo(EXPENDITURE_BALANCE_DECLARED)),
+                            hasProperty("amountDeclared", equalTo(EXPENDITURE_AMOUNT_DECLARED)),
+                            hasProperty("paymentVerified", equalTo(EXPENDITURE_PAYMENT_VERIFIED)),
+                            hasProperty("amountVerified", equalTo(EXPENDITURE_AMOUNT_VERIFIED))
+                    )
+            ));
+        }
+
+        @Test
+        void whenFirstExpenditureDoesNotHaveValuesThenUseValuesOfTheSecondExpenditure() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            var utilitiesExpenditure1 = getExpenditureDto("Utilities");
+            utilitiesExpenditure1.setBalanceDeclared(null);
+            utilitiesExpenditure1.setAmountDeclared(null);
+            utilitiesExpenditure1.setPaymentVerified(null);
+            utilitiesExpenditure1.setAmountVerified(null);
+
+            var utilitiesExpenditure2 = getExpenditureDto("Utilities");
+
+            quickQuoteApplicationRequest.setExpenditure(List.of(utilitiesExpenditure1, utilitiesExpenditure2));
+
+            var products = List.of(getProduct());
+            var fees = Fees.builder().build();
+
+            //When
+            QuickQuoteRequest middlewareCreateApplicationEvent = mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getExpenditure(), hasSize(1));
+            assertThat(middlewareCreateApplicationEvent.getExpenditure(), contains(
+                    allOf(
+                            hasProperty("expenditureType", equalTo("Utilities")),
+                            hasProperty("frequency", equalTo(EXPENDITURE_FREQUENCY)),
+                            hasProperty("balanceDeclared", equalTo(EXPENDITURE_BALANCE_DECLARED)),
+                            hasProperty("amountDeclared", equalTo(EXPENDITURE_AMOUNT_DECLARED)),
+                            hasProperty("paymentVerified", equalTo(EXPENDITURE_PAYMENT_VERIFIED)),
+                            hasProperty("amountVerified", equalTo(EXPENDITURE_AMOUNT_VERIFIED))
+                    )
+            ));
+        }
+
+        @Test
+        void whenSecondExpenditureDoesNotHaveValuesThenUseValuesOfTheFirstExpenditure() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            var utilitiesExpenditure1 = getExpenditureDto("Utilities");
+            var utilitiesExpenditure2 = getExpenditureDto("Utilities");
+            utilitiesExpenditure2.setBalanceDeclared(null);
+            utilitiesExpenditure2.setAmountDeclared(null);
+            utilitiesExpenditure2.setPaymentVerified(null);
+            utilitiesExpenditure2.setAmountVerified(null);
+
+            quickQuoteApplicationRequest.setExpenditure(List.of(utilitiesExpenditure1, utilitiesExpenditure2));
+
+            var products = List.of(getProduct());
+            var fees = Fees.builder().build();
+
+            //When
+            QuickQuoteRequest middlewareCreateApplicationEvent = mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+
+            //Then
+            assertThat(middlewareCreateApplicationEvent.getExpenditure(), hasSize(1));
+            assertThat(middlewareCreateApplicationEvent.getExpenditure(), contains(
+                    allOf(
+                            hasProperty("expenditureType", equalTo("Utilities")),
+                            hasProperty("frequency", equalTo(EXPENDITURE_FREQUENCY)),
+                            hasProperty("balanceDeclared", equalTo(EXPENDITURE_BALANCE_DECLARED)),
+                            hasProperty("amountDeclared", equalTo(EXPENDITURE_AMOUNT_DECLARED)),
+                            hasProperty("paymentVerified", equalTo(EXPENDITURE_PAYMENT_VERIFIED)),
+                            hasProperty("amountVerified", equalTo(EXPENDITURE_AMOUNT_VERIFIED))
+                    )
+            ));
+        }
+    }
+
+    @Test
+    void whenExpenditureTypeIsNotSpecifiedThenMapItToMonthlyValue() {
+        //Given
+        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        var expenditure = getExpenditureDto();
+        expenditure.setFrequency(null);
+
+        quickQuoteApplicationRequest.setExpenditure(List.of(expenditure));
+
+        var products = List.of(getProduct());
+        var fees = Fees.builder().build();
+
+        //When
+        QuickQuoteRequest middlewareCreateApplicationEvent = mapper.mapToQuickQuoteRequest(quickQuoteApplicationRequest, products, fees);
+
+        //Then
+        assertThat(middlewareCreateApplicationEvent.getExpenditure(), hasSize(1));
+        assertThat(middlewareCreateApplicationEvent.getExpenditure(), contains(
+                allOf(
+                        hasProperty("expenditureType", equalTo("Utilities")),
+                        hasProperty("frequency", equalTo("monthly"))
+                )
+        ));
     }
 
     @Test
@@ -384,7 +523,10 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
 
         var expenditure = expenditures.get(0);
         assertThat(expenditure.getExpenditureType(), equalTo(EXPENDITURE_TYPE));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
         assertThat(expenditure.getFrequency(), equalTo(EXPENDITURE_FREQUENCY));
+        assertThat(expenditure.getBalanceDeclared(), equalTo(EXPENDITURE_BALANCE_DECLARED));
+        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        assertThat(expenditure.getPaymentVerified(), equalTo(EXPENDITURE_PAYMENT_VERIFIED));
+        assertThat(expenditure.getAmountVerified(), equalTo(EXPENDITURE_AMOUNT_VERIFIED));
     }
 }

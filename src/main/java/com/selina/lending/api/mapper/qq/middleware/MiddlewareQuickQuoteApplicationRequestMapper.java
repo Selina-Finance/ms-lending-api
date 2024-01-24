@@ -2,6 +2,7 @@ package com.selina.lending.api.mapper.qq.middleware;
 
 import com.selina.lending.api.dto.qq.request.LoanInformationDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.mapper.common.ExpendituresMapper;
 import com.selina.lending.httpclient.middleware.dto.common.Facility;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.middleware.dto.common.LoanInformation;
@@ -20,8 +21,7 @@ import java.util.Objects;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {QuickQuoteApplicantMapper.class, LoanInformationMapper.class, TokenService.class, OfferMapper.class,
-                ExpenditureMapper.class})
+        uses = {QuickQuoteApplicantMapper.class, LoanInformationMapper.class, TokenService.class, OfferMapper.class, ExpendituresMapper.class})
 public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
 
     private static final String MS_QUICK_QUOTE_CLIENT_ID = "ms-quick-quote";
@@ -45,9 +45,9 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "fees", source = "fees")
     @Mapping(target = "offers", source = "products")
     @Mapping(target = "partner", source = "request.partner")
-    @Mapping(target = "expenditure", source = "request.expenditure")
     @Mapping(target = "loanInformation", source = "request.loanInformation", qualifiedByName = "mapLoanInformation")
     @Mapping(target = "eligibility", source = "products", qualifiedByName = "mapEligibility")
+    @Mapping(target = "expenditure", source = "request.expenditure", qualifiedByName = "mapExpenditures")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
                                                              List<Product> products, Fees fees);
 

@@ -1,0 +1,52 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  creationTimestamp: null
+  name: hotfix
+spec:
+  pipelineSpec:
+    tasks:
+    - name: from-build-pack
+      resources: {}
+      taskSpec:
+        metadata: {}
+        stepTemplate:
+          image: uses:Selina-Finance/pipeline-catalog/tasks/gradle/hotfix.yaml@d15be724f8ba9b528801e6d2e6f939b0c4f3b9f6
+          name: ""
+          resources:
+            # override limits for all containers here
+            limits: {}
+          workingDir: /workspace/source
+        steps:
+        - image: uses:Selina-Finance/pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
+          name: ""
+          resources: {}
+        - name: next-version
+          resources: {}
+        - name: jx-variables
+          script: |
+            #!/usr/bin/env sh
+            jx gitops variables
+            source .jx/variables.sh
+            export VERSION=$(echo ${BRANCH_NAME} | cut -d '-' -f2)-hotfix-$(date '+%Y%m%d-%H%M%S') 
+            echo $VERSION > VERSION
+            echo "export VERSION=$VERSION" >> .jx/variables.sh
+          resources:
+            # override requests for the pod here
+            requests:
+              cpu: 400m
+              memory: 512Mi
+        - name: build-gradle-build
+          resources: {}
+        - name: check-registry
+          resources: {}
+        - name: build-container-build
+          resources: {}
+        - name: promote-changelog
+          resources: {}
+        - name: promote-helm-release
+          resources: {}
+  podTemplate: {}
+  serviceAccountName: tekton-bot
+  timeout: 12h0m0s
+status: {}

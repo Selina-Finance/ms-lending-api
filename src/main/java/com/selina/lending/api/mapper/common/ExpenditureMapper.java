@@ -20,12 +20,31 @@ package com.selina.lending.api.mapper.common;
 import com.selina.lending.api.dto.common.ExpenditureDto;
 import com.selina.lending.httpclient.middleware.dto.common.Expenditure;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import org.springframework.util.StringUtils;
 
 @Mapper
 public interface ExpenditureMapper {
+
+    String DEFAULT_EXPENDITURE_FREQUENCY = "monthly";
+
     ExpenditureMapper INSTANCE = Mappers.getMapper(ExpenditureMapper.class);
 
     ExpenditureDto mapToExpenditureDto(Expenditure expenditure);
+
+    @Mapping(target = "frequency", source = "expenditureDto.frequency", qualifiedByName = "mapExpenditureFrequency")
     Expenditure mapToExpenditure(ExpenditureDto expenditureDto);
+
+    @Named("mapExpenditureFrequency")
+    static String mapExpenditureFrequency(String frequency) {
+        String mappedFrequency = frequency;
+
+        if (!StringUtils.hasText(mappedFrequency)) {
+            mappedFrequency = DEFAULT_EXPENDITURE_FREQUENCY;
+        }
+
+        return mappedFrequency;
+    }
 }

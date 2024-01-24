@@ -19,6 +19,7 @@ package com.selina.lending.api.mapper.dip;
 
 import com.selina.lending.api.dto.dip.request.DIPApplicationRequest;
 import com.selina.lending.api.mapper.common.ExpenditureMapper;
+import com.selina.lending.api.mapper.common.ExpendituresMapper;
 import com.selina.lending.api.mapper.common.FeesMapper;
 import com.selina.lending.api.mapper.common.LoanInformationMapper;
 import com.selina.lending.api.mapper.common.PropertyDetailsMapper;
@@ -29,12 +30,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = DIPApplicationRequestMapperConfig.class, uses = {DIPApplicantMapper.class, FeesMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class, ExpenditureMapper.class})
-public interface DIPApplicationRequestMapper {
+public interface DIPApplicationRequestMapper extends ExpendituresMapper {
+
     DIPApplicationRequestMapper INSTANCE = Mappers.getMapper(DIPApplicationRequestMapper.class);
 
     @InheritConfiguration(name = "mapDipApplicationRequest")
     ApplicationRequest mapToApplicationRequest(DIPApplicationRequest dipApplicationRequest);
 
+    //TODO: is not used
     @InheritConfiguration(name = "mapApplicationRequest")
     ApplicationRequest mapToApplicationRequest(com.selina.lending.api.dto.dip.request.ApplicationRequest applicationRequest);
 }

@@ -19,6 +19,7 @@ package com.selina.lending.api.mapper.dipcc;
 
 import com.selina.lending.api.dto.dipcc.request.DIPCCApplicationRequest;
 import com.selina.lending.api.mapper.common.ExpenditureMapper;
+import com.selina.lending.api.mapper.common.ExpendituresMapper;
 import com.selina.lending.api.mapper.common.FeesMapper;
 import com.selina.lending.api.mapper.common.LoanInformationMapper;
 import com.selina.lending.api.mapper.common.PropertyDetailsMapper;
@@ -30,7 +31,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = DIPCCApplicationRequestMapperConfig.class, uses = {DIPApplicantMapper.class, FeesMapper.class, LoanInformationMapper.class, PropertyDetailsMapper.class, ExpenditureMapper.class})
-public interface DIPCCApplicationRequestMapper {
+public interface DIPCCApplicationRequestMapper extends ExpendituresMapper {
+
     DIPCCApplicationRequestMapper INSTANCE = Mappers.getMapper(DIPCCApplicationRequestMapper.class);
 
     @InheritConfiguration(name = "mapDipCCApplicationRequest")
