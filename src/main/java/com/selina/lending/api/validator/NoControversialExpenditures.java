@@ -15,18 +15,19 @@
  *
  */
 
-package com.selina.lending.httpclient.middleware.dto.common;
+package com.selina.lending.api.validator;
 
-import lombok.Builder;
-import lombok.Value;
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-@Builder
-@Value
-public class Expenditure {
-    String frequency;
-    Double balanceDeclared;
-    Double amountDeclared;
-    Double paymentVerified;
-    Double amountVerified;
-    String expenditureType;
+@Documented
+@Constraint(validatedBy = NoControversialExpendituresImpl.class)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface NoControversialExpenditures {
+    String message() default "All expenditures of the same type must have the same frequency value";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }

@@ -27,8 +27,10 @@ import org.mapstruct.ReportingPolicy;
 
 @MapperConfig(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DIPApplicationRequestMapperConfig extends ApplicationRequestMapperConfig {
+
     @InheritConfiguration(name = "mapApplicationRequest")
     void mapDipApplicationRequest(DIPApplicationRequest dipApplicationRequest, @MappingTarget ApplicationRequest applicationRequest);
+
     @InheritConfiguration(name = "mapApplicationRequest")
     void mapDipCCApplicationRequest(DIPCCApplicationRequest dipApplicationRequest, @MappingTarget ApplicationRequest applicationRequest);
 

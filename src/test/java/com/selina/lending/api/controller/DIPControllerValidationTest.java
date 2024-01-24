@@ -27,6 +27,7 @@ import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.service.CreateApplicationService;
 import com.selina.lending.service.RetrieveApplicationService;
 import com.selina.lending.service.UpdateApplicationService;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -1152,5 +1153,267 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field").value("loanInformation.facilities[0].allocationPurpose"))
                 .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+    }
+
+    @Nested
+    class DIPExpendituresValidation {
+
+        @Test
+        void whenExpenditureAmountDeclaredIsNotSpecifiedThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPApplicationRequestDto();
+            request.getExpenditure().get(0).setAmountDeclared(null);
+
+            //When
+            mockMvc.perform(post("/application/dip")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].amountDeclared"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+        }
+
+        @Test
+        void whenExpenditureTypeIsNotSpecifiedThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPApplicationRequestDto();
+            request.getExpenditure().get(0).setExpenditureType(null);
+
+            //When
+            mockMvc.perform(post("/application/dip")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].expenditureType"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be blank"));
+        }
+
+        @Test
+        void whenExpenditureTypeHasInvalidValueThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPApplicationRequestDto();
+            request.getExpenditure().get(0).setExpenditureType("some unsupported value");
+
+            //When
+            mockMvc.perform(post("/application/dip")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].expenditureType"))
+                    .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+        }
+
+        @Test
+        void whenHaveTwoExpendituresOfTheSameTypeButWithDifferentFrequencyThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPApplicationRequestDto();
+            var expenditure1 = getExpenditureDto();
+            expenditure1.setFrequency("monthly");
+
+            var expenditure2 = getExpenditureDto();
+            expenditure2.setFrequency("daily");
+
+            request.setExpenditure(List.of(expenditure1, expenditure2));
+
+            //When
+            mockMvc.perform(post("/application/dip")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure"))
+                    .andExpect(jsonPath("$.violations[0].message").value("All expenditures of the same type must have the same frequency value"));
+        }
+
+        @Test
+        void whenHaveTwoExpendituresOfTheSameTypeButOneOfThemHasNotSpecifiedFrequencyThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPApplicationRequestDto();
+            var expenditure1 = getExpenditureDto();
+            expenditure1.setFrequency("monthly");
+
+            var expenditure2 = getExpenditureDto();
+            expenditure2.setFrequency(null);
+
+            request.setExpenditure(List.of(expenditure1, expenditure2));
+
+            //When
+            mockMvc.perform(post("/application/dip")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure"))
+                    .andExpect(jsonPath("$.violations[0].message").value("All expenditures of the same type must have the same frequency value"));
+        }
+
+        @Test
+        void whenHaveTwoExpendituresOfTheDifferentTypeAndDifferentFrequencyThenReturnOk() throws Exception {
+            //Given
+            var request = getDIPApplicationRequestDto();
+            var expenditure1 = getExpenditureDto("Utilities");
+            expenditure1.setFrequency("monthly");
+
+            var expenditure2 = getExpenditureDto("Other");
+            expenditure2.setFrequency("daily");
+
+            request.setExpenditure(List.of(expenditure1, expenditure2));
+
+            //When
+            mockMvc.perform(post("/application/dip")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isOk());
+        }
+    }
+
+    @Nested
+    class DIPCCExpendituresValidation {
+
+        @Test
+        void whenExpenditureAmountDeclaredIsNotSpecifiedThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPCCApplicationRequestDto();
+            request.getExpenditure().get(0).setAmountDeclared(null);
+
+            //When
+            mockMvc.perform(post("/application/dipcc")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].amountDeclared"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be null"));
+        }
+
+        @Test
+        void whenExpenditureTypeIsNotSpecifiedThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPCCApplicationRequestDto();
+            request.getExpenditure().get(0).setExpenditureType(null);
+
+            //When
+            mockMvc.perform(post("/application/dipcc")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].expenditureType"))
+                    .andExpect(jsonPath("$.violations[0].message").value("must not be blank"));
+        }
+
+        @Test
+        void whenExpenditureTypeHasInvalidValueThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPCCApplicationRequestDto();
+            request.getExpenditure().get(0).setExpenditureType("some unsupported value");
+
+            //When
+            mockMvc.perform(post("/application/dipcc")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure[0].expenditureType"))
+                    .andExpect(jsonPath("$.violations[0].message").value("value is not valid"));
+        }
+
+        @Test
+        void whenHaveTwoExpendituresOfTheSameTypeButWithDifferentFrequencyThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPCCApplicationRequestDto();
+            var expenditure1 = getExpenditureDto();
+            expenditure1.setFrequency("monthly");
+
+            var expenditure2 = getExpenditureDto();
+            expenditure2.setFrequency("daily");
+
+            request.setExpenditure(List.of(expenditure1, expenditure2));
+
+            //When
+            mockMvc.perform(post("/application/dipcc")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure"))
+                    .andExpect(jsonPath("$.violations[0].message").value("All expenditures of the same type must have the same frequency value"));
+        }
+
+        @Test
+        void whenHaveTwoExpendituresOfTheSameTypeButOneOfThemHasNotSpecifiedFrequencyThenReturnBadRequest() throws Exception {
+            //Given
+            var request = getDIPCCApplicationRequestDto();
+            var expenditure1 = getExpenditureDto();
+            expenditure1.setFrequency("monthly");
+
+            var expenditure2 = getExpenditureDto();
+            expenditure2.setFrequency(null);
+
+            request.setExpenditure(List.of(expenditure1, expenditure2));
+
+            //When
+            mockMvc.perform(post("/application/dipcc")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                    .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                    .andExpect(jsonPath("$.violations", hasSize(1)))
+                    .andExpect(jsonPath("$.violations[0].field").value("expenditure"))
+                    .andExpect(jsonPath("$.violations[0].message").value("All expenditures of the same type must have the same frequency value"));
+        }
+
+        @Test
+        void whenHaveTwoExpendituresOfTheDifferentTypeAndDifferentFrequencyThenReturnOk() throws Exception {
+            //Given
+            var request = getDIPCCApplicationRequestDto();
+            var expenditure1 = getExpenditureDto("Utilities");
+            expenditure1.setFrequency("monthly");
+
+            var expenditure2 = getExpenditureDto("Other");
+            expenditure2.setFrequency("daily");
+
+            request.setExpenditure(List.of(expenditure1, expenditure2));
+
+            //When
+            mockMvc.perform(post("/application/dipcc")
+                            .content(objectMapper.writeValueAsString(request))
+                            .contentType(APPLICATION_JSON))
+                    // Then
+                    .andExpect(status().isOk());
+        }
     }
 }
