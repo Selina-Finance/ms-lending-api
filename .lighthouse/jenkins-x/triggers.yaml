@@ -14,3 +14,10 @@ spec:
     branches:
     - ^main$
     - ^master$
+  - name: hotfix
+    context: "release"
+    always_run: true
+    optional: false
+    source: "hotfix.yaml"
+    branches:
+      - ^hotfix-\d+.\d+.\d+$
