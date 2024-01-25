@@ -470,7 +470,7 @@ public abstract class MapperBase {
     protected ExpenditureDto getExpenditureDto(String expenditureType) {
         return ExpenditureDto.builder()
                 .frequency(EXPENDITURE_FREQUENCY)
-                .balanceDeclared(EXPENDITURE_BALANCE_DECLARED)
+                .balanceDeclared(EXPENDITURE_BALANCE_DECLARED.intValue())
                 .amountDeclared(EXPENDITURE_AMOUNT_DECLARED)
                 .paymentVerified(EXPENDITURE_PAYMENT_VERIFIED)
                 .amountVerified(EXPENDITURE_AMOUNT_VERIFIED)
