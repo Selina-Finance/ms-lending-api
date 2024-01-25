@@ -31,7 +31,7 @@ public class ExpenditureDto {
     @Schema(implementation = Frequency.class)
     @EnumValue(enumClass = Frequency.class)
     String frequency;
-    Double balanceDeclared;
+    Integer balanceDeclared;
 
     @NotNull
     Double amountDeclared;
