@@ -38,21 +38,26 @@ public interface ExpendituresMapper {
     }
 
     private static ExpenditureDto mergeExpenditureDtoProperties(ExpenditureDto left, ExpenditureDto right) {
-        mergePropertyValue(left::setBalanceDeclared, left::getBalanceDeclared, right::getBalanceDeclared);
-        mergePropertyValue(left::setAmountDeclared, left::getAmountDeclared, right::getAmountDeclared);
-        mergePropertyValue(left::setPaymentVerified, left::getPaymentVerified, right::getPaymentVerified);
-        mergePropertyValue(left::setAmountVerified, left::getAmountVerified, right::getAmountVerified);
+        mergeIntegerPropertyValue(left::setBalanceDeclared, left::getBalanceDeclared, right::getBalanceDeclared);
+        mergeDoublePropertyValue(left::setAmountDeclared, left::getAmountDeclared, right::getAmountDeclared);
+        mergeDoublePropertyValue(left::setPaymentVerified, left::getPaymentVerified, right::getPaymentVerified);
+        mergeDoublePropertyValue(left::setAmountVerified, left::getAmountVerified, right::getAmountVerified);
         return left;
     }
 
-    private static void mergePropertyValue(Consumer<Double> leftValueSetter, Supplier<Double> leftValueGetter, Supplier<Double> rightValueGetter) {
-        leftValueSetter.accept(sumNullableDoubles(leftValueGetter.get(), rightValueGetter.get()));
+    private static void mergeIntegerPropertyValue(Consumer<Integer> leftValueSetter, Supplier<Integer> leftValueGetter, Supplier<Integer> rightValueGetter) {
+        Double summed = sumNullableNumbers(leftValueGetter.get(), rightValueGetter.get());
+        leftValueSetter.accept(summed == null ? null : summed.intValue());
     }
 
-    private static Double sumNullableDoubles(Double a, Double b) {
+    private static void mergeDoublePropertyValue(Consumer<Double> leftValueSetter, Supplier<Double> leftValueGetter, Supplier<Double> rightValueGetter) {
+        leftValueSetter.accept(sumNullableNumbers(leftValueGetter.get(), rightValueGetter.get()));
+    }
+
+    private static Double sumNullableNumbers(Number a, Number b) {
         if (a == null && b == null)
             return null;
 
-        return (a == null ? 0 : a) + (b == null ? 0 : b);
+        return (a == null ? 0.0 : a.doubleValue()) + (b == null ? 0.0 : b.doubleValue());
     }
 }
