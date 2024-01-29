@@ -950,6 +950,7 @@ public abstract class MapperBase {
 
     protected FilteredQuickQuoteDecisionResponse getFilteredQuickQuoteDecisionResponse() {
         return FilteredQuickQuoteDecisionResponse.builder().decision(DECISION)
+                .hasReferOffers(false)
                 .products(List.of(getProduct()))
                 .build();
     }

@@ -139,7 +139,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
             if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
                 adpResponse.setProducts(getFilteredResponseOffers(clientId, adpResponse.getProducts()));
-                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts());
+                var hasReferOffers = false; // TODO calculate actual value
+                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(), hasReferOffers);
                 storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
                 quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(adpResponse);
             } else {
@@ -152,7 +153,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
             if (isDecisionAccepted(filteredQuickQuoteDecisionResponse.getDecision(), filteredQuickQuoteDecisionResponse.getProducts())) {
                 filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, filteredQuickQuoteDecisionResponse.getProducts()));
-                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, filteredQuickQuoteDecisionResponse.getProducts());
+                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, filteredQuickQuoteDecisionResponse.getProducts(),
+                        filteredQuickQuoteDecisionResponse.getHasReferOffers());
                 storeOffersInMiddleware(request, selectionRequest.getApplication().getFees(), filteredQuickQuoteDecisionResponse.getProducts());
             }
             quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
@@ -184,10 +186,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                 .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()));
     }
 
-    private void enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(QuickQuoteApplicationRequest request,
-            List<Product> products) {
+    private void enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(QuickQuoteApplicationRequest request, List<Product> products, Boolean hasReferOffers) {
         try {
-            var eligibilityResponse = eligibilityRepository.getEligibility(request, products);
+            var eligibilityResponse = eligibilityRepository.getEligibility(request, products, hasReferOffers);
             updatePropertyEstimatedValue(request.getPropertyDetails(), eligibilityResponse.getPropertyInfo());
             enrichOffersWithEligibility(eligibilityResponse, products);
         } catch (Exception ex) {

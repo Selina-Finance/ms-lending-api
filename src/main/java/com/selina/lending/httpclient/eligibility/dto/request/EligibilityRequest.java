@@ -25,6 +25,7 @@ import lombok.Value;
 public class EligibilityRequest {
 
     String partnerAccountId;
+    Decision decision;
     Applicant applicant;
     PropertyDetails propertyDetails;
 }

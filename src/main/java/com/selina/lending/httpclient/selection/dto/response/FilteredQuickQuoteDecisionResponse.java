@@ -28,5 +28,6 @@ import com.selina.lending.httpclient.adp.dto.response.Product;
 @Data
 public class FilteredQuickQuoteDecisionResponse {
     private String decision;
+    private Boolean hasReferOffers;
     private List<Product> products;
 }
