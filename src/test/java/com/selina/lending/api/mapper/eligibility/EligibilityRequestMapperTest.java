@@ -20,6 +20,7 @@ package com.selina.lending.api.mapper.eligibility;
 import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
 import com.selina.lending.httpclient.eligibility.dto.request.CreditRisk;
+import com.selina.lending.httpclient.eligibility.dto.request.Decision;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Income;
 import com.selina.lending.httpclient.eligibility.dto.request.PropertyDetails;
@@ -43,10 +44,12 @@ public class EligibilityRequestMapperTest extends MapperBase {
     @Test
     void shouldMapEligibilityRequest() {
         var products = List.of(getProduct());
-        var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, getQuickQuoteApplicationRequestDto(), products);
+        var hasReferOffers = false;
+        var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, getQuickQuoteApplicationRequestDto(), products, hasReferOffers);
 
         assertThat(eligibilityRequest, equalTo(EligibilityRequest.builder()
                 .partnerAccountId(PARTNER_ACCOUNT_ID)
+                .decision(Decision.Accept)
                 .propertyDetails(PropertyDetails.builder()
                         .addressLine1(ADDRESS_LINE_1)
                         .postcode(POSTCODE)
@@ -67,5 +70,23 @@ public class EligibilityRequestMapperTest extends MapperBase {
                                         .build()))
                         .build())
                 .build()));
+    }
+
+    @Test
+    void whenHasReferOffersThenPassReferDecision() {
+        var products = List.of(getProduct());
+        var hasReferOffers = true;
+        var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, getQuickQuoteApplicationRequestDto(), products, hasReferOffers);
+
+        assertThat(eligibilityRequest.getDecision(), equalTo(Decision.Refer));
+    }
+
+    @Test
+    void whenHasReferOffersIsNullThenPassAcceptDecision() {
+        var products = List.of(getProduct());
+        Boolean hasReferOffers = null;
+        var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, getQuickQuoteApplicationRequestDto(), products, hasReferOffers);
+
+        assertThat(eligibilityRequest.getDecision(), equalTo(Decision.Accept));
     }
 }

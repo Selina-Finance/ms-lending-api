@@ -22,6 +22,7 @@ import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
 import com.selina.lending.httpclient.eligibility.dto.request.CreditRisk;
+import com.selina.lending.httpclient.eligibility.dto.request.Decision;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Income;
 import com.selina.lending.httpclient.adp.dto.response.Product;
@@ -44,7 +45,11 @@ public abstract class EligibilityRequestMapper {
     @Mapping(target = "partnerAccountId", source = "partnerAccountId")
     @Mapping(target = "propertyDetails", source = "request.propertyDetails")
     @Mapping(target = "applicant", source = "request.applicants", qualifiedByName = "mapApplicant")
-    public abstract EligibilityRequest mapToPropertyDetails(String partnerAccountId, QuickQuoteApplicationRequest request, @Context List<Product> products);
+    @Mapping(target = "decision", source = "hasReferOffers", qualifiedByName = "mapDecision")
+    public abstract EligibilityRequest mapToPropertyDetails(String partnerAccountId,
+                                                            QuickQuoteApplicationRequest request,
+                                                            @Context List<Product> products,
+                                                            Boolean hasReferOffers);
 
     @Named("mapApplicant")
     Applicant mapApplicant(List<QuickQuoteApplicantDto> applicants, @Context List<Product> products) {
@@ -107,5 +112,10 @@ public abstract class EligibilityRequestMapper {
                 .map(product -> product.getOffer().getDtir())
                 .max(Double::compareTo)
                 .orElse(null);
+    }
+
+    @Named("mapDecision")
+    Decision mapDecision(Boolean hasReferOffers) {
+        return Boolean.TRUE.equals(hasReferOffers) ? Decision.Refer : Decision.Accept;
     }
 }

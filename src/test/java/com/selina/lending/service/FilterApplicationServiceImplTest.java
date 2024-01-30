@@ -57,6 +57,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -65,6 +66,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class FilterApplicationServiceImplTest extends MapperBase {
+
     @MockBean
     private AdpGatewayRepository adpGatewayRepository;
 
@@ -97,7 +99,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         //When
@@ -135,7 +137,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(qqApplicationRequest, decisionResponse.getProducts())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(qqApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         //When
@@ -163,7 +165,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
 
         //When
@@ -187,7 +189,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(null);
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         // When
@@ -206,7 +208,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(true);
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         // When
@@ -227,7 +229,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(false);
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         // When
@@ -249,7 +251,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         // When
@@ -272,7 +274,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         // When
@@ -295,7 +297,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         // When
@@ -319,7 +321,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         when(partnerService.getPartnerFromToken()).thenReturn(null);
 
         // When
@@ -340,7 +342,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
 
         //When
         var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
@@ -362,7 +364,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
 
         //When
         var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
@@ -381,7 +383,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
 
         // When
         filterApplicationService.filter(quickQuoteApplicationRequest);
@@ -403,7 +405,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
 
@@ -428,7 +430,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
         quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
         quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(true);
@@ -456,7 +458,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         when(tokenService.retrieveClientId()).thenReturn("monevo");
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
         var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
 
@@ -481,7 +483,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         when(tokenService.retrieveClientId()).thenReturn("monevo");
         when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
         when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
         var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
         quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
         quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(false);
@@ -561,7 +563,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             //When
@@ -600,7 +602,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(qqApplicationRequest, decisionResponse.getProducts())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(qqApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             //When
@@ -629,7 +631,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
 
             //When
@@ -655,7 +657,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             // When
@@ -676,7 +678,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             // When
@@ -699,7 +701,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             // When
@@ -722,7 +724,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             // When
@@ -746,7 +748,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             // When
@@ -770,7 +772,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             // When
@@ -795,7 +797,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             // When
@@ -817,7 +819,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
 
             //When
             var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
@@ -839,7 +841,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
 
             //When
             var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
@@ -858,7 +860,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
 
             // When
             filterApplicationService.filter(quickQuoteApplicationRequest);
@@ -885,7 +887,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts())).thenReturn(eligibility);
+            when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(eligibility);
 
             // When
             var quickQuoteResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
@@ -902,7 +904,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             //When
@@ -925,7 +927,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
             //When
@@ -945,7 +947,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts())).thenThrow(RuntimeException.class);
+            when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenThrow(RuntimeException.class);
 
             // When
             var quickQuoteResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
@@ -978,7 +980,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             // Then
             assertThat(decisionResponse, equalTo(declinedDecisionResponse));
             verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
-            verify(eligibilityRepository, never()).getEligibility(any(QuickQuoteApplicationRequest.class), anyList());
+            verify(eligibilityRepository, never()).getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean());
             verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
         }
 
@@ -1294,7 +1296,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                 when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
@@ -1330,7 +1332,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                 when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
@@ -1370,7 +1372,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                 when(tokenService.retrieveClientId()).thenReturn("experian");
 
@@ -1402,7 +1404,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                 when(tokenService.retrieveClientId()).thenReturn("experian");
 
@@ -1435,7 +1437,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
             when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList())).thenReturn(getEligibilityResponse());
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
             when(tokenService.retrieveClientId()).thenReturn("other-client");
 
