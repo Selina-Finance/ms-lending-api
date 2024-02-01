@@ -93,4 +93,7 @@ sla:
 
 features:
   filterResponseOffers:
-    enabled: false
+    clearscore:
+      enabled: false
+    experian:
+      enabled: false

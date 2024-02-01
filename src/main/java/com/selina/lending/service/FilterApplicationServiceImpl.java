@@ -48,6 +48,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String MONEVO_CLIENT_ID = "monevo";
     private static final String CLEARSCORE_CLIENT_ID = "clearscore";
+    private static final String EXPERIAN_CLIENT_ID = "experian";
 
     private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
 
@@ -68,7 +69,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final PartnerService partnerService;
     private final TokenService tokenService;
     private final List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors;
-    private final boolean isFilterResponseOffersFeatureEnabled;
+    private final boolean isFilterClearScoreResponseOffersFeatureEnabled;
+    private final boolean isFilterExperianResponseOffersFeatureEnabled;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
                                         SelectionRepository selectionRepository,
@@ -78,8 +80,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                                         PartnerService partnerService,
                                         TokenService tokenService,
                                         List<AlternativeOfferRequestProcessor> alternativeOfferRequestProcessors,
-                                        @Value("${features.filterResponseOffers.enabled}")
-                                        boolean isFilterResponseOffersFeatureEnabled) {
+                                        @Value("${features.filterResponseOffers.clearscore.enabled}")
+                                        boolean isFilterClearScoreResponseOffersFeatureEnabled,
+                                        @Value("${features.filterResponseOffers.experian.enabled}")
+                                        boolean isFilterExperianResponseOffersFeatureEnabled) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
@@ -88,7 +92,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.partnerService = partnerService;
         this.tokenService = tokenService;
         this.alternativeOfferRequestProcessors = alternativeOfferRequestProcessors;
-        this.isFilterResponseOffersFeatureEnabled = isFilterResponseOffersFeatureEnabled;
+        this.isFilterClearScoreResponseOffersFeatureEnabled = isFilterClearScoreResponseOffersFeatureEnabled;
+        this.isFilterExperianResponseOffersFeatureEnabled = isFilterExperianResponseOffersFeatureEnabled;
     }
 
     @Override
@@ -117,13 +122,15 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     private void filterResponseOffers(String clientId, FilteredQuickQuoteDecisionResponse decisionResponse) {
-        if (!isFilterResponseOffersFeatureEnabled) {
-            return;
-        }
-
-        if (isClearScoreClient(clientId)) {
+        if (isFilterClearScoreResponseOffersFeatureEnabled && isClearScoreClient(clientId)) {
             var filteredProducts = new ArrayList<Product>(2);
             findTheLowestAprcProduct(decisionResponse.getProducts(), HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+            findTheLowestAprcProduct(decisionResponse.getProducts(), HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+            decisionResponse.setProducts(filteredProducts);
+        }
+
+        if (isFilterExperianResponseOffersFeatureEnabled && isExperianClient(clientId)) {
+            var filteredProducts = new ArrayList<Product>(2);
             findTheLowestAprcProduct(decisionResponse.getProducts(), HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
             decisionResponse.setProducts(filteredProducts);
         }
@@ -220,6 +227,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static boolean isMonevoClient(String clientId) {
         return MONEVO_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
+    private static boolean isExperianClient(String clientId) {
+        return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId);
     }
 
     private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, FilterQuickQuoteApplicationRequest selectionRequest, FilteredQuickQuoteDecisionResponse decisionResponse) {
