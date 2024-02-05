@@ -90,6 +90,7 @@ class OfferMapperTest extends MapperBase {
         assertThat(offer.getFixedTermYears(), equalTo(FIXED_TERM_YEARS));
         assertThat(offer.getMinimumInitialDrawdown(), equalTo(MINIMUM_INITIAL_DRAWDOWN));
         assertThat(offer.getOfferValidity(), equalTo(OFFER_VALIDITY));
+        assertThat(offer.getNetLoanAmount(), equalTo(NET_LOAN_AMOUNT));
         assertThat(offer.getEsisLoanAmount(), equalTo(ESIS_LOAN_AMOUNT));
         assertThat(offer.getArrangementFeeSelina(), equalTo(ARRANGEMENT_FEE_SELINA));
         assertErcData(offer.getErcData());
