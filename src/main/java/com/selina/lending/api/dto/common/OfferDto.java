@@ -64,6 +64,7 @@ public class OfferDto {
     String ercShortCode;
     Integer ercPeriodYears;
     Double maximumBalanceEsis;
+    Double netLoanAmount;
     Double maxErc;
     List<ErcDto> ercData;
     @Schema(description = "Rule outcomes for Decline and Refer decisions (only DIP applications)")
