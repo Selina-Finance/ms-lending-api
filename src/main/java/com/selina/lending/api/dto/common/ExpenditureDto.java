@@ -21,6 +21,7 @@ import com.selina.lending.api.validator.EnumValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -44,26 +45,28 @@ public class ExpenditureDto {
     @EnumValue(enumClass = ExpenditureType.class)
     String expenditureType;
 
-    enum Frequency {
-        DAILY("daily"),
-        WEEKLY("weekly"),
-        BI_WEEKLY("bi-weekly"),
-        MONTHLY("monthly"),
-        QUARTERLY("quarterly"),
-        SEMI_ANNUALLY("semi-annually"),
-        ANNUALLY("annually");
+    @Getter
+    public enum Frequency {
+        DAILY("daily", 30.0),
+        WEEKLY("weekly", 4.33),
+        BI_WEEKLY("bi-weekly", 2.166),
+        MONTHLY("monthly", 1.0),
+        QUARTERLY("quarterly", 0.25),
+        SEMI_ANNUALLY("semi-annually", 0.125),
+        ANNUALLY("annually", 0.0833333);
 
         final String value;
+        final double monthlyFactor;
 
-        Frequency(String value) {
+        Frequency(String value, double monthlyFactor) {
             this.value = value;
+            this.monthlyFactor = monthlyFactor;
         }
 
         @Override
         public String toString() {
             return this.value;
         }
-
     }
 
     enum ExpenditureType {

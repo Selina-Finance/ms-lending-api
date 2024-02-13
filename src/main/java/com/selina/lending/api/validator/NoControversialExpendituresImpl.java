@@ -30,6 +30,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toSet;
 
+// TODO delete
 @Slf4j
 public class NoControversialExpendituresImpl implements ConstraintValidator<NoControversialExpenditures, List<ExpenditureDto>> {
 

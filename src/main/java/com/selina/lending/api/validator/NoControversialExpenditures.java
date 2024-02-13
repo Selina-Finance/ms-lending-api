@@ -23,6 +23,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+// TODO delete
 @Documented
 @Constraint(validatedBy = NoControversialExpendituresImpl.class)
 @Retention(RetentionPolicy.RUNTIME)
