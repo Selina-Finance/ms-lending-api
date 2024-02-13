@@ -21,6 +21,7 @@ import com.selina.lending.api.mapper.MapperBase;
 import com.selina.lending.httpclient.selection.dto.request.Application;
 import com.selina.lending.httpclient.selection.dto.request.Expenditure;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -88,18 +89,150 @@ class QuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertFees(applicationRequest);
     }
 
-    @Test
-    void whenExpenditureFrequencyIsNotSpecifiedThenMapItToMonthly() {
-        //Given
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency(null);
+    @Nested
+    class MapExpenditureToMonthly {
 
-        //When
-        var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+        @Test
+        void whenExpenditureFrequencyIsNotSpecifiedThenDefaultToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency(null);
 
-        //Then
-        Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
-        assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        }
+
+        @Test
+        void whenExpenditureFrequencyIsInvalidThenDefaultToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency("invalid-frequency");
+
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        }
+
+        @Test
+        void shouldMapDailyExpenditureToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency("daily");
+            var dailyFrequencyFactor = 30;
+
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * dailyFrequencyFactor));
+        }
+
+        @Test
+        void shouldMapWeeklyExpenditureToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency("weekly");
+            var weeklyFrequencyFactor = 4.33;
+
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * weeklyFrequencyFactor));
+        }
+
+        @Test
+        void shouldMapBiWeeklyExpenditureToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency("bi-weekly");
+            var biWeeklyFrequencyFactor = 2.166;
+
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * biWeeklyFrequencyFactor));
+        }
+
+        @Test
+        void shouldMapMonthlyExpenditureToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency("monthly");
+            var monthlyFrequencyFactor = 1;
+
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * monthlyFrequencyFactor));
+        }
+
+        @Test
+        void shouldMapQuarterlyExpenditureToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency("quarterly");
+            var quarterlyFrequencyFactor = 0.25;
+
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * quarterlyFrequencyFactor));
+        }
+
+        @Test
+        void shouldMapSemiAnnuallyExpenditureToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency("semi-annually");
+            var semiAnnuallyFrequencyFactor = 0.125;
+
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * semiAnnuallyFrequencyFactor));
+        }
+
+        @Test
+        void shouldMapAnnuallyExpenditureToMonthly() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            quickQuoteApplicationRequest.getExpenditure().get(0).setFrequency("annually");
+            var annuallyFrequencyFactor = 0.0833333;
+
+            //When
+            var applicationRequest = QuickQuoteApplicationRequestMapper.mapRequest(quickQuoteApplicationRequest);
+
+            //Then
+            Expenditure expenditure = applicationRequest.getApplication().getExpenditures().get(0);
+            assertThat(expenditure.getFrequency(), equalTo("monthly"));
+            assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * annuallyFrequencyFactor));
+        }
     }
 
     private void assertPropertyDetails(Application application) {

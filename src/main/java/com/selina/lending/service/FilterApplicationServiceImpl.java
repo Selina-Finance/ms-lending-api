@@ -291,8 +291,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, Fees fees, List<Product> products) {
         addPartner(request);
-        middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper
-                .mapToQuickQuoteRequest(request, products, fees));
+        middlewareRepository.createQuickQuoteApplication(middlewareQuickQuoteApplicationRequestMapper.mapToQuickQuoteRequest(request, products, fees));
     }
 
     private void addPartner(QuickQuoteApplicationRequest request) {
