@@ -97,10 +97,3 @@ features:
       enabled: false
     experian:
       enabled: false
-
-logging:
-  level:
-    org:
-      springframework:
-        security: TRACE
-        web: TRACE
