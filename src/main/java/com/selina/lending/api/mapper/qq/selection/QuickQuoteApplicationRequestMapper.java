@@ -37,9 +37,9 @@ import com.selina.lending.httpclient.selection.dto.request.Options;
 import com.selina.lending.httpclient.selection.dto.request.PriorCharges;
 import com.selina.lending.httpclient.selection.dto.request.PropertyDetails;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -115,21 +115,18 @@ public class QuickQuoteApplicationRequestMapper {
 
     private static Expenditure mapExpenditure(ExpenditureDto quickQuoteExpenditureDto) {
         return quickQuoteExpenditureDto == null ? null : Expenditure.builder()
-                .amountDeclared(quickQuoteExpenditureDto.getAmountDeclared())
+                .amountDeclared(mapAmountDeclared(quickQuoteExpenditureDto.getAmountDeclared(), quickQuoteExpenditureDto.getFrequency()))
                 .expenditureType(quickQuoteExpenditureDto.getExpenditureType())
-                .frequency(mapExpenditureFrequency(quickQuoteExpenditureDto.getFrequency()))
+                .frequency(DEFAULT_EXPENDITURE_FREQUENCY)
                 .build();
     }
 
-    private static String mapExpenditureFrequency(String frequency) {
-        String mappedFrequency = frequency;
-
-        if (!StringUtils.hasText(mappedFrequency)) {
-            mappedFrequency = DEFAULT_EXPENDITURE_FREQUENCY;
-            log.warn("Expenditure frequency is not specified. Defaulting to 'monthly'.");
-        }
-
-        return mappedFrequency;
+    private static Double mapAmountDeclared(Double expenditureAmountDeclared, String expenditureFrequency) {
+        return Arrays.stream(ExpenditureDto.Frequency.values())
+                .filter(frequency -> frequency.getValue().equals(expenditureFrequency))
+                .findFirst()
+                .map(frequency -> expenditureAmountDeclared * frequency.getMonthlyFactor())
+                .orElse(expenditureAmountDeclared);
     }
 
     private static PropertyDetails mapPropertyDetails(QuickQuotePropertyDetailsDto propertyDetailsDto) {

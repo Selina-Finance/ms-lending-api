@@ -23,7 +23,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-import org.springframework.util.StringUtils;
+
+import java.util.Arrays;
 
 @Mapper
 public interface ExpenditureMapper {
@@ -34,17 +35,16 @@ public interface ExpenditureMapper {
 
     ExpenditureDto mapToExpenditureDto(Expenditure expenditure);
 
-    @Mapping(target = "frequency", source = "expenditureDto.frequency", qualifiedByName = "mapExpenditureFrequency")
+    @Mapping(target = "frequency", constant = DEFAULT_EXPENDITURE_FREQUENCY)
+    @Mapping(target = "amountDeclared", source = "expenditureDto", qualifiedByName = "mapAmountDeclared")
     Expenditure mapToExpenditure(ExpenditureDto expenditureDto);
 
-    @Named("mapExpenditureFrequency")
-    static String mapExpenditureFrequency(String frequency) {
-        String mappedFrequency = frequency;
-
-        if (!StringUtils.hasText(mappedFrequency)) {
-            mappedFrequency = DEFAULT_EXPENDITURE_FREQUENCY;
-        }
-
-        return mappedFrequency;
+    @Named("mapAmountDeclared")
+    static Double mapAmountDeclared(ExpenditureDto expenditureDto) {
+        return Arrays.stream(ExpenditureDto.Frequency.values())
+                .filter(frequency -> frequency.getValue().equals(expenditureDto.getFrequency()))
+                .findFirst()
+                .map(frequency -> expenditureDto.getAmountDeclared() * frequency.getMonthlyFactor())
+                .orElse(expenditureDto.getAmountDeclared());
     }
 }
