@@ -198,7 +198,12 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
     void shouldMapQuickQuoteApplicationRequestToMiddlewareCreateApplicationEvent() {
         //Given
         when(tokenService.retrieveSourceAccount()).thenReturn(SOURCE_ACCOUNT);
+
         QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+        quickQuoteApplicationRequest.getLoanInformation().setOriginalRequestedLoanTerm(ORIGINAL_LOAN_TERM);
+        quickQuoteApplicationRequest.setTestGroupId(TEST_GROUP_ID);
+        quickQuoteApplicationRequest.setPartner(getPartner());
+
         List<Product> products = List.of(getProduct());
         Fees fees = Fees.builder()
                 .arrangementFeeDiscountSelina(ARRANGEMENT_FEE_DISCOUNT_SELINA)
@@ -218,6 +223,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(middlewareCreateApplicationEvent.getHasGivenConsentForMarketingCommunications(), equalTo(false));
         assertThat(middlewareCreateApplicationEvent.getIsNotContactable(), equalTo(true));
         assertThat(middlewareCreateApplicationEvent.getEligibility(), equalTo(ELIGIBILITY));
+        assertThat(middlewareCreateApplicationEvent.getTestGroupId(), equalTo(TEST_GROUP_ID));
 
         assertApplicants(middlewareCreateApplicationEvent.getApplicants());
         assertFees(fees, middlewareCreateApplicationEvent.getFees());
@@ -423,6 +429,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
     private void assertLoanInformation(LoanInformation loanInformation) {
         assertThat(loanInformation.getRequestedLoanAmount(), equalTo(LOAN_AMOUNT));
         assertThat(loanInformation.getRequestedLoanTerm(), equalTo(LOAN_TERM));
+        assertThat(loanInformation.getOriginalRequestedLoanTerm(), equalTo(ORIGINAL_LOAN_TERM));
         assertThat(loanInformation.getNumberOfApplicants(), equalTo(1));
         assertThat(loanInformation.getLoanPurpose(), equalTo(LOAN_PURPOSE));
         assertThat(loanInformation.getDesiredTimeLine(), equalTo(DESIRED_TIME_LINE));

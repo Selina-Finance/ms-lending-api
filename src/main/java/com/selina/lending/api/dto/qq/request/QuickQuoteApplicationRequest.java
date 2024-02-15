@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.dto.qq.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.dip.request.ApplicationRequest;
 import com.selina.lending.api.validator.MatchNumberOfApplicants;
@@ -57,10 +58,14 @@ public class QuickQuoteApplicationRequest extends ApplicationRequest {
 
     private LeadDto lead;
 
+    @JsonIgnore
     private Partner partner; //TODO must not reuse httpclient DTO
 
     @Valid
     private QuickQuoteFeesDto fees;
 
     private Boolean hasGivenConsentForMarketingCommunications;
+
+    @JsonIgnore
+    private String testGroupId;
 }

@@ -29,6 +29,7 @@ import java.util.List;
 public class LoanInformation {
     Integer requestedLoanAmount;
     int requestedLoanTerm;
+    int originalRequestedLoanTerm;
     int numberOfApplicants;
     String loanPurpose;
     String desiredTimeLine;
