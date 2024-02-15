@@ -19,6 +19,7 @@ package com.selina.lending.api.mapper.common;
 
 import com.selina.lending.api.dto.common.ExpenditureDto;
 import com.selina.lending.httpclient.middleware.dto.common.Expenditure;
+import org.apache.commons.math3.util.Precision;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -45,6 +46,11 @@ public interface ExpenditureMapper {
                 .filter(frequency -> frequency.getValue().equals(expenditureDto.getFrequency()))
                 .findFirst()
                 .map(frequency -> expenditureDto.getAmountDeclared() * frequency.getMonthlyFactor())
-                .orElse(expenditureDto.getAmountDeclared());
+                .map(ExpenditureMapper::roundHalfUp)
+                .orElse(roundHalfUp(expenditureDto.getAmountDeclared()));
+    }
+
+    private static double roundHalfUp(Double amountDeclared) {
+        return Precision.round(amountDeclared, 2);
     }
 }

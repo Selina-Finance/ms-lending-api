@@ -25,6 +25,7 @@ import com.selina.lending.api.dto.qq.request.*;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.selection.dto.request.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.util.Precision;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -107,6 +108,10 @@ public class QuickQuoteApplicationRequestMapper {
                 .expenditureType(quickQuoteExpenditureDto.getExpenditureType())
                 .frequency(DEFAULT_EXPENDITURE_FREQUENCY)
                 .build();
+    }
+
+    private static double roundHalfUp(Double amountDeclared) {
+        return Precision.round(amountDeclared, 2);
     }
 
     private static Double mapAmountDeclared(Double expenditureAmountDeclared, String expenditureFrequency) {
