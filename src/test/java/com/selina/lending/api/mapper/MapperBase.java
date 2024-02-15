@@ -132,6 +132,7 @@ public abstract class MapperBase {
     public static final String LOAN_PURPOSE = "Home improvements";
     public static final Integer LOAN_AMOUNT = 50000;
     public static final int LOAN_TERM = 5;
+    public static final int ORIGINAL_LOAN_TERM = 3;
     public static final double ALLOCATION_AMOUNT = 50000;
     public static final Double AFFORDABILITY_DEFICIT = 2100.0;
     public static final String ALLOCATION_PURPOSE = "Home improvements";
@@ -272,6 +273,7 @@ public abstract class MapperBase {
     public static final Double NET_LOAN_AMOUNT = 50000.0;
     public static final String SUB_UNIT_ID = "subUnitId";
     public static final String COMPANY_ID = "companyId";
+    public static final String TEST_GROUP_ID = "GRO-0000: GroupB";
 
     static {
         try {
@@ -368,7 +370,7 @@ public abstract class MapperBase {
                 .propertyDetails(getQuickQuotePropertyDetailsDto())
                 .applicants(getQuickQuoteApplicantDtoList())
                 .lead(getLeadDto())
-                .partner(getPartner())
+//                .partner(getPartner())
                 .build();
     }
 

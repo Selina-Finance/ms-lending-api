@@ -1,7 +1,8 @@
-package com.selina.lending.service.alternativeofferr;
+package com.selina.lending.service.alternativeofferr.clearscore;
 
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
+import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -13,8 +14,14 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-@ConditionalOnProperty(value = "features.alternativeOffers.clearscore.extendedProcessor.enabled", havingValue = "true")
+@ConditionalOnProperty(value = ClearScoreExtendedAlternativeOfferRequestProcessor.FEATURE_FLAG, havingValue = "true")
 public class ClearScoreExtendedAlternativeOfferRequestProcessor extends AlternativeOfferRequestProcessor {
+
+    public static final String FEATURE_FLAG = "features.alternativeOffers.clearscore.extendedProcessor.enabled";
+
+    private static final String FEATURE_TICKET = "GRO-2862";
+    private static final String GROUP_A = "GroupA";
+    private static final String GROUP_B = "GroupB";
 
     private static final String CLIENT_ID = "clearscore";
     private static final int ALTERNATIVE_OFFER_LOAN_TERM_3_YEARS = 3;
@@ -25,10 +32,10 @@ public class ClearScoreExtendedAlternativeOfferRequestProcessor extends Alternat
     private static final int ALTERNATIVE_OFFER_LOAN_TERM_9_YEARS = 9;
     private static final int ALTERNATIVE_OFFER_LOAN_TERM_10_YEARS = 10;
 
-    private final ClearScoreAlternativeOfferRequestProcessor clearScoreAlternativeOfferRequestProcessor;
+    private final ClearScoreBasicAlternativeOfferRequestProcessor clearScoreBasicAlternativeOfferRequestProcessor;
 
     public ClearScoreExtendedAlternativeOfferRequestProcessor() {
-        clearScoreAlternativeOfferRequestProcessor = new ClearScoreAlternativeOfferRequestProcessor();
+        clearScoreBasicAlternativeOfferRequestProcessor = new ClearScoreBasicAlternativeOfferRequestProcessor();
     }
 
     @PostConstruct
@@ -37,19 +44,19 @@ public class ClearScoreExtendedAlternativeOfferRequestProcessor extends Alternat
     }
 
     @Override
-    String getClientId() {
+    protected String getClientId() {
         return CLIENT_ID;
     }
 
     @Override
-    boolean isSupportedPartner(LeadDto lead) {
+    protected boolean isSupportedPartner(LeadDto lead) {
         return true;
     }
 
     @Override
-    boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
-        return shouldApplyOldAlternativeOfferLogic(applicants)
-                ? clearScoreAlternativeOfferRequestProcessor.isAlternativeRequestedLoanTerm(requestedLoanTerm, applicants)
+    protected boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
+        return shouldApplyBasicAlternativeOfferLogic(applicants)
+                ? clearScoreBasicAlternativeOfferRequestProcessor.isAlternativeRequestedLoanTerm(requestedLoanTerm, applicants)
                 : isExtendedAlternativeRequestedLoanTerm(requestedLoanTerm);
     }
 
@@ -59,9 +66,9 @@ public class ClearScoreExtendedAlternativeOfferRequestProcessor extends Alternat
     }
 
     @Override
-    int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
-        return shouldApplyOldAlternativeOfferLogic(applicants)
-                ? clearScoreAlternativeOfferRequestProcessor.calculateAlternativeRequestedLoanTerm(requestedLoanTerm, applicants)
+    protected int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
+        return shouldApplyBasicAlternativeOfferLogic(applicants)
+                ? clearScoreBasicAlternativeOfferRequestProcessor.calculateAlternativeRequestedLoanTerm(requestedLoanTerm, applicants)
                 : calculateExtendedAlternativeRequestedLoanTerm(requestedLoanTerm);
     }
 
@@ -94,12 +101,12 @@ public class ClearScoreExtendedAlternativeOfferRequestProcessor extends Alternat
         return requestedLoanTerm;
     }
 
-    private boolean shouldApplyOldAlternativeOfferLogic(List<QuickQuoteApplicantDto> applicants) {
+    private boolean shouldApplyBasicAlternativeOfferLogic(List<QuickQuoteApplicantDto> applicants) {
         try {
             var primaryApplicant = findPrimaryApplicant(applicants);
             return primaryApplicant.isPresent() && hasEvenPrimaryApplicantBirthday(primaryApplicant.get());
         } catch (Exception ex) {
-            log.warn("Error while checking if old ClearScore alternative offer logic should be applied. Applying the old logic by default!", ex);
+            log.warn("Error while checking if basic ClearScore alternative offer logic should be applied. Applying the basic alternative logic by default!", ex);
             return true;
         }
     }
@@ -113,5 +120,10 @@ public class ClearScoreExtendedAlternativeOfferRequestProcessor extends Alternat
     private boolean hasEvenPrimaryApplicantBirthday(QuickQuoteApplicantDto primaryApplicant) {
         var birthday = LocalDate.parse(primaryApplicant.getDateOfBirth());
         return birthday.getDayOfMonth() % 2 == 0;
+    }
+
+    @Override
+    protected String getTestGroupId(List<QuickQuoteApplicantDto> applicants) {
+        return "%s: %s".formatted(FEATURE_TICKET, shouldApplyBasicAlternativeOfferLogic(applicants) ? GROUP_A : GROUP_B);
     }
 }

@@ -31,4 +31,5 @@ public class QuickQuoteRequest {
     private Partner partner;
     private List<Expenditure> expenditure;
     private Double eligibility;
+    private String testGroupId;
 }

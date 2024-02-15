@@ -47,6 +47,7 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
     @Mapping(target = "partner", source = "request.partner")
     @Mapping(target = "loanInformation", source = "request.loanInformation", qualifiedByName = "mapLoanInformation")
     @Mapping(target = "eligibility", source = "products", qualifiedByName = "mapEligibility")
+    @Mapping(target = "testGroupId", source = "request.testGroupId")
     @Mapping(target = "expenditure", source = "request.expenditure", qualifiedByName = "mapExpenditures")
     public abstract QuickQuoteRequest mapToQuickQuoteRequest(QuickQuoteApplicationRequest request,
                                                              List<Product> products, Fees fees);
@@ -85,6 +86,10 @@ public abstract class MiddlewareQuickQuoteApplicationRequestMapper {
 
         if (loanInformationDto.getRequestedLoanTerm() != null) {
             loanInformation.requestedLoanTerm(loanInformationDto.getRequestedLoanTerm());
+        }
+
+        if (loanInformationDto.getOriginalRequestedLoanTerm() != null) {
+            loanInformation.originalRequestedLoanTerm(loanInformationDto.getOriginalRequestedLoanTerm());
         }
 
         if (loanInformationDto.getNumberOfApplicants() != null) {
