@@ -2,6 +2,7 @@ package com.selina.lending.api.mapper.common;
 
 import com.selina.lending.api.dto.common.ExpenditureDto;
 import com.selina.lending.api.mapper.MapperBase;
+import org.apache.commons.math3.util.Precision;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,7 +38,7 @@ public class ExpenditureMapperTest extends MapperBase {
 
         var expenditure = ExpenditureMapper.INSTANCE.mapToExpenditure(expenditureDto);
         assertThat(expenditure.getFrequency(), equalTo("monthly"));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED));
+        assertThat(expenditure.getAmountDeclared(), equalTo(roundHalfUp(EXPENDITURE_AMOUNT_DECLARED)));
     }
 
     @Test
@@ -48,7 +49,7 @@ public class ExpenditureMapperTest extends MapperBase {
 
         var expenditure = ExpenditureMapper.INSTANCE.mapToExpenditure(expenditureDto);
         assertThat(expenditure.getFrequency(), equalTo("monthly"));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * dailyFrequencyFactor));
+        assertThat(expenditure.getAmountDeclared(), equalTo(roundHalfUp(EXPENDITURE_AMOUNT_DECLARED * dailyFrequencyFactor)));
     }
 
     @Test
@@ -59,7 +60,7 @@ public class ExpenditureMapperTest extends MapperBase {
 
         var expenditure = ExpenditureMapper.INSTANCE.mapToExpenditure(expenditureDto);
         assertThat(expenditure.getFrequency(), equalTo("monthly"));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * weeklyFrequencyFactor));
+        assertThat(expenditure.getAmountDeclared(), equalTo(roundHalfUp(EXPENDITURE_AMOUNT_DECLARED * weeklyFrequencyFactor)));
     }
 
     @Test
@@ -70,7 +71,7 @@ public class ExpenditureMapperTest extends MapperBase {
 
         var expenditure = ExpenditureMapper.INSTANCE.mapToExpenditure(expenditureDto);
         assertThat(expenditure.getFrequency(), equalTo("monthly"));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * biWeeklyFrequencyFactor));
+        assertThat(expenditure.getAmountDeclared(), equalTo(roundHalfUp(EXPENDITURE_AMOUNT_DECLARED * biWeeklyFrequencyFactor)));
     }
 
     @Test
@@ -81,7 +82,7 @@ public class ExpenditureMapperTest extends MapperBase {
 
         var expenditure = ExpenditureMapper.INSTANCE.mapToExpenditure(expenditureDto);
         assertThat(expenditure.getFrequency(), equalTo("monthly"));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * monthlyFrequencyFactor));
+        assertThat(expenditure.getAmountDeclared(), equalTo(roundHalfUp(EXPENDITURE_AMOUNT_DECLARED * monthlyFrequencyFactor)));
     }
 
     @Test
@@ -92,7 +93,7 @@ public class ExpenditureMapperTest extends MapperBase {
 
         var expenditure = ExpenditureMapper.INSTANCE.mapToExpenditure(expenditureDto);
         assertThat(expenditure.getFrequency(), equalTo("monthly"));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * quarterlyFrequencyFactor));
+        assertThat(expenditure.getAmountDeclared(), equalTo(roundHalfUp(EXPENDITURE_AMOUNT_DECLARED * quarterlyFrequencyFactor)));
     }
 
     @Test
@@ -103,7 +104,7 @@ public class ExpenditureMapperTest extends MapperBase {
 
         var expenditure = ExpenditureMapper.INSTANCE.mapToExpenditure(expenditureDto);
         assertThat(expenditure.getFrequency(), equalTo("monthly"));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * semiAnnuallyFrequencyFactor));
+        assertThat(expenditure.getAmountDeclared(), equalTo(roundHalfUp(EXPENDITURE_AMOUNT_DECLARED * semiAnnuallyFrequencyFactor)));
     }
 
     @Test
@@ -114,6 +115,10 @@ public class ExpenditureMapperTest extends MapperBase {
 
         var expenditure = ExpenditureMapper.INSTANCE.mapToExpenditure(expenditureDto);
         assertThat(expenditure.getFrequency(), equalTo("monthly"));
-        assertThat(expenditure.getAmountDeclared(), equalTo(EXPENDITURE_AMOUNT_DECLARED * annuallyFrequencyFactor));
+        assertThat(expenditure.getAmountDeclared(), equalTo(roundHalfUp(EXPENDITURE_AMOUNT_DECLARED * annuallyFrequencyFactor)));
+    }
+
+    private static double roundHalfUp(Double amountDeclared) {
+        return Precision.round(amountDeclared, 2);
     }
 }
