@@ -11,6 +11,7 @@ import java.util.List;
 public abstract class AlternativeOfferRequestProcessor {
 
     public void adjustAlternativeOfferRequest(String clientId, QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        setTestGroupId(quickQuoteApplicationRequest);
         if (isAlternativeOfferRequest(clientId, quickQuoteApplicationRequest)) {
             adjustAlternativeOfferRequest(quickQuoteApplicationRequest);
         }
@@ -22,15 +23,15 @@ public abstract class AlternativeOfferRequestProcessor {
                 && isAlternativeRequestedLoanTerm(request.getLoanInformation().getRequestedLoanTerm(), request.getApplicants());
     }
 
-    abstract String getClientId();
+    protected abstract String getClientId();
 
     private boolean isSupportedClient(String clientId) {
         return getClientId().equalsIgnoreCase(clientId);
     }
 
-    abstract boolean isSupportedPartner(LeadDto lead);
+    protected abstract boolean isSupportedPartner(LeadDto lead);
 
-    abstract boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants);
+    protected abstract boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants);
 
     private void adjustAlternativeOfferRequest(QuickQuoteApplicationRequest request) {
         var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
@@ -45,5 +46,12 @@ public abstract class AlternativeOfferRequestProcessor {
         }
     }
 
-    abstract int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants);
+    protected abstract int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants);
+
+    private void setTestGroupId(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        quickQuoteApplicationRequest.setTestGroupId(getTestGroupId(quickQuoteApplicationRequest.getApplicants()));
+    }
+
+    protected abstract String getTestGroupId(List<QuickQuoteApplicantDto> applicants);
+
 }

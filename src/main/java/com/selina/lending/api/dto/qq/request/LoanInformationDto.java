@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.dto.qq.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.selina.lending.api.dto.common.LoanPurpose;
 import com.selina.lending.api.validator.EnumValue;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,6 +42,9 @@ public class LoanInformationDto {
     @Range(min = 1, max = 30)
     @Schema(description = "the length of time in years for which the applicant wishes to repay the loan for (min 1, max 30)")
     private Integer requestedLoanTerm;
+
+    @JsonIgnore
+    private Integer originalRequestedLoanTerm;
 
     @NotNull
     @Range(min = 1, max = 2)
