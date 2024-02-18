@@ -10,8 +10,11 @@ import java.util.List;
 @Slf4j
 public abstract class AlternativeOfferRequestProcessor {
 
+    private static final String EMPTY_STRING = "";
+    private static final String TEST_GROUPS_DELIMITER = "|";
+
     public void adjustAlternativeOfferRequest(String clientId, QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        setTestGroupId(quickQuoteApplicationRequest);
+        addTestGroupId(quickQuoteApplicationRequest);
         if (isAlternativeOfferRequest(clientId, quickQuoteApplicationRequest)) {
             adjustAlternativeOfferRequest(quickQuoteApplicationRequest);
         }
@@ -48,8 +51,16 @@ public abstract class AlternativeOfferRequestProcessor {
 
     protected abstract int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants);
 
-    private void setTestGroupId(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        quickQuoteApplicationRequest.setTestGroupId(getTestGroupId(quickQuoteApplicationRequest.getApplicants()));
+    private void addTestGroupId(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        var testGroupId = getTestGroupId(quickQuoteApplicationRequest.getApplicants());
+        if (testGroupId == null) {
+            return;
+        }
+
+        var testGroupIds = quickQuoteApplicationRequest.getTestGroupId();
+        testGroupIds = testGroupIds == null ? EMPTY_STRING : testGroupIds.concat(TEST_GROUPS_DELIMITER);
+
+        quickQuoteApplicationRequest.setTestGroupId(testGroupIds.concat(testGroupId));
     }
 
     protected abstract String getTestGroupId(List<QuickQuoteApplicantDto> applicants);
