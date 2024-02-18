@@ -33,7 +33,7 @@ public class ClearScoreKeepOriginalRequestedLoanTermAlternativeOfferRequestProce
 
     @PostConstruct
     private void init() {
-        log.info("Registering ClearScoreDecline3And4YearAlternativeOfferRequestProcessor");
+        log.info("Registering ClearScoreKeepOriginalRequestedLoanTermAlternativeOfferRequestProcessor");
     }
 
     @Override
