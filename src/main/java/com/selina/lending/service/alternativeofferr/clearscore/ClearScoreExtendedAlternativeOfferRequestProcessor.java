@@ -79,19 +79,22 @@ public class ClearScoreExtendedAlternativeOfferRequestProcessor extends Alternat
         }
 
         if (requestedLoanTerm == ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS) {
-            return ALTERNATIVE_OFFER_LOAN_TERM_7_YEARS;
+            return ALTERNATIVE_OFFER_LOAN_TERM_6_YEARS;
         }
 
         if (requestedLoanTerm == ALTERNATIVE_OFFER_LOAN_TERM_6_YEARS) {
-            return ALTERNATIVE_OFFER_LOAN_TERM_8_YEARS;
+            return ALTERNATIVE_OFFER_LOAN_TERM_7_YEARS;
         }
 
         if (requestedLoanTerm == ALTERNATIVE_OFFER_LOAN_TERM_7_YEARS) {
+            return ALTERNATIVE_OFFER_LOAN_TERM_8_YEARS;
+        }
+
+        if (requestedLoanTerm == ALTERNATIVE_OFFER_LOAN_TERM_8_YEARS) {
             return ALTERNATIVE_OFFER_LOAN_TERM_9_YEARS;
         }
 
-        if (requestedLoanTerm >= ALTERNATIVE_OFFER_LOAN_TERM_8_YEARS
-                && requestedLoanTerm < ALTERNATIVE_OFFER_LOAN_TERM_10_YEARS) {
+        if (requestedLoanTerm >= ALTERNATIVE_OFFER_LOAN_TERM_9_YEARS) {
             return ALTERNATIVE_OFFER_LOAN_TERM_10_YEARS;
         }
 
