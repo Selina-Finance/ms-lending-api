@@ -100,7 +100,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     public FilteredQuickQuoteDecisionResponse filter(QuickQuoteApplicationRequest request) {
         var clientId = tokenService.retrieveClientId();
 
-        setDefaultApplicantPrimaryApplicantIfDoesNotExist(request);
+        setDefaultPrimaryApplicantIfDoesNotExist(request);
+        storeOriginalRequestedLoanTerm(request);
         alternativeOfferRequestProcessors.forEach(processor -> processor.adjustAlternativeOfferRequest(clientId, request));
 
         if (hasRequestedLoanTermLessThanAllowed(request)) {
@@ -119,6 +120,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         }
 
         return decisionResponse;
+    }
+
+    private void storeOriginalRequestedLoanTerm(QuickQuoteApplicationRequest request) {
+        request.getLoanInformation().setOriginalRequestedLoanTerm(request.getLoanInformation().getRequestedLoanTerm());
     }
 
     private void filterResponseOffers(String clientId, FilteredQuickQuoteDecisionResponse decisionResponse) {
@@ -164,7 +169,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                 .build();
     }
 
-    private void setDefaultApplicantPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
+    private void setDefaultPrimaryApplicantIfDoesNotExist(QuickQuoteApplicationRequest request) {
         if(!hasPrimaryApplicant(request.getApplicants())) {
             request.getApplicants().stream().findFirst()
                     .ifPresent(quickQuoteApplicant -> quickQuoteApplicant.setPrimaryApplicant(true));
