@@ -42,6 +42,7 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class EligibilityRequestMapper {
 
+    @Mapping(target = "extAppId", source = "request.externalApplicationId")
     @Mapping(target = "partnerAccountId", source = "partnerAccountId")
     @Mapping(target = "propertyDetails", source = "request.propertyDetails")
     @Mapping(target = "applicant", source = "request.applicants", qualifiedByName = "mapApplicant")
