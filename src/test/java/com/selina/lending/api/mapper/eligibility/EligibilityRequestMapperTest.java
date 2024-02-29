@@ -48,6 +48,7 @@ public class EligibilityRequestMapperTest extends MapperBase {
         var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(PARTNER_ACCOUNT_ID, getQuickQuoteApplicationRequestDto(), products, hasReferOffers);
 
         assertThat(eligibilityRequest, equalTo(EligibilityRequest.builder()
+                .extAppId(EXTERNAL_APPLICATION_ID)
                 .partnerAccountId(PARTNER_ACCOUNT_ID)
                 .decision(Decision.Accept)
                 .propertyDetails(PropertyDetails.builder()

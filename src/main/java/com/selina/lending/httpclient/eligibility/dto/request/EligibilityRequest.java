@@ -24,6 +24,7 @@ import lombok.Value;
 @Builder
 public class EligibilityRequest {
 
+    String extAppId;
     String partnerAccountId;
     Decision decision;
     Applicant applicant;
