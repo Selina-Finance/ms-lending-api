@@ -48,6 +48,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.List;
 
 import static com.selina.lending.service.FilterApplicationServiceImpl.ADP_CLIENT_ID;
+import static com.selina.lending.service.FilterApplicationServiceImpl.MS_QUICK_QUOTE_CLIENT_ID;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
@@ -921,6 +923,23 @@ class FilterApplicationServiceImplTest extends MapperBase {
             assertThat(quickQuoteApplicationRequest.getFees().getArrangementFee(), equalTo(1000.00));
             assertThat(quickQuoteApplicationRequest.getFees().getAdviceFee(), equalTo(599.00));
             assertThat(quickQuoteApplicationRequest.getFees().getIsAddAdviceFeeToLoan(), is(true));
+        }
+
+        @Test
+        void shouldUseAdpDecisioningWhenClientIdIsMsQuickQuoteAndFeatureFlagEnabled() {
+            //Given
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
+            when(tokenService.retrieveClientId()).thenReturn(MS_QUICK_QUOTE_CLIENT_ID);
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+
+            //When
+            filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            //Then
+            verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
         }
     }
 

@@ -84,6 +84,10 @@ features:
       enabled: true
     experian:
       enabled: true
+  adp-gateway:
+    clients:
+      ms-quick-quote:
+        enabled: true
 
 spring:
   kafka:

@@ -60,6 +60,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private static final String CLEARSCORE_CLIENT_ID = "clearscore";
     private static final String EXPERIAN_CLIENT_ID = "experian";
 
+    protected static final String MS_QUICK_QUOTE_CLIENT_ID = "ms-quick-quote";
+
     private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
 
     private static final String ACCEPTED_DECISION = "Accepted";
@@ -86,6 +88,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final boolean isFilterClearScoreResponseOffersFeatureEnabled;
     private final boolean isFilterExperianResponseOffersFeatureEnabled;
 
+    private final boolean isAdpGatewayClientMsQuickQuoteEnabled;
+
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
             SelectionRepository selectionRepository,
             MiddlewareRepository middlewareRepository,
@@ -98,7 +102,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             @Value("${features.filterResponseOffers.clearscore.enabled}")
             boolean isFilterClearScoreResponseOffersFeatureEnabled,
             @Value("${features.filterResponseOffers.experian.enabled}")
-            boolean isFilterExperianResponseOffersFeatureEnabled) {
+            boolean isFilterExperianResponseOffersFeatureEnabled,
+            @Value("${features.adp-gateway.clients.ms-quick-quote.enabled}")
+            boolean isAdpGatewayClientMsQuickQuoteEnabled) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
@@ -110,6 +116,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.alternativeOfferRequestProcessors = alternativeOfferRequestProcessors;
         this.isFilterClearScoreResponseOffersFeatureEnabled = isFilterClearScoreResponseOffersFeatureEnabled;
         this.isFilterExperianResponseOffersFeatureEnabled = isFilterExperianResponseOffersFeatureEnabled;
+        this.isAdpGatewayClientMsQuickQuoteEnabled = isAdpGatewayClientMsQuickQuoteEnabled;
     }
 
     @Override
@@ -136,7 +143,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private QuickQuoteResponse getQuickQuoteResponse(QuickQuoteApplicationRequest request, String clientId) {
         QuickQuoteResponse quickQuoteResponse;
-        if (isAdpClient(clientId)) {
+        if (isAdpClient(clientId) || (isAdpGatewayClientMsQuickQuoteEnabled && isMsQuickQuoteClient(clientId))) {
             log.info("Use ADP decisioning engine");
             QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(request);
             enrichAdpRequestWithFees(adpRequest, clientId);
@@ -294,6 +301,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static boolean isExperianClient(String clientId) {
         return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
+    private static boolean isMsQuickQuoteClient(String clientId) {
+        return MS_QUICK_QUOTE_CLIENT_ID.equalsIgnoreCase(clientId);
     }
 
     private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, Fees fees, List<Product> products) {
