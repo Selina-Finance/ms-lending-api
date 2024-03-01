@@ -90,6 +90,10 @@ features:
       enabled: false
     experian:
       enabled: false
+  adp-gateway:
+    clients:
+      ms-quick-quote:
+        enabled: false
 
 sla:
   requests:
