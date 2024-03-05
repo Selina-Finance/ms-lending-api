@@ -909,8 +909,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
         class ClearScore {
 
             @ParameterizedTest
-            @ValueSource(ints = {1, 2})
-            void whenClientIsClearScoreAndRequestedLoanTermIsLessThan3ThenReturnDeclinedResponse(int requestedLoanTerm) {
+            @ValueSource(ints = {1, 2, 3, 4, 5})
+            void whenClientIsClearScoreAndRequestedLoanTermIsLessThanOrEqualTo5ThenReturnDeclinedResponse(int requestedLoanTerm) {
                 // Given
                 var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
                         .decision("Declined")
@@ -929,33 +929,6 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 assertThat(decisionResponse).isEqualTo(declinedDecisionResponse);
                 verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
                 verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-            }
-
-            @ParameterizedTest
-            @ValueSource(ints = {3, 4, 5})
-            void whenClientIsClearScoreAndRequestedLoanTermIsBetween3And5ThenAdjustItTo5(int requestedLoanTerm) {
-                // Given
-                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                        .decision("Declined")
-                        .products(null)
-                        .build();
-
-                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-
-                var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
-
-                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-                when(tokenService.retrieveClientId()).thenReturn("clearscore");
-
-                // When
-                filterApplicationService.filter(quickQuoteApplicationRequest);
-
-                // Then
-                verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm()).isEqualTo(5);
             }
 
             @ParameterizedTest
