@@ -131,7 +131,7 @@ public abstract class MapperBase {
     public static final String INCOME_TYPE = "Gross salary";
     public static final String LOAN_PURPOSE = "Home improvements";
     public static final Integer LOAN_AMOUNT = 50000;
-    public static final int LOAN_TERM = 5;
+    public static final int LOAN_TERM = 10;
     public static final int ORIGINAL_LOAN_TERM = 3;
     public static final double ALLOCATION_AMOUNT = 50000;
     public static final Double AFFORDABILITY_DEFICIT = 2100.0;
