@@ -11,8 +11,8 @@ podsLabels:
 deploymentLabels:
   framework: spring
 image:
-  repository: draft
-  tag: dev
+  repository: 677894610806.dkr.ecr.eu-west-2.amazonaws.com/selina-finance/ms-lending-api
+  tag: 0.13.22-hotfix-20240305-130529
   pullPolicy: IfNotPresent
 # Optional Toleration and affinity
 eks:
