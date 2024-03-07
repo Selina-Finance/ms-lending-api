@@ -901,7 +901,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var eligibility = EligibilityResponse.builder()
                     .eligibility(eligibilityValue)
                     .build();
-            QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
             var decisionResponse = getFilteredQuickQuoteDecisionResponse();
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
@@ -931,7 +931,6 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             //Then
             verify(middlewareRepository, times(1)).createQuickQuoteApplication(qqMiddlewareRequestCaptor.capture());
-
             assertThat(qqMiddlewareRequestCaptor.getValue().getPropertyDetails().getEstimatedValue(), equalTo(ESTIMATED_VALUE));
         }
 
@@ -961,7 +960,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         @Test
         void whenGetExceptionRequestingEligibilityServiceThenReturnOffersWithDefaultEligibility() {
             // Given
-            QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
             var decisionResponse = getFilteredQuickQuoteDecisionResponse();
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
@@ -973,6 +972,56 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             // Then
             assertThat(quickQuoteResponse.getOffers().get(0).getEligibility(), equalTo(ELIGIBILITY));
+        }
+
+        @Test
+        void whenEligibilityIs100AndApplicantsBirthDayIsEvenThenKeepOriginalEligibilityValue() {
+            // Given
+            var eligibilityValue = 100.0;
+            var eligibility = EligibilityResponse.builder()
+                    .eligibility(eligibilityValue)
+                    .build();
+
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+            quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-02");
+
+            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(eligibility);
+
+            // When
+            var quickQuoteResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            // Then
+            assertThat(quickQuoteResponse.getOffers().get(0).getEligibility(), equalTo(eligibilityValue));
+            assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-2936: GroupA"));
+        }
+
+        @Test
+        void whenEligibilityIs100AndApplicantsBirthDayIsOddThenDecreaseEligibilityValueTo95() {
+            // Given
+            var eligibilityValue = 100.0;
+            var eligibility = EligibilityResponse.builder()
+                    .eligibility(eligibilityValue)
+                    .build();
+
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+            quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-01");
+
+            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(eligibility);
+
+            // When
+            var quickQuoteResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            // Then
+            assertThat(quickQuoteResponse.getOffers().get(0).getEligibility(), equalTo(95.0));
+            assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-2936: GroupB"));
         }
     }
 

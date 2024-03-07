@@ -41,6 +41,7 @@ import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProce
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
 
+import com.selina.lending.util.ABTestUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -72,6 +73,13 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static final String HELOC_PRODUCT_FAMILY = "HELOC";
     private static final String HOMEOWNER_LOAN_PRODUCT_FAMILY = "Homeowner Loan";
+
+    private static final Double ELIGIBILITY_100 = 100.0;
+    private static final Double ELIGIBILITY_95 = 95.0;
+
+    private static final String TEST_GROUP_ID_GRO_2936_FORMAT = "GRO-2936: %s";
+    private static final String GROUP_A = "GroupA";
+    private static final String GROUP_B = "GroupB";
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionRepository selectionRepository;
@@ -202,7 +210,17 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         try {
             var eligibilityResponse = eligibilityRepository.getEligibility(request, products, hasReferOffers);
             updatePropertyEstimatedValue(request.getPropertyDetails(), eligibilityResponse.getPropertyInfo());
-            enrichOffersWithEligibility(eligibilityResponse, products);
+
+            var eligibility = eligibilityResponse.getEligibility();
+            if (ELIGIBILITY_100.equals(eligibility)) {
+                if (ABTestUtils.hasOddPrimaryApplicantBirthday(request.getApplicants())) {
+                    eligibility = ELIGIBILITY_95;
+                    request.setTestGroupId(TEST_GROUP_ID_GRO_2936_FORMAT.formatted(GROUP_B));
+                } else {
+                    request.setTestGroupId(TEST_GROUP_ID_GRO_2936_FORMAT.formatted(GROUP_A));
+                }
+            }
+            enrichOffersWithEligibility(eligibility, products);
         } catch (Exception ex) {
             log.error("Error retrieving eligibility. The default value from the decision service will be used.", ex);
         }
@@ -244,8 +262,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         }
     }
 
-    private static void enrichOffersWithEligibility(EligibilityResponse eligibilityResponse, List<Product>products) {
-        var eligibility = eligibilityResponse.getEligibility();
+    private static void enrichOffersWithEligibility(Double eligibility, List<Product>products) {
         products.forEach(product -> product.getOffer().setEligibility(eligibility));
     }
 
