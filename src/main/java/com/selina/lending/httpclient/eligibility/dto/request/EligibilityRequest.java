@@ -26,6 +26,7 @@ public class EligibilityRequest {
 
     String extAppId;
     String partnerAccountId;
+    Client client;
     Decision decision;
     Applicant applicant;
     PropertyDetails propertyDetails;

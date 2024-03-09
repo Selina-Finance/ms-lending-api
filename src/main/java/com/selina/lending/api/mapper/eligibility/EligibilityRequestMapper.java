@@ -21,6 +21,7 @@ import com.selina.lending.api.dto.common.IncomeDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.eligibility.dto.request.Applicant;
+import com.selina.lending.httpclient.eligibility.dto.request.Client;
 import com.selina.lending.httpclient.eligibility.dto.request.CreditRisk;
 import com.selina.lending.httpclient.eligibility.dto.request.Decision;
 import com.selina.lending.httpclient.eligibility.dto.request.EligibilityRequest;
@@ -45,12 +46,21 @@ public abstract class EligibilityRequestMapper {
     @Mapping(target = "extAppId", source = "request.externalApplicationId")
     @Mapping(target = "partnerAccountId", source = "partnerAccountId")
     @Mapping(target = "propertyDetails", source = "request.propertyDetails")
+    @Mapping(target = "client", source = "clientId", qualifiedByName = "mapClient")
     @Mapping(target = "applicant", source = "request.applicants", qualifiedByName = "mapApplicant")
     @Mapping(target = "decision", source = "hasReferOffers", qualifiedByName = "mapDecision")
     public abstract EligibilityRequest mapToPropertyDetails(String partnerAccountId,
+                                                            String clientId,
                                                             QuickQuoteApplicationRequest request,
                                                             @Context List<Product> products,
                                                             Boolean hasReferOffers);
+
+    @Named("mapClient")
+    Client mapClient(String clientId) {
+        return Client.builder()
+                .id(clientId)
+                .build();
+    }
 
     @Named("mapApplicant")
     Applicant mapApplicant(List<QuickQuoteApplicantDto> applicants, @Context List<Product> products) {

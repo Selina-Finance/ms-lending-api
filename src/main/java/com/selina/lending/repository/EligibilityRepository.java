@@ -46,8 +46,9 @@ public class EligibilityRepository {
     public EligibilityResponse getEligibility(QuickQuoteApplicationRequest request, List<Product> products, Boolean hasReferOffers) {
         try {
             var partnerAccountId = tokenService.retrievePartnerAccountId();
+            var clientId = tokenService.retrieveClientId();
             var propertyDetails = request.getPropertyDetails();
-            var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(partnerAccountId, request, products, hasReferOffers);
+            var eligibilityRequest = eligibilityRequestMapper.mapToPropertyDetails(partnerAccountId, clientId, request, products, hasReferOffers);
             log.info("Retrieving eligibility for property details [partnerAccountId={}] [postcode={}] [address={}] [buildingNumber={}] [buildingName={}]" +
                             "and applicant [incomes={}] [creditRisk={}]",
                     partnerAccountId, propertyDetails.getPostcode(), propertyDetails.getAddressLine1(), propertyDetails.getBuildingNumber(), propertyDetails.getBuildingName(),
