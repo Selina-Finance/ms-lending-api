@@ -17,6 +17,7 @@
 
 package com.selina.lending.service;
 
+import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.api.dto.qq.request.QuickQuotePropertyDetailsDto;
@@ -27,12 +28,11 @@ import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicati
 import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMapper;
 import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationResponseMapper;
 import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
-import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
+import com.selina.lending.httpclient.adp.dto.response.Product;
 import com.selina.lending.httpclient.eligibility.dto.response.PropertyInfo;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
 import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.httpclient.adp.dto.response.Product;
 import com.selina.lending.repository.AdpGatewayRepository;
 import com.selina.lending.repository.EligibilityRepository;
 import com.selina.lending.repository.MiddlewareRepository;
@@ -40,10 +40,8 @@ import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProcessor;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
-
 import com.selina.lending.util.ABTestUtils;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +58,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private static final String MONEVO_CLIENT_ID = "monevo";
     private static final String CLEARSCORE_CLIENT_ID = "clearscore";
     private static final String EXPERIAN_CLIENT_ID = "experian";
+
+    private static final LeadDto GO_COMPARE_PARTNER_UTM = LeadDto.builder()
+            .utmSource("aggregator")
+            .utmMedium("cpc")
+            .utmCampaign("_consumer_referral___gocompare_main_")
+            .build();
 
     protected static final String MS_QUICK_QUOTE_CLIENT_ID = "ms-quick-quote";
 
@@ -158,7 +162,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             var adpResponse  = adpGatewayRepository.quickQuoteEligibility(adpRequest);
 
             if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
-                adpResponse.setProducts(getFilteredResponseOffers(clientId, adpResponse.getProducts()));
+                adpResponse.setProducts(getFilteredResponseOffers(clientId, request.getLead(), adpResponse.getProducts()));
                 var hasReferOffers = false; // TODO calculate actual value
                 enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(), hasReferOffers);
                 storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
@@ -172,7 +176,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse = selectionRepository.filter(selectionRequest);
 
             if (isDecisionAccepted(filteredQuickQuoteDecisionResponse.getDecision(), filteredQuickQuoteDecisionResponse.getProducts())) {
-                filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, filteredQuickQuoteDecisionResponse.getProducts()));
+                filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, request.getLead(), filteredQuickQuoteDecisionResponse.getProducts()));
                 enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, filteredQuickQuoteDecisionResponse.getProducts(),
                         filteredQuickQuoteDecisionResponse.getHasReferOffers());
                 storeOffersInMiddleware(request, selectionRequest.getApplication().getFees(), filteredQuickQuoteDecisionResponse.getProducts());
@@ -183,7 +187,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         return quickQuoteResponse;
     }
 
-    private List<Product> getFilteredResponseOffers(String clientId, List<Product> productList) {
+    private List<Product> getFilteredResponseOffers(String clientId, LeadDto leadDto, List<Product> productList) {
         if (isFilterClearScoreResponseOffersFeatureEnabled && isClearScoreClient(clientId)) {
                 var filteredProducts = new ArrayList<Product>(2);
                 findTheLowestAprcProduct(productList, HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
@@ -191,7 +195,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                 return filteredProducts;
         }
 
-        if (isFilterExperianResponseOffersFeatureEnabled && isExperianClient(clientId)) {
+        if (isFilterExperianResponseOffersFeatureEnabled && isExperianClient(clientId) && isGoComparePartner(leadDto)) {
             var filteredProducts = new ArrayList<Product>(2);
             findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
             return filteredProducts;
@@ -316,6 +320,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private static boolean isExperianClient(String clientId) {
         return EXPERIAN_CLIENT_ID.equalsIgnoreCase(clientId);
+    }
+
+    private boolean isGoComparePartner(LeadDto leadDto) {
+        return GO_COMPARE_PARTNER_UTM.equals(leadDto);
     }
 
     private static boolean isMsQuickQuoteClient(String clientId) {
