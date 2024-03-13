@@ -6,7 +6,7 @@ repositories:
 - name: jx3
   url: https://jenkins-x-charts.github.io/repo
 - name: dev
-  url: http://chartmuseum-jx.selinadev.co.uk
+  url: https://chartmuseum.staging.selinadev.co.uk
 releases:
 - chart: jx3/jx-verify
   name: jx-verify
