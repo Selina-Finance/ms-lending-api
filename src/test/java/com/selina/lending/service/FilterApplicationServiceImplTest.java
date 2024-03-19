@@ -1319,11 +1319,59 @@ class FilterApplicationServiceImplTest extends MapperBase {
     @Nested
     class FilterResponseOffers extends MapperBase {
 
+        private static final String SOME_CLIENT_ID = "some-client";
+
+        @Test
+        void shouldReturnAllAcceptedOffers() {
+            // Given
+            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+
+            var helocProduct = getProduct(HELOC, 10.0);
+            var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
+            var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
+            var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
+
+            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
+
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+            when(tokenService.retrieveClientId()).thenReturn(SOME_CLIENT_ID);
+
+            // When
+            var response = filterApplicationService.filter(quickQuoteRequest);
+
+            // Then
+            assertThat(response.getOffers(), hasSize(4));
+            assertThat(response.getOffers(), contains(
+                    allOf(
+                            hasProperty("family", equalTo(HELOC)),
+                            hasProperty("aprc", equalTo(10.0))
+                    ),
+                    allOf(
+                            hasProperty("family", equalTo(HELOC)),
+                            hasProperty("aprc", equalTo(9.0))
+                    ),
+                    allOf(
+                            hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                            hasProperty("aprc", equalTo(8.0))
+                    ),
+                    allOf(
+                            hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                            hasProperty("aprc", equalTo(7.0))
+                    )
+            ));
+        }
+
         @Nested
         class ClearScore {
 
+            private static final String CLEARSCORE_CLIENT_ID = "clearscore";
+
             @Test
-            void whenClientIsClearScoreThenReturnLowestAprcHelocAndHomeownerLoanOffersOnly() {
+            void whenClientIsClearScoreThenReturnTheLowestAprcHelocAndHomeownerLoanOffersOnly() {
                 // Given
                 var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
 
@@ -1339,7 +1387,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
                 when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-                when(tokenService.retrieveClientId()).thenReturn("clearscore");
+                when(tokenService.retrieveClientId()).thenReturn(CLEARSCORE_CLIENT_ID);
 
                 // When
                 var response = filterApplicationService.filter(quickQuoteRequest);
@@ -1375,7 +1423,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
                 when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-                when(tokenService.retrieveClientId()).thenReturn("clearscore");
+                when(tokenService.retrieveClientId()).thenReturn(CLEARSCORE_CLIENT_ID);
 
                 // When
                 var response = filterApplicationService.filter(quickQuoteRequest);
@@ -1398,8 +1446,10 @@ class FilterApplicationServiceImplTest extends MapperBase {
         @Nested
         class Experian {
 
+            private static final String EXPERIAN_CLIENT_ID = "experian";
+
             @Test
-            void whenClientIsExperianThenReturnLowestAprcHomeownerLoanOffersOnly() {
+            void whenClientIsExperianThenReturnAllAcceptedOffers() {
                 // Given
                 var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
 
@@ -1415,14 +1465,26 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
                 when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-                when(tokenService.retrieveClientId()).thenReturn("experian");
+                when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
 
                 // When
                 var response = filterApplicationService.filter(quickQuoteRequest);
 
                 // Then
-                assertThat(response.getOffers(), hasSize(1));
+                assertThat(response.getOffers(), hasSize(4));
                 assertThat(response.getOffers(), contains(
+                        allOf(
+                                hasProperty("family", equalTo(HELOC)),
+                                hasProperty("aprc", equalTo(10.0))
+                        ),
+                        allOf(
+                                hasProperty("family", equalTo(HELOC)),
+                                hasProperty("aprc", equalTo(9.0))
+                        ),
+                        allOf(
+                                hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                hasProperty("aprc", equalTo(8.0))
+                        ),
                         allOf(
                                 hasProperty("family", equalTo(HOMEOWNER_LOAN)),
                                 hasProperty("aprc", equalTo(7.0))
@@ -1430,81 +1492,81 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 ));
             }
 
-            @Test
-            void whenClientIsExperianAndThereAreTwoHomeownerLoanOffersWithTheSameLowestAprcThenReturnOnlyTheFirstOne() {
-                // Given
-                var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+            @Nested
+            class GoCompare {
 
-                var helocProduct1 = getProduct(HELOC, 10.0);
-                var helocProduct2 = getProduct(HELOC, 10.0);
-                var homeownerLoanProduct1 = getProduct(HOMEOWNER_LOAN, 8.0);
-                var homeownerLoanProduct2 = getProduct(HOMEOWNER_LOAN, 8.0);
+                private static final LeadDto GO_COMPARE_PARTNER_UTM = LeadDto.builder()
+                        .utmSource("aggregator")
+                        .utmMedium("cpc")
+                        .utmCampaign("_consumer_referral___gocompare_main_")
+                        .build();
 
-                var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-                decisionResponse.setProducts(List.of(helocProduct1, helocProduct2, homeownerLoanProduct1, homeownerLoanProduct2));
+                @Test
+                void whenClientIsExperianAndPartnerIsGoCompareThenReturnTheLowestAprcHomeownerLoanOffersOnly() {
+                    // Given
+                    var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+                    quickQuoteRequest.setLead(GO_COMPARE_PARTNER_UTM);
 
-                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-                when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-                when(tokenService.retrieveClientId()).thenReturn("experian");
+                    var helocProduct = getProduct(HELOC, 10.0);
+                    var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
+                    var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
+                    var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
 
-                // When
-                var response = filterApplicationService.filter(quickQuoteRequest);
+                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
 
-                // Then
-                assertThat(response.getOffers(), hasSize(1));
-                assertThat(response.getOffers(), contains(
-                        allOf(
-                                hasProperty("family", equalTo(HOMEOWNER_LOAN)),
-                                hasProperty("aprc", equalTo(8.0))
-                        )
-                ));
+                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+                    when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
+
+                    // When
+                    var response = filterApplicationService.filter(quickQuoteRequest);
+
+                    // Then
+                    assertThat(response.getOffers(), hasSize(1));
+                    assertThat(response.getOffers(), contains(
+                            allOf(
+                                    hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                    hasProperty("aprc", equalTo(7.0))
+                            )
+                    ));
+                }
+
+                @Test
+                void whenClientIsExperianAndPartnerIsGoCompareAndThereAreTwoHomeownerLoanOffersWithTheSameLowestAprcThenReturnOnlyTheFirstOne() {
+                    // Given
+                    var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+                    quickQuoteRequest.setLead(GO_COMPARE_PARTNER_UTM);
+
+                    var helocProduct1 = getProduct(HELOC, 10.0);
+                    var helocProduct2 = getProduct(HELOC, 10.0);
+                    var homeownerLoanProduct1 = getProduct(HOMEOWNER_LOAN, 8.0);
+                    var homeownerLoanProduct2 = getProduct(HOMEOWNER_LOAN, 8.0);
+
+                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    decisionResponse.setProducts(List.of(helocProduct1, helocProduct2, homeownerLoanProduct1, homeownerLoanProduct2));
+
+                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+                    when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
+
+                    // When
+                    var response = filterApplicationService.filter(quickQuoteRequest);
+
+                    // Then
+                    assertThat(response.getOffers(), hasSize(1));
+                    assertThat(response.getOffers(), contains(
+                            allOf(
+                                    hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                    hasProperty("aprc", equalTo(8.0))
+                            )
+                    ));
+                }
             }
-        }
-
-        @Test
-        void whenClientIsNotClearScoreThenReturnAllAcceptedOffers() {
-            // Given
-            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
-
-            var helocProduct = getProduct(HELOC, 10.0);
-            var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
-            var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
-            var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
-
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-            decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
-
-            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-            when(tokenService.retrieveClientId()).thenReturn("other-client");
-
-            // When
-            var response = filterApplicationService.filter(quickQuoteRequest);
-
-            // Then
-            assertThat(response.getOffers(), hasSize(4));
-            assertThat(response.getOffers(), contains(
-                    allOf(
-                            hasProperty("family", equalTo(HELOC)),
-                            hasProperty("aprc", equalTo(10.0))
-                    ),
-                    allOf(
-                            hasProperty("family", equalTo(HELOC)),
-                            hasProperty("aprc", equalTo(9.0))
-                    ),
-                    allOf(
-                            hasProperty("family", equalTo(HOMEOWNER_LOAN)),
-                            hasProperty("aprc", equalTo(8.0))
-                    ),
-                    allOf(
-                            hasProperty("family", equalTo(HOMEOWNER_LOAN)),
-                            hasProperty("aprc", equalTo(7.0))
-                    )
-            ));
         }
 
         private Product getProduct(String family, double aprc) {
