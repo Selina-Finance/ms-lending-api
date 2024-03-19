@@ -1,6 +1,7 @@
 package com.selina.lending.util;
 
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,18 @@ import java.util.Optional;
 public interface ABTestUtils {
 
     Logger log = LoggerFactory.getLogger(ABTestUtils.class);
+
+    String TEST_GROUP_ID_DELIMITER = ", ";
+
+    static void appendTestGroupId(QuickQuoteApplicationRequest request, String testGroupId) {
+        var existingTestGroupId = request.getTestGroupId();
+
+        if (existingTestGroupId != null) {
+            request.setTestGroupId(existingTestGroupId.concat(TEST_GROUP_ID_DELIMITER).concat(testGroupId));
+        } else {
+            request.setTestGroupId(testGroupId);
+        }
+    }
 
     static boolean hasOddPrimaryApplicantBirthday(List<QuickQuoteApplicantDto> applicants) {
         try {
