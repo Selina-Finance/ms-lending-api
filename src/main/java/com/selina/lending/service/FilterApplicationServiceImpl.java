@@ -82,8 +82,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private static final Double ELIGIBILITY_95 = 95.0;
 
     private static final String TEST_GROUP_ID_GRO_2936_FORMAT = "GRO-2936: %s";
-    private static final String GROUP_A = "GroupA";
-    private static final String GROUP_B = "GroupB";
+    private static final String TEST_GROUP_ID_GRO_2888_FORMAT = "GRO-2888: %s";
+    private static final String GROUP_A = "Group A";
+    private static final String GROUP_B = "Group B";
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionRepository selectionRepository;
@@ -162,7 +163,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             var adpResponse  = adpGatewayRepository.quickQuoteEligibility(adpRequest);
 
             if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
-                adpResponse.setProducts(getFilteredResponseOffers(clientId, request.getLead(), adpResponse.getProducts()));
+                adpResponse.setProducts(getFilteredResponseOffers(clientId, request, adpResponse.getProducts()));
                 var hasReferOffers = false; // TODO calculate actual value
                 enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(), hasReferOffers);
                 storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
@@ -176,7 +177,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse = selectionRepository.filter(selectionRequest);
 
             if (isDecisionAccepted(filteredQuickQuoteDecisionResponse.getDecision(), filteredQuickQuoteDecisionResponse.getProducts())) {
-                filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, request.getLead(), filteredQuickQuoteDecisionResponse.getProducts()));
+                filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, request, filteredQuickQuoteDecisionResponse.getProducts()));
                 enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, filteredQuickQuoteDecisionResponse.getProducts(),
                         filteredQuickQuoteDecisionResponse.getHasReferOffers());
                 storeOffersInMiddleware(request, selectionRequest.getApplication().getFees(), filteredQuickQuoteDecisionResponse.getProducts());
@@ -187,21 +188,30 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         return quickQuoteResponse;
     }
 
-    private List<Product> getFilteredResponseOffers(String clientId, LeadDto leadDto, List<Product> productList) {
+    private List<Product> getFilteredResponseOffers(String clientId, QuickQuoteApplicationRequest request, List<Product> productList) {
         if (isFilterClearScoreResponseOffersFeatureEnabled && isClearScoreClient(clientId)) {
-                var filteredProducts = new ArrayList<Product>(2);
-                findTheLowestAprcProduct(productList, HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
-                findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
-                return filteredProducts;
+            var hasOddPrimaryApplicantBirthday = ABTestUtils.hasOddPrimaryApplicantBirthday(request.getApplicants());
+            ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2888_FORMAT.formatted(hasOddPrimaryApplicantBirthday ? GROUP_B : GROUP_A));
+
+            var filteredProducts = new ArrayList<Product>(2);
+            findTheLowestAprcProduct(productList, HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+            findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY, hasOddPrimaryApplicantBirthday).ifPresent(filteredProducts::add);
+            return filteredProducts;
         }
 
-        if (isFilterExperianResponseOffersFeatureEnabled && isExperianClient(clientId) && isGoComparePartner(leadDto)) {
+        if (isFilterExperianResponseOffersFeatureEnabled && isExperianClient(clientId) && isGoComparePartner(request.getLead())) {
             var filteredProducts = new ArrayList<Product>(2);
             findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
             return filteredProducts;
         }
 
         return productList;
+    }
+
+    private Optional<Product> findTheLowestAprcProduct(List<Product> products, String family, Boolean isVariable) {
+        return products.stream()
+                .filter(product -> family.equalsIgnoreCase(product.getFamily()) && isVariable.equals(product.getIsVariable()))
+                .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()));
     }
 
     private Optional<Product> findTheLowestAprcProduct(List<Product> products, String family) {
@@ -219,9 +229,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             if (ELIGIBILITY_100.equals(eligibility)) {
                 if (ABTestUtils.hasOddPrimaryApplicantBirthday(request.getApplicants())) {
                     eligibility = ELIGIBILITY_95;
-                    request.setTestGroupId(TEST_GROUP_ID_GRO_2936_FORMAT.formatted(GROUP_B));
+                    ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2936_FORMAT.formatted(GROUP_B));
                 } else {
-                    request.setTestGroupId(TEST_GROUP_ID_GRO_2936_FORMAT.formatted(GROUP_A));
+                    ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2936_FORMAT.formatted(GROUP_A));
                 }
             }
             enrichOffersWithEligibility(eligibility, products);
