@@ -26,5 +26,6 @@ import lombok.Data;
 @Data
 public class QuickQuoteEligibilityDecisionResponse {
     private String decision;
+    private Boolean hasReferOffers;
     private List<Product> products;
 }
