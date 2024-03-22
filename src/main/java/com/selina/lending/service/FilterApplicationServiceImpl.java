@@ -168,8 +168,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
                 adpResponse.setProducts(getFilteredResponseOffers(clientId, request, adpResponse.getProducts()));
                 enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(), adpResponse.getHasReferOffers());
-                storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
                 filterOffersByAcceptDecision(adpResponse);
+                storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
                 quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(adpResponse);
             } else {
                 quickQuoteResponse = getDeclinedResponse();
