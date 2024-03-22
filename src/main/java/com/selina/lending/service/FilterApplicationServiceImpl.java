@@ -352,7 +352,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         request.setPartner(partnerService.getPartnerFromToken());
     }
 
-    public void filterOffersByAcceptDecision(QuickQuoteEligibilityDecisionResponse response) {
+    private void filterOffersByAcceptDecision(QuickQuoteEligibilityDecisionResponse response) {
         List<Product> products = response.getProducts();
         response.setProducts(products.stream()
                 .filter(product -> ACCEPT_DECISION.equalsIgnoreCase(product.getOffer().getDecision()))
