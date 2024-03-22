@@ -29,6 +29,6 @@ import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecis
         url = "${adp.gateway.service.url}")
 public interface AdpGatewayApi {
 
-    @PostMapping(path = "/api/quickquote_eligibility", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/api/eligibility", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     QuickQuoteEligibilityDecisionResponse quickQuoteEligibility(QuickQuoteEligibilityApplicationRequest applicationRequest);
 }

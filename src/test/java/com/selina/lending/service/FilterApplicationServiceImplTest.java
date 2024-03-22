@@ -46,10 +46,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.selina.lending.service.FilterApplicationServiceImpl.ADP_CLIENT_ID;
 import static com.selina.lending.service.FilterApplicationServiceImpl.MS_QUICK_QUOTE_CLIENT_ID;
+import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
@@ -888,6 +891,36 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             //Then
             verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
+        }
+        @Test
+        void shouldCreateQuickQuoteApplicationAndFilterAcceptOffers() {
+            // Given
+            var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
+            var productWithDeclinedOffer = getProduct();
+            productWithDeclinedOffer.getOffer().setDecision("Decline");
+
+            var productListWithAcceptAndDeclineOffers = new ArrayList<>(decisionResponse.getProducts());
+            productListWithAcceptAndDeclineOffers.add(productWithDeclinedOffer);
+            decisionResponse.setProducts(productListWithAcceptAndDeclineOffers);
+
+            when(tokenService.retrieveClientId()).thenReturn(ADP_CLIENT_ID);
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+            when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+
+            //When
+            var response = filterApplicationService.filter(quickQuoteRequest);
+
+            //Then
+            verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
+            verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
+            verify(partnerService, times(1)).getPartnerFromToken();
+            assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
+            assertThat(response.getOffers().size(), equalTo(1));
+            assertThat(response.getOffers().get(0).getDecision(), equalTo(ACCEPT_DECISION));
         }
     }
 

@@ -17,6 +17,8 @@
 
 package com.selina.lending.service;
 
+import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
+
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
@@ -29,6 +31,7 @@ import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMa
 import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationResponseMapper;
 import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
 import com.selina.lending.httpclient.adp.dto.response.Product;
+import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 import com.selina.lending.httpclient.eligibility.dto.response.PropertyInfo;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
 import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
@@ -164,8 +167,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
             if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
                 adpResponse.setProducts(getFilteredResponseOffers(clientId, request, adpResponse.getProducts()));
-                var hasReferOffers = false; // TODO calculate actual value
-                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(), hasReferOffers);
+                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(), adpResponse.getHasReferOffers());
+                filterOffersByAcceptDecision(adpResponse);
                 storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
                 quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(adpResponse);
             } else {
@@ -347,5 +350,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private void addPartner(QuickQuoteApplicationRequest request) {
         request.setPartner(partnerService.getPartnerFromToken());
+    }
+
+    private void filterOffersByAcceptDecision(QuickQuoteEligibilityDecisionResponse response) {
+        List<Product> products = response.getProducts();
+        response.setProducts(products.stream()
+                .filter(product -> ACCEPT_DECISION.equalsIgnoreCase(product.getOffer().getDecision()))
+                .toList());
     }
 }
