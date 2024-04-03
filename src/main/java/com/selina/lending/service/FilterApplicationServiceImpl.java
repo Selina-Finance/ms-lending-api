@@ -193,12 +193,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private List<Product> getFilteredResponseOffers(String clientId, QuickQuoteApplicationRequest request, List<Product> productList) {
         if (isFilterClearScoreResponseOffersFeatureEnabled && isClearScoreClient(clientId)) {
-            var hasOddPrimaryApplicantBirthday = ABTestUtils.hasOddPrimaryApplicantBirthday(request.getApplicants());
-            ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2888_FORMAT.formatted(hasOddPrimaryApplicantBirthday ? GROUP_B : GROUP_A));
-
             var filteredProducts = new ArrayList<Product>(2);
             findTheLowestAprcProduct(productList, HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
-            findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY, hasOddPrimaryApplicantBirthday).ifPresent(filteredProducts::add);
+            findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
             return filteredProducts;
         }
 
@@ -209,12 +206,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         }
 
         return productList;
-    }
-
-    private Optional<Product> findTheLowestAprcProduct(List<Product> products, String family, Boolean isVariable) {
-        return products.stream()
-                .filter(product -> family.equalsIgnoreCase(product.getFamily()) && isVariable.equals(product.getIsVariable()))
-                .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()));
     }
 
     private Optional<Product> findTheLowestAprcProduct(List<Product> products, String family) {
