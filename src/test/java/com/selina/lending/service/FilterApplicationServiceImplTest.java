@@ -1410,166 +1410,70 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 when(tokenService.retrieveClientId()).thenReturn(CLEARSCORE_CLIENT_ID);
             }
 
-            @Nested
-            class whenPrimaryApplicantHasOddBirthday {
+            @Test
+            void shouldReturnTheLowestAprcHelocAndHomeownerFixedRateLoanOffersOnly() {
+                // Given
+                var helocProduct = getProduct(HELOC, 10.0);
+                var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
+                var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
+                var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
 
-                @BeforeEach
-                void setUp() {
-                    quickQuoteRequest.getApplicants().get(0).setDateOfBirth("1980-01-01");
-                }
+                var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
 
-                @Test
-                void shouldReturnTheLowestAprcHelocAndHomeownerVariableRateLoanOffersOnly() {
-                    // Given
-                    var helocProduct = getProduct(HELOC, 10.0);
-                    var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
-                    var homeownerFixedRateLoanProduct = getProduct(HOMEOWNER_LOAN, 6.0, false);
-                    var homeownerVariableRateLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0, true);
-                    var lowestAprcHomeownerVariableRateLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0, true);
+                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+                when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
 
-                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-                    decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerFixedRateLoanProduct,
-                            homeownerVariableRateLoanProduct, lowestAprcHomeownerVariableRateLoanProduct));
+                // When
+                var response = filterApplicationService.filter(quickQuoteRequest);
 
-                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                    when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-
-                    // When
-                    var response = filterApplicationService.filter(quickQuoteRequest);
-
-                    // Then
-                    assertThat(quickQuoteRequest.getTestGroupId(), equalTo("GRO-2888: Group B"));
-                    assertThat(response.getOffers(), hasSize(2));
-                    assertThat(response.getOffers(), contains(
-                            allOf(
-                                    hasProperty("family", equalTo(HELOC)),
-                                    hasProperty("aprc", equalTo(9.0))
-                            ),
-                            allOf(
-                                    hasProperty("family", equalTo(HOMEOWNER_LOAN)),
-                                    hasProperty("aprc", equalTo(7.0)),
-                                    hasProperty("isVariable", equalTo(true))
-                            )
-                    ));
-                }
-
-                @Test
-                void whenThereAreTwoHelocAndHomeownerVariableRateLoanOffersWithTheSameLowestAprcThenReturnOnlyTheFirstEachOne() {
-                    // Given
-                    var helocProduct1 = getProduct(HELOC, 10.0);
-                    var helocProduct2 = getProduct(HELOC, 10.0);
-                    var homeownerVariableRateLoanProduct1 = getProduct(HOMEOWNER_LOAN, 8.0, true);
-                    var homeownerVariableRateLoanProduct2 = getProduct(HOMEOWNER_LOAN, 8.0, true);
-
-                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-                    decisionResponse.setProducts(List.of(helocProduct1, helocProduct2, homeownerVariableRateLoanProduct1, homeownerVariableRateLoanProduct2));
-
-                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                    when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-
-                    // When
-                    var response = filterApplicationService.filter(quickQuoteRequest);
-
-                    // Then
-                    assertThat(quickQuoteRequest.getTestGroupId(), equalTo("GRO-2888: Group B"));
-                    assertThat(response.getOffers(), hasSize(2));
-                    assertThat(response.getOffers(), contains(
-                            allOf(
-                                    hasProperty("family", equalTo(HELOC)),
-                                    hasProperty("aprc", equalTo(10.0))
-                            ),
-                            allOf(
-                                    hasProperty("family", equalTo(HOMEOWNER_LOAN)),
-                                    hasProperty("aprc", equalTo(8.0)),
-                                    hasProperty("isVariable", equalTo(true))
-                            )
-                    ));
-                }
+                // Then
+                assertThat(response.getOffers(), hasSize(2));
+                assertThat(response.getOffers(), contains(
+                        allOf(
+                                hasProperty("family", equalTo(HELOC)),
+                                hasProperty("aprc", equalTo(9.0))
+                        ),
+                        allOf(
+                                hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                hasProperty("aprc", equalTo(7.0))
+                        )
+                ));
             }
 
-            @Nested
-            class whenPrimaryApplicantHasEvenBirthday {
+            @Test
+            void whenThereAreTwoHelocAndHomeownerFixedRateLoanOffersWithTheSameLowestAprcThenReturnOnlyTheFirstEachOne() {
+                // Given
+                var helocProduct1 = getProduct(HELOC, 10.0);
+                var helocProduct2 = getProduct(HELOC, 10.0);
+                var homeownerLoanProduct1 = getProduct(HOMEOWNER_LOAN, 8.0);
+                var homeownerLoanProduct2 = getProduct(HOMEOWNER_LOAN, 8.0);
 
-                @BeforeEach
-                void setUp() {
-                    quickQuoteRequest.getApplicants().get(0).setDateOfBirth("1980-01-02");
-                }
+                var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                decisionResponse.setProducts(List.of(helocProduct1, helocProduct2, homeownerLoanProduct1, homeownerLoanProduct2));
 
-                @Test
-                void shouldReturnTheLowestAprcHelocAndHomeownerFixedRateLoanOffersOnly() {
-                    // Given
-                    var helocProduct = getProduct(HELOC, 10.0);
-                    var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
-                    var homeownerVariableRateLoanProduct = getProduct(HOMEOWNER_LOAN, 6.0, true);
-                    var homeownerFixedRateLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0, false);
-                    var lowestAprcHomeownerFixedRateLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0, false);
+                when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+                when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
 
-                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-                    decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerVariableRateLoanProduct,
-                            homeownerFixedRateLoanProduct, lowestAprcHomeownerFixedRateLoanProduct));
+                // When
+                var response = filterApplicationService.filter(quickQuoteRequest);
 
-                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                    when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-
-                    // When
-                    var response = filterApplicationService.filter(quickQuoteRequest);
-
-                    // Then
-                    assertThat(quickQuoteRequest.getTestGroupId(), equalTo("GRO-2888: Group A"));
-                    assertThat(response.getOffers(), hasSize(2));
-                    assertThat(response.getOffers(), contains(
-                            allOf(
-                                    hasProperty("family", equalTo(HELOC)),
-                                    hasProperty("aprc", equalTo(9.0))
-                            ),
-                            allOf(
-                                    hasProperty("family", equalTo(HOMEOWNER_LOAN)),
-                                    hasProperty("aprc", equalTo(7.0)),
-                                    hasProperty("isVariable", equalTo(false))
-                            )
-                    ));
-                }
-
-                @Test
-                void whenThereAreTwoHelocAndHomeownerFixedRateLoanOffersWithTheSameLowestAprcThenReturnOnlyTheFirstEachOne() {
-                    // Given
-                    var helocProduct1 = getProduct(HELOC, 10.0);
-                    var helocProduct2 = getProduct(HELOC, 10.0);
-                    var homeownerFixedRateLoanProduct1 = getProduct(HOMEOWNER_LOAN, 8.0, false);
-                    var homeownerFixedRateLoanProduct2 = getProduct(HOMEOWNER_LOAN, 8.0, false);
-
-                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-                    decisionResponse.setProducts(List.of(helocProduct1, helocProduct2, homeownerFixedRateLoanProduct1, homeownerFixedRateLoanProduct2));
-
-                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-                    when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-
-                    // When
-                    var response = filterApplicationService.filter(quickQuoteRequest);
-
-                    // Then
-                    assertThat(quickQuoteRequest.getTestGroupId(), equalTo("GRO-2888: Group A"));
-                    assertThat(response.getOffers(), hasSize(2));
-                    assertThat(response.getOffers(), contains(
-                            allOf(
-                                    hasProperty("family", equalTo(HELOC)),
-                                    hasProperty("aprc", equalTo(10.0))
-                            ),
-                            allOf(
-                                    hasProperty("family", equalTo(HOMEOWNER_LOAN)),
-                                    hasProperty("aprc", equalTo(8.0)),
-                                    hasProperty("isVariable", equalTo(false))
-                            )
-                    ));
-                }
+                // Then
+                assertThat(response.getOffers(), hasSize(2));
+                assertThat(response.getOffers(), contains(
+                        allOf(
+                                hasProperty("family", equalTo(HELOC)),
+                                hasProperty("aprc", equalTo(10.0))
+                        ),
+                        allOf(
+                                hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                hasProperty("aprc", equalTo(8.0))
+                        )
+                ));
             }
         }
 
