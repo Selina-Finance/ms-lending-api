@@ -304,9 +304,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             requestFees.setIsAddProductFeesToFacility(ADD_PRODUCT_FEES_TO_FACILITY_DEFAULT);
         }
 
-        if (isMonevoClient(clientId)
-                || isClearScoreClient(clientId)
-                || isExperianClient(clientId)) {
+        if (isMonevoClient(clientId) || isClearScoreClient(clientId)) {
             requestFees.setIsAddArrangementFeeSelinaToLoan(true);
             requestFees.setIsAddProductFeesToFacility(true);
         }
