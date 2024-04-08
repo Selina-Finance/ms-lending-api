@@ -252,10 +252,7 @@ public abstract class MapperBase {
     public static final Double INITIAL_MARGIN = 6.5;
     public static final Double POUND_PAID_PER_BORROWED = 2.49;
     public static final Double MONTHLY_PAYMENT_STRESSED = 535.8718926064447;
-    public static final String DECISION_AML = "Accept";
-    public static final String DECISION_FRAUD = "Accept";
     public static final Double BASE_RATE_STRESSED = 5.75;
-    public static final Double APRC_STRESSED = 13.29;
     public static final Double PROPERTY_VALUATION = 160000.0;
     public static final Double INITIAL_RATE_MINIMUM = 8.75;
     public static final Double REVERSION_MARGIN = 6.55;

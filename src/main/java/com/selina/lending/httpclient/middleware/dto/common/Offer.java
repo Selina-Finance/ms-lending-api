@@ -67,7 +67,6 @@ public class Offer {
     private String family;
     private String category;
     private String variant;
-    private String ercShortcode;
     private Integer ercPeriodYears;
     private Double maximumBalanceEsis;
     private Double netLoanAmount;
@@ -86,10 +85,7 @@ public class Offer {
     private Double initialMargin;
     private Double poundPaidPerBorrowed;
     private Double monthlyPaymentStressed;
-    private String decisionAml;
-    private String decisionFraud;
     private Double baseRateStressed;
-    private Double aprcStressed;
     private Double propertyValuation;
     private Double initialRateMinimum;
     private Double reversionMargin;
