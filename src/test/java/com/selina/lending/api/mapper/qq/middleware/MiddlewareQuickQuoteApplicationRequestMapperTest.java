@@ -485,8 +485,6 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(offer.getVariant(), equalTo(OFFER_VARIANT));
         assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
         assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
-        //assertThat(offer.getErcProfile(), equalTo(ERC_PROFILE));
-        //assertThat(offer.getErcShortcode(), equalTo(ERC_SHORT_CODE));
         assertThat(offer.getErcPeriodYears(), equalTo(ERC_PERIOD_YEARS));
         assertThat(offer.getTerm(), equalTo(LOAN_TERM));
         assertThat(offer.getEar(), equalTo(EAR));
@@ -499,10 +497,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(offer.getInitialMargin(), equalTo(INITIAL_MARGIN));
         assertThat(offer.getPoundPaidPerBorrowed(), equalTo(POUND_PAID_PER_BORROWED));
         assertThat(offer.getMonthlyPaymentStressed(), equalTo(MONTHLY_PAYMENT_STRESSED));
-        //assertThat(offer.getDecisionAml(), equalTo(DECISION_AML));
-        //assertThat(offer.getDecisionFraud(), equalTo(DECISION_FRAUD));
         assertThat(offer.getBaseRateStressed(), equalTo(BASE_RATE_STRESSED));
-        //assertThat(offer.getAprcStressed(), equalTo(APRC_STRESSED));
         assertThat(offer.getInitialRateMinimum(), equalTo(INITIAL_RATE_MINIMUM));
         assertThat(offer.getReversionMargin(), equalTo(REVERSION_MARGIN));
         assertThat(offer.getReversionRateMinimum(), equalTo(REVERSION_RATE_MINIMUM));
