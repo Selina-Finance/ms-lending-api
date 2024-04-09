@@ -14,5 +14,6 @@ public interface OfferMapper {
     @Mapping(source = "offer.productCode", target = "code")
     @Mapping(source = "offer.product", target = "name")
     @Mapping(source = "offer.productFeeAddedToLoan", target = "hasProductFeeAddedToLoan")
+    @Mapping(source = "ercShortcode", target = "ercShortCode")
     ProductOfferDto mapToProductOfferDto(Offer offer);
 }

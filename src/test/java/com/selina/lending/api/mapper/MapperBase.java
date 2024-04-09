@@ -961,6 +961,7 @@ public abstract class MapperBase {
                 .category(CATEGORY_STATUS_0)
                 .code(CODE)
                 .hasErc(true)
+                .ercShortCode(ERC_SHORT_CODE)
                 .name(OFFER_VARIABLE_RATE_50_LTV)
                 .build();
     }
@@ -971,6 +972,8 @@ public abstract class MapperBase {
                 .category(CATEGORY_STATUS_0)
                 .code(CODE)
                 .hasErc(true)
+                .ercProfile(ERC_PROFILE)
+                .ercShortCode(ERC_SHORT_CODE)
                 .name(OFFER_VARIABLE_RATE_50_LTV)
                 .variant(OFFER_VARIANT)
                 .offer(getProductOffer())
@@ -1017,7 +1020,10 @@ public abstract class MapperBase {
                 .initialMargin(INITIAL_MARGIN)
                 .poundPaidPerBorrowed(POUND_PAID_PER_BORROWED)
                 .monthlyPaymentStressed(MONTHLY_PAYMENT_STRESSED)
+                .decisionAml(DECISION_AML)
+                .decisionFraud(DECISION_FRAUD)
                 .baseRateStressed(BASE_RATE_STRESSED)
+                .aprcStressed(APRC_STRESSED)
                 .propertyValuation(PROPERTY_VALUATION)
                 .initialRateMinimum(INITIAL_RATE_MINIMUM)
                 .reversionMargin(REVERSION_MARGIN)
