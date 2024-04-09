@@ -114,6 +114,7 @@ class ApplicationResponseMapperTest extends MapperBase {
         var offer = applicationDto.getOffers().get(0);
         assertThat(offer.getProductCode(), equalTo(PRODUCT_CODE));
         assertThat(offer.getMaxErc(), equalTo(MAX_ERC));
+        assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
         assertThat(offer.getErcPeriodYears(), equalTo(2));
         assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
         assertThat(offer.getInitialMargin(), equalTo(INITIAL_MARGIN));

@@ -28,7 +28,9 @@ import org.mapstruct.factory.Mappers;
 public interface OfferMapper {
     OfferMapper INSTANCE = Mappers.getMapper(OfferMapper.class);
 
+    @Mapping(target = "ercShortCode", source = "ercShortcode")
     OfferDto mapToOfferDto(Offer offer);
 
+    @Mapping(target = "ercShortcode", source = "ercShortCode")
     Offer mapToOffer(OfferDto offerDto);
 }

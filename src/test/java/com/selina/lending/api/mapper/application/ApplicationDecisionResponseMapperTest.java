@@ -68,6 +68,7 @@ class ApplicationDecisionResponseMapperTest extends MapperBase {
         assertThat(offer.getErcData().size(), equalTo(2));
         assertThat(offer.getErcPeriodYears(), equalTo(2));
         assertThat(offer.getMaximumBalanceEsis(), equalTo(MAX_BALANCE_ESIS));
+        assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
 
         var ercData = responseDto.getOffers().get(0).getErcData();
         assertThat(ercData.get(0).getPeriod(), equalTo(1));

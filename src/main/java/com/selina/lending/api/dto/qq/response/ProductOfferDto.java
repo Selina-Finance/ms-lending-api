@@ -58,6 +58,7 @@ public class ProductOfferDto {
     private Boolean hasErc;
     private Double netLoanAmount;
     private Double maxErc;
+    private String ercShortCode;
     private Integer ercPeriodYears;
     private String applyUrl;
     private Double eligibility;

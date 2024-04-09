@@ -36,5 +36,7 @@ public class Product {
     private Boolean isVariable;
     private Boolean hasFee;
     private Boolean hasErc;
+    private String ercProfile;
+    private String ercShortCode;
     private ProductOffer offer;
 }

@@ -61,6 +61,7 @@ public class OfferDto {
     Boolean isVariable;
     String family;
     String category;
+    String ercShortCode;
     Integer ercPeriodYears;
     Double maximumBalanceEsis;
     Double netLoanAmount;
