@@ -67,7 +67,10 @@ public class ProductOffer {
     Double initialMargin;
     Double poundPaidPerBorrowed;
     Double monthlyPaymentStressed;
+    String decisionAml;
+    String decisionFraud;
     Double baseRateStressed;
+    Double aprcStressed;
     Double initialRateMinimum;
     Double reversionMargin;
     Double reversionRateMinimum;
