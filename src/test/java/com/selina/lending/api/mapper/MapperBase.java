@@ -223,6 +223,8 @@ public abstract class MapperBase {
     public static final Double BALANCE_CONSOLIDATED = 20000.0;
     public static final Double OTHER_DEBT_PAYMENTS = 5000.0;
     public static final Double MAX_BALANCE_ESIS = 100000.0;
+    public static final String ERC_PROFILE = "5%, 4%, 3%, 2%, 1%";
+    public static final String ERC_SHORT_CODE = "ERC_01";
     public static final String CODE = "HOL00750";
     public static final Double EAR = 9.39;
     public static final Double SVR = 9.0;
@@ -251,7 +253,10 @@ public abstract class MapperBase {
     public static final Double INITIAL_MARGIN = 6.5;
     public static final Double POUND_PAID_PER_BORROWED = 2.49;
     public static final Double MONTHLY_PAYMENT_STRESSED = 535.8718926064447;
+    public static final String DECISION_AML = "Accept";
+    public static final String DECISION_FRAUD = "Accept";
     public static final Double BASE_RATE_STRESSED = 5.75;
+    public static final Double APRC_STRESSED = 13.29;
     public static final Double PROPERTY_VALUATION = 160000.0;
     public static final Double INITIAL_RATE_MINIMUM = 8.75;
     public static final Double REVERSION_MARGIN = 6.55;
@@ -868,6 +873,7 @@ public abstract class MapperBase {
                 .ercPeriodYears(2)
                 .maximumBalanceEsis(MAX_BALANCE_ESIS)
                 .affordabilityDeficit(AFFORDABILITY_DEFICIT)
+                .ercShortcode(ERC_SHORT_CODE)
                 .maxErc(MAX_ERC)
                 .ercData(getErc())
                 .productFeeAddedToLoan(true)
