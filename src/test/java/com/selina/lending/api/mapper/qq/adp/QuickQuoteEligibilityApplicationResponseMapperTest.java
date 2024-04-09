@@ -94,7 +94,6 @@ class QuickQuoteEligibilityApplicationResponseMapperTest extends MapperBase {
         var ercData = offer.getErcData();
         assertThat(offer.getHasErc(), equalTo(true));
         assertThat(offer.getErcPeriodYears(), equalTo(2));
-        assertThat(offer.getErcShortCode(), equalTo(ERC_SHORT_CODE));
 
         assertThat(ercData.get(0).getPeriod(), equalTo(1));
         assertThat(ercData.get(0).getErcAmount(), equalTo(ERC_AMOUNT));

@@ -40,7 +40,6 @@ public interface QuickQuoteEligibilityApplicationResponseMapper {
     @Mapping(source = "product.code", target = "code")
     @Mapping(source = "product.isVariable", target = "isVariable")
     @Mapping(source = "product.hasErc", target = "hasErc")
-    @Mapping(source = "product.ercShortCode", target = "ercShortCode")
     @Mapping(source = "offer.id", target = "id")
     @Mapping(source = "offer.hasFee", target = "hasFee")
     @Mapping(source = "offer.productFee", target = "productFee")
