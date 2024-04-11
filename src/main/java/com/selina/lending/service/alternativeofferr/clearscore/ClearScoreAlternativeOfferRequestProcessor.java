@@ -2,6 +2,7 @@ package com.selina.lending.service.alternativeofferr.clearscore;
 
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -38,13 +39,8 @@ public class ClearScoreAlternativeOfferRequestProcessor extends AlternativeOffer
     }
 
     @Override
-    protected int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
+    protected int calculateAlternativeRequestedLoanTerm(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
         return ALTERNATIVE_OFFER_LOAN_TERM_1_YEAR;
-    }
-
-    @Override
-    protected String getTestGroupId(List<QuickQuoteApplicantDto> applicants) {
-        return null;
     }
 
 }

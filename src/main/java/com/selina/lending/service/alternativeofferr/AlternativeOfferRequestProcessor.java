@@ -10,11 +10,7 @@ import java.util.List;
 @Slf4j
 public abstract class AlternativeOfferRequestProcessor {
 
-    private static final String EMPTY_STRING = "";
-    private static final String TEST_GROUPS_DELIMITER = "|";
-
     public void adjustAlternativeOfferRequest(String clientId, QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        addTestGroupId(quickQuoteApplicationRequest);
         if (isAlternativeOfferRequest(clientId, quickQuoteApplicationRequest)) {
             adjustAlternativeOfferRequest(quickQuoteApplicationRequest);
         }
@@ -42,27 +38,13 @@ public abstract class AlternativeOfferRequestProcessor {
         try {
             log.info("Adjust QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
                     getClientId(), request.getExternalApplicationId(), requestedLoanTerm);
-            request.getLoanInformation().setRequestedLoanTerm(calculateAlternativeRequestedLoanTerm(requestedLoanTerm, request.getApplicants()));
+            request.getLoanInformation().setRequestedLoanTerm(calculateAlternativeRequestedLoanTerm(request));
         } catch (Exception ex) {
             log.error("Error adjusting QQ application to alternative offer [clientId={}] [externalApplicationId={}] [originalRequestedLoanTerm={}]",
                     getClientId(), request.getExternalApplicationId(), requestedLoanTerm);
         }
     }
 
-    protected abstract int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants);
-
-    private void addTestGroupId(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
-        var testGroupId = getTestGroupId(quickQuoteApplicationRequest.getApplicants());
-        if (testGroupId == null) {
-            return;
-        }
-
-        var testGroupIds = quickQuoteApplicationRequest.getTestGroupId();
-        testGroupIds = testGroupIds == null ? EMPTY_STRING : testGroupIds.concat(TEST_GROUPS_DELIMITER);
-
-        quickQuoteApplicationRequest.setTestGroupId(testGroupIds.concat(testGroupId));
-    }
-
-    protected abstract String getTestGroupId(List<QuickQuoteApplicantDto> applicants);
+    protected abstract int calculateAlternativeRequestedLoanTerm(QuickQuoteApplicationRequest quickQuoteApplicationRequest);
 
 }
