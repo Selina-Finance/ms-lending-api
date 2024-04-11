@@ -2,6 +2,7 @@ package com.selina.lending.service.alternativeofferr.monevo;
 
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
 import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProcessor;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +37,9 @@ public class MonevoAlternativeOfferRequestProcessor extends AlternativeOfferRequ
     }
 
     @Override
-    protected int calculateAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
+    protected int calculateAlternativeRequestedLoanTerm(QuickQuoteApplicationRequest quickQuoteApplicationRequest) {
+        var requestedLoanTerm = quickQuoteApplicationRequest.getLoanInformation().getRequestedLoanTerm();
+
         if (requestedLoanTerm < ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS) {
             return ALTERNATIVE_OFFER_LOAN_TERM_5_YEARS;
         }
@@ -48,8 +51,4 @@ public class MonevoAlternativeOfferRequestProcessor extends AlternativeOfferRequ
         return requestedLoanTerm;
     }
 
-    @Override
-    protected String getTestGroupId(List<QuickQuoteApplicantDto> applicants) {
-        return null;
-    }
 }

@@ -14,6 +14,8 @@ public interface ABTestUtils {
     Logger log = LoggerFactory.getLogger(ABTestUtils.class);
 
     String TEST_GROUP_ID_DELIMITER = ", ";
+    String GROUP_A = "Group A";
+    String GROUP_B = "Group B";
 
     static void appendTestGroupId(QuickQuoteApplicationRequest request, String testGroupId) {
         var existingTestGroupId = request.getTestGroupId();

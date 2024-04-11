@@ -85,9 +85,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private static final Double ELIGIBILITY_95 = 95.0;
 
     private static final String TEST_GROUP_ID_GRO_2936_FORMAT = "GRO-2936: %s";
-    private static final String TEST_GROUP_ID_GRO_2888_FORMAT = "GRO-2888: %s";
-    private static final String GROUP_A = "Group A";
-    private static final String GROUP_B = "Group B";
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
     private final SelectionRepository selectionRepository;
@@ -223,9 +220,9 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             if (ELIGIBILITY_100.equals(eligibility)) {
                 if (ABTestUtils.hasOddPrimaryApplicantBirthday(request.getApplicants())) {
                     eligibility = ELIGIBILITY_95;
-                    ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2936_FORMAT.formatted(GROUP_B));
+                    ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2936_FORMAT.formatted(ABTestUtils.GROUP_B));
                 } else {
-                    ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2936_FORMAT.formatted(GROUP_A));
+                    ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2936_FORMAT.formatted(ABTestUtils.GROUP_A));
                 }
             }
             enrichOffersWithEligibility(eligibility, products);
