@@ -67,12 +67,9 @@ public class ProductOffer {
     private Double dtir;
     private Double bbr;
     private Double initialMargin;
-    private  Double poundPaidPerBorrowed;
+    private Double poundPaidPerBorrowed;
     private Double monthlyPaymentStressed;
-    private String decisionAml;
-    private String decisionFraud;
     private Double baseRateStressed;
-    private Double aprcStressed;
     private Double initialRateMinimum;
     private Double reversionMargin;
     private Double reversionRateMinimum;
