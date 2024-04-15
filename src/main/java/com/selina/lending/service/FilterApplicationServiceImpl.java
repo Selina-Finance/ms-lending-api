@@ -68,6 +68,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             .utmCampaign("_consumer_referral___gocompare_main_")
             .build();
 
+    private static final LeadDto CREDIT_MATCHER_PARTNER_UTM = LeadDto.builder()
+            .utmSource("aggregator")
+            .utmMedium("cpc")
+            .utmCampaign("_consumer_referral___creditmatcher_main_")
+            .build();
+
     protected static final String MS_QUICK_QUOTE_CLIENT_ID = "ms-quick-quote";
 
     private static final int MIN_ALLOWED_SELINA_LOAN_TERM = 5;
@@ -196,10 +202,18 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             return filteredProducts;
         }
 
-        if (isFilterExperianResponseOffersFeatureEnabled && isExperianClient(clientId) && isGoComparePartner(request.getLead())) {
-            var filteredProducts = new ArrayList<Product>(2);
-            findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
-            return filteredProducts;
+        if (isFilterExperianResponseOffersFeatureEnabled && isExperianClient(clientId)) {
+            if (isGoComparePartner(request.getLead())) {
+                var filteredProducts = new ArrayList<Product>(1);
+                findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
+                return filteredProducts;
+            }
+
+            if (isCreditMatcherPartner(request.getLead())) {
+                var filteredProducts = new ArrayList<Product>(1);
+                findTheLowestAprcProduct(productList, HOMEOWNER_LOAN_PRODUCT_FAMILY, true).ifPresent(filteredProducts::add);
+                return filteredProducts;
+            }
         }
 
         return productList;
@@ -208,6 +222,12 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private Optional<Product> findTheLowestAprcProduct(List<Product> products, String family) {
         return products.stream()
                 .filter(product -> family.equalsIgnoreCase(product.getFamily()))
+                .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()));
+    }
+
+    private Optional<Product> findTheLowestAprcProduct(List<Product> products, String family, Boolean isVariable) {
+        return products.stream()
+                .filter(product -> family.equalsIgnoreCase(product.getFamily()) && isVariable.equals(product.getIsVariable()))
                 .min(Comparator.comparingDouble(product -> product.getOffer().getAprc()));
     }
 
@@ -325,6 +345,10 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private boolean isGoComparePartner(LeadDto leadDto) {
         return GO_COMPARE_PARTNER_UTM.equals(leadDto);
+    }
+
+    private boolean isCreditMatcherPartner(LeadDto leadDto) {
+        return CREDIT_MATCHER_PARTNER_UTM.equals(leadDto);
     }
 
     private static boolean isMsQuickQuoteClient(String clientId) {

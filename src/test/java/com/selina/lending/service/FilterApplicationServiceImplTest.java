@@ -1693,6 +1693,85 @@ class FilterApplicationServiceImplTest extends MapperBase {
                     ));
                 }
             }
+
+            @Nested
+            class whenPartnerIsCreditMatcher {
+
+                private static final LeadDto CREDIT_MATCHER_PARTNER_UTM = LeadDto.builder()
+                        .utmSource("aggregator")
+                        .utmMedium("cpc")
+                        .utmCampaign("_consumer_referral___creditmatcher_main_")
+                        .build();
+
+                @Test
+                void shouldReturnTheLowestAprcHomeownerLoanVariableRateOffer() {
+                    // Given
+                    var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+                    quickQuoteRequest.setLead(CREDIT_MATCHER_PARTNER_UTM);
+
+                    var helocProduct = getProduct(HELOC, 10.0);
+                    var homeownerVariableRateLoanProduct = getProduct(HOMEOWNER_LOAN, 9.0, true);
+                    var lowestAprcHomeownerVariableRateLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0, true);
+                    var homeownerFixedRateLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0, false);
+                    var lowestAprcHomeownerFixedRateLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0, false);
+
+                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    decisionResponse.setProducts(List.of(helocProduct, homeownerVariableRateLoanProduct, lowestAprcHomeownerVariableRateLoanProduct,
+                            homeownerFixedRateLoanProduct, lowestAprcHomeownerFixedRateLoanProduct));
+
+                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+                    when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
+
+                    // When
+                    var response = filterApplicationService.filter(quickQuoteRequest);
+
+                    // Then
+                    assertThat(response.getOffers(), hasSize(1));
+                    assertThat(response.getOffers(), contains(
+                            allOf(
+                                    hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                    hasProperty("aprc", equalTo(8.0)),
+                                    hasProperty("isVariable", equalTo(true))
+                            )
+                    ));
+                }
+
+                @Test
+                void whenThereAreTwoHomeownerLoanVariableRateOffersWithTheSameLowestAprcThenReturnOnlyTheFirstOne() {
+                    // Given
+                    var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+                    quickQuoteRequest.setLead(CREDIT_MATCHER_PARTNER_UTM);
+
+                    var helocProduct1 = getProduct(HELOC, 10.0);
+                    var homeownerLoanVariableRateProduct1 = getProduct(HOMEOWNER_LOAN, 8.0, true);
+                    var homeownerLoanVariableRateProduct2 = getProduct(HOMEOWNER_LOAN, 8.0, true);
+
+                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    decisionResponse.setProducts(List.of(helocProduct1, homeownerLoanVariableRateProduct1, homeownerLoanVariableRateProduct2));
+
+                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+                    when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
+
+                    // When
+                    var response = filterApplicationService.filter(quickQuoteRequest);
+
+                    // Then
+                    assertThat(response.getOffers(), hasSize(1));
+                    assertThat(response.getOffers(), contains(
+                            allOf(
+                                    hasProperty("family", equalTo(HOMEOWNER_LOAN)),
+                                    hasProperty("aprc", equalTo(8.0)),
+                                    hasProperty("isVariable", equalTo(true))
+                            )
+                    ));
+                }
+            }
         }
 
         private Product getProduct(String family, double aprc) {
