@@ -17,6 +17,7 @@
 
 package com.selina.lending.api.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.selina.lending.api.controller.SwaggerConstants;
 import com.selina.lending.api.validator.EnumValue;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,6 +27,8 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Data
@@ -72,6 +75,7 @@ public class EmploymentDto {
     String companyRegistrationNumber;
     String percentageOfCompanyOwned;
     String monthAccountingPeriodStarts;
+
     @Pattern(regexp = SwaggerConstants.DATE_PATTERN, message = SwaggerConstants.DATE_INVALID_MESSAGE)
     @Schema(example = SwaggerConstants.EXAMPLE_DATE)
     String whenWasCompanyIncorporated;
