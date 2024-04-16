@@ -228,7 +228,7 @@ class DIPControllerValidationTest extends MapperBase {
                 .contractEndDate("21-01-2019")
                 .whenWasCompanyIncorporated("2019/01/21")
                 .partnershipFormedDate("Monday 21st January 2019")
-                .whenDidYouBeginTrading("2019-01-21")  //valid
+                .whenDidYouBeginTrading("1699-01-21")
                 .build();
 
         var applicant = getDIPApplicantDto();
@@ -250,15 +250,18 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
-                .andExpect(jsonPath("$.violations", hasSize(4)))
+                .andExpect(jsonPath("$.violations", hasSize(5)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants[0].employment.contractEndDate"))
-                .andExpect(jsonPath("$.violations[0].message").value("must match yyyy-MM-dd format"))
+                .andExpect(jsonPath("$.violations[0].message").value("must match yyyy-MM-dd format and be later than 1700-01-01"))
                 .andExpect(jsonPath("$.violations[1].field").value("applicants[0].employment.contractStartDate"))
-                .andExpect(jsonPath("$.violations[1].message").value("must match yyyy-MM-dd format"))
+                .andExpect(jsonPath("$.violations[1].message").value("must match yyyy-MM-dd format and be later than 1700-01-01"))
                 .andExpect(jsonPath("$.violations[2].field").value("applicants[0].employment.partnershipFormedDate"))
-                .andExpect(jsonPath("$.violations[2].message").value("must match yyyy-MM-dd format"))
-                .andExpect(jsonPath("$.violations[3].field").value("applicants[0].employment.whenWasCompanyIncorporated"))
-                .andExpect(jsonPath("$.violations[3].message").value("must match yyyy-MM-dd format"));
+                .andExpect(jsonPath("$.violations[2].message").value("must match yyyy-MM-dd format and be later than 1700-01-01"))
+                .andExpect(jsonPath("$.violations[3].field").value("applicants[0].employment.whenDidYouBeginTrading"))
+                .andExpect(jsonPath("$.violations[3].message").value("must match yyyy-MM-dd format and be later than 1700-01-01"))
+                .andExpect(jsonPath("$.violations[4].field").value("applicants[0].employment.whenWasCompanyIncorporated"))
+                .andExpect(jsonPath("$.violations[4].message").value("must match yyyy-MM-dd format and be later than 1700-01-01"))
+                ;
     }
 
     @Test

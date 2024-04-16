@@ -34,8 +34,8 @@ public class SwaggerConstants {
             "{\n    \"title\": \"Error processing request\",\n    \"status\": 409,\n    \"detail\": \"message details\"\n}";
 
     public static final String OFFER_SELECTED_EXAMPLE = "{\n   \"message\": \"Offer selected with success\",\n  \"externalApplicationId\": \"external id\",\n   \"productCode\": \"product code\"\n}";
-    public static final String DATE_PATTERN = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
-    public static final String DATE_INVALID_MESSAGE = "must match yyyy-MM-dd format";
+    public static final String DATE_PATTERN = "^(1[789]\\d{2}|2\\d{3})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
+    public static final String DATE_INVALID_MESSAGE = "must match yyyy-MM-dd format and be later than 1700-01-01";
     public static final String EXAMPLE_DATE = "2001-01-01";
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS";
     public static final String DATE_FORMAT = "yyyy-MM-dd";
