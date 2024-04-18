@@ -57,7 +57,7 @@ public class EmploymentDto {
     String contractEndDate;
     Boolean firstTimeContractor;
 
-    @Size(min = 3, max = 100)
+    @Size(min = 2, max = 100)
     String employerName;
     String jobTitle;
     String occupationType;

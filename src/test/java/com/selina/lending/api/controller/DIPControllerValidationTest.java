@@ -439,10 +439,10 @@ class DIPControllerValidationTest extends MapperBase {
     }
 
     @Test
-    void whenCreateDipApplicationWithEmployerNameLengthLessThan3ThenReturnBadRequest() throws Exception {
+    void whenCreateDipApplicationWithEmployerNameLengthLessThan2ThenReturnBadRequest() throws Exception {
         //Given
         var dipApplicationRequest = getDIPApplicationRequestDto();
-        dipApplicationRequest.getApplicants().get(0).getEmployment().setEmployerName("ab");
+        dipApplicationRequest.getApplicants().get(0).getEmployment().setEmployerName("X");
 
         //When
         mockMvc.perform(post("/application/dip").content(objectMapper.writeValueAsString(dipApplicationRequest))
@@ -453,7 +453,7 @@ class DIPControllerValidationTest extends MapperBase {
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
                 .andExpect(jsonPath("$.violations[0].field").value("applicants[0].employment.employerName"))
-                .andExpect(jsonPath("$.violations[0].message").value("size must be between 3 and 100"));
+                .andExpect(jsonPath("$.violations[0].message").value("size must be between 2 and 100"));
     }
 
     @Test
