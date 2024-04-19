@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class AdpGatewayRepositoryImpl implements AdpGatewayRepository {
 
-    private static final double DEFAULT_ESTIMATED_VALUE = 99_999_999;
+    private static final double DEFAULT_ESTIMATED_VALUE = 9999999;
     private final AdpGatewayApi api;
     private final TokenService tokenService;
 
