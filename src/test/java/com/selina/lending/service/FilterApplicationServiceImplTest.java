@@ -17,42 +17,6 @@
 
 package com.selina.lending.service;
 
-import com.selina.lending.api.dto.common.LeadDto;
-import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
-import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
-import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
-import com.selina.lending.api.mapper.MapperBase;
-import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
-import com.selina.lending.httpclient.adp.dto.response.Product;
-import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
-import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
-import com.selina.lending.httpclient.middleware.dto.common.Fees;
-import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
-import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
-import com.selina.lending.repository.AdpGatewayRepository;
-import com.selina.lending.repository.EligibilityRepository;
-import com.selina.lending.repository.MiddlewareRepository;
-import com.selina.lending.repository.SelectionRepository;
-import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
-import com.selina.lending.service.quickquote.PartnerService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentCaptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.selina.lending.service.FilterApplicationServiceImpl.ADP_CLIENT_ID;
-import static com.selina.lending.service.FilterApplicationServiceImpl.MS_QUICK_QUOTE_CLIENT_ID;
-import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
@@ -69,14 +33,45 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import static com.selina.lending.service.FilterApplicationServiceImpl.ADP_CLIENT_ID;
+import static com.selina.lending.service.FilterApplicationServiceImpl.MS_QUICK_QUOTE_CLIENT_ID;
+import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.selina.lending.api.dto.common.LeadDto;
+import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
+import com.selina.lending.api.dto.qq.request.QuickQuoteFeesDto;
+import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
+import com.selina.lending.api.mapper.MapperBase;
+import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
+import com.selina.lending.httpclient.adp.dto.response.Product;
+import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
+import com.selina.lending.httpclient.eligibility.dto.response.EligibilityResponse;
+import com.selina.lending.httpclient.middleware.dto.common.Fees;
+import com.selina.lending.httpclient.middleware.dto.qq.request.QuickQuoteRequest;
+import com.selina.lending.repository.AdpGatewayRepository;
+import com.selina.lending.repository.EligibilityRepository;
+import com.selina.lending.repository.MiddlewareRepository;
+import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
+import com.selina.lending.service.quickquote.PartnerService;
+
 @SpringBootTest
 class FilterApplicationServiceImplTest extends MapperBase {
 
     @MockBean
     private AdpGatewayRepository adpGatewayRepository;
-
-    @MockBean
-    private SelectionRepository selectionRepository;
 
     @MockBean
     private MiddlewareRepository middlewareRepository;
@@ -95,466 +90,6 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
     @Autowired
     private FilterApplicationServiceImpl filterApplicationService;
-
-    @Test
-    void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequestWithCorrectDefaultValues() {
-        // Given
-        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        //When
-        var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
-
-        //Then
-        verify(selectionRepository, times(1)).filter(selectionRequestCaptor.capture());
-        verify(middlewareRepository, times(1)).createQuickQuoteApplication(any());
-        verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
-
-        assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
-
-        var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
-        assertThat(requestFees.getIsAddProductFeesToFacility(), is(false));
-    }
-
-    @Test
-    void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequestWithoutDefaultValuesIfValuesPresent() {
-        // Given
-        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        var qqFees = QuickQuoteFeesDto.builder()
-                .isAddArrangementFeeSelinaToLoan(true)
-                .isAddProductFeesToFacility(true)
-                .build();
-
-        var qqApplicationRequest = QuickQuoteApplicationRequest.builder()
-                .applicants(List.of())
-                .loanInformation(getQQLoanInformationDto())
-                .propertyDetails(getQuickQuotePropertyDetailsDto())
-                .fees(qqFees)
-                .build();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(qqApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        //When
-        var response = filterApplicationService.filter(qqApplicationRequest);
-
-        //Then
-        verify(selectionRepository, times(1)).filter(selectionRequestCaptor.capture());
-        verify(middlewareRepository, times(1)).createQuickQuoteApplication(any());
-        verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
-
-        assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
-
-        var requestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(requestFees.getIsAddArrangementFeeSelinaToLoan(), equalTo(qqFees.getIsAddArrangementFeeSelinaToLoan()));
-        assertThat(requestFees.getIsAddProductFeesToFacility(), equalTo(qqFees.getIsAddProductFeesToFacility()));
-    }
-
-    @Test
-    void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequestWithPartnerAdded() {
-        // Given
-        var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
-        quickQuoteRequest.setPartner(null);
-
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
-
-        //When
-        var response = filterApplicationService.filter(quickQuoteRequest);
-
-        //Then
-        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
-        verify(arrangementFeeSelinaService, times(1)).getFeesFromToken();
-        verify(partnerService, times(1)).getPartnerFromToken();
-        assertThat(quickQuoteRequest.getPartner().getSubUnitId(), equalTo(SUB_UNIT_ID));
-        assertThat(quickQuoteRequest.getPartner().getCompanyId(), equalTo(COMPANY_ID));
-        assertThat(response.getStatus(), equalTo(decisionResponse.getDecision()));
-    }
-
-    @Test
-    void whenHaveOneApplicantWithPrimaryApplicantNullThenApplicantPrimaryApplicantIsTrue() {
-        // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(null);
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
-    }
-
-    @Test
-    void whenHaveOneApplicantWithPrimaryApplicantTrueThenApplicantPrimaryApplicantIsTrue() {
-        // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(true);
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
-    }
-
-    @Test
-    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantFalseThenApplicantPrimaryApplicantIsTrue() {
-        // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(true);
-        quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(false);
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(false));
-    }
-
-    @Test
-    void whenHaveOneApplicantPrimaryApplicantTrueAndOneApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue() {
-        // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
-        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(true);
-        quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(null);
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(nullValue()));
-    }
-
-    @Test
-    void whenHaveOneApplicantPrimaryApplicantNullAndOneApplicantPrimaryApplicantTrueThenSecondApplicantPrimaryApplicantIsTrue() {
-        // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
-        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(null);
-        quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(true);
-
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(nullValue()));
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(true));
-    }
-
-    @Test
-    void whenHaveOneApplicantPrimaryApplicantFalseAndOneApplicantPrimaryApplicantTrueThenSecondApplicantPrimaryApplicantIsTrue() {
-        // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
-        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(false);
-        quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(true);
-
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(false));
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(true));
-    }
-
-    @Test
-    void whenHaveTwoApplicantPrimaryApplicantNullThenFirstApplicantPrimaryApplicantIsTrue() {
-        // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        quickQuoteApplicationRequest.getApplicants().add(getQuickQuoteApplicantDto());
-
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        quickQuoteApplicationRequest.getApplicants().get(0).setPrimaryApplicant(null);
-        quickQuoteApplicationRequest.getApplicants().get(1).setPrimaryApplicant(null);
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        when(partnerService.getPartnerFromToken()).thenReturn(null);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(0).getPrimaryApplicant(), is(true));
-        assertThat(quickQuoteApplicationRequest.getApplicants().get(1).getPrimaryApplicant(), is(nullValue()));
-    }
-
-    @Test
-    void whenDecisionResponseIsDeclinedThenDoNotSendMiddlewareRequest() {
-        //Given
-        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(List.of(getProduct()))
-                .build();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-
-        //When
-        var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
-
-        //Then
-        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
-        verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-        assertThat(response.getStatus(), equalTo("Declined"));
-        assertThat(response.getOffers(), hasSize(decisionResponse.getProducts().size()));
-    }
-
-    @Test
-    void whenDecisionResponseHasNullProductOffersThenDoNotSendMiddlewareRequest() {
-        //Given
-        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(null)
-                .build();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-
-        //When
-        var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
-
-        //Then
-        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
-        verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-        assertThat(response.getStatus(), equalTo("Declined"));
-    }
-
-    @Test
-    void shouldCreateApplicationRequestWithFeesIfProvidedButNoArrangementFeeSelinaFields() {
-        // Given
-        QuickQuoteApplicationRequest quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
-        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        assertThat(quickQuoteApplicationRequest.getFees().getArrangementFee(), equalTo(1000.00));
-        assertThat(quickQuoteApplicationRequest.getFees().getAdviceFee(), equalTo(599.00));
-        assertThat(quickQuoteApplicationRequest.getFees().getIsAddAdviceFeeToLoan(), is(true));
-    }
-
-    @Test
-    void whenFeesAreNotSpecifiedThenDoNotIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
-        // Given
-        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(null)
-                .build();
-
-        when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        verify(selectionRepository).filter(selectionRequestCaptor.capture());
-        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(false));
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
-    }
-
-    @Test
-    void shouldUseSpecifiedFeesForIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
-        // Given
-        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(null)
-                .build();
-
-        when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
-        quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
-        quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(true);
-
-        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        verify(selectionRepository).filter(selectionRequestCaptor.capture());
-        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
-    }
-
-    @Test
-    void whenClientIsMonevoAndFeesAreNotSpecifiedThenIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
-        // Given
-        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(null)
-                .build();
-
-        when(tokenService.retrieveClientId()).thenReturn("monevo");
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        verify(selectionRepository).filter(selectionRequestCaptor.capture());
-        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
-    }
-
-    @Test
-    void whenClientIsMonevoAndFeesAreSpecifiedThenOverwriteThemToIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
-        // Given
-        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(null)
-                .build();
-
-        when(tokenService.retrieveClientId()).thenReturn("monevo");
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
-        quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
-        quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(false);
-
-        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        verify(selectionRepository).filter(selectionRequestCaptor.capture());
-        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
-    }
-
-    @Test
-    void whenClientIsClearScoreAndFeesAreNotSpecifiedThenIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
-        // Given
-        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(null)
-                .build();
-
-        when(tokenService.retrieveClientId()).thenReturn("clearscore");
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        verify(selectionRepository).filter(selectionRequestCaptor.capture());
-        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
-    }
-
-    @Test
-    void whenClientIsClearScoreAndFeesAreSpecifiedThenOverwriteThemToIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
-        // Given
-        var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(null)
-                .build();
-
-        when(tokenService.retrieveClientId()).thenReturn("clearscore");
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(declinedDecisionResponse);
-        var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
-        quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
-        quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(false);
-
-        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-        // When
-        filterApplicationService.filter(quickQuoteApplicationRequest);
-
-        // Then
-        verify(selectionRepository).filter(selectionRequestCaptor.capture());
-        var selectionRequestFees = selectionRequestCaptor.getValue().getApplication().getFees();
-        assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
-        assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
-    }
 
     @Nested
     class AdpDecisioning {
@@ -892,6 +427,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             //Then
             verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
         }
+
         @Test
         void shouldCreateQuickQuoteApplicationAndFilterAcceptOffers() {
             // Given
@@ -922,6 +458,162 @@ class FilterApplicationServiceImplTest extends MapperBase {
             assertThat(response.getOffers().size(), equalTo(1));
             assertThat(response.getOffers().get(0).getDecision(), equalTo(ACCEPT_DECISION));
         }
+
+        @Test
+        void shouldUseSpecifiedFeesForIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+            // Given
+            var declinedDecisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
+                    .decision("Declined")
+                    .products(null)
+                    .build();
+
+            when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+            quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
+            quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(true);
+
+            var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
+
+            // When
+            filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            // Then
+            verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+            var adpRequestFees = adpRequestCaptor.getValue().getApplication().getFees();
+            assertThat(adpRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
+            assertThat(adpRequestFees.getIsAddProductFeesToFacility(), is(true));
+        }
+
+        @Test
+        void whenFeesAreNotSpecifiedThenDoNotIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+            // Given
+            var declinedDecisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
+                    .decision("Declined")
+                    .products(null)
+                    .build();
+
+            when(tokenService.retrieveClientId()).thenReturn("some-aggregator");
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
+
+            // When
+            filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            // Then
+            verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+            var adpRequestFees = adpRequestCaptor.getValue().getApplication().getFees();
+            assertThat(adpRequestFees.getIsAddProductFeesToFacility(), is(false));
+            assertThat(adpRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(false));
+        }
+
+        @Test
+        void whenClientIsMonevoAndFeesAreNotSpecifiedThenIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+            // Given
+            var declinedDecisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
+                    .decision("Declined")
+                    .products(null)
+                    .build();
+
+            when(tokenService.retrieveClientId()).thenReturn("monevo");
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
+
+            // When
+            filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            // Then
+            verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+            var adpRequestFees = adpRequestCaptor.getValue().getApplication().getFees();
+            assertThat(adpRequestFees.getIsAddProductFeesToFacility(), is(true));
+            assertThat(adpRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
+        }
+
+        @Test
+        void whenClientIsMonevoAndFeesAreSpecifiedThenOverwriteThemToIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+            // Given
+            var declinedDecisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
+                    .decision("Declined")
+                    .products(null)
+                    .build();
+
+            when(tokenService.retrieveClientId()).thenReturn("monevo");
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+            when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+            quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
+            quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(false);
+
+            var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
+
+            // When
+            filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            // Then
+            verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+            var adpRequestFees = adpRequestCaptor.getValue().getApplication().getFees();
+            assertThat(adpRequestFees.getIsAddProductFeesToFacility(), is(true));
+            assertThat(adpRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
+        }
+
+        @Test
+        void whenClientIsClearScoreAndFeesAreNotSpecifiedThenIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+            // Given
+            var declinedDecisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
+                    .decision("Declined")
+                    .products(null)
+                    .build();
+
+            when(tokenService.retrieveClientId()).thenReturn("clearscore");
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+            var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
+
+            // When
+            filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            // Then
+            verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+            var selectionRequestFees = adpRequestCaptor.getValue().getApplication().getFees();
+            assertThat(selectionRequestFees.getIsAddProductFeesToFacility(), is(true));
+            assertThat(selectionRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
+        }
+        @Test
+        void whenClientIsClearScoreAndFeesAreSpecifiedThenOverwriteThemToIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
+            // Given
+            var declinedDecisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
+                    .decision("Declined")
+                    .products(null)
+                    .build();
+
+            when(tokenService.retrieveClientId()).thenReturn("clearscore");
+            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(declinedDecisionResponse);
+            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
+            quickQuoteApplicationRequest.getFees().setIsAddArrangementFeeSelinaToLoan(false);
+            quickQuoteApplicationRequest.getFees().setIsAddProductFeesToFacility(false);
+
+            var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
+
+            // When
+            filterApplicationService.filter(quickQuoteApplicationRequest);
+
+            // Then
+            verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+            var adpRequestFees = adpRequestCaptor.getValue().getApplication().getFees();
+            assertThat(adpRequestFees.getIsAddProductFeesToFacility(), is(true));
+            assertThat(adpRequestFees.getIsAddArrangementFeeSelinaToLoan(), is(true));
+        }
     }
 
     @Nested
@@ -935,10 +627,10 @@ class FilterApplicationServiceImplTest extends MapperBase {
                     .eligibility(eligibilityValue)
                     .build();
             var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
             when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(eligibility);
 
             // When
@@ -952,10 +644,10 @@ class FilterApplicationServiceImplTest extends MapperBase {
         void shouldSendToMiddlewareSpecifiedPropertyDetailsEstimatedValue() {
             // Given
             var qqMiddlewareRequestCaptor = ArgumentCaptor.forClass(QuickQuoteRequest.class);
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
             when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
@@ -974,10 +666,10 @@ class FilterApplicationServiceImplTest extends MapperBase {
             applicationRequest.getPropertyDetails().setEstimatedValue(null);
 
             var qqMiddlewareRequestCaptor = ArgumentCaptor.forClass(QuickQuoteRequest.class);
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
             when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(null);
 
@@ -994,10 +686,10 @@ class FilterApplicationServiceImplTest extends MapperBase {
         void whenGetExceptionRequestingEligibilityServiceThenReturnOffersWithDefaultEligibility() {
             // Given
             var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
             when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenThrow(RuntimeException.class);
 
             // When
@@ -1018,10 +710,10 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
             quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-02");
 
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
             when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(eligibility);
 
             // When
@@ -1043,10 +735,10 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
             quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-01");
 
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
             when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(eligibility);
 
             // When
@@ -1080,7 +772,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
             // Then
             assertThat(decisionResponse, equalTo(declinedDecisionResponse));
-            verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+            verify(adpGatewayRepository, never()).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
             verify(eligibilityRepository, never()).getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean());
             verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
         }
@@ -1104,8 +796,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
                         .build();
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(
-                        FilteredQuickQuoteDecisionResponse.builder().build());
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(
+                        QuickQuoteEligibilityDecisionResponse.builder().build());
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
@@ -1118,7 +810,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 assertThat(decisionResponse, equalTo(declinedDecisionResponse));
-                verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                verify(adpGatewayRepository, never()).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
                 verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
             }
 
@@ -1126,19 +818,19 @@ class FilterApplicationServiceImplTest extends MapperBase {
             @ValueSource(ints = {5, 7, 9, 11, 15, 30})
             void whenClientIsMonevoAndPartnerIsCreditKarmaThenKeepOriginalRequestedLoanTermValue(int requestedLoanTerm) {
                 // Given
-                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
                         .decision("Declined")
                         .products(null)
                         .build();
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
                 quickQuoteApplicationRequest.setLead(CREDIT_KARMA_PARTNER_UTM);
 
-                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+                var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
 
                 when(tokenService.retrieveClientId()).thenReturn("monevo");
 
@@ -1146,8 +838,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 filterApplicationService.filter(quickQuoteApplicationRequest);
 
                 // Then
-                verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
+                verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+                assertThat(adpRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
                         equalTo(requestedLoanTerm));
             }
 
@@ -1155,18 +847,18 @@ class FilterApplicationServiceImplTest extends MapperBase {
             @ValueSource(ints = {1, 2, 3, 4})
             void whenClientIsMonevoAndRequestedLoanTermIsBetween1and4ThenAdjustItTo5(int requestedLoanTerm) {
                 // Given
-                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
                         .decision("Declined")
                         .products(null)
                         .build();
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
-                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+                var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
 
                 when(tokenService.retrieveClientId()).thenReturn("monevo");
 
@@ -1174,26 +866,26 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 filterApplicationService.filter(quickQuoteApplicationRequest);
 
                 // Then
-                verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(5));
+                verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+                assertThat(adpRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(5));
             }
 
             @ParameterizedTest
             @ValueSource(ints = {5, 6, 7, 8, 9, 10})
             void whenClientIsMonevoAndRequestedLoanTermIsBetween5and10ThenAdjustItTo10(int requestedLoanTerm) {
                 // Given
-                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
                         .decision("Declined")
                         .products(null)
                         .build();
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
-                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+                var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
 
                 when(tokenService.retrieveClientId()).thenReturn("monevo");
 
@@ -1201,8 +893,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 filterApplicationService.filter(quickQuoteApplicationRequest);
 
                 // Then
-                verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
+                verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+                assertThat(adpRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
                         equalTo(10));
             }
 
@@ -1210,19 +902,19 @@ class FilterApplicationServiceImplTest extends MapperBase {
             @ValueSource(ints = {11, 15, 30})
             void whenClientIsMonevoAndRequestedLoanTermIsGreaterThan10ThenLeaveOriginalValue(int requestedLoanTerm) {
                 // Given
-                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
                         .decision("Declined")
                         .products(null)
                         .build();
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
                 quickQuoteApplicationRequest.setLead(CREDIT_KARMA_PARTNER_UTM);
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
-                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+                var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
 
                 when(tokenService.retrieveClientId()).thenReturn("monevo");
 
@@ -1230,8 +922,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 filterApplicationService.filter(quickQuoteApplicationRequest);
 
                 // Then
-                verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
+                verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+                assertThat(adpRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(),
                         equalTo(requestedLoanTerm));
             }
         }
@@ -1271,7 +963,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                     // Then
                     assertThat(decisionResponse, equalTo(declinedDecisionResponse));
-                    verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                    verify(adpGatewayRepository, never()).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
                     verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
                 }
 
@@ -1279,24 +971,24 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 @ValueSource(ints = {5, 6, 10, 30})
                 void whenRequestedLoanTermIsGreaterThanOrEqualTo5ThenLeaveOriginalValue(int requestedLoanTerm) {
                     // Given
-                    var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                    var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
                             .decision("Declined")
                             .products(null)
                             .build();
 
                     when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
 
                     quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
-                    var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+                    var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
 
                     // When
                     filterApplicationService.filter(quickQuoteApplicationRequest);
 
                     // Then
-                    verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                    assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
+                    verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+                    assertThat(adpRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
                     assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-3053: Group A"));
                 }
             }
@@ -1328,7 +1020,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                     // Then
                     assertThat(decisionResponse, equalTo(declinedDecisionResponse));
-                    verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                    verify(adpGatewayRepository, never()).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
                     verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
                 }
 
@@ -1340,13 +1032,13 @@ class FilterApplicationServiceImplTest extends MapperBase {
                             .offers(null)
                             .build();
 
-                    var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                    var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
                             .decision("Declined")
                             .products(null)
                             .build();
 
                     when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
 
                     quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(5);
 
@@ -1355,7 +1047,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                     // Then
                     assertThat(response, equalTo(declinedResponse));
-                    verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                    verify(adpGatewayRepository, never()).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
                     verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
                 }
 
@@ -1363,24 +1055,24 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 @ValueSource(ints = {6, 10, 30})
                 void whenRequestedLoanTermIsGreaterThanOrEqualTo6ThenLeaveOriginalValue(int requestedLoanTerm) {
                     // Given
-                    var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                    var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
                             .decision("Declined")
                             .products(null)
                             .build();
 
                     when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
 
                     quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
-                    var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+                    var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
 
                     // When
                     filterApplicationService.filter(quickQuoteApplicationRequest);
 
                     // Then
-                    verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                    assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
+                    verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+                    assertThat(adpRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
                     assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-3053: Group B"));
                 }
             }
@@ -1408,7 +1100,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
 
                 // Then
                 assertThat(decisionResponse, equalTo(declinedDecisionResponse));
-                verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                verify(adpGatewayRepository, never()).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
                 verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
             }
 
@@ -1416,18 +1108,18 @@ class FilterApplicationServiceImplTest extends MapperBase {
             @ValueSource(ints = {6, 10, 30})
             void whenClientIsClearScoreAndRequestedLoanTermIsGreaterThan5ThenLeaveOriginalValue(int requestedLoanTerm) {
                 // Given
-                var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
                         .decision("Declined")
                         .products(null)
                         .build();
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
 
                 var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
                 quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
-                var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+                var adpRequestCaptor = ArgumentCaptor.forClass(QuickQuoteEligibilityApplicationRequest.class);
 
                 when(tokenService.retrieveClientId()).thenReturn("clearscore");
 
@@ -1435,8 +1127,8 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 filterApplicationService.filter(quickQuoteApplicationRequest);
 
                 // Then
-                verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
+                verify(adpGatewayRepository).quickQuoteEligibility(adpRequestCaptor.capture());
+                assertThat(adpRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
             }
         }
     }
@@ -1456,11 +1148,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
             var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
             var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
 
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+            var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
             decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
 
             when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+            when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
             when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
             when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
             when(tokenService.retrieveClientId()).thenReturn(SOME_CLIENT_ID);
@@ -1510,11 +1202,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
                 var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
 
-                var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
                 decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
                 when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
 
@@ -1543,11 +1235,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var homeownerLoanProduct1 = getProduct(HOMEOWNER_LOAN, 8.0);
                 var homeownerLoanProduct2 = getProduct(HOMEOWNER_LOAN, 8.0);
 
-                var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
                 decisionResponse.setProducts(List.of(helocProduct1, helocProduct2, homeownerLoanProduct1, homeownerLoanProduct2));
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
                 when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
 
@@ -1584,11 +1276,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
                 var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
 
-                var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
                 decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
 
                 when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
                 when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                 when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                 when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
@@ -1638,11 +1330,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
                     var homeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0);
                     var lowestAprcHomeownerLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0);
 
-                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
                     decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct, homeownerLoanProduct, lowestAprcHomeownerLoanProduct));
 
                     when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
                     when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                     when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                     when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
@@ -1671,11 +1363,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
                     var homeownerLoanProduct1 = getProduct(HOMEOWNER_LOAN, 8.0);
                     var homeownerLoanProduct2 = getProduct(HOMEOWNER_LOAN, 8.0);
 
-                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
                     decisionResponse.setProducts(List.of(helocProduct1, helocProduct2, homeownerLoanProduct1, homeownerLoanProduct2));
 
                     when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
                     when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                     when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                     when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
@@ -1715,12 +1407,12 @@ class FilterApplicationServiceImplTest extends MapperBase {
                     var homeownerFixedRateLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0, false);
                     var lowestAprcHomeownerFixedRateLoanProduct = getProduct(HOMEOWNER_LOAN, 7.0, false);
 
-                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
                     decisionResponse.setProducts(List.of(helocProduct, homeownerVariableRateLoanProduct, lowestAprcHomeownerVariableRateLoanProduct,
                             homeownerFixedRateLoanProduct, lowestAprcHomeownerFixedRateLoanProduct));
 
                     when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
                     when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                     when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                     when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
@@ -1749,11 +1441,11 @@ class FilterApplicationServiceImplTest extends MapperBase {
                     var homeownerLoanVariableRateProduct1 = getProduct(HOMEOWNER_LOAN, 8.0, true);
                     var homeownerLoanVariableRateProduct2 = getProduct(HOMEOWNER_LOAN, 8.0, true);
 
-                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    var decisionResponse = getQuickQuoteEligibilityDecisionResponse();
                     decisionResponse.setProducts(List.of(helocProduct1, homeownerLoanVariableRateProduct1, homeownerLoanVariableRateProduct2));
 
                     when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(adpGatewayRepository.quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class))).thenReturn(decisionResponse);
                     when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
                     when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
                     when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
