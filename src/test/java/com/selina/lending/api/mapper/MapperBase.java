@@ -939,6 +939,7 @@ public abstract class MapperBase {
 
     protected QuickQuoteEligibilityDecisionResponse getQuickQuoteEligibilityDecisionResponse() {
         return QuickQuoteEligibilityDecisionResponse.builder().decision(DECISION)
+                .hasReferOffers(false)
                 .products(List.of(getProduct()))
                 .build();
     }

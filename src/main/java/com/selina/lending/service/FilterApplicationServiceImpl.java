@@ -19,6 +19,14 @@ package com.selina.lending.service;
 
 import static com.selina.lending.service.LendingConstants.ACCEPT_DECISION;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.selina.lending.api.dto.common.LeadDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicantDto;
 import com.selina.lending.api.dto.qq.request.QuickQuoteApplicationRequest;
@@ -27,31 +35,20 @@ import com.selina.lending.api.dto.qq.response.QuickQuoteResponse;
 import com.selina.lending.api.mapper.qq.adp.QuickQuoteEligibilityApplicationRequestMapper;
 import com.selina.lending.api.mapper.qq.adp.QuickQuoteEligibilityApplicationResponseMapper;
 import com.selina.lending.api.mapper.qq.middleware.MiddlewareQuickQuoteApplicationRequestMapper;
-import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationRequestMapper;
-import com.selina.lending.api.mapper.qq.selection.QuickQuoteApplicationResponseMapper;
 import com.selina.lending.httpclient.adp.dto.request.QuickQuoteEligibilityApplicationRequest;
 import com.selina.lending.httpclient.adp.dto.response.Product;
 import com.selina.lending.httpclient.adp.dto.response.QuickQuoteEligibilityDecisionResponse;
 import com.selina.lending.httpclient.eligibility.dto.response.PropertyInfo;
 import com.selina.lending.httpclient.middleware.dto.common.Fees;
-import com.selina.lending.httpclient.selection.dto.request.FilterQuickQuoteApplicationRequest;
-import com.selina.lending.httpclient.selection.dto.response.FilteredQuickQuoteDecisionResponse;
 import com.selina.lending.repository.AdpGatewayRepository;
 import com.selina.lending.repository.EligibilityRepository;
 import com.selina.lending.repository.MiddlewareRepository;
-import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.alternativeofferr.AlternativeOfferRequestProcessor;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
 import com.selina.lending.util.ABTestUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -93,7 +90,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private static final String TEST_GROUP_ID_GRO_2936_FORMAT = "GRO-2936: %s";
 
     private final MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper;
-    private final SelectionRepository selectionRepository;
     private final MiddlewareRepository middlewareRepository;
     private final EligibilityRepository eligibilityRepository;
 
@@ -107,10 +103,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     private final boolean isFilterClearScoreResponseOffersFeatureEnabled;
     private final boolean isFilterExperianResponseOffersFeatureEnabled;
 
-    private final boolean isAdpGatewayClientMsQuickQuoteEnabled;
 
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
-            SelectionRepository selectionRepository,
             MiddlewareRepository middlewareRepository,
             EligibilityRepository eligibilityRepository,
             AdpGatewayRepository adpGatewayRepository,
@@ -121,11 +115,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             @Value("${features.filterResponseOffers.clearscore.enabled}")
             boolean isFilterClearScoreResponseOffersFeatureEnabled,
             @Value("${features.filterResponseOffers.experian.enabled}")
-            boolean isFilterExperianResponseOffersFeatureEnabled,
-            @Value("${features.adp-gateway.clients.ms-quick-quote.enabled}")
-            boolean isAdpGatewayClientMsQuickQuoteEnabled) {
+            boolean isFilterExperianResponseOffersFeatureEnabled) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
-        this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
         this.eligibilityRepository = eligibilityRepository;
         this.adpGatewayRepository = adpGatewayRepository;
@@ -135,8 +126,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.alternativeOfferRequestProcessors = alternativeOfferRequestProcessors;
         this.isFilterClearScoreResponseOffersFeatureEnabled = isFilterClearScoreResponseOffersFeatureEnabled;
         this.isFilterExperianResponseOffersFeatureEnabled = isFilterExperianResponseOffersFeatureEnabled;
-        this.isAdpGatewayClientMsQuickQuoteEnabled = isAdpGatewayClientMsQuickQuoteEnabled;
-    }
+     }
 
     @Override
     public QuickQuoteResponse filter(QuickQuoteApplicationRequest request) {
@@ -162,33 +152,22 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private QuickQuoteResponse getQuickQuoteResponse(QuickQuoteApplicationRequest request, String clientId) {
         QuickQuoteResponse quickQuoteResponse;
-        if (isAdpClient(clientId) || (isAdpGatewayClientMsQuickQuoteEnabled && isMsQuickQuoteClient(clientId))) {
-            log.info("Use ADP decisioning engine");
-            QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(request);
-            enrichAdpRequestWithFees(adpRequest, clientId);
-            var adpResponse  = adpGatewayRepository.quickQuoteEligibility(adpRequest);
+        log.info("Use ADP decisioning engine");
+        QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(
+                request);
+        enrichAdpRequestWithFees(adpRequest, clientId);
+        var adpResponse = adpGatewayRepository.quickQuoteEligibility(adpRequest);
 
-            if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
-                adpResponse.setProducts(getFilteredResponseOffers(clientId, request, adpResponse.getProducts()));
-                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(), adpResponse.getHasReferOffers());
-                filterOffersByAcceptDecision(adpResponse);
-                storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
-                quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(adpResponse);
-            } else {
-                quickQuoteResponse = getDeclinedResponse();
-            }
+        if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
+            adpResponse.setProducts(getFilteredResponseOffers(clientId, request, adpResponse.getProducts()));
+            enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(),
+                    adpResponse.getHasReferOffers());
+            filterOffersByAcceptDecision(adpResponse);
+            storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
+            quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(
+                    adpResponse);
         } else {
-            FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
-            enrichSelectionRequestWithFees(selectionRequest, clientId);
-            FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse = selectionRepository.filter(selectionRequest);
-
-            if (isDecisionAccepted(filteredQuickQuoteDecisionResponse.getDecision(), filteredQuickQuoteDecisionResponse.getProducts())) {
-                filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, request, filteredQuickQuoteDecisionResponse.getProducts()));
-                enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, filteredQuickQuoteDecisionResponse.getProducts(),
-                        filteredQuickQuoteDecisionResponse.getHasReferOffers());
-                storeOffersInMiddleware(request, selectionRequest.getApplication().getFees(), filteredQuickQuoteDecisionResponse.getProducts());
-            }
-            quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
+            quickQuoteResponse = getDeclinedResponse();
         }
 
         return quickQuoteResponse;
@@ -300,15 +279,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         enrichRequestWithFees(adpRequest.getApplication().getFees(), clientId, tokenFees);
     }
 
-    private void enrichSelectionRequestWithFees(FilterQuickQuoteApplicationRequest selectionRequest, String clientId) {
-        var tokenFees = arrangementFeeSelinaService.getFeesFromToken();
-
-        if (selectionRequest.getApplication().getFees() == null) {
-            selectionRequest.getApplication().setFees(tokenFees);
-        }
-        enrichRequestWithFees(selectionRequest.getApplication().getFees(), clientId, tokenFees);
-    }
-
     private void enrichRequestWithFees(Fees requestFees, String clientId, Fees tokenFees) {
         requestFees.setAddArrangementFeeSelina(tokenFees.getAddArrangementFeeSelina());
         requestFees.setArrangementFeeDiscountSelina(tokenFees.getArrangementFeeDiscountSelina());
@@ -325,10 +295,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             requestFees.setIsAddArrangementFeeSelinaToLoan(true);
             requestFees.setIsAddProductFeesToFacility(true);
         }
-    }
-
-    private static boolean isAdpClient(String clientId) {
-        return ADP_CLIENT_ID.equalsIgnoreCase(clientId);
     }
 
     private static boolean isClearScoreClient(String clientId) {
@@ -349,10 +315,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private boolean isCreditMatcherPartner(LeadDto leadDto) {
         return CREDIT_MATCHER_PARTNER_UTM.equals(leadDto);
-    }
-
-    private static boolean isMsQuickQuoteClient(String clientId) {
-        return MS_QUICK_QUOTE_CLIENT_ID.equalsIgnoreCase(clientId);
     }
 
     private void storeOffersInMiddleware(QuickQuoteApplicationRequest request, Fees fees, List<Product> products) {
