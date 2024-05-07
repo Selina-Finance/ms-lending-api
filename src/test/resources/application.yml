@@ -89,6 +89,10 @@ features:
       ms-quick-quote:
         enabled: true
 
+decisioning:
+  adp-gateway:
+    enabled: false
+
 spring:
   kafka:
     bootstrap-servers: ${spring.embedded.kafka.brokers}

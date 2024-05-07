@@ -95,6 +95,10 @@ features:
       ms-quick-quote:
         enabled: false
 
+decisioning:
+  adp-gateway:
+    enabled: false
+
 sla:
   requests:
     - name: create Quick Quote application

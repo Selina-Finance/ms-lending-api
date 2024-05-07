@@ -109,6 +109,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private final boolean isAdpGatewayClientMsQuickQuoteEnabled;
 
+    private final boolean isDecisioningAdpGatewayEnabled;
+
     public FilterApplicationServiceImpl(MiddlewareQuickQuoteApplicationRequestMapper middlewareQuickQuoteApplicationRequestMapper,
             SelectionRepository selectionRepository,
             MiddlewareRepository middlewareRepository,
@@ -123,7 +125,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
             @Value("${features.filterResponseOffers.experian.enabled}")
             boolean isFilterExperianResponseOffersFeatureEnabled,
             @Value("${features.adp-gateway.clients.ms-quick-quote.enabled}")
-            boolean isAdpGatewayClientMsQuickQuoteEnabled) {
+            boolean isAdpGatewayClientMsQuickQuoteEnabled,
+            @Value("${decisioning.adp-gateway.enabled}") boolean isDecisioningAdpGatewayEnabled) {
         this.middlewareQuickQuoteApplicationRequestMapper = middlewareQuickQuoteApplicationRequestMapper;
         this.selectionRepository = selectionRepository;
         this.middlewareRepository = middlewareRepository;
@@ -136,6 +139,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
         this.isFilterClearScoreResponseOffersFeatureEnabled = isFilterClearScoreResponseOffersFeatureEnabled;
         this.isFilterExperianResponseOffersFeatureEnabled = isFilterExperianResponseOffersFeatureEnabled;
         this.isAdpGatewayClientMsQuickQuoteEnabled = isAdpGatewayClientMsQuickQuoteEnabled;
+        this.isDecisioningAdpGatewayEnabled = isDecisioningAdpGatewayEnabled;
     }
 
     @Override
@@ -162,7 +166,7 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
 
     private QuickQuoteResponse getQuickQuoteResponse(QuickQuoteApplicationRequest request, String clientId) {
         QuickQuoteResponse quickQuoteResponse;
-        if (isAdpClient(clientId) || (isAdpGatewayClientMsQuickQuoteEnabled && isMsQuickQuoteClient(clientId))) {
+        if (isDecisioningAdpGatewayEnabled || isAdpClient(clientId) || (isAdpGatewayClientMsQuickQuoteEnabled && isMsQuickQuoteClient(clientId))) {
             log.info("Use ADP decisioning engine");
             QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(request);
             enrichAdpRequestWithFees(adpRequest, clientId);
