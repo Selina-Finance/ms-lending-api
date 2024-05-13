@@ -13,6 +13,8 @@ public interface ABTestUtils {
 
     Logger log = LoggerFactory.getLogger(ABTestUtils.class);
 
+    String HUBERT_FENWICK_EMAIL = "hubertfenwick@gmail.com";
+
     String TEST_GROUP_ID_DELIMITER = ", ";
     String GROUP_A = "Group A";
     String GROUP_B = "Group B";
@@ -24,6 +26,16 @@ public interface ABTestUtils {
             request.setTestGroupId(existingTestGroupId.concat(TEST_GROUP_ID_DELIMITER).concat(testGroupId));
         } else {
             request.setTestGroupId(testGroupId);
+        }
+    }
+
+    static boolean isPrimaryApplicantsEmailHubertFenwickGmail(List<QuickQuoteApplicantDto> applicants) {
+        try {
+            var primaryApplicant = findPrimaryApplicant(applicants);
+            return primaryApplicant.isPresent() && HUBERT_FENWICK_EMAIL.equalsIgnoreCase(primaryApplicant.get().getEmailAddress());
+        } catch (Exception ex) {
+            log.warn("Error checking if primary applicant's email is H.F.! Return false!", ex);
+            return false;
         }
     }
 
