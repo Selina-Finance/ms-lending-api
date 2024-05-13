@@ -1056,31 +1056,6 @@ class FilterApplicationServiceImplTest extends MapperBase {
             assertThat(quickQuoteResponse.getOffers().get(0).getEligibility(), equalTo(95.0));
             assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-2936: Group B"));
         }
-
-        @Test
-        void whenApplicantsEmailIsHubertFenwickGmailDotComThenSetEligibilityTo100() {
-            // Given
-            var eligibilityValue = 90.0;
-            var eligibility = EligibilityResponse.builder()
-                    .eligibility(eligibilityValue)
-                    .build();
-
-            var quickQuoteApplicationRequest = getQuickQuoteApplicationRequestWithFeesDto();
-            quickQuoteApplicationRequest.getApplicants().get(0).setEmailAddress("hubertfenwick@gmail.com");
-            quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1990-08-03");
-
-            var decisionResponse = getFilteredQuickQuoteDecisionResponse();
-
-            when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-            when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-            when(eligibilityRepository.getEligibility(quickQuoteApplicationRequest, decisionResponse.getProducts(), false)).thenReturn(eligibility);
-
-            // When
-            var quickQuoteResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
-
-            // Then
-            assertThat(quickQuoteResponse.getOffers().get(0).getEligibility(), equalTo(100.0));
-        }
     }
 
     @Nested

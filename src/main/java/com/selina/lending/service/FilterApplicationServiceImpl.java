@@ -249,11 +249,6 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                     ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_2936_FORMAT.formatted(ABTestUtils.GROUP_A));
                 }
             }
-
-            if (ABTestUtils.isPrimaryApplicantsEmailHubertFenwickGmail(request.getApplicants())) {
-                eligibility = ELIGIBILITY_100;
-            }
-
             enrichOffersWithEligibility(eligibility, products);
         } catch (Exception ex) {
             log.error("Error retrieving eligibility. The default value from the decision service will be used.", ex);
