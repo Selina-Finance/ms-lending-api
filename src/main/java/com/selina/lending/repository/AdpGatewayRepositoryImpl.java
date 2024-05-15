@@ -48,14 +48,27 @@ public class AdpGatewayRepositoryImpl implements AdpGatewayRepository {
                 request.getApplication().getExternalApplicationId());
         enrichRequest(request);
         if (isPropertyDetailsEstimatedValueSpecified(request)) {
-            return api.quickQuoteEligibility(request);
+            var response = api.quickQuoteEligibility(request);
+            setLtvCapToLtvBandAsDecimal(response);
+            return response;
         }
         setDefaultPropertyDetailsEstimatedValue(request);
         var response = api.quickQuoteEligibility(request);
         setOffersIsAprcHeadlineToTrue(response);
+        setLtvCapToLtvBandAsDecimal(response);
         return response;
     }
 
+
+    private void setLtvCapToLtvBandAsDecimal(QuickQuoteEligibilityDecisionResponse response) {
+        if (response.getProducts() != null) {
+            response.getProducts().forEach(product -> product.getOffer().setLtvCap(convertToDecimal(product.getOffer().getLtvBand())));
+        }
+    }
+
+    private Double convertToDecimal(Double ltvBand) {
+        return ltvBand / 100;
+    }
 
     private void enrichRequest(QuickQuoteEligibilityApplicationRequest request) {
         var application = request.getApplication();
