@@ -52,6 +52,7 @@ public class ProductOffer {
     private Integer reversionTerm;
     private Double brokerFeesIncluded;
     private Double ltvCap;
+    private Double ltvBand;
     private Double cltv;
     private Boolean hasProductFeeAddedToLoan;
     private String decision;

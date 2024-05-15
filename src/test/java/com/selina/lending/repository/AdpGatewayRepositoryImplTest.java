@@ -18,7 +18,7 @@
 package com.selina.lending.repository;
 
 
-import static org.mockito.ArgumentMatchers.any;;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -30,6 +30,9 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -150,5 +153,35 @@ class AdpGatewayRepositoryImplTest {
 
         //Then
         verify(application, never()).setPartnerAccountId(any());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"50000.0"})
+    @NullSource
+    void whenProductsExistSetLTVCapToLtvBandAsDecimal(Double propertyValue) {
+        //Given
+        var externalApplicationId = UUID.randomUUID().toString();
+        var sourceAccount = "Broker";
+        var partnerAccountId = "Partner";
+        var ltvBandValue = 70.0;
+        var ltvBandValueAsDecimal = 0.7;
+
+        when(request.getApplication()).thenReturn(application);
+        when(application.getPropertyDetails()).thenReturn(propertyDetails);
+        when(propertyDetails.getEstimatedValue()).thenReturn(propertyValue);
+        when(api.quickQuoteEligibility(any())).thenReturn(response);
+        when(response.getProducts()).thenReturn(List.of(product));
+        when(product.getOffer()).thenReturn(productOffer);
+        when(productOffer.getLtvBand()).thenReturn(ltvBandValue);
+        when(application.getExternalApplicationId()).thenReturn(externalApplicationId);
+        when(tokenService.retrieveSourceAccount()).thenReturn(sourceAccount);
+        when(tokenService.retrievePartnerAccountId()).thenReturn(partnerAccountId);
+
+        //When
+        adpGatewayRepository.quickQuoteEligibility(request);
+        verify(api, times(1)).quickQuoteEligibility(request);
+        verify(application, times(1)).setSource(any(Source.class));
+        verify(application, times(1)).setPartnerAccountId(any(String.class));
+        verify(productOffer, times(1)).setLtvCap(ltvBandValueAsDecimal);
     }
 }

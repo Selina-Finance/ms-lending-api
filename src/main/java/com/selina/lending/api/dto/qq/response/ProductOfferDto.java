@@ -54,6 +54,7 @@ public class ProductOfferDto {
     private String family;
     private String category;
     private Double ltvCap;
+    private Double ltvBand;
     private String decision;
     private Boolean hasErc;
     private Double netLoanAmount;
