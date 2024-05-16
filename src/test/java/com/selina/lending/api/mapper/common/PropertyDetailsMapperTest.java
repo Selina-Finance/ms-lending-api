@@ -87,7 +87,6 @@ class PropertyDetailsMapperTest extends MapperBase {
         assertThat(propertyDetails.getCity(), equalTo(CITY));
         assertThat(propertyDetails.getPostcode(), equalTo(POSTCODE));
         assertThat(propertyDetails.getCounty(), equalTo(COUNTY));
-        assertNull(propertyDetails.getHasAGarage());
     }
 
     @Test
@@ -110,6 +109,5 @@ class PropertyDetailsMapperTest extends MapperBase {
         assertThat(propertyDetails.getCounty(), equalTo(COUNTY));
         assertThat(propertyDetails.getPropertyType(), equalTo(PROPERTY_TYPE));
         assertThat(propertyDetails.getNumberOfBedrooms(), equalTo(NUMBER_OF_BEDROOMS));
-        assertThat(propertyDetails.getHasAGarage(), equalTo(true));
     }
 }

@@ -57,7 +57,6 @@ public class PropertyDetails {
     private String constructionYear;
     private String tenure;
     private Boolean isThePropertyAnExLocalAuthority;
-    private Boolean hasAGarage;
     private Integer numberOfParkingSpaces;
     private Integer yearsRemainingOnLease;
     private Integer hometrackConfidenceLevel;

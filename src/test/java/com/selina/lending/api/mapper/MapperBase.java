@@ -648,7 +648,6 @@ public abstract class MapperBase {
                 .purchaseValue(PURCHASE_VALUE)
                 .propertyType(PROPERTY_TYPE)
                 .numberOfBedrooms(NUMBER_OF_BEDROOMS)
-                .hasAGarage(true)
                 .whenLastPurchased(WHEN_LAST_PURCHASED)
                 .numberOfPriorCharges(1)
                 .priorCharges(getPriorChargesDto())
@@ -670,7 +669,6 @@ public abstract class MapperBase {
                 .purchaseValue(PURCHASE_VALUE)
                 .propertyType(PROPERTY_TYPE)
                 .numberOfBedrooms(NUMBER_OF_BEDROOMS)
-                .hasAGarage(true)
                 .whenLastPurchased(WHEN_LAST_PURCHASED)
                 .build();
     }
@@ -808,7 +806,6 @@ public abstract class MapperBase {
                 .whenHasLastPurchased(WHEN_LAST_PURCHASED)
                 .propertyType(PROPERTY_TYPE)
                 .numberOfBedrooms(NUMBER_OF_BEDROOMS)
-                .hasAGarage(true)
                 .numberOfPriorCharges(1)
                 .priorCharges(getPriorCharges())
                 .build();
