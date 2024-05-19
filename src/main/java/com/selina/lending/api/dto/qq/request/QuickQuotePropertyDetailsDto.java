@@ -43,9 +43,8 @@ public class QuickQuotePropertyDetailsDto {
     private String whenLastPurchased;
 
     private Double purchaseValue;
-
+    private Integer numberOfBedrooms;
     private Integer numberOfPriorCharges;
-
     private PriorChargesDto priorCharges;
 
     @NotBlank

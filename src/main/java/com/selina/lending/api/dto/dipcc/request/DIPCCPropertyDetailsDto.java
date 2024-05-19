@@ -69,7 +69,6 @@ public class DIPCCPropertyDetailsDto extends PropertyDetailsDto {
     @EnumValue(enumClass = Tenure.class)
     private String tenure;
     private Boolean isThePropertyAnExLocalAuthority;
-    private Boolean hasAGarage;
     private Integer yearsRemainingOnLease;
     private Integer hometrackConfidenceLevel;
     private Double hometrackValuation;
