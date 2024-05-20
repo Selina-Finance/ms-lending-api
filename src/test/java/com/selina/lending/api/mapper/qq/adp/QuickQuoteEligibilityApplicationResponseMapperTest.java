@@ -37,7 +37,7 @@ class QuickQuoteEligibilityApplicationResponseMapperTest extends MapperBase {
         var quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(eligibilityDecisionResponse);
 
         //Then
-        assertThat(quickQuoteResponse.getStatus(), equalTo(DECISION));
+        assertThat(quickQuoteResponse.getStatus(), equalTo(DECISION_ACCEPTED));
 
         var offer = quickQuoteResponse.getOffers().get(0);
 

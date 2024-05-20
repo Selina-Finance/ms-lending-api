@@ -448,6 +448,7 @@ class MiddlewareQuickQuoteApplicationRequestMapperTest extends MapperBase {
         assertThat(propertyDetails.getBuildingNumber(), equalTo(BUILDING_NUMBER));
         assertThat(propertyDetails.getBuildingName(), equalTo(BUILDING_NAME));
         assertThat(propertyDetails.getNumberOfPriorCharges(), equalTo(1));
+        assertThat(propertyDetails.getNumberOfBedrooms(), equalTo(NUMBER_OF_BEDROOMS));
         assertThat(propertyDetails.getPriorCharges(), notNullValue());
     }
 

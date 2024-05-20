@@ -47,6 +47,7 @@ import com.selina.lending.util.ABTestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -165,40 +166,39 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
     }
 
     private QuickQuoteResponse getQuickQuoteResponse(QuickQuoteApplicationRequest request, String clientId) {
-        QuickQuoteResponse quickQuoteResponse;
         if (isDecisioningAdpGatewayEnabled || isAdpClient(clientId) || (isAdpGatewayClientMsQuickQuoteEnabled && isMsQuickQuoteClient(clientId))) {
             log.info("Use ADP decisioning engine");
             QuickQuoteEligibilityApplicationRequest adpRequest = QuickQuoteEligibilityApplicationRequestMapper.mapRequest(request);
             enrichAdpRequestWithFees(adpRequest, clientId);
             var adpResponse = adpGatewayRepository.quickQuoteEligibility(adpRequest);
+            adpResponse.setProducts(getFilteredResponseOffers(clientId, request, adpResponse.getProducts()));
 
-            if (isDecisionAccepted(adpResponse.getDecision(), adpResponse.getProducts())) {
-                adpResponse.setProducts(getFilteredResponseOffers(clientId, request, adpResponse.getProducts()));
+            if (hasAcceptedOffers(adpResponse.getDecision(), adpResponse.getProducts())) {
                 enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, adpResponse.getProducts(), adpResponse.getHasReferOffers());
                 filterOffersByAcceptDecision(adpResponse);
                 storeOffersInMiddleware(request, adpRequest.getApplication().getFees(), adpResponse.getProducts());
-                quickQuoteResponse = QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(adpResponse);
-            } else {
-                quickQuoteResponse = getDeclinedResponse();
+                return QuickQuoteEligibilityApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(adpResponse);
             }
         } else {
             FilterQuickQuoteApplicationRequest selectionRequest = QuickQuoteApplicationRequestMapper.mapRequest(request);
             enrichSelectionRequestWithFees(selectionRequest, clientId);
             FilteredQuickQuoteDecisionResponse filteredQuickQuoteDecisionResponse = selectionRepository.filter(selectionRequest);
+            filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, request, filteredQuickQuoteDecisionResponse.getProducts()));
 
-            if (isDecisionAccepted(filteredQuickQuoteDecisionResponse.getDecision(), filteredQuickQuoteDecisionResponse.getProducts())) {
-                filteredQuickQuoteDecisionResponse.setProducts(getFilteredResponseOffers(clientId, request, filteredQuickQuoteDecisionResponse.getProducts()));
+            if (hasAcceptedOffers(filteredQuickQuoteDecisionResponse.getDecision(), filteredQuickQuoteDecisionResponse.getProducts())) {
                 enrichOffersWithEligibilityAndRequestWithPropertyEstimatedValue(request, filteredQuickQuoteDecisionResponse.getProducts(),
                         filteredQuickQuoteDecisionResponse.getHasReferOffers());
                 storeOffersInMiddleware(request, selectionRequest.getApplication().getFees(), filteredQuickQuoteDecisionResponse.getProducts());
+                return QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
             }
-            quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredQuickQuoteDecisionResponse);
         }
 
-        return quickQuoteResponse;
+        return getDeclinedResponse();
     }
 
     private List<Product> getFilteredResponseOffers(String clientId, QuickQuoteApplicationRequest request, List<Product> productList) {
+        if (CollectionUtils.isEmpty(productList)) return productList;
+
         if (isFilterClearScoreResponseOffersFeatureEnabled && isClearScoreClient(clientId)) {
             var filteredProducts = new ArrayList<Product>(2);
             findTheLowestAprcProduct(productList, HELOC_PRODUCT_FAMILY).ifPresent(filteredProducts::add);
@@ -279,8 +279,8 @@ public class FilterApplicationServiceImpl implements FilterApplicationService {
                         && quickQuoteApplicant.getPrimaryApplicant());
     }
 
-    private static boolean isDecisionAccepted(String decision, List<Product> products) {
-        return ACCEPTED_DECISION.equalsIgnoreCase(decision) && products != null;
+    private static boolean hasAcceptedOffers(String decision, List<Product> products) {
+        return ACCEPTED_DECISION.equalsIgnoreCase(decision) && !CollectionUtils.isEmpty(products);
     }
 
     private void updatePropertyEstimatedValue(QuickQuotePropertyDetailsDto propertyDetails, PropertyInfo propertyInfo) {

@@ -123,6 +123,30 @@ class FilterApplicationServiceImplTest extends MapperBase {
     }
 
     @Test
+    void whenDecisionIsAcceptedButThereAreNoOffersThenReturnDeclinedResponse() {
+        // Given
+        var declinedDecisionResponse = QuickQuoteResponse.builder()
+                .status(DECISION_DECLINED)
+                .offers(null)
+                .build();
+
+        var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+        decisionResponse.setProducts(null);
+
+        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(partnerService.getPartnerFromToken()).thenReturn(null);
+
+        //When
+        var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
+
+        //Then
+        assertThat(response, equalTo(declinedDecisionResponse));
+        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+    }
+
+    @Test
     void shouldFilterQuickQuoteApplicationAndSendMiddlewareCreateApplicationRequestWithoutDefaultValuesIfValuesPresent() {
         // Given
         var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
@@ -341,29 +365,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     void whenDecisionResponseIsDeclinedThenDoNotSendMiddlewareRequest() {
         //Given
         var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
-                .products(List.of(getProduct()))
-                .build();
-
-        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
-
-        //When
-        var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
-
-        //Then
-        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
-        verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-        assertThat(response.getStatus(), equalTo("Declined"));
-        assertThat(response.getOffers(), hasSize(decisionResponse.getProducts().size()));
-    }
-
-    @Test
-    void whenDecisionResponseHasNullProductOffersThenDoNotSendMiddlewareRequest() {
-        //Given
-        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
+                .decision(DECISION_DECLINED)
                 .products(null)
                 .build();
 
@@ -377,7 +379,28 @@ class FilterApplicationServiceImplTest extends MapperBase {
         //Then
         verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
         verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-        assertThat(response.getStatus(), equalTo("Declined"));
+        assertThat(response.getStatus(), equalTo(DECISION_DECLINED));
+    }
+
+    @Test
+    void whenDecisionResponseHasNullProductOffersThenDoNotSendMiddlewareRequest() {
+        //Given
+        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                .decision(DECISION_DECLINED)
+                .products(null)
+                .build();
+
+        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+        when(eligibilityRepository.getEligibility(any(QuickQuoteApplicationRequest.class), anyList(), anyBoolean())).thenReturn(getEligibilityResponse());
+
+        //When
+        var response = filterApplicationService.filter(getQuickQuoteApplicationRequestDto());
+
+        //Then
+        verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+        verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+        assertThat(response.getStatus(), equalTo(DECISION_DECLINED));
     }
 
     @Test
@@ -403,7 +426,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     void whenFeesAreNotSpecifiedThenDoNotIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
         // Given
         var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
+                .decision(DECISION_DECLINED)
                 .products(null)
                 .build();
 
@@ -428,7 +451,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     void shouldUseSpecifiedFeesForIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
         // Given
         var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
+                .decision(DECISION_DECLINED)
                 .products(null)
                 .build();
 
@@ -456,7 +479,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     void whenClientIsMonevoAndFeesAreNotSpecifiedThenIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
         // Given
         var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
+                .decision(DECISION_DECLINED)
                 .products(null)
                 .build();
 
@@ -481,7 +504,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     void whenClientIsMonevoAndFeesAreSpecifiedThenOverwriteThemToIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
         // Given
         var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
+                .decision(DECISION_DECLINED)
                 .products(null)
                 .build();
 
@@ -509,7 +532,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     void whenClientIsClearScoreAndFeesAreNotSpecifiedThenIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
         // Given
         var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
+                .decision(DECISION_DECLINED)
                 .products(null)
                 .build();
 
@@ -533,7 +556,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
     void whenClientIsClearScoreAndFeesAreSpecifiedThenOverwriteThemToIncludeArrangementFeeSelinaAndProductFeeToTheLoan() {
         // Given
         var declinedDecisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                .decision("Declined")
+                .decision(DECISION_DECLINED)
                 .products(null)
                 .build();
 
@@ -817,7 +840,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         void whenDecisionResponseIsDeclinedThenDoNotSendMiddlewareRequest() {
             //Given
             var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
-                    .decision("Declined")
+                    .decision(DECISION_DECLINED)
                     .products(List.of(getProduct()))
                     .build();
 
@@ -832,14 +855,14 @@ class FilterApplicationServiceImplTest extends MapperBase {
             //Then
             verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
             verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-            assertThat(response.getStatus(), equalTo("Declined"));
+            assertThat(response.getStatus(), equalTo(DECISION_DECLINED));
         }
 
         @Test
         void whenDecisionResponseHasNullProductOffersThenDoNotSendMiddlewareRequest() {
             //Given
             var decisionResponse = QuickQuoteEligibilityDecisionResponse.builder()
-                    .decision("Declined")
+                    .decision(DECISION_DECLINED)
                     .products(null)
                     .build();
 
@@ -854,7 +877,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             //Then
             verify(adpGatewayRepository, times(1)).quickQuoteEligibility(any(QuickQuoteEligibilityApplicationRequest.class));
             verify(middlewareRepository, times(0)).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-            assertThat(response.getStatus(), equalTo("Declined"));
+            assertThat(response.getStatus(), equalTo(DECISION_DECLINED));
         }
         @Test
         void shouldCreateApplicationRequestWithFeesIfProvidedButNoArrangementFeeSelinaFields() {
@@ -1066,7 +1089,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
         void whenRequestedLoanTermIsLessThan5ThenReturnDeclinedResponse(int requestedLoanTerm) {
             // Given
             var declinedDecisionResponse = QuickQuoteResponse.builder()
-                    .status("Declined")
+                    .status(DECISION_DECLINED)
                     .offers(null)
                     .build();
 
@@ -1099,7 +1122,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             void whenClientIsMonevoAndPartnerIsCreditKarmaAndRequestedLoanTermIsLessThan5ThenReturnDeclinedResponse(int requestedLoanTerm) {
                 // Given
                 var declinedDecisionResponse = QuickQuoteResponse.builder()
-                        .status("Declined")
+                        .status(DECISION_DECLINED)
                         .offers(null)
                         .build();
 
@@ -1127,7 +1150,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             void whenClientIsMonevoAndPartnerIsCreditKarmaThenKeepOriginalRequestedLoanTermValue(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                        .decision("Declined")
+                        .decision(DECISION_DECLINED)
                         .products(null)
                         .build();
 
@@ -1156,7 +1179,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             void whenClientIsMonevoAndRequestedLoanTermIsBetween1and4ThenAdjustItTo5(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                        .decision("Declined")
+                        .decision(DECISION_DECLINED)
                         .products(null)
                         .build();
 
@@ -1183,7 +1206,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             void whenClientIsMonevoAndRequestedLoanTermIsBetween5and10ThenAdjustItTo10(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                        .decision("Declined")
+                        .decision(DECISION_DECLINED)
                         .products(null)
                         .build();
 
@@ -1211,7 +1234,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             void whenClientIsMonevoAndRequestedLoanTermIsGreaterThan10ThenLeaveOriginalValue(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                        .decision("Declined")
+                        .decision(DECISION_DECLINED)
                         .products(null)
                         .build();
 
@@ -1260,7 +1283,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 void whenRequestedLoanTermIsBetween1And4ThenDeclineApplication(int requestedLoanTerm) {
                     // Given
                     var declinedDecisionResponse = QuickQuoteResponse.builder()
-                            .status("Declined")
+                            .status(DECISION_DECLINED)
                             .offers(null)
                             .build();
 
@@ -1280,7 +1303,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 void whenRequestedLoanTermIsGreaterThanOrEqualTo5ThenLeaveOriginalValue(int requestedLoanTerm) {
                     // Given
                     var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                            .decision("Declined")
+                            .decision(DECISION_DECLINED)
                             .products(null)
                             .build();
 
@@ -1317,7 +1340,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 void whenRequestedLoanTermIsBetween1And4ThenDeclineApplication(int requestedLoanTerm) {
                     // Given
                     var declinedDecisionResponse = QuickQuoteResponse.builder()
-                            .status("Declined")
+                            .status(DECISION_DECLINED)
                             .offers(null)
                             .build();
 
@@ -1336,12 +1359,12 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 void whenRequestedLoanTermIs5ThenDeclineApplication() {
                     // Given
                     var declinedResponse = QuickQuoteResponse.builder()
-                            .status("Declined")
+                            .status(DECISION_DECLINED)
                             .offers(null)
                             .build();
 
                     var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                            .decision("Declined")
+                            .decision(DECISION_DECLINED)
                             .products(null)
                             .build();
 
@@ -1364,7 +1387,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
                 void whenRequestedLoanTermIsGreaterThanOrEqualTo6ThenLeaveOriginalValue(int requestedLoanTerm) {
                     // Given
                     var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                            .decision("Declined")
+                            .decision(DECISION_DECLINED)
                             .products(null)
                             .build();
 
@@ -1394,7 +1417,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             void whenClientIsClearScoreAndRequestedLoanTermIsLessThanOrEqualTo5ThenReturnDeclinedResponse(int requestedLoanTerm) {
                 // Given
                 var declinedDecisionResponse = QuickQuoteResponse.builder()
-                        .status("Declined")
+                        .status(DECISION_DECLINED)
                         .offers(null)
                         .build();
 
@@ -1417,7 +1440,7 @@ class FilterApplicationServiceImplTest extends MapperBase {
             void whenClientIsClearScoreAndRequestedLoanTermIsGreaterThan5ThenLeaveOriginalValue(int requestedLoanTerm) {
                 // Given
                 var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                        .decision("Declined")
+                        .decision(DECISION_DECLINED)
                         .products(null)
                         .build();
 
@@ -1692,6 +1715,37 @@ class FilterApplicationServiceImplTest extends MapperBase {
                             )
                     ));
                 }
+
+                @Test
+                void whenThereIsNoAcceptedHomeownerLoanOfferThenReturnDeclinedResponse() {
+                    // Given
+                    var declinedDecisionResponse = QuickQuoteResponse.builder()
+                            .status(DECISION_DECLINED)
+                            .offers(null)
+                            .build();
+
+                    var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+                    quickQuoteRequest.setLead(GO_COMPARE_PARTNER_UTM);
+
+                    var helocProduct = getProduct(HELOC, 10.0);
+                    var lowestAprcHelocProduct = getProduct(HELOC, 9.0);
+
+                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    decisionResponse.setProducts(List.of(helocProduct, lowestAprcHelocProduct));
+
+                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+                    when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
+
+                    // When
+                    var response = filterApplicationService.filter(quickQuoteRequest);
+
+                    // Then
+                    assertThat(response, equalTo(declinedDecisionResponse));
+                    verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+                    verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                }
             }
 
             @Nested
@@ -1770,6 +1824,37 @@ class FilterApplicationServiceImplTest extends MapperBase {
                                     hasProperty("isVariable", equalTo(true))
                             )
                     ));
+                }
+
+                @Test
+                void whenThereIsNoAcceptedHomeownerLoanVariableRateOfferTheNReturnDeclinedResponse() {
+                    // Given
+                    var declinedDecisionResponse = QuickQuoteResponse.builder()
+                            .status(DECISION_DECLINED)
+                            .offers(null)
+                            .build();
+
+                    var quickQuoteRequest = getQuickQuoteApplicationRequestDto();
+                    quickQuoteRequest.setLead(CREDIT_MATCHER_PARTNER_UTM);
+
+                    var helocProduct = getProduct(HELOC, 10.0);
+                    var homeownerFixedRateLoanProduct = getProduct(HOMEOWNER_LOAN, 8.0, false);
+
+                    var decisionResponse = getFilteredQuickQuoteDecisionResponse();
+                    decisionResponse.setProducts(List.of(helocProduct, homeownerFixedRateLoanProduct));
+
+                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    when(partnerService.getPartnerFromToken()).thenReturn(getPartner());
+                    when(tokenService.retrieveClientId()).thenReturn(EXPERIAN_CLIENT_ID);
+
+                    // When
+                    var response = filterApplicationService.filter(quickQuoteRequest);
+
+                    // Then
+                    assertThat(response, equalTo(declinedDecisionResponse));
+                    verify(selectionRepository, times(1)).filter(any(FilterQuickQuoteApplicationRequest.class));
+                    verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
                 }
             }
         }

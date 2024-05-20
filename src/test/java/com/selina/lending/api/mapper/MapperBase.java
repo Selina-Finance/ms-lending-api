@@ -201,7 +201,8 @@ public abstract class MapperBase {
     public static final Double ERC_FEE = 0.02;
     public static final String HOMEOWNER_LOAN = "Homeowner Loan";
     public static final String HELOC = "HELOC";
-    public static final String DECISION = "Accepted";
+    public static final String DECISION_ACCEPTED = "Accepted";
+    public static final String DECISION_DECLINED = "Declined";
     public static final String OFFER_DECISION_ACCEPT = "Accept";
     public static final String OFFER_DECISION_DECLINE = "Decline";
     public static final String OFFER_VARIABLE_RATE_50_LTV = "Variable Rate - 50% LTV";
@@ -620,6 +621,7 @@ public abstract class MapperBase {
                 .whenLastPurchased(WHEN_LAST_PURCHASED)
                 .purchaseValue(PURCHASE_VALUE)
                 .numberOfPriorCharges(1)
+                .numberOfBedrooms(NUMBER_OF_BEDROOMS)
                 .priorCharges(getPriorChargesDto())
                 .build();
     }
@@ -893,7 +895,7 @@ public abstract class MapperBase {
     }
 
     protected ApplicationResponse getApplicationResponse() {
-        return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE) .applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
+        return ApplicationResponse.builder().applicationType(DIP_APPLICATION_TYPE).applicationId(APPLICATION_ID).application(getApplication()).creditCommitment(getCreditCommitment()).build();
     }
 
     protected QuickQuoteCFRequest getQuickQuoteCFRequest() {
@@ -908,7 +910,7 @@ public abstract class MapperBase {
 
     protected QuickQuoteCFResponse getQuickQuoteCFResponse() {
         return QuickQuoteCFResponse.builder()
-                .status(DECISION)
+                .status(DECISION_ACCEPTED)
                 .offers(List.of(getOffer()))
                 .externalApplicationId(EXTERNAL_APPLICATION_ID)
                 .build();
@@ -935,13 +937,13 @@ public abstract class MapperBase {
     }
 
     protected QuickQuoteEligibilityDecisionResponse getQuickQuoteEligibilityDecisionResponse() {
-        return QuickQuoteEligibilityDecisionResponse.builder().decision(DECISION)
+        return QuickQuoteEligibilityDecisionResponse.builder().decision(DECISION_ACCEPTED)
                 .products(List.of(getProduct()))
                 .build();
     }
 
     protected FilteredQuickQuoteDecisionResponse getFilteredQuickQuoteDecisionResponse() {
-        return FilteredQuickQuoteDecisionResponse.builder().decision(DECISION)
+        return FilteredQuickQuoteDecisionResponse.builder().decision(DECISION_ACCEPTED)
                 .hasReferOffers(false)
                 .products(List.of(getProduct()))
                 .build();
