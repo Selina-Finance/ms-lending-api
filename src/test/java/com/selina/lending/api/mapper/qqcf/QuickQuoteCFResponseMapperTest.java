@@ -21,7 +21,7 @@ public class QuickQuoteCFResponseMapperTest extends MapperBase {
         var quickQuoteResponse = QuickQuoteCFResponseMapper.INSTANCE.mapToQuickQuoteResponse(response);
 
         //Then
-        assertThat(quickQuoteResponse.getStatus(), equalTo(DECISION));
+        assertThat(quickQuoteResponse.getStatus(), equalTo(DECISION_ACCEPTED));
         assertThat(quickQuoteResponse.getExternalApplicationId(), equalTo(EXTERNAL_APPLICATION_ID));
 
         assertThat(quickQuoteResponse.getOffers(), notNullValue());

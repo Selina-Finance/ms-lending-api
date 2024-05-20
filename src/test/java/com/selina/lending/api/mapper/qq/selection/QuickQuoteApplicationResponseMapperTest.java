@@ -36,7 +36,7 @@ class QuickQuoteApplicationResponseMapperTest extends MapperBase {
         var quickQuoteResponse = QuickQuoteApplicationResponseMapper.INSTANCE.mapToQuickQuoteResponse(filteredResponse);
 
         //Then
-        assertThat(quickQuoteResponse.getStatus(), equalTo(DECISION));
+        assertThat(quickQuoteResponse.getStatus(), equalTo(DECISION_ACCEPTED));
 
         var offer = quickQuoteResponse.getOffers().get(0);
 
