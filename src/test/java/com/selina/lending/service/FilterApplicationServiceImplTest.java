@@ -36,6 +36,7 @@ import com.selina.lending.repository.MiddlewareRepository;
 import com.selina.lending.repository.SelectionRepository;
 import com.selina.lending.service.quickquote.ArrangementFeeSelinaService;
 import com.selina.lending.service.quickquote.PartnerService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -1268,143 +1269,338 @@ class FilterApplicationServiceImplTest extends MapperBase {
             }
 
             @Nested
-            class whenApplicantsBirthDayIsEven {
+            class whenPartnerIsCreditMatcher {
 
-                QuickQuoteApplicationRequest quickQuoteApplicationRequest;
-
-                @BeforeEach
-                void setUp() {
-                     quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                     quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-02");
-                }
-
-                @ParameterizedTest
-                @ValueSource(ints = {1, 2, 3, 4})
-                void whenRequestedLoanTermIsBetween1And4ThenDeclineApplication(int requestedLoanTerm) {
-                    // Given
-                    var declinedDecisionResponse = QuickQuoteResponse.builder()
-                            .status(DECISION_DECLINED)
-                            .offers(null)
-                            .build();
-
-                    quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
-
-                    // When
-                    var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
-
-                    // Then
-                    assertThat(decisionResponse, equalTo(declinedDecisionResponse));
-                    verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
-                    verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
-                }
-
-                @ParameterizedTest
-                @ValueSource(ints = {5, 6, 10, 30})
-                void whenRequestedLoanTermIsGreaterThanOrEqualTo5ThenLeaveOriginalValue(int requestedLoanTerm) {
-                    // Given
-                    var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                            .decision(DECISION_DECLINED)
-                            .products(null)
-                            .build();
-
-                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
-
-                    quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
-
-                    var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
-
-                    // When
-                    filterApplicationService.filter(quickQuoteApplicationRequest);
-
-                    // Then
-                    verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                    assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
-                    assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-3053: Group A"));
-                }
-            }
-
-            @Nested
-            class whenApplicantsBirthDayIsOdd {
+                private static final LeadDto CREDIT_MATCHER_PARTNER_UTM = LeadDto.builder()
+                        .utmSource("aggregator")
+                        .utmMedium("cpc")
+                        .utmCampaign("_consumer_referral___creditmatcher_main_")
+                        .build();
 
                 QuickQuoteApplicationRequest quickQuoteApplicationRequest;
 
                 @BeforeEach
                 void setUp() {
                     quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
-                    quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-01");
+                    quickQuoteApplicationRequest.setLead(CREDIT_MATCHER_PARTNER_UTM);
                 }
 
-                @ParameterizedTest
-                @ValueSource(ints = {1, 2, 3, 4})
-                void whenRequestedLoanTermIsBetween1And4ThenDeclineApplication(int requestedLoanTerm) {
-                    // Given
-                    var declinedDecisionResponse = QuickQuoteResponse.builder()
-                            .status(DECISION_DECLINED)
-                            .offers(null)
-                            .build();
+                @Nested
+                class whenApplicantsBirthDayIsEven {
 
-                    quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+                    @BeforeEach
+                    void setUp() {
+                        quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-02");
+                    }
 
-                    // When
-                    var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
+                    @ParameterizedTest
+                    @ValueSource(ints = {1, 2, 3, 4})
+                    void whenRequestedLoanTermIsBetween1And4ThenDeclineApplication(int requestedLoanTerm) {
+                        // Given
+                        var declinedDecisionResponse = QuickQuoteResponse.builder()
+                                .status(DECISION_DECLINED)
+                                .offers(null)
+                                .build();
 
-                    // Then
-                    assertThat(decisionResponse, equalTo(declinedDecisionResponse));
-                    verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
-                    verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+
+                        // When
+                        var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        assertThat(decisionResponse, equalTo(declinedDecisionResponse));
+                        verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                        verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                    }
+
+                    @Test
+                    void whenRequestedLoanTermIs5ThenDeclineApplication() {
+                        // Given
+                        var declinedResponse = QuickQuoteResponse.builder()
+                                .status(DECISION_DECLINED)
+                                .offers(null)
+                                .build();
+
+                        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                                .decision(DECISION_DECLINED)
+                                .products(null)
+                                .build();
+
+                        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(5);
+
+                        // When
+                        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        assertThat(response, equalTo(declinedResponse));
+                        verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                        verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                    }
+
+                    @ParameterizedTest
+                    @ValueSource(ints = {6, 10, 30})
+                    void whenRequestedLoanTermIsGreaterThanOrEqualTo6ThenLeaveOriginalValue(int requestedLoanTerm) {
+                        // Given
+                        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                                .decision(DECISION_DECLINED)
+                                .products(null)
+                                .build();
+
+                        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+
+                        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+                        // When
+                        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        verify(selectionRepository).filter(selectionRequestCaptor.capture());
+                        assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
+                        assertThat(quickQuoteApplicationRequest.getTestGroupId(), is(nullValue()));
+                    }
                 }
 
-                @Test
-                void whenRequestedLoanTermIs5ThenDeclineApplication() {
-                    // Given
-                    var declinedResponse = QuickQuoteResponse.builder()
-                            .status(DECISION_DECLINED)
-                            .offers(null)
-                            .build();
+                @Nested
+                class whenApplicantsBirthDayIsOdd {
 
-                    var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                            .decision(DECISION_DECLINED)
-                            .products(null)
-                            .build();
+                    @BeforeEach
+                    void setUp() {
+                        quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-01");
+                    }
 
-                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    @ParameterizedTest
+                    @ValueSource(ints = {1, 2, 3, 4})
+                    void whenRequestedLoanTermIsBetween1And4ThenDeclineApplication(int requestedLoanTerm) {
+                        // Given
+                        var declinedDecisionResponse = QuickQuoteResponse.builder()
+                                .status(DECISION_DECLINED)
+                                .offers(null)
+                                .build();
 
-                    quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(5);
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
-                    // When
-                    var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+                        // When
+                        var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
 
-                    // Then
-                    assertThat(response, equalTo(declinedResponse));
-                    verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
-                    verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                        // Then
+                        assertThat(decisionResponse, equalTo(declinedDecisionResponse));
+                        verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                        verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                    }
+
+                    @Test
+                    void whenRequestedLoanTermIs5ThenDeclineApplication() {
+                        // Given
+                        var declinedResponse = QuickQuoteResponse.builder()
+                                .status(DECISION_DECLINED)
+                                .offers(null)
+                                .build();
+
+                        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                                .decision(DECISION_DECLINED)
+                                .products(null)
+                                .build();
+
+                        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(5);
+
+                        // When
+                        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        assertThat(response, equalTo(declinedResponse));
+                        verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                        verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                    }
+
+                    @ParameterizedTest
+                    @ValueSource(ints = {6, 10, 30})
+                    void whenRequestedLoanTermIsGreaterThanOrEqualTo6ThenLeaveOriginalValue(int requestedLoanTerm) {
+                        // Given
+                        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                                .decision(DECISION_DECLINED)
+                                .products(null)
+                                .build();
+
+                        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+
+                        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+                        // When
+                        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        verify(selectionRepository).filter(selectionRequestCaptor.capture());
+                        assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
+                        assertThat(quickQuoteApplicationRequest.getTestGroupId(), is(nullValue()));
+                    }
+                }
+            }
+
+            @Nested
+            class whenPartnerIsGoCompare {
+
+                private static final LeadDto GO_COMPARE_PARTNER_UTM = LeadDto.builder()
+                        .utmSource("aggregator")
+                        .utmMedium("cpc")
+                        .utmCampaign("consumer_referral___gocompare_main")
+                        .build();
+
+                QuickQuoteApplicationRequest quickQuoteApplicationRequest;
+
+                @BeforeEach
+                void setUp() {
+                    quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+                    quickQuoteApplicationRequest.setLead(GO_COMPARE_PARTNER_UTM);
                 }
 
-                @ParameterizedTest
-                @ValueSource(ints = {6, 10, 30})
-                void whenRequestedLoanTermIsGreaterThanOrEqualTo6ThenLeaveOriginalValue(int requestedLoanTerm) {
-                    // Given
-                    var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
-                            .decision(DECISION_DECLINED)
-                            .products(null)
-                            .build();
+                @Nested
+                class whenApplicantsBirthDayIsEven {
 
-                    when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
-                    when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+                    @BeforeEach
+                    void setUp() {
+                        quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-02");
+                    }
 
-                    quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+                    @ParameterizedTest
+                    @ValueSource(ints = {1, 2, 3, 4})
+                    void whenRequestedLoanTermIsBetween1And4ThenDeclineApplication(int requestedLoanTerm) {
+                        // Given
+                        var declinedDecisionResponse = QuickQuoteResponse.builder()
+                                .status(DECISION_DECLINED)
+                                .offers(null)
+                                .build();
 
-                    var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
 
-                    // When
-                    filterApplicationService.filter(quickQuoteApplicationRequest);
+                        // When
+                        var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
 
-                    // Then
-                    verify(selectionRepository).filter(selectionRequestCaptor.capture());
-                    assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
-                    assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-3053: Group B"));
+                        // Then
+                        assertThat(decisionResponse, equalTo(declinedDecisionResponse));
+                        verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                        verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                    }
+
+                    @ParameterizedTest
+                    @ValueSource(ints = {5, 6, 10, 30})
+                    void whenRequestedLoanTermIsGreaterThanOrEqualTo5ThenLeaveOriginalValue(int requestedLoanTerm) {
+                        // Given
+                        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                                .decision(DECISION_DECLINED)
+                                .products(null)
+                                .build();
+
+                        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+
+                        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+                        // When
+                        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        verify(selectionRepository).filter(selectionRequestCaptor.capture());
+                        assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
+                        assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-3053: Group A"));
+                    }
+                }
+
+                @Nested
+                class whenApplicantsBirthDayIsOdd {
+
+                    QuickQuoteApplicationRequest quickQuoteApplicationRequest;
+
+                    @BeforeEach
+                    void setUp() {
+                        quickQuoteApplicationRequest = getQuickQuoteApplicationRequestDto();
+                        quickQuoteApplicationRequest.getApplicants().get(0).setDateOfBirth("1980-01-01");
+                    }
+
+                    @ParameterizedTest
+                    @ValueSource(ints = {1, 2, 3, 4})
+                    void whenRequestedLoanTermIsBetween1And4ThenDeclineApplication(int requestedLoanTerm) {
+                        // Given
+                        var declinedDecisionResponse = QuickQuoteResponse.builder()
+                                .status(DECISION_DECLINED)
+                                .offers(null)
+                                .build();
+
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+
+                        // When
+                        var decisionResponse = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        assertThat(decisionResponse, equalTo(declinedDecisionResponse));
+                        verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                        verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                    }
+
+                    @Test
+                    void whenRequestedLoanTermIs5ThenDeclineApplication() {
+                        // Given
+                        var declinedResponse = QuickQuoteResponse.builder()
+                                .status(DECISION_DECLINED)
+                                .offers(null)
+                                .build();
+
+                        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                                .decision(DECISION_DECLINED)
+                                .products(null)
+                                .build();
+
+                        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(5);
+
+                        // When
+                        var response = filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        assertThat(response, equalTo(declinedResponse));
+                        verify(selectionRepository, never()).filter(any(FilterQuickQuoteApplicationRequest.class));
+                        verify(middlewareRepository, never()).createQuickQuoteApplication(any(QuickQuoteRequest.class));
+                    }
+
+                    @ParameterizedTest
+                    @ValueSource(ints = {6, 10, 30})
+                    void whenRequestedLoanTermIsGreaterThanOrEqualTo6ThenLeaveOriginalValue(int requestedLoanTerm) {
+                        // Given
+                        var decisionResponse = FilteredQuickQuoteDecisionResponse.builder()
+                                .decision(DECISION_DECLINED)
+                                .products(null)
+                                .build();
+
+                        when(arrangementFeeSelinaService.getFeesFromToken()).thenReturn(Fees.builder().build());
+                        when(selectionRepository.filter(any(FilterQuickQuoteApplicationRequest.class))).thenReturn(decisionResponse);
+
+                        quickQuoteApplicationRequest.getLoanInformation().setRequestedLoanTerm(requestedLoanTerm);
+
+                        var selectionRequestCaptor = ArgumentCaptor.forClass(FilterQuickQuoteApplicationRequest.class);
+
+                        // When
+                        filterApplicationService.filter(quickQuoteApplicationRequest);
+
+                        // Then
+                        verify(selectionRepository).filter(selectionRequestCaptor.capture());
+                        assertThat(selectionRequestCaptor.getValue().getApplication().getLoanInformation().getRequestedLoanTerm(), equalTo(requestedLoanTerm));
+                        assertThat(quickQuoteApplicationRequest.getTestGroupId(), equalTo("GRO-3053: Group B"));
+                    }
                 }
             }
         }

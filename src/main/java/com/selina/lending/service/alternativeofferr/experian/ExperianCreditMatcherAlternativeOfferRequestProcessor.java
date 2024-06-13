@@ -10,12 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ExperianAlternativeOfferRequestProcessor extends AlternativeOfferRequestProcessor {
+public class ExperianCreditMatcherAlternativeOfferRequestProcessor extends AlternativeOfferRequestProcessor {
 
     private static final String CLIENT_ID = "experian";
     private static final int LOAN_TERM_5_YEARS = 5;
     private static final int LOAN_TERM_1_YEAR = 1;
-    private static final String TEST_GROUP_ID_GRO_3053_FORMAT = "GRO-3053: %s";
 
     private static final LeadDto CREDIT_MATCHER_PARTNER_UTM = LeadDto.builder()
             .utmSource("aggregator")
@@ -30,30 +29,17 @@ public class ExperianAlternativeOfferRequestProcessor extends AlternativeOfferRe
 
     @Override
     protected boolean isSupportedPartner(LeadDto lead) {
-        return !CREDIT_MATCHER_PARTNER_UTM.equals(lead);
+        return CREDIT_MATCHER_PARTNER_UTM.equals(lead);
     }
 
     @Override
     protected boolean isAlternativeRequestedLoanTerm(int requestedLoanTerm, List<QuickQuoteApplicantDto> applicants) {
-        return requestedLoanTerm >= LOAN_TERM_5_YEARS;
+        return requestedLoanTerm == LOAN_TERM_5_YEARS;
     }
 
     @Override
     protected int calculateAlternativeRequestedLoanTerm(QuickQuoteApplicationRequest request) {
-        var requestedLoanTerm = request.getLoanInformation().getRequestedLoanTerm();
-
-        if (ABTestUtils.hasOddPrimaryApplicantBirthday(request.getApplicants())) {
-            ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_3053_FORMAT.formatted(ABTestUtils.GROUP_B));
-
-            if (requestedLoanTerm == LOAN_TERM_5_YEARS) {
-                requestedLoanTerm = LOAN_TERM_1_YEAR;
-            }
-        } else {
-            ABTestUtils.appendTestGroupId(request, TEST_GROUP_ID_GRO_3053_FORMAT.formatted(ABTestUtils.GROUP_A));
-        }
-
-
-        return requestedLoanTerm;
+        return LOAN_TERM_1_YEAR;
     }
 
 }
